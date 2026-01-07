@@ -4,7 +4,6 @@ namespace Chamilo\Core\Menu\Table;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\ItemService;
-use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -39,17 +38,14 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     protected ItemService $itemService;
 
-    protected RightsService $rightsService;
-
     public function __construct(
-        ItemRendererFactory $itemRendererFactory, ItemService $itemService, RightsService $rightsService,
-        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        ItemRendererFactory $itemRendererFactory, ItemService $itemService, Translator $translator,
+        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
         DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
     )
     {
         $this->itemRendererFactory = $itemRendererFactory;
         $this->itemService = $itemService;
-        $this->rightsService = $rightsService;
 
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
@@ -78,11 +74,6 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         return $this->itemRendererFactory;
     }
 
-    public function getItemRightsUrl(Item $item): string
-    {
-        return $this->getItemUrl($item, [Application::PARAM_ACTION => Manager::ACTION_RIGHTS]);
-    }
-
     public function getItemService(): ItemService
     {
         return $this->itemService;
@@ -94,14 +85,6 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         $parameters[Manager::PARAM_ITEM] = $item->getId();
 
         return $this->getUrlGenerator()->fromParameters($parameters);
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Service\RightsService
-     */
-    public function getRightsService(): RightsService
-    {
-        return $this->rightsService;
     }
 
     public function getTableActions(): TableActions
@@ -138,33 +121,34 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $dataClass
      *
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $item): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $dataClass): string
     {
         $itemRendererFactory = $this->getItemRendererFactory();
 
         return match ($column->get_name())
         {
-            Item::PROPERTY_TITLES => $itemRendererFactory->getItemRenderer($item)->renderTitleForCurrentLanguage($item),
-            self::PROPERTY_TYPE => $itemRendererFactory->getItemRenderer($item)->getRendererTypeGlyph()->render(),
-            default => parent::renderCell($column, $resultPosition, $item),
+            Item::PROPERTY_TITLES => $itemRendererFactory->getItemRenderer($dataClass)->renderTitleForCurrentLanguage(
+                $dataClass
+            ),
+            self::PROPERTY_TYPE => $itemRendererFactory->getItemRenderer($dataClass)->getRendererTypeGlyph()->render(),
+            default => parent::renderCell($column, $resultPosition, $dataClass),
         };
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $result
      */
-    public function renderTableRowActions(TableResultPosition $resultPosition, $item): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, $result): string
     {
-        $numberOfSiblings = $this->getItemService()->countItemsByParentIdentifier($item->getParentId());
-        $areRightsEnabled = $this->getRightsService()->areRightsEnabled();
+        $numberOfSiblings = $this->getItemService()->countItemsByParentIdentifier($result->getParentId());
 
-        $isFirstItem = $item->getSort() == 1;
+        $isFirstItem = $result->getSort() == 1;
         $isOnlyItem = $numberOfSiblings == 1;
-        $isLastItem = $item->getSort() == $numberOfSiblings;
+        $isLastItem = $result->getSort() == $numberOfSiblings;
 
         $translator = $this->getTranslator();
 
@@ -173,19 +157,9 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         $toolbar->add_item(
             new ToolbarItem(
                 $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                $this->getItemEditingUrl($item), ToolbarItem::DISPLAY_ICON
+                $this->getItemEditingUrl($result), ToolbarItem::DISPLAY_ICON
             )
         );
-
-        if ($areRightsEnabled)
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    $translator->trans('Rights', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
-                    $this->getItemRightsUrl($item), ToolbarItem::DISPLAY_ICON
-                )
-            );
-        }
 
         if ($isFirstItem || $isOnlyItem)
         {
@@ -201,7 +175,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
             $toolbar->add_item(
                 new ToolbarItem(
                     $translator->trans('MoveUp', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-up'),
-                    $this->getItemMovingUrl($item, ItemService::PARAM_DIRECTION_UP), ToolbarItem::DISPLAY_ICON
+                    $this->getItemMovingUrl($result, ItemService::PARAM_DIRECTION_UP), ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -220,7 +194,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
             $toolbar->add_item(
                 new ToolbarItem(
                     $translator->trans('MoveDown', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-down'),
-                    $this->getItemMovingUrl($item, ItemService::PARAM_DIRECTION_DOWN), ToolbarItem::DISPLAY_ICON
+                    $this->getItemMovingUrl($result, ItemService::PARAM_DIRECTION_DOWN), ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -228,7 +202,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         $toolbar->add_item(
             new ToolbarItem(
                 $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                $this->getItemDeletingUrl($item), ToolbarItem::DISPLAY_ICON, true
+                $this->getItemDeletingUrl($result), ToolbarItem::DISPLAY_ICON, true
             )
         );
 

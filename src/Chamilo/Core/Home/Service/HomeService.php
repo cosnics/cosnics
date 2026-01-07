@@ -3,17 +3,11 @@ namespace Chamilo\Core\Home\Service;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Manager;
-use Chamilo\Core\Home\Renderer\BlockRenderer;
 use Chamilo\Core\Home\Renderer\BlockRendererFactory;
 use Chamilo\Core\Home\Repository\HomeRepository;
-use Chamilo\Core\Home\Rights\Service\BlockTypeRightsService;
-use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
-use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -33,13 +27,9 @@ class HomeService
 
     protected BlockRendererFactory $blockRendererFactory;
 
-    protected BlockTypeRightsService $blockTypeRightsService;
-
     protected ClassnameUtilities $classnameUtilities;
 
     protected ConfigurationConsulter $configurationConsulter;
-
-    protected ElementRightsService $elementRightsService;
 
     protected SessionInterface $session;
 
@@ -50,20 +40,17 @@ class HomeService
     private HomeRepository $homeRepository;
 
     public function __construct(
-        HomeRepository $homeRepository, ElementRightsService $elementRightsService, SessionInterface $session,
-        ConfigurationConsulter $configurationConsulter, Translator $translator,
-        BlockRendererFactory $blockRendererFactory, ClassnameUtilities $classnameUtilities,
-        BlockTypeRightsService $blockTypeRightsService, DisplayOrderHandler $displayOrderHandler
+        HomeRepository $homeRepository, SessionInterface $session, ConfigurationConsulter $configurationConsulter,
+        Translator $translator, BlockRendererFactory $blockRendererFactory, ClassnameUtilities $classnameUtilities,
+        DisplayOrderHandler $displayOrderHandler
     )
     {
         $this->homeRepository = $homeRepository;
-        $this->elementRightsService = $elementRightsService;
         $this->session = $session;
         $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
         $this->blockRendererFactory = $blockRendererFactory;
         $this->classnameUtilities = $classnameUtilities;
-        $this->blockTypeRightsService = $blockTypeRightsService;
         $this->displayOrderHandler = $displayOrderHandler;
     }
 
@@ -229,67 +216,6 @@ class HomeService
         return true;
     }
 
-    public function determineHomeUserIdentifier(User $user = null): string
-    {
-        $generalMode = $this->getSession()->get(Manager::SESSION_GENERAL_MODE, false);
-
-        // Get user id
-        if ($user instanceof User && $generalMode && $user->isPlatformAdmin())
-        {
-            return '0';
-        }
-        elseif ($this->isUserHomeAllowed() && $user instanceof User)
-        {
-            return $user->getId();
-        }
-        else
-        {
-            return '0';
-        }
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     */
-    public function determineUser(?User $currentUser = null, bool $isGeneralMode = false): ?User
-    {
-        $userHomeAllowed = $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'allow_user_home']);
-
-        if ($currentUser instanceof User)
-        {
-            if ($isGeneralMode && $currentUser->isPlatformAdmin())
-            {
-                return null;
-            }
-            elseif ($userHomeAllowed)
-            {
-                return $currentUser;
-            }
-            elseif ($currentUser->isPlatformAdmin())
-            {
-                return null;
-            }
-            else
-            {
-                throw new NotAllowedException();
-            }
-        }
-        else
-        {
-            throw new NotAllowedException();
-        }
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     */
-    public function determineUserId(?User $currentUser = null, bool $isGeneralMode = false): string
-    {
-        $user = $this->determineUser($currentUser, $isGeneralMode);
-
-        return $user instanceof User ? $user->getId() : '0';
-    }
-
     public function elementHasChildren(Element $element): bool
     {
         return $this->countElementsByParentIdentifier($element->getId()) > 0;
@@ -339,86 +265,17 @@ class HomeService
      * @throws \Exception
      */
     public function findElementsByTypeUserAndParentIdentifier(
-        string $type, ?User $user = null, string $parentIdentifier = '0'
+        string $type, string $parentIdentifier = '0'
     ): ArrayCollection
     {
-        $homeUserIdentifier = $this->determineHomeUserIdentifier($user);
-
-        if ($this->isUserHomeAllowed() && $user instanceof User)
-        {
-            if ($this->countElementsByUserIdentifier($homeUserIdentifier) == 0)
-            {
-                $this->createDefaultHomeByUserIdentifier($user);
-            }
-        }
-
         return $this->getHomeRepository()->findElementsByTypeUserIdentifierAndParentIdentifier(
-            $type, $homeUserIdentifier, $parentIdentifier
+            $type, '0', $parentIdentifier
         );
-    }
-
-    public function getAvailableBlockRenderersForUser(User $user): array
-    {
-        $blockRendererFactory = $this->getBlockRendererFactory();
-        $blockTypeRightsService = $this->getBlockTypeRightsService();
-        $translator = $this->getTranslator();
-
-        $platformBlocks = [];
-
-        foreach ($blockRendererFactory->getAvailableBlockRenderers() as $availableBlockRenderer)
-        {
-            $rendererContext = $availableBlockRenderer::CONTEXT;
-            $availableBlockRendererClassName = get_class($availableBlockRenderer);
-
-            if (!array_key_exists($rendererContext, $platformBlocks))
-            {
-                $platformBlocks[$rendererContext] = [];
-
-                $packageGlyph = new NamespaceIdentGlyph(
-                    $rendererContext, true, false, false, IdentGlyph::SIZE_MINI, ['fa-fw']
-                );
-
-                $platformBlocks[$rendererContext]['name'] = $translator->trans('TypeName', [], $rendererContext);
-                $platformBlocks[$rendererContext]['image'] = $packageGlyph->render();
-
-                $platformBlocks[$rendererContext]['components'] = [];
-            }
-
-            if ($blockTypeRightsService->canUserViewBlockRenderer($user, $availableBlockRenderer))
-            {
-                $blockName = $this->getClassnameUtilities()->getClassnameFromObject($availableBlockRenderer);
-
-                $blockGlyph = new NamespaceIdentGlyph(
-                    $availableBlockRendererClassName, true, false, false, IdentGlyph::SIZE_MINI, ['fa-fw']
-                );
-
-                $platformBlocks[$rendererContext]['components'][] = [
-                    BlockRenderer::BLOCK_PROPERTY_ID => $availableBlockRendererClassName,
-                    BlockRenderer::BLOCK_PROPERTY_NAME => $translator->trans($blockName, [], $rendererContext),
-                    BlockRenderer::BLOCK_PROPERTY_IMAGE => $blockGlyph->render()
-                ];
-            }
-        }
-
-        foreach ($platformBlocks as $rendererContext => $platformBlock)
-        {
-            if (count($platformBlock['components']) == 0)
-            {
-                unset($platformBlocks[$rendererContext]);
-            }
-        }
-
-        return $platformBlocks;
     }
 
     public function getBlockRendererFactory(): BlockRendererFactory
     {
         return $this->blockRendererFactory;
-    }
-
-    public function getBlockTypeRightsService(): BlockTypeRightsService
-    {
-        return $this->blockTypeRightsService;
     }
 
     public function getClassnameUtilities(): ClassnameUtilities
@@ -444,11 +301,6 @@ class HomeService
     public function getElementByIdentifier(string $elementIdentifier): ?Element
     {
         return $this->getHomeRepository()->findElementByIdentifier($elementIdentifier);
-    }
-
-    public function getElementRightsService(): ElementRightsService
-    {
-        return $this->elementRightsService;
     }
 
     /**
@@ -481,15 +333,9 @@ class HomeService
         return ($currentTabIdentifier == $tab->getId() || (!isset($currentTabIdentifier) && $tabKey == 0));
     }
 
-    public function isUserHomeAllowed(): bool
-    {
-        return (boolean) $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'allow_user_home']);
-    }
-
     public function tabByUserAndIdentifierHasMultipleColumns(string $tabIdentifier, User $user = null): bool
     {
-        return $this->findElementsByTypeUserAndParentIdentifier(Element::TYPE_COLUMN, $user, $tabIdentifier)->count() >
-            1;
+        return $this->findElementsByTypeUserAndParentIdentifier(Element::TYPE_COLUMN, $tabIdentifier)->count() > 1;
     }
 
     public function tabCanBeDeleted(Element $tab): bool
@@ -522,6 +368,6 @@ class HomeService
 
     public function userHasMultipleTabs(User $user = null): bool
     {
-        return $this->findElementsByTypeUserAndParentIdentifier(Element::TYPE_TAB, $user)->count() > 1;
+        return $this->findElementsByTypeUserAndParentIdentifier(Element::TYPE_TAB)->count() > 1;
     }
 }

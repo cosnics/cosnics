@@ -7,9 +7,7 @@ use Chamilo\Core\Menu\Architecture\Traits\TranslatableItemTrait;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\CachedItemService;
-use Chamilo\Core\Menu\Service\RightsCacheService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
@@ -26,24 +24,17 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
 
     private ItemRendererFactory $itemRendererFactory;
 
-    private RightsCacheService $rightsCacheService;
-
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
-        CachedItemService $itemCacheService, ChamiloRequest $request, RightsCacheService $rightsCacheService,
+        Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
         ItemRendererFactory $itemRendererFactory, array $fallbackIsoCodes
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
+        parent::__construct($translator, $itemCacheService, $request);
 
-        $this->rightsCacheService = $rightsCacheService;
         $this->itemRendererFactory = $itemRendererFactory;
         $this->fallbackIsoCodes = $fallbackIsoCodes;
     }
 
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
     public function render(Item $item, User $user): string
     {
         $html = [];
@@ -114,11 +105,6 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
         return $this->getTranslator()->trans('CategoryItem', [], Manager::CONTEXT);
     }
 
-    public function getRightsCacheService(): RightsCacheService
-    {
-        return $this->rightsCacheService;
-    }
-
     public function isSelected(Item $item, User $user): bool
     {
         $childItems = $this->getItemCacheService()->findItemsByParentIdentifier($item->getId());
@@ -136,9 +122,6 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
         return false;
     }
 
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
     public function renderChildren(Item $item, User $user): string
     {
         $childItems = $this->getItemCacheService()->findItemsByParentIdentifier($item->getId());
@@ -149,17 +132,12 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
 
         foreach ($childItems as $childItem)
         {
-            $userCanViewItem = $this->getRightsCacheService()->canUserViewItem($user, $item);
-
-            if ($userCanViewItem)
+            if (!$childItem->isHidden())
             {
-                if (!$childItem->isHidden())
-                {
-                    $childItem->setDisplay(Item::DISPLAY_TEXT);
+                $childItem->setDisplay(Item::DISPLAY_TEXT);
 
-                    $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($childItem);
-                    $html[] = $itemRenderer->render($childItem, $user);
-                }
+                $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($childItem);
+                $html[] = $itemRenderer->render($childItem, $user);
             }
         }
 

@@ -54,25 +54,6 @@ class Security
         return false;
     }
 
-    /**
-     * Checks the user agent of the client as recorder by get_ua() to prevent most session hijacking attacks.
-     */
-    public function checkUa(): bool
-    {
-        $session = $this->getSession();
-        $request = $this->getChamiloRequest();
-
-        $session_agent = $session->get('sec_ua');
-        $current_agent = $request->server->get('HTTP_USER_AGENT') . $session->get('sec_ua_seed');
-
-        if (isset($session_agent) and $session_agent === $current_agent)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
     public function getChamiloRequest(): ChamiloRequest
     {
         return $this->chamiloRequest;
@@ -89,41 +70,11 @@ class Security
     }
 
     /**
-     * This function sets a random token to be included in a form as a hidden field and saves it into the user's
-     * session. This later prevents Cross-Site Request Forgeries by checking that the user is really the one that sent
-     * this form in knowingly (this form hasn't been generated from another website visited by the user at the same
-     * time). Check the token with check_token()
-     */
-    public function getToken(): string
-    {
-        $token = $this->getHashingUtilities()->hashString(uniqid((string) rand(), true));
-        $this->getSession()->set('sec_token', $token);
-
-        return $token;
-    }
-
-    /**
-     * Gets the user agent in the session to later check it with check_ua() to prevent most cases of session hijacking.
-     */
-    public function getUa(): void
-    {
-        $session = $this->getSession();
-        $session->set('sec_ua_seed', uniqid((string) rand(), true));
-        $session->set(
-            'sec_ua', $this->getChamiloRequest()->server->get('HTTP_USER_AGENT') . $session->get('sec_ua_seed')
-        );
-    }
-
-    /**
      * This function tackles the XSS injections.
      * Filtering for XSS is very easily done by using the htmlentities()
      * function. This kind of filtering prevents JavaScript snippets to be understood as such.
-     *
-     * @param string|array $variable
-     *
-     * @return string|array
      */
-    public function removeXSS($variable)
+    public function removeXSS(string|array|null $variable): string|array|null
     {
         if (is_array($variable))
         {

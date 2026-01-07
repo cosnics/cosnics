@@ -10,7 +10,6 @@ use Chamilo\Core\Menu\Architecture\Traits\TranslatableItemTrait;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -42,28 +41,19 @@ class ApplicationItemRenderer extends ItemRenderer
     private UrlGenerator $urlGenerator;
 
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
-        CachedItemService $itemCacheService, ChamiloRequest $request, RegistrationConsulter $registrationConsulter,
-        UrlGenerator $urlGenerator, array $fallbackIsoCodes
+        Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
+        RegistrationConsulter $registrationConsulter, UrlGenerator $urlGenerator, array $fallbackIsoCodes
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
+        parent::__construct($translator, $itemCacheService, $request);
 
         $this->registrationConsulter = $registrationConsulter;
         $this->urlGenerator = $urlGenerator;
         $this->fallbackIsoCodes = $fallbackIsoCodes;
     }
 
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
     public function render(Item $item, User $user): string
     {
-        if (!$this->isItemVisibleForUser($item, $user))
-        {
-            return '';
-        }
-
         $html = [];
 
         $html[] = '<li class="' . ($this->isSelected($item, $user) ? 'active' : '') . '">';
@@ -234,19 +224,6 @@ class ApplicationItemRenderer extends ItemRenderer
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
-    }
-
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
-    public function isItemVisibleForUser(Item $item, User $user): bool
-    {
-        $application = $item->getSetting(self::CONFIGURATION_APPLICATION);
-
-        $isAuthorized = $this->getAuthorizationChecker()->isAuthorized($user, $application);
-        $isActiveApplication = $this->getRegistrationConsulter()->isContextRegisteredAndActive($application);
-
-        return $isAuthorized && $isActiveApplication;
     }
 
     public function isSelected(Item $item, User $user): bool

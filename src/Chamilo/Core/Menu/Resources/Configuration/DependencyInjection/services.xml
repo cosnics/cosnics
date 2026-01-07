@@ -19,24 +19,6 @@
                       type="service"
                       id="Chamilo\Core\Menu\Cache\ItemCacheProvider"/>
         </service>
-        <service id="Chamilo\Core\Menu\Service\RightsCacheService">
-            <argument key="$cacheAdapter"
-                      type="service"
-                      id="Chamilo\Core\Menu\Cache\RightsCacheProvider"/>
-        </service>
-        <service id="Chamilo\Core\Menu\Service\RightsService">
-            <argument key="$configurationConsulter"
-                      type="service"
-                      id="Chamilo\Configuration\Service\Consulter\ConfigurationConsulter"/>
-        </service>
-
-        <service id="Chamilo\Core\Menu\Cache\RightsCacheProvider"
-                 class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
-            <tag name="Symfony\Component\Cache\Adapter"/>
-            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
-                     method="createFilesystemAdapter"/>
-            <argument key="$namespace">Chamilo\Core\Menu\Rights</argument>
-        </service>
 
         <service id="Chamilo\Core\Menu\Cache\ItemCacheProvider"
                  class="Symfony\Component\Cache\Adapter\FilesystemAdapter">

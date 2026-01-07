@@ -15,7 +15,7 @@ use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTra
  */
 class HtmlMenu
 {
-     use DependencyInjectionContainerTrait;
+    use DependencyInjectionContainerTrait;
 
     public const HTML_MENU_ENTRY_ACTIVE = 1;
     public const HTML_MENU_ENTRY_ACTIVEPATH = 2;
@@ -170,7 +170,7 @@ class HtmlMenu
     /**
      * @param mixed $nodeId
      * @param string $nodeUrl Node 'url' attribute
-     * @param int $level      Level in the tree
+     * @param int $level Level in the tree
      *
      * @return int Node type (one of HTML_MENU_ENTRY_* constants)
      */
@@ -197,8 +197,8 @@ class HtmlMenu
      * Renders the 'prevnext' menu
      *
      * @param string[] $menu (sub)menu being rendered
-     * @param int $level     current depth in the tree structure
-     * @param int $flagStop  flag indicating whether to finish processing
+     * @param int $level current depth in the tree structure
+     * @param int $flagStop flag indicating whether to finish processing
      *                       (0 - continue, 1 - this is "next" node, 2 - stop)
      */
     private function _renderPrevNext($menu, $level = 0, $flagStop = 0)
@@ -274,7 +274,7 @@ class HtmlMenu
      * Renders the 'rows' menu
      *
      * @param string[] $menu (sub)menu being rendered
-     * @param int $level     current depth in the tree structure
+     * @param int $level current depth in the tree structure
      */
     private function _renderRows($menu, $level = 0)
     {
@@ -308,7 +308,7 @@ class HtmlMenu
      * Renders the tree menu ('tree' and 'sitemap')
      *
      * @param string[] $menu (sub)menu being rendered
-     * @param int $level     current depth in the tree structure
+     * @param int $level current depth in the tree structure
      */
     private function _renderTree($menu, $level = 0)
     {
@@ -341,7 +341,7 @@ class HtmlMenu
      * Renders the 'urhere' menu
      *
      * @param string[] $menu (sub)menu being rendered
-     * @param int $level     current depth in the tree structure
+     * @param int $level current depth in the tree structure
      */
     private function _renderURHere($menu, $level = 0)
     {

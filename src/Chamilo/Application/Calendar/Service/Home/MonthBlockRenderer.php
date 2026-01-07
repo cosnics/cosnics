@@ -6,9 +6,7 @@ use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Architecture\Interfaces\StaticBlockTitleInterface;
-use Chamilo\Core\Home\Form\ConfigurationFormFactory;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
-use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -39,14 +37,11 @@ class MonthBlockRenderer extends BlockRenderer implements StaticBlockTitleInterf
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         ConfigurationConsulter $configurationConsulter, MiniMonthCalendarRenderer $miniMonthCalendarRenderer,
-        ChamiloRequest $request, ElementRightsService $elementRightsService,
-        ConfigurationFormFactory $configurationFormFactory,
-        CalendarRendererProviderRepository $calendarRendererProviderRepository
+        ChamiloRequest $request, CalendarRendererProviderRepository $calendarRendererProviderRepository
     )
     {
         parent::__construct(
-            $homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService,
-            $configurationFormFactory
+            $homeService, $urlGenerator, $translator, $configurationConsulter
         );
 
         $this->miniMonthCalendarRenderer = $miniMonthCalendarRenderer;
@@ -89,13 +84,13 @@ class MonthBlockRenderer extends BlockRenderer implements StaticBlockTitleInterf
         return $this->request;
     }
 
-    public function getTitle(Element $block, ?User $user = null): string
+    public function getTitle(Element $block): string
     {
         return $this->getTranslator()->trans(date('F', $this->getDisplayTime()) . 'Long', [], StringUtilities::LIBRARIES
             ) . ' ' . date('Y', $this->getDisplayTime());
     }
 
-    public function renderContentFooter(Element $block): string
+    public function renderContentFooter(): string
     {
         return '</div>';
     }

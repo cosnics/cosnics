@@ -5,7 +5,6 @@ use Chamilo\Core\Menu\Architecture\Interfaces\SelectableItemInterface;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -24,12 +23,11 @@ abstract class MenuItemRenderer extends ItemRenderer
     private ClassnameUtilities $classnameUtilities;
 
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
-        CachedItemService $itemCacheService, ChamiloRequest $request, ClassnameUtilities $classnameUtilities,
-        UrlGenerator $urlGenerator
+        Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
+        ClassnameUtilities $classnameUtilities, UrlGenerator $urlGenerator
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
+        parent::__construct($translator, $itemCacheService, $request);
 
         $this->classnameUtilities = $classnameUtilities;
         $this->urlGenerator = $urlGenerator;

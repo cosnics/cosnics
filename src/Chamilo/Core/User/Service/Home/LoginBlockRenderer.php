@@ -4,9 +4,7 @@ namespace Chamilo\Core\User\Service\Home;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Architecture\Interfaces\AnonymousBlockInterface;
 use Chamilo\Core\Home\Architecture\Interfaces\ReadOnlyBlockInterface;
-use Chamilo\Core\Home\Form\ConfigurationFormFactory;
 use Chamilo\Core\Home\Renderer\BlockRenderer;
-use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Manager;
@@ -28,13 +26,11 @@ class LoginBlockRenderer extends BlockRenderer implements AnonymousBlockInterfac
 
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
-        ConfigurationConsulter $configurationConsulter, ChamiloRequest $request,
-        ElementRightsService $elementRightsService, ConfigurationFormFactory $configurationFormFactory
+        ConfigurationConsulter $configurationConsulter, ChamiloRequest $request
     )
     {
         parent::__construct(
-            $homeService, $urlGenerator, $translator, $configurationConsulter, $elementRightsService,
-            $configurationFormFactory
+            $homeService, $urlGenerator, $translator, $configurationConsulter
         );
 
         $this->request = $request;

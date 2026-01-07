@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 
@@ -10,77 +8,126 @@ use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
  * @package Chamilo\Libraries\Format\Structure
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class HeaderRenderer extends AbstractHeaderRenderer
+class HeaderRenderer implements HeaderRendererInterface
 {
-    private ConfigurationConsulter $configurationConsulter;
+    private BannerRenderer $bannerRenderer;
 
-    private FileConfigurationLocator $fileConfigurationLocator;
+    private PageConfiguration $pageConfiguration;
+
+    private ThemePathBuilder $themeWebPathBuilder;
+
+    private WebPathBuilder $webPathBuilder;
 
     public function __construct(
         PageConfiguration $pageConfiguration, WebPathBuilder $webPathBuilder, ThemePathBuilder $themeWebPathBuilder,
-        ConfigurationConsulter $configurationConsulter, FileConfigurationLocator $fileConfigurationLocator,
         BannerRenderer $bannerRenderer
     )
     {
-        parent::__construct($pageConfiguration, $webPathBuilder, $themeWebPathBuilder, $bannerRenderer);
-
-        $this->configurationConsulter = $configurationConsulter;
-        $this->fileConfigurationLocator = $fileConfigurationLocator;
+        $this->pageConfiguration = $pageConfiguration;
+        $this->webPathBuilder = $webPathBuilder;
+        $this->themeWebPathBuilder = $themeWebPathBuilder;
+        $this->bannerRenderer = $bannerRenderer;
     }
 
     /**
      * @throws \Exception
      */
-    protected function addDefaultHeaders()
+    public function render(): string
     {
-        parent::addDefaultHeaders();
-        $this->addGoogleAnalyticsTracking();
-    }
+        $this->addDefaultHeaders();
+        $pageConfiguration = $this->getPageConfiguration();
 
-    /**
-     * Adds the google analytics tracking to the header if configured
-     *
-     * @throws \Exception
-     */
-    protected function addGoogleAnalyticsTracking()
-    {
-        if (!$this->getFileConfigurationLocator()->isAvailable())
+        $html = [];
+
+        $html[] = '<!DOCTYPE html>';
+        $html[] = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $pageConfiguration->getLanguageCode() .
+            '" lang="' . $pageConfiguration->getLanguageCode() . '">';
+        $html[] = '<head>';
+
+        $htmlHeaders = $pageConfiguration->getHtmlHeaders();
+
+        foreach ($htmlHeaders as $htmlHeader)
         {
-            return;
+            $html[] = $htmlHeader;
         }
 
-        $googleAnalyticsTrackingId = $this->getConfigurationConsulter()->getSetting(
-            ['Chamilo\Core\Admin', 'google_analytics_tracking_id']
+        $html[] = '</head>';
+
+        $html[] = '<body dir="' . $pageConfiguration->getTextDirection() . '">';
+
+        if ($pageConfiguration->getViewMode() != PageConfiguration::VIEW_MODE_HEADERLESS)
+        {
+            $html[] = $this->getBannerRenderer()->render();
+        }
+
+        $classes = $pageConfiguration->getContainerMode();
+
+        if ($pageConfiguration->getViewMode() == PageConfiguration::VIEW_MODE_HEADERLESS)
+        {
+            $classes .= ' container-headerless';
+        }
+
+        $html[] = '<div class="' . $classes . '">';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    protected function addDefaultHeaders(): void
+    {
+        $pathBuilder = $this->getWebPathBuilder();
+        $themeWebPathBuilder = $this->getThemeWebPathBuilder();
+        $pageConfiguration = $this->getPageConfiguration();
+
+        $pageConfiguration->addHtmlHeader('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
+        $pageConfiguration->addHtmlHeader('<meta name="viewport" content="width=device-width, initial-scale=1">');
+        $pageConfiguration->addHtmlHeader('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
+
+        $cssPath = $pathBuilder->getCssPath('Chamilo/Libraries');
+        $javascriptPath = $pathBuilder->getJavascriptPath('Chamilo/Libraries');
+
+        $pageConfiguration->addCssFile($cssPath . 'cosnics.vendor.bootstrap.min.css');
+        $pageConfiguration->addCssFile($cssPath . 'cosnics.vendor.jquery.min.css');
+        $pageConfiguration->addCssFile($cssPath . 'cosnics.vendor.min.css');
+        $pageConfiguration->addCssFile($cssPath . 'cosnics.common.' . $themeWebPathBuilder->getTheme() . '.min.css');
+
+        $pageConfiguration->addLink($pathBuilder->getBasePath(), 'top');
+        $pageConfiguration->addLink($themeWebPathBuilder->getFavouriteIcon(), 'shortcut icon', null, 'image/x-icon');
+
+        $pageConfiguration->addHtmlHeader(
+            '<script>var rootWebPath="' . $pathBuilder->getBasePath() . '";</script>'
         );
 
-        if (!empty($googleAnalyticsTrackingId))
-        {
-            $html = [];
-            $pageConfiguration = $this->getPageConfiguration();
+        $pageConfiguration->addJavascriptFile($javascriptPath . 'cosnics.vendor.jquery.min.js');
+        $pageConfiguration->addJavascriptFile($javascriptPath . 'cosnics.vendor.bootstrap.min.js');
+        $pageConfiguration->addJavascriptFile($javascriptPath . 'cosnics.vendor.angular.min.js');
+        $pageConfiguration->addJavascriptFile($javascriptPath . 'cosnics.vendor.min.js');
+        $pageConfiguration->addJavascriptFile($javascriptPath . 'cosnics.common.min.js');
 
-            $html[] = '<script>';
-            $html[] = '(function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){';
-            $html[] = '(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),';
-            $html[] = 'm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)';
-            $html[] = '})(window,document,\'script\',\'https://www.google-analytics.com/analytics.js\',\'ga\');';
-            $html[] = '';
-            $html[] = 'ga(\'create\', \'' . $googleAnalyticsTrackingId . '\', \'auto\');';
-            $html[] = 'ga(\'send\', \'pageview\', location.pathname + location.search);';
-            $html[] = '';
-            $html[] = '</script>';
-
-            $pageConfiguration->addHtmlHeader(implode(PHP_EOL, $html));
-        }
+        $pageConfiguration->addHtmlHeader('<title>' . $pageConfiguration->getTitle() . '</title>');
     }
 
-    public function getConfigurationConsulter(): ConfigurationConsulter
+    public function getBannerRenderer(): BannerRenderer
     {
-        return $this->configurationConsulter;
+        return $this->bannerRenderer;
     }
 
-    public function getFileConfigurationLocator(): FileConfigurationLocator
+    public function getPageConfiguration(): PageConfiguration
     {
-        return $this->fileConfigurationLocator;
+        return $this->pageConfiguration;
+    }
+
+    public function getThemeWebPathBuilder(): ThemePathBuilder
+    {
+        return $this->themeWebPathBuilder;
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->webPathBuilder;
     }
 }

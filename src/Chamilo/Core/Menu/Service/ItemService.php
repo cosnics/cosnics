@@ -34,20 +34,16 @@ class ItemService implements ItemServiceInterface
 
     private PropertyMapper $propertyMapper;
 
-    private RightsService $rightsService;
-
     private StringUtilities $stringUtilities;
 
     private Translator $translator;
 
     public function __construct(
-        ItemRepository $itemRepository, RightsService $rightsService, StringUtilities $stringUtilities,
-        PropertyMapper $propertyMapper, Translator $translator, DisplayOrderHandler $displayOrderHandler,
-        array $fallbackIsoCodes
+        ItemRepository $itemRepository, StringUtilities $stringUtilities, PropertyMapper $propertyMapper,
+        Translator $translator, DisplayOrderHandler $displayOrderHandler, array $fallbackIsoCodes
     )
     {
         $this->itemRepository = $itemRepository;
-        $this->rightsService = $rightsService;
         $this->stringUtilities = $stringUtilities;
         $this->propertyMapper = $propertyMapper;
         $this->translator = $translator;
@@ -55,13 +51,21 @@ class ItemService implements ItemServiceInterface
         $this->fallbackIsoCodes = $fallbackIsoCodes;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function countItemsByParentIdentifier(string $parentIdentifier): int
     {
         return $this->getItemRepository()->countItemsByParentIdentifier($parentIdentifier);
     }
 
     /**
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
+     *
+     * @return bool
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function createItem(Item $item): bool
     {
@@ -71,11 +75,6 @@ class ItemService implements ItemServiceInterface
         }
 
         if (!$this->getItemRepository()->createItem($item))
-        {
-            return false;
-        }
-
-        if (!$this->getRightsService()->createItemRightsLocationWithViewRightForEveryone($item))
         {
             return false;
         }
@@ -139,17 +138,13 @@ class ItemService implements ItemServiceInterface
             return false;
         }
 
-        if (!$this->getRightsService()->deleteItemRightsLocation($item))
-        {
-            return false;
-        }
-
         return true;
     }
 
     /**
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function deleteItemChildren(Item $item): bool
     {
@@ -166,6 +161,9 @@ class ItemService implements ItemServiceInterface
         return true;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function doesItemHaveChildren(Item $item): bool
     {
         return $this->countItemsByParentIdentifier($item->getId()) > 0;
@@ -173,12 +171,17 @@ class ItemService implements ItemServiceInterface
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findApplicationItems(): ArrayCollection
     {
         return $this->findItemsByType(ApplicationItemRenderer::class);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     */
     public function findItemByIdentifier(string $identifier): ?Item
     {
         return $this->getItemRepository()->findItemByIdentifier($identifier);
@@ -186,6 +189,7 @@ class ItemService implements ItemServiceInterface
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findItems(): ArrayCollection
     {
@@ -196,6 +200,7 @@ class ItemService implements ItemServiceInterface
      * @param string[] $identifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findItemsByIdentifiers(array $identifiers): ArrayCollection
     {
@@ -209,6 +214,7 @@ class ItemService implements ItemServiceInterface
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findItemsByParentIdentifier(
         string $parentIdentifier, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
@@ -223,6 +229,7 @@ class ItemService implements ItemServiceInterface
      * @param string $type
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findItemsByType(string $type): ArrayCollection
     {
@@ -231,6 +238,7 @@ class ItemService implements ItemServiceInterface
 
     /**
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[][]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findItemsGroupedByParentIdentifier(): array
     {
@@ -241,6 +249,7 @@ class ItemService implements ItemServiceInterface
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findRootCategoryItems(): ArrayCollection
     {
@@ -249,6 +258,7 @@ class ItemService implements ItemServiceInterface
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findRootItems(): ArrayCollection
     {
@@ -279,6 +289,10 @@ class ItemService implements ItemServiceInterface
         return $this->itemRepository;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function getNextItemSortValueByParentIdentifier(string $parentIdentifier): int
     {
         return $this->getItemRepository()->getNextItemSortValueByParentIdentifier($parentIdentifier);
@@ -287,11 +301,6 @@ class ItemService implements ItemServiceInterface
     public function getPropertyMapper(): PropertyMapper
     {
         return $this->propertyMapper;
-    }
-
-    public function getRightsService(): RightsService
-    {
-        return $this->rightsService;
     }
 
     public function getStringUtilities(): StringUtilities
@@ -306,6 +315,7 @@ class ItemService implements ItemServiceInterface
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function moveItemInDirection(Item $item, int $moveDirection): bool
     {
@@ -319,6 +329,7 @@ class ItemService implements ItemServiceInterface
      * @param string[]|string[][] $values
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function saveItemFromValues(Item $item, array $values): bool
     {
@@ -354,6 +365,7 @@ class ItemService implements ItemServiceInterface
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function updateItem(Item $item): bool
     {
@@ -363,11 +375,6 @@ class ItemService implements ItemServiceInterface
         }
 
         if (!$this->getItemRepository()->updateItem($item))
-        {
-            return false;
-        }
-
-        if (!$this->getRightsService()->moveItemRightsLocation($item))
         {
             return false;
         }

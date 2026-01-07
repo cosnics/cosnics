@@ -28,7 +28,7 @@ class TabRenderer
      * @throws \QuickformException
      */
     public function render(
-        Element $tab, int $tabKey, ?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
+        Element $tab, int $tabKey, ?int $currentTabIdentifier = null, ?User $user = null
     ): string
     {
         $columnRenderer = $this->getColumnRenderer();
@@ -41,12 +41,12 @@ class TabRenderer
             '">';
 
         $columns = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(
-            Element::TYPE_COLUMN, $user, $tab->getId()
+            Element::TYPE_COLUMN, $tab->getId()
         );
 
         foreach ($columns as $column)
         {
-            $html[] = $columnRenderer->render($column, $isGeneralMode, $user);
+            $html[] = $columnRenderer->render($column, $user);
         }
 
         $html[] = '</div>';

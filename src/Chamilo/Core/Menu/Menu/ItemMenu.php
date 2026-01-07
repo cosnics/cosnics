@@ -9,7 +9,6 @@ use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu\Menu
@@ -25,18 +24,15 @@ class ItemMenu extends HtmlMenu
 
     private ItemService $itemService;
 
-    private Translator $translator;
-
     private string $urlFormat;
 
     public function __construct(
-        ItemRendererFactory $itemRendererFactory, ItemService $itemService, Translator $translator, string $urlFormat,
+        ItemRendererFactory $itemRendererFactory, ItemService $itemService, string $urlFormat,
         string $currentParentIdentifier = '0'
     )
     {
         $this->itemRendererFactory = $itemRendererFactory;
         $this->itemService = $itemService;
-        $this->translator = $translator;
         $this->urlFormat = $urlFormat;
 
         parent::__construct($this->getItems());
@@ -116,11 +112,6 @@ class ItemMenu extends HtmlMenu
         $menuItem['sub'] = $subMenuItems;
 
         return [$menuItem];
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 
     public function getUrlFormat(): string

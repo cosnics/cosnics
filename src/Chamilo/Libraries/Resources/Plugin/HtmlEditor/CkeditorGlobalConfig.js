@@ -1,25 +1,4 @@
 ﻿(function () {
-    CKEDITOR.plugins.addExternal(
-        'chamilo', web_path + 'Chamilo/Libraries/Resources/Plugin/HtmlEditor/CkeditorExtra/Plugin/chamilo/');
-    CKEDITOR.plugins.addExternal(
-        'chamilofakeobjects',
-        web_path + 'Chamilo/Libraries/Resources/Plugin/HtmlEditor/CkeditorExtra/Plugin/chamilofakeobjects/'
-    );
-    CKEDITOR.plugins.addExternal(
-        'resource', web_path + 'Chamilo/Libraries/Resources/Plugin/HtmlEditor/CkeditorExtra/Plugin/resource/');
-    CKEDITOR.plugins.addExternal(
-        'resourceupload',
-        web_path + 'Chamilo/Libraries/Resources/Plugin/HtmlEditor/CkeditorExtra/Plugin/resourceupload/'
-    );
-    CKEDITOR.plugins.addExternal(
-        'resourcestylecontextmenu',
-        web_path + 'Chamilo/Libraries/Resources/Plugin/HtmlEditor/CkeditorExtra/Plugin/resourcestylecontextmenu/'
-    );
-    CKEDITOR.plugins.addExternal(
-        'quickquestion',
-        web_path + 'Chamilo/Libraries/Resources/Plugin/HtmlEditor/CkeditorExtra/Plugin/quickquestion/'
-    );
-
     CKEDITOR.stylesSet.add('default', [
         // Adding space after the style name is an intended workaround. For now, there
         // is no option to create two styles with the same name for different widget types. See #16664.

@@ -5,7 +5,6 @@ use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\Renderer\ItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -30,12 +29,12 @@ class WidgetItemRenderer extends ItemRenderer
     private UserPictureProviderInterface $userPictureProvider;
 
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
-        CachedItemService $itemCacheService, ChamiloRequest $request, ConfigurationConsulter $configurationConsulter,
-        UserPictureProviderInterface $userPictureProvider, UrlGenerator $urlGenerator
+        Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
+        ConfigurationConsulter $configurationConsulter, UserPictureProviderInterface $userPictureProvider,
+        UrlGenerator $urlGenerator
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
+        parent::__construct($translator, $itemCacheService, $request);
 
         $this->configurationConsulter = $configurationConsulter;
         $this->userPictureProvider = $userPictureProvider;
@@ -45,11 +44,6 @@ class WidgetItemRenderer extends ItemRenderer
     public function render(Item $item, User $user): string
     {
         $translator = $this->getTranslator();
-
-        if (!$this->isItemVisibleForUser($user))
-        {
-            return '';
-        }
 
         $userPicture = $this->getUserPictureProvider()->getUserPictureAsBase64String($user, $user);
 
@@ -176,11 +170,6 @@ class WidgetItemRenderer extends ItemRenderer
         return $this->getUrlGenerator()->fromParameters(
             [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => $action]
         );
-    }
-
-    public function isItemVisibleForUser(User $user): bool
-    {
-        return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ManageAccount');
     }
 
     public function renderTitleForCurrentLanguage(Item $item): string

@@ -7,7 +7,7 @@ CKEDITOR.editorConfig = function (config) {
     config.plugins =
         'uploadwidget,a11yhelp,about,basicstyles,bidi,blockquote,button,clipboard,colorbutton,colordialog,contextmenu,dialog,dialogadvtab,dialogui,div,enterkey,entities,fakeobjects,find,flash,floatingspace,floatpanel,font,format,forms,horizontalrule,htmlwriter,iframe,image2,indent,indentblock,indentlist,justify,link,list,listblock,liststyle,magicline,maximize,menu,menubutton,newpage,pagebreak,panel,panelbutton,pastefromword,pastetext,popup,preview,print,removeformat,resize,richcombo,save,scayt,selectall,showblocks,showborders,smiley,sourcearea,specialchar,stylescombo,tab,table,tabletools,templates,toolbar,undo,wsc,wysiwygarea,mathjax,widget,embed,filebrowser,autoembed,codesnippet,footnotes';
     config.extraPlugins =
-        "resource,resourceupload,chamilo,chamilofakeobjects,autosave,quickquestion,resourcestylecontextmenu";
+        "autosave";
 
     config.menu_groups = 'clipboard,' + 'form,' + 'tablecell,tablecellproperties,tablerow,tablecolumn,table,'
         + 'anchor,link,image,flash,'
@@ -25,7 +25,7 @@ CKEDITOR.editorConfig = function (config) {
         ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote'],
         ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
         ['Link', 'Unlink', 'Anchor'],
-        ['Chamilo', 'Image', 'Embed', 'Mathjax', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar',
+        ['Image', 'Embed', 'Mathjax', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar',
             'PageBreak', 'Footnotes', 'CodeSnippet'], '/', ['Format', 'Font', 'FontSize'], ['TextColor', 'BGColor'],
         ['Maximize', 'ShowBlocks', '-', 'About']];
 
@@ -37,22 +37,9 @@ CKEDITOR.editorConfig = function (config) {
             'NumberedList', 'BulletedList', 'HorizontalRule', '-', 'JustifyLeft', 'JustifyCenter',
             'JustifyRight', 'JustifyBlock', 'Outdent', 'Indent'],
         '/',
-        ['Link', 'Unlink', 'Anchor', '-', 'TextColor', 'BGColor', '-', 'Table', 'Resource', 'Embed', 'Mathjax',
+        ['Link', 'Unlink', 'Anchor', '-', 'TextColor', 'BGColor', '-', 'Table', 'Embed', 'Mathjax',
             'Smiley', 'Quickquestion', '-', 'Templates', 'SpecialChar', 'Footnotes', 'CodeSnippet', '-', 'Source']];
 
-    /*config.filebrowserBrowseUrl = web_path
-        + 'index.php?application=Chamilo\\Core\\Repository&go=HtmlEditorFile&plugin=chamilo';*/
-    config.uploadUrl = web_path
-        + 'index.php?application=Chamilo\\Core\\Repository\\Ajax&go=HtmlEditorFileUpload';
-
-    /*config.filebrowserImageBrowseUrl  = web_path
-        + 'index.php?application=Chamilo\\Core\\Repository&go=HtmlEditorFile&plugin=chamilo&tab=Browser';
-    config.filebrowserImageUploadUrl= web_path
-        + 'index.php?application=Chamilo\\Core\\Repository&go=HtmlEditorFile&plugin=chamilo';*/
-    config.filebrowserChamiloBrowseUrl = web_path
-        + 'index.php?application=Chamilo\\Core\\Repository&go=HtmlEditorFile&plugin=chamilo';
-    config.filebrowserChamiloHandbookLinkBrowseUrl = web_path
-        + 'index.php?application=Chamilo\\Application\Handbook&go=handbook_topic_picker';
     config.latexDialogUrl = web_path
         + 'Chamilo/Libraries/Resources/Plugin/HtmlEditor/Ckeditor/plugins/latex/dialogs/latex.html?a=b';
 

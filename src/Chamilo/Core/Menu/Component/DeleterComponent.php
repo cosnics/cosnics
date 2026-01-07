@@ -2,7 +2,9 @@
 namespace Chamilo\Core\Menu\Component;
 
 use Chamilo\Core\Menu\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -25,7 +27,10 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
-        $this->getRightsService()->isUserAllowedToAccessComponent($this->getUser());
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
+        {
+            throw new NotAllowedException();
+        }
 
         $items = $this->getItems();
         $failures = 0;

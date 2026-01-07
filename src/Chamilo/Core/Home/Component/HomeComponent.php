@@ -26,15 +26,12 @@ class HomeComponent extends Manager implements NoAuthenticationSupportInterface,
         $authenticationValidator = $this->getAuthenticationValidator();
         $authenticationValidator->validate();
 
-        //$this->getBreadcrumbTrail()->truncate();
-
         $currentTabIdentifier = $this->getRequest()->query->get(self::PARAM_TAB_ID);
-        $isGeneralMode = (bool) $this->getSession()->get(Manager::SESSION_GENERAL_MODE, false);
 
         $html = [];
 
         $html[] = $this->renderHeader();
-        $html[] = $this->getHomeRenderer()->render($currentTabIdentifier, $isGeneralMode, $this->getUser());
+        $html[] = $this->getHomeRenderer()->render($currentTabIdentifier, $this->getUser());
         $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);

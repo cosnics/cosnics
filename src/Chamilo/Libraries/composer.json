@@ -61,8 +61,7 @@
                         "Resources/Plugin/Jquery/jquery.scrollable.pack.js",
                         "Resources/Plugin/Jquery/jquery.xml2json.pack.js",
                         "Resources/Plugin/Jquery/jquery.json.min.js",
-                        "Resources/Plugin/Jquery/jquery.query.min.js",
-                        "Resources/Plugin/JqueryContextMenu/jquery.contextMenu.min.js"
+                        "Resources/Plugin/Jquery/jquery.query.min.js"
                     ]
                 },
                 {
@@ -85,9 +84,7 @@
                 {
                     "output": "Chamilo/Libraries/Resources/Javascript/cosnics.vendor.min.js",
                     "input": [
-                        "Resources/Plugin/Fancytree/dist/jquery.fancytree-all.min.js",
                         "Resources/Plugin/Dropzone/dropzone.min.js",
-                        "Resources/Plugin/Highlight/highlight.pack.js",
                         "Resources/Plugin/PhpJs/phpjs.min.js"
                     ]
                 },
@@ -97,8 +94,7 @@
                         "Resources/Javascript/Jquery/jquery.treeMenu.min.js",
                         "Resources/Javascript/Utilities.min.js",
                         "Resources/Javascript/Help.min.js",
-                        "Resources/Javascript/Visit.min.js",
-                        "Resources/Javascript/InitHighlight.min.js"
+                        "Resources/Javascript/Visit.min.js"
                     ]
                 },
                 {
@@ -122,8 +118,7 @@
                         "Resources/Plugin/FontAwesome6/css/all.min.css",
                         "Resources/Plugin/ConnectIdents/ConnectIdents.min.css",
                         "Resources/Plugin/Dropzone/dropzone.min.css",
-                        "Resources/Plugin/Highlight/github.min.css",
-                        "Resources/Plugin/Fancytree/dist/skin-bootstrap/ui.fancytree.min.css"
+                        "Resources/Plugin/Highlight/github.min.css"
                     ]
                 },
                 {

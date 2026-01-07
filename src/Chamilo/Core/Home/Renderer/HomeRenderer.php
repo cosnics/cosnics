@@ -6,17 +6,9 @@ use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\File\WebPathBuilder;
-use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -59,46 +51,12 @@ class HomeRenderer
     /**
      * @throws \QuickformException
      */
-    public function render(?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null): string
+    public function render(?int $currentTabIdentifier = null, ?User $user = null): string
     {
-        $webPathBuilder = $this->getWebPathBuilder();
-
-        $userHomeAllowed = $this->getHomeService()->isUserHomeAllowed();
-
-        $isEditable = ($user instanceof User && ($userHomeAllowed || ($user->isPlatformAdmin() && $isGeneralMode)));
-        $isGeneralMode = ($isGeneralMode && $user instanceof User && $user->isPlatformAdmin());
-
-        if ($isEditable)
-        {
-            $html[] = '<script src="' . $webPathBuilder->getJavascriptPath('Chamilo\Core\Home') . 'HomeAjax.js' .
-                '"></script>';
-        }
-
-        if ($isGeneralMode)
-        {
-            $html[] =
-                '<script src="' . $webPathBuilder->getJavascriptPath('Chamilo\Core\Home') . 'HomeGeneralModeAjax.js' .
-                '"></script>';
-        }
-
-        $html[] = $this->renderTabs($currentTabIdentifier, $isGeneralMode, $user);
-
-        if ($isEditable)
-        {
-            $html[] = $this->renderTabTitlePanel();
-        }
-
-        if ($isGeneralMode)
-        {
-            $html[] = '<div class="alert alert-danger">' .
-                $this->getTranslator()->trans('HomepageInGeneralMode', [], Manager::CONTEXT) . '</div>';
-        }
+        $html[] = $this->renderTabs($currentTabIdentifier, $user);
 
         $html[] = $this->renderPackageContainer();
-        $html[] = $this->renderContent($currentTabIdentifier, $isGeneralMode, $user);
-
-        $html[] =
-            '<script src="' . $webPathBuilder->getJavascriptPath('Chamilo\Core\Home') . 'HomeView.js' . '"></script>';
+        $html[] = $this->renderContent($currentTabIdentifier, $user);
 
         return implode(PHP_EOL, $html);
     }
@@ -140,118 +98,9 @@ class HomeRenderer
 
     /**
      * @throws \QuickformException
+     * @throws \Exception
      */
-    public function renderButtons(bool $isGeneralMode = false, ?User $user = null): string
-    {
-        $userHomeAllowed = $this->getHomeService()->isUserHomeAllowed();
-        $homeUserIdentifier = $this->getHomeService()->determineHomeUserIdentifier($user);
-        $translator = $this->getTranslator();
-
-        $html = [];
-
-        if ($user instanceof User && ($userHomeAllowed || $user->isPlatformAdmin()))
-        {
-            $buttonToolBar = new ButtonToolBar();
-
-            if ($userHomeAllowed || $isGeneralMode)
-            {
-                $splitDropdownButton = new SplitDropdownButton(
-                    $translator->trans('NewBlock', [], Manager::CONTEXT), new FontAwesomeGlyph('plus'), '#',
-                    AbstractButton::DISPLAY_ICON_AND_LABEL, null, ['portal-add-block btn-link'], null,
-                    ['dropdown-menu-right']
-                );
-
-                $buttonToolBar->addItem($splitDropdownButton);
-
-                $splitDropdownButton->addSubButton(
-                    new SubButton(
-                        $translator->trans('NewColumn', [], Manager::CONTEXT), null, '#', AbstractButton::DISPLAY_LABEL,
-                        null, ['portal-add-column', 'btn-link']
-                    )
-                );
-                $splitDropdownButton->addSubButton(
-                    new SubButton(
-                        $translator->trans('NewTab', [], Manager::CONTEXT), null, '#', AbstractButton::DISPLAY_LABEL,
-                        null, ['portal-add-tab', 'btn-link']
-                    )
-                );
-
-                $truncateLink = $this->getUrlGenerator()->fromParameters(
-                    [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_TRUNCATE
-                    ]
-                );
-
-                if ($homeUserIdentifier != '0')
-                {
-                    $splitDropdownButton->addSubButton(
-                        new SubButton(
-                            $translator->trans('ResetHomepage', [], Manager::CONTEXT), null, $truncateLink,
-                            AbstractButton::DISPLAY_LABEL,
-                            $translator->trans('ConfirmChosenAction', [], StringUtilities::LIBRARIES),
-                            ['portal-reset', 'btn-link']
-                        )
-                    );
-                }
-            }
-
-            if (!$isGeneralMode && $user->isPlatformAdmin())
-            {
-                $homeUrl = $this->getUrlGenerator()->fromParameters(
-                    [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_MANAGE_HOME
-                    ]
-                );
-
-                $buttonToolBar->addItem(
-                    new Button(
-                        $translator->trans('ConfigureDefault', [], Manager::CONTEXT), new FontAwesomeGlyph('wrench'),
-                        $homeUrl
-                    )
-                );
-            }
-            elseif ($isGeneralMode && $user->isPlatformAdmin())
-            {
-                $personalUrl = $this->getUrlGenerator()->fromParameters(
-                    [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_MANAGE_HOME
-                    ]
-                );
-
-                $title = $userHomeAllowed ? 'BackToPersonal' : 'ViewDefault';
-
-                if (isset($splitDropdownButton))
-                {
-                    $splitDropdownButton->addSubButton(
-                        new SubButton(
-                            $translator->trans($title, [], Manager::CONTEXT), new FontAwesomeGlyph('home'),
-                            $personalUrl, AbstractButton::DISPLAY_LABEL
-                        )
-                    );
-                }
-                else
-                {
-                    $buttonToolBar->addItem(
-                        new Button($translator->trans($title), new FontAwesomeGlyph('home'), $personalUrl)
-                    );
-                }
-            }
-
-            $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-            $html[] = '<li class="pull-right portal-actions">' . $buttonToolBarRenderer->render() . '</li>';
-        }
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @throws \QuickformException
-     */
-    public function renderContent(?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
-    ): string
+    public function renderContent(?int $currentTabIdentifier = null, ?User $user = null): string
     {
         $tabRenderer = $this->getTabRenderer();
 
@@ -259,11 +108,11 @@ class HomeRenderer
 
         $html[] = '<div class="portal-tabs">';
 
-        $tabs = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(Element::TYPE_TAB, $user);
+        $tabs = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(Element::TYPE_TAB);
 
         foreach ($tabs as $tabKey => $tab)
         {
-            $html[] = $tabRenderer->render($tab, $tabKey, $currentTabIdentifier, $isGeneralMode, $user);
+            $html[] = $tabRenderer->render($tab, $tabKey, $currentTabIdentifier, $user);
         }
 
         $html[] = '</div>';
@@ -363,9 +212,9 @@ class HomeRenderer
 
     /**
      * @throws \QuickformException
+     * @throws \Exception
      */
-    public function renderTabs(?int $currentTabIdentifier = null, bool $isGeneralMode = false, ?User $user = null
-    ): string
+    public function renderTabs(?int $currentTabIdentifier = null, ?User $user = null): string
     {
         $tabHeaderRenderer = $this->getTabHeaderRenderer();
 
@@ -373,16 +222,14 @@ class HomeRenderer
 
         $html[] = '<ul class="nav nav-tabs portal-nav-tabs">';
 
-        $tabs = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(Element::TYPE_TAB, $user);
+        $tabs = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(Element::TYPE_TAB);
 
         foreach ($tabs as $tabKey => $tab)
         {
             $html[] = $tabHeaderRenderer->render(
-                $tab, $tabKey, $currentTabIdentifier, $isGeneralMode, $user
+                $tab, $tabKey, $currentTabIdentifier, $user
             );
         }
-
-        $html[] = $this->renderButtons($isGeneralMode, $user);
 
         $html[] = '</ul>';
 

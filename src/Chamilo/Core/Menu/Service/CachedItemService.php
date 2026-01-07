@@ -21,21 +21,16 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
 
     public const KEY_ITEMS = 'items';
 
-    protected RightsCacheService $rightsCacheService;
-
     private ItemService $itemService;
 
     private PropertyMapper $propertyMapper;
 
-    public function __construct(
-        ItemService $itemService, AdapterInterface $cacheAdapter, PropertyMapper $propertyMapper,
-        RightsCacheService $rightsCacheService
+    public function __construct(ItemService $itemService, AdapterInterface $cacheAdapter, PropertyMapper $propertyMapper
     )
     {
         $this->itemService = $itemService;
         $this->cacheAdapter = $cacheAdapter;
         $this->propertyMapper = $propertyMapper;
-        $this->rightsCacheService = $rightsCacheService;
     }
 
     /**
@@ -58,11 +53,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
             return false;
         }
 
-        if (!$this->getRightsCacheService()->clear())
-        {
-            return false;
-        }
-
         return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 
@@ -71,11 +61,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         $item = $this->getItemService()->createItemForTypeFromValues($itemType, $values);
 
         if (!$item)
-        {
-            return null;
-        }
-
-        if (!$this->getRightsCacheService()->clear())
         {
             return null;
         }
@@ -95,11 +80,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
             return false;
         }
 
-        if (!$this->getRightsCacheService()->clear())
-        {
-            return false;
-        }
-
         return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 
@@ -111,11 +91,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     public function deleteItemChildren(Item $item): bool
     {
         if (!$this->getItemService()->deleteItemChildren($item))
-        {
-            return false;
-        }
-
-        if (!$this->getRightsCacheService()->clear())
         {
             return false;
         }
@@ -213,11 +188,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         return $this->propertyMapper;
     }
 
-    public function getRightsCacheService(): RightsCacheService
-    {
-        return $this->rightsCacheService;
-    }
-
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
@@ -248,11 +218,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
             return false;
         }
 
-        if (!$this->getRightsCacheService()->clear())
-        {
-            return false;
-        }
-
         return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 
@@ -263,11 +228,6 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     public function updateItem(Item $item): bool
     {
         if (!$this->getItemService() - $this->updateItem($item))
-        {
-            return false;
-        }
-
-        if (!$this->getRightsCacheService()->clear())
         {
             return false;
         }

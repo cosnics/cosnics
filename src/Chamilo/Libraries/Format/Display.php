@@ -14,11 +14,11 @@ use InvalidArgumentException;
  */
 class Display
 {
-    const MESSAGE_TYPE_CONFIRM = 'confirm';
-    const MESSAGE_TYPE_ERROR = 'error';
-    const MESSAGE_TYPE_FATAL = 'fatal';
-    const MESSAGE_TYPE_NORMAL = 'normal';
-    const MESSAGE_TYPE_WARNING = 'warning';
+    public const MESSAGE_TYPE_CONFIRM = 'confirm';
+    public const MESSAGE_TYPE_ERROR = 'error';
+    public const MESSAGE_TYPE_FATAL = 'fatal';
+    public const MESSAGE_TYPE_NORMAL = 'normal';
+    public const MESSAGE_TYPE_WARNING = 'warning';
 
     /**
      *
@@ -26,7 +26,7 @@ class Display
      *
      * @return string
      */
-    public static function error_message($message)
+    public static function error_message(string $message): string
     {
         return self::message(self::MESSAGE_TYPE_ERROR, $message);
     }
@@ -38,7 +38,7 @@ class Display
      *
      * @return string
      */
-    public static function message($type = self::MESSAGE_TYPE_NORMAL, $message)
+    public static function message(string $type = self::MESSAGE_TYPE_NORMAL, string $message): string
     {
         $html = [];
 
@@ -77,7 +77,7 @@ class Display
      *
      * @return string
      */
-    public static function normal_message($message)
+    public static function normal_message(string $message): string
     {
         return self::message(self::MESSAGE_TYPE_NORMAL, $message);
     }
@@ -88,7 +88,7 @@ class Display
      *
      * @return string
      */
-    public static function warning_message($message)
+    public static function warning_message(string $message): string
     {
         return self::message(self::MESSAGE_TYPE_WARNING, $message);
     }

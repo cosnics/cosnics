@@ -29,6 +29,9 @@ class ItemRepository
         $this->dataClassRepository = $dataClassRepository;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function countItemsByParentIdentifier(string $parentIdentifier): int
     {
         $condition = new EqualityCondition(
@@ -41,16 +44,27 @@ class ItemRepository
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException
+     */
     public function createItem(Item $item): bool
     {
         return $this->getDataClassRepository()->create($item);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function deleteItem(Item $item): bool
     {
         return $this->getDataClassRepository()->delete($item);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function findItemByIdentifier(string $identifier): ?Item
     {
         return $this->getDataClassRepository()->retrieveById(Item::class, $identifier);
@@ -58,6 +72,7 @@ class ItemRepository
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findItems(): ArrayCollection
     {
@@ -74,6 +89,7 @@ class ItemRepository
      * @param int[] $identifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findItemsByIdentifiers(array $identifiers): ArrayCollection
     {
@@ -91,6 +107,7 @@ class ItemRepository
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findItemsByParentIdentifier(
         string $parentIdentifier, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
@@ -119,6 +136,7 @@ class ItemRepository
      * @param string $type
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findItemsByType(string $type): ArrayCollection
     {
@@ -131,6 +149,7 @@ class ItemRepository
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findRootCategoryItems(): ArrayCollection
     {
@@ -159,6 +178,10 @@ class ItemRepository
         return $this->dataClassRepository;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     */
     public function getNextItemSortValueByParentIdentifier(string $parentIdentifier): int
     {
         $condition = new EqualityCondition(
@@ -169,6 +192,9 @@ class ItemRepository
         return $this->getDataClassRepository()->retrieveMaximumValue(Item::class, Item::PROPERTY_SORT, $condition);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function updateItem(Item $item): bool
     {
         return $this->getDataClassRepository()->update($item);

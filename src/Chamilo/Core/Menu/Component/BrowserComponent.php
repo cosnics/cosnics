@@ -4,18 +4,16 @@ namespace Chamilo\Core\Menu\Component;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Menu\ItemMenu;
 use Chamilo\Core\Menu\Table\ItemTableRenderer;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Core\Menu\Component
@@ -36,7 +34,10 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
      */
     public function run()
     {
-        $this->getRightsService()->isUserAllowedToAccessComponent($this->getUser());
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
+        {
+            throw new NotAllowedException();
+        }
 
         $html = [];
 
@@ -97,17 +98,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
             $commonActions->addButton($dropDownButton);
 
-            if ($this->getRightsService()->areRightsEnabled())
-            {
-                $toolActions->addButton(
-                    new Button(
-
-                        $translator->trans('Rights', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('lock'),
-                        $this->get_url([self::PARAM_ACTION => self::ACTION_RIGHTS]), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                    )
-                );
-            }
-
             $buttonToolbar->addButtonGroup($commonActions);
             $buttonToolbar->addButtonGroup($toolActions);
 
@@ -133,8 +123,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         );
 
         return new ItemMenu(
-            $this->getItemRendererFactory(), $this->getItemService(), $this->getTranslator(), $urlFormat,
-            $this->getParentIdentifier()
+            $this->getItemRendererFactory(), $this->getItemService(), $urlFormat, $this->getParentIdentifier()
         );
     }
 

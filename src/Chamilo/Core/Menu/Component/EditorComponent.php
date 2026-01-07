@@ -4,7 +4,9 @@ namespace Chamilo\Core\Menu\Component;
 use Chamilo\Core\Menu\Form\ItemForm;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
@@ -28,7 +30,10 @@ class EditorComponent extends Manager implements BreadcrumbLessComponentInterfac
      */
     public function run()
     {
-        $this->getRightsService()->isUserAllowedToAccessComponent($this->getUser());
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
+        {
+            throw new NotAllowedException();
+        }
 
         $item = $this->getItem();
         $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($item);

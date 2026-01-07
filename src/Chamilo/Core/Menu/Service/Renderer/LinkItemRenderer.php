@@ -8,7 +8,6 @@ use Chamilo\Core\Menu\Architecture\Traits\TranslatableItemTrait;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\WebPathBuilder;
@@ -41,12 +40,11 @@ class LinkItemRenderer extends ItemRenderer
     private ClassnameUtilities $classnameUtilities;
 
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
-        CachedItemService $itemCacheService, ChamiloRequest $request, ClassnameUtilities $classnameUtilities,
-        WebPathBuilder $webPathBuilder, array $fallbackIsoCodes
+        Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
+        ClassnameUtilities $classnameUtilities, WebPathBuilder $webPathBuilder, array $fallbackIsoCodes
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
+        parent::__construct($translator, $itemCacheService, $request);
 
         $this->classnameUtilities = $classnameUtilities;
         $this->fallbackIsoCodes = $fallbackIsoCodes;

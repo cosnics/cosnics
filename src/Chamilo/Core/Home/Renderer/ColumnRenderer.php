@@ -36,7 +36,7 @@ class ColumnRenderer
     /**
      * @throws \QuickformException
      */
-    public function render(Element $column, bool $isGeneralMode = false, ?User $user = null): string
+    public function render(Element $column, ?User $user = null): string
     {
         $html = [];
 
@@ -45,7 +45,7 @@ class ColumnRenderer
             $column->getWidth() . '">';
 
         $blocks = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(
-            Element::TYPE_BLOCK, $user, $column->getId()
+            Element::TYPE_BLOCK, $column->getId()
         );
 
         foreach ($blocks as $block)
@@ -54,7 +54,7 @@ class ColumnRenderer
 
             if ($blockRenderer instanceof AnonymousBlockInterface || $blockRenderer->isVisible($block, $user))
             {
-                $html[] = $blockRenderer->render($block, $isGeneralMode, $user);
+                $html[] = $blockRenderer->render($block, $user);
             }
         }
 

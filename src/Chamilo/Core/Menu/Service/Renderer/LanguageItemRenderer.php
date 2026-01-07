@@ -5,7 +5,6 @@ use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -28,12 +27,11 @@ class LanguageItemRenderer extends ItemRenderer
     private LanguageConsulter $languageConsulter;
 
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker, Translator $translator,
-        CachedItemService $itemCacheService, ChamiloRequest $request, LanguageConsulter $languageConsulter,
-        ItemRendererFactory $itemRendererFactory, UrlGenerator $urlGenerator
+        Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
+        LanguageConsulter $languageConsulter, ItemRendererFactory $itemRendererFactory, UrlGenerator $urlGenerator
     )
     {
-        parent::__construct($authorizationChecker, $translator, $itemCacheService, $request);
+        parent::__construct($translator, $itemCacheService, $request);
 
         $this->languageConsulter = $languageConsulter;
         $this->itemRendererFactory = $itemRendererFactory;
@@ -49,11 +47,6 @@ class LanguageItemRenderer extends ItemRenderer
      */
     public function render(Item $item, User $user): string
     {
-        if (!$this->isItemVisibleForUser($user))
-        {
-            return '';
-        }
-
         $languages = $this->getLanguageConsulter()->getOtherLanguages($this->getTranslator()->getLocale());
 
         if (count($languages) > 1)
@@ -142,11 +135,6 @@ class LanguageItemRenderer extends ItemRenderer
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
-    }
-
-    public function isItemVisibleForUser(User $user): bool
-    {
-        return $this->getAuthorizationChecker()->isAuthorized($user, 'Chamilo\Core\User', 'ChangeLanguage');
     }
 
     public function renderDropdown(Item $item): string

@@ -4,7 +4,6 @@ namespace Chamilo\Core\Menu;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\ItemService;
-use Chamilo\Core\Menu\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
@@ -21,7 +20,6 @@ abstract class Manager extends Application
     public const ACTION_DELETE = 'Deleter';
     public const ACTION_EDIT = 'Editor';
     public const ACTION_MOVE = 'Mover';
-    public const ACTION_RIGHTS = 'Rights';
 
     public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
@@ -63,10 +61,5 @@ abstract class Manager extends Application
     public function getItemService(): ItemService
     {
         return $this->getService(ItemService::class);
-    }
-
-    public function getRightsService(): RightsService
-    {
-        return $this->getService(RightsService::class);
     }
 }

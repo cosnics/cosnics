@@ -4,7 +4,6 @@ namespace Chamilo\Core\Menu\Service\Renderer;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Menu\Factory\ItemRendererFactory;
 use Chamilo\Core\Menu\Service\CachedItemService;
-use Chamilo\Core\Menu\Service\RightsCacheService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
@@ -25,21 +24,17 @@ class MenuRenderer
 
     private ItemRendererFactory $itemRendererFactory;
 
-    private RightsCacheService $rightsCacheService;
-
     private ThemePathBuilder $themeWebPathBuilder;
 
     private WebPathBuilder $webPathBuilder;
 
     public function __construct(
-        CachedItemService $itemCacheService, RightsCacheService $rightsCacheService,
-        ItemRendererFactory $itemRendererFactory, ChamiloRequest $chamiloRequest,
+        CachedItemService $itemCacheService, ItemRendererFactory $itemRendererFactory, ChamiloRequest $chamiloRequest,
         ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder,
         ThemePathBuilder $themeWebPathBuilder
     )
     {
         $this->itemCacheService = $itemCacheService;
-        $this->rightsCacheService = $rightsCacheService;
         $this->itemRendererFactory = $itemRendererFactory;
         $this->chamiloRequest = $chamiloRequest;
         $this->configurationConsulter = $configurationConsulter;
@@ -61,19 +56,16 @@ class MenuRenderer
         {
             foreach ($this->findRootItems() as $item)
             {
-                if ($this->getRightsCacheService()->canUserViewItem($user, $item))
+                if (!$item->isHidden())
                 {
-                    if (!$item->isHidden())
+                    $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($item);
+
+                    $itemHtml = $itemRenderer->render($item, $user);
+
+                    if (!empty($itemHtml))
                     {
-                        $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($item);
-
-                        $itemHtml = $itemRenderer->render($item, $user);
-
-                        if (!empty($itemHtml))
-                        {
-                            $numberOfItems ++;
-                            $itemRenditions[] = $itemHtml;
-                        }
+                        $numberOfItems ++;
+                        $itemRenditions[] = $itemHtml;
                     }
                 }
             }
@@ -112,11 +104,6 @@ class MenuRenderer
     public function getItemRendererFactory(): ItemRendererFactory
     {
         return $this->itemRendererFactory;
-    }
-
-    public function getRightsCacheService(): RightsCacheService
-    {
-        return $this->rightsCacheService;
     }
 
     public function getThemeWebPathBuilder(): ThemePathBuilder
