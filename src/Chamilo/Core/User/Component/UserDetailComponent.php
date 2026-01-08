@@ -110,15 +110,6 @@ class UserDetailComponent extends Manager
                 )
             );
 
-            $commonActions->addButton(
-                new Button(
-                    $translator->trans('ViewQuota', [], Manager::CONTEXT), new FontAwesomeGlyph('folder'),
-                    $this->get_url(
-                        [self::PARAM_ACTION => self::ACTION_VIEW_QUOTA, 'user_id' => $user->get_id()]
-                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
-
             $changeUserUrl = $this->getUserUrlGenerator()->getChangeUserUrl($user);
 
             $toolActions->addButton(

@@ -87,9 +87,4 @@ class UserUrlGenerator
             $additionalParameters
         );
     }
-
-    public function getViewQuotaUrl(User $user): string
-    {
-        return $this->getUserActionUrl(Manager::ACTION_VIEW_QUOTA, $user);
-    }
 }

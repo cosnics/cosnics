@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataClass;
 
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassExtensionInterface;
-
 /**
  *
  * @package Chamilo\Libraries\Storage\DataClass
@@ -34,18 +32,6 @@ class DataClassFactory
             {
                 $dataClass->setDefaultProperty($property, $record[$property]);
                 unset($record[$property]);
-            }
-        }
-
-        if ($dataClass instanceof DataClassExtensionInterface)
-        {
-            foreach ($dataClass::getAdditionalPropertyNames() as $additionalPropertyName)
-            {
-                if (array_key_exists($additionalPropertyName, $record))
-                {
-                    $dataClass->setAdditionalProperty($additionalPropertyName, $record[$additionalPropertyName]);
-                    unset($record[$additionalPropertyName]);
-                }
             }
         }
 

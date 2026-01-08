@@ -116,14 +116,7 @@ class DisplayOrderRepository
 
     protected function determinePropertyDataClassName(DataClassDisplayOrderSupport $dataClass): string
     {
-        if ($dataClass instanceof CompositeDataClassExtensionInterface)
-        {
-            return $dataClass::getCompositeDataClassName();
-        }
-        else
-        {
-            return $dataClass::class;
-        }
+        return $dataClass::class;
     }
 
     /**

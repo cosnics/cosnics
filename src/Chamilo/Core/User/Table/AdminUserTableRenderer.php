@@ -204,15 +204,6 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
                     ToolbarItem::DISPLAY_ICON
                 )
             );
-
-            $viewQuotaUrl = $this->getUserUrlGenerator()->getViewQuotaUrl($user);
-
-            $toolbar->add_item(
-                new ToolBarItem(
-                    $translator->trans('ViewQuota', [], Manager::CONTEXT), new FontAwesomeGlyph('folder'),
-                    $viewQuotaUrl, ToolbarItem::DISPLAY_ICON
-                )
-            );
         }
 
         if ($user->get_id() != $this->getUser()->getId())
