@@ -89,7 +89,7 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
 
         $toolbar = new Toolbar();
 
-        $unsubscribeUrl = $this->getGroupUrlGenerator()->getUnsubscribeUserUrl($subscribedUser->getRelationId());
+        $unsubscribeUrl = $this->getGroupUrlGenerator()->getUnsubscribeUserUrl($subscribedUser);
 
         $toolbar->add_item(
             new ToolbarItem(

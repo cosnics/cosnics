@@ -101,32 +101,30 @@ class User extends DataClass
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(
-            [
-                self::PROPERTY_LASTNAME,
-                self::PROPERTY_FIRSTNAME,
-                self::PROPERTY_USERNAME,
-                self::PROPERTY_PASSWORD,
-                self::PROPERTY_AUTH_SOURCE,
-                self::PROPERTY_EXTERNAL_UID,
-                self::PROPERTY_EMAIL,
-                self::PROPERTY_STATUS,
-                self::PROPERTY_PLATFORMADMIN,
-                self::PROPERTY_PHONE,
-                self::PROPERTY_OFFICIAL_CODE,
-                self::PROPERTY_PICTURE_URI,
-                self::PROPERTY_CREATOR_ID,
-                self::PROPERTY_DISK_QUOTA,
-                self::PROPERTY_DATABASE_QUOTA,
-                self::PROPERTY_ACTIVATION_DATE,
-                self::PROPERTY_EXPIRATION_DATE,
-                self::PROPERTY_REGISTRATION_DATE,
-                self::PROPERTY_ACTIVE,
-                self::PROPERTY_SECURITY_TOKEN,
-                self::PROPERTY_APPROVED,
-                self::PROPERTY_TERMS_DATE
-            ]
-        );
+        $extendedPropertyNames[] = self::PROPERTY_LASTNAME;
+        $extendedPropertyNames[] = self::PROPERTY_FIRSTNAME;
+        $extendedPropertyNames[] = self::PROPERTY_USERNAME;
+        $extendedPropertyNames[] = self::PROPERTY_PASSWORD;
+        $extendedPropertyNames[] = self::PROPERTY_AUTH_SOURCE;
+        $extendedPropertyNames[] = self::PROPERTY_EXTERNAL_UID;
+        $extendedPropertyNames[] = self::PROPERTY_EMAIL;
+        $extendedPropertyNames[] = self::PROPERTY_STATUS;
+        $extendedPropertyNames[] = self::PROPERTY_PLATFORMADMIN;
+        $extendedPropertyNames[] = self::PROPERTY_PHONE;
+        $extendedPropertyNames[] = self::PROPERTY_OFFICIAL_CODE;
+        $extendedPropertyNames[] = self::PROPERTY_PICTURE_URI;
+        $extendedPropertyNames[] = self::PROPERTY_CREATOR_ID;
+        $extendedPropertyNames[] = self::PROPERTY_DISK_QUOTA;
+        $extendedPropertyNames[] = self::PROPERTY_DATABASE_QUOTA;
+        $extendedPropertyNames[] = self::PROPERTY_ACTIVATION_DATE;
+        $extendedPropertyNames[] = self::PROPERTY_EXPIRATION_DATE;
+        $extendedPropertyNames[] = self::PROPERTY_REGISTRATION_DATE;
+        $extendedPropertyNames[] = self::PROPERTY_ACTIVE;
+        $extendedPropertyNames[] = self::PROPERTY_SECURITY_TOKEN;
+        $extendedPropertyNames[] = self::PROPERTY_APPROVED;
+        $extendedPropertyNames[] = self::PROPERTY_TERMS_DATE;
+
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     public function getGroupMembershipService(): GroupMembershipService

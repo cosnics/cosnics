@@ -254,6 +254,7 @@ class DataClassRepository
     protected function __retrieves(string $dataClassName, StorageParameters $parameters): ArrayCollection
     {
         $records = $this->__records($dataClassName, $parameters);
+
         $dataClasses = [];
 
         foreach ($records as $record)

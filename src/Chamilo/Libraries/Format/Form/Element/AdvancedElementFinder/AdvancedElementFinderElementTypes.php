@@ -26,35 +26,12 @@ class AdvancedElementFinderElementTypes
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType[] $types
-     */
-    public function set_types($types)
-    {
-        $this->types = $types;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType[]
-     */
-    public function get_types()
-    {
-        return $this->types;
-    }
-
-    /**
      * Adds an element type to the types list
      *
      * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType $type
      */
     public function add_element_type(AdvancedElementFinderElementType $type)
     {
-        if (!$type instanceof AdvancedElementFinderElementType)
-        {
-            return false;
-        }
-
         $this->types[] = $type;
     }
 
@@ -75,5 +52,23 @@ class AdvancedElementFinderElementTypes
         }
 
         return $array;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType[]
+     */
+    public function get_types()
+    {
+        return $this->types;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType[] $types
+     */
+    public function set_types($types)
+    {
+        $this->types = $types;
     }
 }

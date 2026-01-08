@@ -9,7 +9,6 @@ class SubscribedUser extends User
     public const CONTEXT = Manager::CONTEXT;
 
     public const PROPERTY_GROUP_ID = 'group_id';
-
     public const PROPERTY_RELATION_ID = 'relation_id';
 
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array

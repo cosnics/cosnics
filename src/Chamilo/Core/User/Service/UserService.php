@@ -431,6 +431,10 @@ class UserService
         return $this->getUserRepository()->findUserByEmail($email);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function findUserByIdentifier(string $identifier): ?User
     {
         return $this->getUserRepository()->findUserByIdentifier($identifier);

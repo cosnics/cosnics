@@ -8,6 +8,7 @@ use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
 use Chamilo\Core\Group\Table\GroupTableRenderer;
 use Chamilo\Core\Group\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\MenuComponentInterface;
@@ -403,7 +404,15 @@ class BrowserComponent extends Manager implements MenuComponentInterface
      */
     public function renderApplicationMenu(): string
     {
-        $group_menu = new GroupMenu($this->getGroupIdentifier());
+        $url = $this->getUrlGenerator()->fromParameters(
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => Manager::ACTION_BROWSER,
+                self::PARAM_GROUP_ID => '%s'
+            ]
+        );
+
+        $group_menu = new GroupMenu($this->getGroupIdentifier(), $url);
 
         return $group_menu->render_as_tree();
     }

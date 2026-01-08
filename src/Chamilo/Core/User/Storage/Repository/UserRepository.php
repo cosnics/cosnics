@@ -272,6 +272,10 @@ class UserRepository implements UserRepositoryInterface
         return $this->getDataClassRepository()->retrieve(User::class, new StorageParameters(condition: $condition));
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     */
     public function findUserByIdentifier(string $identifier): ?User
     {
         return $this->getDataClassRepository()->retrieveById(User::class, $identifier);
