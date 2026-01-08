@@ -1,18 +1,6 @@
 {
     "name": "cosnics/application-calendar-extension-google-integration-chamilo-libraries-calendar",
     "version": "1.0.0",
-    "description": "Application Calendar Extension Google Integration Chamilo Libraries Calendar",
-    "keywords": [
-        "Application",
-        "Calendar",
-        "Extension",
-        "Google",
-        "Integration",
-        "Chamilo",
-        "Libraries",
-        "Calendar"
-    ],
-    "homepage": "http://www.cosnics.org",
     "license": "MIT",
     "authors": [
         {

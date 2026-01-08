@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Mail\Mailer;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Configuration\Storage\DataClass\MailLog;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 
 /**
@@ -74,9 +73,6 @@ abstract class AbstractMailer implements MailerInterface
         return $this->determineDefaultEmail();
     }
 
-    /**
-     * Determines the reply name for the given mail
-     */
     protected function determineReplyName(Mail $mail): string
     {
         if (!is_null($mail->getReplyName()))
@@ -87,17 +83,9 @@ abstract class AbstractMailer implements MailerInterface
         return $this->getAdministratorName();
     }
 
-    /**
-     * Returns the name of the administrator from the platform settings
-     *
-     * @return string
-     */
     protected function getAdministratorName(): string
     {
-        $configurationConsulter = $this->getConfigurationConsulter();
-
-        return $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'administrator_firstname']) .
-            $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'administrator_surname']);
+        return $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_name']);
     }
 
     public function getConfigurationConsulter(): ConfigurationConsulter
@@ -106,31 +94,9 @@ abstract class AbstractMailer implements MailerInterface
     }
 
     /**
-     * Logs a send (or not send) mail to the database
-     *
-     * @throws \RuntimeException
-     */
-    protected function logMail(Mail $mail, int $state = MailLog::STATE_SUCCESSFUL, ?string $message = null)
-    {
-        // $log = new MailLog();
-        // $log->set_sender($this->determineFromEmail($mail));
-        // $log->set_recipient(json_encode($mail->getTo()));
-        // $log->set_date(time());
-        // $log->set_subject($mail->getSubject());
-        // $log->set_host(gethostname());
-        // $log->set_state($state);
-        // $log->set_message($message);
-        //
-        // if(!$log->create())
-        // {
-        // throw new \RuntimeException('Could not create a mail log');
-        // }
-    }
-
-    /**
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail[] $mails
      */
-    public function sendMails(array $mails = [])
+    public function sendMails(array $mails = []): void
     {
         foreach ($mails as $mail)
         {

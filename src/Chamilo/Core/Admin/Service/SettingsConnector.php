@@ -8,6 +8,7 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use DateTimeZone;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -122,6 +123,22 @@ class SettingsConnector implements SettingsConnectorInterface
     public function getThemes(): array
     {
         return $this->getThemeSystemPathBuilder()->getAvailableThemes();
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getTimeZones(): array
+    {
+        $timezones = [];
+        $timezoneIdentifiers = DateTimeZone::listIdentifiers();
+
+        foreach ($timezoneIdentifiers as $timezoneIdentifier)
+        {
+            $timezones[$timezoneIdentifier] = $timezoneIdentifier;
+        }
+
+        return $timezones;
     }
 
     public function getTranslator(): Translator

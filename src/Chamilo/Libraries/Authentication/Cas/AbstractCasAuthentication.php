@@ -161,7 +161,6 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
      */
     public function login(): ?User
     {
-
         if (!$this->isAuthSourceActive())
         {
             return null;
@@ -171,7 +170,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
         $configurationConsulter = $this->getConfigurationConsulter();
 
         $externalAuthenticationEnabled = $configurationConsulter->getSetting(
-            ['Chamilo\Core\Admin', 'enableExternalAuthentication']
+            ['Chamilo\Libraries', 'enableExternalAuthentication']
         );
 
         $bypassExternalAuthentication = (boolean) $this->getRequest()->query->get('noExtAuth', false);

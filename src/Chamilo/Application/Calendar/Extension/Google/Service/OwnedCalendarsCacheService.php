@@ -52,7 +52,7 @@ class OwnedCalendarsCacheService
         if (!$this->hasCacheDataForKey($cacheIdentifier))
         {
             $lifetimeInMinutes = $this->getUserSettingService()->getSettingForUser(
-                $this->getUser(), 'Chamilo\Libraries\Calendar', 'refresh_external'
+                $this->getUser(), 'Chamilo\Core\Admin', 'refresh_external'
             );
 
             $this->saveCacheDataForKey(

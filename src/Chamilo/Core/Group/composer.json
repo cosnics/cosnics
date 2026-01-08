@@ -1,12 +1,6 @@
 {
     "name": "cosnics/core-group",
     "version": "1.0.0",
-    "description": "Core Group",
-    "keywords": [
-        "Core",
-        "Group"
-    ],
-    "homepage": "http://www.cosnics.org",
     "license": "MIT",
     "authors": [
         {

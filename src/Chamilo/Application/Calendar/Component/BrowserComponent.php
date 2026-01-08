@@ -140,7 +140,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::CONTEXT,
                 Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_USER_SETTINGS,
-                UserSettingsComponent::PARAM_CONTEXT => 'Chamilo\Libraries\Calendar'
+                UserSettingsComponent::PARAM_CONTEXT => 'Chamilo\Core\User'
             ]
         );
 

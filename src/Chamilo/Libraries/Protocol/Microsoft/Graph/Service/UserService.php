@@ -45,7 +45,7 @@ class UserService
     public function getAzureUserIdentifier(User $user): string
     {
         $azureActiveDirectoryUserIdentifier = $this->getUserSettingService()->getSettingForUser(
-            $user, 'Chamilo\Libraries\Protocol\Microsoft\Graph', 'external_user_id'
+            $user, 'Chamilo\Libraries', 'microsoft_graph_external_user_id'
         );
 
         if (empty($azureActiveDirectoryUserIdentifier))
@@ -58,7 +58,7 @@ class UserService
             }
 
             $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
-                'Chamilo\Libraries\Protocol\Microsoft\Graph', 'external_user_id', $user,
+                'Chamilo\Libraries', 'microsoft_graph_external_user_id', $user,
                 $azureActiveDirectoryUserIdentifier
             );
         }

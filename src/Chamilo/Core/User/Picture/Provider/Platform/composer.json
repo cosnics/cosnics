@@ -1,15 +1,6 @@
 {
     "name": "cosnics/core-user-picture-provider-platform",
     "version": "1.0.0",
-    "description": "Core User Picture Provider Platform",
-    "keywords": [
-        "Core",
-        "User",
-        "Picture",
-        "Provider",
-        "Platform"
-    ],
-    "homepage": "http://www.cosnics.org",
     "license": "MIT",
     "authors": [
         {

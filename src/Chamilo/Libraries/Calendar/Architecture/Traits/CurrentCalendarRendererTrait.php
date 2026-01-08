@@ -18,7 +18,7 @@ trait CurrentCalendarRendererTrait
         if (!$rendererType)
         {
             $rendererType = $this->getUserSettingService()->getSettingForUser(
-                $this->getUser(), 'Chamilo\Libraries\Calendar', 'default_view'
+                $this->getUser(), 'Chamilo\Libraries', 'calendar_default_view'
             );
 
             if ($rendererType == HtmlCalendarRenderer::TYPE_MONTH)

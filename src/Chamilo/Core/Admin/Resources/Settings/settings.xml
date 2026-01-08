@@ -91,6 +91,14 @@
                          source="getLanguages"/>
                 <availability source="isAllowedToChangePlatformLanguage"/>
             </setting>
+            <setting name="platform_timezone"
+                     field="select"
+                     default="Europe/Brussels"
+                     user_setting="1">
+                <options type="dynamic"
+                         source="getTimeZones"/>
+                <availability source="isAllowedToChangePlatformTimezone"/>
+            </setting>
             <setting name="theme"
                      field="select"
                      default="Aqua"
@@ -103,97 +111,12 @@
                      field="html_editor"
                      default=""/>
         </category>
-        <category name="authentication">
-            <setting name="enableExternalAuthentication"
-                     field="toggle">
-                <options type="static">
-                    <option name="enableExternalAuthentication"
-                            value="1"/>
-                </options>
-            </setting>
-        </category>
 
-        <category name="credentials_authentication">
-            <setting name="enablePlatformAuthentication"
-                     field="toggle"
-                     default="1">
-                <options type="static">
-                    <option name="enablePlatformAuthentication"
-                            value="1"/>
-                </options>
-            </setting>
-        </category>
-
-        <category name="query_authentication">
-            <setting name="enableSecurityTokenAuthentication"
-                     field="toggle">
-                <options type="static">
-                    <option name="enableSecurityTokenAuthentication"
-                            value="1"/>
-                </options>
-            </setting>
-            <setting name="enableAnonymousAuthentication"
-                     field="toggle">
-                <options type="static">
-                    <option name="enableAnonymousAuthentication"
-                            value="0"/>
-                </options>
-            </setting>
-        </category>
-
-        <category name="external_authentication">
-            <setting name="enableCasAuthentication"
-                     field="toggle">
-                <options type="static">
-                    <option name="enableCasAuthentication"
-                            value="1"/>
-                </options>
-            </setting>
-        </category>
-        <category name="cas_authentication">
-            <setting name="cas_base_url"
+        <category name="caching">
+            <setting name="refresh_external"
                      field="text"
-                     default=""/>
-            <setting name="cas_host"
-                     field="text"
-                     default=""/>
-            <setting name="cas_port"
-                     field="text"
-                     default=""/>
-            <setting name="cas_uri"
-                     field="text"
-                     default=""/>
-            <setting name="cas_version"
-                     field="radio"
-                     default="SAML_VERSION_1_1">
-                <options type="static">
-                    <option name="SAML VERSION 1.1"
-                            value="SAML_VERSION_1_1"/>
-                    <option name="CAS VERSION 2.0"
-                            value="CAS_VERSION_2_0"/>
-                </options>
-            </setting>
-            <setting name="cas_check_certificate"
-                     field="toggle"
-                     default="1">
-                <options type="static">
-                    <option name="cas_check_certificate"
-                            value="1"/>
-                </options>
-            </setting>
-            <setting name="cas_certificate"
-                     field="text"
-                     default=""/>
-            <setting name="cas_enable_log"
-                     field="toggle">
-                <options type="static">
-                    <option name="cas_enable_log"
-                            value="1"/>
-                </options>
-            </setting>
-            <setting name="cas_log"
-                     field="text"
-                     default=""/>
+                     default="60"
+                     user_setting="1"/>
         </category>
     </settings>
 </package>

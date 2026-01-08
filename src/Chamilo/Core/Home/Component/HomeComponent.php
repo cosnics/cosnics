@@ -14,7 +14,8 @@ use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessPackageInterface;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class HomeComponent extends Manager implements NoAuthenticationSupportInterface, BreadcrumbLessPackageInterface, BreadcrumbLessComponentInterface
+class HomeComponent extends Manager
+    implements NoAuthenticationSupportInterface, BreadcrumbLessPackageInterface, BreadcrumbLessComponentInterface
 {
 
     /**

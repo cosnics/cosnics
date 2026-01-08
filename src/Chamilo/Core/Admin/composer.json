@@ -1,12 +1,6 @@
 {
     "name": "cosnics/core-admin",
     "version": "1.0.0",
-    "description": "Core Admin",
-    "keywords": [
-        "Core",
-        "Admin"
-    ],
-    "homepage": "http://www.cosnics.org",
     "license": "MIT",
     "authors": [
         {

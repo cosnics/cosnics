@@ -1,12 +1,6 @@
 {
     "name": "cosnics/core-menu",
     "version": "1.0.0",
-    "description": "Core Menu",
-    "keywords": [
-        "Core",
-        "Menu"
-    ],
-    "homepage": "http://www.cosnics.org",
     "license": "MIT",
     "authors": [
         {

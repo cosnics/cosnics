@@ -1,7 +1,6 @@
 {
     "name": "cosnics/libraries",
     "version": "1.0.0",
-    "description": "Libraries",
     "require": {
         "php": ">=8.2.0",
         "ext-zip": "*",
@@ -13,10 +12,6 @@
         "spipu/html2pdf": "5.2.*",
         "voku/stringy": "6.*"
     },
-    "keywords": [
-        "Libraries"
-    ],
-    "homepage": "http://www.cosnics.org",
     "license": "MIT",
     "authors": [
         {
@@ -130,7 +125,8 @@
                         "Resources/Css/Aqua/Tabs.min.css",
                         "Resources/Css/Aqua/Tree.min.css",
                         "Resources/Css/Aqua/Bootstrap.min.css",
-                        "Resources/Css/Aqua/Stylesheet.min.css"
+                        "Resources/Css/Aqua/Stylesheet.min.css",
+                        "Resources/Css/Aqua/Calendar/Stylesheet.min.css"
                     ]
                 },
                 {

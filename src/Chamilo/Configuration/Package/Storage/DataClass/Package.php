@@ -1,13 +1,8 @@
 <?php
 namespace Chamilo\Configuration\Package\Storage\DataClass;
 
-use Chamilo\Configuration\Package\Properties\Authors\Author;
-use Chamilo\Configuration\Package\Service\PackageFactory;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Exception;
-use Symfony\Component\Filesystem\Filesystem;
+use stdClass;
 
 /**
  * @package Chamilo\Configuration\Package\Storage\DataClass
@@ -17,57 +12,16 @@ class Package extends DataClass
 {
     public const CONTEXT = 'Chamilo\Configuration\Package';
 
-    public const PROPERTY_AUTHORS = 'authors';
-    public const PROPERTY_CATEGORY = 'category';
+    public const PROPERTY_COMPOSER_JSON_OBJECT = 'extra';
     public const PROPERTY_CONTEXT = 'context';
-    public const PROPERTY_DESCRIPTION = 'description';
-    public const PROPERTY_EXTRA = 'extra';
     public const PROPERTY_NAME = 'name';
     public const PROPERTY_RESOURCES = 'resources';
     public const PROPERTY_TYPE = 'type';
     public const PROPERTY_VERSION = 'version';
 
-    /**
-     * @param \Chamilo\Configuration\Package\Properties\Authors\Author $author
-     */
-    public function add_author(Author $author)
+    public function getComposerJsonObject(): stdClass
     {
-        $authors = $this->get_authors();
-        $authors[] = $author;
-
-        $this->set_authors($authors);
-    }
-
-    /**
-     * @param string $context
-     *
-     * @return bool
-     * @throws \Exception
-     * @deprecated Use PackageFactory->packageExists($context) now
-     */
-    public static function exists($context)
-    {
-        $packageFactory = new PackageFactory(
-            new SystemPathBuilder(ClassnameUtilities::getInstance()), new Filesystem()
-        );
-
-        return $packageFactory->packageExists($context);
-    }
-
-    /**
-     * @param string $context
-     *
-     * @return \Chamilo\Configuration\Package\Storage\DataClass\Package
-     * @throws Exception
-     * @deprecated Use PackageFactory->getPackage($context) now
-     */
-    public static function get($context)
-    {
-        $packageFactory = new PackageFactory(
-            new SystemPathBuilder(ClassnameUtilities::getInstance()), new Filesystem()
-        );
-
-        return $packageFactory->getPackage($context);
+        return unserialize($this->getDefaultProperty(self::PROPERTY_COMPOSER_JSON_OBJECT));
     }
 
     /**
@@ -80,22 +34,17 @@ class Package extends DataClass
         $extendedPropertyNames[] = self::PROPERTY_CONTEXT;
         $extendedPropertyNames[] = self::PROPERTY_NAME;
         $extendedPropertyNames[] = self::PROPERTY_TYPE;
-        $extendedPropertyNames[] = self::PROPERTY_CATEGORY;
-        $extendedPropertyNames[] = self::PROPERTY_AUTHORS;
         $extendedPropertyNames[] = self::PROPERTY_VERSION;
-        $extendedPropertyNames[] = self::PROPERTY_DESCRIPTION;
-        $extendedPropertyNames[] = self::PROPERTY_EXTRA;
+        $extendedPropertyNames[] = self::PROPERTY_COMPOSER_JSON_OBJECT;
         $extendedPropertyNames[] = self::PROPERTY_RESOURCES;
 
         return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**
-     * Returns the extra of this Package.
-     *
-     * @return \stdClass[]
+     * @return string[][]
      */
-    public function getResources()
+    public function getResources(): array
     {
         return unserialize($this->getDefaultProperty(self::PROPERTY_RESOURCES));
     }
@@ -108,157 +57,68 @@ class Package extends DataClass
         return 'configuration_package';
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
-    /**
-     * @return \Chamilo\Configuration\Package\Properties\Authors\Author[]
-     */
-    public function get_authors()
-    {
-        return unserialize($this->getDefaultProperty(self::PROPERTY_AUTHORS));
-    }
-
-    /**
-     * @return string
-     */
-    public function get_category()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CATEGORY);
-    }
-
-    /**
-     * @return string
-     */
-    public function get_context()
+    public function get_context(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_CONTEXT);
     }
 
-    /**
-     * @return string
-     */
-    public function get_description()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function get_extra()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_EXTRA);
-    }
-
-    /**
-     * @return string
-     */
-    public function get_name()
+    public function get_name(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
-    /**
-     * @deprecated Use Package::getType() now
-     */
-    public function get_type()
-    {
-        return $this->getType();
-    }
-
-    /**
-     * @return string
-     */
-    public function get_version()
+    public function get_version(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_VERSION);
     }
 
+    public function setComposerJsonObject(stdClass $composerJsonObject): Package
+    {
+        $this->setDefaultProperty(self::PROPERTY_COMPOSER_JSON_OBJECT, serialize($composerJsonObject));
+
+        return $this;
+    }
+
     /**
-     * Sets the extra of this Package.
-     *
      * @param string[][] $resources
      */
-    public function setResources($resources)
+    public function setResources(array $resources): Package
     {
         $this->setDefaultProperty(self::PROPERTY_RESOURCES, serialize($resources));
+
+        return $this;
     }
 
-    /**
-     * @param string $type
-     */
-    public function setType($type)
+    public function setType(string $type): Package
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
+
+        return $this;
     }
 
-    /**
-     * @param \Chamilo\Configuration\Package\Properties\Authors\Author[] $authors
-     */
-    public function set_authors($authors)
-    {
-        $this->setDefaultProperty(self::PROPERTY_AUTHORS, serialize($authors));
-    }
-
-    /**
-     * @param string $category
-     */
-    public function set_category($category)
-    {
-        $this->setDefaultProperty(self::PROPERTY_CATEGORY, $category);
-    }
-
-    /**
-     * @param string $context
-     */
-    public function set_context($context)
+    public function set_context(string $context): Package
     {
         $this->setDefaultProperty(self::PROPERTY_CONTEXT, $context);
+
+        return $this;
     }
 
-    /**
-     * @param string $description
-     */
-    public function set_description($description)
-    {
-        $this->setDefaultProperty(self::PROPERTY_DESCRIPTION, $description);
-    }
-
-    /**
-     * @param string[] $extra
-     */
-    public function set_extra($extra)
-    {
-        $this->setDefaultProperty(self::PROPERTY_EXTRA, $extra);
-    }
-
-    /**
-     * @param string $name
-     */
-    public function set_name($name)
+    public function set_name(string $name): Package
     {
         $this->setDefaultProperty(self::PROPERTY_NAME, $name);
+
+        return $this;
     }
 
-    /**
-     * @deprecated Use Package::setType() now
-     */
-    public function set_type($type)
-    {
-        $this->setType($type);
-    }
-
-    /**
-     * @param string $version
-     */
-    public function set_version($version)
+    public function set_version(string $version): Package
     {
         $this->setDefaultProperty(self::PROPERTY_VERSION, $version);
+
+        return $this;
     }
 }

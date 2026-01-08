@@ -61,15 +61,15 @@ class GraphRepositoryFactory
     public function buildGraphRepository()
     {
         $clientId = $this->configurationConsulter->getSetting(
-            ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'client_id']
+            ['Chamilo\Libraries', 'microsoft_graph_client_id']
         );
 
         $clientSecret = $this->configurationConsulter->getSetting(
-            ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'client_secret']
+            ['Chamilo\Libraries', 'microsoft_graph_client_secret']
         );
 
         $tenantId = $this->configurationConsulter->getSetting(
-            ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'tenant_id']
+            ['Chamilo\Libraries', 'microsoft_graph_tenant_id']
         );
 
         if (empty($tenantId))

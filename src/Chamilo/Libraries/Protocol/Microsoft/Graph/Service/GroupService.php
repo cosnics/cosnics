@@ -283,7 +283,7 @@ class GroupService
     public function getGroupUrl($groupId)
     {
         $groupUrl = $this->configurationConsulter->getSetting(
-            ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'group_base_uri']
+            ['Chamilo\Libraries', 'microsoft_graph_group_base_uri']
         );
 
         $group = $this->groupRepository->getGroup($groupId);

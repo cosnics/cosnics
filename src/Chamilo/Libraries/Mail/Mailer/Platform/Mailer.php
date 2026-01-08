@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Mail\Mailer\Platform;
 
-use Chamilo\Configuration\Storage\DataClass\MailLog;
 use Chamilo\Libraries\Mail\Mailer\AbstractMailer;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use RuntimeException;
@@ -14,21 +13,15 @@ use RuntimeException;
 class Mailer extends AbstractMailer
 {
 
-    protected function send(Mail $mail, string $recipients, string $headers)
+    protected function send(Mail $mail, string $recipients, string $headers): void
     {
         if (!mail($recipients, $mail->getSubject(), $mail->getMessage(), $headers))
         {
-            $this->logMail($mail, MailLog::STATE_FAILED);
             throw new RuntimeException('Could not send e-mail');
         }
-
-        $this->logMail($mail);
     }
 
-    /**
-     * @throws \RuntimeException
-     */
-    public function sendMail(Mail $mail)
+    public function sendMail(Mail $mail): void
     {
         $headers = [];
 

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View\TableBuilder;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use HTML_Table;
@@ -135,9 +136,17 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
 
     protected function getFirstDayOfWeek(): ?string
     {
-        return $this->getUserSettingService()->getSettingForUser(
-            $this->getUser(), 'Chamilo\Libraries\Calendar', 'first_day_of_week'
-        );
+        if ($this->getUser() instanceof User)
+        {
+
+            return $this->getUserSettingService()->getSettingForUser(
+                $this->getUser(), 'Chamilo\Libraries', 'calendar_first_day_of_week'
+            );
+        }
+        else
+        {
+            return $this->getConfigurationConsulter()->getSetting(['Chamilo\Libraries', 'calendar_first_day_of_week']);
+        }
     }
 
     public function getTableEndTime(int $displayTime): int

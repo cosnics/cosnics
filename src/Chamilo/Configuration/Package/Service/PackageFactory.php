@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Configuration\Package\Service;
 
-use Chamilo\Configuration\Package\Properties\Authors\Author;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use OutOfBoundsException;
@@ -71,16 +70,9 @@ class PackageFactory
         $package->set_context($cosnicsProperties->context);
         $package->set_name($cosnicsProperties->name);
         $package->setType($cosnicsProperties->type);
-        $package->set_category($cosnicsProperties->category ?? '');
         $package->set_version($jsonPackageObject->version);
-        $package->set_description($jsonPackageObject->description);
-
         $package->setResources($cosnicsProperties->resources ?? []);
-
-        foreach ($jsonPackageObject->authors as $author)
-        {
-            $package->add_author(new Author($author->name, $author->email));
-        }
+        $package->setComposerJsonObject($jsonPackageObject);
 
         return $package;
     }

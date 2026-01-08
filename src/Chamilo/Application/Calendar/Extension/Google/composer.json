@@ -1,14 +1,6 @@
 {
     "name": "cosnics/application-calendar-extension-google",
     "version": "1.0.0",
-    "description": "Application Calendar Extension Google",
-    "keywords": [
-        "Application",
-        "Calendar",
-        "Extension",
-        "Google"
-    ],
-    "homepage": "http://www.cosnics.org",
     "license": "MIT",
     "authors": [
         {

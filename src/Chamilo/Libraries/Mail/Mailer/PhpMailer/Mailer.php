@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Mail\Mailer\PhpMailer;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Configuration\Storage\DataClass\MailLog;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Mail\Mailer\AbstractMailer;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
@@ -36,7 +35,7 @@ class Mailer extends AbstractMailer
     /**
      * @throws \PHPMailer\PHPMailer\Exception
      */
-    protected function addAttachments(Mail $mail)
+    protected function addAttachments(Mail $mail): void
     {
         foreach ($mail->getAttachments() as $mailFile)
         {
@@ -44,7 +43,7 @@ class Mailer extends AbstractMailer
         }
     }
 
-    protected function addContent(Mail $mail)
+    protected function addContent(Mail $mail): void
     {
         $this->phpMailer->Body = $mail->getMessage();
         $this->phpMailer->Subject = $mail->getSubject();
@@ -53,7 +52,7 @@ class Mailer extends AbstractMailer
     /**
      * @throws \PHPMailer\PHPMailer\Exception
      */
-    protected function addEmbeddedImages(Mail $mail)
+    protected function addEmbeddedImages(Mail $mail): void
     {
         foreach ($mail->getEmbeddedImages() as $index => $mailFile)
         {
@@ -66,9 +65,9 @@ class Mailer extends AbstractMailer
     /**
      * @throws \PHPMailer\PHPMailer\Exception
      */
-    protected function addRecipients(Mail $mail)
+    protected function addRecipients(Mail $mail): void
     {
-        foreach ($mail->getTo() as $index => $recipient)
+        foreach ($mail->getTo() as $recipient)
         {
             $this->phpMailer->addAddress($recipient, $recipient);
         }
@@ -87,7 +86,7 @@ class Mailer extends AbstractMailer
     /**
      * @throws \PHPMailer\PHPMailer\Exception
      */
-    protected function addReplyInformation(Mail $mail)
+    protected function addReplyInformation(Mail $mail): void
     {
         if (!is_null($mail->getReplyEmail()))
         {
@@ -105,7 +104,7 @@ class Mailer extends AbstractMailer
      *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail $mail
      */
-    protected function addSenderInformation(Mail $mail)
+    protected function addSenderInformation(Mail $mail): void
     {
         $this->phpMailer->From = $this->determineFromEmail($mail);
         $this->phpMailer->Sender = $this->phpMailer->From;
@@ -120,7 +119,7 @@ class Mailer extends AbstractMailer
     /**
      * @throws \PHPMailer\PHPMailer\Exception
      */
-    protected function initializePhpMailer()
+    protected function initializePhpMailer(): void
     {
         if (!isset($this->phpMailer))
         {
@@ -129,7 +128,7 @@ class Mailer extends AbstractMailer
 
             $this->phpMailer = new PHPMailer();
 
-            $this->phpMailer->isHTML(true);
+            $this->phpMailer->isHTML();
             $this->phpMailer->CharSet = 'utf-8';
             $this->phpMailer->Mailer = $phpMailerConfiguration['SMTP_MAILER'];
             $this->phpMailer->Host = $phpMailerConfiguration['SMTP_HOST'];
@@ -154,10 +153,7 @@ class Mailer extends AbstractMailer
         }
     }
 
-    /**
-     * Resets the mailer after sending each mail
-     */
-    protected function resetMailer()
+    protected function resetMailer(): void
     {
         $this->phpMailer->clearAllRecipients();
         $this->phpMailer->clearAttachments();
@@ -168,16 +164,11 @@ class Mailer extends AbstractMailer
     /**
      * @throws \PHPMailer\PHPMailer\Exception
      */
-    protected function send(Mail $mail)
+    protected function send(Mail $mail): void
     {
         if (!$this->phpMailer->send())
         {
-            $this->logMail($mail, MailLog::STATE_FAILED, $this->phpMailer->ErrorInfo);
-            throw new RuntimeException('Could not send e-mail');
-        }
-        else
-        {
-            $this->logMail($mail);
+            throw new RuntimeException('Could not send e-mail:' . $mail->getSubject());
         }
     }
 
@@ -185,7 +176,7 @@ class Mailer extends AbstractMailer
      * @throws \PHPMailer\PHPMailer\Exception
      * @throws \Exception
      */
-    protected function sendIndividually(Mail $mail)
+    protected function sendIndividually(Mail $mail): void
     {
         $recipientsFailed = [];
 
@@ -197,7 +188,7 @@ class Mailer extends AbstractMailer
             {
                 $this->send($mail);
             }
-            catch (Exception $ex)
+            catch (Exception)
             {
                 $recipientsFailed[] = $recipient;
             }
@@ -214,7 +205,7 @@ class Mailer extends AbstractMailer
     /**
      * @throws \PHPMailer\PHPMailer\Exception
      */
-    public function sendMail(Mail $mail)
+    public function sendMail(Mail $mail): void
     {
         $this->addSenderInformation($mail);
         $this->addReplyInformation($mail);

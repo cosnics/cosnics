@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View\TableBuilder;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Calendar\Architecture\Traits\HourBasedCalendarTrait;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -99,7 +100,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
                 $classes[] = 'table-calendar-alternate';
             }
 
-            $table->setCellAttributes($rowId, 0, ['class' =>$classes]);
+            $table->setCellAttributes($rowId, 0, ['class' => $classes]);
         }
 
         $today = date('Y-m-d');
@@ -117,7 +118,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
 
                 if (count($classes) > 0)
                 {
-                    $table->setCellAttributes($row, $day + 1, ['class' =>$classes]);
+                    $table->setCellAttributes($row, $day + 1, ['class' => $classes]);
                 }
 
                 $table->setCellContents($row, $day + 1, '');
@@ -168,9 +169,17 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
 
     protected function getFirstDayOfWeek(): ?string
     {
-        return $this->getUserSettingService()->getSettingForUser(
-            $this->getUser(), 'Chamilo\Libraries\Calendar', 'first_day_of_week'
-        );
+        if ($this->getUser() instanceof User)
+        {
+
+            return $this->getUserSettingService()->getSettingForUser(
+                $this->getUser(), 'Chamilo\Libraries', 'calendar_first_day_of_week'
+            );
+        }
+        else
+        {
+            return $this->getConfigurationConsulter()->getSetting(['Chamilo\Libraries', 'calendar_first_day_of_week']);
+        }
     }
 
     protected function getHeaderContent(int $weekDayTime, ?string $dayUrlTemplate = null): string

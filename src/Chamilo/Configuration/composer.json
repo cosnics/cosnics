@@ -1,11 +1,6 @@
 {
     "name": "cosnics/configuration",
     "version": "1.0.0",
-    "description": "Configuration",
-    "keywords": [
-        "Configuration"
-    ],
-    "homepage": "http://www.cosnics.org",
     "license": "MIT",
     "authors": [
         {

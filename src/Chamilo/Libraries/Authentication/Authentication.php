@@ -96,7 +96,7 @@ abstract class Authentication implements AuthenticationInterface
     protected function isAuthSourceActive(): bool
     {
         return (bool) $this->getConfigurationConsulter()->getSetting(
-            ['Chamilo\Core\Admin', 'enable' . str_replace('\\', '', $this->getAuthenticationType())]
+            ['Chamilo\Libraries', 'enable' . str_replace('\\', '', $this->getAuthenticationType())]
         );
     }
 

@@ -1,18 +1,6 @@
 {
     "name": "cosnics/application-calendar-extension-office365-integration-chamilo-application-calendar",
     "version": "1.0.0",
-    "description": "Application Calendar Extension Office365 Integration Chamilo Application Calendar",
-    "keywords": [
-        "Application",
-        "Calendar",
-        "Extension",
-        "Office365",
-        "Integration",
-        "Chamilo",
-        "Application",
-        "Calendar"
-    ],
-    "homepage": "http://www.cosnics.org",
     "license": "MIT",
     "authors": [
         {

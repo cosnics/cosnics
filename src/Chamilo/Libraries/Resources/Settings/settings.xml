@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Libraries">
+    <settings>
+        <category name="authentication">
+            <setting name="enableExternalAuthentication"
+                     field="toggle">
+                <options type="static">
+                    <option name="enableExternalAuthentication"
+                            value="1"/>
+                </options>
+            </setting>
+            <setting name="enableChamiloLibrariesAuthenticationPlatform"
+                     field="toggle"
+                     default="1">
+                <options type="static">
+                    <option name="enablePlatformAuthenticationPlatform"
+                            value="1"/>
+                </options>
+            </setting>
+            <setting name="enableChamiloLibrariesAuthenticationSecurityToken"
+                     field="toggle">
+                <options type="static">
+                    <option name="enableChamiloLibrariesAuthenticationSecurityToken"
+                            value="1"/>
+                </options>
+            </setting>
+            <setting name="enableChamiloLibrariesAuthenticationAnonymous"
+                     field="toggle">
+                <options type="static">
+                    <option name="enableChamiloLibrariesAuthenticationAnonymous"
+                            value="0"/>
+                </options>
+            </setting>
+            <setting name="enableChamiloLibrariesAuthenticationCas"
+                     field="toggle">
+                <options type="static">
+                    <option name="enableChamiloLibrariesAuthenticationCas"
+                            value="1"/>
+                </options>
+            </setting>
+        </category>
+        <category name="cas_authentication">
+            <setting name="cas_base_url"
+                     field="text"
+                     default=""/>
+            <setting name="cas_host"
+                     field="text"
+                     default=""/>
+            <setting name="cas_port"
+                     field="text"
+                     default=""/>
+            <setting name="cas_uri"
+                     field="text"
+                     default=""/>
+            <setting name="cas_version"
+                     field="radio"
+                     default="SAML_VERSION_1_1">
+                <options type="static">
+                    <option name="SAML VERSION 1.1"
+                            value="SAML_VERSION_1_1"/>
+                    <option name="CAS VERSION 2.0"
+                            value="CAS_VERSION_2_0"/>
+                </options>
+            </setting>
+            <setting name="cas_check_certificate"
+                     field="toggle"
+                     default="1">
+                <options type="static">
+                    <option name="cas_check_certificate"
+                            value="1"/>
+                </options>
+            </setting>
+            <setting name="cas_certificate"
+                     field="text"
+                     default=""/>
+            <setting name="cas_enable_log"
+                     field="toggle">
+                <options type="static">
+                    <option name="cas_enable_log"
+                            value="1"/>
+                </options>
+            </setting>
+            <setting name="cas_log"
+                     field="text"
+                     default=""/>
+        </category>
+        <category name="calendar">
+            <setting name="calendar_hour_step"
+                     field="text"
+                     default="1">
+                <validations>
+                    <validation rule="numeric"
+                                message="MustBeNumeric"/>
+                </validations>
+            </setting>
+            <setting name="calendar_working_hours_start"
+                     field="select"
+                     default="0"
+                     user_setting="1">
+                <options type="static">
+                    <option value="0"
+                            name="00"/>
+                    <option value="1"
+                            name="01"/>
+                    <option value="2"
+                            name="02"/>
+                    <option value="3"
+                            name="03"/>
+                    <option value="4"
+                            name="04"/>
+                    <option value="5"
+                            name="05"/>
+                    <option value="6"
+                            name="06"/>
+                    <option value="7"
+                            name="07"/>
+                    <option value="8"
+                            name="08"/>
+                    <option value="9"
+                            name="09"/>
+                    <option value="10"
+                            name="10"/>
+                    <option value="11"
+                            name="11"/>
+                    <option value="12"
+                            name="12"/>
+                    <option value="13"
+                            name="13"/>
+                    <option value="14"
+                            name="14"/>
+                    <option value="15"
+                            name="15"/>
+                    <option value="16"
+                            name="16"/>
+                    <option value="17"
+                            name="17"/>
+                    <option value="18"
+                            name="18"/>
+                    <option value="19"
+                            name="19"/>
+                    <option value="20"
+                            name="20"/>
+                    <option value="21"
+                            name="21"/>
+                    <option value="22"
+                            name="22"/>
+                    <option value="23"
+                            name="23"/>
+                </options>
+            </setting>
+            <setting name="calendar_working_hours_end"
+                     field="select"
+                     default="24"
+                     user_setting="1">
+                <options type="static">
+                    <option value="0"
+                            name="00"/>
+                    <option value="1"
+                            name="01"/>
+                    <option value="2"
+                            name="02"/>
+                    <option value="3"
+                            name="03"/>
+                    <option value="4"
+                            name="04"/>
+                    <option value="5"
+                            name="05"/>
+                    <option value="6"
+                            name="06"/>
+                    <option value="7"
+                            name="07"/>
+                    <option value="8"
+                            name="08"/>
+                    <option value="9"
+                            name="09"/>
+                    <option value="10"
+                            name="10"/>
+                    <option value="11"
+                            name="11"/>
+                    <option value="12"
+                            name="12"/>
+                    <option value="13"
+                            name="13"/>
+                    <option value="14"
+                            name="14"/>
+                    <option value="15"
+                            name="15"/>
+                    <option value="16"
+                            name="16"/>
+                    <option value="17"
+                            name="17"/>
+                    <option value="18"
+                            name="18"/>
+                    <option value="19"
+                            name="19"/>
+                    <option value="20"
+                            name="20"/>
+                    <option value="21"
+                            name="21"/>
+                    <option value="22"
+                            name="22"/>
+                    <option value="23"
+                            name="23"/>
+                </options>
+            </setting>
+            <setting name="calendar_hide_non_working_hours"
+                     field="toggle"
+                     default="0"
+                     user_setting="1">
+                <options type="static">
+                    <option name="hide_non_working_hours"
+                            value="1"/>
+                </options>
+            </setting>
+            <setting name="calendar_default_view"
+                     field="radio"
+                     default="Month"
+                     user_setting="1">
+                <options type="static">
+                    <option name="Month"
+                            value="Month"/>
+                    <option name="Week"
+                            value="Week"/>
+                    <option name="Day"
+                            value="Day"/>
+                    <option name="List"
+                            value="List"/>
+                </options>
+            </setting>
+            <setting name="calendar_first_day_of_week"
+                     field="radio"
+                     default="monday"
+                     user_setting="1">
+                <options type="static">
+                    <option name="Sunday"
+                            value="sunday"/>
+                    <option name="Monday"
+                            value="monday"/>
+                </options>
+            </setting>
+        </category>
+        <category name="microsoft_graph_general">
+            <setting name="microsoft_graph_client_id"
+                     field="text"
+                     default=""/>
+            <setting name="microsoft_graph_client_secret"
+                     field="password"
+                     default=""/>
+            <setting name="microsoft_graph_access_token"
+                     field="text"
+                     default=""
+                     user_setting="true"
+                     locked="true"
+                     hidden="true"/>
+            <setting name="microsoft_graph_external_user_id"
+                     field="text"
+                     default=""
+                     user_setting="true"
+                     locked="true"
+                     hidden="true"/>
+            <setting name="microsoft_graph_tenant_id"
+                     field="text"
+                     default=""/>
+            <setting name="cosnics_prefix"
+                     field="text"
+                     default="cosnics_"/>
+        </category>
+        <category name="microsoft_graph_groups">
+            <setting name="microsoft_graph_planner_base_uri"
+                     field="text"
+                     default="https://tasks.office.com/tenantName.onmicrosoft.com/nl-NL/Home/Planner"/>
+            <setting name="microsoft_graph_group_base_uri"
+                     field="text"
+                     default="https://outlook.office.com/owa/?realm=realm&amp;exsvurl=1&amp;ll-cc=1043&amp;modurl=0&amp;path=/group/{GROUP_ID}@tenant.onmicrosoft.com/people"/>
+        </category>
+    </settings>
+</package>

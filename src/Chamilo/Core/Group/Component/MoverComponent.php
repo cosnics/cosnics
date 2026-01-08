@@ -33,7 +33,6 @@ class MoverComponent extends Manager
 
         $group = $this->getGroupService()->findGroupByIdentifier($this->getRequest()->query->get(self::PARAM_GROUP_ID));
 
-        // TODO: only show groups you can actually move to (where you have create rights)
         $form = new GroupMoveForm($group, $this->get_url([self::PARAM_GROUP_ID => $group_id]), $this->getUser());
 
         if ($form->validate())

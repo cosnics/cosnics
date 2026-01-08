@@ -51,7 +51,7 @@ abstract class CalendarEventVisibilityComponent extends Manager
                 JsonAjaxResult::error(
                     500, $translator->trans(
                     'ObjectNotDeleted',
-                    ['OBJECT' => $translator->trans('Visibility', [], 'Chamilo\Libraries\Calendar')],
+                    ['OBJECT' => $translator->trans('Visibility', [], 'Chamilo\Libraries')],
                     StringUtilities::LIBRARIES
                 )
                 );
@@ -72,7 +72,7 @@ abstract class CalendarEventVisibilityComponent extends Manager
                 JsonAjaxResult::error(
                     500, $translator->trans(
                     'ObjectNotCreated',
-                    ['OBJECT' => $translator->trans('Visibility', [], 'Chamilo\Libraries\Calendar')],
+                    ['OBJECT' => $translator->trans('Visibility', [], 'Chamilo\Libraries')],
                     StringUtilities::LIBRARIES
                 )
                 );

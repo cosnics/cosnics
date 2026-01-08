@@ -140,7 +140,7 @@ trait AgendaCalendarTrait
         else
         {
             $html[] = Display::normal_message(
-                $this->getTranslator()->trans('NoUpcomingEvents', [], 'Chamilo\Libraries\Calendar')
+                $this->getTranslator()->trans('NoUpcomingEvents', [], 'Chamilo\Libraries')
             );
         }
 

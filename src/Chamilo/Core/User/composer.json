@@ -1,12 +1,6 @@
 {
     "name": "cosnics/core-user",
     "version": "1.0.0",
-    "description": "Core User",
-    "keywords": [
-        "Core",
-        "User"
-    ],
-    "homepage": "http://www.cosnics.org",
     "license": "MIT",
     "authors": [
         {

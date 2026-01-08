@@ -13,14 +13,14 @@ use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 class GroupRepositoryFactory
 {
     /**
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository
-     */
-    protected $graphRepository;
-
-    /**
      * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
      */
     protected $configurationConsulter;
+
+    /**
+     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository
+     */
+    protected $graphRepository;
 
     /**
      * GroupRepositoryFactory constructor.
@@ -42,7 +42,7 @@ class GroupRepositoryFactory
     public function buildGroupRepository()
     {
         $cosnicsPrefix = $this->configurationConsulter->getSetting(
-            ['Chamilo\Libraries\Protocol\Microsoft\Graph', 'cosnics_prefix']
+            ['Chamilo\Libraries', 'microsoft_graph_cosnics_prefix']
         );
 
         return new GroupRepository($this->graphRepository, $cosnicsPrefix);

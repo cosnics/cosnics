@@ -76,7 +76,7 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
         $html[] = '<div class="clearfix"></div>';
 
         $html[] = $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries\Calendar') . 'EventTooltip.js'
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'Calendar/EventTooltip.js'
         );
 
         return implode(PHP_EOL, $html);

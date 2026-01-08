@@ -82,8 +82,6 @@ abstract class Application
             {
                 throw new NotAllowedException();
             }
-
-            $this->getAuthorizationChecker()->checkAuthorization($this->getUser(), $context, $action);
         }
     }
 
@@ -322,16 +320,6 @@ abstract class Application
         }
 
         return '0';
-    }
-
-    public function isAuthorized(string $context, ?string $action = null): bool
-    {
-        if (!$this->getUser() instanceof User)
-        {
-            return false;
-        }
-
-        return $this->getAuthorizationChecker()->isAuthorized($this->getUser(), $context, $action);
     }
 
     /**

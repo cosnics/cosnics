@@ -1,12 +1,6 @@
 {
     "name": "cosnics/application-calendar",
     "version": "1.0.0",
-    "description": "Application Calendar",
-    "keywords": [
-        "Application",
-        "Calendar"
-    ],
-    "homepage": "http://www.cosnics.org",
     "license": "MIT",
     "authors": [
         {

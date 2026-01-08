@@ -34,7 +34,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     public function getApplicationAccessToken(): ?AccessToken
     {
         $accessTokenData = $this->getUserSettingService()->getSettingForUser(
-            $this->getUser(), 'Chamilo\Libraries\Protocol\Microsoft\Graph', 'access_token'
+            $this->getUser(), 'Chamilo\Libraries', 'microsoft_graph_access_token'
         );
 
         if (empty($accessTokenData))
@@ -75,7 +75,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     public function storeApplicationAccessToken(AccessToken $accessToken)
     {
         $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
-            'Chamilo\Libraries\Protocol\Microsoft\Graph', 'access_token', $this->getUser(),
+            'Chamilo\Libraries', 'microsoft_graph_access_token', $this->getUser(),
             json_encode($accessToken->jsonSerialize())
         );
     }

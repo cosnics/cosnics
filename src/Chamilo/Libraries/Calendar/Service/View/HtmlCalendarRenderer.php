@@ -129,7 +129,7 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
         $translator = $this->getTranslator();
 
         $button = new DropdownButton(
-            $translator->trans($currentRendererType . 'View', [], 'Chamilo\Libraries\Calendar'),
+            $translator->trans($currentRendererType . 'View', [], 'Chamilo\Libraries'),
             new FontAwesomeGlyph('calendar-alt'), AbstractButton::DISPLAY_ICON_AND_LABEL, [], ['dropdown-menu-right']
         );
 
@@ -139,7 +139,7 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
 
             $button->addSubButton(
                 new SubButton(
-                    $translator->trans($rendererType . 'View', [], 'Chamilo\Libraries\Calendar'), null,
+                    $translator->trans($rendererType . 'View', [], 'Chamilo\Libraries'), null,
                     $this->getUrlGenerator()->fromParameters($displayParameters), AbstractButton::DISPLAY_LABEL, null,
                     [], null, $currentRendererType == $rendererType
                 )

@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\DependencyInjection\Traits;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Group\Service\GroupService;
-use Chamilo\Core\Rights\Structure\Service\AuthorizationChecker;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -50,11 +49,6 @@ trait DependencyInjectionContainerTrait
     public function getApplicationFactory(): ApplicationFactory
     {
         return $this->getService(ApplicationFactory::class);
-    }
-
-    public function getAuthorizationChecker(): AuthorizationChecker
-    {
-        return $this->getService(AuthorizationChecker::class);
     }
 
     public function getBreadcrumbTrail(): BreadcrumbTrail

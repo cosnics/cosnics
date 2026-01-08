@@ -108,7 +108,7 @@ class LegendRenderer
                 $result[] = '</script>';
 
                 $result[] = $this->getResourceManager()->getResourceHtml(
-                    $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries\Calendar') . 'Highlight.js'
+                    $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'Calendar/Highlight.js'
                 );
 
                 if ($visibleSources == 0)
@@ -189,6 +189,14 @@ class LegendRenderer
         return $this->sources;
     }
 
+    /**
+     * @param string[] $sources
+     */
+    public function setSources(array $sources)
+    {
+        $this->sources = $sources;
+    }
+
     public function getTranslator(): Translator
     {
         return $this->translator;
@@ -205,13 +213,5 @@ class LegendRenderer
     public function hasSources(): bool
     {
         return count($this->getSources()) > 0;
-    }
-
-    /**
-     * @param string[] $sources
-     */
-    public function setSources(array $sources)
-    {
-        $this->sources = $sources;
     }
 }

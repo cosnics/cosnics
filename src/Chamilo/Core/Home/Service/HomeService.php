@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Home\Service;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Renderer\BlockRendererFactory;
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Storage\DataClass\Element;
@@ -11,7 +10,6 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Doctrine\Common\Collections\ArrayCollection;
-use Exception;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
 
@@ -62,103 +60,6 @@ class HomeService
     public function countElementsByUserIdentifier(string $userIdentifier): int
     {
         return $this->getHomeRepository()->countElementsByUserIdentifier($userIdentifier);
-    }
-
-    /**
-     * @param string[] $elementIdentifierMap
-     *
-     * @throws \Exception
-     */
-    private function createDefaultElementByUserIdentifier(
-        array &$elementIdentifierMap, Element $element, string $userIdentifier
-    ): bool
-    {
-        $originalIdentifier = $element->getId();
-
-        $element->setUserId($userIdentifier);
-
-        if (!$element->isOnTopLevel())
-        {
-            $element->setParentId($elementIdentifierMap[$element->getParentId()]);
-        }
-
-        if (!$this->getHomeRepository()->createElement($element))
-        {
-            throw new Exception($this->getTranslator()->trans('HomepageDefaultCreationFailed', [], Manager::CONTEXT));
-        }
-
-        $elementIdentifierMap[$originalIdentifier] = $element->getId();
-
-        return true;
-    }
-
-    /**
-     * @param \Chamilo\Core\Home\Storage\DataClass\Element[] $defaultElements
-     * @param string[] $elementIdentifierMap
-     *
-     * @throws \Exception
-     */
-    private function createDefaultElementsByUserIdentifier(
-        string $elementType, array $defaultElements, array &$elementIdentifierMap, string $userIdentifier
-    ): bool
-    {
-        foreach ($defaultElements[$elementType] as $typeElements)
-        {
-            foreach ($typeElements as $typeElement)
-            {
-                if (!$this->createDefaultElementByUserIdentifier($elementIdentifierMap, $typeElement, $userIdentifier))
-                {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function createDefaultHomeByUserIdentifier(User $user): bool
-    {
-        $defaultElementResultSet = $this->getElementsByUserIdentifier('0');
-        $defaultElements = [];
-
-        $elementIdentifierMap = [];
-
-        foreach ($defaultElementResultSet as $defaultElement)
-        {
-            if ($this->getElementRightsService()->canUserViewElement($user, $defaultElement))
-            {
-                $defaultElements[$defaultElement->getType()][$defaultElement->getParentId()][] = $defaultElement;
-            }
-        }
-
-        // Process tabs
-        if (!$this->createDefaultElementsByUserIdentifier(
-            Element::TYPE_TAB, $defaultElements, $elementIdentifierMap, $user->getId()
-        ))
-        {
-            return false;
-        }
-
-        // Process columns
-        if ($this->createDefaultElementsByUserIdentifier(
-            Element::TYPE_COLUMN, $defaultElements, $elementIdentifierMap, $user->getId()
-        ))
-        {
-            return false;
-        }
-
-        // Process blocks
-        if ($this->createDefaultElementsByUserIdentifier(
-            Element::TYPE_BLOCK, $defaultElements, $elementIdentifierMap, $user->getId()
-        ))
-        {
-            return false;
-        }
-
-        return true;
     }
 
     /**

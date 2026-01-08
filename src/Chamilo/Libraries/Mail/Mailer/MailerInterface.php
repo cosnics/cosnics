@@ -11,10 +11,10 @@ use Chamilo\Libraries\Mail\ValueObject\Mail;
 interface MailerInterface
 {
 
-    public function sendMail(Mail $mail);
+    public function sendMail(Mail $mail): void;
 
     /**
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail[] $mails
      */
-    public function sendMails(array $mails = []);
+    public function sendMails(array $mails = []): void;
 }

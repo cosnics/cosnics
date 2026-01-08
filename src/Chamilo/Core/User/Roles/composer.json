@@ -1,13 +1,6 @@
 {
     "name": "cosnics/core-user-roles",
     "version": "1.0.0",
-    "description": "Core User Roles",
-    "keywords": [
-        "Core",
-        "User",
-        "Roles"
-    ],
-    "homepage": "http://www.cosnics.org",
     "license": "MIT",
     "authors": [
         {

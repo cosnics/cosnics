@@ -1,14 +1,6 @@
 {
     "name": "cosnics/application-calendar-extension-office365",
     "version": "1.0.0",
-    "description": "Application Calendar Extension Office365",
-    "keywords": [
-        "Application",
-        "Calendar",
-        "Extension",
-        "Office365"
-    ],
-    "homepage": "http://www.cosnics.org",
     "license": "MIT",
     "authors": [
         {
