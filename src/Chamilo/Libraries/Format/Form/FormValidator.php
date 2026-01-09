@@ -18,7 +18,6 @@ use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_DateCompare;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Filetype;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_NumberCompare;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Username;
-use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_UsernameAvailable;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_ValidateDatabaseConnection;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTabsGenerator;
@@ -66,12 +65,12 @@ class FormValidator extends HTML_QuickForm
     /**
      * Constructor
      *
-     * @param string $formName     Name of the form
-     * @param string $method       Method (FormValidator::FORM_METHOD_POST (default) or FormValidator::FORM_METHOD_GET)
-     * @param string $action       Action (default is $PHP_SELF)
-     * @param string $target       Form's target defaults to '_self'
+     * @param string $formName Name of the form
+     * @param string $method Method (FormValidator::FORM_METHOD_POST (default) or FormValidator::FORM_METHOD_GET)
+     * @param string $action Action (default is $PHP_SELF)
+     * @param string $target Form's target defaults to '_self'
      * @param string[] $attributes (optional)Extra attributes for <form> tag
-     * @param bool $trackSubmit    (optional)Whether to track if the form was submitted by adding a special hidden field
+     * @param bool $trackSubmit (optional)Whether to track if the form was submitted by adding a special hidden field
      *                             (default = true)
      */
     public function __construct(
@@ -491,7 +490,7 @@ EOT;
     /**
      * Add a datepicker element to the form A rule is added to check if the date is a valid one
      *
-     * @param string $name  The element name
+     * @param string $name The element name
      * @param string $label The label for the form-element
      * @param bool $includeTimePicker
      *
@@ -583,10 +582,10 @@ EOT;
     /**
      * Adds a select control to the form.
      *
-     * @param string $name         The element name.
-     * @param string $label        The element label.
-     * @param string[] $values     Associative array of possible values.
-     * @param bool $required       <code>true</code> if required (default), <code>false</code> otherwise.
+     * @param string $name The element name.
+     * @param string $label The element label.
+     * @param string[] $values Associative array of possible values.
+     * @param bool $required <code>true</code> if required (default), <code>false</code> otherwise.
      * @param string[] $attributes Element attributes (optional).
      *
      * @return \HTML_QuickForm_select The element.
@@ -612,9 +611,9 @@ EOT;
      * Add a textfield to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string $name         The element name
-     * @param string $label        The label for the form-element
-     * @param bool $required       Is the form-element required (default=true)
+     * @param string $name The element name
+     * @param string $label The label for the form-element
+     * @param bool $required Is the form-element required (default=true)
      * @param string[] $attributes Optional list of attributes for the form-element
      *
      * @return \HTML_QuickForm_text The element.
@@ -644,9 +643,9 @@ EOT;
      * 2 datepicker elements are added and a rule to check if the first date is
      * before the second one.
      *
-     * @param string $firstName   The element name
-     * @param string $secondName  The element name
-     * @param string $firstLabel  The label for the form-element
+     * @param string $firstName The element name
+     * @param string $secondName The element name
+     * @param string $firstLabel The label for the form-element
      * @param string $secondLabel The label for the form-element
      * @param bool $includeTimePicker
      *
@@ -881,6 +880,14 @@ EOT;
     }
 
     /**
+     * @param \HTML_QuickForm_Renderer_Default $renderer
+     */
+    public function set_renderer($renderer)
+    {
+        $this->renderer = $renderer;
+    }
+
+    /**
      * Formats an multiple dimension array to a single dimension array to support default values in the quickform
      * library because quickform produces arrays when an array is used in the name, but quickform does not accept arrays
      * for the default values, instead the inner arrays are converted as strings
@@ -959,7 +966,6 @@ EOT;
         static::registerRule('date', null, HTML_QuickForm_Rule_Date::class);
         static::registerRule('date_compare', null, HTML_QuickForm_Rule_DateCompare::class);
         static::registerRule('number_compare', null, HTML_QuickForm_Rule_NumberCompare::class);
-        static::registerRule('username_available', null, HTML_QuickForm_Rule_UsernameAvailable::class);
         static::registerRule('username', null, HTML_QuickForm_Rule_Username::class);
         static::registerRule('filetype', null, HTML_QuickForm_Rule_Filetype::class);
         static::registerRule(
@@ -989,14 +995,6 @@ EOT;
         $this->renderer->setFormTemplate($this->getFormTemplate());
         $this->renderer->setElementTemplate($this->getElementTemplate());
         $this->renderer->setRequiredNoteTemplate($this->getRequiredNoteTemplate());
-    }
-
-    /**
-     * @param \HTML_QuickForm_Renderer_Default $renderer
-     */
-    public function set_renderer($renderer)
-    {
-        $this->renderer = $renderer;
     }
 
     /**

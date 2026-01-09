@@ -59,7 +59,7 @@ class EditorComponent extends Manager
                 $this->redirectWithMessage(
                     $message, !$success, [
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => $group->get_id()
+                        self::PARAM_GROUP_ID => $group->getId()
                     ]
                 );
             }

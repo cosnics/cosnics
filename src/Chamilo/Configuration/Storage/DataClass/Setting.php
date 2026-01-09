@@ -2,13 +2,8 @@
 namespace Chamilo\Configuration\Storage\DataClass;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Repository\DataManager;
 
 /**
  * @package Chamilo\Configuration\Storage\DataClass
@@ -23,54 +18,6 @@ class Setting extends DataClass
     public const PROPERTY_USER_SETTING = 'user_setting';
     public const PROPERTY_VALUE = 'value';
     public const PROPERTY_VARIABLE = 'variable';
-
-    /**
-     * @return bool
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @deprecated Use ConfigurationService::createSetting
-     */
-    public function create(): bool
-    {
-        return $this->on_change(parent::create());
-    }
-
-    /**
-     * @return bool
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @deprecated Use ConfigurationService::deleteSetting
-     */
-    public function delete(): bool
-    {
-        if (!parent::delete())
-        {
-            return false;
-        }
-        elseif ($this->get_user_setting())
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID),
-                new StaticConditionVariable($this->get_id())
-            );
-            if (!DataManager::deletes(UserSetting::class, $condition))
-            {
-                return false;
-            }
-            else
-            {
-                $this->on_change();
-
-                return true;
-            }
-        }
-        else
-        {
-            $this->on_change();
-
-            return true;
-        }
-    }
 
     /**
      * Get the default properties of all settings.
@@ -206,16 +153,5 @@ class Setting extends DataClass
     public function set_variable($variable)
     {
         $this->setDefaultProperty(self::PROPERTY_VARIABLE, $variable);
-    }
-
-    /**
-     * @return bool
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @deprecated Use ConfigurationService::updateSetting
-     */
-    public function update(): bool
-    {
-        return $this->on_change(parent::update());
     }
 }

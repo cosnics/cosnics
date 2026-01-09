@@ -133,7 +133,6 @@ class GroupMenu extends HtmlMenu
 
             $menu_item = [];
             $menu_item['title'] = $group->get_name();
-            // $menu_item['url'] = $this->get_url($group->get_id());
             $menu_item['url'] = $this->get_home_url();
 
             $sub_menu_items = $this->get_menu_items($group->getId());

@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage;
 /**
  * Describes a generic database-backed storage layer connection string
  *
- * @package Chamilo\Libraries\Storage\DataManager
+ * @package Chamilo\Libraries\Storage
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -69,6 +69,13 @@ abstract class DataSourceName
         return $this->charset;
     }
 
+    public function setCharset(string $charset): static
+    {
+        $this->charset = $charset;
+
+        return $this;
+    }
+
     public function getConnectionString(): string
     {
         $string = [];
@@ -103,6 +110,13 @@ abstract class DataSourceName
         return $this->database;
     }
 
+    public function setDatabase(string $database): static
+    {
+        $this->database = $database;
+
+        return $this;
+    }
+
     public function getDriver(?bool $implementation = false): string
     {
         if ($implementation)
@@ -115,9 +129,23 @@ abstract class DataSourceName
         }
     }
 
+    public function setDriver(string $driver): static
+    {
+        $this->driver = $driver;
+
+        return $this;
+    }
+
     public function getHost(): string
     {
         return $this->host;
+    }
+
+    public function setHost(string $host): static
+    {
+        $this->host = $host;
+
+        return $this;
     }
 
     abstract public function getImplementedDriver(): string;
@@ -127,9 +155,23 @@ abstract class DataSourceName
         return $this->password;
     }
 
+    public function setPassword(?string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
     public function getPort(): ?string
     {
         return $this->port;
+    }
+
+    public function setPort(?string $port): static
+    {
+        $this->port = $port;
+
+        return $this;
     }
 
     /**
@@ -143,6 +185,13 @@ abstract class DataSourceName
     public function getUsername(): string
     {
         return $this->username;
+    }
+
+    public function setUsername(string $username): static
+    {
+        $this->username = $username;
+
+        return $this;
     }
 
     public function isValid(): bool
@@ -173,54 +222,5 @@ abstract class DataSourceName
         }
 
         return true;
-    }
-
-    public function setCharset(string $charset): static
-    {
-        $this->charset = $charset;
-
-        return $this;
-    }
-
-    public function setDatabase(string $database): static
-    {
-        $this->database = $database;
-
-        return $this;
-    }
-
-    public function setDriver(string $driver): static
-    {
-        $this->driver = $driver;
-
-        return $this;
-    }
-
-    public function setHost(string $host): static
-    {
-        $this->host = $host;
-
-        return $this;
-    }
-
-    public function setPassword(?string $password): static
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    public function setPort(?string $port): static
-    {
-        $this->port = $port;
-
-        return $this;
-    }
-
-    public function setUsername(string $username): static
-    {
-        $this->username = $username;
-
-        return $this;
     }
 }

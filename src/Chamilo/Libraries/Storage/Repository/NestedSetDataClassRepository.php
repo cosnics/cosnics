@@ -44,7 +44,6 @@ class NestedSetDataClassRepository
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @see NestedSet::count_ancestors()
      */
     public function countAncestors(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null): int
     {
@@ -56,8 +55,6 @@ class NestedSetDataClassRepository
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @see NestedSet::count_descendants()
-     * @see NestedSet::count_children()
      */
     public function countDescendants(NestedSet $nestedSet, bool $recursive = true, ?Condition $condition = null): int
     {
@@ -72,7 +69,6 @@ class NestedSetDataClassRepository
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @see NestedSet::count_siblings()
      */
     public function countSiblings(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null): int
     {
@@ -84,7 +80,6 @@ class NestedSetDataClassRepository
 
     /**
      * @throws \Throwable
-     * @see NestedSet::create()
      */
     public function create(NestedSet $nestedSet, string $previousNestedSetIdentifier = '0'): bool
     {
@@ -162,7 +157,6 @@ class NestedSetDataClassRepository
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
      * @throws \Throwable
-     * @see NestedSet::delete()
      */
     public function delete(NestedSet $nestedSet, ?Condition $condition = null): ArrayCollection
     {
@@ -248,8 +242,6 @@ class NestedSetDataClassRepository
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @see NestedSet::get_descendants()
-     * @see NestedSet::get_children()
      */
     public function findDescendants(NestedSet $nestedSet, bool $recursive = true, ?Condition $condition = null
     ): ArrayCollection
@@ -277,7 +269,6 @@ class NestedSetDataClassRepository
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @see NestedSet::get_siblings()
      */
     public function findSiblings(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null
     ): ArrayCollection
@@ -292,8 +283,6 @@ class NestedSetDataClassRepository
 
     /**
      * Build the conditions for the get / count _ ancestors methods
-     *
-     * @see NestedSet::build_ancestry_condition()
      */
     protected function getAncestorsCondition(
         NestedSet $nestedSet, bool $includeSelf = false, ?Condition $condition = null
@@ -346,8 +335,6 @@ class NestedSetDataClassRepository
 
     /**
      * Build the conditions for the get / count _ children / descendants methods
-     *
-     * @see NestedSet::build_offspring_condition()
      */
     protected function getDescendantsCondition(
         NestedSet $nestedSet, bool $recursive = false, bool $includeSelf = false, ?Condition $condition = null
@@ -410,7 +397,6 @@ class NestedSetDataClassRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     * @see NestedSet::get_parent()
      */
     public function getParent(NestedSet $nestedSet): NestedSet
     {
@@ -422,8 +408,6 @@ class NestedSetDataClassRepository
      * nodes). When applied to a list of ancestors, this coincides with an inverse ordering according to the node's
      * level (leaf -> ... -> root). When applied to a list of siblings, this coincides with an ordering from right to
      * left.
-     *
-     * @see NestedSet::build_post_order_ordering()
      */
     protected function getPostOrderBy(NestedSet $nestedSet, int $sortOrder = SORT_ASC): OrderBy
     {
@@ -438,8 +422,6 @@ class NestedSetDataClassRepository
      * Orders the tree-structured data in pre-order (i.e. the order in which a depth-first traversal would enter the
      * nodes). When applied to a list of ancestors, this coincides with an ordering according to the node's level (root
      * -> ... -> leaf). When applied to a list of siblings, this coincides with an ordering from left to right.
-     *
-     * @see NestedSet::build_pre_order_ordering()
      */
     protected function getPreOrderBy(NestedSet $nestedSet, int $sortOrder = SORT_ASC): OrderBy
     {
@@ -452,8 +434,6 @@ class NestedSetDataClassRepository
 
     /**
      * Build the conditions for the get / count _ siblings methods
-     *
-     * @see NestedSet::build_sibling_condition()
      */
     protected function getSiblingsCondition(
         NestedSet $nestedSet, bool $includeSelf = false, ?Condition $condition = null
@@ -491,9 +471,6 @@ class NestedSetDataClassRepository
         return new AndCondition($conditions);
     }
 
-    /**
-     * @see NestedSet::get_nested_set_condition_array()
-     */
     protected function getSubTreeCondition(NestedSet $nestedSet): ?AndCondition
     {
         $subTreePropertyNames = $nestedSet->getSubTreePropertyNames();
@@ -530,7 +507,6 @@ class NestedSetDataClassRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      * @throws \Throwable
-     * @see NestedSet::move()
      */
     public function move(
         NestedSet $nestedSet, string $newParentId = '0', string $newPreviousId = '0', ?Condition $condition = null
@@ -715,7 +691,6 @@ class NestedSetDataClassRepository
      * Change the left/right values in the tree of every node that is affected by to the delete of this node
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @see NestedSet::post_delete()
      */
     protected function postDelete(NestedSet $nestedSet, ?Condition $condition = null): bool
     {
@@ -822,7 +797,6 @@ class NestedSetDataClassRepository
      * left/right values of all nodes that are traversed after the insertion point to the right.
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @see NestedSet::pre_insert()
      */
     protected function preInsert(
         NestedSet $nestedSet, int $insertAfter, int $numberOfElements = 1, ?Condition $condition = null
@@ -988,7 +962,6 @@ class NestedSetDataClassRepository
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     * @see NestedSet::validate_position()
      */
     protected function validatePosition(
         NestedSet $nestedSet, int $position = NestedSet::AS_LAST_CHILD_OF, ?NestedSet $referenceNode = null

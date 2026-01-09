@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Calendar\Event;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Repository\DataManager;
 
 /**
  * @package Chamilo\Libraries\Calendar\Event
@@ -33,34 +32,22 @@ abstract class Visibility extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_SOURCE);
     }
 
-    public function getUser(): ?User
-    {
-        if (isset($this->user))
-        {
-            $this->user = DataManager::retrieve_by_id(User::class, (string) $this->getUserId());
-        }
-
-        return $this->user;
-    }
-
-    public function getUserId(): int
+    public function getUserId(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function setSource(string $source)
+    public function setSource(string $source): static
     {
         $this->setDefaultProperty(self::PROPERTY_SOURCE, $source);
+
+        return $this;
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function setUserId(int $id)
+    public function setUserId(string $id): static
     {
         $this->setDefaultProperty(self::PROPERTY_USER_ID, $id);
+
+        return $this;
     }
 }

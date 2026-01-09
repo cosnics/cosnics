@@ -49,13 +49,13 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
         $user->set_password('PLACEHOLDER');
         $user->set_status(User::STATUS_STUDENT);
         $user->set_auth_source(__NAMESPACE__);
-        $user->set_platformadmin(0);
+        $user->set_platformadmin(false);
         $user->set_email($casUserAttributes['email']);
         $user->set_lastname($casUserAttributes['last_name']);
         $user->set_firstname($casUserAttributes['first_name']);
         $user->set_official_code($casUserAttributes['person_number']);
 
-        if (!$user->create())
+        if (!$this->getUserService()->createUser($user))
         {
             throw new AuthenticationException('CasUserRegistrationFailed');
         }

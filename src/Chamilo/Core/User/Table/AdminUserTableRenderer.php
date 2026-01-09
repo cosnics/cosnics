@@ -206,7 +206,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
             );
         }
 
-        if ($user->get_id() != $this->getUser()->getId())
+        if ($user->getId() != $this->getUser()->getId())
         {
             if ($this->getUser()->isPlatformAdmin())
             {

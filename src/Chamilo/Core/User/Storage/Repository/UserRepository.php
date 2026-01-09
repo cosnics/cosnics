@@ -4,7 +4,6 @@ namespace Chamilo\Core\User\Storage\Repository;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
-use Chamilo\Core\User\Storage\Repository\Interfaces\UserRepositoryInterface;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
@@ -31,7 +30,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserRepository implements UserRepositoryInterface
+class UserRepository
 {
 
     private DataClassRepository $dataClassRepository;
@@ -72,15 +71,6 @@ class UserRepository implements UserRepositoryInterface
         );
     }
 
-    /**
-     * @throws \Exception
-     * @deprecated Use dedicated create-methods in the UserRepository instead
-     */
-    public function create(DataClass $dataClass): bool
-    {
-        return $dataClass->create();
-    }
-
     public function createUser(User $user): bool
     {
         return $this->getDataClassRepository()->create($user);
@@ -101,9 +91,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function deleteUser(User $user): bool
     {
-        // TODO: $user->delete() still implements some business logic
-        // return $this->getDataClassRepository()->delete($user);
-        return $user->delete();
+        return $this->getDataClassRepository()->delete($user);
     }
 
     public function deleteUserSetting(UserSetting $userSetting): bool
@@ -557,15 +545,6 @@ class UserRepository implements UserRepositoryInterface
             new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers);
 
         return new AndCondition($conditions);
-    }
-
-    /**
-     * @throws \Exception
-     * @deprecated Use dedicated update-methods in the UserRepository instead
-     */
-    public function update(DataClass $dataClass): bool
-    {
-        return $dataClass->update();
     }
 
     public function updateUser(User $user): bool

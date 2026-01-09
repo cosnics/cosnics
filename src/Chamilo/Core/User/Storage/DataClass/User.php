@@ -53,25 +53,6 @@ class User extends DataClass
     public const STATUS_STUDENT = 5;
     public const STATUS_TEACHER = 1;
 
-    /**
-     * Instructs the Datamanager to create this user.
-     *
-     * @return bool True if success, false otherwise
-     * @deprecated Use UserService::createUser()
-     */
-    public function create(): bool
-    {
-        return $this->getUserService()->createUser($this);
-    }
-
-    /**
-     * @deprecated Use UserService::deleteUser()
-     */
-    public function delete(): bool
-    {
-        return $this->getUserService()->deleteUser($this);
-    }
-
     public static function fullname(string $first_name, string $last_name): string
     {
         /**

@@ -35,61 +35,6 @@ class Registration extends DataClass
     public const TYPE_LIBRARY = 'library';
     public const TYPE_VIDEO_CONFERENCING_MANAGER = 'video_conferencing_manager';
 
-    private $package;
-
-    /**
-     * Activates the registration
-     *
-     * @param $with_update bool - include update or not
-     *
-     * @return bool
-     */
-    public function activate($with_update = false)
-    {
-        $this->set_status(true);
-
-        if ($with_update)
-        {
-            return $this->update();
-        }
-
-        return true;
-    }
-
-    public function can_be_activated()
-    {
-        return !in_array($this->getType(), [self::TYPE_CORE, self::TYPE_EXTENSION, self::TYPE_LIBRARY]);
-    }
-
-    public function create(): bool
-    {
-        return $this->on_change(parent::create());
-    }
-
-    /**
-     * Deactivates the registration
-     *
-     * @param $with_update bool - include update or not
-     *
-     * @return bool
-     */
-    public function deactivate($with_update = false)
-    {
-        $this->set_status(false);
-
-        if ($with_update)
-        {
-            return $this->update();
-        }
-
-        return true;
-    }
-
-    public function delete(): bool
-    {
-        return $this->on_change(parent::delete());
-    }
-
     /**
      * @return string[]
      */
@@ -308,10 +253,5 @@ class Registration extends DataClass
     public function toggle_status()
     {
         $this->set_status(!$this->get_status());
-    }
-
-    public function update(): bool
-    {
-        return $this->on_change(parent::update());
     }
 }

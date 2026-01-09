@@ -28,10 +28,20 @@ class AvailabilityRepository
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException
+     */
+    public function createAvailability(Availability $availability): bool
+    {
+        return $this->getDataClassRepository()->create($availability);
+    }
+
+    /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param bool $isAvailable
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Calendar\Storage\DataClass\Availability>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findAvailabilitiesForUser(User $user, ?bool $isAvailable = null): ArrayCollection
     {
@@ -63,6 +73,7 @@ class AvailabilityRepository
      * @param ?bool $isAvailable
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Calendar\Storage\DataClass\Availability>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     public function findAvailabilitiesForUserAndCalendarType(User $user, string $calendarType, ?bool $isAvailable = null
     ): ArrayCollection
@@ -127,6 +138,9 @@ class AvailabilityRepository
         return $this->dataClassRepository;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function removeAvailabilityByCalendarType(string $calendarType): bool
     {
         $condition = new EqualityCondition(
@@ -135,5 +149,13 @@ class AvailabilityRepository
         );
 
         return $this->getDataClassRepository()->deletes(Availability::class, $condition);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
+    public function updateAvailability(Availability $availability): bool
+    {
+        return $this->getDataClassRepository()->update($availability);
     }
 }
