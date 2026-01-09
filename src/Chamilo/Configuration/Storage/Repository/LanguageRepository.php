@@ -2,11 +2,10 @@
 namespace Chamilo\Configuration\Storage\Repository;
 
 use Chamilo\Configuration\Storage\DataClass\Language;
-use Chamilo\Libraries\Storage\Query\RetrieveProperties;
-use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
-use Chamilo\Libraries\Storage\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\StorageParameters;
+use Chamilo\Libraries\File\FilesystemTools;
+use Chamilo\Libraries\File\SystemPathBuilder;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**
  * @package Chamilo\Configuration\Repository
@@ -15,33 +14,52 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class LanguageRepository
 {
+    protected FilesystemTools $filesystemTools;
 
-    private DataClassRepository $dataClassRepository;
+    protected SystemPathBuilder $systemPathBuilder;
 
-    public function __construct(DataClassRepository $dataClassRepository)
+    public function __construct(SystemPathBuilder $systemPathBuilder, FilesystemTools $filesystemTools)
     {
-        $this->dataClassRepository = $dataClassRepository;
-    }
-
-    public function clearLanguageCache(): bool
-    {
-        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncateClass(Language::class);
+        $this->systemPathBuilder = $systemPathBuilder;
+        $this->filesystemTools = $filesystemTools;
     }
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Storage\DataClass\Language>
      */
-    public function findLanguagesAsRecords(): ArrayCollection
+    public function findLanguages(): ArrayCollection
     {
-        return $this->getDataClassRepository()->records(
-            Language::class, new StorageParameters(
-                retrieveProperties: new RetrieveProperties([new PropertiesConditionVariable(Language::class)])
-            )
-        );
+        $languagesPath = $this->getSystemPathBuilder()->namespaceToFullPath('Chamilo\Libraries') . 'Resources/I18n/';
+        $languageFiles =
+            $this->getFilesystemTools()->getDirectoryContent($languagesPath, FileTypeFilterIterator::ONLY_FILES, false);
+
+        $languages = new ArrayCollection();
+
+        foreach ($languageFiles as $languageFile)
+        {
+            if ($languageFile->getExtension() == 'json')
+            {
+                $languageValues = json_decode(file_get_contents($languageFile->getPathname()), true);
+
+                $languages->add(
+                    new Language(
+                        $languageValues['codes'], $languageValues['families'], $languageValues['name'],
+                        $languageValues['translations']
+                    )
+                );
+            }
+        }
+
+        return $languages;
     }
 
-    protected function getDataClassRepository(): DataClassRepository
+    public function getFilesystemTools(): FilesystemTools
     {
-        return $this->dataClassRepository;
+        return $this->filesystemTools;
+    }
+
+    public function getSystemPathBuilder(): SystemPathBuilder
+    {
+        return $this->systemPathBuilder;
     }
 }

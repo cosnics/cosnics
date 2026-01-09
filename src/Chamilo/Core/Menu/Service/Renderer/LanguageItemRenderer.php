@@ -195,7 +195,7 @@ class LanguageItemRenderer extends ItemRenderer
                     $html[] = '<li>';
                     $html[] = '<a href="' . $languageUrl . '">';
                     $html[] = '<div>';
-                    $html[] = strtoupper($language);
+                    $html[] = $language;
                     $html[] = '</div>';
                     $html[] = '</a>';
                     $html[] = '</li>';

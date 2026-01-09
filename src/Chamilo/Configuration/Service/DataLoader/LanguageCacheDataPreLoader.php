@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Service\DataLoader;
 
-use Chamilo\Configuration\Storage\DataClass\Language;
+use Chamilo\Configuration\Storage\DataClass\LanguageCodeEnum;
 use Chamilo\Configuration\Storage\Repository\LanguageRepository;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\Cache\Traits\SimpleCacheAdapterHandlerTrait;
@@ -31,15 +31,15 @@ class LanguageCacheDataPreLoader implements CacheDataPreLoaderInterface
      */
     protected function getDataForCache(): array
     {
-        $languages = [];
-        $languageRecords = $this->getLanguageRepository()->findLanguagesAsRecords();
+        $languageValues = [];
+        $languages = $this->getLanguageRepository()->findLanguages();
 
-        foreach ($languageRecords as $languageRecord)
+        foreach ($languages as $language)
         {
-            $languages[$languageRecord[Language::PROPERTY_ISOCODE]] = $languageRecord[Language::PROPERTY_ORIGINAL_NAME];
+            $languageValues[$language->getCode(LanguageCodeEnum::ISO_639_1)] = $language->getName();
         }
 
-        return $languages;
+        return $languageValues;
     }
 
     public function getLanguageRepository(): LanguageRepository

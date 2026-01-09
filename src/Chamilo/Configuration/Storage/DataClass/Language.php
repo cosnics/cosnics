@@ -1,153 +1,123 @@
 <?php
 namespace Chamilo\Configuration\Storage\DataClass;
 
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-
 /**
- * @package common.libraries
- * @author  Hans De Bisschop
- * @author  Magali Gillard
+ * @package Chamilo\Configuration\Storage\DataClass
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class Language extends DataClass
+class Language
 {
-    public const CONTEXT = 'Chamilo\Configuration';
-
-    public const PROPERTY_AVAILABLE = 'available';
-    public const PROPERTY_ENGLISH_NAME = 'english_name';
-    public const PROPERTY_FAMILY = 'family';
-    public const PROPERTY_ISOCODE = 'isocode';
-    public const PROPERTY_ORIGINAL_NAME = 'original_name';
+    public const CODE_TYPE_GLOTTOLOG = 'glottolog';
+    public const CODE_TYPE_ISO_639_1 = 'iso_639_1';
+    public const CODE_TYPE_ISO_639_2 = 'iso_639_2';
+    public const CODE_TYPE_ISO_639_3 = 'iso_639_3';
+    public const CODE_TYPE_LINGUASPHERE = 'linguasphere';
 
     /**
-     * Get the default properties of all languages
-     *
-     * @param string[] $extendedPropertyNames
-     *
+     * @string[] array
+     */
+    private array $codes;
+
+    /**
+     * @string[][] array
+     */
+    private array $families;
+
+    private string $name;
+
+    /**
+     * @string[] array
+     */
+    private array $translations;
+
+    /**
+     * @param string[] $codes
+     * @param string[][] $families
+     * @param string $name
+     * @param string[] $translations
+     */
+    public function __construct(array $codes, array $families, string $name, array $translations)
+    {
+        $this->codes = $codes;
+        $this->families = $families;
+        $this->name = $name;
+        $this->translations = $translations;
+    }
+
+    public function getCode(LanguageCodeEnum $codeType): ?string
+    {
+        return $this->codes[$codeType->value] ?? null;
+    }
+
+    /**
      * @return string[]
      */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    public function getCodes(): array
     {
-        return parent::getDefaultPropertyNames(
-            [
-                self::PROPERTY_ORIGINAL_NAME,
-                self::PROPERTY_ENGLISH_NAME,
-                self::PROPERTY_FAMILY,
-                self::PROPERTY_ISOCODE,
-                self::PROPERTY_AVAILABLE
-            ]
-        );
+        return $this->codes;
     }
 
     /**
-     * @return string
+     * @param string[] $codes
      */
-    public static function getStorageUnitName(): string
+    public function setCodes(array $codes): Language
     {
-        return 'configuration_language';
+        $this->codes = $codes;
+
+        return $this;
     }
 
     /**
-     * Get the availability of the language
-     *
-     * @return int
+     * @return string[][]
      */
-    public function get_available()
+    public function getFamilies(): array
     {
-        return $this->getDefaultProperty(self::PROPERTY_AVAILABLE);
+        return $this->families;
     }
 
     /**
-     * Get the english name of the language
-     *
-     * @return string
+     * @param string[][] $families
      */
-    public function get_english_name()
+    public function setFamilies(array $families): Language
     {
-        return $this->getDefaultProperty(self::PROPERTY_ENGLISH_NAME);
+        $this->families = $families;
+
+        return $this;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): Language
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getTranslation(string $isoCode): ?string
+    {
+        return $this->translations[$isoCode] ?? null;
     }
 
     /**
-     * Get the family of the language
-     *
-     * @return string
+     * @return string[]
      */
-    public function get_family()
+    public function getTranslations(): array
     {
-        return $this->getDefaultProperty(self::PROPERTY_FAMILY);
+        return $this->translations;
     }
 
     /**
-     * Get the ISO 639-1 code of the language
-     *
-     * @return string
+     * @param string[] $translations
      */
-    public function get_isocode()
+    public function setTranslations(array $translations): Language
     {
-        return $this->getDefaultProperty(self::PROPERTY_ISOCODE);
+        $this->translations = $translations;
+
+        return $this;
     }
 
-    /**
-     * Get the native name of the language
-     *
-     * @return string
-     */
-    public function get_original_name()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_ORIGINAL_NAME);
-    }
-
-    /**
-     * Set the availability of the language
-     *
-     * @return int
-     */
-    public function is_available()
-    {
-        return $this->get_available();
-    }
-
-    public function set_available($available)
-    {
-        $this->setDefaultProperty(self::PROPERTY_AVAILABLE, $available);
-    }
-
-    /**
-     * Set the english name of the language
-     *
-     * @param string $original_name
-     */
-    public function set_english_name($english_name)
-    {
-        $this->setDefaultProperty(self::PROPERTY_ENGLISH_NAME, $english_name);
-    }
-
-    /**
-     * Set the family of the language
-     *
-     * @param string $family
-     */
-    public function set_family($family)
-    {
-        $this->setDefaultProperty(self::PROPERTY_FAMILY, $family);
-    }
-
-    /**
-     * Set the ISO 639-1 code of the language
-     *
-     * @param string $isocode
-     */
-    public function set_isocode($isocode)
-    {
-        $this->setDefaultProperty(self::PROPERTY_ISOCODE, $isocode);
-    }
-
-    /**
-     * Set the native name of the language
-     *
-     * @param string $original_name
-     */
-    public function set_original_name($original_name)
-    {
-        $this->setDefaultProperty(self::PROPERTY_ORIGINAL_NAME, $original_name);
-    }
 }

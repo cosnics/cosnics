@@ -1,0 +1,52 @@
+{
+    "name": "Nederlands",
+    "families": [
+        {
+            "code": "ine",
+            "name": "Indo-European languages"
+        },
+        {
+            "code": "gem",
+            "name": "Germanic languages"
+        },
+        {
+            "code": "gmw",
+            "name": "West Germanic languages"
+        }
+    ],
+    "codes": {
+        "iso639-1": "nl",
+        "iso639-2": "nld",
+        "iso639-3": "nld",
+        "glottolog": "mode1257",
+        "linguagsphere": "52-ACB-a"
+    },
+    "translations": {
+        "bul": "нидерландски",
+        "hrv": "nizozemski",
+        "ces": "nizozemština",
+        "dan": "nederlandsk",
+        "nld": "Nederlands",
+        "eng": "Dutch",
+        "est": "hollandi keel",
+        "fin": "hollanti",
+        "fra": "néerlandais",
+        "deu": "Niederländisch",
+        "ell": "Ολλανδικά",
+        "hun": "holland",
+        "gle": "Ollainnis",
+        "ita": "olandese",
+        "lav": "holandiešu",
+        "lit": "olandų",
+        "mlt": "Olandiż",
+        "pol": "niderlandzki",
+        "por": "neerlandês",
+        "ron": "neerlandeză",
+        "slk": "holandčina",
+        "slv": "nizozemščina",
+        "spa": "neerlandés",
+        "swe": "nederländska",
+        "isl": "hollenska",
+        "nor": "nederlandsk"
+    }
+}

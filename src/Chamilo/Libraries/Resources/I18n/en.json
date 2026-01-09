@@ -1,0 +1,52 @@
+{
+    "name": "English",
+    "families": [
+        {
+            "code": "ine",
+            "name": "Indo-European languages"
+        },
+        {
+            "code": "gem",
+            "name": "Germanic languages"
+        },
+        {
+            "code": "gmw",
+            "name": "West Germanic languages"
+        }
+    ],
+    "codes": {
+        "iso639-1": "en",
+        "iso639-2": "eng",
+        "iso639-3": "eng",
+        "glottolog": "stan1293",
+        "linguagsphere": "52-ABA"
+    },
+    "translations": {
+        "bul": "английски",
+        "hrv": "engleski",
+        "ces": "angličtina",
+        "dan": "engelsk",
+        "nld": "Engels",
+        "eng": "English",
+        "est": "inglise",
+        "fin": "englanti",
+        "fra": "anglais",
+        "deu": "Englisch",
+        "ell": "Αγγλικά",
+        "hun": "angol",
+        "gle": "Béarla",
+        "ita": "inglese",
+        "lav": "angļu",
+        "lit": "anglų",
+        "mlt": "Ingliż",
+        "pol": "angielski",
+        "por": "inglês",
+        "ron": "engleză",
+        "slk": "angličtina",
+        "slv": "angleščina",
+        "spa": "inglés",
+        "swe": "engelska",
+        "isl": "enska",
+        "nor": "engelsk"
+    }
+}
