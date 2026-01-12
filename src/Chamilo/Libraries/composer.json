@@ -10,7 +10,9 @@
         "phpoffice/phpspreadsheet": "2.*",
         "sentry/sdk": "4.*",
         "spipu/html2pdf": "5.2.*",
-        "voku/stringy": "6.*"
+        "voku/stringy": "6.*",
+        "hackzilla/password-generator": "1.*",
+        "apereo/phpcas": "1.6.*"
     },
     "license": "MIT",
     "authors": [
