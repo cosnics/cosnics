@@ -1,10 +1,9 @@
 <?php
 namespace Chamilo\Application\Calendar\Component;
 
-use Chamilo\Application\Calendar\ActionsInterface;
 use Chamilo\Application\Calendar\Manager;
+use Chamilo\Application\Calendar\Service\CalendarProvider;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
-use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Component\UserSettingsComponent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -28,7 +27,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 class BrowserComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
-    protected CalendarRendererProvider $calendarDataProvider;
+    protected CalendarRendererProvider $calendarRendererProvider;
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
@@ -60,6 +59,8 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      */
     protected function checkLoggedInAs(): void
     {
@@ -67,7 +68,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
         if ($asAdmin && $asAdmin > 0)
         {
-
             $user = $this->getUserService()->findUserByIdentifier($asAdmin);
             if (!$user instanceof User || !$user->isPlatformAdmin())
             {
@@ -76,14 +76,19 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         }
     }
 
-    protected function getActionRenderer(string $context): ActionsInterface
+    protected function getCalendarProvider(): CalendarProvider
     {
-        return $this->getService($context . '\Actions');
+        return $this->getService(CalendarProvider::class);
     }
 
-    protected function getCalendarDataProvider(): CalendarRendererProvider
+    protected function getCalendarRendererFactory(): HtmlCalendarRendererFactory
     {
-        if (!isset($this->calendarDataProvider))
+        return $this->getService(HtmlCalendarRendererFactory::class);
+    }
+
+    protected function getCalendarRendererProvider(): CalendarRendererProvider
+    {
+        if (!isset($this->calendarRendererProvider))
         {
             $displayParameters = [
                 self::PARAM_CONTEXT => Manager::CONTEXT,
@@ -92,18 +97,13 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
                 HtmlCalendarRenderer::PARAM_TIME => $this->getCurrentRendererTime()
             ];
 
-            $this->calendarDataProvider = new CalendarRendererProvider(
+            $this->calendarRendererProvider = new CalendarRendererProvider(
                 $this->getCalendarRendererProviderRepository(), $this->getUser(), $displayParameters,
                 \Chamilo\Application\Calendar\Ajax\Manager::CONTEXT
             );
         }
 
-        return $this->calendarDataProvider;
-    }
-
-    protected function getCalendarRendererFactory(): HtmlCalendarRendererFactory
-    {
-        return $this->getService(HtmlCalendarRendererFactory::class);
+        return $this->calendarRendererProvider;
     }
 
     protected function getGeneralActions(): ButtonGroup
@@ -172,23 +172,15 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
     {
         $actions = [];
 
-        $extensionRegistrations =
-            $this->getRegistrationConsulter()->getRegistrationsByType(Manager::CONTEXT . '\Extension');
-
         $primaryExtensionActions = [];
         $additionalExtensionActions = [];
 
-        foreach ($extensionRegistrations as $extensionRegistration)
+        foreach ($this->getCalendarProvider()->getActionsProviders() as $actionProvider)
         {
-            if ($extensionRegistration[Registration::PROPERTY_STATUS] == 1)
-            {
-                $actionRenderer = $this->getActionRenderer($extensionRegistration[Registration::PROPERTY_CONTEXT]);
-
-                $primaryExtensionActions = array_merge($primaryExtensionActions, $actionRenderer->getPrimary($this));
-                $additionalExtensionActions = array_merge(
-                    $additionalExtensionActions, $actionRenderer->getAdditional($this)
-                );
-            }
+            $primaryExtensionActions = array_merge($primaryExtensionActions, $actionProvider->getPrimary($this));
+            $additionalExtensionActions = array_merge(
+                $additionalExtensionActions, $actionProvider->getAdditional($this)
+            );
         }
 
         $actions = array_merge($actions, $primaryExtensionActions);
@@ -208,7 +200,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         $renderer = $this->getCalendarRendererFactory()->getRenderer($this->getCurrentRendererType());
 
         return $renderer->render(
-            $this->getCalendarDataProvider(), $this->getCurrentRendererTime(), $this->getViewActions()
+            $this->getCalendarRendererProvider(), $this->getCurrentRendererTime(), $this->getViewActions()
         );
     }
 

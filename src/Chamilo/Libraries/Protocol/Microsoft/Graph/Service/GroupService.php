@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
 use Microsoft\Graph\Model\Group;
@@ -59,7 +59,7 @@ class GroupService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException
      */
     public function addMemberToGroup($groupId, User $user)
     {
@@ -69,7 +69,7 @@ class GroupService
 
             if (empty($azureUserIdentifier))
             {
-                throw new AzureUserNotExistsException($user);
+                throw new UserNotFoundException($user);
             }
 
             $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
@@ -84,7 +84,7 @@ class GroupService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException
      */
     public function addOwnerToGroup($groupId, User $user)
     {
@@ -94,7 +94,7 @@ class GroupService
 
             if (empty($azureUserIdentifier))
             {
-                throw new AzureUserNotExistsException($user);
+                throw new UserNotFoundException($user);
             }
 
             $this->getGroupRepository()->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
@@ -109,7 +109,7 @@ class GroupService
      *
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException
      */
     public function createGroupByName(User $owner, $groupName)
     {
@@ -117,7 +117,7 @@ class GroupService
 
         if (empty($azureUserIdentifier))
         {
-            throw new AzureUserNotExistsException($owner);
+            throw new UserNotFoundException($owner);
         }
 
         $group = $this->getGroupRepository()->createGroup($groupName);

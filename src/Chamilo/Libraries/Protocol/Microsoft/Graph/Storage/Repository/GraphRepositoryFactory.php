@@ -6,6 +6,8 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use League\OAuth2\Client\Provider\GenericProvider;
 use Microsoft\Graph\Graph;
+use Microsoft\Graph\GraphServiceClient;
+use Microsoft\Kiota\Authentication\Oauth\ClientCredentialContext;
 use stdClass;
 
 /**
@@ -98,8 +100,12 @@ class GraphRepositoryFactory
             ]
         );
 
+        $tokenRequestContext = new ClientCredentialContext(
+            $tenantId, $clientId, $clientSecret
+        );
+
         return new GraphRepository(
-            $oauthClient, new Graph(), $this->accessTokenRepository
+            $oauthClient, new GraphServiceClient($tokenRequestContext), $this->accessTokenRepository
         );
     }
 }

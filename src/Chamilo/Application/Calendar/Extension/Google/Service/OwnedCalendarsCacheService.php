@@ -43,11 +43,9 @@ class OwnedCalendarsCacheService
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function getOwnedCalendars(): array
+    public function getOwnedCalendars(User $user): array
     {
-        $calendarRepository = $this->getCalendarRepository();
-
-        $cacheIdentifier = $this->getCacheKeyForParts([$calendarRepository->getAccessToken(), __METHOD__]);
+        $cacheIdentifier = $this->getCacheKeyForParts([__METHOD__, $user->getId()]);
 
         if (!$this->hasCacheDataForKey($cacheIdentifier))
         {
@@ -56,7 +54,7 @@ class OwnedCalendarsCacheService
             );
 
             $this->saveCacheDataForKey(
-                $cacheIdentifier, $this->getCalendarRepository()->findOwnedCalendars(), $lifetimeInMinutes * 60
+                $cacheIdentifier, $this->getCalendarRepository()->findOwnedCalendars($user), $lifetimeInMinutes * 60
             );
         }
 

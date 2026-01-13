@@ -18,20 +18,16 @@ class EventsCacheService
 {
     use SingleCacheAdapterHandlerTrait;
 
-    protected User $user;
-
     protected UserSettingService $userSettingService;
 
     private CalendarRepository $calendarRepository;
 
     public function __construct(
-        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository, User $user,
-        UserSettingService $userSettingService
+        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository, UserSettingService $userSettingService
     )
     {
         $this->cacheAdapter = $cacheAdapter;
         $this->calendarRepository = $calendarRepository;
-        $this->user = $user;
         $this->userSettingService = $userSettingService;
     }
 
@@ -43,34 +39,30 @@ class EventsCacheService
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function getEventsForCalendarIdentifierAndBetweenDates(string $calendarIdentifier, $fromDate, $toDate
+    public function getEventsForCalendarIdentifierAndBetweenDates(
+        User $user, string $calendarIdentifier, $fromDate, $toDate
     ): Google_Service_Calendar_Events
     {
         $calendarRepository = $this->getCalendarRepository();
 
         $cacheIdentifier = $this->getCacheKeyForParts(
-            [$calendarRepository->getAccessToken(), __METHOD__, $calendarIdentifier, $fromDate, $toDate]
+            [__METHOD__, $user->getId(), $calendarIdentifier, $fromDate, $toDate]
         );
 
         if (!$this->hasCacheDataForKey($cacheIdentifier))
         {
             $lifetimeInMinutes = $this->getUserSettingService()->getSettingForUser(
-                $this->getUser(), 'Chamilo\Core\Admin', 'refresh_external'
+                $user, 'Chamilo\Core\Admin', 'refresh_external'
             );
 
             $this->saveCacheDataForKey(
                 $cacheIdentifier, $calendarRepository->findEventsForCalendarIdentifierAndBetweenDates(
-                $calendarIdentifier, $fromDate, $toDate
+                $user, $calendarIdentifier, $fromDate, $toDate
             ), $lifetimeInMinutes * 60
             );
         }
 
         return $this->readCacheDataForKey($cacheIdentifier);
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
     }
 
     public function getUserSettingService(): UserSettingService

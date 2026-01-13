@@ -13,8 +13,7 @@
         }
     ],
     "require": {
-        "php": ">=8.2.0",
-        "ext-exif": "*"
+        "php": ">=8.2.0"
     },
     "extra": {
         "cosnics": {

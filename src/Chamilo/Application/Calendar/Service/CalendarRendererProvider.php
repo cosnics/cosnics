@@ -1,16 +1,11 @@
 <?php
 namespace Chamilo\Application\Calendar\Service;
 
-use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
-use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
-use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Translation\Translation;
-use ReflectionClass;
 
 /**
  * @package Chamilo\Application\Calendar\Service
@@ -55,25 +50,34 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     }
 
     /**
-     * @param int|null $startTime
-     * @param int|null $endTime
-     *
-     * @return array|\Chamilo\Libraries\Calendar\Event\Event[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
-     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
     public function aggregateEvents(?int $startTime = null, ?int $endTime = null): array
     {
         $events = [];
 
-        foreach ($this->getSources() as $implementor)
+        foreach ($this->getCalendarProviders() as $calendarDataProviders)
         {
-            $implementorEvents = $implementor->getEvents($this, $startTime, $endTime);
+            $implementorEvents = $calendarDataProviders->getEvents($this, $startTime, $endTime);
 
             $events = array_merge($events, $implementorEvents);
         }
 
         return $events;
+    }
+
+    /**
+     * @return \Chamilo\Application\Calendar\Architecture\CalendarDataProviderInterface[]
+     */
+    public function getCalendarProviders(): array
+    {
+        /**
+         * @var \Chamilo\Application\Calendar\Service\CalendarProvider $calendarProvider
+         */
+        $calendarProvider =
+            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(CalendarProvider::class);
+
+        return $calendarProvider->getCalendarDataProviders();
     }
 
     /**
@@ -88,57 +92,14 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     {
         $sourceNames = [];
 
-        foreach ($this->getSources() as $sourceContext => $sourceImplementor)
+        foreach ($this->getCalendarProviders() as $calenderDataProvider)
         {
-            $sourceNames[] = Translation::get('TypeName', [], $sourceContext);
+            $sourceNames[] = $calenderDataProvider->getName();
         }
 
         sort($sourceNames);
 
         return $sourceNames;
-    }
-
-    /**
-     * @return \Chamilo\Application\Calendar\Architecture\CalendarInterface[][]
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
-     */
-    public function getSources()
-    {
-        /**
-         * @var \Chamilo\Configuration\Service\Consulter\RegistrationConsulter $registrationConsulter
-         */
-        $registrationConsulter =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(RegistrationConsulter::class);
-
-        $registrations = $registrationConsulter->getIntegrationRegistrations(Manager::CONTEXT);
-
-        $sources = [];
-
-        foreach ($registrations as $registration)
-        {
-
-            if ($registration[Registration::PROPERTY_STATUS])
-            {
-                $context = $registration[Registration::PROPERTY_CONTEXT];
-                $class_name = $context . '\Service\CalendarEventDataProvider';
-
-                if (class_exists($class_name))
-                {
-                    $reflectionClass = new ReflectionClass($class_name);
-                    if ($reflectionClass->isAbstract())
-                    {
-                        continue;
-                    }
-
-                    $implementor = new $class_name();
-
-                    $sources[$context] = $implementor;
-                }
-            }
-        }
-
-        return $sources;
     }
 
     public function getUrlGenerator(): UrlGenerator

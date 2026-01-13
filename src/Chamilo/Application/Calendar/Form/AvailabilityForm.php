@@ -1,13 +1,12 @@
 <?php
 namespace Chamilo\Application\Calendar\Form;
 
+use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Translation\Translation;
 
 /**
- *
  * @package Chamilo\Application\Calendar\Form
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -16,31 +15,20 @@ use Chamilo\Libraries\Translation\Translation;
 class AvailabilityForm extends FormValidator
 {
 
-    /**
-     *
-     * @var \Chamilo\Core\User\Storage\DataClass\User
-     */
-    private $user;
+    private AvailabilityService $availabilityService;
 
     /**
-     *
-     * @var \Chamilo\Application\Calendar\Service\AvailabilityService
+     * @var \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[][]
      */
-    private $availabilityService;
+    private array $availableCalendars;
+
+    private User $user;
 
     /**
-     *
-     * @var string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \QuickformException
      */
-    private $availableCalendars;
-
-    /**
-     *
-     * @param string $actionUrl
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Application\Calendar\Service\AvailabilityService $availabilityService
-     */
-    public function __construct($actionUrl, User $user, AvailabilityService $availabilityService)
+    public function __construct(string $actionUrl, User $user, AvailabilityService $availabilityService)
     {
         parent::__construct('Availability', self::FORM_METHOD_POST, $actionUrl);
 
@@ -51,91 +39,50 @@ class AvailabilityForm extends FormValidator
         $this->setValues();
     }
 
-    public function build()
+    /**
+     * @throws \QuickformException
+     */
+    public function build(): void
     {
         $this->add_information_message(
-            'calendar_availability', null, Translation::get('CalendarAvailabilityInformation'), true
+            'calendar_availability', null,
+            $this->getTranslation('CalendarAvailabilityInformation', [], Manager::CONTEXT), true
         );
 
         $availableCalendars = $this->getAvailableCalendars();
 
         foreach ($availableCalendars as $ownedCalendarType => $ownedCalendars)
         {
-            if (count($ownedCalendars) > 1)
+            $this->addElement('category', $ownedCalendarType);
+
+            foreach ($ownedCalendars as $ownedCalendar)
             {
-                $this->addElement('category', Translation::get('TypeName', null, $ownedCalendarType));
+                $calendarElements = [];
 
-                foreach ($ownedCalendars as $ownedCalendar)
-                {
-                    $calendarElements = [];
+                $calendarElements[] = $this->createElement(
+                    'checkbox', AvailabilityService::PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
+                    $ownedCalendar->getIdentifier() . '][' . AvailabilityService::PROPERTY_AVAILABLE . ']',
+                    $ownedCalendar->getName(), null, null, 1, 0
+                );
 
-                    $calendarElements[] = $this->createElement(
-                        'checkbox', AvailabilityService::PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
-                        $ownedCalendar->getIdentifier() . '][' . AvailabilityService::PROPERTY_AVAILABLE . ']',
-                        $ownedCalendar->getName(), null, null, 1, 0
-                    );
+                $calendarElements[] = $this->createElement('static', null, null, $ownedCalendar->getDescription());
 
-                    // $colourElement = $this->createElement(
-                    // 'text',
-                    // AvailabilityService::PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
-                    // $ownedCalendar->getIdentifier() . '][' . AvailabilityService::PROPERTY_COLOUR . ']',
-                    // $ownedCalendar->getName() . ' Colour',
-                    // array('class' => 'colour-selection'));
-                    // $colourElement->setType('color');
-
-                    // $calendarElements[] = $colourElement;
-                    $calendarElements[] = $this->createElement('static', null, null, $ownedCalendar->getDescription());
-
-                    $this->addGroup($calendarElements, 'buttons', $ownedCalendar->getName(), '&nbsp;', false);
-                }
-            }
-        }
-
-        $this->addElement('category', Translation::get('VariousCalendars'));
-
-        foreach ($availableCalendars as $ownedCalendarType => $ownedCalendars)
-        {
-            if (count($ownedCalendars) == 1)
-            {
-                foreach ($ownedCalendars as $ownedCalendar)
-                {
-                    $calendarElements = [];
-
-                    $calendarElements[] = $this->createElement(
-                        'checkbox', AvailabilityService::PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
-                        $ownedCalendar->getIdentifier() . '][' . AvailabilityService::PROPERTY_AVAILABLE . ']',
-                        $ownedCalendar->getName(), null, null, 1, 0
-                    );
-
-                    $calendarElements[] = $this->createElement('static', null, null, $ownedCalendar->getDescription());
-
-                    $this->addGroup($calendarElements, 'buttons', $ownedCalendar->getName(), '&nbsp;', false);
-                }
+                $this->addGroup($calendarElements, 'buttons', $ownedCalendar->getName(), '&nbsp;', false);
             }
         }
 
         $this->addSaveResetButtons();
     }
 
-    /**
-     *
-     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
-     */
-    public function getAvailabilityService()
+    public function getAvailabilityService(): AvailabilityService
     {
         return $this->availabilityService;
     }
 
     /**
-     *
-     * @param \Chamilo\Application\Calendar\Service\AvailabilityService $AvailabilityService
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[][]
      */
-    public function setAvailabilityService(AvailabilityService $AvailabilityService)
-    {
-        $this->AvailabilityService = $AvailabilityService;
-    }
-
-    public function getAvailableCalendars()
+    public function getAvailableCalendars(): array
     {
         if (!isset($this->availableCalendars))
         {
@@ -145,24 +92,15 @@ class AvailabilityForm extends FormValidator
         return $this->availableCalendars;
     }
 
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
 
     /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \QuickformException
      */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
-    }
-
     private function setValues()
     {
         $defaultValues = [];
@@ -178,7 +116,7 @@ class AvailabilityForm extends FormValidator
                 $calendarAvailability->getColour();
         }
 
-        foreach ($this->getAvailableCalendars() as $ownedCalendarType => $ownedCalendars)
+        foreach ($this->getAvailableCalendars() as $ownedCalendars)
         {
             foreach ($ownedCalendars as $ownedCalendar)
             {

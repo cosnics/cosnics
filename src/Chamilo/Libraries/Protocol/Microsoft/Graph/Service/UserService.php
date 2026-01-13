@@ -3,10 +3,14 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository;
+use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException;
+use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
+use Symfony\Component\Cache\Exception\CacheException;
 
 /**
- * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
+ * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -26,44 +30,53 @@ class UserService
     }
 
     /**
-     * Authorizes a user by a given authorization code
-     *
-     * @param string $authorizationCode
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException
      */
-    public function authorizeUserByAuthorizationCode($authorizationCode)
+    public function getAndSaveUserIdentifier(User $user): ?string
     {
-        $this->getUserRepository()->authorizeUserByAuthorizationCode($authorizationCode);
-    }
-
-    /**
-     * Returns the identifier in azure active directory for a given user
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
-     */
-    public function getAzureUserIdentifier(User $user): string
-    {
-        $azureActiveDirectoryUserIdentifier = $this->getUserSettingService()->getSettingForUser(
+        $userIdentifier = $this->getUserSettingService()->getSettingForUser(
             $user, 'Chamilo\Libraries', 'microsoft_graph_external_user_id'
         );
 
-        if (empty($azureActiveDirectoryUserIdentifier))
+        if (empty($userIdentifier))
         {
-            $azureUser = $this->getUserRepository()->getAzureUser($user);
+            $userIdentifier = $this->getUserIdentifier($user);
 
-            if ($azureUser instanceof \Microsoft\Graph\Model\User)
+            try
             {
-                $azureActiveDirectoryUserIdentifier = $azureUser->getId();
+                $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
+                    'Chamilo\Libraries', 'microsoft_graph_external_user_id', $user, $userIdentifier
+                );
             }
-
-            $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
-                'Chamilo\Libraries', 'microsoft_graph_external_user_id', $user,
-                $azureActiveDirectoryUserIdentifier
-            );
+            catch (StorageMethodException|StorageNoResultException|CacheException)
+            {
+            }
         }
 
-        return $azureActiveDirectoryUserIdentifier;
+        return $userIdentifier;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException
+     */
+    public function getUser(User $user): \Microsoft\Graph\Generated\Models\User
+    {
+        return $this->getUserRepository()->getUser($user);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException
+     */
+    public function getUserIdentifier(User $user): string
+    {
+        $graphUser = $this->getUser($user);
+
+        if (!$graphUser->getId())
+        {
+            throw new UserNotFoundException($user);
+        }
+
+        return $graphUser->getId();
     }
 
     public function getUserRepository(): UserRepository

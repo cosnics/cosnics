@@ -2,8 +2,6 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Component;
 
 use Chamilo\Application\Calendar\Extension\Google\Manager;
-use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
-use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
@@ -18,10 +16,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class LogoutComponent extends Manager implements BreadcrumbLessComponentInterface
 {
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
     public function run()
     {
-        $calendarService = new CalendarService(CalendarRepository::getInstance());
-        $isSuccessful = $calendarService->logout();
+        $isSuccessful = $this->getCalendarService()->logout($this->getUser());
 
         if ($isSuccessful)
         {
@@ -35,10 +35,7 @@ class LogoutComponent extends Manager implements BreadcrumbLessComponentInterfac
         );
     }
 
-    /**
-     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
-     */
-    protected function getAvailabilityService()
+    protected function getAvailabilityService(): AvailabilityService
     {
         return $this->getService(AvailabilityService::class);
     }

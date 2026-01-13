@@ -1,8 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
-use Microsoft\Graph\Model\Calendar;
-use Microsoft\Graph\Model\Event;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\CalendarNotFoundException;
+use Exception;
+use Microsoft\Graph\Generated\Models\Calendar;
+use Microsoft\Graph\Generated\Users\Item\Calendars\Item\CalendarView\CalendarViewRequestBuilderGetQueryParameters;
+use Microsoft\Graph\Generated\Users\Item\Calendars\Item\CalendarView\CalendarViewRequestBuilderGetRequestConfiguration;
+use Microsoft\Graph\GraphServiceClient;
 
 /**
  *
@@ -13,88 +17,80 @@ use Microsoft\Graph\Model\Event;
 class CalendarRepository
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository
-     */
-    private $graphRepository;
+    private GraphServiceClient $graphServiceClient;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository $graphRepository
-     */
-    public function __construct(GraphRepository $graphRepository)
+    public function __construct(GraphServiceClient $graphServiceClient)
     {
-        $this->setGraphRepository($graphRepository);
+        $this->graphServiceClient = $graphServiceClient;
     }
 
     /**
-     *
-     * @param string $calendarIdentifier
-     * @param string $azureUserIdentifier
-     * @param int $fromDate
-     * @param int $toDate
-     *
-     * @return \Microsoft\Graph\Model\Event[] | \Microsoft\Graph\Model\Entity[]
+     * @return \Microsoft\Graph\Generated\Models\Event[]
      */
     public function findEventsForCalendarIdentifierAndBetweenDates(
-        $calendarIdentifier, $azureUserIdentifier, $fromDate, $toDate
-    )
+        string $userIdentifier, string $calendarIdentifier, int $fromDate, int $toDate
+    ): array
     {
-        $queryParameters = http_build_query(
-            ['$top' => 600, 'startDateTime' => date('c', $fromDate), 'endDateTime' => date('c', $toDate)]
-        );
+        try
+        {
+            $configuration = new CalendarViewRequestBuilderGetRequestConfiguration(
+                queryParameters: new CalendarViewRequestBuilderGetQueryParameters(
+                    count: true, endDateTime: date('c', $toDate), startDateTime: date('c', $fromDate), top: 600
+                )
+            );
 
-        $result = $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            '/users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier . '/calendarview?' .
-            $queryParameters, Event::class, true
-        );
-
-        return $result;
+            return $this->getGraphServiceClient()->users()->byUserId($userIdentifier)->calendars()->byCalendarId(
+                $calendarIdentifier
+            )->calendarView()->get($configuration)->wait()->getValue();
+        }
+        catch (Exception)
+        {
+            return [];
+        }
     }
 
     /**
-     *
-     * @param string $calendarIdentifier
-     * @param string $azureUserIdentifier
-     *
-     * @return \Microsoft\Graph\Model\Calendar | \Microsoft\Graph\Model\Entity[]
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\CalendarNotFoundException
      */
-    public function getCalendarByIdentifier($calendarIdentifier, $azureUserIdentifier)
+    public function getCalendarByIdentifier(string $userIdentifier, string $calendarIdentifier): Calendar
     {
-        return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            '/users/' . $azureUserIdentifier . '/calendars/' . $calendarIdentifier, Calendar::class
-        );
+        try
+        {
+            $calendar = $this->getGraphServiceClient()->users()->byUserId($userIdentifier)->calendars()->byCalendarId(
+                $calendarIdentifier
+            )->get()->wait();
+
+            if (!$calendar instanceof Calendar)
+            {
+                throw new CalendarNotFoundException($userIdentifier, $calendarIdentifier);
+            }
+
+            return $calendar;
+        }
+        catch (Exception)
+        {
+            throw new CalendarNotFoundException($userIdentifier, $calendarIdentifier);
+        }
+    }
+
+    protected function getGraphServiceClient(): GraphServiceClient
+    {
+        return $this->graphServiceClient;
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository
+     * @return \Microsoft\Graph\Generated\Models\Calendar[]
      */
-    protected function getGraphRepository()
+    public function listOwnedCalendars(string $azureUserIdentifier): array
     {
-        return $this->graphRepository;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository $graphRepository
-     */
-    protected function setGraphRepository(GraphRepository $graphRepository)
-    {
-        $this->graphRepository = $graphRepository;
-    }
-
-    /**
-     *
-     * @param string $azureUserIdentifier
-     *
-     * @return \Microsoft\Graph\Model\Calendar[] | \Microsoft\Graph\Model\Entity[]
-     */
-    public function listOwnedCalendars($azureUserIdentifier)
-    {
-        return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            '/users/' . $azureUserIdentifier . '/calendars', Calendar::class, true
-        );
+        try
+        {
+            return $this->getGraphServiceClient()->users()->byUserId($azureUserIdentifier)->calendars()->get()->wait()
+                ->getValue();
+        }
+        catch (Exception)
+        {
+            return [];
+        }
     }
 }

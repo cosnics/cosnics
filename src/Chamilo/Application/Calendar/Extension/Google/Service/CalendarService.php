@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Google\Service;
 
-use Chamilo\Application\Calendar\Extension\Google\CalendarProperties;
-use Chamilo\Application\Calendar\Extension\Google\EventIterator;
+use Chamilo\Application\Calendar\Extension\Google\Architecture\Domain\CalendarProperties;
+use Chamilo\Application\Calendar\Extension\Google\Architecture\Domain\EventIterator;
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 
 /**
@@ -16,78 +16,55 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
  */
 class CalendarService
 {
-    const PARAM_AUTHORIZATION_CODE = 'code';
+    public const PARAM_AUTHORIZATION_CODE = 'code';
 
-    /**
-     *
-     * @var \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository
-     */
-    private $calendarRepository;
+    private CalendarRepository $calendarRepository;
 
-    /**
-     *
-     * @param \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
-     */
-    public function __construct(CalendarRepository $calendarRepository)
+    private ConfigurablePathBuilder $configurablePathBuilder;
+
+    private EventsCacheService $eventsCacheService;
+
+    private OwnedCalendarsCacheService $ownedCalendarsCacheService;
+
+    public function __construct(
+        CalendarRepository $calendarRepository, ConfigurablePathBuilder $configurablePathBuilder,
+        EventsCacheService $eventsCacheService, OwnedCalendarsCacheService $ownedCalendarsCacheService
+    )
     {
         $this->calendarRepository = $calendarRepository;
+        $this->configurablePathBuilder = $configurablePathBuilder;
+        $this->eventsCacheService = $eventsCacheService;
+        $this->ownedCalendarsCacheService = $ownedCalendarsCacheService;
     }
 
-    /**
-     *
-     * @param string $summary
-     * @param string $description
-     * @param string $timeZone
-     *
-     * @return \Chamilo\Application\Calendar\Extension\Google\CalendarProperties
-     */
-    private function getCalendarProperties($summary, $description, $timeZone)
+    private function getCalendarProperties(string $summary, string $description, string $timeZone): CalendarProperties
     {
         return new CalendarProperties($summary, $description, $timeZone);
     }
 
-    /**
-     *
-     * @return \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository
-     */
-    public function getCalendarRepository()
+    public function getCalendarRepository(): CalendarRepository
     {
         return $this->calendarRepository;
     }
 
-    /**
-     *
-     * @param \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository $calendarRepository
-     */
-    public function setCalendarRepository(CalendarRepository $calendarRepository)
+    protected function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
-        $this->calendarRepository = $calendarRepository;
+        return $this->configurablePathBuilder;
+    }
+
+    public function getEventsCacheService(): EventsCacheService
+    {
+        return $this->eventsCacheService;
     }
 
     /**
-     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
-     * @throws \Exception
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    protected function getConfigurablePathBuilder()
+    public function getEventsForCalendarIdentifierAndBetweenDates(
+        User $user, string $calendarIdentifier, ?int $fromDate = null, ?int $toDate = null
+    ): EventIterator
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            ConfigurablePathBuilder::class
-        );
-    }
-
-    /**
-     *
-     * @param string $calendarIdentifier
-     * @param integer $fromDate
-     * @param integer $toDate
-     *
-     * @return \Chamilo\Application\Calendar\Extension\Google\EventIterator
-     */
-    public function getEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
-    {
-        $eventsCacheService =
-            new EventsCacheService($this->getCalendarRepository(), $this->getConfigurablePathBuilder());
-        $googleCalendarEvents = $eventsCacheService->getEventsForCalendarIdentifierAndBetweenDates(
+        $googleCalendarEvents = $this->getEventsCacheService()->getEventsForCalendarIdentifierAndBetweenDates($user,
             $calendarIdentifier, $fromDate, $toDate
         );
 
@@ -102,39 +79,35 @@ class CalendarService
     /**
      *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function getOwnedCalendars()
+    public function getOwnedCalendars(User $user): array
     {
-        $ownedCalendarsCacheService =
-            new OwnedCalendarsCacheService($this->getCalendarRepository(), $this->getConfigurablePathBuilder());
-
-        return $ownedCalendarsCacheService->getOwnedCalendars();
+        return $this->getOwnedCalendarsCacheService()->getOwnedCalendars($user);
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function isAuthenticated()
+    public function getOwnedCalendarsCacheService(): OwnedCalendarsCacheService
     {
-        return $this->getCalendarRepository()->hasAccessToken();
+        return $this->ownedCalendarsCacheService;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function login($authenticationCode = null)
+    public function isAuthenticated(User $user): bool
     {
-        return $this->getCalendarRepository()->login($authenticationCode);
+        return $this->getCalendarRepository()->hasAccessToken($user);
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function logout()
+    public function isConfigured(): bool
     {
-        return $this->getCalendarRepository()->logout();
+        return $this->getCalendarRepository()->isConfigured();
+    }
+
+    public function login(User $user, $authenticationCode = null): bool
+    {
+        return $this->getCalendarRepository()->login($user, $authenticationCode);
+    }
+
+    public function logout(User $user): bool
+    {
+        return $this->getCalendarRepository()->logout($user);
     }
 }

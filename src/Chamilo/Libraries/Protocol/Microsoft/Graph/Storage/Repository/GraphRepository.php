@@ -5,9 +5,7 @@ use Exception;
 use GuzzleHttp\Exception\ClientException;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Token\AccessToken;
-use Microsoft\Graph\Graph;
-use Microsoft\Graph\Http\GraphRequest;
-use Microsoft\Graph\Http\GraphResponse;
+use Microsoft\Graph\GraphServiceClient;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -18,49 +16,31 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class GraphRepository
 {
-    const API_VERSION_BETA = 'beta';
-    const API_VERSION_V1 = 'V1.0';
+    public const API_VERSION_BETA = 'beta';
+    public const API_VERSION_V1 = 'V1.0';
 
-    const RESPONSE_CODE_ACCESS_TOKEN_EXPIRED = '401';
-    const RESPONSE_CODE_RESOURCE_NOT_FOUND = '404';
+    public const RESPONSE_CODE_ACCESS_TOKEN_EXPIRED = '401';
+    public const RESPONSE_CODE_RESOURCE_NOT_FOUND = '404';
+
+    protected AccessTokenRepositoryInterface $accessTokenRepository;
+
+    protected ?AccessToken $delegatedAccessToken = null;
+
+    protected GraphServiceClient $graphServiceClient;
 
     /**
      *
      * @var \League\OAuth2\Client\Provider\AbstractProvider
      */
-    protected $oauthProvider;
+    protected AbstractProvider $oauthProvider;
 
-    /**
-     *
-     * @var \Microsoft\Graph\Graph
-     */
-    protected $graph;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepositoryInterface
-     */
-    protected $accessTokenRepository;
-
-    /**
-     *
-     * @var \League\OAuth2\Client\Token\AccessToken
-     */
-    protected $delegatedAccessToken;
-
-    /**
-     * GraphRepository constructor.
-     *
-     * @param \League\OAuth2\Client\Provider\AbstractProvider $oauthProvider
-     * @param \Microsoft\Graph\Graph $graph
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepositoryInterface $accessTokenRepository
-     */
     public function __construct(
-        AbstractProvider $oauthProvider, Graph $graph, AccessTokenRepositoryInterface $accessTokenRepository
+        AbstractProvider $oauthProvider, GraphServiceClient $graphServiceClient,
+        AccessTokenRepositoryInterface $accessTokenRepository
     )
     {
         $this->setOauthProvider($oauthProvider);
-        $this->setGraph($graph);
+        $this->setGraphServiceClient($graphServiceClient);
         $this->setAccessTokenRepository($accessTokenRepository);
 
         $this->initializeApplicationAccessToken();
@@ -88,23 +68,7 @@ class GraphRepository
             $this->accessTokenRepository->storeDelegatedAccessToken($this->getDelegatedAccessToken());
         }
 
-        $this->getGraph()->setAccessToken($this->getDelegatedAccessToken());
-    }
-
-    /**
-     * Authorizes a user by a given authorization code
-     *
-     * @param string $authorizationCode
-     */
-    public function authorizeUserByAuthorizationCode($authorizationCode)
-    {
-        $this->setDelegatedAccessToken(
-            $this->getOauthProvider()->getAccessToken(
-                'authorization_code', ['code' => $authorizationCode, 'resource' => 'https://graph.microsoft.com/']
-            )
-        );
-
-        $this->getAccessTokenRepository()->storeDelegatedAccessToken($this->getDelegatedAccessToken());
+        $this->getGraphServiceClient()->setAccessToken($this->getDelegatedAccessToken());
     }
 
     /**
@@ -168,15 +132,16 @@ class GraphRepository
         string $apiVersion = self::API_VERSION_V1
     )
     {
-        $this->getGraph()->setApiVersion($apiVersion);
+        $this->getGraphServiceClient()->setApiVersion($apiVersion);
 
         if (!$isCollectionRequest)
         {
-            $request = $this->getGraph()->createRequest($requestType, $endpoint)->setReturnType($returnClass);
+            $request =
+                $this->getGraphServiceClient()->createRequest($requestType, $endpoint)->setReturnType($returnClass);
         }
         else
         {
-            $request = $this->getGraph()->createCollectionRequest($requestType, $endpoint);
+            $request = $this->getGraphServiceClient()->createCollectionRequest($requestType, $endpoint);
         }
 
         if (!empty($requestBody))
@@ -395,7 +360,7 @@ class GraphRepository
             if ($exception->getCode() == self::RESPONSE_CODE_ACCESS_TOKEN_EXPIRED)
             {
                 $accessToken = $this->requestNewApplicationAccessToken();
-                $this->getGraph()->setAccessToken($accessToken);
+                $this->getGraphServiceClient()->setAccessToken($accessToken);
                 $graphRequest->addHeaders(['Authorization' => 'Bearer ' . $accessToken]);
 
                 return $graphRequest->execute();
@@ -469,40 +434,28 @@ class GraphRepository
         $this->delegatedAccessToken = $delegatedAccessToken;
     }
 
-    /**
-     *
-     * @return \Microsoft\Graph\Graph
-     */
-    protected function getGraph()
+    protected function getGraphServiceClient(): GraphServiceClient
     {
-        return $this->graph;
+        return $this->graphServiceClient;
     }
 
-    /**
-     *
-     * @param \Microsoft\Graph\Graph $graph
-     */
-    protected function setGraph(Graph $graph)
+    protected function setGraphServiceClient(GraphServiceClient $graphServiceClient): static
     {
-        $this->graph = $graph;
+        $this->graphServiceClient = $graphServiceClient;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return \League\OAuth2\Client\Provider\AbstractProvider
-     */
-    protected function getOauthProvider()
+    protected function getOauthProvider(): AbstractProvider
     {
         return $this->oauthProvider;
     }
 
-    /**
-     *
-     * @param \League\OAuth2\Client\Provider\AbstractProvider $oauthProvider
-     */
-    protected function setOauthProvider(AbstractProvider $oauthProvider)
+    protected function setOauthProvider(AbstractProvider $oauthProvider): static
     {
         $this->oauthProvider = $oauthProvider;
+
+        return $this;
     }
 
     /**
@@ -517,7 +470,7 @@ class GraphRepository
             $accessToken = $this->requestNewApplicationAccessToken();
         }
 
-        $this->getGraph()->setAccessToken($accessToken);
+        $this->getGraphServiceClient()->setAccessToken($accessToken);
         $this->setDelegatedAccessToken($this->getAccessTokenRepository()->getDelegatedAccessToken());
     }
 

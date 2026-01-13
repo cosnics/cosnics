@@ -1,18 +1,14 @@
 <?php
 namespace Chamilo\Application\Calendar\Service;
 
-use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
-use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ActionResult;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
-use ReflectionClass;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Google\Service
@@ -30,12 +26,16 @@ class AvailabilityService
 
     private AvailabilityRepository $availabilityRepository;
 
+    private CalendarProvider $calendarProvider;
+
     public function __construct(
-        AvailabilityRepository $availabilityRepository, RegistrationConsulter $registrationConsulter
+        AvailabilityRepository $availabilityRepository, RegistrationConsulter $registrationConsulter,
+        CalendarProvider $calendarProvider
     )
     {
         $this->availabilityRepository = $availabilityRepository;
         $this->registrationConsulter = $registrationConsulter;
+        $this->calendarProvider = $calendarProvider;
     }
 
     /**
@@ -128,37 +128,28 @@ class AvailabilityService
     }
 
     /**
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
-     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[][]
      */
     public function getAvailableCalendars(User $user): array
     {
         $availableCalendars = [];
 
-        $registrations = $this->getRegistrationConsulter()->getIntegrationRegistrations(
-            Manager::CONTEXT
-        );
-
-        foreach ($registrations as $registration)
+        foreach ($this->getCalendarProvider()->getCalendarDataProviders() as $calendarDataProvider)
         {
-            $context = $registration[Registration::PROPERTY_CONTEXT];
-            $class_name = $context . '\Service\CalendarEventDataProvider';
+            $calendars = $calendarDataProvider->getCalendars($user);
 
-            if (class_exists($class_name))
+            if (count($calendars) > 0)
             {
-                $reflectionClass = new ReflectionClass($class_name);
-                if ($reflectionClass->isAbstract())
-                {
-                    continue;
-                }
-
-                $package = ClassnameUtilities::getInstance()->getNamespaceParent($context, 4);
-                $implementor = new $class_name();
-                $availableCalendars[$package] = $implementor->getCalendars($user);
+                $availableCalendars[$calendars[0]->getType()] = $calendars;
             }
         }
 
         return $availableCalendars;
+    }
+
+    public function getCalendarProvider(): CalendarProvider
+    {
+        return $this->calendarProvider;
     }
 
     /**

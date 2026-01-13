@@ -6,6 +6,7 @@ use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
+use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException;
 use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -13,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Exception;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Exception\CacheException;
 
 /**
  * @package Chamilo\Core\User\Service
@@ -162,11 +164,6 @@ class UserSettingService
         return $this->userSettingsCacheAdapter;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
     public function saveUserSettingForSettingContextVariableAndUser(
         string $context, string $variable, User $user, ?string $value = null
     ): bool
@@ -182,17 +179,35 @@ class UserSettingService
         }
         catch (StorageNoResultException)
         {
-            $setting = $this->getConfigurationService()->findSettingByContextAndVariableName($context, $variable);
+            try
+            {
+                $setting = $this->getConfigurationService()->findSettingByContextAndVariableName($context, $variable);
 
-            if (!$this->getUserService()->createUserSettingFromParameters(
-                $setting->getId(), $user->getId(), $value
-            ))
+                if (!$this->getUserService()->createUserSettingFromParameters(
+                    $setting->getId(), $user->getId(), $value
+                ))
+                {
+                    return false;
+                }
+            }
+            catch (StorageMethodException|StorageNoResultException|CacheException)
             {
                 return false;
             }
         }
+        catch (StorageMethodException $e)
+        {
+            return false;
+        }
 
-        return $this->clearSettingsCacheforUser($user);
+        try
+        {
+            return $this->clearSettingsCacheforUser($user);
+        }
+        catch (CacheException $e)
+        {
+            return false;
+        }
     }
 
     /**

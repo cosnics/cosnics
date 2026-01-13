@@ -2,7 +2,9 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use GuzzleHttp\Exception\ClientException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException;
+use Exception;
+use Microsoft\Graph\GraphServiceClient;
 
 /**
  *
@@ -13,71 +15,42 @@ use GuzzleHttp\Exception\ClientException;
 class UserRepository
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository
-     */
-    private $graphRepository;
+    private GraphServiceClient $graphServiceClient;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository $graphRepository
-     */
-    public function __construct(GraphRepository $graphRepository)
+    public function __construct(GraphServiceClient $graphServiceClient)
     {
-        $this->setGraphRepository($graphRepository);
+        $this->graphServiceClient = $graphServiceClient;
+    }
+
+    protected function getGraphServiceClient(): GraphServiceClient
+    {
+        return $this->graphServiceClient;
     }
 
     /**
-     * Authorizes a user by a given authorization code
-     *
-     * @param string $authorizationCode
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException
      */
-    public function authorizeUserByAuthorizationCode($authorizationCode)
-    {
-        $this->getGraphRepository()->authorizeUserByAuthorizationCode($authorizationCode);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return \Microsoft\Graph\Model\User | \Microsoft\Graph\Model\Entity
-     */
-    public function getAzureUser(User $user)
+    public function getUser(User $user): ?\Microsoft\Graph\Generated\Models\User
     {
         try
         {
-            return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-                '/users/' . $user->get_email(), \Microsoft\Graph\Model\User::class
-            );
-        }
-        catch (ClientException $exception)
-        {
-            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
+            $graphUser = $this->getGraphServiceClient()->users()->byUserId($user->get_email())->get()->wait();
+
+            if ($graphUser instanceof \Microsoft\Graph\Generated\Models\User)
             {
-                return null;
+                return $graphUser;
+            }
+
+            throw new UserNotFoundException($user);
+        }
+        catch (Exception $exception)
+        {
+            if ($exception->getCode() == 404)
+            {
+                throw new UserNotFoundException($user);
             }
 
             throw $exception;
         }
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository
-     */
-    protected function getGraphRepository()
-    {
-        return $this->graphRepository;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository $graphRepository
-     */
-    protected function setGraphRepository(GraphRepository $graphRepository)
-    {
-        $this->graphRepository = $graphRepository;
     }
 }

@@ -11,6 +11,9 @@
             <argument key="$cacheAdapter"
                       type="service"
                       id="Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheAdapter"/>
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\CurrentUser"/>
         </service>
 
         <service id="Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheAdapter"
@@ -35,6 +38,20 @@
             <argument key="$namespace">Chamilo\Application\Calendar\Extension\Google\Events</argument>
         </service>
 
-        <service id="Chamilo\Application\Calendar\Extension\Google\Actions"/>
+        <service id="Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository">
+            <argument key="$currentUser"
+                      type="service"
+                      id="Chamilo\Core\User\CurrentUser"/>
+        </service>
+
+        <service id="Chamilo\Application\Calendar\Extension\Google\Service\EventParser"/>
+        <service id="Chamilo\Application\Calendar\Extension\Google\Service\CalendarService"/>
+        <service id="Chamilo\Application\Calendar\Extension\Google\Service\CalendarDataProvider">
+            <tag name="Chamilo\Application\Calendar\Architecture\CalendarDataProviderInterface"/>
+        </service>
+
+        <service id="Chamilo\Application\Calendar\Extension\Google\Service\ActionsProvider">
+            <tag name="Chamilo\Application\Calendar\Architecture\ActionsProviderInterface"/>
+        </service>
     </services>
 </container>

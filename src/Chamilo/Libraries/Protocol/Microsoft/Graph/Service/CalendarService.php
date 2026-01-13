@@ -2,151 +2,92 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\CalendarRepository;
+use Microsoft\Graph\Generated\Models\Calendar;
 
 /**
- *
- * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
+ * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Service
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CalendarService
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
-     */
-    protected $userService;
+    protected CalendarRepository $calendarRepository;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\CalendarRepository
-     */
-    protected $calendarRepository;
+    protected UserService $userService;
 
-    /**
-     * CalendarService constructor
-     *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService $userService
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\CalendarRepository $calendarRepository
-     */
     public function __construct(UserService $userService, CalendarRepository $calendarRepository)
     {
-        $this->setUserService($userService);
-        $this->setCalendarRepository($calendarRepository);
+        $this->userService = $userService;
+        $this->calendarRepository = $calendarRepository;
     }
 
     /**
-     * @param string $calendarIdentifier
-     * @param User $user
-     * @param integer $fromDate
-     * @param integer $toDate
-     *
-     * @return \Microsoft\Graph\Model\Event[]
-     *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     * @return \Microsoft\Graph\Generated\Models\Event[]
      */
-    public function findEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, User $user, $fromDate, $toDate)
+    public function findEventsForCalendarIdentifierAndBetweenDates(
+        User $user, string $calendarIdentifier, int $fromDate, int $toDate
+    ): array
     {
-        $azureUserIdentifier = $this->getAzureUserIdentifier($user);
-
-        if (empty($azureUserIdentifier))
+        try
         {
-            throw new AzureUserNotExistsException($user);
+            return $this->getCalendarRepository()->findEventsForCalendarIdentifierAndBetweenDates(
+                $this->getUserIdentifier($user), $calendarIdentifier, $fromDate, $toDate
+            );
         }
+        catch (UserNotFoundException)
+        {
+            return [];
+        }
+    }
 
-        return $this->getCalendarRepository()->findEventsForCalendarIdentifierAndBetweenDates(
-            $calendarIdentifier, $azureUserIdentifier, $fromDate, $toDate
+    /**
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\CalendarNotFoundException
+     */
+    public function getCalendarByIdentifier(string $calendarIdentifier, User $user): Calendar
+    {
+        return $this->getCalendarRepository()->getCalendarByIdentifier(
+            $this->getUserIdentifier($user), $calendarIdentifier
         );
     }
 
-    /**
-     * Returns the identifier in azure active directory for a given user
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
-     */
-    protected function getAzureUserIdentifier(User $user)
-    {
-        return $this->getUserService()->getAzureUserIdentifier($user);
-    }
-
-    /**
-     * @param string $calendarIdentifier
-     * @param User $user
-     *
-     * @return \Microsoft\Graph\Model\Calendar
-     *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
-     */
-    public function getCalendarByIdentifier($calendarIdentifier, User $user)
-    {
-        $azureUserIdentifier = $this->getAzureUserIdentifier($user);
-
-        if (empty($azureUserIdentifier))
-        {
-            throw new AzureUserNotExistsException($user);
-        }
-
-        return $this->getCalendarRepository()->getCalendarByIdentifier($calendarIdentifier, $azureUserIdentifier);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\CalendarRepository
-     */
-    protected function getCalendarRepository()
+    protected function getCalendarRepository(): CalendarRepository
     {
         return $this->calendarRepository;
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\CalendarRepository $calendarRepository
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException
      */
-    protected function setCalendarRepository(CalendarRepository $calendarRepository)
+    protected function getUserIdentifier(User $user): ?string
     {
-        $this->calendarRepository = $calendarRepository;
+        return $this->getUserService()->getAndSaveUserIdentifier($user);
     }
 
     /**
      *
      * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
      */
-    protected function getUserService()
+    protected function getUserService(): UserService
     {
         return $this->userService;
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService $userService
+     * @return \Microsoft\Graph\Generated\Models\Calendar[]
      */
-    protected function setUserService(UserService $userService)
+    public function listOwnedCalendars(User $user): array
     {
-        $this->userService = $userService;
-    }
-
-    /**
-     *
-     * @param User $user
-     *
-     * @return \Microsoft\Graph\Model\Calendar[]
-     *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
-     */
-    public function listOwnedCalendars(User $user)
-    {
-        $azureUserIdentifier = $this->getAzureUserIdentifier($user);
-
-        if (empty($azureUserIdentifier))
+        try
         {
-            throw new AzureUserNotExistsException($user);
+            return $this->getCalendarRepository()->listOwnedCalendars($this->getUserIdentifier($user));
         }
-
-        return $this->getCalendarRepository()->listOwnedCalendars($azureUserIdentifier);
+        catch (UserNotFoundException)
+        {
+            return [];
+        }
     }
 }

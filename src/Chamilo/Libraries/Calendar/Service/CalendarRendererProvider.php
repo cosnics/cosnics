@@ -12,9 +12,6 @@ use Chamilo\Libraries\Calendar\Service\Recurrence\RecurrenceCalculator;
  */
 abstract class CalendarRendererProvider implements CalendarRendererProviderInterface
 {
-    public const SOURCE_TYPE_BOTH = 3;
-    public const SOURCE_TYPE_EXTERNAL = 2;
-    public const SOURCE_TYPE_INTERNAL = 1;
 
     private User $dataUser;
 
@@ -74,7 +71,7 @@ abstract class CalendarRendererProvider implements CalendarRendererProviderInter
      */
     public function getEvents(?int $startTime = null, ?int $endTime = null, bool $calculateRecurrence = false): array
     {
-        $cacheIdentifier = md5(serialize(array($startTime, $endTime, $calculateRecurrence)));
+        $cacheIdentifier = md5(serialize([$startTime, $endTime, $calculateRecurrence]));
 
         if (!isset($this->events[$cacheIdentifier]))
         {
