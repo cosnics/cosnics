@@ -1,7 +1,8 @@
 <?php
 namespace Chamilo\Core\Admin\DependencyInjection\CompilerPass;
 
-use Chamilo\Core\Admin\Service\SettingsConnectorFactory;
+use Chamilo\Core\Admin\Architecture\Domain\SettingsConnectorCollection;
+use Chamilo\Core\Admin\Architecture\Interface\SettingsConnectorInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -16,13 +17,11 @@ class SettingsConnectorsCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
-        if ($container->hasDefinition(SettingsConnectorFactory::class))
+        if ($container->hasDefinition(SettingsConnectorCollection::class))
         {
-            $taggedServices = $container->findTaggedServiceIds(
-                'Chamilo\Core\Admin\Service\SettingsConnectorInterface'
-            );
+            $taggedServices = $container->findTaggedServiceIds(SettingsConnectorInterface::class);
 
-            $definition = $container->getDefinition(SettingsConnectorFactory::class);
+            $definition = $container->getDefinition(SettingsConnectorCollection::class);
 
             foreach ($taggedServices as $taggedServiceId => $tags)
             {

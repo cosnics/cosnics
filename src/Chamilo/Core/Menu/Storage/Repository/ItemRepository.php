@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Storage\Repository;
 
-use Chamilo\Core\Menu\Service\Renderer\CategoryItemRenderer;
+use Chamilo\Core\Menu\Implementation\Menu\CategoryItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;

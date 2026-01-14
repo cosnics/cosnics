@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\User\DependencyInjection\CompilerPass;
 
-use Chamilo\Core\User\Architecture\Interfaces\UserDetailsRendererInterface;
-use Chamilo\Core\User\Domain\UserDetails\UserDetailsRendererCollection;
+use Chamilo\Core\User\Architecture\Domain\UserDetailsRendererCollection;
+use Chamilo\Core\User\Architecture\Interface\UserDetailsRendererInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;

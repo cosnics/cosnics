@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\User\Form\PictureForm;
+use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
+use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Picture\UserPictureProviderInterface;
-use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\UserInterface\Form\PictureForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults autowire="true"
+                  autoconfigure="true"
+                  public="true"/>
+
+        <service id="Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheService">
+            <argument key="$cacheAdapter"
+                      type="service"
+                      id="Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheAdapter"/>
+            <argument key="$user"
+                      type="service"
+                      id="Chamilo\Core\User\CurrentUser"/>
+        </service>
+
+        <service id="Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheAdapter"
+                 class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createFilesystemAdapter"/>
+            <argument key="$namespace">Chamilo\Application\Calendar\Extension\Google\OwnedCalendars</argument>
+        </service>
+
+        <service id="Chamilo\Application\Calendar\Extension\Google\Service\EventsCacheService">
+            <argument key="$cacheAdapter"
+                      type="service"
+                      id="Chamilo\Application\Calendar\Extension\Google\Service\EventsCacheAdapter"/>
+        </service>
+
+        <service id="Chamilo\Application\Calendar\Extension\Google\Service\EventsCacheAdapter"
+                 class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createFilesystemAdapter"/>
+            <argument key="$namespace">Chamilo\Application\Calendar\Extension\Google\Events</argument>
+        </service>
+
+        <service id="Chamilo\Application\Calendar\Extension\Google\Service\EventParser"/>
+        <service id="Chamilo\Application\Calendar\Extension\Google\Service\CalendarService"/>
+    </services>
+</container>

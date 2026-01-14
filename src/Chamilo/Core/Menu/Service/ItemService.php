@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Menu\Service;
 
-use Chamilo\Core\Menu\Architecture\Interfaces\ItemServiceInterface;
-use Chamilo\Core\Menu\Service\Renderer\ApplicationItemRenderer;
+use Chamilo\Core\Menu\Architecture\Interface\ItemServiceInterface;
+use Chamilo\Core\Menu\Implementation\Menu\ApplicationItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
 use Chamilo\Libraries\Storage\Query\OrderBy;

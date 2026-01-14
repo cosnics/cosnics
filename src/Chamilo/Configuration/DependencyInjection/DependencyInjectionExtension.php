@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Configuration\DependencyInjection;
 
-use Chamilo\Configuration\DependencyInjection\CompilerPass\PackageActionCompilerPass;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
@@ -31,9 +30,11 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
     {
         return [
             'Chamilo\Configuration' => [
-                'configuration.xml',
-                'registration.xml',
-                'language.xml'
+                'service.consulter.xml',
+                'service.dataLoader.xml',
+                'service.finder.xml',
+                'service.xml',
+                'storage.xml'
             ]
         ];
     }

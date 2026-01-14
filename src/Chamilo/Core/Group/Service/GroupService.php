@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Group\Service;
 
-use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupCreateEvent;
-use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupDeleteEvent;
-use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupMoveEvent;
-use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupUpdateEvent;
+use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupCreateEvent;
+use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupDeleteEvent;
+use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupMoveEvent;
+use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupUpdateEvent;
+use Chamilo\Core\Group\Architecture\Exception\GroupNotFoundException;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
-use Chamilo\Core\Group\Storage\Exception\NoSuchGroupException;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
@@ -195,7 +195,7 @@ class GroupService
         }
         catch (StorageNoResultException)
         {
-            throw new NoSuchGroupException(code: $groupCode, parentIdentifier: $parentIdentifier);
+            throw new GroupNotFoundException(code: $groupCode, parentIdentifier: $parentIdentifier);
         }
     }
 

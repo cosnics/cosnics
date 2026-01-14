@@ -28,7 +28,6 @@ abstract class Manager extends Application
     public const ACTION_LOGOUT = 'Logout';
     public const ACTION_QUICK_LANG = 'QuickLanguage';
     public const ACTION_REGISTER_USER = 'Register';
-    public const ACTION_REPORTING = 'Reporting';
     public const ACTION_RESET_PASSWORD = 'ResetPassword';
     public const ACTION_RESET_PASSWORD_MULTI = 'MultiPasswordResetter';
     public const ACTION_UPDATE_USER = 'Updater';

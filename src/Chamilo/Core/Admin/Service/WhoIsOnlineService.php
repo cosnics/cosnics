@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Admin\Service;
 
-use Chamilo\Core\Admin\Repository\WhoIsOnlineRepository;
 use Chamilo\Core\Admin\Storage\DataClass\Online;
+use Chamilo\Core\Admin\Storage\Repository\WhoIsOnlineRepository;
 use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
 
 /**

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\Admin\Form\ConfigurationForm;
+use Chamilo\Core\Admin\UserInterface\Form\ConfigurationForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;

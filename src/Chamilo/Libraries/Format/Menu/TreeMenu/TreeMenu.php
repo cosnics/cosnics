@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Menu\TreeMenu;
 
+use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
@@ -13,48 +14,27 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 class TreeMenu extends HtmlMenu
 {
 
-    /**
-     * @var \Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer
-     */
-    protected $array_renderer;
+    protected HtmlMenuArrayRenderer $htmlMenuArrayRenderer;
 
-    /**
-     *
-     * @var string
-     */
-    private $name;
+    private TreeMenuDataProvider $dataProvider;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuDataProvider
-     */
-    private $data_provider;
+    private string $name;
 
-    /**
-     *
-     * @param string $name
-     * @param \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuDataProvider $data_provider
-     */
     public function __construct($name, TreeMenuDataProvider $data_provider)
     {
         $this->name = $name;
-        $this->data_provider = $data_provider;
+        $this->dataProvider = $data_provider;
 
-        parent::__construct($this->get_menu_items());
+        parent::__construct($this->getMenuItems());
 
-        $this->array_renderer = new HtmlMenuArrayRenderer();
-        $this->forceCurrentUrl($this->data_provider->get_selected_tree_menu_item_url());
+        $this->htmlMenuArrayRenderer = new HtmlMenuArrayRenderer();
+        $this->forceCurrentUrl($this->dataProvider->getSelectedTreeMenuItemUrl());
     }
 
-    /**
-     * Get the breadcrumbs which lead to the current category.
-     *
-     * @return \Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail
-     */
-    public function get_breadcrumbs()
+    public function getBreadcrumbs(): BreadcrumbTrail
     {
-        $this->render($this->array_renderer, 'urhere');
-        $breadcrumbs = $this->array_renderer->toArray();
+        $this->render($this->htmlMenuArrayRenderer, 'urhere');
+        $breadcrumbs = $this->htmlMenuArrayRenderer->toArray();
         $trail = $this->getBreadcrumbTrail();
         $i = 0;
 
@@ -76,31 +56,22 @@ class TreeMenu extends HtmlMenu
      *
      * @return string[]
      */
-    public function get_menu_items()
+    public function getMenuItems(): array
     {
         $menu_items = [];
-        $menu_items[] = $this->data_provider->get_tree_menu_data()->to_array();
+        $menu_items[] = $this->dataProvider->getTreeMenuData()->toArray();
 
         return $menu_items;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_tree_name()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * Renders the menu as a tree
-     *
-     * @return string
-     */
-    public function render_as_tree()
+    public function renderAsTree(): string
     {
-        $renderer = new TreeMenuRenderer($this->get_tree_name());
+        $renderer = new TreeMenuRenderer($this->getName());
         $this->render($renderer, 'sitemap');
 
         return $renderer->toHtml();

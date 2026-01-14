@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Admin\Component;
 
-use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
+use Chamilo\Configuration\Service\PackageBundlesCacheService;
+use Chamilo\Core\Admin\Architecture\Domain\ActionProviderCollection;
 use Chamilo\Core\Admin\Manager;
-use Chamilo\Core\Admin\Service\ActionProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -40,9 +40,9 @@ class BrowserComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    public function getActionProvider(): ActionProvider
+    public function getActionProvider(): ActionProviderCollection
     {
-        return $this->getService(ActionProvider::class);
+        return $this->getService(ActionProviderCollection::class);
     }
 
     /**

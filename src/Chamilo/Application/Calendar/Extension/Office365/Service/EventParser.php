@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Office365\Service;
 
-use Chamilo\Application\Calendar\Extension\Office365\Domain\Event;
+use Chamilo\Application\Calendar\Extension\Office365\Architecture\Domain\Event;
 use Chamilo\Application\Calendar\Extension\Office365\Manager;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Libraries\Calendar\Event\EventAttendee;
@@ -116,7 +116,7 @@ class EventParser
     }
 
     /**
-     * @return \Chamilo\Application\Calendar\Extension\Office365\Domain\Event[]
+     * @return \Chamilo\Application\Calendar\Extension\Office365\Architecture\Domain\Event[]
      */
     public function getEvents(
         AvailableCalendar $availableCalendar, \Microsoft\Graph\Generated\Models\Event $sourceEvent

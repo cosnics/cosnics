@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Ajax\Component;
 
 use Chamilo\Core\User\Ajax\Manager;
-use Chamilo\Core\User\EventDispatcher\Event\BeforeUserLeavePageEvent;
+use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserLeavePageEvent;
 use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 

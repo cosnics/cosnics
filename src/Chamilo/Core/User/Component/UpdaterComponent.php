@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\User\Form\UserForm;
-use Chamilo\Core\User\Form\UserUpdateForm;
+use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
+use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Picture\UserPictureProviderInterface;
-use Chamilo\Core\User\Picture\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\UserInterface\Form\UserForm;
+use Chamilo\Core\User\UserInterface\Form\UserUpdateForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;

@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Home\DependencyInjection\CompilerPass;
 
-use Chamilo\Core\Home\Renderer\BlockRenderer;
-use Chamilo\Core\Home\Renderer\BlockRendererFactory;
+use Chamilo\Core\Home\Architecture\Domain\BlockRendererCollection;
+use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -16,16 +16,16 @@ class AvailableBlockRendererCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
-        if ($container->hasDefinition(BlockRendererFactory::class))
+        if ($container->hasDefinition(BlockRendererCollection::class))
         {
             $taggedServices = $container->findTaggedServiceIds(BlockRenderer::class);
 
-            $definition = $container->getDefinition(BlockRendererFactory::class);
+            $definition = $container->getDefinition(BlockRendererCollection::class);
 
             foreach ($taggedServices as $taggedServiceId => $tags)
             {
                 $definition->addMethodCall(
-                    'addAvailableBlockRenderer', [new Reference($taggedServiceId)]
+                    'addBlockRenderer', [new Reference($taggedServiceId)]
                 );
             }
         }

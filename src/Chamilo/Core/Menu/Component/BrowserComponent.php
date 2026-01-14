@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Menu\Component;
 
 use Chamilo\Core\Menu\Manager;
-use Chamilo\Core\Menu\Menu\ItemMenu;
-use Chamilo\Core\Menu\Table\ItemTableRenderer;
+use Chamilo\Core\Menu\UserInterface\Menu\ItemMenu;
+use Chamilo\Core\Menu\UserInterface\Table\ItemTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;

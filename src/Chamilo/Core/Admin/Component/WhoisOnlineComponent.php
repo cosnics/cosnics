@@ -3,8 +3,8 @@ namespace Chamilo\Core\Admin\Component;
 
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Service\WhoIsOnlineService;
-use Chamilo\Core\Admin\Table\WhoIsOnlineTableRenderer;
-use Chamilo\Core\User\Service\UserDetails\UserDetailsRenderer;
+use Chamilo\Core\Admin\UserInterface\Table\WhoIsOnlineTableRenderer;
+use Chamilo\Core\User\Implementation\User\UserDetailsRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;

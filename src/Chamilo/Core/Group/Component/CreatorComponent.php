@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
-use Chamilo\Core\Group\Form\GroupForm;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\UserInterface\Form\GroupForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;

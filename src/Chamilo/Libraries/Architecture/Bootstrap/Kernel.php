@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Architecture\Bootstrap;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Service\WhoIsOnlineService;
 use Chamilo\Core\Home\Manager as HomeManager;
-use Chamilo\Core\User\EventDispatcher\Event\AfterUserEnterPageEvent;
+use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserEnterPageEvent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;

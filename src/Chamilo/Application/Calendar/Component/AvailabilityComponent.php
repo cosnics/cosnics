@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Component;
 
-use Chamilo\Application\Calendar\Form\AvailabilityForm;
+use Chamilo\Application\Calendar\UserInterface\Form\AvailabilityForm;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -51,7 +51,7 @@ class AvailabilityComponent extends Manager
     /**
      * @param \Chamilo\Application\Calendar\Service\AvailabilityService $availabilityService
      *
-     * @return \Chamilo\Application\Calendar\Form\AvailabilityForm
+     * @return \Chamilo\Application\Calendar\Interface\Form\AvailabilityForm
      */
     public function getAvailabilityForm(AvailabilityService $availabilityService): AvailabilityForm
     {

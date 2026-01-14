@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
-use Chamilo\Core\Group\Form\GroupMoveForm;
 use Chamilo\Core\Group\Manager;
+use Chamilo\Core\Group\UserInterface\Form\GroupMoveForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;

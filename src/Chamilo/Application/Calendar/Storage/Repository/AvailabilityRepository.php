@@ -1,0 +1,161 @@
+<?php
+namespace Chamilo\Application\Calendar\Storage\Repository;
+
+use Chamilo\Application\Calendar\Storage\DataClass\Availability;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\StorageParameters;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * @package Chamilo\Application\Calendar\Extension\Google\Repository
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
+ */
+class AvailabilityRepository
+{
+
+    private DataClassRepository $dataClassRepository;
+
+    public function __construct(DataClassRepository $dataClassRepository)
+    {
+        $this->dataClassRepository = $dataClassRepository;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException
+     */
+    public function createAvailability(Availability $availability): bool
+    {
+        return $this->getDataClassRepository()->create($availability);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param bool $isAvailable
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Calendar\Storage\DataClass\Availability>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
+    public function findAvailabilitiesForUser(User $user, ?bool $isAvailable = null): ArrayCollection
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Availability::class, Availability::PROPERTY_USER_ID),
+            new StaticConditionVariable($user->getId())
+        );
+
+        if (!is_null($isAvailable))
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(Availability::class, Availability::PROPERTY_AVAILABILITY),
+                new StaticConditionVariable((integer) $isAvailable)
+            );
+        }
+
+        $condition = new AndCondition($conditions);
+
+        return $this->getDataClassRepository()->retrieves(
+            Availability::class, new StorageParameters(condition: $condition)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param string $calendarType
+     * @param ?bool $isAvailable
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Calendar\Storage\DataClass\Availability>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
+    public function findAvailabilitiesForUserAndCalendarType(User $user, string $calendarType, ?bool $isAvailable = null
+    ): ArrayCollection
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Availability::class, Availability::PROPERTY_USER_ID),
+            new StaticConditionVariable($user->getId())
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Availability::class, Availability::PROPERTY_CALENDAR_TYPE),
+            new StaticConditionVariable($calendarType)
+        );
+
+        if (!is_null($isAvailable))
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(Availability::class, Availability::PROPERTY_AVAILABILITY),
+                new StaticConditionVariable((integer) $isAvailable)
+            );
+        }
+
+        $condition = new AndCondition($conditions);
+
+        return $this->getDataClassRepository()->retrieves(
+            Availability::class, new StorageParameters(condition: $condition)
+        );
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
+    public function findAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
+        User $user, string $calendarType, string $calendarIdentifier
+    ): Availability
+    {
+        $conditions = [];
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Availability::class, Availability::PROPERTY_USER_ID),
+            new StaticConditionVariable($user->getId())
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Availability::class, Availability::PROPERTY_CALENDAR_TYPE),
+            new StaticConditionVariable($calendarType)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Availability::class, Availability::PROPERTY_CALENDAR_ID),
+            new StaticConditionVariable($calendarIdentifier)
+        );
+        $condition = new AndCondition($conditions);
+
+        return $this->getDataClassRepository()->retrieve(
+            Availability::class, new StorageParameters(condition: $condition)
+        );
+    }
+
+    protected function getDataClassRepository(): DataClassRepository
+    {
+        return $this->dataClassRepository;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
+    public function removeAvailabilityByCalendarType(string $calendarType): bool
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Availability::class, Availability::PROPERTY_CALENDAR_TYPE),
+            new StaticConditionVariable($calendarType)
+        );
+
+        return $this->getDataClassRepository()->deletes(Availability::class, $condition);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
+    public function updateAvailability(Availability $availability): bool
+    {
+        return $this->getDataClassRepository()->update($availability);
+    }
+}

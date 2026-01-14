@@ -1,9 +1,10 @@
 <?php
 namespace Chamilo\Application\Calendar\Component;
 
+use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionActionProviderCollection;
+use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProviderCollection;
+use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Manager;
-use Chamilo\Application\Calendar\Service\CalendarProvider;
-use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\User\Component\UserSettingsComponent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -76,9 +77,14 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         }
     }
 
-    protected function getCalendarProvider(): CalendarProvider
+    protected function getCalendarExtensionActionProvider(): CalendarExtensionActionProviderCollection
     {
-        return $this->getService(CalendarProvider::class);
+        return $this->getService(CalendarExtensionActionProviderCollection::class);
+    }
+
+    protected function getCalendarExtensionDataProvider(): CalendarExtensionDataProviderCollection
+    {
+        return $this->getService(CalendarExtensionDataProviderCollection::class);
     }
 
     protected function getCalendarRendererFactory(): HtmlCalendarRendererFactory
@@ -98,8 +104,8 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
             ];
 
             $this->calendarRendererProvider = new CalendarRendererProvider(
-                $this->getCalendarRendererProviderRepository(), $this->getUser(), $displayParameters,
-                \Chamilo\Application\Calendar\Ajax\Manager::CONTEXT
+                $this->getVisibilityRepository(), $this->getUser(), $displayParameters,
+                \Chamilo\Application\Calendar\Manager::CONTEXT
             );
         }
 
@@ -175,7 +181,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         $primaryExtensionActions = [];
         $additionalExtensionActions = [];
 
-        foreach ($this->getCalendarProvider()->getActionsProviders() as $actionProvider)
+        foreach ($this->getCalendarExtensionActionProvider()->getCalendarExtenstionActionProviders() as $actionProvider)
         {
             $primaryExtensionActions = array_merge($primaryExtensionActions, $actionProvider->getPrimary($this));
             $additionalExtensionActions = array_merge(

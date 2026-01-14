@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Utilities;
 
-use Chamilo\Configuration\Package\Finder\BasicBundlesGenerator;
+use Chamilo\Configuration\Service\Finder\BasicBundlesGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;

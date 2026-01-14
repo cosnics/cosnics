@@ -16,7 +16,6 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\RetrieveProperties;
-use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Repository\NestedSetDataClassRepository;
@@ -460,60 +459,6 @@ class GroupRepository
         );
 
         return new OrCondition($treeConditions);
-    }
-
-    /**
-     * @param int[] $userGroupIdentifiers
-     *
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     */
-    protected function getGroupQuotumWithFunctionForUserGroupIdentifiers(int $function, array $userGroupIdentifiers
-    ): int
-    {
-        $condition =
-            new InCondition(new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID), $userGroupIdentifiers);
-
-        $parameters = new StorageParameters(
-            condition: $condition, retrieveProperties: new RetrieveProperties(
-            [
-                new FunctionConditionVariable(
-                    $function, new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA),
-                    Group::PROPERTY_DISK_QUOTA
-                )
-            ]
-        )
-        );
-
-        $record = $this->getNestedSetDataClassRepository()->record(Group::class, $parameters);
-
-        return (int) $record[Group::PROPERTY_DISK_QUOTA];
-    }
-
-    /**
-     * @param int[] $userGroupIdentifiers
-     *
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     */
-    public function getHighestGroupQuotumForUserGroupIdentifiers(array $userGroupIdentifiers): int
-    {
-        return $this->getGroupQuotumWithFunctionForUserGroupIdentifiers(
-            FunctionConditionVariable::MAX, $userGroupIdentifiers
-        );
-    }
-
-    /**
-     * @param int[] $userGroupIdentifiers
-     *
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     */
-    public function getLowestGroupQuotumForUserGroupIdentifiers(array $userGroupIdentifiers): int
-    {
-        return $this->getGroupQuotumWithFunctionForUserGroupIdentifiers(
-            FunctionConditionVariable::MIN, $userGroupIdentifiers
-        );
     }
 
     public function getNestedSetDataClassRepository(): NestedSetDataClassRepository

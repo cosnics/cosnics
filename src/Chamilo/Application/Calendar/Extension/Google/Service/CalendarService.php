@@ -64,8 +64,8 @@ class CalendarService
         User $user, string $calendarIdentifier, ?int $fromDate = null, ?int $toDate = null
     ): EventIterator
     {
-        $googleCalendarEvents = $this->getEventsCacheService()->getEventsForCalendarIdentifierAndBetweenDates($user,
-            $calendarIdentifier, $fromDate, $toDate
+        $googleCalendarEvents = $this->getEventsCacheService()->getEventsForCalendarIdentifierAndBetweenDates(
+            $user, $calendarIdentifier, $fromDate, $toDate
         );
 
         return new EventIterator(

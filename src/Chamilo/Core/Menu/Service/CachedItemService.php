@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Service;
 
-use Chamilo\Core\Menu\Architecture\Interfaces\ItemServiceInterface;
+use Chamilo\Core\Menu\Architecture\Interface\ItemServiceInterface;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\Cache\Traits\SingleCacheAdapterHandlerTrait;

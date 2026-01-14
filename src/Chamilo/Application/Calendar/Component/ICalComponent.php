@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Calendar\Component;
 
+use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Manager;
-use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
@@ -124,8 +124,8 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
         if (!isset($this->calendarRendererProvider))
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
-                $this->getCalendarRendererProviderRepository(), $user, [],
-                \Chamilo\Application\Calendar\Ajax\Manager::CONTEXT
+                $this->getVisibilityRepository(), $user, [],
+                \Chamilo\Application\Calendar\Manager::CONTEXT
             );
         }
 

@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Home\Service;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Home\Renderer\BlockRendererFactory;
-use Chamilo\Core\Home\Repository\HomeRepository;
+use Chamilo\Core\Home\Architecture\Domain\BlockRendererCollection;
 use Chamilo\Core\Home\Storage\DataClass\Element;
+use Chamilo\Core\Home\Storage\Repository\HomeRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\ChamiloRequest;
@@ -23,7 +23,7 @@ class HomeService
 {
     public const PARAM_TAB_ID = 'tab';
 
-    protected BlockRendererFactory $blockRendererFactory;
+    protected BlockRendererCollection $blockRendererFactory;
 
     protected ClassnameUtilities $classnameUtilities;
 
@@ -39,7 +39,7 @@ class HomeService
 
     public function __construct(
         HomeRepository $homeRepository, SessionInterface $session, ConfigurationConsulter $configurationConsulter,
-        Translator $translator, BlockRendererFactory $blockRendererFactory, ClassnameUtilities $classnameUtilities,
+        Translator $translator, BlockRendererCollection $blockRendererFactory, ClassnameUtilities $classnameUtilities,
         DisplayOrderHandler $displayOrderHandler
     )
     {
@@ -174,7 +174,7 @@ class HomeService
         );
     }
 
-    public function getBlockRendererFactory(): BlockRendererFactory
+    public function getBlockRendererFactory(): BlockRendererCollection
     {
         return $this->blockRendererFactory;
     }

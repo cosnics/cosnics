@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Service\DataLoader;
 
-use Chamilo\Configuration\Storage\DataClass\LanguageCodeEnum;
+use Chamilo\Configuration\Architecture\Domain\LanguageCodeEnum;
 use Chamilo\Configuration\Storage\Repository\LanguageRepository;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\Cache\Traits\SimpleCacheAdapterHandlerTrait;

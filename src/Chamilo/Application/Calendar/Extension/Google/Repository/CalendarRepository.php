@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Repository;
 
 use Chamilo\Application\Calendar\Extension\Google\Architecture\Exception\NotConfiguredException;
+use Chamilo\Application\Calendar\Extension\Google\Implementation\Calendar\CalendarExtensionDataProvider;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
-use Chamilo\Application\Calendar\Extension\Google\Service\CalendarDataProvider;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserSettingService;
@@ -113,7 +113,7 @@ class CalendarRepository
             {
                 $availableCalendar = new AvailableCalendar();
 
-                $availableCalendar->setType(CalendarDataProvider::CONTEXT);
+                $availableCalendar->setType(CalendarExtensionDataProvider::CONTEXT);
                 $availableCalendar->setIdentifier($calendarItem->id);
                 $availableCalendar->setName($calendarItem->summary);
                 $availableCalendar->setDescription($calendarItem->description);

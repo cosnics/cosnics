@@ -19,13 +19,6 @@ class UserUrlGenerator
         $this->dataClassUrlGenerator = $dataClassUrlGenerator;
     }
 
-    public function getApproveUrl(User $user): string
-    {
-        return $this->getUserActionUrl(
-            Manager::ACTION_USER_APPROVER, $user, [Manager::PARAM_CHOICE => Manager::CHOICE_APPROVE]
-        );
-    }
-
     public function getChangeUserUrl(User $user): string
     {
         return $this->getUserActionUrl(Manager::ACTION_CHANGE_USER, $user);
@@ -43,31 +36,14 @@ class UserUrlGenerator
         );
     }
 
-    public function getDenyUrl(User $user): string
-    {
-        return $this->getUserActionUrl(
-            Manager::ACTION_USER_APPROVER, $user, [Manager::PARAM_CHOICE => Manager::CHOICE_DENY]
-        );
-    }
-
     public function getDetailUrl(User $user): string
     {
         return $this->getUserActionUrl(Manager::ACTION_USER_DETAIL, $user);
     }
 
-    public function getEditMetadataUrl(User $user): string
-    {
-        return $this->getUserActionUrl(Manager::ACTION_MANAGE_METADATA, $user);
-    }
-
     public function getEmailUrl(User $user): string
     {
         return $this->getUserActionUrl(Manager::ACTION_EMAIL, $user);
-    }
-
-    public function getReportingUrl(User $user): string
-    {
-        return $this->getUserActionUrl(Manager::ACTION_REPORTING, $user);
     }
 
     public function getUpdateUrl(User $user): string

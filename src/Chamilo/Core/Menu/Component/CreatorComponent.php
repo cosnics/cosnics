@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Menu\Component;
 
-use Chamilo\Core\Menu\Form\ItemForm;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\Menu\UserInterface\Form\ItemForm;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -41,7 +41,7 @@ class CreatorComponent extends Manager implements BreadcrumbLessComponentInterfa
             throw new ParameterNotDefinedException(self::PARAM_TYPE);
         }
 
-        $itemRenderer = $this->getItemRendererFactory()->getAvailableItemRenderer($itemType);
+        $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($itemType);
 
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(

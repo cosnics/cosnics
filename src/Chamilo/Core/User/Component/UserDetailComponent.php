@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\User\Architecture\Interfaces\UserDetailsRendererInterface;
-use Chamilo\Core\User\Domain\UserDetails\UserDetailsRendererCollection;
+use Chamilo\Core\User\Architecture\Domain\UserDetailsRendererCollection;
+use Chamilo\Core\User\Architecture\Interface\UserDetailsRendererInterface;
+use Chamilo\Core\User\Implementation\User\UserDetailsRenderer;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Service\UserDetails\UserDetailsRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
@@ -168,7 +168,7 @@ class UserDetailComponent extends Manager
 
     /**
      * @param int|string $userDetailsRendererClassName
-     * @param \Chamilo\Core\User\Architecture\Interfaces\UserDetailsRendererInterface $userDetailsRenderer
+     * @param \Chamilo\Core\User\Architecture\Interface\UserDetailsRendererInterface $userDetailsRenderer
      * @param \Chamilo\Core\User\Storage\DataClass\User|null $user
      *
      * @return \Chamilo\Libraries\Format\Tabs\ContentTab

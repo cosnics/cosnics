@@ -2,100 +2,56 @@
 namespace Chamilo\Libraries\Format\Menu\TreeMenu;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Menu\TreeMenu
  */
 abstract class TreeMenuDataProvider
 {
 
-    /**
-     *
-     * @var integer
-     */
-    private $selected_tree_menu_item;
+    private string $selectedTreeMenuItem;
 
-    /**
-     *
-     * @var string
-     */
-    private $url;
+    private string $url;
 
-    /**
-     *
-     * @param string $url
-     * @param integer $selectedTreeMenuItem
-     */
-    public function __construct($url, $selectedTreeMenuItem)
+    public function __construct(string $url, string $selectedTreeMenuItem)
     {
-        $this->set_url($url);
-        $this->set_selected_tree_menu_item($selectedTreeMenuItem);
+        $this->setUrl($url);
+        $this->setSelectedTreeMenuItem($selectedTreeMenuItem);
     }
 
-    /**
-     *
-     * @param integer $id
-     *
-     * @return string
-     */
-    public function format_url($id)
+    public function formatUrl(string $id): string
     {
-        return $this->get_url() . '&' . $this->get_id_param() . '=' . $id;
+        return $this->getUrl() . '&' . $this->getIdParameterName() . '=' . $id;
     }
 
-    /**
-     *
-     * @return string
-     */
-    abstract public function get_id_param();
+    abstract public function getIdParameterName(): string;
 
-    /**
-     *
-     * @return integer
-     */
-    public function get_selected_tree_menu_item()
+    public function getSelectedTreeMenuItem(): string
     {
-        return $this->selected_tree_menu_item;
+        return $this->selectedTreeMenuItem;
     }
 
-    /**
-     *
-     * @param integer $selectedTreeMenuItem
-     */
-    public function set_selected_tree_menu_item($selectedTreeMenuItem)
+    public function setSelectedTreeMenuItem(string $selectedTreeMenuItem): static
     {
-        $this->selected_tree_menu_item = $selectedTreeMenuItem;
+        $this->selectedTreeMenuItem = $selectedTreeMenuItem;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_selected_tree_menu_item_url()
+    public function getSelectedTreeMenuItemUrl(): string
     {
-        return $this->format_url($this->get_selected_tree_menu_item());
+        return $this->formatUrl($this->getSelectedTreeMenuItem());
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem
-     */
-    abstract public function get_tree_menu_data();
+    abstract public function getTreeMenuData(): TreeMenuItem;
 
-    /**
-     *
-     * @return string
-     */
-    public function get_url()
+    public function getUrl(): string
     {
         return $this->url;
     }
 
-    /**
-     *
-     * @param string $url
-     */
-    public function set_url($url)
+    public function setUrl(string $url): static
     {
         $this->url = $url;
+
+        return $this;
     }
 }

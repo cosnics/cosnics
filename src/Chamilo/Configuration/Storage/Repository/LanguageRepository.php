@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Configuration\Storage\Repository;
 
-use Chamilo\Configuration\Storage\DataClass\Language;
+use Chamilo\Configuration\Architecture\Domain\Language;
 use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**
- * @package Chamilo\Configuration\Repository
+ * @package Chamilo\Configuration\Storage\Repository
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
@@ -25,7 +25,7 @@ class LanguageRepository
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Storage\DataClass\Language>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Architecture\Domain\Language>
      */
     public function findLanguages(): ArrayCollection
     {

@@ -9,7 +9,7 @@ $(function () {
             url: getPath('WEB_PATH') + 'index.php',
             data: {
                 'application': calendarVisibilityContext,
-                'go': 'CalendarEventVisibility',
+                'go': 'Visibility',
                 'source': eventSource
             },
             async: false

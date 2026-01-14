@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection;
 
-use Chamilo\Configuration\Package\Finder\PackageBundlesGenerator;
-use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
-use Chamilo\Configuration\Package\Service\PackageFactory;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheDataPreLoader;
 use Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataPreLoader;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
+use Chamilo\Configuration\Service\Finder\PackageBundlesGenerator;
+use Chamilo\Configuration\Service\PackageBundlesCacheService;
+use Chamilo\Configuration\Service\PackageFactory;
 use Chamilo\Configuration\Service\RegistrationService;
 use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -16,7 +16,6 @@ use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\FileExceptionLog
 use Chamilo\Libraries\DependencyInjection\ExtensionFinder\PackagesContainerExtensionFinder;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInterface;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
-use Chamilo\Libraries\DependencyInjection\Interfaces\IConfigurableExtension;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
@@ -495,12 +494,6 @@ class DependencyInjectionContainerBuilder
 
         foreach ($extensions as $extension)
         {
-            if ($extension instanceof IConfigurableExtension)
-            {
-                /** @var IConfigurableExtension $extension */
-                $extension->loadContainerConfiguration($container);
-            }
-
             if ($extension instanceof ICompilerPassExtension)
             {
                 /** @var ICompilerPassExtension $extension */

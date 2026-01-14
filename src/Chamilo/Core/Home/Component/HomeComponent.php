@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Home\Component;
 
 use Chamilo\Core\Home\Manager;
-use Chamilo\Core\Home\Renderer\HomeRenderer;
+use Chamilo\Core\Home\UserInterface\HomeRenderer\HomeRenderer;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Group\Service;
 
-use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupEmptyEvent;
-use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupSubscribeEvent;
-use Chamilo\Core\Group\EventDispatcher\Event\AfterGroupUnsubscribeEvent;
+use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupEmptyEvent;
+use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupSubscribeEvent;
+use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupUnsubscribeEvent;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository;

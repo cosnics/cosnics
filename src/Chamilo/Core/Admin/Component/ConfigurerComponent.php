@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Admin\Component;
 
-use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
-use Chamilo\Core\Admin\Form\ConfigurationForm;
+use Chamilo\Configuration\Service\PackageBundlesCacheService;
 use Chamilo\Core\Admin\Manager;
+use Chamilo\Core\Admin\UserInterface\Form\ConfigurationForm;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;

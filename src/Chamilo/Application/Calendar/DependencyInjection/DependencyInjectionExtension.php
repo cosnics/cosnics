@@ -1,7 +1,8 @@
 <?php
 namespace Chamilo\Application\Calendar\DependencyInjection;
 
-use Chamilo\Application\Calendar\DependencyInjection\CompilerPass\CalendarProviderCompilerPass;
+use Chamilo\Application\Calendar\DependencyInjection\CompilerPass\CalendarExtensionActionProviderCompilerPass;
+use Chamilo\Application\Calendar\DependencyInjection\CompilerPass\CalendarExtensionDataProviderCompilerPass;
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
@@ -24,11 +25,19 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
 
     public function getConfigurationFiles(): array
     {
-        return ['Chamilo\Application\Calendar' => ['services.xml']];
+        return [
+            'Chamilo\Application\Calendar' => [
+                'architecture.domain.xml',
+                'implementation.home.xml',
+                'service.xml',
+                'storage.xml'
+            ]
+        ];
     }
 
     public function registerCompilerPasses(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new CalendarProviderCompilerPass());
+        $container->addCompilerPass(new CalendarExtensionActionProviderCompilerPass());
+        $container->addCompilerPass(new CalendarExtensionDataProviderCompilerPass());
     }
 }

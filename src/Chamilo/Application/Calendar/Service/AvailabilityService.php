@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Application\Calendar\Service;
 
-use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
+use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProviderCollection;
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
+use Chamilo\Application\Calendar\Storage\Repository\AvailabilityRepository;
 use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ActionResult;
@@ -26,11 +27,11 @@ class AvailabilityService
 
     private AvailabilityRepository $availabilityRepository;
 
-    private CalendarProvider $calendarProvider;
+    private CalendarExtensionDataProviderCollection $calendarProvider;
 
     public function __construct(
         AvailabilityRepository $availabilityRepository, RegistrationConsulter $registrationConsulter,
-        CalendarProvider $calendarProvider
+        CalendarExtensionDataProviderCollection $calendarProvider
     )
     {
         $this->availabilityRepository = $availabilityRepository;
@@ -134,7 +135,7 @@ class AvailabilityService
     {
         $availableCalendars = [];
 
-        foreach ($this->getCalendarProvider()->getCalendarDataProviders() as $calendarDataProvider)
+        foreach ($this->getCalendarProvider()->getCalendarExtensionDataProviders() as $calendarDataProvider)
         {
             $calendars = $calendarDataProvider->getCalendars($user);
 
@@ -147,7 +148,7 @@ class AvailabilityService
         return $availableCalendars;
     }
 
-    public function getCalendarProvider(): CalendarProvider
+    public function getCalendarProvider(): CalendarExtensionDataProviderCollection
     {
         return $this->calendarProvider;
     }

@@ -1,7 +1,0 @@
-chamilo.libraries:
-  phpstan:
-    packages:
-      Chamilo\Core\Group:
-        level: 3
-        paths:
-          - 'Chamilo/Core/Group/Service'

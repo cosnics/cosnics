@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Calendar\Service;
 
-use Chamilo\Application\Calendar\Repository\VisibilityRepository;
 use Chamilo\Application\Calendar\Storage\DataClass\Visibility;
+use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\VisibilityServiceInterface;
 use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
 

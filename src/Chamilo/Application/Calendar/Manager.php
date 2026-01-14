@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar;
 
-use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
+use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use DateTime;
@@ -9,16 +9,16 @@ use Detection\MobileDetect;
 use Exception;
 
 /**
- * @package application\calendar
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Application\Calendar
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends Application
 {
-    // Parameters
     public const ACTION_AVAILABILITY = 'Availability';
     public const ACTION_BROWSE = 'Browser';
     public const ACTION_ICAL = 'ICal';
     public const ACTION_PRINT = 'Printer';
+    public const ACTION_VISIBILITY = 'Visibility';
 
     public const CONTEXT = __NAMESPACE__;
 
@@ -29,11 +29,6 @@ abstract class Manager extends Application
     public const PARAM_VIEW = 'view';
 
     private int $currentTime;
-
-    public function getCalendarRendererProviderRepository(): CalendarRendererProviderRepository
-    {
-        return $this->getService(CalendarRendererProviderRepository::class);
-    }
 
     public function getCurrentRendererTime(): int
     {
@@ -81,11 +76,15 @@ abstract class Manager extends Application
         return $rendererType;
     }
 
-    /**
-     * @param int $currentTime
-     */
-    public function setCurrentRendererTime($currentTime)
+    public function getVisibilityRepository(): VisibilityRepository
+    {
+        return $this->getService(VisibilityRepository::class);
+    }
+
+    public function setCurrentRendererTime(int $currentTime): static
     {
         $this->currentTime = $currentTime;
+
+        return $this;
     }
 }

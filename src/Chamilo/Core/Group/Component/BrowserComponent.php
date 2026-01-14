@@ -2,11 +2,11 @@
 namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\Group\Menu\GroupMenu;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
-use Chamilo\Core\Group\Table\GroupTableRenderer;
-use Chamilo\Core\Group\Table\SubscribedUserTableRenderer;
+use Chamilo\Core\Group\UserInterface\Menu\GroupMenu;
+use Chamilo\Core\Group\UserInterface\Table\GroupTableRenderer;
+use Chamilo\Core\Group\UserInterface\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;

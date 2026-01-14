@@ -4,200 +4,137 @@ namespace Chamilo\Libraries\Format\Menu\TreeMenu;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Menu\TreeMenu
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TreeMenuItem
 {
 
-    /**
-     *
-     * @var string
-     */
-    private $title;
+    private ?string $class = null;
+
+    private bool $collapsed = false;
+
+    private ?string $id = null;
+
+    private ?string $title = null;
 
     /**
-     *
-     * @var string
-     */
-    private $url;
-
-    /**
-     *
-     * @var string
-     */
-    private $id;
-
-    /**
-     *
-     * @var string
-     */
-    private $class;
-
-    /**
-     *
      * @var \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem[]
      */
-    private $children = [];
+    private array $treeMenuItems = [];
 
-    /**
-     *
-     * @var boolean
-     */
-    private $collapsed;
+    private ?string $url = null;
 
-    /**
-     *
-     * @param string $title
-     * @param string $url
-     * @param string $id
-     * @param string $class
-     * @param boolean $collapsed
-     */
-    public function __construct($title = null, $url = null, $id = null, $class = null, $collapsed = false)
+    public function __construct(
+        ?string $title = null, ?string $url = null, ?string $id = null, ?string $class = null, bool $collapsed = false
+    )
     {
-        $this->set_title($title);
-        $this->set_url($url);
-        $this->set_id($id);
+        $this->setTitle($title);
+        $this->setUrl($url);
+        $this->setId($id);
 
         if (is_null($class))
         {
             $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
-            $this->set_class($glyph->getClassNamesString());
+            $this->setClass($glyph->getClassNamesString());
         }
         else
         {
-            $this->set_class($class);
+            $this->setClass($class);
         }
 
-        $this->set_children([]);
-        $this->set_collapsed($collapsed);
+        $this->setTreeMenuItems([]);
+        $this->setCollapsed($collapsed);
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem $tree_menu_child
-     */
-    public function add_child($tree_menu_child)
+    public function addChild(TreeMenuItem $treeMenuItem): static
     {
-        $this->children[] = $tree_menu_child;
+        $this->treeMenuItems[] = $treeMenuItem;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem[]
-     */
-    public function get_children()
-    {
-        return $this->children;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem[] $children
-     */
-    public function set_children($children)
-    {
-        $this->children = $children;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_class()
+    public function getClass(): ?string
     {
         return $this->class;
     }
 
-    /**
-     *
-     * @param string $class
-     */
-    public function set_class($class)
+    public function setClass(?string $class = null): static
     {
         $this->class = $class;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function get_collapsed()
+    public function getCollapsed(): bool
     {
         return $this->collapsed;
     }
 
-    /**
-     *
-     * @param boolean $collapsed
-     */
-    public function set_collapsed($collapsed)
+    public function setCollapsed(bool $collapsed): static
     {
         $this->collapsed = $collapsed;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_id()
+    public function getId(): ?string
     {
         return $this->id;
     }
 
-    /**
-     *
-     * @param string $id
-     */
-    public function set_id($id)
+    public function setId(?string $id = null): static
     {
         $this->id = $id;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_title()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     *
-     * @param string $title
-     */
-    public function set_title($title)
+    public function setTitle(?string $title = null): static
     {
         $this->title = $title;
+
+        return $this;
     }
 
     /**
-     *
-     * @return string
+     * @return \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem[]
      */
-    public function get_url()
+    public function getTreeMenuItems(): array
+    {
+        return $this->treeMenuItems;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem[] $treeMenuItems
+     */
+    public function setTreeMenuItems(array $treeMenuItems): static
+    {
+        $this->treeMenuItems = $treeMenuItems;
+
+        return $this;
+    }
+
+    public function getUrl(): ?string
     {
         return $this->url;
     }
 
-    /**
-     *
-     * @param string $url
-     */
-    public function set_url($url)
+    public function setUrl(?string $url = null): static
     {
         $this->url = $url;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function has_children()
+    public function hasChildren(): bool
     {
-        if ($this->get_children())
+        if ($this->getTreeMenuItems())
         {
             return true;
         }
@@ -205,43 +142,40 @@ class TreeMenuItem
         return false;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem $tree_menu_child
-     */
-    public function remove_child($tree_menu_child)
+    public function removeChild(TreeMenuItem $treeMenuItem): static
     {
-        foreach ($this->children as $key => $value)
+        foreach ($this->treeMenuItems as $key => $value)
         {
-            if ($value == $tree_menu_child)
+            if ($value === $treeMenuItem)
             {
-                unset($this->children[$key]);
+                unset($this->treeMenuItems[$key]);
             }
         }
 
-        $this->children = array_values($this->children);
+        $this->treeMenuItems = array_values($this->treeMenuItems);
+
+        return $this;
     }
 
     /**
-     *
      * @return string[][]
      */
-    public function to_array()
+    public function toArray(): array
     {
         $array = [];
-        $array['title'] = $this->get_title();
-        $array['url'] = $this->get_url();
-        $array['id'] = $this->get_id();
-        $array['class'] = $this->get_class();
-        $array['collapsed'] = $this->get_collapsed();
+        $array['title'] = $this->getTitle();
+        $array['url'] = $this->getUrl();
+        $array['id'] = $this->getId();
+        $array['class'] = $this->getClass();
+        $array['collapsed'] = $this->getCollapsed();
 
         $children = [];
 
-        if ($this->has_children())
+        if ($this->hasChildren())
         {
-            foreach ($this->get_children() as $child)
+            foreach ($this->getTreeMenuItems() as $child)
             {
-                $children[] = $child->to_array();
+                $children[] = $child->toArray();
             }
 
             $array['sub'] = $children;

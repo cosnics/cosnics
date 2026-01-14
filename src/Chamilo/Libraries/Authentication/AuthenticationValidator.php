@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\Authentication;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\User\EventDispatcher\Event\AfterUserLoginEvent;
-use Chamilo\Core\User\EventDispatcher\Event\BeforeUserLogoutEvent;
+use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserLoginEvent;
+use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserLogoutEvent;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;

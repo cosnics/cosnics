@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Menu\Component;
 
-use Chamilo\Core\Menu\Form\ItemForm;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\Menu\UserInterface\Form\ItemForm;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -36,7 +36,7 @@ class EditorComponent extends Manager implements BreadcrumbLessComponentInterfac
         }
 
         $item = $this->getItem();
-        $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($item);
+        $itemRenderer = $this->getItemRendererFactory()->getItemRendererForItem($item);
 
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(

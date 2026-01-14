@@ -3,12 +3,12 @@ namespace Chamilo\Core\User\Service;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Core\User\EventDispatcher\Event\AfterUserCreateEvent;
-use Chamilo\Core\User\EventDispatcher\Event\AfterUserDeleteEvent;
-use Chamilo\Core\User\EventDispatcher\Event\AfterUserPasswordResetEvent;
-use Chamilo\Core\User\EventDispatcher\Event\AfterUserRegistrationEvent;
-use Chamilo\Core\User\EventDispatcher\Event\AfterUserUpdateEvent;
-use Chamilo\Core\User\EventDispatcher\Event\BeforeUserDeleteEvent;
+use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserCreateEvent;
+use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserDeleteEvent;
+use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserPasswordResetEvent;
+use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserRegistrationEvent;
+use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserUpdateEvent;
+use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserDeleteEvent;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;

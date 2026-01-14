@@ -1,7 +1,8 @@
 <?php
 namespace Chamilo\Core\Admin\DependencyInjection\CompilerPass;
 
-use Chamilo\Core\Admin\Service\ActionProvider;
+use Chamilo\Core\Admin\Architecture\Domain\ActionProviderCollection;
+use Chamilo\Core\Admin\Architecture\Interface\ActionProviderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -16,13 +17,11 @@ class ActionProviderCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
-        if ($container->hasDefinition(ActionProvider::class))
+        if ($container->hasDefinition(ActionProviderCollection::class))
         {
-            $taggedServices = $container->findTaggedServiceIds(
-                'Chamilo\Core\Admin\Service\ActionProvider'
-            );
+            $taggedServices = $container->findTaggedServiceIds(ActionProviderInterface::class);
 
-            $definition = $container->getDefinition(ActionProvider::class);
+            $definition = $container->getDefinition(ActionProviderCollection::class);
 
             foreach ($taggedServices as $taggedServiceId => $tags)
             {
