@@ -35,8 +35,8 @@ class UsersFeedComponent extends Manager
     {
         $result = new JsonAjaxResult();
 
-        $result->set_property(self::PROPERTY_ELEMENTS, $this->getElements()->as_array());
-        $result->set_property(self::PROPERTY_TOTAL_ELEMENTS, $this->userCount);
+        $result->setProperty(self::PROPERTY_ELEMENTS, $this->getElements()->as_array());
+        $result->setProperty(self::PROPERTY_TOTAL_ELEMENTS, $this->userCount);
 
         $result->display();
     }

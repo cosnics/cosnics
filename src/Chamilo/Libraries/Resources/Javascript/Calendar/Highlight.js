@@ -14,7 +14,7 @@ $(function () {
             },
             async: false
         }).success(function (json) {
-            if (json.result_code == 200) {
+            if (json.resultCode == 200) {
                 $(".table-calendar [data-source-key='" + eventSourceKey + "']").toggleClass('event-container-hidden');
 
                 $('.table-calendar-list-events').each(function (index) {

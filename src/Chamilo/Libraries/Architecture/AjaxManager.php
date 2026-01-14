@@ -64,7 +64,7 @@ abstract class AjaxManager extends Application
         {
             if (!$this->getRequest()->hasRequestOrQuery($parameter))
             {
-                JsonAjaxResult::bad_request('Invalid Post parameters');
+                JsonAjaxResult::badRequest('Invalid Post parameters');
             }
         }
     }

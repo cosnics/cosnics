@@ -19,10 +19,6 @@
                       id="Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheDataPreLoader"/>
         </service>
 
-        <service id="Chamilo\Configuration\Service\Consulter\LanguageConsulter">
-            <argument key="$languageCacheDataPreLoader"
-                      type="service"
-                      id="Chamilo\Configuration\Service\DataLoader\LanguageCacheDataPreLoader"/>
-        </service>
+        <service id="Chamilo\Configuration\Service\Consulter\LanguageConsulter"/>
     </services>
 </container>

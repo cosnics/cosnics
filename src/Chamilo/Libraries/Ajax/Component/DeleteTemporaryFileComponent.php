@@ -35,7 +35,7 @@ class DeleteTemporaryFileComponent extends Manager
         }
         catch (Exception)
         {
-            JsonAjaxResult::general_error($translator->trans('FileNotRemoved', [], StringUtilities::LIBRARIES));
+            JsonAjaxResult::generalError($translator->trans('FileNotRemoved', [], StringUtilities::LIBRARIES));
         }
     }
 

@@ -23,7 +23,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class ConfigurerComponent extends Manager
 {
-    public const PARAM_TAB = 'tab';
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
@@ -44,7 +43,7 @@ class ConfigurerComponent extends Manager
 
         $form = new ConfigurationForm(
             $this->getContext(), 'config', FormValidator::FORM_METHOD_POST,
-            $this->get_url([self::PARAM_CONTEXT => $this->getContext(), self::PARAM_TAB => $this->getTab()])
+            $this->get_url([self::PARAM_CONTEXT => $this->getContext()])
         );
 
         if ($form->validate())
@@ -56,8 +55,7 @@ class ConfigurerComponent extends Manager
                     StringUtilities::LIBRARIES
                 ), !$success, [
                     Application::PARAM_ACTION => self::ACTION_CONFIGURE_PLATFORM,
-                    self::PARAM_CONTEXT => $this->getContext(),
-                    GenericTabsRenderer::PARAM_SELECTED_TAB => $this->getTab()
+                    self::PARAM_CONTEXT => $this->getContext()
                 ]
             );
         }
@@ -94,8 +92,7 @@ class ConfigurerComponent extends Manager
                         new LinkTab(
                             $package, $translator->trans('TypeName', [], $package), new NamespaceIdentGlyph(
                             $package, true, false, false, IdentGlyph::SIZE_SMALL
-                        ), $this->get_url([self::PARAM_TAB => $this->getTab(), self::PARAM_CONTEXT => $package]),
-                            $this->getContext() == $package
+                        ), $this->get_url([self::PARAM_CONTEXT => $package]), $this->getContext() == $package
                         )
                     );
                 }
@@ -111,37 +108,9 @@ class ConfigurerComponent extends Manager
         }
     }
 
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
     public function getContext(): string
     {
-        $context = $this->getRequest()->query->get(self::PARAM_CONTEXT);
-
-        if (!isset($context))
-        {
-            $packages = $this->getPackageBundlesCacheService()->getPackages()->getNestedTypedPackages();
-
-            foreach ($packages[$this->getTab()] as $package)
-            {
-                if ($this->getConfigurationConsulter()->hasSettingsForContext($package->get_context()))
-                {
-                    $packageNames[$package->get_context()] = $this->getTranslator()->trans(
-                        'TypeName', [], $package->get_context()
-                    );
-                }
-            }
-
-            asort($packageNames);
-
-            $packageNames = array_keys($packageNames);
-
-            return $packageNames[0];
-        }
-        else
-        {
-            return $context;
-        }
+        return $this->getRequest()->query->get(self::PARAM_CONTEXT, 'Chamilo\Core\Admin');
     }
 
     public function getLinkTabsRenderer(): LinkTabsRenderer
@@ -152,10 +121,5 @@ class ConfigurerComponent extends Manager
     public function getPackageBundlesCacheService(): PackageBundlesCacheService
     {
         return $this->getService(PackageBundlesCacheService::class);
-    }
-
-    public function getTab(): string
-    {
-        return $this->getRequest()->query->get(self::PARAM_TAB, 'Chamilo\Core');
     }
 }

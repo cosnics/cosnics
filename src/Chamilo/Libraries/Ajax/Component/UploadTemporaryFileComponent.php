@@ -25,7 +25,7 @@ class UploadTemporaryFileComponent extends Manager
 
         if (!$file->isValid())
         {
-            JsonAjaxResult::bad_request(
+            JsonAjaxResult::badRequest(
                 $this->getTranslator()->trans('NoValidFileUploaded', [], StringUtilities::LIBRARIES)
             );
         }
@@ -40,14 +40,14 @@ class UploadTemporaryFileComponent extends Manager
 
         if (!$result)
         {
-            JsonAjaxResult::general_error(
+            JsonAjaxResult::generalError(
                 $this->getTranslator()->trans('FileNotUploaded', [], StringUtilities::LIBRARIES)
             );
         }
         else
         {
             $jsonAjaxResult = new JsonAjaxResult();
-            $jsonAjaxResult->set_properties(['temporaryFileName' => $fileName]);
+            $jsonAjaxResult->setProperties(['temporaryFileName' => $fileName]);
             $jsonAjaxResult->display();
         }
     }

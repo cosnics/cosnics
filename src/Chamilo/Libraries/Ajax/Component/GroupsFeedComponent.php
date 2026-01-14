@@ -43,11 +43,11 @@ abstract class GroupsFeedComponent extends Manager
         $elements = $this->get_elements();
         $elements = $elements->as_array();
 
-        $result->set_property(self::PROPERTY_ELEMENTS, $elements);
+        $result->setProperty(self::PROPERTY_ELEMENTS, $elements);
 
         if ($this->user_count > 0)
         {
-            $result->set_property(self::PROPERTY_TOTAL_ELEMENTS, $this->user_count);
+            $result->setProperty(self::PROPERTY_TOTAL_ELEMENTS, $this->user_count);
         }
 
         $result->display();

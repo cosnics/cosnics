@@ -41,8 +41,8 @@ class AjaxResultGenerator
         $this->getAjaxResultDataProvider()->generateElements($elements);
         $elements = $elements->as_array();
 
-        $result->set_property(self::PROPERTY_ELEMENTS, $elements);
-        $result->set_property(
+        $result->setProperty(self::PROPERTY_ELEMENTS, $elements);
+        $result->setProperty(
             self::PROPERTY_TOTAL_ELEMENTS, $this->getAjaxResultDataProvider()->getTotalNumberOfElements()
         );
 

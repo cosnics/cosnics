@@ -2,6 +2,7 @@
 namespace Chamilo\Configuration\Storage\Repository;
 
 use Chamilo\Configuration\Architecture\Domain\Language;
+use Chamilo\Configuration\Architecture\Domain\LanguageCodeEnum;
 use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -51,6 +52,19 @@ class LanguageRepository
         }
 
         return $languages;
+    }
+
+    public function findLanguagesAsArray(): array
+    {
+        $languageValues = [];
+        $languages = $this->findLanguages();
+
+        foreach ($languages as $language)
+        {
+            $languageValues[$language->getCode(LanguageCodeEnum::ISO_639_1)] = $language->getName();
+        }
+
+        return $languageValues;
     }
 
     public function getFilesystemTools(): FilesystemTools

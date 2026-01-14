@@ -5,341 +5,280 @@ var theme;
 var ajaxUri = getPath('WEB_PATH') + 'index.php';
 
 // Get a platform setting
-function getPlatformSetting(variable, application)
-{
+function getPlatformSetting(variable, application) {
+
     if (typeof (settings[application]) == 'undefined'
-            || (typeof (settings[application]) !== 'undefined' && typeof (settings[application][variable]) == 'undefined'))
-    {
-        
-        if (typeof (settings[application]) == 'undefined')
-        {
+        ||
+        (typeof (settings[application]) !== 'undefined' && typeof (settings[application][variable]) == 'undefined')) {
+
+        if (typeof (settings[application]) == 'undefined') {
             settings[application] = [];
         }
-        
+
         settings[application][variable] = getUtilities('platform_setting', {
-            variable : variable,
-            context : application
+            variable: variable,
+            context: application
         });
     }
-    
+
     return settings[application][variable];
 }
 
 // Get a translation
-function getTranslation(string, parameters, context)
-{
+function getTranslation(string, parameters, context) {
     if (typeof (translations[context]) == 'undefined'
-            || (typeof (translations[context]) !== 'undefined' && typeof (translations[context][string]) == 'undefined'))
-    {
-        
-        if (typeof (translations[context]) == 'undefined')
-        {
+        || (typeof (translations[context]) !== 'undefined' && typeof (translations[context][string]) == 'undefined')) {
+
+        if (typeof (translations[context]) == 'undefined') {
             translations[context] = [];
         }
-        
+
         translations[context][string] = getUtilities('translation', {
-            string : string,
-            parameters : parameters,
-            context : context
+            string: string,
+            parameters: parameters,
+            context: context
         });
     }
-    
+
     return translations[context][string];
 }
 
 // Get a platform path
-function getPath(path)
-{
+function getPath(path) {
     // we should avoid doing chatty calls. When possible needed data should be
     // loaded during page creation.
-    
-    if (path.toUpperCase() == 'WEB_PATH' && window.rootWebPath !== undefined)
-    {
+
+    if (path.toUpperCase() == 'WEB_PATH' && window.rootWebPath !== undefined) {
         return window.rootWebPath;
     }
-    
-    if (typeof (paths[path]) == 'undefined')
-    {
+
+    if (typeof (paths[path]) == 'undefined') {
         paths[path] = getUtilities('path', {
-            path : path
+            path: path
         });
     }
-    
+
     return paths[path];
 }
 
 // Get the current theme
-function getTheme()
-{
-    if (typeof (theme) == 'undefined')
-    {
+function getTheme() {
+    if (typeof (theme) == 'undefined') {
         theme = getUtilities('theme');
     }
-    
+
     return theme;
 }
 
-// Get a memorized variable
-function getMemory(variable)
-{
-    return getUtilities('memory', {
-        action : 'get',
-        variable : variable
-    });
-}
-
-// Set a memorized variable
-function setMemory(variable, value)
-{
-    getUtilities('memory', {
-        action : 'set',
-        variable : variable,
-        value : value
-    });
-}
-
-// Clear a memorized variable
-function clearMemory(variable)
-{
-    getUtilities('memory', {
-        action : 'clear',
-        variable : variable
-    });
-}
-
-// General function to retrieve and process utilities-calls.
-function getUtilities(type, parameters)
-{
+// General function to retrieve and process utilities-calls
+function getUtilities(type, parameters) {
     var result;
-    
-    if (typeof parameters == "undefined")
-    {
+
+    if (typeof parameters == "undefined") {
         parameters = new Object();
     }
-    
+
     parameters.type = type;
     parameters.application = 'Chamilo\\Libraries\\Ajax';
     parameters.go = 'utilities';
-    
+
     var response = $.ajax({
-        type : "POST",
-        url : ajaxUri,
-        data : parameters,
-        async : false
-    }).success(function(json)
-    {
+        type: "POST",
+        url: ajaxUri,
+        data: parameters,
+        async: false
+    }).success(function (json) {
         result = json.properties.result;
     });
-    
+
     return result;
 }
 
 // Wrapper for an Ajax POST
-function doAjaxPost(url, parameters)
-{
+function doAjaxPost(url, parameters) {
     return doAjax("POST", url, parameters);
 }
 
 // Wrapper for an Ajax GET
-function doAjaxGet(url, parameters)
-{
+function doAjaxGet(url, parameters) {
     return doAjax("GET", url, parameters);
 }
 
 // Execute an Ajax postback
-function doAjax(type, url, parameters)
-{
-    if (typeof parameters == "undefined")
-    {
+function doAjax(type, url, parameters) {
+    if (typeof parameters == "undefined") {
         parameters = new Object();
     }
-    
+
     var response = $.ajax({
-        type : type,
-        url : url,
-        dataType : "json",
-        data : parameters,
-        async : false
+        type: type,
+        url: url,
+        dataType: "json",
+        data: parameters,
+        async: false
     }).responseText;
-    
+
     return response;
 }
 
 // Return an HTML Editor
-function renderHtmlEditor(editorName, editorOptions, editorLabel, editorAttributes)
-{
+function renderHtmlEditor(editorName, editorOptions, editorLabel, editorAttributes) {
     var defaults = {
-        "name" : '',
-        "label" : '',
-        "options" : $.json.serialize({}),
-        "attributes" : $.json.serialize({})
+        "name": '',
+        "label": '',
+        "options": $.json.serialize({}),
+        "attributes": $.json.serialize({})
     };
-    
+
     var parameters = new Object();
     parameters.name = editorName;
-    
-    if (typeof editorOptions != "undefined")
-    {
+
+    if (typeof editorOptions != "undefined") {
         parameters.options = $.json.serialize(editorOptions);
     }
-    
-    if (typeof editorAttributes != "undefined")
-    {
+
+    if (typeof editorAttributes != "undefined") {
         parameters.attributes = $.json.serialize(editorAttributes);
     }
-    
-    if (typeof editorLabel != "undefined")
-    {
+
+    if (typeof editorLabel != "undefined") {
         parameters.label = editorLabel;
     }
-    
+
     parameters.application = 'Chamilo\\Libraries\\Ajax';
     parameters.go = 'HtmlEditorInstance';
-    
+
     var ajaxParameters = $.extend(defaults, parameters);
-    
+
     ajaxUri = getPath('WEB_PATH') + 'index.php';
-    
+
     var result = doAjaxPost(ajaxUri, ajaxParameters);
-    
+
     return result;
 }
 
 // Destroy an HTML Editor
-function destroyHtmlEditor(editorName)
-{
-    if (typeof CKEDITOR != 'undefined')
-    {
+function destroyHtmlEditor(editorName) {
+    if (typeof CKEDITOR != 'undefined') {
         $('textarea.html_editor[name=\'' + editorName + '\']').ckeditorGet().destroy();
     }
-    
-    if (typeof tinyMCE != 'undefined')
-    {
+
+    if (typeof tinyMCE != 'undefined') {
         $('textarea.html_editor[name=\'' + editorName + '\']').tinymce().destroy();
     }
 }
 
 // Popup window
-function openPopup(url, width, height)
-{
-    
+function openPopup(url, width, height) {
+
     width = width || '80%';
     height = height || '70%';
-    
-    if (typeof width == 'string' && width.length > 1 && width.substr(width.length - 1, 1) == '%')
-    {
+
+    if (typeof width == 'string' && width.length > 1 && width.substr(width.length - 1, 1) == '%') {
         width = parseInt(window.screen.width * parseInt(width, 10) / 100, 10);
     }
-    if (typeof height == 'string' && height.length > 1 && height.substr(height.length - 1, 1) == '%')
-    {
+    if (typeof height == 'string' && height.length > 1 && height.substr(height.length - 1, 1) == '%') {
         height = parseInt(window.screen.height * parseInt(height, 10) / 100, 10);
     }
-    
-    if (width < 640)
-    {
+
+    if (width < 640) {
         width = 640;
     }
-    
-    if (height < 420)
-    {
+
+    if (height < 420) {
         height = 420;
     }
-    
+
     var settings = {
-        centerBrowser : 1, // center window over browser window? {1 (YES) or 0
+        centerBrowser: 1, // center window over browser window? {1 (YES) or 0
         // (NO)}. overrides top and left
-        centerScreen : 0, // center window over entire screen? {1 (YES) or 0
+        centerScreen: 0, // center window over entire screen? {1 (YES) or 0
         // (NO)}. overrides top and left
-        height : height, // sets the height in pixels of the window.
-        left : 0, // left position when the window appears.
-        location : 0, // determines whether the address bar is displayed {1
+        height: height, // sets the height in pixels of the window.
+        left: 0, // left position when the window appears.
+        location: 0, // determines whether the address bar is displayed {1
         // (YES) or 0 (NO)}.
-        menubar : 0, // determines whether the menu bar is displayed {1 (YES)
+        menubar: 0, // determines whether the menu bar is displayed {1 (YES)
         // or 0 (NO)}.
-        resizable : 0, // whether the window can be resized {1 (YES) or 0
+        resizable: 0, // whether the window can be resized {1 (YES) or 0
         // (NO)}. Can also be overloaded using resizable.
-        scrollbars : 1, // determines whether scrollbars appear on the window {1
+        scrollbars: 1, // determines whether scrollbars appear on the window {1
         // (YES) or 0 (NO)}.
-        status : 0, // whether a status line appears at the bottom of the window
+        status: 0, // whether a status line appears at the bottom of the window
         // {1 (YES) or 0 (NO)}.
-        width : width, // sets the width in pixels of the window.
-        windowName : '_blank', // name of window set from the name attribute of
+        width: width, // sets the width in pixels of the window.
+        windowName: '_blank', // name of window set from the name attribute of
         // the element that invokes the click
-        windowURL : url, // url used for the popup
-        top : 0, // top position when the window appears.
-        toolbar : 0
-    // determines whether a toolbar (includes the forward and back buttons) is
-    // displayed {1 (YES) or 0 (NO)}.
+        windowURL: url, // url used for the popup
+        top: 0, // top position when the window appears.
+        toolbar: 0
+        // determines whether a toolbar (includes the forward and back buttons) is
+        // displayed {1 (YES) or 0 (NO)}.
     };
-    
+
     var windowFeatures = 'height=' + settings.height + ',width=' + settings.width + ',toolbar=' + settings.toolbar
-            + ',scrollbars=' + settings.scrollbars + ',status=' + settings.status + ',resizable=' + settings.resizable
-            + ',location=' + settings.location + ',menuBar=' + settings.menubar;
-    
+        + ',scrollbars=' + settings.scrollbars + ',status=' + settings.status + ',resizable=' + settings.resizable
+        + ',location=' + settings.location + ',menuBar=' + settings.menubar;
+
     settings.windowName = this.name || settings.windowName;
     settings.windowURL = this.href || settings.windowURL;
     var centeredY, centeredX;
-    
-    if (settings.centerBrowser)
-    {
-        
-        if ($.browser.msie)
-        {// hacked together for IE browsers
+
+    if (settings.centerBrowser) {
+
+        if ($.browser.msie) {// hacked together for IE browsers
             centeredY = (window.screenTop - 120)
-                    + ((((document.documentElement.clientHeight + 120) / 2) - (settings.height / 2)));
+                + ((((document.documentElement.clientHeight + 120) / 2) - (settings.height / 2)));
             centeredX = window.screenLeft + ((((document.body.offsetWidth + 20) / 2) - (settings.width / 2)));
         }
-        else
-        {
+        else {
             centeredY = window.screenY + (((window.outerHeight / 2) - (settings.height / 2)));
             centeredX = window.screenX + (((window.outerWidth / 2) - (settings.width / 2)));
         }
-        window.open(settings.windowURL, settings.windowName,
-                windowFeatures + ',left=' + centeredX + ',top=' + centeredY).focus();
+        window.open(
+            settings.windowURL, settings.windowName,
+            windowFeatures + ',left=' + centeredX + ',top=' + centeredY
+        ).focus();
     }
-    else if (settings.centerScreen)
-    {
+    else if (settings.centerScreen) {
         centeredY = (screen.height - settings.height) / 2;
         centeredX = (screen.width - settings.width) / 2;
-        window.open(settings.windowURL, settings.windowName,
-                windowFeatures + ',left=' + centeredX + ',top=' + centeredY).focus();
+        window.open(
+            settings.windowURL, settings.windowName,
+            windowFeatures + ',left=' + centeredX + ',top=' + centeredY
+        ).focus();
     }
-    else
-    {
-        window.open(settings.windowURL, settings.windowName,
-                windowFeatures + ',left=' + settings.left + ',top=' + settings.top).focus();
+    else {
+        window.open(
+            settings.windowURL, settings.windowName,
+            windowFeatures + ',left=' + settings.left + ',top=' + settings.top
+        ).focus();
     }
     return false;
 }
 
-function scaleDimensions(width, height, imageProperties)
-{
-    if (imageProperties.width > width || imageProperties.height > height)
-    {
-        if (imageProperties.width >= imageProperties.height)
-        {
+function scaleDimensions(width, height, imageProperties) {
+    if (imageProperties.width > width || imageProperties.height > height) {
+        if (imageProperties.width >= imageProperties.height) {
             imageProperties.thumbnailWidth = width;
             imageProperties.thumbnailHeight = (imageProperties.thumbnailWidth / imageProperties.width)
-                    * imageProperties.height;
+                * imageProperties.height;
         }
-        else
-        {
+        else {
             imageProperties.thumbnailHeight = height;
             imageProperties.thumbnailWidth = (imageProperties.thumbnailHeight / imageProperties.height)
-                    * imageProperties.width;
+                * imageProperties.width;
         }
     }
-    else
-    {
+    else {
         imageProperties.thumbnailWidth = imageProperties.width;
         imageProperties.thumbnailHeight = imageProperties.height;
     }
-    
+
     return imageProperties;
 }
 
-function asort(inputArr, sort_flags)
-{
+function asort(inputArr, sort_flags) {
     // http://kevin.vanzonneveld.net
     // + original by: Brett Zamir (http://brett-zamir.me)
     // + improved by: Brett Zamir (http://brett-zamir.me)
@@ -385,13 +324,11 @@ function asort(inputArr, sort_flags)
     // * results 2: data == {c: 'apple', b: 'banana', d: 'lemon', a: 'orange'}
     // * returns 2: true
     var valArr = [], keyArr = [], k, i, ret, sorter, that = this, strictForIn = false, populateArr = {};
-    
-    switch (sort_flags)
-    {
+
+    switch (sort_flags) {
         case 'SORT_STRING':
             // compare items as strings
-            sorter = function(a, b)
-            {
+            sorter = function (a, b) {
                 return that.strnatcmp(a, b);
             };
             break;
@@ -403,45 +340,36 @@ function asort(inputArr, sort_flags)
             break;
         case 'SORT_NUMERIC':
             // compare items numerically
-            sorter = function(a, b)
-            {
+            sorter = function (a, b) {
                 return (a - b);
             };
             break;
         case 'SORT_REGULAR':
-            // compare items normally (don't change types)
+        // compare items normally (don't change types)
         default:
-            sorter = function(a, b)
-            {
+            sorter = function (a, b) {
                 var aFloat = parseFloat(a), bFloat = parseFloat(b), aNumeric = aFloat + '' === a, bNumeric = bFloat
-                        + '' === b;
-                if (aNumeric && bNumeric)
-                {
+                    + '' === b;
+                if (aNumeric && bNumeric) {
                     return aFloat > bFloat ? 1 : aFloat < bFloat ? -1 : 0;
                 }
-                else if (aNumeric && !bNumeric)
-                {
+                else if (aNumeric && !bNumeric) {
                     return 1;
                 }
-                else if (!aNumeric && bNumeric)
-                {
+                else if (!aNumeric && bNumeric) {
                     return -1;
                 }
                 return a > b ? 1 : a < b ? -1 : 0;
             };
             break;
     }
-    
-    var bubbleSort = function(keyArr, inputArr)
-    {
+
+    var bubbleSort = function (keyArr, inputArr) {
         var i, j, tempValue, tempKeyVal;
-        for (i = inputArr.length - 2; i >= 0; i--)
-        {
-            for (j = 0; j <= i; j++)
-            {
+        for (i = inputArr.length - 2; i >= 0; i--) {
+            for (j = 0; j <= i; j++) {
                 ret = sorter(inputArr[j + 1], inputArr[j]);
-                if (ret < 0)
-                {
+                if (ret < 0) {
                     tempValue = inputArr[j];
                     inputArr[j] = inputArr[j + 1];
                     inputArr[j + 1] = tempValue;
@@ -452,49 +380,42 @@ function asort(inputArr, sort_flags)
             }
         }
     };
-    
+
     // BEGIN REDUNDANT
     this.php_js = this.php_js || {};
     this.php_js.ini = this.php_js.ini || {};
     // END REDUNDANT
     strictForIn = this.php_js.ini['phpjs.strictForIn'] && this.php_js.ini['phpjs.strictForIn'].local_value
-            && this.php_js.ini['phpjs.strictForIn'].local_value !== 'off';
+        && this.php_js.ini['phpjs.strictForIn'].local_value !== 'off';
     populateArr = strictForIn ? inputArr : populateArr;
-    
+
     // Get key and value arrays
-    for (k in inputArr)
-    {
-        if (inputArr.hasOwnProperty(k))
-        {
+    for (k in inputArr) {
+        if (inputArr.hasOwnProperty(k)) {
             valArr.push(inputArr[k]);
             keyArr.push(k);
-            if (strictForIn)
-            {
+            if (strictForIn) {
                 delete inputArr[k];
             }
         }
     }
-    try
-    {
+    try {
         // Sort our new temporary arrays
         bubbleSort(keyArr, valArr);
     }
-    catch (e)
-    {
+    catch (e) {
         return false;
     }
-    
+
     // Repopulate the old array
-    for (i = 0; i < valArr.length; i++)
-    {
+    for (i = 0; i < valArr.length; i++) {
         populateArr[keyArr[i]] = valArr[i];
     }
-    
+
     return strictForIn || populateArr;
 }
 
-function explode(delimiter, string, limit)
-{
+function explode(delimiter, string, limit) {
     // http://kevin.vanzonneveld.net
     // + original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
     // + improved by: kenneth
@@ -506,37 +427,31 @@ function explode(delimiter, string, limit)
     // * example 2: explode('=', 'a=bc=d', 2);
     // * returns 2: ['a', 'bc=d']
     var emptyArray = {
-        0 : ''
+        0: ''
     };
-    
+
     // third argument is not required
-    if (arguments.length < 2 || typeof arguments[0] == 'undefined' || typeof arguments[1] == 'undefined')
-    {
+    if (arguments.length < 2 || typeof arguments[0] == 'undefined' || typeof arguments[1] == 'undefined') {
         return null;
     }
-    
-    if (delimiter === '' || delimiter === false || delimiter === null)
-    {
+
+    if (delimiter === '' || delimiter === false || delimiter === null) {
         return false;
     }
-    
+
     if (typeof delimiter == 'function' || typeof delimiter == 'object' || typeof string == 'function'
-            || typeof string == 'object')
-    {
+        || typeof string == 'object') {
         return emptyArray;
     }
-    
-    if (delimiter === true)
-    {
+
+    if (delimiter === true) {
         delimiter = '1';
     }
-    
-    if (!limit)
-    {
+
+    if (!limit) {
         return string.toString().split(delimiter.toString());
     }
-    else
-    {
+    else {
         // support for limit argument
         var splitted = string.toString().split(delimiter.toString());
         var partA = splitted.splice(0, limit - 1);
@@ -546,8 +461,7 @@ function explode(delimiter, string, limit)
     }
 }
 
-function str_replace(search, replace, subject, count)
-{
+function str_replace(search, replace, subject, count) {
     // http://kevin.vanzonneveld.net
     // + original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
     // + improved by: Gabriel Paderni
@@ -570,27 +484,23 @@ function str_replace(search, replace, subject, count)
     // * example 2: str_replace(['{name}', 'l'], ['hello', 'm'], '{name},
     // lars');
     // * returns 2: 'hemmo, mars'
-    var i = 0, j = 0, temp = '', repl = '', sl = 0, fl = 0, f = [].concat(search), r = [].concat(replace), s = subject, ra = Object.prototype.toString
+    var i = 0, j = 0, temp = '', repl = '', sl = 0, fl = 0, f = [].concat(search), r = [].concat(replace), s = subject,
+        ra = Object.prototype.toString
             .call(r) === '[object Array]', sa = Object.prototype.toString.call(s) === '[object Array]';
     s = [].concat(s);
-    if (count)
-    {
+    if (count) {
         this.window[count] = 0;
     }
-    
-    for (i = 0, sl = s.length; i < sl; i++)
-    {
-        if (s[i] === '')
-        {
+
+    for (i = 0, sl = s.length; i < sl; i++) {
+        if (s[i] === '') {
             continue;
         }
-        for (j = 0, fl = f.length; j < fl; j++)
-        {
+        for (j = 0, fl = f.length; j < fl; j++) {
             temp = s[i] + '';
             repl = ra ? (r[j] !== undefined ? r[j] : '') : r[0];
             s[i] = (temp).split(f[j]).join(repl);
-            if (count && s[i] !== temp)
-            {
+            if (count && s[i] !== temp) {
                 this.window[count] += (temp.length - s[i].length) / f[j].length;
             }
         }
@@ -598,8 +508,7 @@ function str_replace(search, replace, subject, count)
     return sa ? s : s[0];
 }
 
-function sprintf()
-{
+function sprintf() {
     // http://kevin.vanzonneveld.net
     // + original by: Ash Searle (http://hexmen.com/blog/)
     // + namespaced by: Michael White (http://getsprink.com)
@@ -617,81 +526,68 @@ function sprintf()
     // * returns 3: '[####monkey]'
     var regex = /%%|%(\d+\$)?([-+\'#0 ]*)(\*\d+\$|\*|\d+)?(\.(\*\d+\$|\*|\d+))?([scboxXuidfegEG])/g;
     var a = arguments, i = 0, format = a[i++];
-    
+
     // pad()
-    var pad = function(str, len, chr, leftJustify)
-    {
-        if (!chr)
-        {
+    var pad = function (str, len, chr, leftJustify) {
+        if (!chr) {
             chr = ' ';
         }
         var padding = (str.length >= len) ? '' : Array(1 + len - str.length >>> 0).join(chr);
         return leftJustify ? str + padding : padding + str;
     };
-    
+
     // justify()
-    var justify = function(value, prefix, leftJustify, minWidth, zeroPad, customPadChar)
-    {
+    var justify = function (value, prefix, leftJustify, minWidth, zeroPad, customPadChar) {
         var diff = minWidth - value.length;
-        if (diff > 0)
-        {
-            if (leftJustify || !zeroPad)
-            {
+        if (diff > 0) {
+            if (leftJustify || !zeroPad) {
                 value = pad(value, minWidth, customPadChar, leftJustify);
             }
-            else
-            {
+            else {
                 value = value.slice(0, prefix.length) + pad('', diff, '0', true) + value.slice(prefix.length);
             }
         }
         return value;
     };
-    
+
     // formatBaseX()
-    var formatBaseX = function(value, base, prefix, leftJustify, minWidth, precision, zeroPad)
-    {
+    var formatBaseX = function (value, base, prefix, leftJustify, minWidth, precision, zeroPad) {
         // Note: casts negative numbers to positive ones
         var number = value >>> 0;
         prefix = prefix && number && {
-            '2' : '0b',
-            '8' : '0',
-            '16' : '0x'
+            '2': '0b',
+            '8': '0',
+            '16': '0x'
         }[base] || '';
         value = prefix + pad(number.toString(base), precision || 0, '0', false);
         return justify(value, prefix, leftJustify, minWidth, zeroPad);
     };
-    
+
     // formatString()
-    var formatString = function(value, leftJustify, minWidth, precision, zeroPad, customPadChar)
-    {
-        if (precision != null)
-        {
+    var formatString = function (value, leftJustify, minWidth, precision, zeroPad, customPadChar) {
+        if (precision != null) {
             value = value.slice(0, precision);
         }
         return justify(value, '', leftJustify, minWidth, zeroPad, customPadChar);
     };
-    
+
     // doFormat()
-    var doFormat = function(substring, valueIndex, flags, minWidth, _, precision, type)
-    {
+    var doFormat = function (substring, valueIndex, flags, minWidth, _, precision, type) {
         var number;
         var prefix;
         var method;
         var textTransform;
         var value;
-        
-        if (substring == '%%')
-        {
+
+        if (substring == '%%') {
             return '%';
         }
-        
+
         // parse flags
         var leftJustify = false, positivePrefix = '', zeroPad = false, prefixBaseX = false, customPadChar = ' ';
         var flagsl = flags.length;
-        for (var j = 0; flags && j < flagsl; j++)
-        {
-            switch (flags.charAt(j))
-            {
+        for (var j = 0; flags && j < flagsl; j++) {
+            switch (flags.charAt(j)) {
                 case ' ':
                     positivePrefix = ' ';
                     break;
@@ -712,60 +608,49 @@ function sprintf()
                     break;
             }
         }
-        
+
         // parameters may be null, undefined, empty-string or real valued
         // we want to ignore null, undefined and empty-string values
-        if (!minWidth)
-        {
+        if (!minWidth) {
             minWidth = 0;
         }
-        else if (minWidth == '*')
-        {
+        else if (minWidth == '*') {
             minWidth = +a[i++];
         }
-        else if (minWidth.charAt(0) == '*')
-        {
+        else if (minWidth.charAt(0) == '*') {
             minWidth = +a[minWidth.slice(1, -1)];
         }
-        else
-        {
+        else {
             minWidth = +minWidth;
         }
-        
+
         // Note: undocumented perl feature:
-        if (minWidth < 0)
-        {
+        if (minWidth < 0) {
             minWidth = -minWidth;
             leftJustify = true;
         }
-        
-        if (!isFinite(minWidth))
-        {
+
+        if (!isFinite(minWidth)) {
             throw new Error('sprintf: (minimum-)width must be finite');
         }
-        
-        if (!precision)
-        {
+
+        if (!precision) {
             precision = 'fFeE'.indexOf(type) > -1 ? 6 : (type == 'd') ? 0 : undefined;
         }
-        else if (precision == '*')
-        {
+        else if (precision == '*') {
             precision = +a[i++];
         }
-        else if (precision.charAt(0) == '*')
-        {
+        else if (precision.charAt(0) == '*') {
             precision = +a[precision.slice(1, -1)];
         }
-        else
-        {
+        else {
             precision = +precision;
         }
-        
+
         // grab value using valueIndex if required?
         value = valueIndex ? a[valueIndex.slice(0, -1)] : a[i++];
-        
-        switch (type)
-        {
+
+        switch (type) {
             case 's':
                 return formatString(String(value), leftJustify, minWidth, precision, zeroPad, customPadChar);
             case 'c':
@@ -794,14 +679,14 @@ function sprintf()
             case 'G':
                 number = +value;
                 prefix = number < 0 ? '-' : positivePrefix;
-                method = [ 'toExponential', 'toFixed', 'toPrecision' ]['efg'.indexOf(type.toLowerCase())];
-                textTransform = [ 'toString', 'toUpperCase' ]['eEfFgG'.indexOf(type) % 2];
+                method = ['toExponential', 'toFixed', 'toPrecision']['efg'.indexOf(type.toLowerCase())];
+                textTransform = ['toString', 'toUpperCase']['eEfFgG'.indexOf(type) % 2];
                 value = prefix + Math.abs(number)[method](precision);
                 return justify(value, prefix, leftJustify, minWidth, zeroPad)[textTransform]();
             default:
                 return substring;
         }
     };
-    
+
     return format.replace(regex, doFormat);
 }

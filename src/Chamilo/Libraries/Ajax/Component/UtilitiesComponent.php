@@ -30,8 +30,9 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
      */
     public function run()
     {
-        $type = $this->getPostDataValue(self::PARAM_TYPE);
+
         $request = $this->getRequest();
+        $type = $request->getFromQueryOrRequest(self::PARAM_TYPE);
 
         $properties = [];
 
@@ -95,7 +96,7 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
         }
 
         $result = new JsonAjaxResult(200);
-        $result->set_properties($properties);
+        $result->setProperties($properties);
         $result->display();
     }
 

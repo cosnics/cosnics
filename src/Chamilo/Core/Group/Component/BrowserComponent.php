@@ -11,7 +11,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\MenuComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -37,7 +36,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @package Chamilo\Core\Group\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class BrowserComponent extends Manager implements MenuComponentInterface
+class BrowserComponent extends Manager
 {
     public const TAB_DETAILS = 2;
     public const TAB_SUBGROUPS = 0;
@@ -407,7 +406,7 @@ class BrowserComponent extends Manager implements MenuComponentInterface
         $url = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_BROWSER,
+                Application::PARAM_ACTION => Application::ACTION_BROWSER,
                 self::PARAM_GROUP_ID => '%s'
             ]
         );
@@ -415,6 +414,16 @@ class BrowserComponent extends Manager implements MenuComponentInterface
         $group_menu = new GroupMenu($this->getGroupIdentifier(), $url);
 
         return $group_menu->render_as_tree();
+    }
+
+    public function renderFooter(): string
+    {
+        $html = [];
+
+        $html[] = '</div>';
+        $html[] = parent::renderFooter();
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -439,6 +448,22 @@ class BrowserComponent extends Manager implements MenuComponentInterface
         );
 
         return $groupTableRenderer->render($tableParameterValues, $users);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function renderHeader(string $pageTitle = ''): string
+    {
+        $html = [];
+
+        $html[] = parent::renderHeader();
+        $html[] = '<div class="col-xs-12 col-md-4 col-lg-3">';
+        $html[] = $this->renderApplicationMenu();
+        $html[] = '</div>';
+        $html[] = '<div class="col-xs-12 col-md-8 col-lg-9">';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**

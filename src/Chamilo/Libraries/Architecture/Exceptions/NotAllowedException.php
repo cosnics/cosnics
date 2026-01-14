@@ -26,6 +26,9 @@ class NotAllowedException extends UserException
         parent::__construct(implode(PHP_EOL, $html));
     }
 
+    /**
+     * @throws \QuickformException
+     */
     public function getLoginForm(): FormValidator
     {
         $translator = $this->getTranslator();
@@ -34,7 +37,7 @@ class NotAllowedException extends UserException
 
         $form->get_renderer()->setElementTemplate('{element}');
 
-        $form->setRequiredNote(null);
+        $form->setRequiredNote('');
 
         $form->addElement('html', '<div class="form-group">');
         $form->addElement('html', '<div class="input-group">');

@@ -11,10 +11,8 @@ use Chamilo\Libraries\Architecture\AjaxManager;
  */
 abstract class Manager extends AjaxManager
 {
-    public const ACTION_RESOURCE = 'Resource';
+    public const ACTION_UTILITIES = 'Utilities';
 
     public const CONTEXT = __NAMESPACE__;
-    public const DEFAULT_ACTION = self::ACTION_RESOURCE;
-
-    public const PARAM_MODIFIED = 'modified';
+    public const DEFAULT_ACTION = self::ACTION_UTILITIES;
 }
