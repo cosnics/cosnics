@@ -48,11 +48,5 @@
                      method="createFilesystemAdapter"/>
             <argument key="$namespace">Chamilo\Configuration\InternationalizationBundles</argument>
         </service>
-
-        <service id="Chamilo\Configuration\Service\RegistrationService">
-            <argument key="$registrationCacheAdapter"
-                      type="service"
-                      id="Chamilo\Configuration\Service\DataLoader\RegistrationCacheAdapter"/>
-        </service>
     </services>
 </container>

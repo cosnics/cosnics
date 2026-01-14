@@ -2,17 +2,12 @@
 namespace Chamilo\Libraries\DependencyInjection;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheDataPreLoader;
-use Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataPreLoader;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Configuration\Service\Finder\PackageBundlesGenerator;
 use Chamilo\Configuration\Service\PackageBundlesCacheService;
 use Chamilo\Configuration\Service\PackageFactory;
-use Chamilo\Configuration\Service\RegistrationService;
-use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\FileExceptionLogger;
 use Chamilo\Libraries\DependencyInjection\ExtensionFinder\PackagesContainerExtensionFinder;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInterface;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
@@ -20,36 +15,9 @@ use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
-use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
-use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Database\DataClassDatabase;
 use Chamilo\Libraries\Storage\Implementations\Doctrine\DataSourceName;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConnectionFactory;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\AndConditionTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\ComparisonConditionTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\EqualityConditionTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\InConditionTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\NotConditionTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\OrConditionTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\PatternMatchConditionTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\RegularExpressionConditionTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition\SubselectConditionTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\CaseConditionVariableTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\CaseElementConditionVariableTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\DateFormatConditionVariableTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\DistinctConditionVariableTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\FunctionConditionVariableTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\OperationConditionVariableTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\PropertiesConditionVariableTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\PropertyConditionVariableTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable\StaticConditionVariableTranslator;
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\QueryBuilderConfigurator;
-use Chamilo\Libraries\Storage\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Exception;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -93,8 +61,6 @@ class DependencyInjectionContainerBuilder
     private ConfigurationConsulter $fileConfigurationConsulter;
 
     private FileConfigurationLocator $fileConfigurationLocator;
-
-    private RegistrationConsulter $registrationConsulter;
 
     private StringUtilities $stringUtilities;
 
@@ -189,7 +155,6 @@ class DependencyInjectionContainerBuilder
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
     public function getContainerExtensionFinder(): ContainerExtensionFinderInterface
     {
@@ -270,16 +235,12 @@ class DependencyInjectionContainerBuilder
         return self::$instance;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
-     */
     protected function getPackageBundlesCacheService(): PackageBundlesCacheService
     {
         $packageFactory = new PackageFactory($this->getSystemPathBuilder(), $this->getFilesystem());
 
         $packageBundlesGenerator = new PackageBundlesGenerator(
-            $this->getSystemPathBuilder(), $this->getClassnameUtilities(), $packageFactory,
-            $this->getRegistrationConsulter()
+            $this->getSystemPathBuilder(), $this->getClassnameUtilities(), $packageFactory
         );
 
         return new PackageBundlesCacheService(new ArrayAdapter(), $packageBundlesGenerator);
@@ -288,140 +249,19 @@ class DependencyInjectionContainerBuilder
     /**
      * @return string[]
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
     protected function getPackageNamespaces(): array
     {
-        $fileConfigurationLocator = $this->getFileConfigurationLocator();
-
-        if ($fileConfigurationLocator->isAvailable())
-        {
-            try
-            {
-                return $this->getRegistrationConsulter()->getRegistrationContexts();
-            }
-            catch (Exception)
-            {
-                return $this->getPackageNamespacesFromFilesystem();
-            }
-        }
-        else
-        {
-            return $this->getPackageNamespacesFromFilesystem();
-        }
+        return $this->getPackageNamespacesFromFilesystem();
     }
 
     /**
      * @return string[]
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
     protected function getPackageNamespacesFromFilesystem(): array
     {
-        $nestedPackages = $this->getPackageBundlesCacheService()->getAllPackages()->getNestedPackages();
-
-        return array_keys($nestedPackages);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
-     * @throws \Exception
-     */
-    protected function getRegistrationConsulter(): RegistrationConsulter
-    {
-        if (!isset($this->registrationConsulter))
-        {
-            $connectionFactory = $this->getConnectionFactory();
-
-            $storageAliasGenerator = new StorageAliasGenerator($this->getClassnameUtilities());
-
-            $conditionPartTranslatorService = new ConditionPartTranslatorService(new ConditionPartCache(), false);
-
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new CaseConditionVariableTranslator($conditionPartTranslatorService, $storageAliasGenerator)
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new CaseElementConditionVariableTranslator($conditionPartTranslatorService, $storageAliasGenerator)
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new ComparisonConditionTranslator($conditionPartTranslatorService, $storageAliasGenerator)
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new EqualityConditionTranslator($conditionPartTranslatorService, $storageAliasGenerator)
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new DateFormatConditionVariableTranslator($conditionPartTranslatorService, $storageAliasGenerator)
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new DistinctConditionVariableTranslator($conditionPartTranslatorService, $storageAliasGenerator)
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new FunctionConditionVariableTranslator($conditionPartTranslatorService, $storageAliasGenerator)
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new InConditionTranslator($conditionPartTranslatorService, $storageAliasGenerator)
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new AndConditionTranslator($conditionPartTranslatorService, $storageAliasGenerator)
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new OrConditionTranslator($conditionPartTranslatorService, $storageAliasGenerator)
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new NotConditionTranslator($conditionPartTranslatorService, $storageAliasGenerator)
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new OperationConditionVariableTranslator($conditionPartTranslatorService, $storageAliasGenerator)
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new PatternMatchConditionTranslator($conditionPartTranslatorService, $storageAliasGenerator)
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new PropertiesConditionVariableTranslator(
-                    $conditionPartTranslatorService, $storageAliasGenerator
-                )
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new PropertyConditionVariableTranslator(
-                    $conditionPartTranslatorService, $storageAliasGenerator
-                )
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new RegularExpressionConditionTranslator(
-                    $conditionPartTranslatorService, $storageAliasGenerator
-                )
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new StaticConditionVariableTranslator(
-                    $conditionPartTranslatorService, $storageAliasGenerator
-                )
-            );
-            $conditionPartTranslatorService->addConditionPartTranslator(
-                new SubselectConditionTranslator(
-                    $conditionPartTranslatorService, $storageAliasGenerator
-                )
-            );
-
-            $dataClassRepositoryCache = new DataClassRepositoryCache();
-
-            $dataClassRepository = new DataClassRepository(
-                $dataClassRepositoryCache, new DataClassDatabase(
-                $connectionFactory->getConnection(), $storageAliasGenerator,
-                new FileExceptionLogger($this->getDefaultLogsPath()), $conditionPartTranslatorService,
-                new QueryBuilderConfigurator($conditionPartTranslatorService, $storageAliasGenerator)
-            ), new DataClassFactory()
-            );
-
-            $this->registrationConsulter = new RegistrationConsulter(
-                new RegistrationCacheDataPreLoader(
-                    new ArrayAdapter(), $this->getStringUtilities(), new RegistrationService(
-                        new RegistrationRepository($dataClassRepository), new ArrayAdapter()
-                    )
-                ), $this->getStringUtilities()
-            );
-        }
-
-        return $this->registrationConsulter;
+        return array_keys($this->getPackageBundlesCacheService()->getPackages());
     }
 
     protected function getRequest(): ChamiloRequest
@@ -474,7 +314,6 @@ class DependencyInjectionContainerBuilder
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
      */
     protected function loadContainerExtensions(ContainerBuilder $container): void
     {

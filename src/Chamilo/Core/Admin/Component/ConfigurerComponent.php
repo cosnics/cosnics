@@ -70,7 +70,7 @@ class ConfigurerComponent extends Manager
                 )
             );
 
-            $packages = $this->getPackageBundlesCacheService()->getAllPackages()->getNestedPackages();
+            $packages = $this->getPackageBundlesCacheService()->getPackages();
 
             foreach ($packages as $package)
             {
@@ -120,7 +120,7 @@ class ConfigurerComponent extends Manager
 
         if (!isset($context))
         {
-            $packages = $this->getPackageBundlesCacheService()->getAllPackages()->getNestedTypedPackages();
+            $packages = $this->getPackageBundlesCacheService()->getPackages()->getNestedTypedPackages();
 
             foreach ($packages[$this->getTab()] as $package)
             {

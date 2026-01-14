@@ -24,11 +24,5 @@
                       type="service"
                       id="Chamilo\Configuration\Service\DataLoader\LanguageCacheDataPreLoader"/>
         </service>
-
-        <service id="Chamilo\Configuration\Service\Consulter\RegistrationConsulter">
-            <argument key="$registrationCacheDataPreLoader"
-                      type="service"
-                      id="Chamilo\Configuration\Service\DataLoader\RegistrationCacheDataPreLoader"/>
-        </service>
     </services>
 </container>

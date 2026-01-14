@@ -4,7 +4,6 @@ namespace Chamilo\Application\Calendar\Service;
 use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProviderCollection;
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
 use Chamilo\Application\Calendar\Storage\Repository\AvailabilityRepository;
-use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ActionResult;
 use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
@@ -23,19 +22,15 @@ class AvailabilityService
     public const PROPERTY_CALENDAR = 'calendar';
     public const PROPERTY_COLOUR = 'colour';
 
-    protected RegistrationConsulter $registrationConsulter;
-
     private AvailabilityRepository $availabilityRepository;
 
     private CalendarExtensionDataProviderCollection $calendarProvider;
 
     public function __construct(
-        AvailabilityRepository $availabilityRepository, RegistrationConsulter $registrationConsulter,
-        CalendarExtensionDataProviderCollection $calendarProvider
+        AvailabilityRepository $availabilityRepository, CalendarExtensionDataProviderCollection $calendarProvider
     )
     {
         $this->availabilityRepository = $availabilityRepository;
-        $this->registrationConsulter = $registrationConsulter;
         $this->calendarProvider = $calendarProvider;
     }
 
@@ -160,11 +155,6 @@ class AvailabilityService
     public function getInactiveAvailabilitiesForUserAndCalendarType(User $user, string $calendarType): ArrayCollection
     {
         return $this->getAvailabilitiesForUserAndCalendarType($user, $calendarType, false);
-    }
-
-    public function getRegistrationConsulter(): RegistrationConsulter
-    {
-        return $this->registrationConsulter;
     }
 
     /**

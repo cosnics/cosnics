@@ -1,12 +1,11 @@
 <?php
 namespace Chamilo\Configuration\Service;
 
-use Chamilo\Configuration\Architecture\Domain\PackageList;
 use Chamilo\Configuration\Service\Finder\PackageBundlesGenerator;
 use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
-use Chamilo\Libraries\Cache\Traits\SingleCacheAdapterHandlerTrait;
+use Chamilo\Libraries\Cache\Traits\SimpleCacheAdapterHandlerTrait;
+use Chamilo\Libraries\Cache\Traits\SimpleCacheDataPreLoaderTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\Cache\Exception\CacheException;
 
 /**
  * @package Chamilo\Configuration\Package\Service
@@ -16,7 +15,8 @@ use Symfony\Component\Cache\Exception\CacheException;
  */
 class PackageBundlesCacheService implements CacheDataPreLoaderInterface
 {
-    use SingleCacheAdapterHandlerTrait;
+    use SimpleCacheAdapterHandlerTrait;
+    use SimpleCacheDataPreLoaderTrait;
 
     protected PackageBundlesGenerator $packageBundlesGenerator;
 
@@ -26,76 +26,12 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
         $this->packageBundlesGenerator = $packageBundlesGenerator;
     }
 
-    public function clearCacheDataForIdentifier(int $cacheIdentifier): bool
-    {
-        $cacheKey = $this->getCacheKeyForParts([$cacheIdentifier]);
-
-        if (!$this->hasCacheDataForKey($cacheKey))
-        {
-            try
-            {
-                $this->clearCacheDataForKey($cacheKey);
-            }
-            catch (CacheException)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @return \Chamilo\Configuration\Storage\DataClass\Package[]
      */
-    public function getAllPackages(): PackageList
+    public function getDataForCache(): array
     {
-        if (!$this->loadCacheDataForIdentifier(PackageList::MODE_ALL))
-        {
-            throw new CacheException(
-                'Could not load cache for ' . __CLASS__ . ' with key ' . PackageList::MODE_ALL
-            );
-        }
-
-        return $this->readCacheDataForKey($this->getCacheKeyForParts([PackageList::MODE_ALL]));
-    }
-
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
-    public function getAvailablePackages(): PackageList
-    {
-        if (!$this->loadCacheDataForIdentifier(PackageList::MODE_AVAILABLE))
-        {
-            throw new CacheException(
-                'Could not load cache for ' . __CLASS__ . ' with key ' . PackageList::MODE_AVAILABLE
-            );
-        }
-
-        return $this->readCacheDataForKey($this->getCacheKeyForParts([PackageList::MODE_AVAILABLE]));
-    }
-
-    /**
-     * @return int[]
-     */
-    protected function getCacheIdentifiers(): array
-    {
-        return [PackageList::MODE_ALL, PackageList::MODE_INSTALLED, PackageList::MODE_AVAILABLE];
-    }
-
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
-    public function getInstalledPackages(): PackageList
-    {
-        if (!$this->loadCacheDataForIdentifier(PackageList::MODE_INSTALLED))
-        {
-            throw new CacheException(
-                'Could not load cache for ' . __CLASS__ . ' with key ' . PackageList::MODE_INSTALLED
-            );
-        }
-
-        return $this->readCacheDataForKey($this->getCacheKeyForParts([PackageList::MODE_INSTALLED]));
+        return $this->getPackageBundlesGenerator()->getPackages();
     }
 
     public function getPackageBundlesGenerator(): PackageBundlesGenerator
@@ -104,54 +40,11 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
     }
 
     /**
+     * @return \Chamilo\Configuration\Storage\DataClass\Package[]
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function getPackageListForMode(int $mode): PackageList
+    public function getPackages(): array
     {
-        $packageBundlesGenerator = $this->getPackageBundlesGenerator();
-        $packageList = $packageBundlesGenerator->getPackageListForNamespaceAndMode(PackageList::ROOT, $mode);
-
-        $packageList->getNestedTypedPackages();
-        $packageList->getNestedTypedPackages(false);
-
-        $packageList->getNestedPackages();
-        $packageList->getNestedPackages(false);
-
-        return $packageList;
-    }
-
-    public function loadCacheDataForIdentifier(int $cacheIdentifier): bool
-    {
-        $cacheKey = $this->getCacheKeyForParts([$cacheIdentifier]);
-
-        if (!$this->hasCacheDataForKey($cacheKey))
-        {
-            try
-            {
-                if (!$this->saveCacheDataForKey($cacheKey, $this->getPackageListForMode($cacheIdentifier)))
-                {
-                    return false;
-                }
-            }
-            catch (CacheException $e)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public function preLoadCacheData(): bool
-    {
-        foreach ($this->getCacheIdentifiers() as $cacheIdentifier)
-        {
-            if (!$this->loadCacheDataForIdentifier($cacheIdentifier))
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->loadCacheData();
     }
 }

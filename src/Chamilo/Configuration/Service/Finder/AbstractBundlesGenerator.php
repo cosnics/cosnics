@@ -1,9 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Service\Finder;
 
-use Chamilo\Configuration\Architecture\Domain\PackageList;
 use Chamilo\Libraries\File\SystemPathBuilder;
-use Symfony\Component\Finder\Finder;
 
 /**
  * @package Chamilo\Configuration\Package\Finder
@@ -19,53 +17,25 @@ abstract class AbstractBundlesGenerator
         $this->systemPathBuilder = $systemPathBuilder;
     }
 
-    protected function discoverPackages(string $rootNamespace): array
+    public function getPackageNamespaces(): array
     {
-        $rootNamespace = $rootNamespace == PackageList::ROOT ? '' : $rootNamespace;
-        $path = $this->getSystemPathBuilder()->namespaceToFullPath($rootNamespace);
+        $packagesListPath =
+            $this->getSystemPathBuilder()->getStoragePath() . 'configuration' . DIRECTORY_SEPARATOR . 'packages.json';
+        $packagesList = json_decode(file_get_contents($packagesListPath));
 
-        $finder = new Finder();
-        $finder->depth('== 0')->directories()->notName($this->getBlacklistedFolders())->notName('.*')->in($path);
+        $packages = $packagesList->packages;
 
         $packageNamespaces = [];
 
-        foreach ($finder as $folder)
+        foreach ($packages as $package)
         {
-            $folderNamespace = ($rootNamespace ? $rootNamespace . '\\' : '') . $folder->getFilename();
-
-            if ($this->verifyPackage($folderNamespace))
+            if ($this->verifyPackage($package))
             {
-                $packageNamespaces[] = $folderNamespace;
+                $packageNamespaces[] = $package;
             }
-
-            $packageNamespaces = array_merge($packageNamespaces, $this->discoverPackages($folderNamespace));
         }
 
         return $packageNamespaces;
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getBlacklistedFolders(): array
-    {
-        return ['build', 'Build', 'plugin', 'Plugin', 'resources', 'Resources', 'test', 'Test'];
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getPackageNamespaces(): array
-    {
-        return $this->discoverPackages(PackageList::ROOT);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getPackageNamespacesForNamespace(string $namespace = PackageList::ROOT): array
-    {
-        return $this->discoverPackages($namespace);
     }
 
     public function getSystemPathBuilder(): SystemPathBuilder

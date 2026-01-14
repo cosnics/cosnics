@@ -63,7 +63,7 @@ class ResourceGenerator
     protected function aggregateResources(): array
     {
         $packageBundlesCacheService = $this->getPackageBundlesCacheService();
-        $packages = $packageBundlesCacheService->getAllPackages()->getNestedPackages();
+        $packages = $packageBundlesCacheService->getPackages();
 
         $resourceFiles = [];
 

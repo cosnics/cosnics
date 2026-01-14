@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Mail\Mailer;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -18,17 +17,11 @@ class MailerFactory
 
     protected ConfigurationConsulter $configurationConsulter;
 
-    protected RegistrationConsulter $registrationConsulter;
-
     protected Translator $translator;
 
-    public function __construct(
-        ConfigurationConsulter $configurationConsulter, RegistrationConsulter $registrationConsulter,
-        Translator $translator
-    )
+    public function __construct(ConfigurationConsulter $configurationConsulter, Translator $translator)
     {
         $this->configurationConsulter = $configurationConsulter;
-        $this->registrationConsulter = $registrationConsulter;
         $this->translator = $translator;
     }
 
@@ -52,23 +45,13 @@ class MailerFactory
 
     /**
      * @return string[]
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getAvailableMailers(): array
     {
         $mailers = [];
 
-        $mailerPackages = $this->getRegistrationConsulter()->getRegistrationsByType(__NAMESPACE__);
-
-        foreach ($mailerPackages as $package)
-        {
-            $mailerClass = $package['context'] . '\Mailer';
-
-            if (class_exists($mailerClass))
-            {
-                $mailers[$mailerClass] = $this->getTranslator()->trans('TypeName', [], $package['context']);
-            }
-        }
+        $mailers['Chamilo\Libraries\Mail\Mailer\PhpMailer\Mailer'] = 'PhpMailer';
+        $mailers['Chamilo\Libraries\Mail\Mailer\Platform\Mailer'] = 'Platform Mailer';
 
         return $mailers;
     }
@@ -76,11 +59,6 @@ class MailerFactory
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
-    }
-
-    public function getRegistrationConsulter(): RegistrationConsulter
-    {
-        return $this->registrationConsulter;
     }
 
     public function getTranslator(): Translator

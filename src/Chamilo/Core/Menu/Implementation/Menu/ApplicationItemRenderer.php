@@ -1,8 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Implementation\Menu;
 
-use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
-use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Configuration\Service\PackageBundlesCacheService;
 use Chamilo\Core\Menu\Architecture\Interface\ConfigurableItemInterface;
 use Chamilo\Core\Menu\Architecture\Interface\SelectableItemInterface;
 use Chamilo\Core\Menu\Architecture\Interface\TranslatableItemInterface;
@@ -37,18 +36,18 @@ class ApplicationItemRenderer extends ItemRenderer
     public const CONFIGURATION_EXTRA_PARAMETERS = 'extra_parameters';
     public const CONFIGURATION_USE_TRANSLATION = 'use_translation';
 
-    private RegistrationConsulter $registrationConsulter;
+    private PackageBundlesCacheService $packageBundlesCacheService;
 
     private UrlGenerator $urlGenerator;
 
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
-        RegistrationConsulter $registrationConsulter, UrlGenerator $urlGenerator, array $fallbackIsoCodes
+        PackageBundlesCacheService $packageBundlesCacheService, UrlGenerator $urlGenerator, array $fallbackIsoCodes
     )
     {
         parent::__construct($translator, $itemCacheService, $request);
 
-        $this->registrationConsulter = $registrationConsulter;
+        $this->packageBundlesCacheService = $packageBundlesCacheService;
         $this->urlGenerator = $urlGenerator;
         $this->fallbackIsoCodes = $fallbackIsoCodes;
     }
@@ -168,27 +167,19 @@ class ApplicationItemRenderer extends ItemRenderer
      */
     protected function getApplicationOptions(): array
     {
-        $registrationConsulter = $this->getRegistrationConsulter();
-
-        $coreApplications = $registrationConsulter->getRegistrationsByType(Registration::TYPE_CORE);
-        $optionalApplications = $registrationConsulter->getRegistrationsByType(Registration::TYPE_APPLICATION);
-
-        $applications = $coreApplications + $optionalApplications;
+        $packages = $this->getPackageBundlesCacheService()->getPackages();
 
         $activeApplications = [];
 
-        foreach ($applications as $application)
+        foreach ($packages as $package)
         {
-            if (!$application[Registration::PROPERTY_STATUS])
+            if (!$package->isApplication())
             {
                 continue;
             }
 
-            $applicationContext = $application[Registration::PROPERTY_CONTEXT];
-            $applicationName = $this->getTranslator()->trans('TypeName', [], $applicationContext);
-
-            $activeApplications[$applicationContext] =
-                $applicationName == 'TypeName' ? $applicationContext : $applicationName;
+            $activeApplications[$package->get_context()] =
+                $this->getTranslator()->trans('TypeName', [], $package->get_context());
         }
 
         return $activeApplications;
@@ -207,9 +198,9 @@ class ApplicationItemRenderer extends ItemRenderer
         ];
     }
 
-    public function getRegistrationConsulter(): RegistrationConsulter
+    public function getPackageBundlesCacheService(): PackageBundlesCacheService
     {
-        return $this->registrationConsulter;
+        return $this->packageBundlesCacheService;
     }
 
     public function getRendererTypeGlyph(): InlineGlyph

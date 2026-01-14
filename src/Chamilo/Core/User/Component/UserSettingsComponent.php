@@ -4,7 +4,6 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\Admin\UserInterface\Form\ConfigurationForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
@@ -33,11 +32,6 @@ class UserSettingsComponent extends ProfileComponent
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageAccount');
         $this->context = $this->getRequest()->query->get(self::PARAM_CONTEXT, \Chamilo\Core\Admin\Manager::CONTEXT);
-
-        if (!$this->getRegistrationConsulter()->isContextRegisteredAndActive($this->context))
-        {
-            throw new NotAllowedException();
-        }
 
         $this->form = new ConfigurationForm(
             $this->context, 'config', FormValidator::FORM_METHOD_POST,
@@ -71,25 +65,23 @@ class UserSettingsComponent extends ProfileComponent
 
         foreach ($settingContexts as $settingContext)
         {
-            if ($this->getRegistrationConsulter()->isContextRegisteredAndActive($settingContext))
-            {
-                $package_url = $this->get_url(
-                    [
-                        Application::PARAM_ACTION => self::ACTION_USER_SETTINGS,
-                        \Chamilo\Core\Admin\Manager::PARAM_CONTEXT => $settingContext
-                    ]
-                );
 
-                $is_current_tab = ($this->context === $settingContext);
+            $package_url = $this->get_url(
+                [
+                    Application::PARAM_ACTION => self::ACTION_USER_SETTINGS,
+                    \Chamilo\Core\Admin\Manager::PARAM_CONTEXT => $settingContext
+                ]
+            );
 
-                $tab = new LinkTab(
-                    $settingContext, $translator->trans('TypeName', [], $settingContext), new NamespaceIdentGlyph(
-                    $settingContext, true
-                ), $package_url, $is_current_tab
-                );
+            $is_current_tab = ($this->context === $settingContext);
 
-                $tabs->add($tab);
-            }
+            $tab = new LinkTab(
+                $settingContext, $translator->trans('TypeName', [], $settingContext), new NamespaceIdentGlyph(
+                $settingContext, true
+            ), $package_url, $is_current_tab
+            );
+
+            $tabs->add($tab);
         }
 
         $html = [];

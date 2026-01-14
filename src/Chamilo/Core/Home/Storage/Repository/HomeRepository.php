@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Home\Storage\Repository;
 
-use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -20,12 +19,9 @@ class HomeRepository
 {
     protected DataClassRepository $dataClassRepository;
 
-    protected RegistrationConsulter $registrationConsulter;
-
-    public function __construct(DataClassRepository $dataClassRepository, RegistrationConsulter $registrationConsulter)
+    public function __construct(DataClassRepository $dataClassRepository)
     {
         $this->dataClassRepository = $dataClassRepository;
-        $this->registrationConsulter = $registrationConsulter;
     }
 
     public function countElementsByParentIdentifier(string $parentIdentifier): int
@@ -217,11 +213,6 @@ class HomeRepository
             new PropertyConditionVariable(Element::class, Element::PROPERTY_USER_ID),
             new StaticConditionVariable($userIdentifier)
         );
-    }
-
-    public function getRegistrationConsulter(): RegistrationConsulter
-    {
-        return $this->registrationConsulter;
     }
 
     public function updateElement(Element $element): bool

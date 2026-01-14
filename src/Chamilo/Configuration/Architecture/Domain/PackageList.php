@@ -13,10 +13,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
  */
 class PackageList
 {
-    public const MODE_ALL = 1;
-    public const MODE_AVAILABLE = 3;
-    public const MODE_INSTALLED = 2;
-
     public const ROOT = '__ROOT__';
 
     /**
@@ -215,6 +211,16 @@ class PackageList
     }
 
     /**
+     * @param \Chamilo\Configuration\Package\PackageList[] $packageLists
+     */
+    public function setPackageLists(array $packageLists): PackageList
+    {
+        $this->packageLists = $packageLists;
+
+        return $this;
+    }
+
+    /**
      * @return \Chamilo\Configuration\Storage\DataClass\Package[]
      */
     public function getPackages(): array
@@ -222,9 +228,26 @@ class PackageList
         return $this->packages;
     }
 
+    /**
+     * @param \Chamilo\Configuration\Storage\DataClass\Package[] $packages
+     */
+    public function setPackages(array $packages): PackageList
+    {
+        $this->packages = $packages;
+
+        return $this;
+    }
+
     public function getType(): string
     {
         return $this->type;
+    }
+
+    public function setType(string $type): PackageList
+    {
+        $this->type = $type;
+
+        return $this;
     }
 
     public function getTypeInlineGlyph(): InlineGlyph
@@ -232,9 +255,23 @@ class PackageList
         return $this->typeInlineGlyph;
     }
 
+    public function setTypeInlineGlyph(InlineGlyph $typeInlineGlyph): PackageList
+    {
+        $this->typeInlineGlyph = $typeInlineGlyph;
+
+        return $this;
+    }
+
     public function getTypeName(): string
     {
         return $this->typeName;
+    }
+
+    public function setTypeName(string $typeName): PackageList
+    {
+        $this->typeName = $typeName;
+
+        return $this;
     }
 
     public function hasPackage(string $packageName): bool
@@ -255,46 +292,5 @@ class PackageList
     public function hasPackages(): bool
     {
         return count($this->getPackages()) > 0;
-    }
-
-    /**
-     * @param \Chamilo\Configuration\Package\PackageList[] $packageLists
-     */
-    public function setPackageLists(array $packageLists): PackageList
-    {
-        $this->packageLists = $packageLists;
-
-        return $this;
-    }
-
-    /**
-     * @param \Chamilo\Configuration\Storage\DataClass\Package[] $packages
-     */
-    public function setPackages(array $packages): PackageList
-    {
-        $this->packages = $packages;
-
-        return $this;
-    }
-
-    public function setType(string $type): PackageList
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    public function setTypeInlineGlyph(InlineGlyph $typeInlineGlyph): PackageList
-    {
-        $this->typeInlineGlyph = $typeInlineGlyph;
-
-        return $this;
-    }
-
-    public function setTypeName(string $typeName): PackageList
-    {
-        $this->typeName = $typeName;
-
-        return $this;
     }
 }

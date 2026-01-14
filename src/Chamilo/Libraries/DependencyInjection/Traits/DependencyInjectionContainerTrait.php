@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\DependencyInjection\Traits;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserSettingService;
@@ -150,11 +149,6 @@ trait DependencyInjectionContainerTrait
     public function getPageConfiguration(): PageConfiguration
     {
         return $this->getService(PageConfiguration::class);
-    }
-
-    public function getRegistrationConsulter(): RegistrationConsulter
-    {
-        return $this->getService(RegistrationConsulter::class);
     }
 
     public function getRequest(): ChamiloRequest

@@ -3,8 +3,6 @@ namespace Chamilo\Core\Admin\Implementation\Admin;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
-use Chamilo\Configuration\Service\Consulter\RegistrationConsulter;
-use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Admin\Architecture\Interface\SettingsConnectorInterface;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
@@ -25,50 +23,20 @@ class SettingsConnector implements SettingsConnectorInterface
 
     protected MailerFactory $mailerFactory;
 
-    protected RegistrationConsulter $registrationConsulter;
-
     protected ThemePathBuilder $themeSystemPathBuilder;
 
     protected Translator $translator;
 
     public function __construct(
         ConfigurationConsulter $configurationConsulter, LanguageConsulter $languageConsulter,
-        MailerFactory $mailerFactory, RegistrationConsulter $registrationConsulter,
-        ThemePathBuilder $themeSystemPathBuilder, Translator $translator
+        MailerFactory $mailerFactory, ThemePathBuilder $themeSystemPathBuilder, Translator $translator
     )
     {
         $this->configurationConsulter = $configurationConsulter;
         $this->languageConsulter = $languageConsulter;
         $this->mailerFactory = $mailerFactory;
-        $this->registrationConsulter = $registrationConsulter;
         $this->themeSystemPathBuilder = $themeSystemPathBuilder;
         $this->translator = $translator;
-    }
-
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
-    public function getActiveApplications(): array
-    {
-        $registrations = $this->getRegistrationConsulter()->getRegistrationsByType(Registration::TYPE_APPLICATION);
-        $translator = $this->getTranslator();
-
-        $options = [];
-        $options['Chamilo\Core\Home'] = $translator->trans('Homepage', [], 'Chamilo\Core\Home');
-
-        foreach ($registrations as $registration)
-        {
-            if ($registration[Registration::PROPERTY_STATUS])
-            {
-                $options[$registration[Registration::PROPERTY_CONTEXT]] = $translator->trans(
-                    'TypeName', [], $registration[Registration::PROPERTY_CONTEXT]
-                );
-            }
-        }
-
-        asort($options);
-
-        return $options;
     }
 
     public function getConfigurationConsulter(): ConfigurationConsulter
@@ -106,11 +74,6 @@ class SettingsConnector implements SettingsConnectorInterface
     public function getMailers(): array
     {
         return $this->getMailerFactory()->getAvailableMailers();
-    }
-
-    public function getRegistrationConsulter(): RegistrationConsulter
-    {
-        return $this->registrationConsulter;
     }
 
     public function getThemeSystemPathBuilder(): ThemePathBuilder

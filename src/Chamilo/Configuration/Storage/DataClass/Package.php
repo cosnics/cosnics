@@ -19,6 +19,9 @@ class Package extends DataClass
     public const PROPERTY_TYPE = 'type';
     public const PROPERTY_VERSION = 'version';
 
+    public const TYPE_APPLICATION = 'Chamilo\Application';
+    public const TYPE_CORE = 'Chamilo\Core';
+
     public function getComposerJsonObject(): stdClass
     {
         return unserialize($this->getDefaultProperty(self::PROPERTY_COMPOSER_JSON_OBJECT));
@@ -42,7 +45,7 @@ class Package extends DataClass
     }
 
     /**
-     * @return string[][]
+     * @return stdClass[]
      */
     public function getResources(): array
     {
@@ -75,6 +78,11 @@ class Package extends DataClass
     public function get_version(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_VERSION);
+    }
+
+    public function isApplication(): bool
+    {
+        return in_array($this->getType(), [self::TYPE_APPLICATION, self::TYPE_CORE]);
     }
 
     public function setComposerJsonObject(stdClass $composerJsonObject): Package
