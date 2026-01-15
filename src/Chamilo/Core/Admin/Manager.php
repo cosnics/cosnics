@@ -23,9 +23,8 @@ abstract class Manager extends Application
     public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_ADMIN_BROWSER;
 
-    public const PARAM_CONTEXT = 'context';
+    public const PARAM_SELECTED_CONTEXT = 'context';
     public const PARAM_DELETE_SELECTED = 'delete_selected';
     public const PARAM_EDIT_SELECTED = 'edit_selected';
     public const PARAM_USER_ID = 'user_id';
-    public const PARAM_WEB_APPLICATION = 'web_application';
 }

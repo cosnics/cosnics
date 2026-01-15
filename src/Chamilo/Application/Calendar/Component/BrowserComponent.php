@@ -44,9 +44,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
             $this->getThemeWebPathBuilder()->getTheme() . '.min.css', 'print'
         );
 
-        $this->set_parameter(HtmlCalendarRenderer::PARAM_TYPE, $this->getCurrentRendererType());
-        $this->set_parameter(HtmlCalendarRenderer::PARAM_TIME, $this->getCurrentRendererTime());
-
         $html = [];
 
         $html[] = $this->renderHeader();

@@ -71,8 +71,11 @@ class EditorComponent extends Manager implements BreadcrumbLessComponentInterfac
             );
 
             $this->redirectWithMessage(
-                $message, !$success,
-                [Application::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_ITEM => $item->getParentId()]
+                $message, !$success, [
+                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_ACTION => Manager::ACTION_BROWSE,
+                    Manager::PARAM_ITEM => $item->getParentId()
+                ]
             );
         }
 

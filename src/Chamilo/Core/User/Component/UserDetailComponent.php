@@ -7,12 +7,10 @@ use Chamilo\Core\User\Implementation\User\UserDetailsRenderer;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Tabs\ContentTab;
@@ -70,16 +68,6 @@ class UserDetailComponent extends Manager
                 )
             );
         }
-    }
-
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
-                $this->getTranslator()->trans('AdminUserBrowserComponent', [], Manager::CONTEXT)
-            )
-        );
     }
 
     public function getButtonToolbarRenderer($user): ButtonToolBarRenderer

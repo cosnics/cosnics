@@ -7,7 +7,6 @@ use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -39,34 +38,18 @@ abstract class Application
     public const RESULT_TYPE_MOVED = 'Moved';
     public const RESULT_TYPE_UPDATED = 'Updated';
 
-    public const SETTING_BREADCRUMBS_DISABLED = 'breadcrumbs_disabled';
-
-    /**
-     * @var string[]
-     */
-    public static array $application_path_cache = [];
-
     protected ApplicationConfigurationInterface $applicationConfiguration;
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         $this->applicationConfiguration = $applicationConfiguration;
-        $this->getBreadcrumbGenerator()->generateBreadcrumbs($this);
+        $this->getBreadcrumbGenerator()->addDefaultBreadcrumbs();
     }
 
     /**
      * @return string|\Symfony\Component\HttpFoundation\Response
      */
     abstract public function run();
-
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-    }
-
-    public function areBreadcrumbsDisabled(): bool
-    {
-        return $this->getApplicationConfiguration()->get(self::SETTING_BREADCRUMBS_DISABLED) == true;
-    }
 
     /**
      * Helper function to call the authorization checker with the current logged in user.
@@ -91,16 +74,11 @@ abstract class Application
 
     public function display_error_page(string $message): string
     {
-        if ($this->get_application() instanceof Application)
-        {
-            return $this->get_application()->display_error_page($message);
-        }
-
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->display_error_message($message);
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
@@ -129,23 +107,18 @@ abstract class Application
 
     public function display_warning_page(string $message): string
     {
-        if ($this->get_application() instanceof Application)
-        {
-            return $this->get_application()->display_warning_page($message);
-        }
-
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->display_warning_message($message);
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function getAdditionalParameters(array $additionalParameters = []): array
+    public function getAction(): string
     {
-        return $additionalParameters;
+        return $this->getRequest()->query->get(static::PARAM_ACTION, static::DEFAULT_ACTION);
     }
 
     public function getApplicationConfiguration(): ApplicationConfigurationInterface
@@ -158,13 +131,9 @@ abstract class Application
         return $this->getService(BreadcrumbGenerator::class);
     }
 
-    /**
-     * @param string[] $parameters
-     * @param string[] $filter
-     */
-    public function getLink(array $parameters = [], array $filter = []): string
+    public function getContext(): string
     {
-        return $this->getUrlGenerator()->fromRequest($parameters, $filter);
+        return $this->getRequest()->query->get(static::PARAM_CONTEXT, 'Chamilo\Core\Admin');
     }
 
     protected function getPageTitle(): string
@@ -178,16 +147,6 @@ abstract class Application
     public function getUser(): ?User
     {
         return $this->getApplicationConfiguration()->getUser();
-    }
-
-    public function get_action(): ?string
-    {
-        return $this->get_parameter(static::PARAM_ACTION);
-    }
-
-    public function get_application(): ?Application
-    {
-        return $this->getApplicationConfiguration()->getApplication();
     }
 
     public function get_general_result(
@@ -225,38 +184,6 @@ abstract class Application
         return $this->getTranslator()->trans($message, $param, static::CONTEXT);
     }
 
-    public function get_level(): int
-    {
-        $level = 0;
-        $application = $this;
-
-        while ($application->get_application() instanceof Application)
-        {
-            $level ++;
-            $application = $application->get_application();
-        }
-
-        return $level;
-    }
-
-    public function get_parameter(string $name)
-    {
-        return Parameters::getInstance()->get_parameter($this, $name);
-    }
-
-    public function get_parameters(): array
-    {
-        return Parameters::getInstance()->get_parameters($this);
-    }
-
-    /**
-     * @deprecated Use get_application() now
-     */
-    public function get_parent(): ?Application
-    {
-        return $this->get_application();
-    }
-
     public function get_result(
         int $failures, int $count, string $failMessageSingle, string $failMessageMultiple, string $succesMessageSingle,
         string $succesMessageMultiple, string $context = null
@@ -286,42 +213,6 @@ abstract class Application
     }
 
     /**
-     * Gets the URL of the current page in the application. Optionally takes an associative array of name/value pairs
-     * representing additional query string parameters; these will either be added to the parameters already present,
-     * or override them if a value with the same name exists.
-     *
-     * @param array $parameters
-     * @param array $filter
-     *
-     * @return string
-     */
-    public function get_url(array $parameters = [], array $filter = []): string
-    {
-        return $this->getLink(array_merge($this->get_parameters(), $parameters), $filter);
-    }
-
-    /**
-     * @deprecated Use Application::getUser() now
-     */
-    public function get_user(): ?User
-    {
-        return $this->getUser();
-    }
-
-    /**
-     * @deprecated Use Application::getUser()::getId() now
-     */
-    public function get_user_id(): ?string
-    {
-        if ($this->getApplicationConfiguration()->getUser())
-        {
-            return $this->getUser()->getId();
-        }
-
-        return '0';
-    }
-
-    /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function not_allowed(bool $showLoginForm = true)
@@ -329,20 +220,18 @@ abstract class Application
         throw new NotAllowedException($showLoginForm);
     }
 
-    public function redirect(array $parameters = [], array $filter = [])
+    public function redirect(array $parameters = [], array $filter = []): void
     {
-        $response = new RedirectResponse($this->getLink(array_merge($this->get_parameters(), $parameters), $filter));
+        $response = new RedirectResponse($this->getUrlGenerator()->fromParameters($parameters));
         $response->send();
         exit;
     }
 
     /**
      * @param string[] $parameters
-     * @param string[] $filter
      */
-    public function redirectWithMessage(
-        ?string $message = null, bool $errorMessage = false, array $parameters = [], array $filter = []
-    )
+    public function redirectWithMessage(?string $message = null, bool $errorMessage = false, array $parameters = []
+    ): void
     {
         if ($message)
         {
@@ -350,16 +239,11 @@ abstract class Application
             $this->getNotificationMessageManager()->addMessage(new NotificationMessage($message, $messageType));
         }
 
-        $this->redirect($parameters, $filter);
+        $this->redirect($parameters);
     }
 
     public function renderFooter(): string
     {
-        if ($this->get_application())
-        {
-            return $this->get_application()->render_footer();
-        }
-
         $html = [];
 
         if ($this->getPageConfiguration()->isFullPage())
@@ -378,14 +262,14 @@ abstract class Application
 
     public function renderHeader(string $pageTitle = ''): string
     {
+        if ($this->getAction() != static::DEFAULT_ACTION)
+        {
+            $this->getBreadcrumbGenerator()->addComponentBreadcrumb($this);
+        }
+
         if (!$pageTitle)
         {
             $pageTitle = $this->renderPageTitle();
-        }
-
-        if ($this->get_application())
-        {
-            return $this->get_application()->render_header($pageTitle);
         }
 
         $pageConfiguration = $this->getPageConfiguration();
@@ -455,31 +339,5 @@ abstract class Application
         }
 
         return '';
-    }
-
-    /**
-     * @deprecated Use Application::renderFooter() now
-     */
-    public function render_footer(): string
-    {
-        return $this->renderFooter();
-    }
-
-    /**
-     * @deprecated Use Application::renderHeader() now
-     */
-    public function render_header(string $pageTitle = ''): string
-    {
-        return $this->renderHeader($pageTitle);
-    }
-
-    public function set_action(?string $action)
-    {
-        $this->set_parameter(static::PARAM_ACTION, $action);
-    }
-
-    public function set_parameter(string $name, $value)
-    {
-        Parameters::getInstance()->set_parameter($this, $name, $value);
     }
 }

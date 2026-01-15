@@ -37,9 +37,22 @@ class BreadcrumbTrail
         return $this->breadcrumbs;
     }
 
+    /**
+     * @param \Chamilo\Libraries\Format\Structure\Breadcrumb[] $breadcrumbs
+     */
+    public function setBreadcrumbs(array $breadcrumbs): void
+    {
+        $this->breadcrumbs = $breadcrumbs;
+    }
+
     public function getContainerMode(): string
     {
         return $this->containerMode;
+    }
+
+    public function setContainerMode(string $containerMode): void
+    {
+        $this->containerMode = $containerMode;
     }
 
     public function getLast(): Breadcrumb
@@ -72,19 +85,6 @@ class BreadcrumbTrail
     public function set(array $breadcrumbs): void
     {
         $this->breadcrumbs = $breadcrumbs;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Structure\Breadcrumb[] $breadcrumbs
-     */
-    public function setBreadcrumbs(array $breadcrumbs): void
-    {
-        $this->breadcrumbs = $breadcrumbs;
-    }
-
-    public function setContainerMode(string $containerMode): void
-    {
-        $this->containerMode = $containerMode;
     }
 
     public function size(): int

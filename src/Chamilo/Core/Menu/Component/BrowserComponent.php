@@ -60,16 +60,6 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @return string[]
-     */
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = Manager::PARAM_ITEM;
-
-        return parent::getAdditionalParameters($additionalParameters);
-    }
-
     public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
@@ -82,7 +72,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
             $dropDownButton = new DropdownButton($translator->trans('AddMenuItem', [], Manager::CONTEXT));
 
-            foreach ($this->getItemRendererFactory()->getAvailableItemRenderers() as $itemRenderer)
+            foreach ($this->getItemRendererFactory()->getItemRenderers() as $itemRenderer)
             {
                 $dropDownButton->addSubButton(
                     new SubButton(

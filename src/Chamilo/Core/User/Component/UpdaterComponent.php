@@ -9,10 +9,8 @@ use Chamilo\Core\User\UserInterface\Form\UserForm;
 use Chamilo\Core\User\UserInterface\Form\UserUpdateForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -137,16 +135,6 @@ class UpdaterComponent extends Manager
                 )
             );
         }
-    }
-
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
-                $this->getTranslator()->trans('AdminUserBrowserComponent', [], Manager::CONTEXT)
-            )
-        );
     }
 
     public function getUserPictureProvider(): UserPictureProviderInterface

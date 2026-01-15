@@ -38,7 +38,7 @@ class CreatorComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $form = new UserCreationForm($this->get_url());
+        $form = new UserCreationForm($this->getUrlGenerator()->fromRequest());
 
         if ($form->validate())
         {

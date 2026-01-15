@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Manager;
-use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 
 /**
@@ -27,17 +26,14 @@ class PrinterComponent extends BrowserComponent
             $this->getThemeWebPathBuilder()->getTheme() . '.min.css', 'print'
         );
 
-        $this->set_parameter(HtmlCalendarRenderer::PARAM_TYPE, $this->getCurrentRendererType());
-        $this->set_parameter(HtmlCalendarRenderer::PARAM_TIME, $this->getCurrentRendererTime());
-
         $html = [];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
         $html[] = $this->renderNormalCalendar();
         $html[] = '<script>';
         $html[] = 'window.print();';
         $html[] = '</script>';
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }

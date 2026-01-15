@@ -19,8 +19,8 @@ abstract class AbstractBundlesGenerator
 
     public function getPackageNamespaces(): array
     {
-        $packagesListPath =
-            $this->getSystemPathBuilder()->getStoragePath() . 'configuration' . DIRECTORY_SEPARATOR . 'packages.json';
+        $packagesListPath = $this->getSystemPathBuilder()->getStoragePath() . 'configuration' . DIRECTORY_SEPARATOR .
+            'configuration.packages.json';
         $packagesList = json_decode(file_get_contents($packagesListPath));
 
         $packages = $packagesList->packages;

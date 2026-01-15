@@ -14,6 +14,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBarSearchFormTrait;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -25,9 +26,7 @@ use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -38,6 +37,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class BrowserComponent extends Manager
 {
+    use ButtonToolBarSearchFormTrait;
+
     public const TAB_DETAILS = 2;
     public const TAB_SUBGROUPS = 0;
     public const TAB_USERS = 1;
@@ -63,24 +64,36 @@ class BrowserComponent extends Manager
             throw new NotAllowedException();
         }
 
+        $this->setButtonToolBarSearchFormRequestQuery();
+
         $html = [];
 
         $html[] = $this->renderHeader();
         $html[] = $this->getButtonToolbarRenderer()->render() . '<br />';
-        $html[] = $this->get_user_html();
+        $html[] = $this->renderTabs();
         $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @return string[]
-     */
-    public function getAdditionalParameters(array $additionalParameters = []): array
+    public function getButtonToolBarSearchProperties(?string $type = null): array
     {
-        $additionalParameters[] = self::PARAM_GROUP_ID;
+        $searchProperties = [];
 
-        return parent::getAdditionalParameters($additionalParameters);
+        if ($type === Group::class)
+        {
+            $searchProperties[] = new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME);
+            $searchProperties[] = new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION);
+            $searchProperties[] = new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE);
+        }
+        elseif ($type === SubscribedUser::class)
+        {
+            $searchProperties[] = new PropertyConditionVariable(SubscribedUser::class, User::PROPERTY_FIRSTNAME);
+            $searchProperties[] = new PropertyConditionVariable(SubscribedUser::class, User::PROPERTY_LASTNAME);
+            $searchProperties[] = new PropertyConditionVariable(SubscribedUser::class, User::PROPERTY_USERNAME);
+        }
+
+        return $searchProperties;
     }
 
     public function getButtonToolbarRenderer(): ButtonToolBarRenderer
@@ -89,7 +102,15 @@ class BrowserComponent extends Manager
         {
             $translator = $this->getTranslator();
 
-            $buttonToolbar = new ButtonToolBar($this->get_url([self::PARAM_GROUP_ID => $this->getGroupIdentifier()]));
+            $buttonToolbar = new ButtonToolBar(
+                $this->getUrlGenerator()->fromParameters(
+                    [
+                        self::PARAM_CONTEXT => Manager::CONTEXT,
+                        self::PARAM_ACTION => self::ACTION_BROWSER,
+                        self::PARAM_GROUP_ID => $this->getGroupIdentifier()
+                    ]
+                )
+            );
             $commonActions = new ButtonGroup();
 
             $commonActions->addButton(
@@ -110,8 +131,13 @@ class BrowserComponent extends Manager
             $commonActions->addButton(
                 new Button(
                     $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
-                    $this->get_url([self::PARAM_GROUP_ID => $this->getGroupIdentifier()]),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $this->getUrlGenerator()->fromParameters(
+                        [
+                            self::PARAM_CONTEXT => Manager::CONTEXT,
+                            self::PARAM_ACTION => self::ACTION_BROWSER,
+                            self::PARAM_GROUP_ID => $this->getGroupIdentifier()
+                        ]
+                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
             $buttonToolbar->addButtonGroup($commonActions);
@@ -131,126 +157,7 @@ class BrowserComponent extends Manager
         return $this->group;
     }
 
-    public function getGroupIdentifier(): string
-    {
-        if (!isset($this->groupIdentifier))
-        {
-            $this->groupIdentifier =
-                $this->getRequest()->query->get(self::PARAM_GROUP_ID, $this->getRootGroup()->getId());
-        }
-
-        return $this->groupIdentifier;
-    }
-
-    /**
-     * @throws \QuickformException
-     */
-    protected function getGroupTableCondition(): ?Condition
-    {
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-
-        if (is_null($query))
-        {
-            return $this->get_subgroups_condition();
-        }
-        else
-        {
-            return $this->get_all_groups_condition();
-        }
-    }
-
-    public function getGroupTableRenderer(): GroupTableRenderer
-    {
-        return $this->getService(GroupTableRenderer::class);
-    }
-
-    public function getGroupsCondition(string $query): OrCondition
-    {
-        $conditions = [];
-
-        $conditions[] = new ContainsCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), $query
-        );
-        $conditions[] = new ContainsCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION), $query
-        );
-        $conditions[] = new ContainsCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), $query
-        );
-
-        return new OrCondition($conditions);
-    }
-
-    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
-    {
-        return $this->getService(RequestTableParameterValuesCompiler::class);
-    }
-
-    public function getRootGroup(): Group
-    {
-        if (!isset($this->rootGroup))
-        {
-            $this->rootGroup = $this->getGroupService()->findRootGroup();
-        }
-
-        return $this->rootGroup;
-    }
-
-    public function getSubscribedUserTableRenderer(): SubscribedUserTableRenderer
-    {
-        return $this->getService(SubscribedUserTableRenderer::class);
-    }
-
-    /**
-     * @throws \QuickformException
-     */
-    public function getSubscribedUsersCondition(): ?OrCondition
-    {
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-
-        if (isset($query) && $query != '')
-        {
-            $conditions = [];
-
-            $conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(SubscribedUser::class, User::PROPERTY_FIRSTNAME), $query
-            );
-            $conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(SubscribedUser::class, User::PROPERTY_LASTNAME), $query
-            );
-            $conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(SubscribedUser::class, User::PROPERTY_USERNAME), $query
-            );
-
-            return new OrCondition($conditions);
-        }
-
-        return null;
-    }
-
-    protected function getTabsRenderer(): TabsRenderer
-    {
-        return $this->getService(TabsRenderer::class);
-    }
-
-    /**
-     * @throws \QuickformException
-     */
-    public function get_all_groups_condition(): ?OrCondition
-    {
-        $condition = null;
-
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-
-        if (isset($query) && $query != '')
-        {
-            $condition = $this->getGroupsCondition($query);
-        }
-
-        return $condition;
-    }
-
-    public function get_group_info(): string
+    public function getGroupDetails(): string
     {
         $group = $this->getGroup();
         $translator = $this->getTranslator();
@@ -307,13 +214,6 @@ class BrowserComponent extends Manager
             );
         }
 
-        $toolbar->add_item(
-            new ToolbarItem(
-                $translator->trans('Metadata', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('info-circle'),
-                $this->getGroupUrlGenerator()->getMetadataUrl($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
-            )
-        );
-
         $html[] = '<b>' . $translator->trans('Code') . '</b>: ' . $group->get_code() . '<br />';
 
         $description = $group->get_description();
@@ -331,70 +231,75 @@ class BrowserComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
+    public function getGroupIdentifier(): string
+    {
+        if (!isset($this->groupIdentifier))
+        {
+            $this->groupIdentifier =
+                $this->getRequest()->query->get(self::PARAM_GROUP_ID, $this->getRootGroup()->getId());
+        }
+
+        return $this->groupIdentifier;
+    }
+
     /**
      * @throws \QuickformException
      */
-    public function get_subgroups_condition(): Condition
+    protected function getGroupTableCondition(): ?Condition
     {
-        $condition = new EqualityCondition(
+        $conditions = [];
+
+        $searchCondition = $this->getButtonToolBarSearchCondition(Group::class);
+
+        if ($searchCondition instanceof Condition)
+        {
+            $conditions[] = $searchCondition;
+        }
+
+        $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->getGroupIdentifier())
         );
 
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        return new AndCondition($conditions);
+    }
 
-        if (isset($query) && $query != '')
+    public function getGroupTableRenderer(): GroupTableRenderer
+    {
+        return $this->getService(GroupTableRenderer::class);
+    }
+
+    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
+    {
+        return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    public function getRootGroup(): Group
+    {
+        if (!isset($this->rootGroup))
         {
-            $and_conditions = [];
-
-            $and_conditions[] = $condition;
-            $and_conditions[] = $this->getGroupsCondition($query);
-
-            $condition = new AndCondition($and_conditions);
+            $this->rootGroup = $this->getGroupService()->findRootGroup();
         }
 
-        return $condition;
+        return $this->rootGroup;
+    }
+
+    public function getSubscribedUserTableRenderer(): SubscribedUserTableRenderer
+    {
+        return $this->getService(SubscribedUserTableRenderer::class);
     }
 
     /**
-     * @throws \TableException
-     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */
-    public function get_user_html(): string
+    public function getSubscribedUsersCondition(): ?AndCondition
     {
-        $renderer_name = ClassnameUtilities::getInstance()->getClassnameFromObject($this, true);
-        $tabs = new TabsCollection();
-        $translator = $this->getTranslator();
+        return $this->getButtonToolBarSearchCondition(SubscribedUser::class);
+    }
 
-        // Subgroups table tab
-        $tabs->add(
-            new ContentTab(
-                (string) self::TAB_SUBGROUPS, $translator->trans('Subgroups'), $this->renderGroupTable(),
-                new FontAwesomeGlyph(
-                    'users', ['fa-lg'], null, 'fas'
-                )
-            )
-        );
-
-        $tabs->add(
-            new ContentTab(
-                (string) self::TAB_USERS, $translator->trans('Users', [], \Chamilo\Core\User\Manager::CONTEXT),
-                $this->renderSubscribedUsertable(), new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas')
-            )
-        );
-
-        // Group info tab
-        $tabs->add(
-            new ContentTab(
-                (string) self::TAB_DETAILS, $translator->trans('Details'), $this->get_group_info(),
-                new FontAwesomeGlyph(
-                    'info-circle', ['fa-lg'], null, 'fas'
-                )
-            )
-        );
-
-        return $this->getTabsRenderer()->render($renderer_name, $tabs);
+    protected function getTabsRenderer(): TabsRenderer
+    {
+        return $this->getService(TabsRenderer::class);
     }
 
     /**
@@ -430,10 +335,13 @@ class BrowserComponent extends Manager
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     protected function renderGroupTable(): string
     {
-        $totalNumberOfItems = $this->getGroupService()->countGroups($this->getGroupTableCondition());
+        $groupTableCondition = $this->getGroupTableCondition();
+
+        $totalNumberOfItems = $this->getGroupService()->countGroups($groupTableCondition);
         $groupTableRenderer = $this->getGroupTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -442,8 +350,7 @@ class BrowserComponent extends Manager
         );
 
         $users = $this->getGroupService()->findGroups(
-            $this->getGroupTableCondition(), $tableParameterValues->getOffset(),
-            $tableParameterValues->getNumberOfItemsPerPage(),
+            $groupTableCondition, $tableParameterValues->getOffset(), $tableParameterValues->getNumberOfItemsPerPage(),
             $groupTableRenderer->determineOrderBy($tableParameterValues)
         );
 
@@ -473,8 +380,10 @@ class BrowserComponent extends Manager
      */
     protected function renderSubscribedUsertable(): string
     {
+        $subscribedUsersCondition = $this->getButtonToolBarSearchCondition(SubscribedUser::class);
+
         $totalNumberOfItems = $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifier(
-            $this->getGroupIdentifier(), $this->getSubscribedUsersCondition()
+            $this->getGroupIdentifier(), $subscribedUsersCondition
         );
         $subscribedUserTableRenderer = $this->getSubscribedUserTableRenderer();
 
@@ -484,11 +393,52 @@ class BrowserComponent extends Manager
         );
 
         $users = $this->getGroupMembershipService()->findSubscribedUsersForGroupIdentifier(
-            $this->getGroupIdentifier(), $this->getSubscribedUsersCondition(), $tableParameterValues->getOffset(),
+            $this->getGroupIdentifier(), $subscribedUsersCondition, $tableParameterValues->getOffset(),
             $tableParameterValues->getNumberOfItemsPerPage(),
             $subscribedUserTableRenderer->determineOrderBy($tableParameterValues)
         );
 
         return $subscribedUserTableRenderer->render($tableParameterValues, $users);
+    }
+
+    /**
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     */
+    public function renderTabs(): string
+    {
+        $renderer_name = ClassnameUtilities::getInstance()->getClassnameFromObject($this, true);
+        $tabs = new TabsCollection();
+        $translator = $this->getTranslator();
+
+        // Subgroups table tab
+        $tabs->add(
+            new ContentTab(
+                (string) self::TAB_SUBGROUPS, $translator->trans('Subgroups'), $this->renderGroupTable(),
+                new FontAwesomeGlyph(
+                    'users', ['fa-lg'], null, 'fas'
+                )
+            )
+        );
+
+        $tabs->add(
+            new ContentTab(
+                (string) self::TAB_USERS, $translator->trans('Users', [], \Chamilo\Core\User\Manager::CONTEXT),
+                $this->renderSubscribedUsertable(), new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas')
+            )
+        );
+
+        // Group info tab
+        $tabs->add(
+            new ContentTab(
+                (string) self::TAB_DETAILS, $translator->trans('Details'), $this->getGroupDetails(),
+                new FontAwesomeGlyph(
+                    'info-circle', ['fa-lg'], null, 'fas'
+                )
+            )
+        );
+
+        return $this->getTabsRenderer()->render($renderer_name, $tabs);
     }
 }

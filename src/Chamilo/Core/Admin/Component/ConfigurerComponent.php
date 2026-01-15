@@ -39,11 +39,16 @@ class ConfigurerComponent extends Manager
         }
 
         $translator = $this->getTranslator();
-        $this->set_parameter(self::PARAM_CONTEXT, $this->getContext());
 
         $form = new ConfigurationForm(
-            $this->getContext(), 'config', FormValidator::FORM_METHOD_POST,
-            $this->get_url([self::PARAM_CONTEXT => $this->getContext()])
+            $this->getSelectedContext(), 'config', FormValidator::FORM_METHOD_POST,
+            $this->getUrlGenerator()->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
+                    Application::PARAM_ACTION => self::ACTION_CONFIGURE_PLATFORM,
+                    self::PARAM_SELECTED_CONTEXT => $this->getSelectedContext()
+                ]
+            )
         );
 
         if ($form->validate())
@@ -54,8 +59,9 @@ class ConfigurerComponent extends Manager
                     $success ? 'ObjectUpdated' : 'ObjectNotUpdated', ['OBJECT' => $translator->trans('Setting')],
                     StringUtilities::LIBRARIES
                 ), !$success, [
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => self::ACTION_CONFIGURE_PLATFORM,
-                    self::PARAM_CONTEXT => $this->getContext()
+                    self::PARAM_SELECTED_CONTEXT => $this->getSelectedContext()
                 ]
             );
         }
@@ -63,8 +69,12 @@ class ConfigurerComponent extends Manager
         {
             $this->getBreadcrumbTrail()->add(
                 new Breadcrumb(
-                    $this->get_url([GenericTabsRenderer::PARAM_SELECTED_TAB => $this->getContext()]),
-                    $translator->trans('TypeName', [], $this->getContext())
+                    $this->getUrlGenerator()->fromParameters([
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
+                        Application::PARAM_ACTION => self::ACTION_CONFIGURE_PLATFORM,
+                        self::PARAM_SELECTED_CONTEXT => $this->getSelectedContext(),
+                        GenericTabsRenderer::PARAM_SELECTED_TAB => $this->getSelectedContext()
+                    ]), $translator->trans('TypeName', [], $this->getContext())
                 )
             );
 
@@ -92,7 +102,11 @@ class ConfigurerComponent extends Manager
                         new LinkTab(
                             $package, $translator->trans('TypeName', [], $package), new NamespaceIdentGlyph(
                             $package, true, false, false, IdentGlyph::SIZE_SMALL
-                        ), $this->get_url([self::PARAM_CONTEXT => $package]), $this->getContext() == $package
+                        ), $this->getUrlGenerator()->fromParameters([
+                            Application::PARAM_CONTEXT => Manager::CONTEXT,
+                            Application::PARAM_ACTION => self::ACTION_CONFIGURE_PLATFORM,
+                            self::PARAM_SELECTED_CONTEXT => $package
+                        ]), $this->getSelectedContext() == $package
                         )
                     );
                 }
@@ -108,11 +122,6 @@ class ConfigurerComponent extends Manager
         }
     }
 
-    public function getContext(): string
-    {
-        return $this->getRequest()->query->get(self::PARAM_CONTEXT, 'Chamilo\Core\Admin');
-    }
-
     public function getLinkTabsRenderer(): LinkTabsRenderer
     {
         return $this->getService(LinkTabsRenderer::class);
@@ -121,5 +130,10 @@ class ConfigurerComponent extends Manager
     public function getPackageBundlesCacheService(): PackageBundlesCacheService
     {
         return $this->getService(PackageBundlesCacheService::class);
+    }
+
+    protected function getSelectedContext(): ?string
+    {
+        return $this->getRequest()->query->get(self::PARAM_SELECTED_CONTEXT, 'Chamilo\Core\Admin');
     }
 }

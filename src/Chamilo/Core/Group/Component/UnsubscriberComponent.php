@@ -5,7 +5,6 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use RuntimeException;
@@ -29,12 +28,23 @@ class UnsubscriberComponent extends Manager
         }
 
         $groupUserRelationIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_REL_USER_ID);
-        $this->set_parameter(self::PARAM_GROUP_ID, $groupUserRelationIdentifiers);
 
         $groupMembershipService = $this->getGroupMembershipService();
         $userService = $this->getUserService();
         $groupService = $this->getGroupService();
         $translator = $this->getTranslator();
+
+        $this->getBreadcrumbTrail()->add(
+            new Breadcrumb(
+                $this->getUrlGenerator()->fromParameters(
+                    [
+                        self::PARAM_CONTEXT => Manager::CONTEXT,
+                        self::PARAM_ACTION => self::ACTION_VIEW_GROUP,
+                        self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
+                    ]
+                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
+            )
+        );
 
         $failures = 0;
 
@@ -90,6 +100,7 @@ class UnsubscriberComponent extends Manager
 
             $this->redirectWithMessage(
                 $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
+                    Application::PARAM_CONTEXT => $this->getContext(),
                     Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
                     self::PARAM_GROUP_ID => $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID)
                 ]
@@ -101,28 +112,5 @@ class UnsubscriberComponent extends Manager
                 htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
             );
         }
-    }
-
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $translator = $this->getTranslator();
-
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
-                $translator->trans('BrowserComponent', [], Manager::CONTEXT)
-            )
-        );
-
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    [
-                        Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
-                    ]
-                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
-            )
-        );
     }
 }

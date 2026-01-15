@@ -13,35 +13,14 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 class ApplicationConfiguration implements ApplicationConfigurationInterface
 {
 
-    private ?Application $application;
-
-    /**
-     *
-     * @var string[]
-     */
-    private array $configurationParameters;
-
     private ChamiloRequest $request;
 
     private ?User $user;
 
-    /**
-     * @param string[] $configurationParameters
-     */
-    public function __construct(
-        ChamiloRequest $request, ?User $user = null, ?Application $parentApplication = null,
-        array $configurationParameters = []
-    )
+    public function __construct(ChamiloRequest $request, ?User $user = null)
     {
         $this->request = $request;
         $this->user = $user;
-        $this->application = $parentApplication;
-        $this->configurationParameters = $configurationParameters;
-    }
-
-    public function get(string $key, ?string $defaultValue = null): string
-    {
-        return $this->configurationParameters[$key] ?? $defaultValue;
     }
 
     public function getApplication(): ?Application
@@ -62,13 +41,6 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
     public function setUser(?User $user): ApplicationConfigurationInterface
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function set(string $key, string $value): ApplicationConfigurationInterface
-    {
-        $this->configurationParameters[$key] = $value;
 
         return $this;
     }

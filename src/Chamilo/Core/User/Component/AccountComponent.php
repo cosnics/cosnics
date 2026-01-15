@@ -70,8 +70,10 @@ class AccountComponent extends ProfileComponent
             $message = !$success ? 'UserProfileNotUpdated' : 'UserProfileUpdated';
 
             $this->redirectWithMessage(
-                $translator->trans($message, [], Manager::CONTEXT), !$success,
-                [Application::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT]
+                $translator->trans($message, [], Manager::CONTEXT), !$success, [
+                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT
+                ]
             );
         }
         else
@@ -88,7 +90,7 @@ class AccountComponent extends ProfileComponent
         if (!isset($this->accountForm))
         {
             $this->accountForm = new AccountForm(
-                $this->getUser(), $this->get_url(), $this->getAuthenticationValidator()
+                $this->getUser(), $this->getUrlGenerator()->fromRequest(), $this->getAuthenticationValidator()
             );
         }
 

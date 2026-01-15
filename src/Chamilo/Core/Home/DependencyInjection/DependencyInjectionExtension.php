@@ -35,7 +35,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         ];
     }
 
-    public function registerCompilerPasses(ContainerBuilder $container)
+    public function registerCompilerPasses(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new AvailableBlockRendererCompilerPass());
     }

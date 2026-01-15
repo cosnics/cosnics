@@ -8,12 +8,9 @@ use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Translation\Loader\IniFileLoader;
-use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\Translator;
 
 /**
- * Builds the symfony translator
- *
  * @package Chamilo\Libraries\Translation
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -39,7 +36,7 @@ class TranslatorFactory
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    protected function addOptimizedTranslationResources(Translator $translator)
+    protected function addOptimizedTranslationResources(Translator $translator): void
     {
         $packageNamespaces = $this->getInternationalizationBundlesCacheService()->getPackageNamespaces();
 
@@ -51,7 +48,7 @@ class TranslatorFactory
         }
 
         $translationResourcesOptimizer = new TranslationResourcesOptimizer(
-            ['xliff' => new XliffFileLoader(), 'ini' => new IniFileLoader()], new PackagesTranslationResourcesFinder(
+            new IniFileLoader(), new PackagesTranslationResourcesFinder(
             new PackagesFilesFinder(
                 new SystemPathBuilder(ClassnameUtilities::getInstance()), $packageNamespaces
             )

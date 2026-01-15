@@ -6,14 +6,11 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\UserInterface\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
@@ -98,16 +95,6 @@ class ViewerComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
-                $this->getTranslator()->trans('BrowserComponent', [], Manager::CONTEXT)
-            )
-        );
-    }
-
     public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         $currentGroup = $this->getCurrentGroup();
@@ -116,15 +103,28 @@ class ViewerComponent extends Manager
 
         if (!isset($this->buttonToolbarRenderer))
         {
-            $buttonToolbar = new ButtonToolBar($this->get_url([self::PARAM_GROUP_ID => $currentGroup->getId()]));
+            $buttonToolbar = new ButtonToolBar(
+                $this->getUrlGenerator()->fromParameters(
+                    [
+                        self::PARAM_CONTEXT => Manager::CONTEXT,
+                        self::PARAM_ACTION => self::ACTION_VIEW_GROUP,
+                        self::PARAM_GROUP_ID => $currentGroup->getId()
+                    ]
+                )
+            );
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
 
             $commonActions->addButton(
                 new Button(
                     $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
-                    $this->get_url([self::PARAM_GROUP_ID => $currentGroup->getId()]),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $this->getUrlGenerator()->fromParameters(
+                        [
+                            self::PARAM_CONTEXT => Manager::CONTEXT,
+                            self::PARAM_ACTION => self::ACTION_VIEW_GROUP,
+                            self::PARAM_GROUP_ID => $currentGroup->getId()
+                        ]
+                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
@@ -175,13 +175,6 @@ class ViewerComponent extends Manager
                     )
                 );
             }
-
-            $toolActions->addButton(
-                new Button(
-                    $translator->trans('Metadata', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('info-circle'),
-                    $this->getGroupUrlGenerator()->getMetadataUrl($currentGroup), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
 
             $buttonToolbar->addButtonGroup($commonActions);
             $buttonToolbar->addButtonGroup($toolActions);

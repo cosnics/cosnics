@@ -4,8 +4,6 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -57,16 +55,6 @@ class ChangeUserComponent extends Manager
                 )
             );
         }
-    }
-
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
-                $this->getTranslator()->trans('AdminUserBrowserComponent', [], Manager::CONTEXT)
-            )
-        );
     }
 
 }

@@ -87,6 +87,7 @@ class CreatorComponent extends Manager implements BreadcrumbLessComponentInterfa
 
             $this->redirectWithMessage(
                 $message, !$success, [
+                    Application::PARAM_CONTEXT => $this->getContext(),
                     Application::PARAM_ACTION => Manager::ACTION_BROWSE,
                     Manager::PARAM_PARENT => $item->getParentId()
                 ]

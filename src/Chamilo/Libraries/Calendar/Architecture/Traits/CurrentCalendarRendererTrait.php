@@ -5,7 +5,7 @@ use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Mobile_Detect;
+use Detection\MobileDetect;
 
 trait CurrentCalendarRendererTrait
 {
@@ -23,10 +23,17 @@ trait CurrentCalendarRendererTrait
 
             if ($rendererType == HtmlCalendarRenderer::TYPE_MONTH)
             {
-                $detect = new Mobile_Detect();
-                if ($detect->isMobile() && !$detect->isTablet())
+                $detect = new MobileDetect();
+                try
                 {
-                    $rendererType = HtmlCalendarRenderer::TYPE_LIST;
+                    if ($detect->isMobile() && !$detect->isTablet())
+                    {
+                        $rendererType = HtmlCalendarRenderer::TYPE_LIST;
+                    }
+                }
+                catch (\Exception)
+                {
+
                 }
             }
         }
@@ -36,12 +43,12 @@ trait CurrentCalendarRendererTrait
 
     public function getCurrentCalendartRendererTime(): int
     {
-        if (!isset($this->currentTime))
+        if (!isset($this->currentCalendarTime))
         {
-            $this->currentTime = $this->getRequest()->query->get(HtmlCalendarRenderer::PARAM_TIME, time());
+            $this->currentCalendarTime = $this->getRequest()->query->get(HtmlCalendarRenderer::PARAM_TIME, time());
         }
 
-        return $this->currentTime;
+        return $this->currentCalendarTime;
     }
 
     abstract public function getRequest(): ChamiloRequest;

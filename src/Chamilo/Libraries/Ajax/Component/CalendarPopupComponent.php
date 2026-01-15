@@ -80,9 +80,9 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
             $translator->trans('DecemberLong', [], StringUtilities::LIBRARIES)
         ];
 
-        $html[] = $this->render_header();
+        $html[] = $this->renderHeader();
 
-        $html[] = ResourceManager::getInstance()->getResourceHtml(
+        $html[] = $this->getResourceManager()->getResourceHtml(
             $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries\Format') . 'TblChange.js'
         );
 
@@ -111,7 +111,7 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
         $html[] = '<script>';
         $html[] = 'initCalendar(' . $start_of_week_identifier . ');';
         $html[] = '</script>';
-        $html[] = $this->render_footer();
+        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }

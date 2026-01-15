@@ -4,8 +4,6 @@ namespace Chamilo\Core\Group\Component;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use RuntimeException;
 
@@ -26,7 +24,6 @@ class TruncaterComponent extends Manager
         }
 
         $groupIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID);
-        $this->set_parameter(self::PARAM_GROUP_ID, $groupIdentifiers);
 
         $groupMembershipService = $this->getGroupMembershipService();
         $groupService = $this->getGroupService();
@@ -78,15 +75,20 @@ class TruncaterComponent extends Manager
             if (count($groupIdentifiers) == 1)
             {
                 $this->redirectWithMessage(
-                    $translator->trans($message, [], Manager::CONTEXT), (bool) $failures,
-                    [Application::PARAM_ACTION => self::ACTION_VIEW_GROUP, self::PARAM_GROUP_ID => $groupIdentifiers[0]]
+                    $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
+                        Application::PARAM_CONTEXT => $this->getContext(),
+                        Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
+                        self::PARAM_GROUP_ID => $groupIdentifiers[0]
+                    ]
                 );
             }
             else
             {
                 $this->redirectWithMessage(
-                    $translator->trans($message, [], Manager::CONTEXT), (bool) $failures,
-                    [Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]
+                    $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
+                        Application::PARAM_CONTEXT => $this->getContext(),
+                        Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS
+                    ]
                 );
             }
         }
@@ -96,28 +98,5 @@ class TruncaterComponent extends Manager
                 htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
             );
         }
-    }
-
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $translator = $this->getTranslator();
-
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
-                $translator->trans('BrowserComponent', [], Manager::CONTEXT)
-            )
-        );
-
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    [
-                        Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
-                    ]
-                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
-            )
-        );
     }
 }

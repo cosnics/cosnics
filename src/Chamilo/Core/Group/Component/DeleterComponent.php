@@ -3,11 +3,8 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -26,44 +23,22 @@ class DeleterComponent extends Manager
         $groupService = $this->getGroupService();
         $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID);
 
-        $this->set_parameter(self::PARAM_GROUP_ID, $ids);
-
         if (!$this->getUser()->isPlatformAdmin())
         {
             throw new NotAllowedException();
         }
 
-        $trail = $this->getBreadcrumbTrail();
-
-        $browseUrl = $this->getUrlGenerator()->fromParameters(
-            [
-                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
-                Application::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER
-            ]
-        );
-        $trail->add(
-            new Breadcrumb($browseUrl, $translator->trans('Administration', [], \Chamilo\Core\Admin\Manager::CONTEXT))
-        );
-
-        $browseTabUrl = $this->getUrlGenerator()->fromParameters(
-            [
-                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
-                Application::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER,
-                GenericTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
-                    Manager::CONTEXT
-                )
-            ]
-        );
-        $trail->add(new Breadcrumb($browseTabUrl, $translator->trans('Group', [], Manager::CONTEXT)));
-
-        $trail->add(
+        $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
-                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
-                $translator->trans('GroupList', [], Manager::CONTEXT)
+                $this->getUrlGenerator()->fromParameters(
+                    [
+                        self::PARAM_CONTEXT => Manager::CONTEXT,
+                        self::PARAM_ACTION => self::ACTION_VIEW_GROUP,
+                        self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
+                    ]
+                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
             )
         );
-
-        $trail->add(new Breadcrumb($this->get_url(), $translator->trans('DeleteGroup', [], Manager::CONTEXT)));
 
         $failures = 0;
 
@@ -117,8 +92,10 @@ class DeleterComponent extends Manager
             }
 
             $this->redirectWithMessage(
-                $message, (bool) $failures, [Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS],
-                [self::PARAM_GROUP_ID]
+                $message, (bool) $failures, [
+                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS
+                ]
             );
         }
         else
@@ -127,28 +104,5 @@ class DeleterComponent extends Manager
                 htmlentities($translator->trans('NoObjectsSelected', [], StringUtilities::LIBRARIES))
             );
         }
-    }
-
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $translator = $this->getTranslator();
-
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
-                $translator->trans('BrowserComponent', [], Manager::CONTEXT)
-            )
-        );
-
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    [
-                        Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
-                    ]
-                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
-            )
-        );
     }
 }

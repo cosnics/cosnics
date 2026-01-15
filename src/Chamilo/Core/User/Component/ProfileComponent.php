@@ -22,15 +22,16 @@ abstract class ProfileComponent extends Manager implements BreadcrumbLessPackage
      */
     public function getAvailableTabs(): array
     {
+        $action = $this->getRequest()->query->get(self::PARAM_ACTION);
         $translator = $this->getTranslator();
         $tabs = [];
 
         $tabs[] = new LinkTab(
             self::ACTION_VIEW_ACCOUNT,
             htmlentities($translator->trans(self::ACTION_VIEW_ACCOUNT . 'Title', [], Manager::CONTEXT)),
-            new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas'),
-            $this->get_url([self::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT]),
-            self::ACTION_VIEW_ACCOUNT == $this->get_action()
+            new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas'), $this->getUrlGenerator()->fromParameters(
+            [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT]
+        ), self::ACTION_VIEW_ACCOUNT == $action
         );
 
         if ($this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'allow_change_user_picture']))
@@ -38,18 +39,18 @@ abstract class ProfileComponent extends Manager implements BreadcrumbLessPackage
             $tabs[] = new LinkTab(
                 self::ACTION_CHANGE_PICTURE,
                 htmlentities($translator->trans(self::ACTION_CHANGE_PICTURE . 'Title', [], Manager::CONTEXT)),
-                new FontAwesomeGlyph('image', ['fa-lg'], null, 'fas'),
-                $this->get_url([self::PARAM_ACTION => self::ACTION_CHANGE_PICTURE]),
-                self::ACTION_CHANGE_PICTURE == $this->get_action()
+                new FontAwesomeGlyph('image', ['fa-lg'], null, 'fas'), $this->getUrlGenerator()->fromParameters(
+                [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_CHANGE_PICTURE]
+            ), self::ACTION_CHANGE_PICTURE == $action
             );
         }
 
         $tabs[] = new LinkTab(
             self::ACTION_USER_SETTINGS,
             htmlentities($translator->trans(self::ACTION_USER_SETTINGS . 'Title', [], Manager::CONTEXT)),
-            new FontAwesomeGlyph('cog', ['fa-lg'], null, 'fas'),
-            $this->get_url([self::PARAM_ACTION => self::ACTION_USER_SETTINGS]),
-            self::ACTION_USER_SETTINGS == $this->get_action()
+            new FontAwesomeGlyph('cog', ['fa-lg'], null, 'fas'), $this->getUrlGenerator()->fromParameters(
+            [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_USER_SETTINGS]
+        ), self::ACTION_USER_SETTINGS == $action
         );
 
         return $tabs;

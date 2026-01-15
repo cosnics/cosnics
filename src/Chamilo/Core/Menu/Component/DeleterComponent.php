@@ -6,8 +6,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -52,34 +50,18 @@ class DeleterComponent extends Manager
         );
 
         $this->redirectWithMessage(
-            $message, (bool) $failures,
-            [Application::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_PARENT => $parentIdentifier]
+            $message, (bool) $failures, [
+                Application::PARAM_CONTEXT => $this->getContext(),
+                Application::PARAM_ACTION => Manager::ACTION_BROWSE,
+                Manager::PARAM_PARENT => $parentIdentifier
+            ]
         );
-    }
-
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->getHomeUrl(), $this->getTranslator()->trans('ManagerBrowserComponent', [], 'Chamilo\Core\Menu')
-            )
-        );
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = Manager::PARAM_ITEM;
-        $additionalParameters[] = Manager::PARAM_DIRECTION;
-
-        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
     protected function getItems(): ArrayCollection
     {

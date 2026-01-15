@@ -11,5 +11,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 interface BreadcrumbGeneratorInterface
 {
-    public function generateBreadcrumbs(Application $application): void;
+    public function addDefaultBreadcrumbs(): void;
+
+    public function addComponentBreadcrumb(Application $application): void;
 }

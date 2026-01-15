@@ -59,31 +59,13 @@ class ApplicationFactory
         /**
          * @var \Chamilo\Libraries\Architecture\Application\Application $application
          */
-        $application = new $className($applicationConfiguration);
-
-        $application->set_parameter($this->getActionParameter($context), $action);
-
-        if (!$this->getParentApplication($applicationConfiguration) instanceof Application)
-        {
-            $application->set_parameter(Application::PARAM_CONTEXT, $context);
-        }
-
-        $parameters = $application->getAdditionalParameters();
-
-        foreach ($parameters as $parameter)
-        {
-            $application->set_parameter($parameter, $this->getRequest()->getFromRequestOrQuery($parameter));
-        }
-
-        return $application;
+        return new $className($applicationConfiguration);
     }
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    protected function getAction(
-        string $context, ?string $fallBackAction = null
-    ): string
+    protected function getAction(string $context, ?string $fallBackAction = null): string
     {
         $actionParameter = $this->getActionParameter($context);
 
@@ -175,11 +157,6 @@ class ApplicationFactory
         }
 
         return $managerClass;
-    }
-
-    protected function getParentApplication(ApplicationConfiguration $applicationConfiguration): ?Application
-    {
-        return $applicationConfiguration->getApplication();
     }
 
     public function getRequest(): ChamiloRequest

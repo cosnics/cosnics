@@ -55,7 +55,10 @@ class DeleterComponent extends Manager
             );
 
             $this->redirectWithMessage(
-                $message, ($failures > 0), [Application::PARAM_ACTION => self::ACTION_BROWSE_USERS]
+                $message, ($failures > 0), [
+                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_ACTION => self::ACTION_BROWSE_USERS
+                ]
             );
         }
         else
@@ -69,15 +72,5 @@ class DeleterComponent extends Manager
                 )
             );
         }
-    }
-
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
-                $this->getTranslator()->trans('AdminUserBrowserComponent')
-            )
-        );
     }
 }

@@ -5,6 +5,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm_Renderer_Default;
+use QuickformException;
 
 /**
  * @package Chamilo\Libraries\Format\Structure\ActionBar
@@ -34,12 +35,13 @@ class ButtonSearchForm extends FormValidator
         $this->setAttribute('class', 'form-inline');
         $this->renderer = clone $this->defaultRenderer();
 
-        $query = $this->getQuery();
-
-        if ($query)
-        {
-            $this->setDefaults([self::PARAM_SIMPLE_SEARCH_QUERY => $query]);
-        }
+        //        if($this->getQuery())
+        //        {
+        //            $this->setDefaults([self::PARAM_SIMPLE_SEARCH_QUERY => $this->getQuery()]);
+        //        }else
+        //        {
+                    $this->setDefaults([self::PARAM_SIMPLE_SEARCH_QUERY => 'blah']);
+        //        }
 
         $this->buildForm();
     }
@@ -98,21 +100,25 @@ class ButtonSearchForm extends FormValidator
 
     public function getQuery(): ?string
     {
-        $query = $this->getRequest()->request->get(self::PARAM_SIMPLE_SEARCH_QUERY);
-
-        if (!$query)
+        try
         {
-            $query = $this->getRequest()->query->get(self::PARAM_SIMPLE_SEARCH_QUERY);
+            if (!$this->clearFormSubmitted())
+            {
+                if ($this->validate())
+                {
+                    return $this->getRequest()->request->get(self::PARAM_SIMPLE_SEARCH_QUERY);
+                }
+                else
+                {
+                    return $this->getRequest()->query->get(self::PARAM_SIMPLE_SEARCH_QUERY);
+                }
+            }
+        }
+        catch (QuickformException)
+        {
+            return null;
         }
 
-        return $query;
-    }
-
-    /**
-     * @deprecated Use ButtonSearchForm::getQuery() now
-     */
-    public function get_query(): string
-    {
-        return $this->getQuery();
+        return null;
     }
 }

@@ -14,6 +14,6 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
  */
 interface ICompilerPassExtension extends ExtensionInterface
 {
-    
-    public function registerCompilerPasses(ContainerBuilder $container);
+
+    public function registerCompilerPasses(ContainerBuilder $container): void;
 }

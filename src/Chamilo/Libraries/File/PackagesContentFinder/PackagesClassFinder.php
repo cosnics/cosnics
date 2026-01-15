@@ -11,31 +11,21 @@ namespace Chamilo\Libraries\File\PackagesContentFinder;
 class PackagesClassFinder extends PackagesContentFinder
 {
 
-    /**
-     * The class name that needs to be searched
-     *
-     * @var string
-     */
-    private $className;
+    private string $className;
 
-    /**
-     * The path relative to the root of the package that needs to be searched
-     *
-     * @var string
-     */
-    private $relativeFilePath;
+    private string $relativeFilePath;
 
     /**
      * Locates the classes by a given filepath and classname.
      * Checks for each package if the path and the class exists.
      *
      * @param string $relativeFilePath - The path relative to the package root
-     * @param string $className        - The classname relative to the package namespace (not the fully qualified one)
+     * @param string $className - The classname relative to the package namespace (not the fully qualified one)
      *
      * @return string[]
      * @throws \Exception
      */
-    public function findClasses($relativeFilePath, $className)
+    public function findClasses(string $relativeFilePath, string $className): array
     {
         $this->relativeFilePath = $relativeFilePath;
         $this->className = $className;
@@ -43,14 +33,7 @@ class PackagesClassFinder extends PackagesContentFinder
         return $this->findContent();
     }
 
-    /**
-     * Handles a single package
-     *
-     * @param string $package
-     *
-     * @return string[]
-     */
-    public function handlePackage($package)
+    public function handlePackage(string $package): array
     {
         $classes = [];
 

@@ -15,10 +15,6 @@ abstract class Manager extends Application
     public const ACTION_CREATE_GROUP = 'Creator';
     public const ACTION_DELETE_GROUP = 'Deleter';
     public const ACTION_EDIT_GROUP = 'Editor';
-    public const ACTION_EXPORT = 'Exporter';
-    public const ACTION_IMPORT = 'Importer';
-    public const ACTION_IMPORT_GROUP_USERS = 'GroupUserImporter';
-    public const ACTION_MANAGE_METADATA = 'MetadataManager';
     public const ACTION_MOVE_GROUP = 'Mover';
     public const ACTION_SUBSCRIBE_USER_BROWSER = 'SubscribeUserBrowser';
     public const ACTION_SUBSCRIBE_USER_TO_GROUP = 'Subscriber';

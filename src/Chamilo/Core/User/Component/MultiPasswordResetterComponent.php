@@ -4,8 +4,6 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
@@ -23,7 +21,6 @@ class MultiPasswordResetterComponent extends Manager
     {
         $userIdentifiers = (array) $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID, []);
         $translator = $this->getTranslator();
-        $this->set_parameter(self::PARAM_USER_USER_ID, $userIdentifiers);
 
         if (!$this->getUser()->isPlatformAdmin())
         {
@@ -52,7 +49,10 @@ class MultiPasswordResetterComponent extends Manager
             );
 
             $this->redirectWithMessage(
-                $message, ($failures > 0), [Application::PARAM_ACTION => self::ACTION_BROWSE_USERS]
+                $message, ($failures > 0), [
+                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_ACTION => self::ACTION_BROWSE_USERS
+                ]
             );
         }
         else
@@ -66,16 +66,6 @@ class MultiPasswordResetterComponent extends Manager
                 )
             );
         }
-    }
-
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url([self::PARAM_ACTION => self::ACTION_BROWSE_USERS]),
-                $this->getTranslator()->trans('AdminUserBrowserComponent', [], Manager::CONTEXT)
-            )
-        );
     }
 
     public function getHashingUtilities(): HashingUtilities

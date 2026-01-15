@@ -13,55 +13,30 @@ use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
 class PackagesTranslationResourcesFinder implements TranslationResourcesFinderInterface
 {
 
-    /**
-     * The packages files finder
-     *
-     * @var \Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder
-     */
-    private $packagesFilesFinder;
+    private PackagesFilesFinder $packagesFilesFinder;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder $packagesFilesFinder
-     */
     public function __construct(PackagesFilesFinder $packagesFilesFinder)
     {
         $this->packagesFilesFinder = $packagesFilesFinder;
     }
 
     /**
-     * Locates the translation resources and returns them per locale, per resource type and per domain
-     *
      * @return string[]
      * @throws \Exception
-     * @example $resource['nl']['ini']['domain'] = '/path/to/resource'
+     * @example $resource['nl']['domain'] = '/path/to/resource'
      */
     public function findTranslationResources(): array
     {
         $resources = [];
 
-        $translationFiles = $this->packagesFilesFinder->findFiles('Resources/I18n/', '/.*(\.i18n|\.xliff)$/');
+        $translationFiles = $this->packagesFilesFinder->findFiles('Resources/I18n/', '/.*\.i18n$/');
 
         foreach ($translationFiles as $package => $translationFilesPerPackage)
         {
             foreach ($translationFilesPerPackage as $translationFile)
             {
                 $fileParts = explode('.', basename($translationFile));
-                $locale = $fileParts[0];
-
-                switch ($fileParts[1])
-                {
-                    case 'i18n' :
-                        $type = 'ini';
-                        break;
-                    case 'xliff' :
-                        $type = 'xliff';
-                        break;
-                    default :
-                        $type = 'unknown';
-                }
-
-                $resources[$locale][$type][$package] = $translationFile;
+                $resources[$fileParts[0]][$package] = $translationFile;
             }
         }
 

@@ -5,8 +5,6 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\UserInterface\Form\GroupMoveForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -29,11 +27,18 @@ class MoverComponent extends Manager
         $translator = $this->getTranslator();
 
         $group_id = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
-        $this->set_parameter(self::PARAM_GROUP_ID, $group_id);
 
         $group = $this->getGroupService()->findGroupByIdentifier($this->getRequest()->query->get(self::PARAM_GROUP_ID));
 
-        $form = new GroupMoveForm($group, $this->get_url([self::PARAM_GROUP_ID => $group_id]), $this->getUser());
+        $form = new GroupMoveForm(
+            $group, $this->getUrlGenerator()->fromParameters(
+            [
+                self::PARAM_CONTEXT => Manager::CONTEXT,
+                self::PARAM_ACTION => self::ACTION_MOVE_GROUP,
+                self::PARAM_GROUP_ID => $group_id
+            ]
+        ), $this->getUser()
+        );
 
         if ($form->validate())
         {
@@ -44,8 +49,11 @@ class MoverComponent extends Manager
                 StringUtilities::LIBRARIES
             );
             $this->redirectWithMessage(
-                $message, !$success,
-                [Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS, self::PARAM_GROUP_ID => $parent]
+                $message, !$success, [
+                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS,
+                    self::PARAM_GROUP_ID => $parent
+                ]
             );
         }
         else
@@ -59,27 +67,5 @@ class MoverComponent extends Manager
 
             return implode(PHP_EOL, $html);
         }
-    }
-
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $translator = $this->getTranslator();
-
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
-                $translator->trans('BrowserComponent', [], Manager::CONTEXT)
-            )
-        );
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    [
-                        Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
-                    ]
-                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
-            )
-        );
     }
 }

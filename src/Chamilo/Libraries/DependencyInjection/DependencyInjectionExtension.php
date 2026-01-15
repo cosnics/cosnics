@@ -66,7 +66,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         $this->extentensionLoad($configs, $container);
     }
 
-    public function registerCompilerPasses(ContainerBuilder $container)
+    public function registerCompilerPasses(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new ConsoleCompilerPass());
         $container->addCompilerPass(new CacheDataPreLoaderCompilerPass());

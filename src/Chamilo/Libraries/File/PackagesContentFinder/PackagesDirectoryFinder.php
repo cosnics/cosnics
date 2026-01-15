@@ -11,12 +11,7 @@ namespace Chamilo\Libraries\File\PackagesContentFinder;
 class PackagesDirectoryFinder extends PackagesContentFinder
 {
 
-    /**
-     * The path relative to the root of the package that needs to be searched
-     *
-     * @var string
-     */
-    private $relativeFilePath;
+    private string $relativeFilePath;
 
     /**
      * Locates the directories by a given filepath.
@@ -27,7 +22,7 @@ class PackagesDirectoryFinder extends PackagesContentFinder
      * @return string[]
      * @throws \Exception
      */
-    public function findDirectories($relativeFilePath)
+    public function findDirectories(string $relativeFilePath): array
     {
         $this->relativeFilePath = $relativeFilePath;
 
@@ -35,13 +30,11 @@ class PackagesDirectoryFinder extends PackagesContentFinder
     }
 
     /**
-     * Handles a single package
-     *
      * @param string $package
      *
      * @return string[]
      */
-    public function handlePackage($package)
+    public function handlePackage(string $package): array
     {
         $directories = [];
 

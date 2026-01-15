@@ -85,7 +85,19 @@ class GroupMenu extends HtmlMenu
         $menu = $this->get_menu();
         parent::__construct($menu);
         $this->array_renderer = new HtmlMenuArrayRenderer();
-        $this->forceCurrentUrl($this->get_url($this->current_category->getId()));
+        $this->forceCurrentUrl($this->getUrl($this->current_category->getId()));
+    }
+
+    /**
+     * Gets the URL of a given category
+     *
+     * @param int $category The id of the category
+     *
+     * @return string The requested URL
+     */
+    public function getUrl($group)
+    {
+        return htmlentities(sprintf($this->urlFmt, $group));
     }
 
     public function getUrlGenerator(): UrlGenerator
@@ -176,7 +188,7 @@ class GroupMenu extends HtmlMenu
                 $menu_item = [];
 
                 $menu_item['title'] = $group->get_name();
-                $menu_item['url'] = $this->get_url($group->getId());
+                $menu_item['url'] = $this->getUrl($group->getId());
 
                 if ($group->isAncestorOf($current_category) || $group->getId() == $current_category->getId() ||
                     $show_complete_tree)
@@ -205,19 +217,6 @@ class GroupMenu extends HtmlMenu
     public static function get_tree_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::TREE_NAME, true);
-    }
-
-    /**
-     * Gets the URL of a given category
-     *
-     * @param int $category The id of the category
-     *
-     * @return string The requested URL
-     */
-    public function get_url($group)
-    {
-        // TODO: Put another class in charge of the htmlentities() invocation
-        return htmlentities(sprintf($this->urlFmt, $group));
     }
 
     /**

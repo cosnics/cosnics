@@ -16,33 +16,28 @@ use Exception;
 abstract class PackagesContentFinder
 {
 
-    /**
-     * The location of the cache file
-     *
-     * @var string
-     */
-    private $cacheFile;
+    private ?string $cacheFilePath;
 
     /**
      * The packages in which the system must be searching
      *
      * @var string[]
      */
-    private $packages;
+    private array $packages;
 
     private SystemPathBuilder $systemPathBuilder;
 
     /**
-     * Constructor
-     *
      * @param \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
      * @param string[] $packages
-     * @param string $cacheFile
+     * @param ?string $cacheFilePath
      */
-    public function __construct(SystemPathBuilder $systemPathBuilder, array $packages = [], $cacheFile = null)
+    public function __construct(
+        SystemPathBuilder $systemPathBuilder, array $packages = [], ?string $cacheFilePath = null
+    )
     {
         $this->packages = $packages;
-        $this->cacheFile = $cacheFile;
+        $this->cacheFilePath = $cacheFilePath;
         $this->systemPathBuilder = $systemPathBuilder;
     }
 
@@ -52,16 +47,18 @@ abstract class PackagesContentFinder
      * @return string[][]
      * @throws \Exception
      */
-    protected function findContent()
+    protected function findContent(): array
     {
-        if (isset($this->cacheFile) && file_exists($this->cacheFile))
+        $cacheFilePath = $this->getCacheFilePath();
+
+        if (isset($cacheFilePath) && file_exists($cacheFilePath))
         {
-            $content = require($this->cacheFile);
+            $content = require($cacheFilePath);
 
             if (!empty($content) && !is_array($content))
             {
                 throw new Exception(
-                    'The given cache file ' . $this->cacheFile . ' contains invalid data, should be an array'
+                    'The given cache file ' . $cacheFilePath . ' contains invalid data, should be an array'
                 );
             }
         }
@@ -69,38 +66,44 @@ abstract class PackagesContentFinder
         {
             $content = [];
 
-            foreach ($this->packages as $package)
+            foreach ($this->getPackages() as $package)
             {
                 $content = array_merge($content, $this->handlePackage($package));
             }
 
-            if (isset($this->cacheFile))
+            if (isset($cacheFilePath))
             {
-                file_put_contents($this->cacheFile, sprintf('<?php return %s;', var_export($content, true)));
+                file_put_contents($cacheFilePath, sprintf('<?php return %s;', var_export($content, true)));
             }
         }
 
         return $content;
     }
 
-    /**
-     * Returns the full path to the given package
-     *
-     * @param string $package
-     *
-     * @return string
-     */
-    protected function getPackagePath($package)
+    public function getCacheFilePath(): ?string
     {
-        return $this->systemPathBuilder->namespaceToFullPath($package);
+        return $this->cacheFilePath;
+    }
+
+    protected function getPackagePath(string $package): string
+    {
+        return $this->getSystemPathBuilder()->namespaceToFullPath($package);
+    }
+
+    public function getPackages(): array
+    {
+        return $this->packages;
+    }
+
+    public function getSystemPathBuilder(): SystemPathBuilder
+    {
+        return $this->systemPathBuilder;
     }
 
     /**
-     * Handles a single package
-     *
      * @param string $package
      *
      * @return string[]
      */
-    abstract public function handlePackage($package);
+    abstract public function handlePackage(string $package): array;
 }

@@ -56,7 +56,8 @@ class LogViewerComponent extends Manager
      */
     public function buildForm(): FormValidator
     {
-        $form = new FormValidator('logviewer', FormValidator::FORM_METHOD_POST, $this->get_url());
+        $form =
+            new FormValidator('logviewer', FormValidator::FORM_METHOD_POST, $this->getUrlGenerator()->fromRequest());
         $translator = $this->getTranslator();
 
         $renderer = $form->defaultRenderer();

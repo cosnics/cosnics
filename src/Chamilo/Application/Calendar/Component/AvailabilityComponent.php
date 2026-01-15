@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\Calendar\Component;
 
-use Chamilo\Application\Calendar\UserInterface\Form\AvailabilityForm;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
+use Chamilo\Application\Calendar\UserInterface\Form\AvailabilityForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -40,9 +40,9 @@ class AvailabilityComponent extends Manager
         {
             $html = [];
 
-            $html[] = $this->render_header();
+            $html[] = $this->renderHeader();
             $html[] = $form->render();
-            $html[] = $this->render_footer();
+            $html[] = $this->renderFooter();
 
             return implode(PHP_EOL, $html);
         }
@@ -55,7 +55,7 @@ class AvailabilityComponent extends Manager
      */
     public function getAvailabilityForm(AvailabilityService $availabilityService): AvailabilityForm
     {
-        return new AvailabilityForm($this->get_url(), $this->getUser(), $availabilityService);
+        return new AvailabilityForm($this->getUrlGenerator()->fromRequest(), $this->getUser(), $availabilityService);
     }
 
     /**

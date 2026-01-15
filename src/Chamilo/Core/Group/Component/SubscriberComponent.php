@@ -5,7 +5,6 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use RuntimeException;
@@ -18,11 +17,13 @@ class SubscriberComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      */
     public function run()
     {
         $groupIdentifier = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
-        $this->set_parameter(self::PARAM_GROUP_ID, $groupIdentifier);
 
         if (!$this->getUser()->isPlatformAdmin())
         {
@@ -35,6 +36,18 @@ class SubscriberComponent extends Manager
         $userService = $this->getUserService();
         $groupService = $this->getGroupService();
         $translator = $this->getTranslator();
+
+        $this->getBreadcrumbTrail()->add(
+            new Breadcrumb(
+                $this->getUrlGenerator()->fromParameters(
+                    [
+                        self::PARAM_CONTEXT => Manager::CONTEXT,
+                        self::PARAM_ACTION => self::ACTION_VIEW_GROUP,
+                        self::PARAM_GROUP_ID => $groupIdentifier
+                    ]
+                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
+            )
+        );
 
         $failures = 0;
 
@@ -92,8 +105,11 @@ class SubscriberComponent extends Manager
             }
 
             $this->redirectWithMessage(
-                $translator->trans($message), (bool) $failures,
-                [Application::PARAM_ACTION => self::ACTION_VIEW_GROUP, self::PARAM_GROUP_ID => $groupIdentifier]
+                $translator->trans($message), (bool) $failures, [
+                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
+                    self::PARAM_GROUP_ID => $groupIdentifier
+                ]
             );
         }
         else
@@ -104,26 +120,4 @@ class SubscriberComponent extends Manager
         }
     }
 
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $translator = $this->getTranslator();
-
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
-                $translator->trans('BrowserComponent', [], Manager::CONTEXT)
-            )
-        );
-
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    [
-                        Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
-                    ]
-                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
-            )
-        );
-    }
 }

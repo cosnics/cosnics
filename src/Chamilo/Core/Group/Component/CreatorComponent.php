@@ -6,8 +6,6 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\UserInterface\Form\GroupForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -35,8 +33,13 @@ class CreatorComponent extends Manager
         $group->setParentId($parentGroupIdentifier);
 
         $form = new GroupForm(
-            GroupForm::TYPE_CREATE, $group, $this->get_url([self::PARAM_GROUP_ID => $parentGroupIdentifier]),
-            $this->getUser()
+            GroupForm::TYPE_CREATE, $group, $this->getUrlGenerator()->fromParameters(
+            [
+                self::PARAM_CONTEXT => Manager::CONTEXT,
+                self::PARAM_ACTION => self::ACTION_CREATOR,
+                self::PARAM_GROUP_ID => $parentGroupIdentifier
+            ]
+        ), $this->getUser()
         );
 
         if ($form->validate())
@@ -51,6 +54,7 @@ class CreatorComponent extends Manager
                         'ObjectCreated', ['OBJECT' => $translator->trans('Group', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
                     ), (false), [
+                        Application::PARAM_CONTEXT => $this->getContext(),
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
                         self::PARAM_GROUP_ID => $group->getId()
                     ]
@@ -62,7 +66,11 @@ class CreatorComponent extends Manager
                     $translator->trans(
                         'ObjectNotCreated', ['OBJECT' => $translator->trans('Group', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
-                    ), (true), [Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]
+                    ), (true), [
+                        Application::PARAM_CONTEXT => $this->getContext(),
+                        Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS,
+                        self::PARAM_GROUP_ID => $parentGroupIdentifier
+                    ]
                 );
             }
         }
@@ -76,15 +84,5 @@ class CreatorComponent extends Manager
 
             return implode(PHP_EOL, $html);
         }
-    }
-
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
-                $this->getTranslator()->trans('BrowserComponent', [], Manager::CONTEXT)
-            )
-        );
     }
 }

@@ -16,19 +16,9 @@ use Symfony\Component\Finder\Finder;
 class PackagesFilesFinder extends PackagesContentFinder
 {
 
-    /**
-     * The path relative to the root of the package that needs to be searched
-     *
-     * @var string
-     */
-    private $relativeFilePath;
+    private string $filenamePattern;
 
-    /**
-     * The pattern of the filename
-     *
-     * @var string
-     */
-    private $filenamePattern;
+    private string $relativeFilePath;
 
     /**
      * Locates the files starting from a given directory, searching by a given pattern or filename, optionally using
@@ -42,7 +32,7 @@ class PackagesFilesFinder extends PackagesContentFinder
      * @return string[][]
      * @throws \Exception
      */
-    public function findFiles($relativeFilePath = null, $filenamePattern = '')
+    public function findFiles(string $relativeFilePath, string $filenamePattern): array
     {
         $this->relativeFilePath = $relativeFilePath;
         $this->filenamePattern = $filenamePattern;
@@ -51,13 +41,11 @@ class PackagesFilesFinder extends PackagesContentFinder
     }
 
     /**
-     * Handles a single package
-     *
      * @param string $package
      *
      * @return string[]
      */
-    function handlePackage($package)
+    public function handlePackage(string $package): array
     {
         $files = [];
         $path = $this->getPackagePath($package) . $this->relativeFilePath;

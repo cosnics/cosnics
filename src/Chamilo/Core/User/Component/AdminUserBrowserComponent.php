@@ -4,7 +4,6 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Table\AdminUserTableRenderer;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -76,8 +75,9 @@ class AdminUserBrowserComponent extends Manager
                 $commonActions->addButton(
                     new Button(
                         $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
-                        $this->get_url([Application::PARAM_ACTION => self::ACTION_CREATE_USER]),
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL
+                        $this->getUrlGenerator()->fromParameters(
+                            [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_CREATE_USER]
+                        ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
             }

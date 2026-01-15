@@ -50,11 +50,6 @@ class GroupUrlGenerator
         );
     }
 
-    public function getMetadataUrl(Group $group): string
-    {
-        return $this->getGroupActionUrl(Manager::ACTION_MANAGE_METADATA, $group);
-    }
-
     public function getMoveUrl(Group $group): string
     {
         return $this->getGroupActionUrl(Manager::ACTION_MOVE_GROUP, $group);

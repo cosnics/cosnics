@@ -4,8 +4,6 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -31,10 +29,8 @@ abstract class ActiveChangerComponent extends Manager
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
         $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID);
-        $this->set_parameter(self::PARAM_USER_USER_ID, $ids);
 
         $active = $this->getState();
-        $this->set_parameter(self::PARAM_ACTIVE, $active);
 
         if (!is_array($ids))
         {
@@ -77,7 +73,10 @@ abstract class ActiveChangerComponent extends Manager
             }
 
             $this->redirectWithMessage(
-                $message, ($failures > 0), [Application::PARAM_ACTION => self::ACTION_BROWSE_USERS]
+                $message, ($failures > 0), [
+                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_ACTION => self::ACTION_BROWSE_USERS
+                ]
             );
         }
         else
@@ -91,16 +90,6 @@ abstract class ActiveChangerComponent extends Manager
                 )
             );
         }
-    }
-
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url([self::PARAM_ACTION => self::ACTION_USER_APPROVAL_BROWSER]),
-                $this->getTranslator()->trans('UserApprovalBrowserComponent')
-            )
-        );
     }
 
     abstract protected function getState(): bool;

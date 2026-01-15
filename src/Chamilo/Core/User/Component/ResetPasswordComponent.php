@@ -106,8 +106,9 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
         {
             $translator = $this->getTranslator();
 
-            $this->passwordResetForm =
-                new FormValidator('lost_password', FormValidator::FORM_METHOD_POST, $this->get_url());
+            $this->passwordResetForm = new FormValidator(
+                'lost_password', FormValidator::FORM_METHOD_POST, $this->getUrlGenerator()->fromRequest()
+            );
 
             $this->passwordResetForm->addElement(
                 'text', User::PROPERTY_EMAIL, $translator->trans('Email', [], Manager::CONTEXT)

@@ -6,8 +6,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -31,7 +29,7 @@ class MoverComponent extends Manager
         {
             throw new NotAllowedException();
         }
-        
+
         $moveDirection = $this->getRequest()->query->get(self::PARAM_DIRECTION);
 
         if (is_null($moveDirection))
@@ -58,21 +56,10 @@ class MoverComponent extends Manager
 
         $this->redirectWithMessage(
             $message, !$success, [
+                Application::PARAM_CONTEXT => $this->getContext(),
                 Application::PARAM_ACTION => Manager::ACTION_BROWSE,
                 Manager::PARAM_PARENT => $item->getParentId()
             ]
-        );
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail $breadcrumbtrail
-     */
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->getHomeUrl(), $this->getTranslator()->trans('ManagerBrowserComponent', [], 'Chamilo\Core\Menu')
-            )
         );
     }
 }

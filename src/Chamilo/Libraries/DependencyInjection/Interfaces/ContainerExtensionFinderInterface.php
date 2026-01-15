@@ -13,9 +13,7 @@ interface ContainerExtensionFinderInterface
 {
 
     /**
-     * Locates the container extension classes
-     *
      * @return string[]
      */
-    public function findContainerExtensions();
+    public function findContainerExtensions(): array;
 }

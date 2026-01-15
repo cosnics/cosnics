@@ -46,40 +46,6 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_EXPORT
-        ];
-
-        $links[] = new Action(
-            $translator->trans('ExportDescription', [], $context),
-            $translator->trans('Export', [], StringUtilities::LIBRARIES),
-            new FontAwesomeGlyph('download', ['fa-fw', 'fa-2x'], null, 'fas'),
-            $urlGenerator->fromParameters($parameters)
-        );
-
-        $parameters = [
-            Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_IMPORT
-        ];
-
-        $links[] = new Action(
-            $translator->trans('ImportDescription', [], $context),
-            $translator->trans('Import', [], StringUtilities::LIBRARIES),
-            new FontAwesomeGlyph('upload', ['fa-fw', 'fa-2x'], null, 'fas'), $urlGenerator->fromParameters($parameters)
-        );
-
-        $parameters = [
-            Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_IMPORT_GROUP_USERS
-        ];
-
-        $links[] = new Action(
-            $translator->trans('ImportGroupUsersDescription', [], $context),
-            $translator->trans('ImportGroupUsers', [], $context),
-            new FontAwesomeGlyph('upload', ['fa-fw', 'fa-2x'], null, 'fas'), $urlGenerator->fromParameters($parameters)
-        );
-
-        $parameters = [
-            Application::PARAM_CONTEXT => $context,
             Application::PARAM_ACTION => Manager::ACTION_BROWSE_GROUPS
         ];
 

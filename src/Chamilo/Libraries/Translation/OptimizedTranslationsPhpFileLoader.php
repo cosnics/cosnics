@@ -19,15 +19,11 @@ class OptimizedTranslationsPhpFileLoader implements LoaderInterface
 {
 
     /**
-     * Loads a locale.
+     * @param mixed $resource
+     * @param string $locale
+     * @param string $domain
      *
-     * @param mixed $resource A resource
-     * @param string $locale A locale
-     * @param string $domain The domain
-     *
-     * @return \Symfony\Component\Translation\MessageCatalogue A MessageCatalogue instance
-     * @throws \Symfony\Component\Translation\Exception\NotFoundResourceException when the resource cannot be found
-     * @throws \Symfony\Component\Translation\Exception\InvalidResourceException when the resource cannot be loaded
+     * @return \Symfony\Component\Translation\MessageCatalogue
      */
     public function load(mixed $resource, string $locale, string $domain = 'messages'): MessageCatalogue
     {

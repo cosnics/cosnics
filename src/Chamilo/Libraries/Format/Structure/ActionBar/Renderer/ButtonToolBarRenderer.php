@@ -6,7 +6,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use QuickformException;
 
 /**
  * @package Chamilo\Libraries\Format\Structure\ActionBar\Renderer
@@ -47,15 +47,7 @@ class ButtonToolBarRenderer
 
         if ($this->getButtonToolBar()->getSearchUrl())
         {
-            $searchForm = $this->getSearchForm();
-
-            if ($searchForm->validate() && $searchForm->clearFormSubmitted())
-            {
-                $redirectResponse = new RedirectResponse($searchForm->getActionUrl());
-                $redirectResponse->send();
-            }
-
-            $html[] = $searchForm->render();
+            $html[] = $this->getSearchForm()->render();
         }
 
         $html[] = '</div>';
@@ -78,21 +70,16 @@ class ButtonToolBarRenderer
 
     /**
      * @param \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[] $properties
-     *
-     * @throws \QuickformException
      */
     public function getConditions(array $properties = []): ?AndCondition
     {
-        // check input parameter
         if (!is_array($properties))
         {
             $properties = [$properties];
         }
 
-        // get query
-        $query = $this->getSearchForm()->getQuery();
+        $query = $this->getSearchQuery();
 
-        // only process if we have a search query and properties
         if ($query && count($properties))
         {
             $searchQueryConditionGenerator = new SearchQueryConditionGenerator();
@@ -116,8 +103,15 @@ class ButtonToolBarRenderer
         return $this->searchForm;
     }
 
-    public function setButtonToolBar(ButtonToolBar $buttonToolBar)
+    public function getSearchQuery(): ?string
     {
-        $this->buttonToolBar = $buttonToolBar;
+        try
+        {
+            return $this->getSearchForm()->getQuery();
+        }
+        catch (QuickformException)
+        {
+            return null;
+        }
     }
 }

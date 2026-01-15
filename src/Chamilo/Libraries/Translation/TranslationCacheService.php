@@ -38,7 +38,7 @@ class TranslationCacheService extends FileBasedCacheService
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function initializeCache()
+    public function initializeCache(): void
     {
         $this->getTranslatorFactory()->createTranslator('en_EN');
     }

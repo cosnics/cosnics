@@ -131,7 +131,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
     /**
      * @return string[]
      */
-    protected function determineCellClasses(int $today, int $weekDay, int $hour, int $workingStart, int $workingEnd
+    protected function determineCellClasses(string $today, int $weekDay, int $hour, int $workingStart, int $workingEnd
     ): array
     {
         $classes = [];

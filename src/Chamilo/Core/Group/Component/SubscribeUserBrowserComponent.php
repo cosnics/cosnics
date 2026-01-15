@@ -5,9 +5,7 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\UserInterface\Table\NonSubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -48,6 +46,18 @@ class SubscribeUserBrowserComponent extends Manager
             throw new NotAllowedException();
         }
 
+        $this->getBreadcrumbTrail()->add(
+            new Breadcrumb(
+                $this->getUrlGenerator()->fromParameters(
+                    [
+                        self::PARAM_CONTEXT => Manager::CONTEXT,
+                        self::PARAM_ACTION => self::ACTION_VIEW_GROUP,
+                        self::PARAM_GROUP_ID => $this->getGroupIdentifier()
+                    ]
+                ), $this->getTranslator()->trans('ViewerComponent', [], Manager::CONTEXT)
+            )
+        );
+
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $output = $this->get_user_subscribe_html();
 
@@ -61,42 +71,33 @@ class SubscribeUserBrowserComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    public function addAdditionalBreadcrumbs(BreadcrumbTrail $breadcrumbtrail): void
-    {
-        $translator = $this->getTranslator();
-
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url([Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS]),
-                $translator->trans('BrowserComponent', [], Manager::CONTEXT)
-            )
-        );
-        $breadcrumbtrail->add(
-            new Breadcrumb(
-                $this->get_url(
-                    [
-                        Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
-                        self::PARAM_GROUP_ID => $this->getGroupIdentifier()
-                    ]
-                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
-            )
-        );
-    }
-
     public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         $group = $this->getGroup();
 
         if (!isset($this->buttonToolbarRenderer))
         {
-            $buttonToolbar = new ButtonToolBar($this->get_url([self::PARAM_GROUP_ID => $group->getId()]));
+            $buttonToolbar = new ButtonToolBar(
+                $this->getUrlGenerator()->fromParameters(
+                    [
+                        self::PARAM_CONTEXT => Manager::CONTEXT,
+                        self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER,
+                        self::PARAM_GROUP_ID => $group->getId()
+                    ]
+                )
+            );
             $commonActions = new ButtonGroup();
 
             $commonActions->addButton(
                 new Button(
                     $this->getTranslator()->trans('ShowAll', [], StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('folder'), $this->get_url([self::PARAM_GROUP_ID => $group->getId()]),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    new FontAwesomeGlyph('folder'), $this->getUrlGenerator()->fromParameters(
+                    [
+                        self::PARAM_CONTEXT => Manager::CONTEXT,
+                        self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER,
+                        self::PARAM_GROUP_ID => $group->getId()
+                    ]
+                ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 

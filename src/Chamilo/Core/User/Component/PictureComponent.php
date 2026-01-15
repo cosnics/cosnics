@@ -70,8 +70,10 @@ class PictureComponent extends ProfileComponent
                 }
 
                 $this->redirectWithMessage(
-                    $this->getTranslator()->trans($success ? $successMessage : $errorMessage), !$success,
-                    [Application::PARAM_ACTION => self::ACTION_CHANGE_PICTURE]
+                    $this->getTranslator()->trans($success ? $successMessage : $errorMessage), !$success, [
+                        Application::PARAM_CONTEXT => $this->getContext(),
+                        Application::PARAM_ACTION => self::ACTION_CHANGE_PICTURE
+                    ]
                 );
             }
             else
@@ -102,7 +104,7 @@ class PictureComponent extends ProfileComponent
     {
         if (!isset($this->pictureForm))
         {
-            $this->pictureForm = new PictureForm($this->getUser(), $this->get_url());
+            $this->pictureForm = new PictureForm($this->getUser(), $this->getUrlGenerator()->fromRequest());
         }
 
         return $this->pictureForm;
