@@ -179,14 +179,6 @@ class AdvancedElementFinderElement
     }
 
     /**
-     * @deprecated Use AdvancedElementFinderElement::setType()
-     */
-    public function set_type($type)
-    {
-        $this->setType($type);
-    }
-
-    /**
      * Sets the type of this element
      *
      * @param string $type

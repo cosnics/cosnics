@@ -3,7 +3,6 @@ namespace Chamilo\Core\Group\Service;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Service\PropertyMapper;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -316,37 +315,5 @@ class GroupsTreeTraverser
         }
 
         return implode(' <span class="text-primary">></span> ', array_reverse($names));
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     */
-    public function getHighestGroupQuotumForUser(User $user): int
-    {
-        $userGroupIdentifiers = $this->findAllSubscribedGroupIdentifiersForUserIdentifier($user->getId());
-
-        if (count($userGroupIdentifiers) == 0)
-        {
-            return 0;
-        }
-
-        return $this->groupRepository->getHighestGroupQuotumForUserGroupIdentifiers($userGroupIdentifiers);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     */
-    public function getLowestGroupQuotumForUser(User $user): int
-    {
-        $userGroupIdentifiers = $this->findAllSubscribedGroupIdentifiersForUserIdentifier($user->getId());
-
-        if (count($userGroupIdentifiers) == 0)
-        {
-            return 0;
-        }
-
-        return $this->groupRepository->getLowestGroupQuotumForUserGroupIdentifiers($userGroupIdentifiers);
     }
 }

@@ -8,6 +8,7 @@ use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -48,7 +49,8 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         GroupsTreeTraverser $groupsTreeTraverser, GroupMembershipService $groupMembershipService,
         StringUtilities $stringUtilities, Translator $translator, UrlGenerator $urlGenerator,
         ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, GroupUrlGenerator $groupUrlGenerator
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, GroupUrlGenerator $groupUrlGenerator,
+        ClassnameUtilities $classnameUtilities
     )
     {
         $this->stringUtilities = $stringUtilities;
@@ -57,7 +59,8 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         $this->groupUrlGenerator = $groupUrlGenerator;
 
         parent::__construct(
-            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
+            $classnameUtilities
         );
     }
 
@@ -203,7 +206,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
         $editUrl = $groupUrlGenerator->getUpdateUrl($group);
 
-        $toolbar->add_item(
+        $toolbar->addItem(
             new ToolbarItem(
                 $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $editUrl, ToolbarItem::DISPLAY_ICON
@@ -212,7 +215,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
         $subscribeUrl = $groupUrlGenerator->getSubscribeUrl($group);
 
-        $toolbar->add_item(
+        $toolbar->addItem(
             new ToolbarItem(
                 $translator->trans('AddUsers', [], 'Chamilo\Core\Group'), new FontAwesomeGlyph('plus-circle'),
                 $subscribeUrl, ToolbarItem::DISPLAY_ICON
@@ -225,7 +228,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         {
             $truncateUrl = $groupUrlGenerator->getTruncateUrl($group);
 
-            $toolbar->add_item(
+            $toolbar->addItem(
                 new ToolbarItem(
                     label: $translator->trans('Truncate', [], 'Chamilo\Core\Group'), image: new FontAwesomeGlyph(
                     'trash-alt'
@@ -239,7 +242,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         else
         {
 
-            $toolbar->add_item(
+            $toolbar->addItem(
                 new ToolbarItem(
                     $translator->trans('TruncateNA', [], 'Chamilo\Core\Group'),
                     new FontAwesomeGlyph('trash-alt', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
@@ -249,7 +252,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
         $deleteUrl = $groupUrlGenerator->getDeleteUrl($group);
 
-        $toolbar->add_item(
+        $toolbar->addItem(
             new ToolbarItem(
                 label: $translator->trans('Delete', [], StringUtilities::LIBRARIES), image: new FontAwesomeGlyph(
                 'times'
@@ -262,7 +265,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
         $moveUrl = $groupUrlGenerator->getMoveUrl($group);
 
-        $toolbar->add_item(
+        $toolbar->addItem(
             new ToolbarItem(
                 $translator->trans('Move', [], StringUtilities::LIBRARIES),
                 new FontAwesomeGlyph('window-restore', ['fa-flip-horizontal'], null, 'fas'), $moveUrl,

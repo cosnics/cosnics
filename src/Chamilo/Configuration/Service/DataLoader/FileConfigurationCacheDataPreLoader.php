@@ -107,10 +107,7 @@ class FileConfigurationCacheDataPreLoader implements CacheDataPreLoaderInterface
                         'chamilo.configuration.debug.enable_query_cache'
                     )
                 ],
-                'storage' => $fileContainer->getParameter('chamilo.configuration.storage'),
-                'session' => [
-                    'session_handler' => $fileContainer->getParameter('chamilo.configuration.session.session_handler')
-                ]
+                'storage' => $fileContainer->getParameter('chamilo.configuration.storage')
             ]
         ];
 

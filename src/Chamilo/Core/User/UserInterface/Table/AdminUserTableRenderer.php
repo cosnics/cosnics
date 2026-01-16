@@ -7,6 +7,7 @@ use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -40,7 +41,8 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
     public function __construct(
         ConfigurationConsulter $configurationConsulter, User $user, Translator $translator, UrlGenerator $urlGenerator,
         ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, UserUrlGenerator $userUrlGenerator
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, UserUrlGenerator $userUrlGenerator,
+        ClassnameUtilities $classnameUtilities
     )
     {
         $this->configurationConsulter = $configurationConsulter;
@@ -48,7 +50,8 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
         $this->userUrlGenerator = $userUrlGenerator;
 
         parent::__construct(
-            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
+            $classnameUtilities
         );
     }
 
@@ -188,7 +191,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
         {
             $editUrl = $this->getUserUrlGenerator()->getUpdateUrl($user);
 
-            $toolbar->add_item(
+            $toolbar->addItem(
                 new ToolbarItem(
                     $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $editUrl, ToolbarItem::DISPLAY_ICON
@@ -197,7 +200,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
 
             $detailUrl = $this->getUserUrlGenerator()->getDetailUrl($user);
 
-            $toolbar->add_item(
+            $toolbar->addItem(
                 new ToolBarItem(
                     $translator->trans('Detail', [], Manager::CONTEXT), new FontAwesomeGlyph('info-circle'), $detailUrl,
                     ToolbarItem::DISPLAY_ICON
@@ -211,19 +214,19 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
             {
                 $deleteUrl = $this->getUserUrlGenerator()->getDeleteUrl($user);
 
-                $toolbar->add_item(
+                $toolbar->addItem(
                     new ToolBarItem(
                         label: $translator->trans('Delete', [], StringUtilities::LIBRARIES),
                         image: new FontAwesomeGlyph('times'), href: $deleteUrl, display: ToolbarItem::DISPLAY_ICON,
                         confirmation: true, confirmationMessage: $this->getTranslator()->trans(
-                            'ConfirmChosenAction', [], StringUtilities::LIBRARIES
-                        )
+                        'ConfirmChosenAction', [], StringUtilities::LIBRARIES
+                    )
                     )
                 );
             }
             else
             {
-                $toolbar->add_item(
+                $toolbar->addItem(
                     new ToolBarItem(
                         $translator->trans('DeleteNA', [], StringUtilities::LIBRARIES),
                         new FontAwesomeGlyph('times', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
@@ -235,7 +238,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
             {
                 $changeUserUrl = $this->getUserUrlGenerator()->getChangeUserUrl($user);
 
-                $toolbar->add_item(
+                $toolbar->addItem(
                     new ToolBarItem(
                         $translator->trans('LoginAsUser', [], Manager::CONTEXT), new FontAwesomeGlyph('mask'),
                         $changeUserUrl, ToolbarItem::DISPLAY_ICON
@@ -245,7 +248,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
         }
         else
         {
-            $toolbar->add_item(
+            $toolbar->addItem(
                 new ToolBarItem(
                     $translator->trans('DeleteNA', [], StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('times', ['text-muted']), null, ToolbarItem::DISPLAY_ICON

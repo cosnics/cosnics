@@ -23,22 +23,6 @@ abstract class AjaxManager extends Application
     }
 
     /**
-     * @deprecated Use ChamiloRequest::getFromQueryOrRequest()
-     */
-    public function getPostDataValue(string $name): mixed
-    {
-        return $this->getRequest()->getFromQueryOrRequest($name);
-    }
-
-    /**
-     * @deprecated Use ChamiloRequest::getFromQueryOrRequest()
-     */
-    public function getRequestedPostDataValue(string $parameter): mixed
-    {
-        return $this->getRequest()->getFromQueryOrRequest($parameter);
-    }
-
-    /**
      * @param string[] $postParameters
      *
      * @return string[]

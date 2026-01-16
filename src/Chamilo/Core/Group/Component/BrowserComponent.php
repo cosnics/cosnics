@@ -9,7 +9,6 @@ use Chamilo\Core\Group\UserInterface\Table\GroupTableRenderer;
 use Chamilo\Core\Group\UserInterface\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
@@ -166,7 +165,7 @@ class BrowserComponent extends Manager
 
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 
-        $toolbar->add_item(
+        $toolbar->addItem(
             new ToolbarItem(
                 $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->getGroupUrlGenerator()->getUpdateUrl($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -175,7 +174,7 @@ class BrowserComponent extends Manager
 
         if ($this->getGroup()->getId() != $this->getRootGroup()->getId())
         {
-            $toolbar->add_item(
+            $toolbar->addItem(
                 new ToolbarItem(
                     $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->getGroupUrlGenerator()->getDeleteUrl($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -183,7 +182,7 @@ class BrowserComponent extends Manager
             );
         }
 
-        $toolbar->add_item(
+        $toolbar->addItem(
             new ToolbarItem(
                 $translator->trans('AddUsers'), new FontAwesomeGlyph('plus-circle'),
                 $this->getGroupUrlGenerator()->getSubscribeUrl($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -197,7 +196,7 @@ class BrowserComponent extends Manager
 
         if ($visible)
         {
-            $toolbar->add_item(
+            $toolbar->addItem(
                 new ToolbarItem(
                     $translator->trans('Truncate'), new FontAwesomeGlyph('trash-alt'),
                     $this->getGroupUrlGenerator()->getTruncateUrl($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -206,7 +205,7 @@ class BrowserComponent extends Manager
         }
         else
         {
-            $toolbar->add_item(
+            $toolbar->addItem(
                 new ToolbarItem(
                     $translator->trans('TruncateNA'), new FontAwesomeGlyph('trash-alt', ['text-muted']), null,
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -408,7 +407,6 @@ class BrowserComponent extends Manager
      */
     public function renderTabs(): string
     {
-        $renderer_name = ClassnameUtilities::getInstance()->getClassnameFromObject($this, true);
         $tabs = new TabsCollection();
         $translator = $this->getTranslator();
 
@@ -439,6 +437,6 @@ class BrowserComponent extends Manager
             )
         );
 
-        return $this->getTabsRenderer()->render($renderer_name, $tabs);
+        return $this->getTabsRenderer()->render('group_browser', $tabs);
     }
 }

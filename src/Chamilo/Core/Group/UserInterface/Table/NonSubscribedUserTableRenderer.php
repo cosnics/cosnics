@@ -6,6 +6,7 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -34,13 +35,14 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, UrlGenerator $urlGenerator,
         ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, ClassnameUtilities $classnameUtilities
     )
     {
         $this->configurationConsulter = $configurationConsulter;
 
         parent::__construct(
-            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
+            $classnameUtilities
         );
     }
 
@@ -115,7 +117,7 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
 
         ]);
 
-        $toolbar->add_item(
+        $toolbar->addItem(
             new ToolbarItem(
                 $translator->trans('UnsubscribeSelected', [], Manager::CONTEXT), new FontAwesomeGlyph('plus-circle'),
                 $subscribeUrl, ToolbarItem::DISPLAY_ICON

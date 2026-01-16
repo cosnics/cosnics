@@ -234,26 +234,6 @@ class DatetimeUtilities
     }
 
     /**
-     * @throws \Exception
-     */
-    public static function getInstance(): DatetimeUtilities
-    {
-        if (is_null(static::$instance))
-        {
-            /**
-             * @var \Symfony\Component\Translation\Translator $translator
-             */
-            $translator = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-                'Symfony\Component\Translation\Translator'
-            );
-
-            self::$instance = new static($translator);
-        }
-
-        return static::$instance;
-    }
-
-    /**
      * Defining the shorts for the months.
      *
      * @return string[]

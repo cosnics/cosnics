@@ -95,7 +95,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         $translator = $this->getTranslator();
 
         $html[] = $translator->trans('Email', [], Manager::CONTEXT) . ': ' .
-            StringUtilities::getInstance()->encryptMailLink($user->get_email());
+            $this->getStringUtilities()->encryptMailLink($user->get_email());
         $html[] = '<br />' . $translator->trans('Username', [], Manager::CONTEXT) . ': ' . $user->get_username();
         $html[] = '<br />' . $translator->trans('Status', [], Manager::CONTEXT) . ': ' .
             ($user->get_status() == 1 ? $translator->trans('Teacher', [], Manager::CONTEXT) :

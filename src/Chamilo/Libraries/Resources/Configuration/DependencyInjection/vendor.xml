@@ -30,12 +30,7 @@
         <service id="Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage">
             <argument key="$handler"
                       type="service"
-                      id="Symfony\Component\HttpFoundation\Session\Storage\SessionHandler"/>
-        </service>
-
-        <service id="Symfony\Component\HttpFoundation\Session\Storage\SessionHandler">
-            <factory service="Chamilo\Libraries\Platform\Session\SessionHandlerFactory"
-                     method="getSessionHandler"/>
+                      id="Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler"/>
         </service>
 
         <service id="Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler">

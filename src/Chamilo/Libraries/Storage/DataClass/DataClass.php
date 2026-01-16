@@ -166,12 +166,4 @@ abstract class DataClass
 
         return $this;
     }
-
-    /**
-     * @deprecated Use setId($id) now
-     */
-    public function set_id(?string $id): static
-    {
-        return $this->setId($id);
-    }
 }

@@ -40,7 +40,7 @@ class EditorComponent extends Manager implements BreadcrumbLessComponentInterfac
 
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
-                null, $this->getTranslator()->trans(
+                $this->getUrlGenerator()->fromRequest(), $this->getTranslator()->trans(
                 'EditMenuItemComponentTitle', ['{ITEM_NAME}' => $itemRenderer->renderTitleForCurrentLanguage($item)],
                 Manager::CONTEXT
             )

@@ -1,13 +1,11 @@
 <?php
 namespace Chamilo\Configuration\Storage\DataClass;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * @package Chamilo\Configuration\Storage\DataClass
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Setting extends DataClass
 {
@@ -19,139 +17,66 @@ class Setting extends DataClass
     public const PROPERTY_VALUE = 'value';
     public const PROPERTY_VARIABLE = 'variable';
 
-    /**
-     * Get the default properties of all settings.
-     *
-     * @return array The property names.
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    public function getContext()
     {
-        return parent::getDefaultPropertyNames(
-            [self::PROPERTY_CONTEXT, self::PROPERTY_VARIABLE, self::PROPERTY_VALUE, self::PROPERTY_USER_SETTING]
-        );
+        return $this->getDefaultProperty(self::PROPERTY_CONTEXT);
     }
 
-    /**
-     * @return string
-     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        $extendedPropertyNames[] = self::PROPERTY_CONTEXT;
+        $extendedPropertyNames[] = self::PROPERTY_VARIABLE;
+        $extendedPropertyNames[] = self::PROPERTY_VALUE;
+        $extendedPropertyNames[] = self::PROPERTY_USER_SETTING;
+
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
+    }
+
     public static function getStorageUnitName(): string
     {
         return 'configuration_setting';
     }
 
-    /**
-     * Returns the application of this setting object
-     *
-     * @return string The setting application
-     * @deprecated Use get_context instead
-     */
-    public function get_application()
-    {
-        return $this->get_context();
-    }
-
-    public function get_context()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CONTEXT);
-    }
-
-    /**
-     * Returns the user_setting of this setting object
-     *
-     * @return string the user_setting
-     */
-    public function get_user_setting()
+    public function getUserSetting(): int
     {
         return $this->getDefaultProperty(self::PROPERTY_USER_SETTING);
     }
 
-    /**
-     * Returns the value of this setting object
-     *
-     * @return string the value
-     */
-    public function get_value()
+    public function getValue(): mixed
     {
         return $this->getDefaultProperty(self::PROPERTY_VALUE);
     }
 
-    /**
-     * Returns the variable of this setting object
-     *
-     * @return string the variable
-     */
-    public function get_variable()
+    public function getVariable(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_VARIABLE);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
-    protected function on_change($success = true)
-    {
-        if (!$success)
-        {
-            return $success;
-        }
-
-        /**
-         * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
-         */
-        $configurationConsulter = DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            ConfigurationConsulter::class
-        );
-
-        $configurationConsulter->getDataPreLoader()->clearCacheData();
-
-        return $success;
-    }
-
-    /**
-     * Sets the application of this setting.
-     *
-     * @param $application string the setting application.
-     *
-     * @deprecated Use set_context instead
-     */
-    public function set_application($application)
-    {
-        $this->set_context($application);
-    }
-
-    public function set_context($context)
+    public function setContext(string $context): static
     {
         $this->setDefaultProperty(self::PROPERTY_CONTEXT, $context);
+
+        return $this;
     }
 
-    /**
-     * Sets the user_setting of this setting.
-     *
-     * @param $user_setting string the user_setting.
-     */
-    public function set_user_setting($user_setting)
+    public function setUserSetting(int $userSetting): static
     {
-        $this->setDefaultProperty(self::PROPERTY_USER_SETTING, $user_setting);
+        $this->setDefaultProperty(self::PROPERTY_USER_SETTING, $userSetting);
+
+        return $this;
     }
 
-    /**
-     * Sets the value of this setting.
-     *
-     * @param $value string the value.
-     */
-    public function set_value($value)
+    public function setValue(mixed $value): static
     {
         $this->setDefaultProperty(self::PROPERTY_VALUE, $value);
+
+        return $this;
     }
 
-    /**
-     * Sets the variable of this setting.
-     *
-     * @param $variable string the variable.
-     */
-    public function set_variable($variable)
+    public function setVariable(string $variable): static
     {
         $this->setDefaultProperty(self::PROPERTY_VARIABLE, $variable);
+
+        return $this;
     }
 }

@@ -22,7 +22,7 @@ class DeleteTemporaryFileComponent extends Manager
      */
     public function run()
     {
-        $temporaryFileName = $this->getPostDataValue(self::PARAM_FILE);
+        $temporaryFileName = $this->getRequest()->getFromQueryOrRequest(self::PARAM_FILE);
         $temporaryPath = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__);
         $temporaryFilePath = $temporaryPath . $temporaryFileName;
 

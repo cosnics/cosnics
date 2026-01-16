@@ -35,10 +35,7 @@
             <parameter key="archive_path">./../files/archive/</parameter>
             <parameter key="cache_path">./../files/cache/</parameter>
             <parameter key="garbage_path">./../files/garbage/</parameter>
-            <parameter key="hotpotatoes_path">./../files/hotpotatoes/</parameter>
             <parameter key="logs_path">./../files/logs/</parameter>
-            <parameter key="repository_path">./../files/repository/</parameter>
-            <parameter key="scorm_path">./../files/scorm/</parameter>
             <parameter key="temp_path">./../files/temp/</parameter>
             <parameter key="userpictures_path">./../files/userpictures/</parameter>
         </parameter>

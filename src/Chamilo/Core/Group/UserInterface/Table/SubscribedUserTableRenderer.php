@@ -7,6 +7,7 @@ use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -34,13 +35,15 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
 
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, GroupUrlGenerator $groupUrlGenerator
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, GroupUrlGenerator $groupUrlGenerator,
+        ClassnameUtilities $classnameUtilities
     )
     {
         $this->groupUrlGenerator = $groupUrlGenerator;
 
         parent::__construct(
-            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
+            $classnameUtilities
         );
     }
 
@@ -91,7 +94,7 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
 
         $unsubscribeUrl = $this->getGroupUrlGenerator()->getUnsubscribeUserUrl($subscribedUser);
 
-        $toolbar->add_item(
+        $toolbar->addItem(
             new ToolbarItem(
                 $translator->trans('UnsubscribeSelected', [], Manager::CONTEXT), new FontAwesomeGlyph('times'),
                 $unsubscribeUrl, ToolbarItem::DISPLAY_ICON

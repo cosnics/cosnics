@@ -139,7 +139,7 @@ class EventListRenderer extends EventRenderer
 
             foreach ($eventActions as $action)
             {
-                $toolbar->add_item($action);
+                $toolbar->addItem($action);
             }
 
             $html[] = '<div style="float: right; margin-top: 2px;">';

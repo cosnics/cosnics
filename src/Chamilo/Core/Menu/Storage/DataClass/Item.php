@@ -121,46 +121,6 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
-    /**
-     * @deprecated Use Item::getDisplay() now
-     */
-    public function get_display(): int
-    {
-        return $this->getDisplay();
-    }
-
-    /**
-     * @deprecated Use Item::getHidden() now
-     */
-    public function get_hidden(): int
-    {
-        return $this->getHidden();
-    }
-
-    /**
-     * @deprecated Use Item::getParent() now
-     */
-    public function get_parent(): string
-    {
-        return $this->getParentId();
-    }
-
-    /**
-     * @deprecated Use Item::getSort() now
-     */
-    public function get_sort(): int
-    {
-        return $this->getSort();
-    }
-
-    /**
-     * @deprecated Use Item::hadParentId() now
-     */
-    public function hasParent(): bool
-    {
-        return $this->hasParentId();
-    }
-
     public function hasParentId(): bool
     {
         return $this->getParentId() != 0;
@@ -169,14 +129,6 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
     public function isHidden(): bool
     {
         return (bool) $this->getHidden();
-    }
-
-    /**
-     * @deprecated Use Item::isHidden() now
-     */
-    public function is_hidden(): bool
-    {
-        return $this->isHidden();
     }
 
     public function setDisplay(int $display = self::DISPLAY_ICON): Item
@@ -234,40 +186,6 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
         return $this;
     }
 
-    /**
-     * @deprecated Use Item::setDisplay() now
-     */
-    public function set_display(int $display = self::DISPLAY_ICON): Item
-    {
-        return $this->setDisplay($display);
-    }
-
-    /**
-     * @deprecated User Item::setHidden() now
-     */
-    public function set_hidden(int $hidden = 0): Item
-    {
-        return $this->setHidden($hidden);
-    }
-
-    /**
-     * @deprecated Use Item::setParent() now
-     */
-    public function set_parent(string $parent): Item
-    {
-        return $this->setParentId($parent);
-    }
-
-    /**
-     * @deprecated Use Item::setSort() now
-     */
-    public function set_sort(int $sort): Item
-    {
-        $this->setSort($sort);
-
-        return $this;
-    }
-
     public function showIcon(): bool
     {
         return $this->getDisplay() == self::DISPLAY_BOTH || $this->getDisplay() == self::DISPLAY_ICON;
@@ -276,22 +194,6 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
     public function showTitle(): bool
     {
         return $this->getDisplay() == self::DISPLAY_TEXT || $this->getDisplay() == self::DISPLAY_BOTH;
-    }
-
-    /**
-     * @deprecated Use Item::showIcon() now
-     */
-    public function show_icon(): bool
-    {
-        return $this->showIcon();
-    }
-
-    /**
-     * @deprecated Use Item::showTitle() now
-     */
-    public function show_title(): bool
-    {
-        return $this->showTitle();
     }
 
 }

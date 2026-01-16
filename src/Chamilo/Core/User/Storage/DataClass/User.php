@@ -106,14 +106,6 @@ class User extends DataClass
         return (bool) $this->getDefaultProperty(self::PROPERTY_APPROVED);
     }
 
-    /**
-     * @deprecated Use getAuthenticationSource() now
-     */
-    public function get_auth_source(): string
-    {
-        return $this->getAuthenticationSource();
-    }
-
     public function get_creator_id(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_CREATOR_ID);
@@ -183,14 +175,6 @@ class User extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_PICTURE_URI);
     }
 
-    /**
-     * @deprecated Use User::getPlatformAdmin()
-     */
-    public function get_platformadmin(): bool
-    {
-        return $this->getPlatformAdmin();
-    }
-
     public function get_registration_date()
     {
         return $this->getDefaultProperty(self::PROPERTY_REGISTRATION_DATE);
@@ -240,14 +224,6 @@ class User extends DataClass
     public function is_anonymous_user(): bool
     {
         return $this->get_status() == self::STATUS_ANONYMOUS;
-    }
-
-    /**
-     * @deprecated Use User::isPlatformAdmin()
-     */
-    public function is_platform_admin(): bool
-    {
-        return $this->isPlatformAdmin();
     }
 
     public function is_teacher(): bool

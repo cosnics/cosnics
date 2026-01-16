@@ -48,7 +48,6 @@ class WebPathBuilder extends AbstractPathBuilder
 
     public function isWebUri(string $uri): bool
     {
-        return ((stripos($uri, 'http://') === 0) || (stripos($uri, 'https://') === 0) ||
-            (stripos($uri, 'ftp://') === 0));
+        return ((stripos($uri, 'https://') === 0) || (stripos($uri, 'ftp://') === 0));
     }
 }

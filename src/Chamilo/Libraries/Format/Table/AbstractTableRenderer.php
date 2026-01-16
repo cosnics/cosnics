@@ -30,6 +30,8 @@ abstract class AbstractTableRenderer
      */
     public const TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
 
+    protected ClassnameUtilities $classnameUtilities;
+
     /**
      * @var \Chamilo\Libraries\Format\Table\Column\TableColumn[]
      */
@@ -47,7 +49,7 @@ abstract class AbstractTableRenderer
 
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, AbstractHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, ClassnameUtilities $classnameUtilities
     )
     {
         $this->translator = $translator;
@@ -55,6 +57,7 @@ abstract class AbstractTableRenderer
         $this->htmlTableRenderer = $htmlTableRenderer;
         $this->pager = $pager;
         $this->dataClassPropertyTableColumnFactory = $dataClassPropertyTableColumnFactory;
+        $this->classnameUtilities = $classnameUtilities;
 
         $this->initializeColumns();
     }
@@ -77,7 +80,7 @@ abstract class AbstractTableRenderer
         );
     }
 
-    protected function addColumn(TableColumn $column, ?int $index = null)
+    protected function addColumn(TableColumn $column, ?int $index = null): static
     {
         if (is_null($index))
         {
@@ -87,6 +90,8 @@ abstract class AbstractTableRenderer
         {
             array_splice($this->columns, $index, 0, [$column]);
         }
+
+        return $this;
     }
 
     public function determineOrderBy(TableParameterValues $parameterValues): OrderBy
@@ -109,7 +114,7 @@ abstract class AbstractTableRenderer
     {
         try
         {
-            return ClassnameUtilities::getInstance()->getClassnameFromNamespace(static::class, true);
+            return $this->getClassnameUtilities()->getClassnameFromNamespace(static::class, true);
         }
         catch (Exception)
         {
@@ -139,6 +144,11 @@ abstract class AbstractTableRenderer
         return implode('', $html);
     }
 
+    public function getClassnameUtilities(): ClassnameUtilities
+    {
+        return $this->classnameUtilities;
+    }
+
     /**
      * Gets the column at the given index in the model.
      */
@@ -153,6 +163,16 @@ abstract class AbstractTableRenderer
     public function getColumns(): array
     {
         return $this->columns;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $columns
+     */
+    public function setColumns(array $columns): static
+    {
+        $this->columns = $columns;
+
+        return $this;
     }
 
     public function getDataClassPropertyTableColumnFactory(): DataClassPropertyTableColumnFactory
@@ -288,12 +308,4 @@ abstract class AbstractTableRenderer
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array $result
      */
     abstract protected function renderIdentifierCell($result): string;
-
-    /**
-     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $columns
-     */
-    public function setColumns(array $columns)
-    {
-        $this->columns = $columns;
-    }
 }

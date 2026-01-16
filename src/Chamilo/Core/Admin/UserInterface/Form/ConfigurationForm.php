@@ -511,7 +511,7 @@ class ConfigurationForm extends FormValidator
                     }
                     else
                     {
-                        $platformSetting->set_value($values[$name] ?: 0);
+                        $platformSetting->setValue($values[$name] ?: 0);
 
                         if (!$configurationService->updateSetting($platformSetting))
                         {

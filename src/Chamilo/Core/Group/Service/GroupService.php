@@ -132,26 +132,6 @@ class GroupService
     }
 
     /**
-     * @return string[]
-     * @deprecated Use GroupsTreeTraverser::findAllSubscribedGroupIdentifiersForUserIdentifier(string $userIdentifier)
-     */
-    public function findAllSubscribedGroupIdentifiersForUserIdentifier(string $userIdentifier): array
-    {
-        return $this->groupsTreeTraverser->findAllSubscribedGroupIdentifiersForUserIdentifier($userIdentifier);
-    }
-
-    /**
-     * @param string $userIdentifier
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @deprecated Use GroupsTreeTraverser::findAllSubscribedGroupsForUserIdentifier(string $userIdentifier)
-     */
-    public function findAllSubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection
-    {
-        return $this->groupsTreeTraverser->findAllSubscribedGroupsForUserIdentifier($userIdentifier);
-    }
-
-    /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
@@ -323,51 +303,14 @@ class GroupService
         return $this->eventDispatcher;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     * @deprecated Use GroupService::findGroupByIdentifier() now
-     */
-    public function getGroupByIdentifier(string $groupIdentifier): ?Group
-    {
-        return $this->findGroupByIdentifier($groupIdentifier);
-    }
-
     public function getGroupMembershipService(): GroupMembershipService
     {
         return $this->groupMembershipService;
     }
 
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     *
-     * @return string
-     * @deprecated (use tree traverser)
-     */
-    public function getGroupPath(Group $group): string
-    {
-        return $this->groupsTreeTraverser->getFullyQualifiedNameForGroup($group);
-    }
-
     public function getGroupRepository(): GroupRepository
     {
         return $this->groupRepository;
-    }
-
-    /**
-     * @deprecated (use tree traverser)
-     */
-    public function getHighestGroupQuotumForUser(User $user): int
-    {
-        return $this->groupsTreeTraverser->getHighestGroupQuotumForUser($user);
-    }
-
-    /**
-     * @deprecated (use tree traverser)
-     */
-    public function getLowestGroupQuotumForUser(User $user): int
-    {
-        return $this->groupsTreeTraverser->getLowestGroupQuotumForUser($user);
     }
 
     public function getPropertyMapper(): PropertyMapper

@@ -17,10 +17,7 @@ class ToolbarItem
 
     private ?string $class;
 
-    /**
-     * @var bool|string
-     */
-    private $confirmation;
+    private bool $confirmation;
 
     private ?string $confirmationMessage;
 
@@ -29,7 +26,7 @@ class ToolbarItem
     /**
      * @var string[]
      */
-    private ?array $extraAttributes;
+    private array $extraAttributes;
 
     private ?string $href;
 
@@ -41,8 +38,8 @@ class ToolbarItem
 
     public function __construct(
         ?string $label = null, ?InlineGlyph $image = null, ?string $href = null,
-        int $display = self::DISPLAY_ICON_AND_LABEL, $confirmation = false, ?string $class = null,
-        ?string $target = null, ?string $confirmationMessage = null, ?array $extraAttributes = null
+        int $display = self::DISPLAY_ICON_AND_LABEL, bool $confirmation = false, ?string $class = null,
+        ?string $target = null, ?string $confirmationMessage = null, array $extraAttributes = []
     )
     {
         $this->label = $label;
@@ -63,21 +60,13 @@ class ToolbarItem
         return $buttonRenderer->render();
     }
 
-    /**
-     * @deprecated Use ToolbarItem::render() now
-     */
-    public function as_html(): string
-    {
-        return $this->render();
-    }
-
     public function convertToButton(bool $keepDisplayProperty = true): Button
     {
-        $label = ($this->get_label() ? htmlspecialchars($this->get_label()) : null);
+        $label = ($this->getLabel() ? htmlspecialchars($this->getLabel()) : null);
 
         if ($keepDisplayProperty)
         {
-            $display = !$this->get_display() ? self::DISPLAY_ICON : $this->get_display();
+            $display = !$this->getDisplay() ? self::DISPLAY_ICON : $this->getDisplay();
         }
         else
         {
@@ -87,8 +76,8 @@ class ToolbarItem
         $elementClasses = !empty($this->class) ? explode(' ', $this->class) : [];
         array_unshift($elementClasses, 'btn-link');
 
-        $confirmation = $this->get_confirmation();
-        $confirmationMessage = $this->get_confirm_message();
+        $confirmation = $this->getConfirmation();
+        $confirmationMessage = $this->getConfirmationMessage();
 
         if ($confirmation === true && is_string($confirmationMessage) && !empty($confirmationMessage))
         {
@@ -100,8 +89,8 @@ class ToolbarItem
         }
 
         return new Button(
-            $label, $this->get_image(), $this->get_href(), $display, $buttonConfirmationMessage, $elementClasses,
-            $this->get_target()
+            $label, $this->getImage(), $this->getHref(), $display, $buttonConfirmationMessage, $elementClasses,
+            $this->getTarget()
         );
     }
 
@@ -110,10 +99,46 @@ class ToolbarItem
         return $this->class;
     }
 
+    public function getConfirmation(): bool
+    {
+        return $this->confirmation;
+    }
+
+    public function setConfirmation(bool $confirmation): static
+    {
+        $this->confirmation = $confirmation;
+
+        return $this;
+    }
+
+    public function getConfirmationMessage(): ?string
+    {
+        return $this->confirmationMessage;
+    }
+
+    public function setConfirmationMessage(?string $message): static
+    {
+        $this->confirmationMessage = $message;
+
+        return $this;
+    }
+
+    public function getDisplay(): int
+    {
+        return $this->display;
+    }
+
+    public function setDisplay(int $display): static
+    {
+        $this->display = $display;
+
+        return $this;
+    }
+
     /**
-     * @return ?string[]
+     * @return string[]
      */
-    public function getExtraAttributes(): ?array
+    public function getExtraAttributes(): array
     {
         return $this->extraAttributes;
     }
@@ -121,96 +146,63 @@ class ToolbarItem
     /**
      * @param ?string[] $extraAttributes
      */
-    public function setExtraAttributes(?array $extraAttributes)
+    public function setExtraAttributes(array $extraAttributes = []): static
     {
         $this->extraAttributes = $extraAttributes;
+
+        return $this;
     }
 
-    public function get_confirm_message(): ?string
-    {
-        return $this->confirmationMessage;
-    }
-
-    /**
-     * @return bool|string
-     */
-    public function get_confirmation()
-    {
-        return $this->confirmation;
-    }
-
-    /**
-     * @param bool|string $confirmation
-     */
-    public function set_confirmation($confirmation)
-    {
-        $this->confirmation = $confirmation;
-    }
-
-    public function get_display(): int
-    {
-        return $this->display;
-    }
-
-    public function set_display(int $display)
-    {
-        $this->display = $display;
-    }
-
-    public function get_href(): ?string
+    public function getHref(): ?string
     {
         return $this->href;
     }
 
-    public function set_href(?string $href)
+    public function setHref(?string $href): static
     {
         $this->href = $href;
+
+        return $this;
     }
 
-    public function get_image(): ?InlineGlyph
+    public function getImage(): ?InlineGlyph
     {
         return $this->image;
     }
 
-    public function set_image(?InlineGlyph $image)
+    public function setImage(?InlineGlyph $image): static
     {
         $this->image = $image;
+
+        return $this;
     }
 
-    public function get_label(): ?string
+    public function getLabel(): ?string
     {
         return $this->label;
     }
 
-    public function set_label(?string $label)
+    public function setLabel(?string $label): static
     {
         $this->label = $label;
+
+        return $this;
     }
 
-    public function get_target(): ?string
+    public function getTarget(): ?string
     {
         return $this->target;
     }
 
-    public function set_target(?string $target)
+    public function setTarget(?string $target): static
     {
         $this->target = $target;
+
+        return $this;
     }
 
     public function needsConfirmation(): bool
     {
-        if ($this->get_confirmation() === false)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-
-    public function set_confirm_message(?string $message)
-    {
-        $this->confirmationMessage = $message;
+        return !($this->getConfirmation() === false);
     }
 }

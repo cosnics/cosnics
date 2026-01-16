@@ -7,6 +7,7 @@ use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -41,14 +42,15 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
     public function __construct(
         ItemRendererCollection $itemRendererFactory, ItemService $itemService, Translator $translator,
         UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, ClassnameUtilities $classnameUtilities
     )
     {
         $this->itemRendererFactory = $itemRendererFactory;
         $this->itemService = $itemService;
 
         parent::__construct(
-            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
+            $classnameUtilities
         );
     }
 
@@ -156,7 +158,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         $toolbar = new Toolbar();
 
-        $toolbar->add_item(
+        $toolbar->addItem(
             new ToolbarItem(
                 $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->getItemEditingUrl($result), ToolbarItem::DISPLAY_ICON
@@ -165,7 +167,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         if ($isFirstItem || $isOnlyItem)
         {
-            $toolbar->add_item(
+            $toolbar->addItem(
                 new ToolbarItem(
                     $translator->trans('MoveUpNA', [], StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('sort-up', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
@@ -174,7 +176,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         }
         else
         {
-            $toolbar->add_item(
+            $toolbar->addItem(
                 new ToolbarItem(
                     $translator->trans('MoveUp', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-up'),
                     $this->getItemMovingUrl($result, ItemService::PARAM_DIRECTION_UP), ToolbarItem::DISPLAY_ICON
@@ -184,7 +186,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         if ($isLastItem || $isOnlyItem)
         {
-            $toolbar->add_item(
+            $toolbar->addItem(
                 new ToolbarItem(
                     $translator->trans('MoveDownNA', [], StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('sort-down', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
@@ -193,7 +195,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         }
         else
         {
-            $toolbar->add_item(
+            $toolbar->addItem(
                 new ToolbarItem(
                     $translator->trans('MoveDown', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-down'),
                     $this->getItemMovingUrl($result, ItemService::PARAM_DIRECTION_DOWN), ToolbarItem::DISPLAY_ICON
@@ -201,7 +203,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
             );
         }
 
-        $toolbar->add_item(
+        $toolbar->addItem(
             new ToolbarItem(
                 label: $translator->trans('Delete', [], StringUtilities::LIBRARIES), image: new FontAwesomeGlyph(
                 'times'

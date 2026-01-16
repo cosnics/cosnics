@@ -1009,19 +1009,6 @@ EOT;
     }
 
     /**
-     * Returns the HTML representation of this form.
-     *
-     * @param ?string $in_data
-     *
-     * @return string
-     * @deprecated Use render() now
-     */
-    public function toHtml(?string $in_data = null): string
-    {
-        return $this->render($in_data);
-    }
-
-    /**
      * @param string $name
      */
     public function unregister_html_editor($name)

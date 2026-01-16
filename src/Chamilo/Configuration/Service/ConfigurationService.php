@@ -76,10 +76,10 @@ class ConfigurationService
     {
         $setting = new Setting();
 
-        $setting->set_context($context);
-        $setting->set_variable($variable);
-        $setting->set_value($value);
-        $setting->set_user_setting((int) $isUserSetting);
+        $setting->setContext($context);
+        $setting->setVariable($variable);
+        $setting->setValue($value);
+        $setting->setUserSetting((int) $isUserSetting);
 
         return $this->createSetting($setting);
     }
@@ -99,7 +99,7 @@ class ConfigurationService
             return false;
         }
 
-        if ($setting->get_user_setting())
+        if ($setting->getUserSetting())
         {
             if (!$this->getUserService()->deleteUserSettingsForSettingIdentifier($setting->getId()))
             {
@@ -199,12 +199,12 @@ class ConfigurationService
 
         if (!is_null($value))
         {
-            $setting->set_value($value);
+            $setting->setValue($value);
         }
 
         if (!is_null($isUserSetting))
         {
-            $setting->set_user_setting((int) $isUserSetting);
+            $setting->setUserSetting((int) $isUserSetting);
         }
 
         return $this->updateSetting($setting);

@@ -14,79 +14,41 @@ class ConfigurablePathBuilder
     public const GARBAGE = 7;
     public const LOG = 3;
     public const PROFILE_PICTURE = 6;
-    public const REPOSITORY = 5;
-    public const SCORM = 7;
     public const TEMPORARY = 1;
     public const USER_PICTURES = 8;
 
     /**
      * @var string[]
      */
-    protected $cache;
+    protected array $cache;
 
-    /**
-     * @var string
-     */
-    private $configuredArchivePath;
+    private string $configuredArchivePath;
 
-    /**
-     * @var string
-     */
-    private $configuredCachePath;
+    private string $configuredCachePath;
 
-    /**
-     * @var string
-     */
-    private $configuredGarbagePath;
+    private string $configuredGarbagePath;
 
-    /**
-     * @var string
-     */
-    private $configuredHotpotatoesPath;
-
-    /**
-     * @var string
-     */
-    private $configuredLogsPath;
+    private string $configuredLogsPath;
 
     /**
      * @var string[]
      */
-    private $configuredPaths;
+    private array $configuredPaths;
 
-    /**
-     * @var string
-     */
-    private $configuredRepositoryPath;
+    private string $configuredTempPath;
 
-    /**
-     * @var string
-     */
-    private $configuredScormPath;
-
-    /**
-     * @var string
-     */
-    private $configuredTempPath;
-
-    /**
-     * @var string
-     */
-    private $configuredUserPicturesPath;
+    private string $configuredUserPicturesPath;
 
     /**
      * @param string[] $configuredPaths
      */
-    public function __construct($configuredPaths)
+    public function __construct(array $configuredPaths)
     {
         $this->cache = [];
         $this->configuredPaths = $configuredPaths;
     }
 
-    /**
-     * @return string
-     */
-    public function getArchivePath()
+    public function getArchivePath(): string
     {
         return $this->cache[self::ARCHIVE] = $this->getConfiguredArchivePath();
     }
@@ -94,29 +56,31 @@ class ConfigurablePathBuilder
     /**
      * @return string[]
      */
-    public function getCache()
+    public function getCache(): array
     {
         return $this->cache;
     }
 
     /**
-     * @param string $namespace
-     *
-     * @return string
+     * @param string[] $cache
      */
-    public function getCachePath($namespace = null)
+    public function setCache(array $cache): static
+    {
+        $this->cache = $cache;
+
+        return $this;
+    }
+
+    public function getCachePath(?string $namespace = null): string
     {
         $completeNamespace = ($namespace ? 'cache\\' . $namespace : 'cache');
 
-        return $this->cache[self::CACHE][(string) $completeNamespace] = $this->getConfiguredCachePath() . md5(
+        return $this->cache[self::CACHE][$completeNamespace] = $this->getConfiguredCachePath() . md5(
                 $namespace
             ) . DIRECTORY_SEPARATOR;
     }
 
-    /**
-     * @return string
-     */
-    public function getConfiguredArchivePath()
+    public function getConfiguredArchivePath(): string
     {
         if (!isset($this->configuredArchivePath))
         {
@@ -127,10 +91,7 @@ class ConfigurablePathBuilder
         return $this->configuredArchivePath;
     }
 
-    /**
-     * @return string
-     */
-    public function getConfiguredCachePath()
+    public function getConfiguredCachePath(): string
     {
         if (!isset($this->configuredCachePath))
         {
@@ -141,10 +102,7 @@ class ConfigurablePathBuilder
         return $this->configuredCachePath;
     }
 
-    /**
-     * @return string
-     */
-    public function getConfiguredGarbagePath()
+    public function getConfiguredGarbagePath(): string
     {
         if (!isset($this->configuredGarbagePath))
         {
@@ -155,24 +113,7 @@ class ConfigurablePathBuilder
         return $this->configuredGarbagePath;
     }
 
-    /**
-     * @return string
-     */
-    public function getConfiguredHotpotatoesPath()
-    {
-        if (!isset($this->configuredHotpotatoesPath))
-        {
-            $configuredPaths = $this->getConfiguredPaths();
-            $this->configuredHotpotatoesPath = $configuredPaths['hotpotatoes_path'];
-        }
-
-        return $this->configuredHotpotatoesPath;
-    }
-
-    /**
-     * @return string
-     */
-    public function getConfiguredLogsPath()
+    public function getConfiguredLogsPath(): string
     {
         if (!isset($this->configuredLogsPath))
         {
@@ -186,43 +127,12 @@ class ConfigurablePathBuilder
     /**
      * @return string[]
      */
-    public function getConfiguredPaths()
+    public function getConfiguredPaths(): array
     {
         return $this->configuredPaths;
     }
 
-    /**
-     * @return string
-     */
-    public function getConfiguredRepositoryPath()
-    {
-        if (!isset($this->configuredRepositoryPath))
-        {
-            $configuredPaths = $this->getConfiguredPaths();
-            $this->configuredRepositoryPath = $configuredPaths['repository_path'];
-        }
-
-        return $this->configuredRepositoryPath;
-    }
-
-    /**
-     * @return string
-     */
-    public function getConfiguredScormPath()
-    {
-        if (!isset($this->configuredScormPath))
-        {
-            $configuredPaths = $this->getConfiguredPaths();
-            $this->configuredScormPath = $configuredPaths['scorm_path'];
-        }
-
-        return $this->configuredScormPath;
-    }
-
-    /**
-     * @return string
-     */
-    public function getConfiguredTempPath()
+    public function getConfiguredTempPath(): string
     {
         if (!isset($this->configuredTempPath))
         {
@@ -233,10 +143,7 @@ class ConfigurablePathBuilder
         return $this->configuredTempPath;
     }
 
-    /**
-     * @return string
-     */
-    public function getConfiguredUserPicturesPath()
+    public function getConfiguredUserPicturesPath(): string
     {
         if (!isset($this->configuredUserPicturesPath))
         {
@@ -247,63 +154,31 @@ class ConfigurablePathBuilder
         return $this->configuredUserPicturesPath;
     }
 
-    public function getGarbagePath()
+    public function getGarbagePath(): string
     {
         return $this->cache[self::GARBAGE] = $this->getConfiguredGarbagePath();
     }
 
-    /**
-     * @return string
-     */
-    public function getLogPath()
+    public function getLogPath(): string
     {
         return $this->cache[self::LOG] = $this->getConfiguredLogsPath();
     }
 
-    /**
-     * @return string
-     */
-    public function getProfilePicturePath()
+    public function getProfilePicturePath(): string
     {
         return $this->cache[self::PROFILE_PICTURE] = $this->getConfiguredUserPicturesPath();
     }
 
-    /**
-     * @return string
-     */
-    public function getRepositoryPath()
-    {
-        return $this->cache[self::REPOSITORY] = $this->getConfiguredRepositoryPath();
-    }
-
-    public function getScormPath()
-    {
-        return $this->cache[self::SCORM] = $this->getConfiguredScormPath();
-    }
-
-    /**
-     * @param string $namespace
-     *
-     * @return string
-     */
-    public function getTemporaryPath($namespace = null)
+    public function getTemporaryPath(?string $namespace = null): string
     {
         $completeNamespace = ($namespace ? 'temp\\' . $namespace : 'temp');
 
-        return $this->cache[self::TEMPORARY][(string) $completeNamespace] =
+        return $this->cache[self::TEMPORARY][$completeNamespace] =
             $this->getConfiguredTempPath() . md5($namespace) . DIRECTORY_SEPARATOR;
     }
 
-    public function getUserPicturesPath()
+    public function getUserPicturesPath(): string
     {
         return $this->cache[self::USER_PICTURES] = $this->getConfiguredUserPicturesPath();
-    }
-
-    /**
-     * @param string[] $cache
-     */
-    public function setCache($cache)
-    {
-        $this->cache = $cache;
     }
 }

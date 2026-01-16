@@ -6,10 +6,9 @@ use Chamilo\Libraries\Architecture\Traits\HashableTrait;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
- * This class describes a single property for a data class with the name and the value This class can be used in query
- * structures
+ * A single property for a data class with the name and the value This class can be used in queries
  *
- * @package Chamilo\Libraries\Storage\DataClass\Property
+ * @package Chamilo\Libraries\Storage\Query
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -57,37 +56,5 @@ class UpdateProperty implements HashableInterface
         $this->valueConditionVariable = $valueConditionVariable;
 
         return $this;
-    }
-
-    /**
-     * @deprecated Use DataClassUpdateProperty::getPropertyConditionVariable() now
-     */
-    public function get_property(): ConditionVariable
-    {
-        return $this->getPropertyConditionVariable();
-    }
-
-    /**
-     * @deprecated Use DataClassUpdateProperty::getValueConditionVariable() now
-     */
-    public function get_value(): ConditionVariable
-    {
-        return $this->getValueConditionVariable();
-    }
-
-    /**
-     * @deprecated Use DataClassUpdateProperty::setPropertyConditionVariable() now
-     */
-    public function set_property(ConditionVariable $propertyConditionVariable): UpdateProperty
-    {
-        return $this->setPropertyConditionVariable($propertyConditionVariable);
-    }
-
-    /**
-     * @deprecated Use DataClassUpdateProperty::setValueConditionVariable() now
-     */
-    public function set_value(ConditionVariable $valueConditionVariable): UpdateProperty
-    {
-        return $this->setValueConditionVariable($valueConditionVariable);
     }
 }

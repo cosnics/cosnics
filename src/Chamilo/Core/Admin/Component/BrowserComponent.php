@@ -5,7 +5,6 @@ use Chamilo\Configuration\Service\PackageBundlesCacheService;
 use Chamilo\Core\Admin\Architecture\Domain\ActionProviderCollection;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 
@@ -22,7 +21,6 @@ class BrowserComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \QuickformException
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run()
     {
@@ -72,12 +70,10 @@ class BrowserComponent extends Manager
 
     /**
      * @throws \QuickformException
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function renderTabs(): string
     {
-        $tabNamespace = ClassnameUtilities::getInstance()->getNamespaceFromId($this->getCurrentTab());
-        $tabsCollection = $this->getActionProvider()->getTabsCollection($tabNamespace);
+        $tabsCollection = $this->getActionProvider()->getTabsCollection();
         $tabsCollection->sortByLabel();
 
         return $this->getTabsRenderer()->render('admin', $tabsCollection);

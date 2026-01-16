@@ -7,7 +7,6 @@ use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Application\Calendar\Extension\Google\Service\EventParser;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 use Symfony\Component\Translation\Translator;
 
@@ -76,10 +75,8 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
      */
     private function getCalendarIdentifiers(CalendarRendererProvider $calendarRendererProvider): array
     {
-        $package = ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 5);
-
         $availabilities = $this->getAvailabilityService()->getAvailabilitiesForUserAndCalendarType(
-            $calendarRendererProvider->getDataUser(), $package
+            $calendarRendererProvider->getDataUser(), Manager::CONTEXT
         );
 
         $calendarIdentifiers = [];
@@ -144,7 +141,8 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
     {
         $calendarService = $this->getCalendarService();
 
-        if (!$calendarService->isConfigured() || !$calendarService->isAuthenticated())
+        if (!$calendarService->isConfigured() ||
+            !$calendarService->isAuthenticated($calendarRendererProvider->getDataUser()))
         {
             return [];
         }

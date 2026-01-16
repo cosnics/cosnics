@@ -45,7 +45,7 @@ class CreatorComponent extends Manager implements BreadcrumbLessComponentInterfa
 
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
-                null, $this->getTranslator()->trans(
+                $this->getUrlGenerator()->fromRequest(), $this->getTranslator()->trans(
                 'AddMenuItemComponentTitle', ['{ITEM_TYPE}' => $itemRenderer->getRendererTypeName()], Manager::CONTEXT
             )
             )

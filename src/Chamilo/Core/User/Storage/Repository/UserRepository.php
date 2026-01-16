@@ -81,14 +81,6 @@ class UserRepository
         return $this->getDataClassRepository()->create($userSetting);
     }
 
-    /**
-     * @deprecated Use dedicated delete-methods in the UserRepository instead
-     */
-    public function delete(DataClass $dataClass): bool
-    {
-        return $dataClass->delete();
-    }
-
     public function deleteUser(User $user): bool
     {
         return $this->getDataClassRepository()->delete($user);

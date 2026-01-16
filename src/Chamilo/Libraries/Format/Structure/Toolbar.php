@@ -1,12 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-
 /**
- *
  * @package Chamilo\Libraries\Format\Structure
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Toolbar
 {
@@ -27,7 +24,7 @@ class Toolbar
 
     public function render(): ?string
     {
-        if (!$this->has_items())
+        if (!$this->hasItems())
         {
             return null;
         }
@@ -48,31 +45,27 @@ class Toolbar
         return implode($html);
     }
 
-    public function add_item(ToolbarItem $item)
+    public function addItem(ToolbarItem $item): static
     {
         $this->items[] = $item;
+
+        return $this;
     }
 
     /**
      * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $items
      */
-    public function add_items(array $items)
+    public function addItems(array $items): static
     {
         foreach ($items as $item)
         {
             $this->items[] = $item;
         }
+
+        return $this;
     }
 
-    /**
-     * @deprecated Use Toolbar::render() now
-     */
-    public function as_html(): string
-    {
-        return $this->render();
-    }
-
-    public function get_item(int $index): ToolbarItem
+    public function getItem(int $index): ToolbarItem
     {
         return $this->items[$index];
     }
@@ -80,7 +73,7 @@ class Toolbar
     /**
      * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
      */
-    public function get_items(): array
+    public function getItems(): array
     {
         return $this->items;
     }
@@ -88,17 +81,11 @@ class Toolbar
     /**
      * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $items
      */
-    public function set_items(array $items)
+    public function setItems(array $items): static
     {
         $this->items = $items;
-    }
 
-    /**
-     * @deprecated Use Toolbar::getType() now
-     */
-    public function get_type(): string
-    {
-        return $this->getType();
+        return $this;
     }
 
     public function getType(): string
@@ -106,35 +93,33 @@ class Toolbar
         return $this->type;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): static
     {
         $this->type = $type;
+
+        return $this;
     }
 
-    /**
-     * @deprecated Use Toolbar::setType() now
-     */
-    public function set_type($type)
-    {
-        $this->setType($type);
-    }
-
-    public function has_items(): bool
+    public function hasItems(): bool
     {
         return count($this->items) > 0;
     }
 
-    public function insert_item(ToolbarItem $item, int $index)
+    public function insertItem(ToolbarItem $item, int $index): static
     {
         $items = $this->items;
         array_splice($items, $index, 0, [$item]);
         $this->items = $items;
+
+        return $this;
     }
 
-    public function replace_item(ToolbarItem $item, int $index)
+    public function replaceItem(ToolbarItem $item, int $index): static
     {
         $items = $this->items;
         array_splice($items, $index, 1, [$item]);
         $this->items = $items;
+
+        return $this;
     }
 }

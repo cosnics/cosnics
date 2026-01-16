@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
@@ -23,11 +24,12 @@ abstract class ListTableRenderer extends AbstractTableRenderer
 
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, ClassnameUtilities $classnameUtilities
     )
     {
         parent::__construct(
-            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory
+            $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
+            $classnameUtilities
         );
 
         if ($this instanceof TableRowActionsSupport)

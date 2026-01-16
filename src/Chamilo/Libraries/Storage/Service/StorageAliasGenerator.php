@@ -55,19 +55,12 @@ class StorageAliasGenerator
         return $this;
     }
 
+    /**
+     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $class
+     */
     public function getDataClassAlias(string $class): string
     {
         return $this->getTableAlias($class::getStorageUnitName());
-    }
-
-    public static function getInstance(): StorageAliasGenerator
-    {
-        if (!isset(self::$instance))
-        {
-            self::$instance = new self(ClassnameUtilities::getInstance());
-        }
-
-        return self::$instance;
     }
 
     public function getTableAlias(string $tableName): string
@@ -110,16 +103,5 @@ class StorageAliasGenerator
     public function getTypes(): array
     {
         return [self::TYPE_TABLE, self::TYPE_CONSTRAINT];
-    }
-
-    /**
-     *
-     * @return string[]
-     * @deprecated Use getTypes() now
-     */
-    public function get_types(): array
-
-    {
-        return $this->getTypes();
     }
 }

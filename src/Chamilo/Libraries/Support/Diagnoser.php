@@ -172,7 +172,6 @@ class Diagnoser
 
         $writable_folders = [];
         $writable_folders[] = $this->systemPathBuilder->getPublicStoragePath();
-        $writable_folders[] = $this->configurablePathBuilder->getRepositoryPath();
         $writable_folders[] = $this->configurablePathBuilder->getTemporaryPath();
 
         foreach ($writable_folders as $folder)

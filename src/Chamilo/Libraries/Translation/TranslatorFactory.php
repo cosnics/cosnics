@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Translation;
 
 use Chamilo\Configuration\Service\InternationalizationBundlesCacheService;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
 use Chamilo\Libraries\File\SystemPathBuilder;
@@ -23,14 +22,18 @@ class TranslatorFactory
 
     protected InternationalizationBundlesCacheService $internationalizationBundlesCacheService;
 
+    protected SystemPathBuilder $systemPathBuilder;
+
     public function __construct(
         Filesystem $filesystem, ConfigurablePathBuilder $configurablePathBuilder,
-        InternationalizationBundlesCacheService $internationalizationBundlesCacheService
+        InternationalizationBundlesCacheService $internationalizationBundlesCacheService,
+        SystemPathBuilder $systemPathBuilder
     )
     {
         $this->filesystem = $filesystem;
         $this->configurablePathBuilder = $configurablePathBuilder;
         $this->internationalizationBundlesCacheService = $internationalizationBundlesCacheService;
+        $this->systemPathBuilder = $systemPathBuilder;
     }
 
     /**
@@ -50,7 +53,7 @@ class TranslatorFactory
         $translationResourcesOptimizer = new TranslationResourcesOptimizer(
             new IniFileLoader(), new PackagesTranslationResourcesFinder(
             new PackagesFilesFinder(
-                new SystemPathBuilder(ClassnameUtilities::getInstance()), $packageNamespaces
+                $this->getSystemPathBuilder(), $packageNamespaces
             )
         ), $translationCachePath
         );
@@ -91,6 +94,11 @@ class TranslatorFactory
     public function getInternationalizationBundlesCacheService(): InternationalizationBundlesCacheService
     {
         return $this->internationalizationBundlesCacheService;
+    }
+
+    public function getSystemPathBuilder(): SystemPathBuilder
+    {
+        return $this->systemPathBuilder;
     }
 
     public function getTranslationCachePath(): string
