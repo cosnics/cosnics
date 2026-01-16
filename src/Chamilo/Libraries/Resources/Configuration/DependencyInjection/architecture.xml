@@ -42,6 +42,7 @@
         <service id="Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator"/>
 
         <service id="Chamilo\Libraries\Architecture\Resource\ResourceGenerator"/>
+        <service id="Chamilo\Libraries\Architecture\ActionResultRenderer"/>
 
     </services>
 </container>

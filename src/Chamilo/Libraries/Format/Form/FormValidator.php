@@ -24,6 +24,7 @@ use Chamilo\Libraries\Format\Tabs\Form\FormTabsGenerator;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm;
+use HTML_QuickForm_textarea;
 
 /**
  * Objects of this class can be used to create/manipulate/validate user input.
@@ -534,9 +535,8 @@ EOT;
      */
     public function add_html_editor($name, $label, $required = true, $options = [], $attributes = [])
     {
-        $html_editor = new FormValidatorHtmlEditor($name, $label, $required, $options, $attributes);
-        $html_editor->set_form($this);
-        $html_editor->add();
+        $formValidatorHtmlEditorRenderer = $this->getFormValidatorHtmlEditorRenderer();
+        $formValidatorHtmlEditorRenderer->addHtmlEditor($this, $name, $label, $required, $options, $attributes);
     }
 
     /**
@@ -701,19 +701,20 @@ EOT;
     }
 
     /**
-     * @param string $name
-     * @param string $label
      * @param string[] $options
      * @param string[] $attributes
      *
-     * @return \HTML_QuickForm_textarea
+     * @throws \QuickformException
      */
-    public function create_html_editor($name, $label, $options = [], $attributes = [])
+    public function create_html_editor(string $name, string $label, array $options = [], array $attributes = []
+    ): HTML_QuickForm_textarea
     {
-        $html_editor = new FormValidatorHtmlEditor($name, $label, false, $options, $attributes);
-        $html_editor->set_form($this);
+        $htmlEditorOptionsFactory = $this->getFormValidatorHtmlEditorOptionsFactory();
 
-        return $html_editor->create();
+        return $this->getFormValidatorHtmlEditorRenderer()->createHtmlEditor(
+            $this, $name, $label, $htmlEditorOptionsFactory->getDefaultFormValidatorHtmlEditorOptions($options),
+            $attributes
+        );
     }
 
     /**
@@ -825,6 +826,16 @@ EOT;
         $html[] = '</form>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    protected function getFormValidatorHtmlEditorOptionsFactory(): FormValidatorHtmlEditorOptionsFactory
+    {
+        return $this->getService(FormValidatorHtmlEditorOptionsFactory::class);
+    }
+
+    protected function getFormValidatorHtmlEditorRenderer(): FormValidatorHtmlEditorRenderer
+    {
+        return $this->getService(FormValidatorHtmlEditorRenderer::class);
     }
 
     public function getRequiredNoteTemplate()

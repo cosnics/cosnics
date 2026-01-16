@@ -71,5 +71,8 @@
 
         <service id="Chamilo\Libraries\Format\Structure\PanelRenderer"/>
         <service id="Chamilo\Libraries\Format\Structure\ProgressBarRenderer"/>
+
+        <service id="Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorRenderer"/>
+        <service id="Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptionsFactory"/>
     </services>
 </container>

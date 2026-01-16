@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure\ActionBar\Renderer;
 
-use Chamilo\Libraries\Translation\Translation;
-
 /**
  *
  * @package Chamilo\Libraries\Format\Structure\ActionBar\Renderer
@@ -42,7 +40,7 @@ class SplitDropdownButtonRenderer extends AbstractButtonRenderer
 
         $html[] = implode(' ', $linkHtml);
         $html[] = $this->renderCaret();
-        $html[] = '<span class="sr-only">' . Translation::get('ToggleDropdown') . '</span>';
+        $html[] = '<span class="sr-only"></span>';
         $html[] = '</a>';
 
         $html[] = $this->renderSubButtons();

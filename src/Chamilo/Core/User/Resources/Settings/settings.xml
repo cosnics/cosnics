@@ -26,12 +26,6 @@
                             value="1"/>
                 </options>
             </setting>
-            <setting name="fullname_format"
-                     field="select"
-                     default="0">
-                <options type="dynamic"
-                         source="getFullnameFormats"/>
-            </setting>
         </category>
         <category name="profile">
             <setting name="allow_change_email"

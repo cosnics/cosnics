@@ -1,241 +1,104 @@
 <?php
 namespace Chamilo\Libraries\Architecture;
 
-use Chamilo\Libraries\Translation\Translation;
-use Exception;
-
 /**
- *
- * @package Chamilo\Libraries\Architecture\Exceptions
+ * @package Chamilo\Libraries\Architecture
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ActionResult
 {
+    private string $actionType;
+
+    private string $context;
+
+    private string $entityType;
+
+    private int $failedActions;
+
+    private int $totalActions;
 
     /**
-     *
-     * @var integer
-     */
-    private $totalActions;
-
-    /**
-     *
-     * @var integer
-     */
-    private $failedActions;
-
-    /**
-     *
-     * @var string
-     */
-    private $context;
-
-    /**
-     *
-     * @var string
-     */
-    private $actionType;
-
-    /**
-     *
-     * @var string
-     */
-    private $entityType;
-
-    /**
-     *
-     * @param integer $totalActions
-     * @param integer $failedActions
-     * @param string $context
-     * @param string $actionType
-     * @param string $entityType
-     *
      * @throws \Exception
      */
-    public function __construct($totalActions, $failedActions, $context, $actionType, $entityType)
+    public function __construct(
+        int $totalActions, int $failedActions, string $context, string $actionType, string $entityType
+    )
     {
         $this->totalActions = $totalActions;
         $this->failedActions = $failedActions;
         $this->context = $context;
         $this->actionType = $actionType;
         $this->entityType = $entityType;
-
-        if ($this->hasFailed())
-        {
-            throw new Exception($this->getMessage());
-        }
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getActionType()
+    public function getActionType(): string
     {
         return $this->actionType;
     }
 
-    /**
-     *
-     * @param string $actionType
-     */
-    public function setActionType($actionType)
+    public function setActionType(string $actionType): void
     {
         $this->actionType = $actionType;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getContext()
+    public function getContext(): string
     {
         return $this->context;
     }
 
-    /**
-     *
-     * @param string $context
-     */
-    public function setContext($context)
+    public function setContext(string $context): void
     {
         $this->context = $context;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getEntityType()
+    public function getEntityType(): string
     {
         return $this->entityType;
     }
 
-    /**
-     *
-     * @param string $entityType
-     */
-    public function setEntityType($entityType)
+    public function setEntityType(string $entityType): void
     {
         $this->entityType = $entityType;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getFailedActions()
+    public function getFailedActions(): int
     {
         return $this->failedActions;
     }
 
-    /**
-     *
-     * @param integer $failedActions
-     */
-    public function setFailedActions($failedActions)
+    public function setFailedActions(int $failedActions): void
     {
         $this->failedActions = $failedActions;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getMessage()
-    {
-        $parameters = [];
-        $parameters['ACTION'] =
-            Translation::get('ActionResultAction' . $this->getActionType(), [], $this->getContext());
-
-        if ($this->isSingleAction())
-        {
-            $parameters['OBJECT'] = Translation::get(
-                'ActionResultSingleEntity' . $this->getEntityType(), [], $this->getContext()
-            );
-
-            if ($this->hasFailed())
-            {
-                return Translation::get('ActionResultSingleFailureMessage', $parameters);
-            }
-            else
-            {
-                return Translation::get('ActionResultSingleSuccessMessage', $parameters);
-            }
-        }
-        else
-        {
-            $parameters['OBJECT'] = Translation::get(
-                'ActionResultMultipleEntity' . $this->getEntityType(), [], $this->getContext()
-            );
-
-            if ($this->hasSucceeded())
-            {
-                return Translation::get('ActionResultMultipleSuccessMessage', $parameters);
-            }
-            elseif ($this->hasFailedCompletely())
-            {
-                return Translation::get('ActionResultMultipleFailureMessage', $parameters);
-            }
-            else
-            {
-                return Translation::get('ActionResultSomeFailureMessage', $parameters);
-            }
-        }
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getTotalActions()
+    public function getTotalActions(): int
     {
         return $this->totalActions;
     }
 
-    /**
-     *
-     * @param integer $totalActions
-     */
-    public function setTotalActions($totalActions)
+    public function setTotalActions(int $totalActions): void
     {
         $this->totalActions = $totalActions;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function hasFailed()
+    public function hasFailed(): bool
     {
         return $this->getFailedActions() > 0;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function hasFailedCompletely()
+    public function hasFailedCompletely(): bool
     {
         return $this->hasFailed() && $this->getFailedActions() == $this->getTotalActions();
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function hasSucceeded()
+    public function hasSucceeded(): bool
     {
         return !$this->hasFailed();
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function isSingleAction()
+    public function isSingleAction(): bool
     {
         return $this->getTotalActions() == 1;
     }

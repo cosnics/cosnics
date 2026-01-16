@@ -213,8 +213,11 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
 
                 $toolbar->add_item(
                     new ToolBarItem(
-                        $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                        $deleteUrl, ToolbarItem::DISPLAY_ICON, true
+                        label: $translator->trans('Delete', [], StringUtilities::LIBRARIES),
+                        image: new FontAwesomeGlyph('times'), href: $deleteUrl, display: ToolbarItem::DISPLAY_ICON,
+                        confirmation: true, confirmationMessage: $this->getTranslator()->trans(
+                            'ConfirmChosenAction', [], StringUtilities::LIBRARIES
+                        )
                     )
                 );
             }

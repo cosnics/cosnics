@@ -131,10 +131,12 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         return match ($column->get_name())
         {
-            Item::PROPERTY_TITLES => $itemRendererFactory->getItemRendererForItem($dataClass)->renderTitleForCurrentLanguage(
-                $dataClass
-            ),
-            self::PROPERTY_TYPE => $itemRendererFactory->getItemRendererForItem($dataClass)->getRendererTypeGlyph()->render(),
+            Item::PROPERTY_TITLES => $itemRendererFactory->getItemRendererForItem($dataClass)
+                ->renderTitleForCurrentLanguage(
+                    $dataClass
+                ),
+            self::PROPERTY_TYPE => $itemRendererFactory->getItemRendererForItem($dataClass)->getRendererTypeGlyph()
+                ->render(),
             default => parent::renderCell($column, $resultPosition, $dataClass),
         };
     }
@@ -201,8 +203,12 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         $toolbar->add_item(
             new ToolbarItem(
-                $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                $this->getItemDeletingUrl($result), ToolbarItem::DISPLAY_ICON, true
+                label: $translator->trans('Delete', [], StringUtilities::LIBRARIES), image: new FontAwesomeGlyph(
+                'times'
+            ), href: $this->getItemDeletingUrl($result), display: ToolbarItem::DISPLAY_ICON, confirmation: true,
+                confirmationMessage: $this->getTranslator()->trans(
+                    'ConfirmChosenAction', [], StringUtilities::LIBRARIES
+                )
             )
         );
 

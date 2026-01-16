@@ -4,7 +4,9 @@ namespace Chamilo\Application\Calendar\Component;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\UserInterface\Form\AvailabilityForm;
+use Chamilo\Libraries\Architecture\ActionResultRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -30,6 +32,11 @@ class AvailabilityComponent extends Manager
                 $this->getUser(), $values[AvailabilityService::PROPERTY_CALENDAR]
             );
 
+            if ($result->hasFailed())
+            {
+                throw new Exception($this->getActionResultRenderer()->getMessage($result));
+            }
+
             return new RedirectResponse(
                 $this->getUrlGenerator()->fromParameters(
                     [Application::PARAM_CONTEXT => Manager::CONTEXT]
@@ -48,11 +55,11 @@ class AvailabilityComponent extends Manager
         }
     }
 
-    /**
-     * @param \Chamilo\Application\Calendar\Service\AvailabilityService $availabilityService
-     *
-     * @return \Chamilo\Application\Calendar\Interface\Form\AvailabilityForm
-     */
+    protected function getActionResultRenderer(): ActionResultRenderer
+    {
+        return $this->getService(ActionResultRenderer::class);
+    }
+
     public function getAvailabilityForm(AvailabilityService $availabilityService): AvailabilityForm
     {
         return new AvailabilityForm($this->getUrlGenerator()->fromRequest(), $this->getUser(), $availabilityService);
@@ -61,7 +68,7 @@ class AvailabilityComponent extends Manager
     /**
      * @return \Chamilo\Application\Calendar\Service\AvailabilityService
      */
-    protected function getAvailabilityService()
+    protected function getAvailabilityService(): AvailabilityService
     {
         return $this->getService(AvailabilityService::class);
     }

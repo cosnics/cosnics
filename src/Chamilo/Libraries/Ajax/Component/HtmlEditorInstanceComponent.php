@@ -2,10 +2,9 @@
 namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Libraries\Ajax\Manager;
-use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditor;
+use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorRenderer;
 
 /**
- *
  * @package Chamilo\Libraries\Ajax\Component
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -15,12 +14,10 @@ class HtmlEditorInstanceComponent extends Manager
 {
 
     /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     * @throws \QuickformException
      */
     public function run()
     {
-
         $request = $this->getRequest();
         $name = $request->request->get('name');
         $label = $request->request->get('label');
@@ -33,8 +30,11 @@ class HtmlEditorInstanceComponent extends Manager
         $attributes = str_replace('\"', '"', $attributes);
         $attributes = json_decode($attributes, true);
 
-        $html_editor = new FormValidatorHtmlEditor($name, $label, false, $options, $attributes);
+        echo $this->getFormValidatorHtmlEditorRenderer()->renderHtmlEditor($name, $label, false, $options, $attributes);
+    }
 
-        echo $html_editor->render();
+    public function getFormValidatorHtmlEditorRenderer(): FormValidatorHtmlEditorRenderer
+    {
+        return $this->getService(FormValidatorHtmlEditorRenderer::class);
     }
 }

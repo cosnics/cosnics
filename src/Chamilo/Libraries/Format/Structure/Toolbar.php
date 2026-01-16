@@ -72,21 +72,6 @@ class Toolbar
         return $this->render();
     }
 
-    public function convertToButtonToolBar(bool $keepDisplayProperty = true): ButtonToolBar
-    {
-        $buttonToolbar = new ButtonToolBar();
-        $buttonGroup = new ButtonGroup();
-
-        foreach ($this->get_items() as $item)
-        {
-            $buttonGroup->addButton($item->convertToButton($keepDisplayProperty));
-        }
-
-        $buttonToolbar->addItem($buttonGroup);
-
-        return $buttonToolbar;
-    }
-
     public function get_item(int $index): ToolbarItem
     {
         return $this->items[$index];

@@ -5,8 +5,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Libraries\Format\Structure
@@ -54,16 +52,7 @@ class ToolbarItem
         $this->confirmation = $confirmation;
         $this->class = $class;
         $this->target = $target;
-
-        if ($confirmationMessage == null)
-        {
-            $this->confirmationMessage = Translation::get('Confirm', null, StringUtilities::LIBRARIES);
-        }
-        else
-        {
-            $this->confirmationMessage = $confirmationMessage;
-        }
-
+        $this->confirmationMessage = $confirmationMessage;
         $this->extraAttributes = $extraAttributes;
     }
 
@@ -86,7 +75,7 @@ class ToolbarItem
     {
         $label = ($this->get_label() ? htmlspecialchars($this->get_label()) : null);
 
-        if($keepDisplayProperty)
+        if ($keepDisplayProperty)
         {
             $display = !$this->get_display() ? self::DISPLAY_ICON : $this->get_display();
         }
@@ -101,17 +90,9 @@ class ToolbarItem
         $confirmation = $this->get_confirmation();
         $confirmationMessage = $this->get_confirm_message();
 
-        if (is_string($confirmation))
-        {
-            $buttonConfirmationMessage = $confirmation;
-        }
-        elseif ($confirmation === true && is_string($confirmationMessage) && !empty($confirmationMessage))
+        if ($confirmation === true && is_string($confirmationMessage) && !empty($confirmationMessage))
         {
             $buttonConfirmationMessage = $confirmationMessage;
-        }
-        elseif ($confirmation === true)
-        {
-            $buttonConfirmationMessage = Translation::get('ConfirmChosenAction', [], StringUtilities::LIBRARIES);
         }
         else
         {

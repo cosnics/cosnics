@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Calendar\Service\View;
 
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Form\JumpForm;
+use Chamilo\Libraries\Calendar\Service\JumpBarRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -15,6 +15,8 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
 {
+    protected JumpBarRenderer $jumpBarRenderer;
+
     protected MiniMonthCalendarRenderer $miniMonthCalendarRenderer;
 
     protected ResourceManager $resourceManager;
@@ -24,7 +26,7 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
         MiniMonthCalendarRenderer $miniMonthCalendarRenderer, WebPathBuilder $webPathBuilder,
-        ResourceManager $resourceManager
+        ResourceManager $resourceManager, JumpBarRenderer $jumpBarRenderer
     )
     {
         parent::__construct($legendRenderer, $urlGenerator, $translator);
@@ -32,6 +34,7 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
         $this->miniMonthCalendarRenderer = $miniMonthCalendarRenderer;
         $this->webPathBuilder = $webPathBuilder;
         $this->resourceManager = $resourceManager;
+        $this->jumpBarRenderer = $jumpBarRenderer;
     }
 
     /**
@@ -70,7 +73,7 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
         $html[] = '<div class="col-xs-12 col-lg-3 table-calendar-sidebar">';
         $html[] = $this->renderMiniMonth($dataProvider, $displayTime, $viewActions);
         $html[] = $this->getLegendRenderer()->render($dataProvider);
-        $html[] = $this->getJumpForm($dataProvider, $displayTime)->render();
+        $html[] = $this->getJumpBarRenderer()->render($this->determineNavigationUrl($dataProvider), $displayTime);
         $html[] = '</div>';
 
         $html[] = '<div class="clearfix"></div>';
@@ -82,14 +85,9 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
         return implode(PHP_EOL, $html);
     }
 
-    protected function getJumpForm(CalendarRendererProviderInterface $dataProvider, int $displayTime): JumpForm
+    protected function getJumpBarRenderer(): JumpBarRenderer
     {
-        if (!isset($this->form))
-        {
-            $this->form = new JumpForm($this->determineNavigationUrl($dataProvider), $displayTime);
-        }
-
-        return $this->form;
+        return $this->jumpBarRenderer;
     }
 
     public function getMiniMonthCalendarRenderer(): MiniMonthCalendarRenderer

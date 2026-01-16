@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Calendar\Service\View;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
+use Chamilo\Libraries\Calendar\Service\JumpBarRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\View\TableBuilder\DayCalendarTableBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
@@ -27,11 +28,12 @@ class DayCalendarRenderer extends SidebarTableCalendarRenderer
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
         MiniMonthCalendarRenderer $miniMonthCalendarRenderer, DatetimeUtilities $datetimeUtilities,
         EventDayRenderer $eventDayRenderer, DayCalendarTableBuilder $dayCalendarTableBuilder,
-        WebPathBuilder $webPathBuilder, ResourceManager $resourceManager
+        WebPathBuilder $webPathBuilder, ResourceManager $resourceManager, JumpBarRenderer $jumpBarRenderer
     )
     {
         parent::__construct(
-            $legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer, $webPathBuilder, $resourceManager
+            $legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer, $webPathBuilder, $resourceManager,
+            $jumpBarRenderer
         );
 
         $this->eventDayRenderer = $eventDayRenderer;

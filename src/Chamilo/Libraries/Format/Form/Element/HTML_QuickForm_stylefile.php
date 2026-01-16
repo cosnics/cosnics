@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Format\Form\Element;
 
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm_file;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Format\Form\Element
@@ -14,6 +16,16 @@ use HTML_QuickForm_file;
  */
 class HTML_QuickForm_stylefile extends HTML_QuickForm_file
 {
+
+    protected function getContainer(): ContainerInterface
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer();
+    }
+
+    protected function getTranslator(): Translator
+    {
+        return $this->getContainer()->get(Translator::class);
+    }
 
     public function toHtml(): string
     {
@@ -35,7 +47,7 @@ class HTML_QuickForm_stylefile extends HTML_QuickForm_file
             $html[] = '<label class="btn btn-default">';
             $html[] = $glyph->render();
             $html[] = ' ';
-            $html[] = Translation::getInstance()->getTranslation(
+            $html[] = $this->getTranslator()->trans(
                 'ChooseFileInputLabel', [], StringUtilities::LIBRARIES
             );
             $html[] = ' ';

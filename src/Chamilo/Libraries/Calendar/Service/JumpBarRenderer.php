@@ -1,0 +1,178 @@
+<?php
+namespace Chamilo\Libraries\Calendar\Service;
+
+use Chamilo\Libraries\Calendar\Service\View\TableBuilder\CalendarTableBuilder;
+use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Utilities\StringUtilities;
+use QuickformException;
+use Symfony\Component\Translation\Translator;
+
+/**
+ * @package Chamilo\Libraries\Calendar\Renderer\Form
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ */
+class JumpBarRenderer
+{
+
+    private Translator $translator;
+
+    public function __construct(Translator $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    public function render(string $navigationUrl, int $currentTime): string
+    {
+        try
+        {
+            return $this->getButtonToolBarRenderer($navigationUrl, $currentTime)->render();
+        }
+        catch (QuickformException)
+        {
+            return '';
+        }
+    }
+
+    private function getButtonToolBarRenderer(string $navigationUrl, int $currentTime): ButtonToolBarRenderer
+    {
+        $buttonToolbar = new ButtonToolBar();
+        $buttonGroup = new ButtonGroup();
+
+        $buttonToolbar->addItem(
+            new Button($this->getTranslator()->trans('JumpTo', [], StringUtilities::LIBRARIES), null, null,
+                AbstractButton::DISPLAY_LABEL, null, ['btn-link'])
+        );
+        $buttonToolbar->addItem($buttonGroup);
+
+        $dateButton = new DropdownButton(date('j', $currentTime));
+
+        foreach ($this->getDays($currentTime) as $day)
+        {
+            $dayUrl = str_replace(
+                CalendarTableBuilder::TIME_PLACEHOLDER,
+                (string) mktime(0, 0, 0, (int) date('n', $currentTime), $day, (int) date('Y', $currentTime)),
+                $navigationUrl
+            );
+
+            $isActive = date('j', $currentTime) == $day;
+            $dateButton->addSubButton(
+                new SubButton((string) $day, null, $dayUrl, AbstractButton::DISPLAY_LABEL, null, [], null, $isActive)
+            );
+        }
+
+        $months = $this->getMonths();
+        $monthButton = new DropdownButton($months[date('n', $currentTime)]);
+
+        foreach ($this->getMonths() as $month => $monthLabel)
+        {
+            $monthUrl = str_replace(
+                CalendarTableBuilder::TIME_PLACEHOLDER, (string) mktime(
+                0, 0, 0, $month, (int) date('j', $currentTime), (int) date('Y', $currentTime)
+            ), $navigationUrl
+            );
+
+            $isActive = date('n', $currentTime) == $month;
+            $monthButton->addSubButton(
+                new SubButton($monthLabel, null, $monthUrl, AbstractButton::DISPLAY_LABEL, null, [], null, $isActive)
+            );
+        }
+
+        $yearButton = new DropdownButton(date('Y', $currentTime));
+
+        foreach ($this->getYears($currentTime) as $year)
+        {
+            $yearUrl = str_replace(
+                CalendarTableBuilder::TIME_PLACEHOLDER,
+                (string) mktime(0, 0, 0, (int) date('n', $currentTime), (int) date('j', $currentTime), $year),
+                $navigationUrl
+            );
+
+            $isActive = date('Y', $currentTime) == $year;
+            $yearButton->addSubButton(
+                new SubButton((string) $year, null, $yearUrl, AbstractButton::DISPLAY_LABEL, null, [], null, $isActive)
+            );
+        }
+
+        $buttonGroup->addButton($dateButton);
+        $buttonGroup->addButton($monthButton);
+        $buttonGroup->addButton($yearButton);
+
+        return new ButtonToolBarRenderer($buttonToolbar);
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getDays(int $currentTime): array
+    {
+        $numberDays = date('t', $currentTime);
+        $days = [];
+
+        for ($i = 1; $i <= $numberDays; $i ++)
+        {
+            $days[$i] = $i;
+        }
+
+        return $days;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getMonths(): array
+    {
+        $translator = $this->getTranslator();
+
+        $monthNames = [
+            $translator->trans('JanuaryLong', [], StringUtilities::LIBRARIES),
+            $translator->trans('FebruaryLong', [], StringUtilities::LIBRARIES),
+            $translator->trans('MarchLong', [], StringUtilities::LIBRARIES),
+            $translator->trans('AprilLong', [], StringUtilities::LIBRARIES),
+            $translator->trans('MayLong', [], StringUtilities::LIBRARIES),
+            $translator->trans('JuneLong', [], StringUtilities::LIBRARIES),
+            $translator->trans('JulyLong', [], StringUtilities::LIBRARIES),
+            $translator->trans('AugustLong', [], StringUtilities::LIBRARIES),
+            $translator->trans('SeptemberLong', [], StringUtilities::LIBRARIES),
+            $translator->trans('OctoberLong', [], StringUtilities::LIBRARIES),
+            $translator->trans('NovemberLong', [], StringUtilities::LIBRARIES),
+            $translator->trans('DecemberLong', [], StringUtilities::LIBRARIES)
+        ];
+
+        $months = [];
+
+        foreach ($monthNames as $key => $month)
+        {
+            $months[$key + 1] = $month;
+        }
+
+        return $months;
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getYears(int $currentTime): array
+    {
+        $year = (int) date('Y', $currentTime);
+        $years = [];
+
+        for ($i = $year - 5; $i <= $year + 5; $i ++)
+        {
+            $years[$i] = $i;
+        }
+
+        return $years;
+    }
+}

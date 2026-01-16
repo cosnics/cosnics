@@ -64,22 +64,6 @@ class SettingsConnector implements SettingsConnectorInterface
         return $this->datetimeUtilities;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getFullnameFormats(): array
-    {
-        $translator = $this->getTranslator();
-        $options = [];
-
-        $options[User::NAME_FORMAT_FIRST] = $translator->trans('FirstName', [], Manager::CONTEXT) . ' ' .
-            $translator->trans('LastName', [], Manager::CONTEXT);
-        $options[User::NAME_FORMAT_LAST] = $translator->trans('LastName', [], Manager::CONTEXT) . ' ' .
-            $translator->trans('FirstName', [], Manager::CONTEXT);
-
-        return $options;
-    }
-
     public function getTranslator(): Translator
     {
         return $this->translator;

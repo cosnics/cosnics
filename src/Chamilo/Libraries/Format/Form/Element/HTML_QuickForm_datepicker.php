@@ -5,10 +5,10 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm_date;
 use HTML_QuickForm_element;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Form element to select a date and hour (with popup datepicker)
@@ -46,9 +46,9 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $this->formName = $formName;
 
         $this->_options['format'] = $this->getDateFormat($elementName, $includeTimePicker);
-        $this->_options['minYear'] = date('Y') - 5;
-        $this->_options['maxYear'] = date('Y') + 10;
-        $this->_options['language'] = Translation::getInstance()->getLanguageIsocode();
+        $this->_options['minYear'] = (int) date('Y') - 5;
+        $this->_options['maxYear'] = (int) date('Y') + 10;
+        $this->_options['language'] = $this->getTranslator()->getLocale();
 
         $this->setValue(date('Y-m-d H:i:s'));
     }
@@ -86,7 +86,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
      * Returns a 'safe' element's value
      *
      * @param array $submitValues array of submitted values to search
-     * @param bool $assoc         whether to return the value as associative array
+     * @param bool $assoc whether to return the value as associative array
      */
     public function exportValue(array &$submitValues, bool $assoc = false)
     {
@@ -111,7 +111,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
             $datetime = $y . '-' . $m . '-' . $d;
         }
 
-        if (strpos($this->getName(), '[') !== false)
+        if (str_contains($this->getName(), '['))
         {
             parse_str($this->getName() . '=' . urlencode($datetime), $result);
         }
@@ -123,6 +123,11 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         return $result;
     }
 
+    protected function getContainer(): ContainerInterface
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer();
+    }
+
     public function getDateFormat(string $elementName, bool $includeTimePicker): string
     {
         $js_form_name = $this->formName;
@@ -132,22 +137,35 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
             '<a class="btn btn-default" href="javascript:openCalendar(\'' . $js_form_name . '\',\'' . $elementName .
             '\')">' . $glyph->render() . '</a>';
         $specialCharacters = ['D', 'l', 'd', 'M', 'F', 'm', 'y', 'H', 'a', 'A', 's', 'i', 'h', 'g', 'W', '.', ' '];
-        $hourMinuteDivider = Translation::get('HourMinuteDivider', null, StringUtilities::LIBRARIES);
 
         foreach ($specialCharacters as $char)
         {
             $popupLink = str_replace($char, "\\" . $char, $popupLink);
-            $hourMinuteDivider = str_replace($char, "\\" . $char, $hourMinuteDivider);
         }
 
         if ($includeTimePicker)
         {
-            return 'd F Y   ' . $popupLink . '   H ' . $hourMinuteDivider . ' i';
+            return 'd F Y   ' . $popupLink . '   H : i';
         }
         else
         {
             return 'd F Y   ' . $popupLink;
         }
+    }
+
+    public function getResourceManager(): ResourceManager
+    {
+        return $this->getContainer()->get(ResourceManager::class);
+    }
+
+    protected function getTranslator(): Translator
+    {
+        return $this->getContainer()->get(Translator::class);
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->getContainer()->get(WebPathBuilder::class);
     }
 
     /**
@@ -210,20 +228,10 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 
     public function toHtml(): string
     {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-        /**
-         * @var \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
-         */
-        $resourceManager = $container->get(ResourceManager::class);
-        /**
-         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
-         */
-        $webPathBuilder = $container->get(WebPathBuilder::class);
-
         $html = [];
 
-        $html[] = $resourceManager->getResourceHtml(
-            $webPathBuilder->getJavascriptPath('Chamilo\Libraries\Format') . 'TblChange.js'
+        $html[] = $this->getResourceManager()->getResourceHtml(
+            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'TblChange.js'
         );
         $html[] = '<script>';
         $html[] = 'var max_year="' . ((int) date('Y') + 10) . '";';

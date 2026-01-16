@@ -1,14 +1,8 @@
 <?php
 namespace Chamilo\Core\User\Storage\DataClass;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Group\Service\GroupMembershipService;
-use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Translation\Translation;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Core\User\Storage\DataClass
@@ -19,12 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class User extends DataClass
 {
-    public const ANONYMOUS_ID = '1';
-
     public const CONTEXT = Manager::CONTEXT;
-
-    public const NAME_FORMAT_FIRST = 0;
-    public const NAME_FORMAT_LAST = 1;
 
     public const PROPERTY_ACTIVATION_DATE = 'activation_date';
     public const PROPERTY_ACTIVE = 'active';
@@ -52,25 +41,6 @@ class User extends DataClass
     public const STATUS_ANONYMOUS = 0;
     public const STATUS_STUDENT = 5;
     public const STATUS_TEACHER = 1;
-
-    public static function fullname(string $first_name, string $last_name): string
-    {
-        /**
-         * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
-         */
-        $configurationConsulter =
-            DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(ConfigurationConsulter::class);
-
-        $format = $configurationConsulter->getSetting([Manager::CONTEXT, 'fullname_format']);
-
-        switch ($format)
-        {
-            case self::NAME_FORMAT_LAST :
-                return $last_name . ' ' . $first_name;
-            default :
-                return $first_name . ' ' . $last_name;
-        }
-    }
 
     public function getAuthenticationSource(): string
     {
@@ -106,18 +76,6 @@ class User extends DataClass
         $extendedPropertyNames[] = self::PROPERTY_TERMS_DATE;
 
         return parent::getDefaultPropertyNames($extendedPropertyNames);
-    }
-
-    public function getGroupMembershipService(): GroupMembershipService
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
-            GroupMembershipService::class
-        );
-    }
-
-    public function getGroupsTreeTraverser(): GroupsTreeTraverser
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(GroupsTreeTraverser::class);
     }
 
     public function getPlatformAdmin(): bool
@@ -197,37 +155,7 @@ class User extends DataClass
 
     public function get_fullname(): string
     {
-        return self::fullname($this->get_firstname(), $this->get_lastname());
-    }
-
-    /**
-     * @return string[]
-     */
-    public static function get_fullname_format_options(): array
-    {
-        $options = [];
-        $options[self::NAME_FORMAT_FIRST] = Translation::get('FirstName') . ' ' . Translation::get('LastName');
-        $options[self::NAME_FORMAT_LAST] = Translation::get('LastName') . ' ' . Translation::get('FirstName');
-
-        return $options;
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>|string[]
-     * @deprecated Use GroupsTreeTraverser::findAllSubscribedGroupIdentifiersForUserIdentifier() or
-     *             GroupsTreeTraverser::findAllSubscribedGroupsForUserIdentifier() based ont he value of
-     *             $only_retrieve_ids
-     */
-    public function get_groups(bool $only_retrieve_ids = false): array|ArrayCollection
-    {
-        if ($only_retrieve_ids)
-        {
-            return $this->getGroupsTreeTraverser()->findAllSubscribedGroupIdentifiersForUserIdentifier($this->getId());
-        }
-        else
-        {
-            return $this->getGroupsTreeTraverser()->findAllSubscribedGroupsForUserIdentifier($this->getId());
-        }
+        return $this->get_firstname() . ' ' . $this->get_lastname();
     }
 
     public function get_lastname(): ?string
@@ -278,35 +206,9 @@ class User extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_STATUS);
     }
 
-    public function get_status_name(): string
-    {
-        if ($this->getPlatformAdmin() == '1')
-        {
-            return Translation::get('PlatformAdministrator');
-        }
-
-        switch ($this->get_status())
-        {
-            case self::STATUS_ANONYMOUS :
-                return Translation::get('Anonymous');
-            case self::STATUS_TEACHER :
-                return Translation::get('CourseAdmin');
-            default :
-                return Translation::get('Student');
-        }
-    }
-
     public function get_terms_date(): int
     {
         return $this->getDefaultProperty(self::PROPERTY_TERMS_DATE);
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     */
-    public function get_user_groups(): ArrayCollection
-    {
-        return $this->getGroupsTreeTraverser()->findDirectlySubscribedGroupsForUserIdentifier($this->getId());
     }
 
     public function get_username(): string
