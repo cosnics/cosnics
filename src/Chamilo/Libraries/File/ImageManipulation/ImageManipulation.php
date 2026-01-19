@@ -15,24 +15,30 @@ abstract class ImageManipulation
      * When cropping an image, use this offset value to get the exacte center of
      * the image
      */
-    const CROP_CENTER = - 1;
+    public const CROP_CENTER = - 1;
 
-    const DIMENSION_HEIGHT = 1;
-    const DIMENSION_WIDTH = 0;
+    public const DIMENSION_HEIGHT = 1;
+    public const DIMENSION_WIDTH = 0;
 
     /**
      * Final dimensions will be less than or equal to the entered width and
      * height.
      * Useful for ensuring a maximum height and/or width.
      */
-    const SCALE_INSIDE = 0;
+    public const SCALE_INSIDE = 0;
 
     /**
      * Final dimensions will be greater than or equal to the entered width and
      * height.
      * Ideal for cropping the result to a square.
      */
-    const SCALE_OUTSIDE = 1;
+    public const SCALE_OUTSIDE = 1;
+
+    /**
+     *
+     * @var int
+     */
+    protected $height;
 
     /**
      * The file on which the manipulations will be done
@@ -43,15 +49,9 @@ abstract class ImageManipulation
 
     /**
      *
-     * @var integer
+     * @var int
      */
     protected $width;
-
-    /**
-     *
-     * @var integer
-     */
-    protected $height;
 
     /**
      * Constructor
@@ -73,11 +73,11 @@ abstract class ImageManipulation
      * image will be cropped. The result is an image which the exact given with
      * and height.
      *
-     * @param integer $width With of the resulting image
-     * @param integer $height Height of the resulting image (if null, the height will be the same as the width,
+     * @param int $width With of the resulting image
+     * @param int $height Height of the resulting image (if null, the height will be the same as the width,
      *        resulting in a square image)
      *
-     * @return boolean
+     * @return bool
      */
     public function create_thumbnail($width, $height = null)
     {
@@ -97,12 +97,12 @@ abstract class ImageManipulation
      * Crop an image to the rectangle specified by the given offsets and
      * dimensions.
      *
-     * @param integer $width The width of the image after cropping
-     * @param integer $height The height of the image after cropping
-     * @param integer $offsetX
-     * @param integer $offsetY
+     * @param int $width The width of the image after cropping
+     * @param int $height The height of the image after cropping
+     * @param int $offsetX
+     * @param int $offsetY
      *
-     * @return boolean
+     * @return bool
      */
     abstract public function crop($width, $height, $offsetX = self::CROP_CENTER, $offsetY = self::CROP_CENTER);
 
@@ -127,7 +127,7 @@ abstract class ImageManipulation
     protected function get_image_extension()
     {
         $info = getimagesize($this->sourceFile);
-        $extensions = array('1' => 'gif', '2' => 'jpg', '3' => 'png');
+        $extensions = ['1' => 'gif', '2' => 'jpg', '3' => 'png'];
         $extension = array_key_exists($info[2], $extensions) ? $extensions[$info[2]] : null;
 
         return (is_null($extension) ? 'jpeg' : $extension);
@@ -136,13 +136,13 @@ abstract class ImageManipulation
     /**
      * Static function to calculate resized image dimensions
      *
-     * @param integer $originalWidth
-     * @param integer $originalHeight
-     * @param integer $width
-     * @param integer $height
-     * @param integer $type
+     * @param int $originalWidth
+     * @param int $originalHeight
+     * @param int $width
+     * @param int $height
+     * @param int $type
      *
-     * @return string[]|boolean
+     * @return string[]|bool
      */
     public static function rescale($originalWidth, $originalHeight, $width, $height, $type = self::SCALE_INSIDE)
     {
@@ -174,16 +174,16 @@ abstract class ImageManipulation
             $width = (int) round($height / $aspect);
         }
 
-        return array(self::DIMENSION_WIDTH => $width, self::DIMENSION_HEIGHT => $height);
+        return [self::DIMENSION_WIDTH => $width, self::DIMENSION_HEIGHT => $height];
     }
 
     /**
      * Resize an image to an exact set of dimensions, ignoring aspect ratio.
      *
-     * @param integer $width The width of the image after resizing
-     * @param integer $height The height of the image after resizing
+     * @param int $width The width of the image after resizing
+     * @param int $height The height of the image after resizing
      *
-     * @return boolean True if successfull, false if not
+     * @return bool True if successfull, false if not
      */
     abstract public function resize($width, $height);
 
@@ -192,11 +192,11 @@ abstract class ImageManipulation
      * Images which are
      * allready smaller than the given width and height won't be scaled.
      *
-     * @param integer $width
-     * @param integer $height
-     * @param integer $type
+     * @param int $width
+     * @param int $height
+     * @param int $type
      *
-     * @return boolean
+     * @return bool
      */
     public function scale($width, $height, $type = self::SCALE_INSIDE)
     {
@@ -211,7 +211,7 @@ abstract class ImageManipulation
      * @param string $sourceFile Full path of the file to which the image should be written. If null, the original image
      *        will be overwritten.
      *
-     * @return boolean
+     * @return bool
      */
     abstract public function write_to_file($sourceFile = null);
 }

@@ -24,7 +24,7 @@ class CreatorComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      * @throws \QuickformException
      */
     public function run(): Response

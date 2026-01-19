@@ -35,7 +35,7 @@ class FormTabGenerator
 
         if (!is_array($method))
         {
-            $method = array($form, $method);
+            $method = [$form, $method];
         }
 
         call_user_func_array($method, $tab->getParameters());

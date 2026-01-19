@@ -26,8 +26,8 @@ class UpdaterComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      */
     public function run(): Response

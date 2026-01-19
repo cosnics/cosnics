@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service;
 
-use Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException;
+use Chamilo\Libraries\Storage\Architecture\Exception\ConnectionException;
 use Chamilo\Libraries\Storage\Implementations\Doctrine\DataSourceName;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
@@ -25,7 +25,7 @@ class ConnectionFactory
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ConnectionException
      */
     public function getConnection(): Connection
     {

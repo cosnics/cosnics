@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
  */
 class OptionsMenuRenderer extends HtmlMenuArrayRenderer
 {
-    const KEY_ID = 'id';
+    public const KEY_ID = 'id';
 
     /**
      * @var string[]
@@ -26,7 +26,7 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
      */
     public function __construct($exclude = [])
     {
-        $exclude = is_array($exclude) ? $exclude : array($exclude);
+        $exclude = is_array($exclude) ? $exclude : [$exclude];
         $this->exclude = $exclude;
     }
 
@@ -34,8 +34,8 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
      * Renders the element of the menu
      *
      * @param string[] $node
-     * @param integer $level
-     * @param integer $type
+     * @param int $level
+     * @param int $type
      */
     public function renderEntry($node, $level, $type)
     {

@@ -15,9 +15,21 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
 
     /**
      *
-     * @var boolean
+     * @var bool
      */
     private static $initialized;
+
+    /**
+     *
+     * @var bool
+     */
+    private $collapsed;
+
+    /**
+     *
+     * @var string
+     */
+    private $item_url;
 
     /**
      *
@@ -33,22 +45,10 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
 
     /**
      *
-     * @var string
-     */
-    private $item_url;
-
-    /**
-     *
-     * @var boolean
-     */
-    private $collapsed;
-
-    /**
-     *
      * @param string $treeName
      * @param string $searchUrl
      * @param string $itemUrl
-     * @param boolean $collapsed
+     * @param bool $collapsed
      */
     public function __construct($treeName = '', $searchUrl = '', $itemUrl = '#', $collapsed = true)
     {
@@ -71,7 +71,7 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
     /**
      * Finish the tree level (for types 'tree' and 'sitemap')
      *
-     * @param integer $level
+     * @param int $level
      */
     public function finishLevel($level)
     {
@@ -96,13 +96,13 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
      * Renders the element of the menu
      *
      * @param string[] $node
-     * @param integer $level
-     * @param integer $type
+     * @param int $level
+     * @param int $type
      */
     public function renderEntry($node, $level, $type)
     {
         // Add some extra keys, so they always get replaced in the template.
-        foreach (array('children', 'class', 'onclick', 'id') as $key)
+        foreach (['children', 'class', 'onclick', 'id'] as $key)
         {
             if (!array_key_exists($key, $node))
             {

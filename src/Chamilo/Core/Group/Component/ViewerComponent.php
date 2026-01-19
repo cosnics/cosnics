@@ -37,8 +37,8 @@ class ViewerComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      * @throws \TableException
      */
@@ -99,8 +99,8 @@ class ViewerComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
@@ -193,8 +193,8 @@ class ViewerComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function getCurrentGroup(): Group
     {
@@ -207,8 +207,8 @@ class ViewerComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function getCurrentGroupIdentifier(): string
     {
@@ -227,8 +227,8 @@ class ViewerComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function getRootGroup(): Group
     {
@@ -301,10 +301,10 @@ class ViewerComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     protected function renderTable(): string
     {

@@ -72,14 +72,14 @@ class DatetimeUtilities
     {
         if ($time / 3600 < 1 && $time / 60 < 1)
         {
-            $converted_time = '000h 00m ' . str_pad($time, 2, '0', STR_PAD_LEFT) . 's';
+            $converted_time = '000h 00m ' . str_pad((string) $time, 2, '0', STR_PAD_LEFT) . 's';
         }
         elseif ($time / 3600 < 1)
         {
             $min = (int) ($time / 60);
             $sec = $time % 60;
-            $converted_time =
-                '000h ' . str_pad($min, 2, '0', STR_PAD_LEFT) . 'm ' . str_pad($sec, 2, '0', STR_PAD_LEFT) . 's';
+            $converted_time = '000h ' . str_pad((string) $min, 2, '0', STR_PAD_LEFT) . 'm ' .
+                str_pad((string) $sec, 2, '0', STR_PAD_LEFT) . 's';
         }
         else
         {
@@ -87,8 +87,9 @@ class DatetimeUtilities
             $rest = $time % 3600;
             $min = (int) ($rest / 60);
             $sec = $rest % 60;
-            $converted_time = str_pad($hour, 3, '0', STR_PAD_LEFT) . 'h ' . str_pad($min, 2, '0', STR_PAD_LEFT) . 'm ' .
-                str_pad($sec, 2, '0', STR_PAD_LEFT) . 's';
+            $converted_time =
+                str_pad((string) $hour, 3, '0', STR_PAD_LEFT) . 'h ' . str_pad((string) $min, 2, '0', STR_PAD_LEFT) .
+                'm ' . str_pad((string) $sec, 2, '0', STR_PAD_LEFT) . 's';
         }
 
         return $converted_time;
@@ -304,8 +305,8 @@ class DatetimeUtilities
         $hoursMinutesSeconds = explode(':', $dateTime[1]);
 
         return mktime(
-            $hoursMinutesSeconds[0], $hoursMinutesSeconds[1], $hoursMinutesSeconds[2], $yearMonthDday[1],
-            $yearMonthDday[2], $yearMonthDday[0]
+            (int) $hoursMinutesSeconds[0], (int) $hoursMinutesSeconds[1], (int) $hoursMinutesSeconds[2],
+            (int) $yearMonthDday[1], (int) $yearMonthDday[2], (int) $yearMonthDday[0]
         );
     }
 }

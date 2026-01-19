@@ -215,7 +215,7 @@ class GroupMenu extends HtmlMenu
 
     public static function get_tree_name()
     {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::TREE_NAME, true);
+        return ClassnameUtilities::getInstance()->getClassnameFromNamespace(self::TREE_NAME, true);
     }
 
     /**

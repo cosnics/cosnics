@@ -44,7 +44,7 @@ class GroupRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function countGroups(?Condition $condition = null): int
     {
@@ -54,7 +54,7 @@ class GroupRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function countSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false): int
     {
@@ -84,7 +84,7 @@ class GroupRepository
      * @param string $userIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<string[]>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -118,7 +118,7 @@ class GroupRepository
      * @param string $userIdentifier
      *
      * @return ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findDirectlySubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -146,8 +146,8 @@ class GroupRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findGroupByCode(string $groupCode): ?Group
     {
@@ -161,8 +161,8 @@ class GroupRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findGroupByCodeAndParentIdentifier(string $groupCode, string $parentIdentifier): ?Group
     {
@@ -181,8 +181,8 @@ class GroupRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findGroupByIdentifier(string $groupId): ?Group
     {
@@ -193,7 +193,7 @@ class GroupRepository
      * @param \Doctrine\Common\Collections\ArrayCollection<string[]> $directlySubscribedGroupNestingValues
      *
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findGroupIdentifiersForDirectlySubscribedGroupNestingValues(
         ArrayCollection $directlySubscribedGroupNestingValues
@@ -216,7 +216,7 @@ class GroupRepository
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findGroups(
         ?Condition $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
@@ -231,7 +231,7 @@ class GroupRepository
      * @param string[] $groupIdentifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findGroupsByIdentifiersOrderedByName(array $groupIdentifiers): ArrayCollection
     {
@@ -251,7 +251,7 @@ class GroupRepository
      * @param \Doctrine\Common\Collections\ArrayCollection<string[]> $directlySubscribedGroupNestingValues
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findGroupsForDirectlySubscribedGroupNestingValues(
         ArrayCollection $directlySubscribedGroupNestingValues
@@ -268,7 +268,7 @@ class GroupRepository
      * @param string $parentIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findGroupsForParentIdentifier(string $parentIdentifier = '0'): ArrayCollection
     {
@@ -291,7 +291,7 @@ class GroupRepository
      * @param string $parentIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findGroupsForSearchQueryAndParentIdentifier(
         ?string $searchQuery = null, string $parentIdentifier = '0'
@@ -327,7 +327,7 @@ class GroupRepository
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findParentGroupIdentifiersForGroup(Group $group, bool $includeSelf = true): array
     {
@@ -339,7 +339,7 @@ class GroupRepository
      * @param bool $includeSelf
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findParentGroupsForGroup(Group $group, bool $includeSelf = true): ArrayCollection
     {
@@ -347,8 +347,8 @@ class GroupRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findRootGroup(): ?Group
     {
@@ -364,7 +364,7 @@ class GroupRepository
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @todo This could be generalized to the NestedSetDataClassRepository
      */
     public function findSubGroupIdentifiersForGroup(Group $group, bool $recursiveSubgroups = false): array
@@ -407,7 +407,7 @@ class GroupRepository
      * @param bool $recursiveSubgroups
      *
      * @return  \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false): ArrayCollection
     {
@@ -472,9 +472,9 @@ class GroupRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Throwable
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function moveGroup(Group $group, string $parentGroupIdentifier): bool
     {
@@ -482,7 +482,7 @@ class GroupRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function updateGroup(Group $group): bool
     {

@@ -190,7 +190,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      */
     public function moveItemInDirection(Item $item, int $moveDirection): bool
     {
@@ -209,7 +209,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      */
     public function saveItemFromValues(Item $item, array $values): bool
     {
@@ -223,7 +223,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      */
     public function updateItem(Item $item): bool
     {

@@ -5,8 +5,8 @@ use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository;
-use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException;
-use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
+use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
+use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Symfony\Component\Cache\Exception\CacheException;
 
 /**

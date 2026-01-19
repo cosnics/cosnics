@@ -142,7 +142,7 @@ class ZipArchiveFilecompression
         {
             $fileInfo = $zipArchive->statIndex($i);
 
-            if (strpos($fileInfo['name'], '.') === false || strpos($fileInfo['name'], '__MACOSX') !== false)
+            if (!str_contains($fileInfo['name'], '.') || str_contains($fileInfo['name'], '__MACOSX'))
             {
                 continue;
             }

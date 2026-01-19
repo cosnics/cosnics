@@ -12,10 +12,8 @@ class PropertyMapper
 {
     /**
      * @param string[] $propertyNames
-     *
-     * @return bool|string
      */
-    public function determineClassKeyValue(stdClass $class, array $propertyNames)
+    public function determineClassKeyValue(stdClass $class, array $propertyNames): ?string
     {
         $keyValue = $class;
         $numberOfProperties = count($propertyNames);
@@ -37,16 +35,16 @@ class PropertyMapper
                 }
                 else
                 {
-                    return false;
+                    return null;
                 }
             }
             else
             {
-                return false;
+                return null;
             }
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -64,7 +62,7 @@ class PropertyMapper
             {
                 $propertyValue = $dataClass->$propertyName;
 
-                if (isset($propertyValue) && $propertyValue !== '')
+                if ($propertyValue !== '')
                 {
                     if (!array_key_exists($dataClass->$propertyName, $mappedDataClasses))
                     {

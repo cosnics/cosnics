@@ -53,7 +53,7 @@ class ThemePathBuilder
 
         foreach ($directories as $directory)
         {
-            if (substr($directory, 0, 1) != '.')
+            if (!str_starts_with($directory, '.'))
             {
                 $availableThemes[$directory] =
                     (string) $this->getStringUtilities()->createString($directory)->upperCamelize();

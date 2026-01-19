@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Service;
 use Chamilo\Application\Calendar\Storage\DataClass\Visibility;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\VisibilityServiceInterface;
-use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
+use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 
 /**
  * @package Chamilo\Application\Calendar\Service
@@ -20,8 +20,8 @@ class VisibilityService implements VisibilityServiceInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function changeVisibility(string $userIdentifier, string $source): bool
     {
@@ -38,8 +38,8 @@ class VisibilityService implements VisibilityServiceInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function createVisibilityFromParameters(string $userIdentifier, string $source): bool
     {
@@ -51,7 +51,7 @@ class VisibilityService implements VisibilityServiceInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function deleteVisibility(Visibility $visibility): bool
     {
@@ -64,8 +64,8 @@ class VisibilityService implements VisibilityServiceInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function retrieveVisibilityForUserIdentifierAndSource(string $userIdentifier, string $source): ?Visibility
     {

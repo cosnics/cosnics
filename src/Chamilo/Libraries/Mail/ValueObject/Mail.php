@@ -13,53 +13,11 @@ class Mail
 {
 
     /**
-     * The name of sender of the mail
+     * The attachments
      *
-     * @var string
+     * @var MailFile[]
      */
-    protected $fromName;
-
-    /**
-     * The email address of the sender of the mail
-     *
-     * @var string
-     */
-    protected $fromEmail;
-
-    /**
-     * The name to which a receiver of the mail can reply to
-     *
-     * @var string
-     */
-    protected $replyName;
-
-    /**
-     * The name to which a receiver of the mail can reply to
-     *
-     * @var string
-     */
-    protected $replyEmail;
-
-    /**
-     * Array of receiver email addresses in the TO field of the mail
-     *
-     * @var string[]
-     */
-    protected $to;
-
-    /**
-     * Whether this mail should be sent individually to the target users or not
-     *
-     * @var string[]
-     */
-    protected $sendIndividually;
-
-    /**
-     * Array of receiver email addresses in the CC field of the mail
-     *
-     * @var string[]
-     */
-    protected $cc;
+    protected $attachments;
 
     /**
      * Array of receiver email addresses in the BCC field of the mail
@@ -69,18 +27,11 @@ class Mail
     protected $bcc;
 
     /**
-     * The subject of the mail
+     * Array of receiver email addresses in the CC field of the mail
      *
      * @var string[]
      */
-    protected $subject;
-
-    /**
-     * The message of the mail
-     *
-     * @var string
-     */
-    protected $message;
+    protected $cc;
 
     /**
      * The embedded images
@@ -90,11 +41,60 @@ class Mail
     protected $embeddedImages;
 
     /**
-     * The attachments
+     * The email address of the sender of the mail
      *
-     * @var MailFile[]
+     * @var string
      */
-    protected $attachments;
+    protected $fromEmail;
+
+    /**
+     * The name of sender of the mail
+     *
+     * @var string
+     */
+    protected $fromName;
+
+    /**
+     * The message of the mail
+     *
+     * @var string
+     */
+    protected $message;
+
+    /**
+     * The name to which a receiver of the mail can reply to
+     *
+     * @var string
+     */
+    protected $replyEmail;
+
+    /**
+     * The name to which a receiver of the mail can reply to
+     *
+     * @var string
+     */
+    protected $replyName;
+
+    /**
+     * Whether this mail should be sent individually to the target users or not
+     *
+     * @var string[]
+     */
+    protected $sendIndividually;
+
+    /**
+     * The subject of the mail
+     *
+     * @var string[]
+     */
+    protected $subject;
+
+    /**
+     * Array of receiver email addresses in the TO field of the mail
+     *
+     * @var string[]
+     */
+    protected $to;
 
     /**
      * Constructor
@@ -102,7 +102,7 @@ class Mail
      * @param string $subject
      * @param string $message
      * @param string[] $to
-     * @param boolean $sendIndividually
+     * @param bool $sendIndividually
      * @param string[] $cc
      * @param string[] $bcc
      * @param string $fromName
@@ -241,7 +241,7 @@ class Mail
     /**
      * Validates and sets the recipients
      *
-     * @param boolean $sendIndividually
+     * @param bool $sendIndividually
      * @param string[] $to
      * @param string[] $cc
      * @param string[] $bcc
@@ -255,9 +255,9 @@ class Mail
             );
         }
 
-        $this->to = is_array($to) ? $to : array($to);
-        $this->cc = is_array($cc) ? $cc : array($cc);
-        $this->bcc = is_array($bcc) ? $bcc : array($bcc);
+        $this->to = is_array($to) ? $to : [$to];
+        $this->cc = is_array($cc) ? $cc : [$cc];
+        $this->bcc = is_array($bcc) ? $bcc : [$bcc];
         $this->sendIndividually = $sendIndividually;
     }
 }

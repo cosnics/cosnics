@@ -25,7 +25,7 @@ class AvailabilityForm extends FormValidator
     private User $user;
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      */
     public function __construct(string $actionUrl, User $user, AvailabilityService $availabilityService)
@@ -97,7 +97,7 @@ class AvailabilityForm extends FormValidator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      */
     private function setValues()

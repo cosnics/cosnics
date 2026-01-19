@@ -35,24 +35,21 @@ class Timer
     {
         if ($this->getDurationInSeconds() / 3600 < 1 && $this->getDurationInSeconds() / 60 < 1)
         {
-            $convertedTime = number_format($this->getDurationInSeconds(),3). 's';
+            $convertedTime = number_format($this->getDurationInSeconds(), 3) . 's';
+        }
+        elseif ($this->getDurationInSeconds() / 3600 < 1)
+        {
+            $minutes = (int) ($this->getDurationInSeconds() / 60);
+            $seconds = $this->getDurationInSeconds() % 60;
+            $convertedTime = $minutes . 'm ' . number_format($seconds, 3) . 's';
         }
         else
         {
-            if ($this->getDurationInSeconds() / 3600 < 1)
-            {
-                $minutes = (int) ($this->getDurationInSeconds() / 60);
-                $seconds = $this->getDurationInSeconds() % 60;
-                $convertedTime = $minutes . 'm ' . number_format($seconds, 3) . 's';
-            }
-            else
-            {
-                $hours = (int) ($this->getDurationInSeconds() / 3600);
-                $rest = $this->getDurationInSeconds() % 3600;
-                $minutes = (int) ($rest / 60);
-                $seconds = $rest % 60;
-                $convertedTime = $hours . 'h ' . $minutes . 'm ' . number_format($seconds, 3) . 's';
-            }
+            $hours = (int) ($this->getDurationInSeconds() / 3600);
+            $rest = $this->getDurationInSeconds() % 3600;
+            $minutes = (int) ($rest / 60);
+            $seconds = $rest % 60;
+            $convertedTime = $hours . 'h ' . $minutes . 'm ' . number_format($seconds, 3) . 's';
         }
 
         return $convertedTime;
@@ -66,25 +63,31 @@ class Timer
     /**
      * Reset the start and stop time
      */
-    public function reset()
+    public function reset(): static
     {
         $this->startTime = 0;
         $this->stopTime = 0;
+
+        return $this;
     }
 
     /**
      * Starts the timer by setting the start time to the current microtime
      */
-    public function start()
+    public function start(): static
     {
         $this->startTime = $this->getMicrotime();
+
+        return $this;
     }
 
     /**
      * Stops the timer by setting the stop time to the current microtime
      */
-    public function stop()
+    public function stop(): static
     {
         $this->stopTime = $this->getMicrotime();
+
+        return $this;
     }
 }

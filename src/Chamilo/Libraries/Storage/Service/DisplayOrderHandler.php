@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Service;
 
-use Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException;
+use Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException;
 use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
 use Chamilo\Libraries\Storage\Repository\DisplayOrderRepository;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -136,7 +136,7 @@ class DisplayOrderHandler
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      */
     public function handleDisplayOrderBeforeCreate(DataClassDisplayOrderSupport $dataClass): bool
     {
@@ -146,7 +146,7 @@ class DisplayOrderHandler
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      */
     public function handleDisplayOrderBeforeUpdate(DataClassDisplayOrderSupport $dataClass): bool
     {
@@ -219,7 +219,7 @@ class DisplayOrderHandler
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      */
     protected function validateDisplayOrder(DataClassDisplayOrderSupport $dataClass)
     {

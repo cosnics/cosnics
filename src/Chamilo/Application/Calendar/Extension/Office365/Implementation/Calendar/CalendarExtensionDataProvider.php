@@ -100,7 +100,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     protected function getCalendarIdentifiers(CalendarRendererProvider $calendarRendererProvider): array
     {
@@ -195,7 +195,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
 
     /**
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getEvents(CalendarRendererProvider $calendarRendererProvider, int $fromDate, int $toDate): array
     {

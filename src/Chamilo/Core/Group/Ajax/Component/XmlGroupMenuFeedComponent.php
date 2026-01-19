@@ -18,7 +18,7 @@ class XmlGroupMenuFeedComponent extends Manager
 {
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function run(): Response
     {
@@ -39,7 +39,7 @@ class XmlGroupMenuFeedComponent extends Manager
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group> $groups
      *
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function dump_groups_tree(ArrayCollection $groups): string
     {

@@ -92,13 +92,20 @@ class Diagnoser
     }
 
     /**
+     * @param int $status
+     * @param string $section
+     * @param string $title
+     * @param string $url
      * @param mixed $current_value
      * @param mixed $expected_value
      * @param mixed $formatter
+     * @param string $comment
+     *
+     * @return array
      */
     public function build_setting(
-        int $status, string $section, string $title, string $url, $current_value, $expected_value, $formatter,
-        string $comment
+        int $status, string $section, string $title, string $url, mixed $current_value, mixed $expected_value,
+        mixed $formatter, string $comment
     ): array
     {
         switch ($status)
@@ -187,7 +194,7 @@ class Diagnoser
 
         $date = $this->getInstallationDate();
         $date = $this->datetimeUtilities->formatLocaleDate(
-            $this->getTranslation('DateFormatShort') . ', ' . $this->getTranslation('TimeNoSecFormat'), (int) $date
+            $this->getTranslation('DateFormatShort') . ', ' . $this->getTranslation('TimeNoSecFormat'), $date
         );
         $array[] = $this->build_setting(
             1, '[INFORMATION]', $this->getTranslation('InstallDate'), '', $date, '', null,

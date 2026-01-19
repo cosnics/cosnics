@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Storage\Architecture\Interfaces;
+namespace Chamilo\Libraries\Storage\Architecture\Interface;
 
 use Chamilo\Libraries\Storage\Query\ConditionPart;
 

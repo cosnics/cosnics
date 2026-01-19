@@ -15,9 +15,19 @@ use Exception;
  */
 class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
 {
-    const HTML_MENU_ENTRY_ACTIVE = 1;
-    const HTML_MENU_ENTRY_ACTIVEPATH = 2;
-    const HTML_MENU_ENTRY_INACTIVE = 0;
+    public const HTML_MENU_ENTRY_ACTIVE = 1;
+    public const HTML_MENU_ENTRY_ACTIVEPATH = 2;
+    public const HTML_MENU_ENTRY_INACTIVE = 0;
+
+    /**
+     *
+     * @var string[]
+     */
+    public $_entryTemplates = [
+        self::HTML_MENU_ENTRY_INACTIVE => '<a href="{url}">{title}</a>',
+        self::HTML_MENU_ENTRY_ACTIVE => '<strong>{title}</strong>',
+        self::HTML_MENU_ENTRY_ACTIVEPATH => '<a href="{url}"><em>{title}</em></a>'
+    ];
 
     /**
      *
@@ -29,40 +39,30 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
      *
      * @var string
      */
-    public $_levelHtml = [];
-
-    /**
-     *
-     * @var string
-     */
     public $_itemHtml = [];
 
     /**
      *
      * @var string[]
      */
-    public $_levelTemplate = array('<ul>', '</ul>');
+    public $_itemTemplate = ['<li>', '</li>'];
+
+    /**
+     *
+     * @var string
+     */
+    public $_levelHtml = [];
 
     /**
      *
      * @var string[]
      */
-    public $_itemTemplate = array('<li>', '</li>');
-
-    /**
-     *
-     * @var string[]
-     */
-    public $_entryTemplates = array(
-        self::HTML_MENU_ENTRY_INACTIVE => '<a href="{url}">{title}</a>',
-        self::HTML_MENU_ENTRY_ACTIVE => '<strong>{title}</strong>',
-        self::HTML_MENU_ENTRY_ACTIVEPATH => '<a href="{url}"><em>{title}</em></a>'
-    );
+    public $_levelTemplate = ['<ul>', '</ul>'];
 
     /**
      * Finish the tree level (for types 'tree' and 'sitemap')
      *
-     * @param integer $level
+     * @param int $level
      */
     public function finishLevel($level)
     {
@@ -86,8 +86,8 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
      * Renders the element of the menu
      *
      * @param string[] $node
-     * @param integer $level
-     * @param integer $type
+     * @param int $level
+     * @param int $type
      */
     public function renderEntry($node, $level, $type)
     {
@@ -142,7 +142,7 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
      */
     public function setItemTemplate($prepend, $append)
     {
-        $this->_itemTemplate = array($prepend, $append);
+        $this->_itemTemplate = [$prepend, $append];
     }
 
     /**
@@ -152,7 +152,7 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
      */
     public function setLevelTemplate($prepend, $append)
     {
-        $this->_levelTemplate = array($prepend, $append);
+        $this->_levelTemplate = [$prepend, $append];
     }
 
     /**

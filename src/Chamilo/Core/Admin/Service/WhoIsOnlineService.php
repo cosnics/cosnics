@@ -3,7 +3,7 @@ namespace Chamilo\Core\Admin\Service;
 
 use Chamilo\Core\Admin\Storage\DataClass\Online;
 use Chamilo\Core\Admin\Storage\Repository\WhoIsOnlineRepository;
-use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
+use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 
 /**
  * @package Chamilo\Core\Admin\Service
@@ -38,8 +38,8 @@ class WhoIsOnlineService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findWhoIsOnlineForUserIdentifier(string $userIdentifier): ?Online
     {
@@ -57,7 +57,7 @@ class WhoIsOnlineService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function updateWhoIsOnlineForUserIdentifierWithCurrentTime(?string $userIdentifier): bool
     {

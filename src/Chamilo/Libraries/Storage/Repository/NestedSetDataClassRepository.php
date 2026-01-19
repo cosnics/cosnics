@@ -35,7 +35,7 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function count(string $dataClassName, StorageParameters $parameters): int
     {
@@ -43,7 +43,7 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function countAncestors(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null): int
     {
@@ -54,7 +54,7 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function countDescendants(NestedSet $nestedSet, bool $recursive = true, ?Condition $condition = null): int
     {
@@ -68,7 +68,7 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function countSiblings(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null): int
     {
@@ -192,7 +192,7 @@ class NestedSetDataClassRepository
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function distinct(string $dataClassName, StorageParameters $parameters): array
     {
@@ -201,7 +201,7 @@ class NestedSetDataClassRepository
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findAncestorIdentifiers(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null
     ): array
@@ -222,7 +222,7 @@ class NestedSetDataClassRepository
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findAncestors(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null
     ): ArrayCollection
@@ -241,7 +241,7 @@ class NestedSetDataClassRepository
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findDescendants(NestedSet $nestedSet, bool $recursive = true, ?Condition $condition = null
     ): ArrayCollection
@@ -254,8 +254,8 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findRelatedNestedSetByIdentifier(NestedSet $nestedSet, string $nestedSetIdentifier): NestedSet
     {
@@ -268,7 +268,7 @@ class NestedSetDataClassRepository
      * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findSiblings(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null
     ): ArrayCollection
@@ -395,8 +395,8 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function getParent(NestedSet $nestedSet): NestedSet
     {
@@ -496,7 +496,7 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function hasSiblings(NestedSet $nestedSet, ?Condition $condition = null): bool
     {
@@ -504,8 +504,8 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Throwable
      */
     public function move(
@@ -690,7 +690,7 @@ class NestedSetDataClassRepository
     /**
      * Change the left/right values in the tree of every node that is affected by to the delete of this node
      *
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     protected function postDelete(NestedSet $nestedSet, ?Condition $condition = null): bool
     {
@@ -796,7 +796,7 @@ class NestedSetDataClassRepository
      * Creates the necessary room to insert a number of values (1 by default) into the nested set: it shifts the
      * left/right values of all nodes that are traversed after the insertion point to the right.
      *
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     protected function preInsert(
         NestedSet $nestedSet, int $insertAfter, int $numberOfElements = 1, ?Condition $condition = null
@@ -890,8 +890,8 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function record(string $dataClassName, StorageParameters $parameters): array
     {
@@ -899,7 +899,7 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function records(string $dataClassName, StorageParameters $parameters): ArrayCollection
     {
@@ -912,8 +912,8 @@ class NestedSetDataClassRepository
      * @param class-string<retrieveDataClassName> $dataClassName
      *
      * @return retrieveDataClassName
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function retrieve(string $dataClassName, StorageParameters $parameters)
     {
@@ -927,8 +927,8 @@ class NestedSetDataClassRepository
      * @param string $identifier
      *
      * @return retrieveById
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function retrieveById(string $dataClassName, string $identifier)
     {
@@ -942,7 +942,7 @@ class NestedSetDataClassRepository
      * @param \Chamilo\Libraries\Storage\StorageParameters $parameters
      *
      * @return ArrayCollection<tRetrieves>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function retrieves(string $dataClassName, StorageParameters $parameters): ArrayCollection
     {
@@ -950,7 +950,7 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function update(NestedSet $nestedSet): bool
     {
@@ -960,8 +960,8 @@ class NestedSetDataClassRepository
     /**
      * Validates a relative position of a node, which is used when creating or moving a node.
      *
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     protected function validatePosition(
         NestedSet $nestedSet, int $position = NestedSet::AS_LAST_CHILD_OF, ?NestedSet $referenceNode = null

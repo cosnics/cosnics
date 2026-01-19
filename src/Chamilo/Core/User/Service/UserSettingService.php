@@ -6,8 +6,8 @@ use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
-use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException;
-use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
+use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
+use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -148,8 +148,8 @@ class UserSettingService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function getUserSettingForSettingContextVariableAndUser(string $context, string $variable, User $user
     ): ?UserSetting

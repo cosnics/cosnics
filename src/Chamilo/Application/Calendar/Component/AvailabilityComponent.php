@@ -67,7 +67,7 @@ class AvailabilityComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      */
     public function getAvailabilityForm(AvailabilityService $availabilityService): AvailabilityForm

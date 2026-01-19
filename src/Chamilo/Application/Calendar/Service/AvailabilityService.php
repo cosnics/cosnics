@@ -6,7 +6,7 @@ use Chamilo\Application\Calendar\Storage\DataClass\Availability;
 use Chamilo\Application\Calendar\Storage\Repository\AvailabilityRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ActionResult;
-use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
+use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 
@@ -35,8 +35,8 @@ class AvailabilityService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function createAvailability(Availability $availability): bool
     {
@@ -44,8 +44,8 @@ class AvailabilityService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Exception
      */
     public function createAvailabilityFromParameters(
@@ -63,7 +63,7 @@ class AvailabilityService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function deleteAvailabilityByCalendarType(string $calendarType): bool
     {
@@ -72,7 +72,7 @@ class AvailabilityService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Calendar\Storage\DataClass\Availability>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getActiveAvailabilitiesForUserAndCalendarType(User $user, string $calendarType): ArrayCollection
     {
@@ -81,7 +81,7 @@ class AvailabilityService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Calendar\Storage\DataClass\Availability>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getAvailabilitiesForUser(User $user, ?bool $isAvailable = null): ArrayCollection
     {
@@ -90,7 +90,7 @@ class AvailabilityService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Calendar\Storage\DataClass\Availability>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getAvailabilitiesForUserAndCalendarType(User $user, string $calendarType, ?bool $isAvailable = null
     ): ArrayCollection
@@ -106,8 +106,8 @@ class AvailabilityService
      * @param string $calendarIdentifier
      *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
         User $user, string $calendarType, string $calendarIdentifier
@@ -150,7 +150,7 @@ class AvailabilityService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Calendar\Storage\DataClass\Availability>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getInactiveAvailabilitiesForUserAndCalendarType(User $user, string $calendarType): ArrayCollection
     {
@@ -163,7 +163,7 @@ class AvailabilityService
      * @param string $calendarIdentifier
      *
      * @return bool
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
         User $user, string $calendarType, string $calendarIdentifier
@@ -225,8 +225,8 @@ class AvailabilityService
      * @param ?string $colour
      *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function setAvailability(
         User $user, string $calendarType, string $calendarIdentifier, bool $isAvailable = true, ?string $colour = null
@@ -271,7 +271,7 @@ class AvailabilityService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function updateAvailability(Availability $availability): bool
     {
@@ -287,7 +287,7 @@ class AvailabilityService
      * @param ?string $colour
      *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function updateAvailabilityFromParameters(
         Availability $availability, User $user, string $calendarType, string $calendarIdentifier,

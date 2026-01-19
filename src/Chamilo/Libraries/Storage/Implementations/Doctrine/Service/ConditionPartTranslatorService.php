@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Storage\Architecture\Interfaces\ConditionPartTranslatorServiceInterface;
-use Chamilo\Libraries\Storage\Architecture\Interfaces\DataClassDatabaseInterface;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionPartTranslatorServiceInterface;
+use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionPartTranslator;

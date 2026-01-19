@@ -21,7 +21,7 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     private function getMenuItems(TreeMenuItem $parent_menu_item, string $parentId = '0'): void
     {
@@ -44,8 +44,8 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function getTreeMenuData(): TreeMenuItem
     {

@@ -41,7 +41,7 @@ class StringUtilities
             $clickableText = $email;
         }
         // mailto already present?
-        if (substr($email, 0, 7) != 'mailto:')
+        if (!str_starts_with($email, 'mailto:'))
         {
             $email = 'mailto:' . $email;
         }
@@ -98,10 +98,7 @@ class StringUtilities
         return static::$instance;
     }
 
-    /**
-     * @param ?mixed $string
-     */
-    public function hasValue($string, bool $forHumans = false): bool
+    public function hasValue(mixed $string, bool $forHumans = false): bool
     {
         return !$this->isNullOrEmpty($string, $forHumans);
     }
@@ -134,11 +131,8 @@ class StringUtilities
 
         return $haystack;
     }
-
-    /**
-     * @param ?mixed $string
-     */
-    public function isNullOrEmpty($string, bool $forHumans = false): bool
+    
+    public function isNullOrEmpty(mixed $string, bool $forHumans = false): bool
     {
         if (is_null($string))
         {

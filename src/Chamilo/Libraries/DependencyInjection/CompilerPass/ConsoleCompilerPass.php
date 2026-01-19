@@ -31,7 +31,7 @@ class ConsoleCompilerPass implements CompilerPassInterface
 
             foreach ($taggedServices as $taggedServiceId => $tags)
             {
-                $consoleDefinition->addMethodCall('add', array(new Reference($taggedServiceId)));
+                $consoleDefinition->addMethodCall('add', [new Reference($taggedServiceId)]);
             }
         }
 
@@ -42,7 +42,7 @@ class ConsoleCompilerPass implements CompilerPassInterface
 
             foreach ($taggedServices as $taggedServiceId => $tags)
             {
-                $helperSetDefinition->addMethodCall('set', array(new Reference($taggedServiceId), $tags[0]['alias']));
+                $helperSetDefinition->addMethodCall('set', [new Reference($taggedServiceId), $tags[0]['alias']]);
             }
         }
     }

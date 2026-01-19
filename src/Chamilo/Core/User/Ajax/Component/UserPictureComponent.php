@@ -20,8 +20,8 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function run(): Response
     {
@@ -31,8 +31,8 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     protected function getUserFromRequest(): User
     {

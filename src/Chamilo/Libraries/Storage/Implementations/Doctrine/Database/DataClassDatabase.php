@@ -2,10 +2,10 @@
 namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Database;
 
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
-use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException;
-use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException;
-use Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException;
-use Chamilo\Libraries\Storage\Architecture\Interfaces\DataClassDatabaseInterface;
+use Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException;
+use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
+use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
+use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\Implementations\Doctrine\Service\QueryBuilderConfigurator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -52,25 +52,38 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     protected function __retrieve(string $dataClassStorageUnitName, StorageParameters $parameters): Result
     {
-        $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
-
         try
         {
-            return $this->getConnection()->executeQuery($sqlQuery);
+            $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
+
+            try
+            {
+                return $this->getConnection()->executeQuery($sqlQuery);
+            }
+            catch (Throwable $throwable)
+            {
+                $this->handleError($throwable);
+                throw new StorageMethodException(
+                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                );
+            }
         }
-        catch (Throwable $throwable)
+        catch (\Doctrine\DBAL\Exception $exception)
         {
-            $this->handleError($throwable);
+            $this->handleError($exception);
             throw new StorageMethodException(
-                __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                __FUNCTION__, $dataClassStorageUnitName, $exception->getMessage()
             );
         }
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     protected function buildFromQuery(string $dataClassStorageUnitName, StorageParameters $parameters): string
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
@@ -84,38 +97,48 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function count(string $dataClassStorageUnitName, StorageParameters $parameters): int
     {
-        $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
-
         try
         {
-            $record = $this->getConnection()->executeQuery($sqlQuery)->fetchNumeric();
+            $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
 
-            return (int) $record[0];
+            try
+            {
+
+                $record = $this->getConnection()->executeQuery($sqlQuery)->fetchNumeric();
+
+                return (int) $record[0];
+            }
+            catch (Throwable $throwable)
+            {
+                $this->handleError($throwable);
+
+                throw new StorageMethodException(
+                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                );
+            }
         }
-        catch (Throwable $throwable)
+        catch (\Doctrine\DBAL\Exception $exception)
         {
-            $this->handleError($throwable);
-
+            $this->handleError($exception);
             throw new StorageMethodException(
-                __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                __FUNCTION__, $dataClassStorageUnitName, $exception->getMessage()
             );
         }
     }
 
     /**
      * @return int[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function countGrouped(string $dataClassStorageUnitName, StorageParameters $parameters): array
     {
-        $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
-
         try
         {
+            $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
             $result = $this->getConnection()->executeQuery($sqlQuery);
 
             $counts = [];
@@ -136,7 +159,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function create(string $dataClassStorageUnitName, array $record): bool
     {
@@ -155,7 +178,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function delete(string $dataClassStorageUnitName, ?Condition $condition = null): bool
     {
@@ -184,51 +207,50 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function distinct(string $dataClassStorageUnitName, StorageParameters $parameters): array
     {
-        $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
-
         try
         {
-            $statement = $this->getConnection()->executeQuery($sqlQuery);
+            $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
 
-            $distinctElements = [];
-
-            while ($record = $statement->fetchAssociative())
+            try
             {
-                if (count($record) > 1)
+
+                $statement = $this->getConnection()->executeQuery($sqlQuery);
+
+                $distinctElements = [];
+
+                while ($record = $statement->fetchAssociative())
                 {
-                    $distinctElements[] = $record;
+                    if (count($record) > 1)
+                    {
+                        $distinctElements[] = $record;
+                    }
+                    else
+                    {
+                        $distinctElements[] = array_pop($record);
+                    }
                 }
-                else
-                {
-                    $distinctElements[] = array_pop($record);
-                }
+
+                return $distinctElements;
             }
+            catch (Throwable $throwable)
+            {
+                $this->handleError($throwable);
 
-            return $distinctElements;
+                throw new StorageMethodException(
+                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                );
+            }
         }
-        catch (Throwable $throwable)
+        catch (\Doctrine\DBAL\Exception $exception)
         {
-            $this->handleError($throwable);
-
+            $this->handleError($exception);
             throw new StorageMethodException(
-                __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                __FUNCTION__, $dataClassStorageUnitName, $exception->getMessage()
             );
-        }
-    }
-
-    protected function escape(mixed $text): mixed
-    {
-        if (!is_null($text))
-        {
-            return $this->quote($text);
-        }
-        else
-        {
-            return 'NULL';
         }
     }
 
@@ -265,7 +287,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function getLastInsertedIdentifier(string $dataClassStorageUnitName): int|string
     {
@@ -305,6 +327,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         );
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function quote(mixed $value): string
     {
         if (is_null($value))
@@ -316,56 +341,76 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function retrieve(string $dataClassStorageUnitName, StorageParameters $parameters): ?array
     {
-        $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
-
         try
         {
-            $record = $this->getConnection()->executeQuery($sqlQuery)->fetchAssociative();
+            $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
 
-            if ($record === false)
+            try
             {
-                throw new StorageNoResultException(
-                    __FUNCTION__, $dataClassStorageUnitName, $parameters, 'No result for query: ' . $sqlQuery
+                $record = $this->getConnection()->executeQuery($sqlQuery)->fetchAssociative();
+
+                if ($record === false)
+                {
+                    throw new StorageNoResultException(
+                        __FUNCTION__, $dataClassStorageUnitName, $parameters, 'No result for query: ' . $sqlQuery
+                    );
+                }
+
+                return $record;
+            }
+            catch (StorageNoResultException $exception)
+            {
+                throw $exception;
+            }
+            catch (Throwable $throwable)
+            {
+                $this->handleError($throwable);
+                throw new StorageMethodException(
+                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
                 );
             }
-
-            return $record;
         }
-        catch (StorageNoResultException $exception)
+        catch (\Doctrine\DBAL\Exception $exception)
         {
-            throw $exception;
-        }
-        catch (Throwable $throwable)
-        {
-            $this->handleError($throwable);
+            $this->handleError($exception);
             throw new StorageMethodException(
-                __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                __FUNCTION__, $dataClassStorageUnitName, $exception->getMessage()
             );
         }
     }
 
     /**
      * @return string[][]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function retrieves(string $dataClassStorageUnitName, StorageParameters $parameters): array
     {
-        $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
-
         try
         {
-            return $this->getConnection()->executeQuery($sqlQuery)->fetchAllAssociative();
+            $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
+
+            try
+            {
+                return $this->getConnection()->executeQuery($sqlQuery)->fetchAllAssociative();
+            }
+            catch (Throwable $throwable)
+            {
+                $this->handleError($throwable);
+                throw new StorageMethodException(
+                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                );
+            }
         }
-        catch (Throwable $throwable)
+        catch (\Doctrine\DBAL\Exception $exception)
         {
-            $this->handleError($throwable);
+            $this->handleError($exception);
             throw new StorageMethodException(
-                __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                __FUNCTION__, $dataClassStorageUnitName, $exception->getMessage()
             );
         }
     }
@@ -407,7 +452,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function update(string $dataClassStorageUnitName, UpdateProperties $properties, Condition $condition): bool
     {

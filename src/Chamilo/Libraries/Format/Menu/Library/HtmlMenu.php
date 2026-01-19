@@ -135,7 +135,7 @@ class HtmlMenu
     /**
      * Builds the mappings from node url to the 'path' in the menu
      *
-     * @param string[] $menu (sub)menu being processed
+     * @param string[][] $menu (sub)menu being processed
      * @param string[] $path path to the (sub)menu
      *
      * @return bool true if the path to the current page was found, otherwise false.
@@ -412,7 +412,7 @@ class HtmlMenu
             $this->_currentUrl = substr($this->_currentUrl, 0, - 1);
         }
 
-        return isset($this->_urlMap[$this->_currentUrl]) ? $this->_urlMap[$this->_currentUrl] : [];
+        return $this->_urlMap[$this->_currentUrl] ?? [];
     }
 
     /**

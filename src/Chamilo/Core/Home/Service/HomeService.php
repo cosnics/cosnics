@@ -62,7 +62,7 @@ class HomeService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      */
     public function createElement(Element $element): bool
     {
@@ -254,7 +254,7 @@ class HomeService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      */
     public function updateElement(Element $element): bool
     {

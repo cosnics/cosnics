@@ -71,7 +71,7 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\ConnectionException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ConnectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getContainer(): ContainerInterface
