@@ -3,9 +3,10 @@ namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @package Ehb\Application\Calendar\Extension\SyllabusPlus\Component
+ * @package Chamilo\Application\Calendar\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -13,10 +14,7 @@ use Chamilo\Libraries\Format\Structure\PageConfiguration;
 class PrinterComponent extends BrowserComponent
 {
 
-    /**
-     * Runs this component and displays its output.
-     */
-    public function run()
+    public function run(): Response
     {
         $this->checkAuthorization(Manager::CONTEXT);
 
@@ -35,6 +33,6 @@ class PrinterComponent extends BrowserComponent
         $html[] = '</script>';
         $html[] = $this->renderFooter();
 
-        return implode(PHP_EOL, $html);
+        return new Response(implode(PHP_EOL, $html));
     }
 }

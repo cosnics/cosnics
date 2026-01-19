@@ -9,9 +9,9 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Menu\Component
@@ -19,16 +19,15 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EditorComponent extends Manager implements BreadcrumbLessComponentInterface
+class EditorComponent extends Manager
 {
     /**
-     * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
      * @throws \Exception
      */
-    public function run()
+    public function run(): Response
     {
         if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
         {
@@ -70,7 +69,7 @@ class EditorComponent extends Manager implements BreadcrumbLessComponentInterfac
                 StringUtilities::LIBRARIES
             );
 
-            $this->redirectWithMessage(
+            return $this->redirectWithMessage(
                 $message, !$success, [
                     Application::PARAM_CONTEXT => $this->getContext(),
                     Application::PARAM_ACTION => Manager::ACTION_BROWSE,
@@ -85,13 +84,14 @@ class EditorComponent extends Manager implements BreadcrumbLessComponentInterfac
         $html[] = $itemForm->render();
         $html[] = $this->renderFooter();
 
-        return implode(PHP_EOL, $html);
+        return new Response(implode(PHP_EOL, $html));
     }
 
     /**
-     * @return \Chamilo\Core\Menu\Storage\DataClass\Item
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      */
     protected function getItem(): Item
     {

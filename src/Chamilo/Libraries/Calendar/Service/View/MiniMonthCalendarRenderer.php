@@ -155,7 +155,7 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
         $html[] = $this->renderPreviousMonthNavigation($dataProvider, $displayTime);
         $html[] = $this->renderNextMonthNavigation($dataProvider, $displayTime);
         $html[] = '<h4 class="panel-title">';
-        $html[] = $this->renderTitle($dataProvider, $displayTime);
+        $html[] = $this->renderTitle($displayTime);
         $html[] = '</h4>';
         $html[] = '</div>';
 
@@ -185,7 +185,7 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
         return '<a href="' . $previousUrl . '">' . $glyph->render() . '</a>';
     }
 
-    public function renderTitle(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
+    public function renderTitle(int $displayTime): string
     {
         return $this->getTranslator()->trans(date('F', $displayTime) . 'Long', [], StringUtilities::LIBRARIES) . ' ' .
             date('Y', $displayTime);

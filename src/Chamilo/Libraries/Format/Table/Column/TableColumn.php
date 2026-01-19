@@ -50,36 +50,37 @@ abstract class TableColumn
         return $this->cssClasses;
     }
 
-    public function get_name(): string
+    /**
+     * @param string[][] $cssClasses
+     */
+    public function setCssClasses(?array $cssClasses): static
+    {
+        $this->cssClasses = $cssClasses;
+
+        return $this;
+    }
+
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function get_title(): string
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string[][] $cssClasses
-     */
-    public function setCssClasses(?array $cssClasses)
-    {
-        $this->cssClasses = $cssClasses;
-    }
-
-    /**
-     * Sets the name of this column
-     *
-     * @param string $name
-     */
-    public function set_name(string $name)
-    {
-        $this->name = $name;
-    }
-
-    public function set_title(string $title)
+    public function setTitle(string $title): static
     {
         $this->title = $title;
+
+        return $this;
     }
 }

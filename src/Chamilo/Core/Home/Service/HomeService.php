@@ -5,7 +5,6 @@ use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Architecture\Domain\BlockRendererCollection;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\Repository\HomeRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
@@ -234,7 +233,7 @@ class HomeService
         return ($currentTabIdentifier == $tab->getId() || (!isset($currentTabIdentifier) && $tabKey == 0));
     }
 
-    public function tabByUserAndIdentifierHasMultipleColumns(string $tabIdentifier, User $user = null): bool
+    public function tabByIdentifierHasMultipleColumns(string $tabIdentifier): bool
     {
         return $this->findElementsByTypeUserAndParentIdentifier(Element::TYPE_COLUMN, $tabIdentifier)->count() > 1;
     }
@@ -265,10 +264,5 @@ class HomeService
         }
 
         return $this->getHomeRepository()->updateElement($element);
-    }
-
-    public function userHasMultipleTabs(User $user = null): bool
-    {
-        return $this->findElementsByTypeUserAndParentIdentifier(Element::TYPE_TAB)->count() > 1;
     }
 }

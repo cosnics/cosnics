@@ -53,15 +53,15 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
         if (!isset($this->settings))
         {
             $this->settings = [];
-            $this->settings['host'] = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'cas_host']);
-            $this->settings['port'] = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'cas_port']);
-            $this->settings['uri'] = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'cas_uri']);
+            $this->settings['host'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'cas_host']);
+            $this->settings['port'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'cas_port']);
+            $this->settings['uri'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'cas_uri']);
             $this->settings['certificate'] = $this->configurationConsulter->getSetting(
-                ['Chamilo\Core\Admin', 'cas_certificate']
+                ['Libraries', 'cas_certificate']
             );
-            $this->settings['log'] = $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'cas_log']);
+            $this->settings['log'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'cas_log']);
             $this->settings['enable_log'] = $this->configurationConsulter->getSetting(
-                ['Chamilo\Core\Admin', 'cas_enable_log']
+                ['Chamilo\Libraries', 'cas_enable_log']
             );
         }
 
@@ -105,7 +105,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
             $configurationConsulter = $this->getConfigurationConsulter();
 
-            $casVersion = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'cas_version']);
+            $casVersion = $configurationConsulter->getSetting(['Libraries', 'cas_version']);
 
             if ($casVersion == 'SAML_VERSION_1_1')
             {
@@ -123,7 +123,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
             }
 
             $casCheckCertificate = $configurationConsulter->getSetting(
-                ['Chamilo\Core\Admin', 'cas_check_certificate']
+                ['Libraries', 'cas_check_certificate']
             );
 
             // SSL validation for the CAS server

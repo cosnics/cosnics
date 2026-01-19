@@ -50,7 +50,7 @@ class PreLoadCacheCommand extends ChamiloCommand
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($this->listCacheDataPreLoaderServices($input, $output))
         {

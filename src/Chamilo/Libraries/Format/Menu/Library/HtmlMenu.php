@@ -108,12 +108,7 @@ class HtmlMenu
 
         $this->_renderer = $renderer;
         // the renderer will throw an error if it is unable to process this menu type
-        $res = $this->_renderer->setMenuType($this->_menuType);
-
-        if (is_object($res) && is_a($res, 'PEAR_Error'))
-        {
-            return $res;
-        }
+        $this->_renderer->setMenuType($this->_menuType);
 
         // storing to a class variable saves some recursion overhead
         $this->_path = $this->getPath();
@@ -229,7 +224,6 @@ class HtmlMenu
                     if (0 == count($last_node))
                     {
                         reset($this->_menu);
-                        $node_id = key($this->_menu);
                         $last_node = current($this->_menu);
                     }
 
@@ -239,7 +233,6 @@ class HtmlMenu
                     if (0 == count($up_node))
                     {
                         reset($this->_menu);
-                        $node_id = key($this->_menu);
                         $up_node = current($this->_menu);
                     }
 

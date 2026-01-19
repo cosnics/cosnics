@@ -2,9 +2,6 @@
 namespace Chamilo\Libraries\Format\Table\FormAction;
 
 /**
- * This class represents a table form action
- * Refactoring from ObjectTable to split between a table based on a record and based on an object
- *
  * @package Chamilo\Libraries\Format\Table\FormAction
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -34,9 +31,23 @@ class TableAction
         return $this->action;
     }
 
+    public function setAction(string $action): static
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
     public function getConfirm(): bool
     {
         return $this->confirm;
+    }
+
+    public function setConfirm(bool $confirm): static
+    {
+        $this->confirm = $confirm;
+
+        return $this;
     }
 
     public function getConfirmationMessage(): ?string
@@ -44,28 +55,22 @@ class TableAction
         return $this->confirmationMessage;
     }
 
+    public function setConfirmationMessage(?string $confirmationMessage): static
+    {
+        $this->confirmationMessage = $confirmationMessage;
+
+        return $this;
+    }
+
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    public function setAction(string $action)
-    {
-        $this->action = $action;
-    }
-
-    public function setConfirm(bool $confirm)
-    {
-        $this->confirm = $confirm;
-    }
-
-    public function setConfirmationMessage(?string $confirmationMessage)
-    {
-        $this->confirmationMessage = $confirmationMessage;
-    }
-
-    public function setTitle(string $title)
+    public function setTitle(string $title): static
     {
         $this->title = $title;
+
+        return $this;
     }
 }

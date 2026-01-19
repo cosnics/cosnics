@@ -227,7 +227,7 @@ class HomeRenderer
         foreach ($tabs as $tabKey => $tab)
         {
             $html[] = $tabHeaderRenderer->render(
-                $tab, $tabKey, $currentTabIdentifier, $user
+                $tab, $tabKey, $currentTabIdentifier
             );
         }
 

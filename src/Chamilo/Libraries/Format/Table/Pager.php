@@ -49,7 +49,7 @@ class Pager
             $calculatedRangeStart =
                 $this->getPreviousRangeEnd($pageNumber, $numberOfItemsPerPage, $totalNumberOfItems) + 1;
         }
-        catch (InvalidPageNumberException $exception)
+        catch (InvalidPageNumberException)
         {
             $calculatedRangeStart = 0;
         }

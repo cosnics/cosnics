@@ -3,7 +3,6 @@ namespace Chamilo\Core\Home\UserInterface\HomeRenderer;
 
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
-use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * @package Chamilo\Core\Home\Renderer
@@ -20,9 +19,7 @@ class TabHeaderRenderer
         $this->homeService = $homeService;
     }
 
-    public function render(
-        Element $tab, int $tabKey, ?int $currentTabIdentifier = null, ?User $user = null
-    ): string
+    public function render(Element $tab, int $tabKey, ?int $currentTabIdentifier = null): string
     {
         $isActiveTab = $this->getHomeService()->isActiveTab($tabKey, $tab, $currentTabIdentifier);
 

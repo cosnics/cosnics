@@ -5,8 +5,7 @@ use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\HomeRenderer;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessPackageInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Home\Component
@@ -14,15 +13,14 @@ use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessPackageInterface;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class HomeComponent extends Manager
-    implements NoAuthenticationSupportInterface, BreadcrumbLessPackageInterface, BreadcrumbLessComponentInterface
+class HomeComponent extends Manager implements NoAuthenticationSupportInterface
 {
 
     /**
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      * @throws \QuickformException
      */
-    public function run()
+    public function run(): Response
     {
         $authenticationValidator = $this->getAuthenticationValidator();
         $authenticationValidator->validate();
@@ -37,7 +35,7 @@ class HomeComponent extends Manager
         $html[] = $this->getHomeRenderer()->render($currentTabIdentifier, $this->getUser());
         $html[] = $this->renderFooter();
 
-        return implode(PHP_EOL, $html);
+        return new Response(implode(PHP_EOL, $html));
     }
 
     protected function getAuthenticationValidator(): AuthenticationValidator

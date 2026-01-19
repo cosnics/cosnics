@@ -25,6 +25,6 @@ class SortableStaticTableColumn extends AbstractSortableTableColumn
 
     public function getConditionVariable(): ConditionVariable
     {
-        return new StaticConditionVariable($this->get_name(), false);
+        return new StaticConditionVariable($this->getName(), false);
     }
 }

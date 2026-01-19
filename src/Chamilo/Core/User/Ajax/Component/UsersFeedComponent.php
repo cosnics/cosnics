@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\User\Ajax
@@ -31,14 +32,14 @@ class UsersFeedComponent extends Manager
 
     private int $userCount = 0;
 
-    public function run()
+    public function run(): Response
     {
         $result = new JsonAjaxResult();
 
         $result->setProperty(self::PROPERTY_ELEMENTS, $this->getElements()->as_array());
         $result->setProperty(self::PROPERTY_TOTAL_ELEMENTS, $this->userCount);
 
-        $result->display();
+        return $result->getResponse();
     }
 
     /**

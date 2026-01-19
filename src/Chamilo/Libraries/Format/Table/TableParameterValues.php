@@ -14,50 +14,49 @@ class TableParameterValues extends AbstractBaseTableParameters
 
     public function getNumberOfColumnsPerPage(): int
     {
-        return $this->tableParameters[self::PARAM_NUMBER_OF_COLUMNS_PER_PAGE];
+        return $this->get(self::PARAM_NUMBER_OF_COLUMNS_PER_PAGE);
     }
 
     public function getNumberOfRowsPerPage(): int
     {
-        return $this->tableParameters[self::PARAM_NUMBER_OF_ROWS_PER_PAGE];
+        return $this->get(self::PARAM_NUMBER_OF_ROWS_PER_PAGE);
     }
 
     public function getOffset(): int
     {
-        return $this->tableParameters[self::PARAM_OFFSET];
+        return $this->get(self::PARAM_OFFSET);
     }
 
     public function getSelectAll(): int
     {
-        return $this->tableParameters[self::PARAM_SELECT_ALL];
+        return $this->get(self::PARAM_SELECT_ALL);
     }
 
     public function setNumberOfColumnsPerPage(int $numberOfColumnsPerPage): TableParameterValues
     {
-        $this->tableParameters[self::PARAM_NUMBER_OF_COLUMNS_PER_PAGE] = $numberOfColumnsPerPage;
+        $this->set(self::PARAM_NUMBER_OF_COLUMNS_PER_PAGE, $numberOfColumnsPerPage);
 
         return $this;
     }
 
     public function setNumberOfRowsPerPage(int $numberOfRowsPerPage): TableParameterValues
     {
-        $this->tableParameters[self::PARAM_NUMBER_OF_ROWS_PER_PAGE] = $numberOfRowsPerPage;
+        $this->set(self::PARAM_NUMBER_OF_ROWS_PER_PAGE, $numberOfRowsPerPage);
 
         return $this;
     }
 
     public function setOffset(int $offset): TableParameterValues
     {
-        $this->tableParameters[self::PARAM_OFFSET] = $offset;
+        $this->set(self::PARAM_OFFSET, $offset);
 
         return $this;
     }
 
     public function setSelectAll(int $selectAll): TableParameterValues
     {
-        $this->tableParameters[self::PARAM_SELECT_ALL] = $selectAll;
+        $this->set(self::PARAM_SELECT_ALL, $selectAll);
 
         return $this;
     }
-
 }

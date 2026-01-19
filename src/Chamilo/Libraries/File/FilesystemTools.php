@@ -187,6 +187,22 @@ class FilesystemTools
         return 0;
     }
 
+    public function getFileForDownloadResponse(
+        string $fullFileName, ?string $name = null, ?string $contentType = null
+    ): BinaryFileResponse
+    {
+        $filename = $name ?: basename($fullFileName);
+
+        $binaryFileResponse = new BinaryFileResponse($fullFileName);
+        $binaryFileResponse->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
+
+        $binaryFileResponse->headers->set('Content-type', $contentType ?: 'application/octet-stream');
+        $binaryFileResponse->headers->set('Content-Description', $filename);
+        $binaryFileResponse->headers->set('Content-transfer-encoding', 'binary');
+
+        return $binaryFileResponse;
+    }
+
     public function getFilesystem(): Filesystem
     {
         return $this->filesystem;
@@ -252,21 +268,5 @@ class FilesystemTools
         }
 
         return intval(round($bytes, 2));
-    }
-
-    public function sendFileForDownload(
-        string $fullFileName, ?string $name = null, ?string $contentType = null
-    ): void
-    {
-        $filename = $name ?: basename($fullFileName);
-
-        $binaryFileResponse = new BinaryFileResponse($fullFileName);
-        $binaryFileResponse->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
-
-        $binaryFileResponse->headers->set('Content-type', $contentType ?: 'application/octet-stream');
-        $binaryFileResponse->headers->set('Content-Description', $filename);
-        $binaryFileResponse->headers->set('Content-transfer-encoding', 'binary');
-
-        $binaryFileResponse->send();
     }
 }

@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\ActionResultRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Application\Calendar\Component
@@ -18,7 +19,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class AvailabilityComponent extends Manager
 {
 
-    public function run()
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \QuickformException
+     * @throws \Exception
+     */
+    public function run(): Response
     {
         $this->checkAuthorization(Manager::CONTEXT);
 
@@ -51,7 +57,7 @@ class AvailabilityComponent extends Manager
             $html[] = $form->render();
             $html[] = $this->renderFooter();
 
-            return implode(PHP_EOL, $html);
+            return new Response(implode(PHP_EOL, $html));
         }
     }
 
@@ -60,6 +66,10 @@ class AvailabilityComponent extends Manager
         return $this->getService(ActionResultRenderer::class);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \QuickformException
+     */
     public function getAvailabilityForm(AvailabilityService $availabilityService): AvailabilityForm
     {
         return new AvailabilityForm($this->getUrlGenerator()->fromRequest(), $this->getUser(), $availabilityService);

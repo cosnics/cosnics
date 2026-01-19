@@ -4,9 +4,8 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -16,8 +15,10 @@ class DeleterComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      */
-    public function run()
+    public function run(): Response
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
@@ -54,7 +55,7 @@ class DeleterComponent extends Manager
                 $failures, count($userIdentifiers), 'UserNotDeleted', 'UsersNotDeleted', 'UserDeleted', 'UsersDeleted'
             );
 
-            $this->redirectWithMessage(
+            return $this->redirectWithMessage(
                 $message, ($failures > 0), [
                     Application::PARAM_CONTEXT => $this->getContext(),
                     Application::PARAM_ACTION => self::ACTION_BROWSE_USERS
@@ -63,11 +64,13 @@ class DeleterComponent extends Manager
         }
         else
         {
-            return $this->display_error_page(
-                htmlentities(
-                    $translator->trans(
-                        'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
-                        StringUtilities::LIBRARIES
+            return new Response(
+                $this->display_error_page(
+                    htmlentities(
+                        $translator->trans(
+                            'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
+                            StringUtilities::LIBRARIES
+                        )
                     )
                 )
             );

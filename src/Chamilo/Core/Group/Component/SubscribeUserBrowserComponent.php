@@ -22,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -39,7 +40,7 @@ class SubscribeUserBrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */
-    public function run()
+    public function run(): Response
     {
         if (!$this->getUser()->isPlatformAdmin())
         {
@@ -68,7 +69,7 @@ class SubscribeUserBrowserComponent extends Manager
         $html[] = $output;
         $html[] = $this->renderFooter();
 
-        return implode(PHP_EOL, $html);
+        return new Response(implode(PHP_EOL, $html));
     }
 
     public function getButtonToolbarRenderer(): ButtonToolBarRenderer

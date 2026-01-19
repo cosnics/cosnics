@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -17,7 +18,7 @@ class MultiPasswordResetterComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
-    public function run()
+    public function run(): Response
     {
         $userIdentifiers = (array) $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID, []);
         $translator = $this->getTranslator();
@@ -48,7 +49,7 @@ class MultiPasswordResetterComponent extends Manager
                 'UserPasswordResetted', 'UserPasswordsResetted'
             );
 
-            $this->redirectWithMessage(
+            return $this->redirectWithMessage(
                 $message, ($failures > 0), [
                     Application::PARAM_CONTEXT => $this->getContext(),
                     Application::PARAM_ACTION => self::ACTION_BROWSE_USERS
@@ -57,11 +58,13 @@ class MultiPasswordResetterComponent extends Manager
         }
         else
         {
-            return $this->display_error_page(
-                htmlentities(
-                    $translator->trans(
-                        'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
-                        StringUtilities::LIBRARIES
+            return new Response(
+                $this->display_error_page(
+                    htmlentities(
+                        $translator->trans(
+                            'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
+                            StringUtilities::LIBRARIES
+                        )
                     )
                 )
             );

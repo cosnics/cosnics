@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorRenderer;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Libraries\Ajax\Component
@@ -16,7 +17,7 @@ class HtmlEditorInstanceComponent extends Manager
     /**
      * @throws \QuickformException
      */
-    public function run()
+    public function run(): Response
     {
         $request = $this->getRequest();
         $name = $request->request->get('name');
@@ -30,7 +31,9 @@ class HtmlEditorInstanceComponent extends Manager
         $attributes = str_replace('\"', '"', $attributes);
         $attributes = json_decode($attributes, true);
 
-        echo $this->getFormValidatorHtmlEditorRenderer()->renderHtmlEditor($name, $label, false, $options, $attributes);
+        return new Response(
+            $this->getFormValidatorHtmlEditorRenderer()->renderHtmlEditor($name, $label, $options, $attributes)
+        );
     }
 
     public function getFormValidatorHtmlEditorRenderer(): FormValidatorHtmlEditorRenderer

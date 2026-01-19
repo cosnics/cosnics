@@ -4,8 +4,8 @@ namespace Chamilo\Application\Calendar\Extension\Google\Component;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  *
@@ -14,9 +14,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LoginComponent extends Manager implements BreadcrumbLessComponentInterface
+class LoginComponent extends Manager
 {
-    public function run()
+    public function run(): Response
     {
         $isSuccessful = $this->getCalendarService()->login(
             $this->getUser(), $this->getRequest()->query->get(CalendarService::PARAM_AUTHORIZATION_CODE)
@@ -29,6 +29,17 @@ class LoginComponent extends Manager implements BreadcrumbLessComponentInterface
                     [
                         Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
                         Application::PARAM_ACTION => \Chamilo\Application\Calendar\Manager::ACTION_AVAILABILITY
+                    ]
+                )
+            );
+        }
+        else
+        {
+            return new RedirectResponse(
+                $this->getUrlGenerator()->fromParameters(
+                    [
+                        Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
+                        Application::PARAM_ACTION => \Chamilo\Application\Calendar\Manager::ACTION_BROWSE
                     ]
                 )
             );

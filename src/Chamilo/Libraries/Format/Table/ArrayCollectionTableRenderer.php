@@ -62,7 +62,7 @@ class ArrayCollectionTableRenderer
         {
             return $this->getPager()->getCurrentRangeOffset($pageNumber, $numberOfItemsPerPage, $totalNumberOfItems);
         }
-        catch (InvalidPageNumberException $exception)
+        catch (InvalidPageNumberException)
         {
             return 0;
         }
@@ -71,7 +71,7 @@ class ArrayCollectionTableRenderer
     protected function determineOrderColumnDirection(string $tableName, int $defaultOrderDirection = SORT_ASC): int
     {
         return $this->getRequest()->query->get(
-            $this->determineParameterName($tableName, TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION),
+            $this->determineParameterName($tableName, AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION),
             $defaultOrderDirection
         );
     }
@@ -79,7 +79,7 @@ class ArrayCollectionTableRenderer
     protected function determineOrderColumnIndex(string $tableName, int $defaultOrderColumnIndex = 0): int
     {
         return $this->getRequest()->query->get(
-            $this->determineParameterName($tableName, TableParameterValues::PARAM_ORDER_COLUMN_INDEX),
+            $this->determineParameterName($tableName, AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX),
             $defaultOrderColumnIndex
         );
     }
@@ -87,7 +87,7 @@ class ArrayCollectionTableRenderer
     protected function determinePageNumber(string $tableName): int
     {
         return $this->getRequest()->query->get(
-            $this->determineParameterName($tableName, TableParameterValues::PARAM_PAGE_NUMBER), 1
+            $this->determineParameterName($tableName, AbstractBaseTableParameters::PARAM_PAGE_NUMBER), 1
         );
     }
 
@@ -104,11 +104,12 @@ class ArrayCollectionTableRenderer
         return [
             TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE => $tableName . '_' .
                 TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE,
-            TableParameterValues::PARAM_ORDER_COLUMN_INDEX => $tableName . '_' .
-                TableParameterValues::PARAM_ORDER_COLUMN_INDEX,
-            TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION => $tableName . '_' .
-                TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION,
-            TableParameterValues::PARAM_PAGE_NUMBER => $tableName . '_' . TableParameterValues::PARAM_PAGE_NUMBER
+            AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX => $tableName . '_' .
+                AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX,
+            AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION => $tableName . '_' .
+                AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION,
+            AbstractBaseTableParameters::PARAM_PAGE_NUMBER => $tableName . '_' .
+                AbstractBaseTableParameters::PARAM_PAGE_NUMBER
         ];
     }
 
@@ -255,7 +256,7 @@ class ArrayCollectionTableRenderer
     {
         $tableColumn = $tableColumns[$orderColumnIndex];
 
-        if (isset($tableColumn) && $tableColumn instanceof AbstractSortableTableColumn && $tableColumn->is_sortable())
+        if (isset($tableColumn) && $tableColumn instanceof AbstractSortableTableColumn && $tableColumn->isSortable())
         {
             return true;
         }

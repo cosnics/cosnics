@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -21,7 +22,7 @@ class SubscriberComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      */
-    public function run()
+    public function run(): Response
     {
         $groupIdentifier = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
 
@@ -104,7 +105,7 @@ class SubscriberComponent extends Manager
                 $message = 'SelectedUsersAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
             }
 
-            $this->redirectWithMessage(
+            return $this->redirectWithMessage(
                 $translator->trans($message), (bool) $failures, [
                     Application::PARAM_CONTEXT => $this->getContext(),
                     Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
@@ -114,8 +115,10 @@ class SubscriberComponent extends Manager
         }
         else
         {
-            return $this->display_error_page(
-                htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
+            return new Response(
+                $this->display_error_page(
+                    htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
+                )
             );
         }
     }

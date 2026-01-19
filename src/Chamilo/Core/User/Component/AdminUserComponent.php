@@ -4,9 +4,10 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @package user.lib.user_manager.component Component to change back from user view to your normal account
+ * @package Chamilo\Core\User\Component
  * @author  Sven Vanpoucke
  */
 class AdminUserComponent extends Manager
@@ -15,7 +16,7 @@ class AdminUserComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
-    public function run()
+    public function run(): Response
     {
         $adminUserIdentifier = $this->getSession()->get('_as_admin');
 

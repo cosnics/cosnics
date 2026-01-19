@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Admin\Component
@@ -28,7 +29,7 @@ class WhoisOnlineComponent extends Manager
      * @throws \QuickformException
      * @throws \TableException
      */
-    public function run()
+    public function run(): Response
     {
         if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
         {
@@ -52,7 +53,7 @@ class WhoisOnlineComponent extends Manager
 
         $html[] = $this->renderFooter();
 
-        return implode(PHP_EOL, $html);
+        return new Response(implode(PHP_EOL, $html));
     }
 
     public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler

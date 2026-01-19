@@ -6,6 +6,7 @@ use Chamilo\Core\Group\UserInterface\Form\GroupForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -17,7 +18,7 @@ class EditorComponent extends Manager
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \QuickformException
      */
-    public function run()
+    public function run(): Response
     {
         if (!$this->getUser()->isPlatformAdmin())
         {
@@ -59,7 +60,7 @@ class EditorComponent extends Manager
                     StringUtilities::LIBRARIES
                 );
 
-                $this->redirectWithMessage(
+                return $this->redirectWithMessage(
                     $message, !$success, [
                         Application::PARAM_CONTEXT => $this->getContext(),
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
@@ -75,13 +76,15 @@ class EditorComponent extends Manager
                 $html[] = $form->render();
                 $html[] = $this->renderFooter();
 
-                return implode(PHP_EOL, $html);
+                return new Response(implode(PHP_EOL, $html));
             }
         }
         else
         {
-            return $this->display_error_page(
-                htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
+            return new Response(
+                $this->display_error_page(
+                    htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
+                )
             );
         }
     }

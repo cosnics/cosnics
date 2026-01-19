@@ -29,6 +29,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -55,8 +56,9 @@ class BrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \TableException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function run()
+    public function run(): Response
     {
         if (!$this->getUser()->isPlatformAdmin())
         {
@@ -72,7 +74,7 @@ class BrowserComponent extends Manager
         $html[] = $this->renderTabs();
         $html[] = $this->renderFooter();
 
-        return implode(PHP_EOL, $html);
+        return new Response(implode(PHP_EOL, $html));
     }
 
     public function getButtonToolBarSearchProperties(?string $type = null): array

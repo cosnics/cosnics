@@ -7,8 +7,8 @@ use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
-use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\Interface\TableActionsSupport;
+use Chamilo\Libraries\Format\Table\Interface\TableRowActionsSupport;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
@@ -38,20 +38,19 @@ abstract class ListTableRenderer extends AbstractTableRenderer
         }
     }
 
-    /**
-     * Adds the action column only if the action column is not yet added
-     */
-    protected function addActionColumn()
+    protected function addActionColumn(): static
     {
         foreach ($this->getColumns() as $column)
         {
             if ($column instanceof ActionsTableColumn)
             {
-                return;
+                return $this;
             }
         }
 
         $this->addColumn(new ActionsTableColumn());
+
+        return $this;
     }
 
     protected function processData(ArrayCollection $results, TableParameterValues $parameterValues): ArrayCollection

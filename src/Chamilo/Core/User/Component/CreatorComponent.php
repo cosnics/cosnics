@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -14,6 +13,7 @@ use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -26,7 +26,7 @@ class CreatorComponent extends Manager
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
-    public function run()
+    public function run(): Response
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
@@ -109,11 +109,13 @@ class CreatorComponent extends Manager
         $html[] = $form->render();
         $html[] = $this->renderFooter();
 
-        return implode(PHP_EOL, $html);
+        return new Response(implode(PHP_EOL, $html));
     }
 
-    public function getUserPictureProvider(): UserPictureProviderInterface
+    public function getUserPictureProvider(): ?UserPictureUpdateProviderInterface
     {
-        return $this->getService(UserPictureProviderInterface::class);
+        $service = $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
+
+        return $service instanceof UserPictureUpdateProviderInterface ? $service : null;
     }
 }

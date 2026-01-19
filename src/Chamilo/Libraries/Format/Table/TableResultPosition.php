@@ -12,12 +12,12 @@ class TableResultPosition extends AbstractBaseTableParameters
 
     public function getPosition(): int
     {
-        return $this->tableParameters[self::PARAM_POSITION];
+        return $this->get(self::PARAM_POSITION);
     }
 
     public function getTotalNumberOfPages(): int
     {
-        return $this->tableParameters[self::PARAM_TOTAL_NUMBER_OF_PAGES];
+        return $this->get(self::PARAM_TOTAL_NUMBER_OF_PAGES);
     }
 
     public function isLast(): bool
@@ -41,14 +41,14 @@ class TableResultPosition extends AbstractBaseTableParameters
 
     public function setPosition(int $position): TableResultPosition
     {
-        $this->tableParameters[self::PARAM_POSITION] = $position;
+        $this->set(self::PARAM_POSITION, $position);
 
         return $this;
     }
 
     public function setTotalNumberOfPages(int $totalNumberOfPages): TableResultPosition
     {
-        $this->tableParameters[self::PARAM_TOTAL_NUMBER_OF_PAGES] = $totalNumberOfPages;
+        $this->set(self::PARAM_TOTAL_NUMBER_OF_PAGES, $totalNumberOfPages);
 
         return $this;
     }

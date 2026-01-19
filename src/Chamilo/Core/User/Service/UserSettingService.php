@@ -195,7 +195,7 @@ class UserSettingService
                 return false;
             }
         }
-        catch (StorageMethodException $e)
+        catch (StorageMethodException)
         {
             return false;
         }
@@ -204,7 +204,7 @@ class UserSettingService
         {
             return $this->clearSettingsCacheforUser($user);
         }
-        catch (CacheException $e)
+        catch (CacheException)
         {
             return false;
         }

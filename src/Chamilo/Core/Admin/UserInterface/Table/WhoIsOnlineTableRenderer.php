@@ -87,7 +87,7 @@ class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
         $translator = $this->getTranslator();
         $urlGenerator = $this->getUrlGenerator();
 
-        switch ($column->get_name())
+        switch ($column->getName())
         {
             case User::PROPERTY_STATUS :
                 if ($user->getPlatformAdmin() == '1')

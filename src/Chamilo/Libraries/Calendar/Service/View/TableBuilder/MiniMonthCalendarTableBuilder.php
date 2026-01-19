@@ -25,7 +25,7 @@ class MiniMonthCalendarTableBuilder extends MonthCalendarTableBuilder
                     $table->getCellContents($row, $column) . '</span>'
                 );
             }
-            catch (Exception $exception)
+            catch (Exception)
             {
             }
         }

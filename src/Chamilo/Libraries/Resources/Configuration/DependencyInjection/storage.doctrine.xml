@@ -26,7 +26,6 @@
 
         <!-- Database Layer -->
         <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Database\DataClassDatabase"/>
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Database\StorageUnitDatabase"/>
 
         <!-- Repositories -->
         <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\DataClassRepository"
@@ -42,13 +41,6 @@
             <argument key="$dataClassRepository"
                       type="service"
                       id="Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\DataClassRepository"/>
-        </service>
-
-        <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\StorageUnitRepository"
-                 class="Chamilo\Libraries\Storage\Repository\StorageUnitRepository">
-            <argument key="$storageUnitDatabase"
-                      type="service"
-                      id="Chamilo\Libraries\Storage\Implementations\Doctrine\Database\StorageUnitDatabase"/>
         </service>
 
         <service id="Chamilo\Libraries\Storage\Repository\DataClassRepository"

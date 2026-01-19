@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Event;
 
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -16,8 +15,6 @@ abstract class Visibility extends DataClass
 
     public const PROPERTY_SOURCE = 'source';
     public const PROPERTY_USER_ID = 'user_id';
-
-    private ?User $user;
 
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {

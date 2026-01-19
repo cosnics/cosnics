@@ -2,9 +2,6 @@
 namespace Chamilo\Libraries\Format\Table\FormAction;
 
 /**
- * This class represents a container for the table form actions
- * Refactoring from ObjectTable to split between a table based on a record and based on an object
- *
  * @package Chamilo\Libraries\Format\Table\FormAction
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -31,12 +28,11 @@ class TableActions
         $this->tableNamespace = $tableNamespace;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Format\Table\FormAction\TableAction $formAction
-     */
-    public function addAction(TableAction $formAction)
+    public function addAction(TableAction $formAction): static
     {
         $this->actions[] = $formAction;
+
+        return $this;
     }
 
     /**
@@ -52,6 +48,13 @@ class TableActions
         return $this->identifierName;
     }
 
+    public function setIdentifierName(string $identifierName): static
+    {
+        $this->identifierName = $identifierName;
+
+        return $this;
+    }
+
     public function getNamespace(): string
     {
         return $this->tableNamespace;
@@ -65,18 +68,17 @@ class TableActions
     /**
      * @param \Chamilo\Libraries\Format\Table\FormAction\TableAction[] $actions
      */
-    public function seActions(array $actions)
+    public function seActions(array $actions): static
     {
         $this->actions = $actions;
+
+        return $this;
     }
 
-    public function setIdentifierName(string $identifierName)
-    {
-        $this->identifierName = $identifierName;
-    }
-
-    public function setNamespace(string $namespace)
+    public function setNamespace(string $namespace): static
     {
         $this->tableNamespace = $namespace;
+
+        return $this;
     }
 }

@@ -204,6 +204,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
         try
         {
             $calendarIdentifiers = $this->getCalendarIdentifiers($calendarRendererProvider);
+
             $identifier = [
                 __METHOD__,
                 $calendarRendererProvider->getDataUser()->getId(),

@@ -11,15 +11,15 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
 
 /**
- * @package groups.lib.forms
+ * @package Chamilo\Core\Group\UserInterface\Form
  */
 class GroupForm extends FormValidator
 {
     public const RESULT_ERROR = 'GroupUpdateFailed';
     public const RESULT_SUCCESS = 'GroupUpdated';
 
-    public const TYPE_CREATE = 1;
-    public const TYPE_EDIT = 2;
+    public const TYPE_CREATE = 'create';
+    public const TYPE_EDIT = 'edit';
 
     private string $form_type;
 

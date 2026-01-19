@@ -6,6 +6,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -17,7 +18,7 @@ class ChangeUserComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
-    public function run()
+    public function run(): Response
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
@@ -46,11 +47,13 @@ class ChangeUserComponent extends Manager
         }
         else
         {
-            return $this->display_error_page(
-                htmlentities(
-                    $translator->trans(
-                        'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
-                        StringUtilities::LIBRARIES
+            return new Response(
+                $this->display_error_page(
+                    htmlentities(
+                        $translator->trans(
+                            'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
+                            StringUtilities::LIBRARIES
+                        )
                     )
                 )
             );

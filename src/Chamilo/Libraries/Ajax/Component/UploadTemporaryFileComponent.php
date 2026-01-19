@@ -5,6 +5,7 @@ use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -19,16 +20,17 @@ class UploadTemporaryFileComponent extends Manager
     /**
      * @throws \Exception
      */
-    public function run()
+    public function run(): Response
     {
         $file = $this->getFile();
 
         if (!$file->isValid())
         {
-            JsonAjaxResult::badRequest(
+            return JsonAjaxResult::badRequest(
                 $this->getTranslator()->trans('NoValidFileUploaded', [], StringUtilities::LIBRARIES)
             );
         }
+
         $temporaryPath = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__);
 
         $this->getFilesystem()->mkdir($temporaryPath);
@@ -40,7 +42,7 @@ class UploadTemporaryFileComponent extends Manager
 
         if (!$result)
         {
-            JsonAjaxResult::generalError(
+            return JsonAjaxResult::generalError(
                 $this->getTranslator()->trans('FileNotUploaded', [], StringUtilities::LIBRARIES)
             );
         }
@@ -48,7 +50,8 @@ class UploadTemporaryFileComponent extends Manager
         {
             $jsonAjaxResult = new JsonAjaxResult();
             $jsonAjaxResult->setProperties(['temporaryFileName' => $fileName]);
-            $jsonAjaxResult->display();
+
+            return $jsonAjaxResult->getResponse();
         }
     }
 

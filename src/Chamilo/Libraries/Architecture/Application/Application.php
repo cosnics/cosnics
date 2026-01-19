@@ -6,9 +6,9 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGenerator;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGeneratorInterface;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Libraries\Architecture\Application
@@ -46,10 +46,7 @@ abstract class Application
         $this->getBreadcrumbGenerator()->addDefaultBreadcrumbs();
     }
 
-    /**
-     * @return string|\Symfony\Component\HttpFoundation\Response
-     */
-    abstract public function run();
+    abstract public function run(): Response;
 
     /**
      * Helper function to call the authorization checker with the current logged in user.
@@ -126,7 +123,7 @@ abstract class Application
         return $this->applicationConfiguration;
     }
 
-    public function getBreadcrumbGenerator(): BreadcrumbGeneratorInterface
+    public function getBreadcrumbGenerator(): BreadcrumbGenerator
     {
         return $this->getService(BreadcrumbGenerator::class);
     }
@@ -220,18 +217,16 @@ abstract class Application
         throw new NotAllowedException($showLoginForm);
     }
 
-    public function redirect(array $parameters = [], array $filter = []): void
+    public function redirect(array $parameters = []): RedirectResponse
     {
-        $response = new RedirectResponse($this->getUrlGenerator()->fromParameters($parameters));
-        $response->send();
-        exit;
+        return new RedirectResponse($this->getUrlGenerator()->fromParameters($parameters));
     }
 
     /**
      * @param string[] $parameters
      */
     public function redirectWithMessage(?string $message = null, bool $errorMessage = false, array $parameters = []
-    ): void
+    ): RedirectResponse
     {
         if ($message)
         {
@@ -239,7 +234,7 @@ abstract class Application
             $this->getNotificationMessageManager()->addMessage(new NotificationMessage($message, $messageType));
         }
 
-        $this->redirect($parameters);
+        return $this->redirect($parameters);
     }
 
     public function renderFooter(): string

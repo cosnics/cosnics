@@ -38,7 +38,7 @@ class Display
      *
      * @return string
      */
-    public static function message(string $type = self::MESSAGE_TYPE_NORMAL, string $message): string
+    public static function message(string $type, string $message): string
     {
         $html = [];
 

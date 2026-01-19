@@ -15,8 +15,6 @@ class StorageAliasGenerator
     public const TYPE_CONSTRAINT = 2;
     public const TYPE_TABLE = 1;
 
-    private static StorageAliasGenerator $instance;
-
     /**
      *
      * @var string[][]

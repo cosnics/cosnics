@@ -16,6 +16,7 @@ use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -32,7 +33,7 @@ class AdminUserBrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      */
-    public function run()
+    public function run(): Response
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
@@ -48,7 +49,7 @@ class AdminUserBrowserComponent extends Manager
         $html[] = $this->get_user_html();
         $html[] = $this->renderFooter();
 
-        return implode(PHP_EOL, $html);
+        return new Response(implode(PHP_EOL, $html));
     }
 
     public function getAdminUserTableRenderer(): AdminUserTableRenderer

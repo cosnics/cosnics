@@ -123,9 +123,8 @@ class GroupMenu extends HtmlMenu
         return $breadcrumbs;
     }
 
-    private function get_home_url($category = null)
+    private function get_home_url(): string
     {
-        // TODO: Put another class in charge of the htmlentities() invocation
         return htmlentities(str_replace('&group_id=%s', '', $this->urlFmt));
     }
 
@@ -227,7 +226,7 @@ class GroupMenu extends HtmlMenu
     public function render_as_tree()
     {
         $feedUrl = $this->getUrlGenerator()->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, Manager::PARAM_ACTION => 'xml_group_menu_feed']
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => 'xml_group_menu_feed']
         );
 
         $renderer = new TreeMenuRenderer($this->get_tree_name(), $feedUrl, $this->urlFmt);

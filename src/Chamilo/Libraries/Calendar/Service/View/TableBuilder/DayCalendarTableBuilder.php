@@ -42,7 +42,7 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
                     $cellContent .= $item;
                     $table->setCellContents($row, 1, $cellContent);
                 }
-                catch (Exception $exception)
+                catch (Exception)
                 {
                 }
             }

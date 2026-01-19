@@ -11,13 +11,13 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Calendar\Architecture\Factory\HtmlCalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Application\Calendar\Component
@@ -25,7 +25,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BrowserComponent extends Manager implements BreadcrumbLessComponentInterface
+class BrowserComponent extends Manager
 {
 
     protected CalendarRendererProvider $calendarRendererProvider;
@@ -34,7 +34,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function run()
+    public function run(): Response
     {
         $this->checkAuthorization(Manager::CONTEXT);
         $this->checkLoggedInAs();
@@ -52,7 +52,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
         $html[] = '</div>';
         $html[] = $this->renderFooter();
 
-        return implode(PHP_EOL, $html);
+        return new Response(implode(PHP_EOL, $html));
     }
 
     /**
@@ -101,8 +101,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
             ];
 
             $this->calendarRendererProvider = new CalendarRendererProvider(
-                $this->getVisibilityRepository(), $this->getUser(), $displayParameters,
-                \Chamilo\Application\Calendar\Manager::CONTEXT
+                $this->getVisibilityRepository(), $this->getUser(), $displayParameters, Manager::CONTEXT
             );
         }
 
@@ -143,7 +142,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::CONTEXT,
                 Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_USER_SETTINGS,
-                UserSettingsComponent::PARAM_CONTEXT => 'Chamilo\Core\User'
+                UserSettingsComponent::PARAM_SELECTED_CONTEXT => 'Chamilo\Core\User'
             ]
         );
 

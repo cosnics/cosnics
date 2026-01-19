@@ -14,6 +14,7 @@ use DateTime;
 use Exception;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -79,11 +80,11 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
                 )));
     }
 
-    public function downloadUserPicture(User $targetUser, User $requestUser): void
+    public function downloadUserPicture(User $user): Response
     {
         try
         {
-            $file = $this->getUserPicturePath($targetUser);
+            $file = $this->getUserPicturePath($user);
 
             $type = exif_imagetype($file);
             $mime = image_type_to_mime_type($type);
@@ -104,11 +105,14 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
                 }
             );
 
-            $response->send();
-            exit();
+            return $response;
         }
         catch (Exception)
         {
+            $response = new Response();
+            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+
+            return $response;
         }
     }
 

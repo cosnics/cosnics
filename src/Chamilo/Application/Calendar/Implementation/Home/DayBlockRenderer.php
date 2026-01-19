@@ -5,7 +5,6 @@ use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Home\Architecture\Interface\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
@@ -22,7 +21,7 @@ use Symfony\Component\Translation\Translator;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DayBlockRenderer extends BlockRenderer implements StaticBlockTitleInterface
+class DayBlockRenderer extends BlockRenderer
 {
     public const CONFIGURATION_HOUR_STEP = 'hour_step';
     public const CONFIGURATION_TIME_END = 'time_end';
@@ -69,19 +68,6 @@ class DayBlockRenderer extends BlockRenderer implements StaticBlockTitleInterfac
     public function getCalendarRendererProviderRepository(): VisibilityRepository
     {
         return $this->calendarRendererProviderRepository;
-    }
-
-    /**
-     * @see \Chamilo\Core\Home\Architecture\Interface\ConfigurableBlockRendererInterface::getConfigurationVariables()
-     */
-    public function getConfigurationVariables(): array
-    {
-        return [
-            self::CONFIGURATION_HOUR_STEP,
-            self::CONFIGURATION_TIME_START,
-            self::CONFIGURATION_TIME_END,
-            self::CONFIGURATION_TIME_HIDE
-        ];
     }
 
     public function getDatetimeUtilities(): DatetimeUtilities

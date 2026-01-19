@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -17,8 +18,10 @@ class UnsubscriberComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      */
-    public function run()
+    public function run(): Response
     {
         $user = $this->getUser();
 
@@ -98,7 +101,7 @@ class UnsubscriberComponent extends Manager
                 $message = 'SelectedGroupRelUsersDeleted';
             }
 
-            $this->redirectWithMessage(
+            return $this->redirectWithMessage(
                 $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
                     Application::PARAM_CONTEXT => $this->getContext(),
                     Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
@@ -108,8 +111,10 @@ class UnsubscriberComponent extends Manager
         }
         else
         {
-            return $this->display_error_page(
-                htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
+            return new Response(
+                $this->display_error_page(
+                    htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
+                )
             );
         }
     }

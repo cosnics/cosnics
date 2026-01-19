@@ -5,6 +5,7 @@ use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Exception;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Libraries\Ajax\Component
@@ -28,7 +29,7 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
     /**
      * @throws \Exception
      */
-    public function run()
+    public function run(): Response
     {
 
         $request = $this->getRequest();
@@ -97,7 +98,8 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
 
         $result = new JsonAjaxResult(200);
         $result->setProperties($properties);
-        $result->display();
+
+        return $result->getResponse();
     }
 
     /**

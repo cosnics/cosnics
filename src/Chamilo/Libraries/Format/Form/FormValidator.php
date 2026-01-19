@@ -92,7 +92,7 @@ class FormValidator extends HTML_QuickForm
         )
         );
 
-        foreach ($this->_submitValues as $index => & $value)
+        foreach ($this->_submitValues as & $value)
         {
             $value = $this->getSecurity()->removeXSS($value);
         }
@@ -110,7 +110,7 @@ class FormValidator extends HTML_QuickForm
     {
         $error = false;
 
-        foreach ($this->_elements as $index => $element)
+        foreach ($this->_elements as $element)
         {
             if ($element->getName() && !is_null(parent::getElementError($element->getName())))
             {
@@ -160,13 +160,11 @@ EOT;
         $elementName, $dropzoneOptions = [], $includeLabel = true, $markRequired = false
     )
     {
-        $autoProcess = true;
         if (array_key_exists('autoProcessQueue', $dropzoneOptions))
         {
             if ($dropzoneOptions['autoProcessQueue'] === false)
             {
                 $dropzoneOptions['autoProcessQueue'] = 'false';
-                $autoProcess = false;
             }
         }
 
@@ -976,12 +974,8 @@ EOT;
     {
         static::registerRule('date', null, HTML_QuickForm_Rule_Date::class);
         static::registerRule('date_compare', null, HTML_QuickForm_Rule_DateCompare::class);
-        static::registerRule('number_compare', null, HTML_QuickForm_Rule_NumberCompare::class);
         static::registerRule('username', null, HTML_QuickForm_Rule_Username::class);
         static::registerRule('filetype', null, HTML_QuickForm_Rule_Filetype::class);
-        static::registerRule(
-            'validate_database_connection', null, HTML_QuickForm_Rule_ValidateDatabaseConnection::class
-        );
     }
 
     /**

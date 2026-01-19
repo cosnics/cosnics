@@ -30,12 +30,12 @@ class GdImageManipulation extends ImageManipulation
     }
 
     /**
-     * @param integer $width
-     * @param integer $height
-     * @param integer $offsetX
-     * @param integer $offsetY
+     * @param int $width
+     * @param int $height
+     * @param int $offsetX
+     * @param int $offsetY
      *
-     * @return boolean
+     * @return bool
      */
     public function crop(
         $width, $height, $offsetX = ImageManipulation::CROP_CENTER, $offsetY = ImageManipulation::CROP_CENTER
@@ -92,10 +92,10 @@ class GdImageManipulation extends ImageManipulation
     /**
      * Resize an image to an exact set of dimensions, ignoring aspect ratio.
      *
-     * @param integer $width The width of the image after resizing
-     * @param integer $height The height of the image after resizing
+     * @param int $width The width of the image after resizing
+     * @param int $height The height of the image after resizing
      *
-     * @return boolean True if successfull, false if not
+     * @return bool True if successfull, false if not
      * @throws \Exception
      */
     public function resize($width, $height)
@@ -125,14 +125,14 @@ class GdImageManipulation extends ImageManipulation
      * @param string $file Full path of the file to which the image should be written. If null, the original image will
      *     be overwritten.
      *
-     * @return boolean
+     * @return bool
      * @throws \Exception
      */
-    public function write_to_file($file = null)
+    public function write_to_file($sourceFile = null)
     {
-        if (is_null($file))
+        if (is_null($sourceFile))
         {
-            $file = $this->sourceFile;
+            $sourceFile = $this->sourceFile;
         }
 
         $extension = $this->get_image_extension();
@@ -144,6 +144,6 @@ class GdImageManipulation extends ImageManipulation
             throw new Exception($createFunction . ' not found');
         }
 
-        return $createFunction($this->gdImage, $file);
+        return $createFunction($this->gdImage, $sourceFile);
     }
 }

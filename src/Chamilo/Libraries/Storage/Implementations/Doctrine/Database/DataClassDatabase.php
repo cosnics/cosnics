@@ -271,7 +271,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         try
         {
-            $lastInsertedId = $this->getConnection()->lastInsertId($dataClassStorageUnitName);
+            $lastInsertedId = $this->getConnection()->lastInsertId();
 
             if (!$lastInsertedId)
             {
@@ -305,14 +305,14 @@ class DataClassDatabase implements DataClassDatabaseInterface
         );
     }
 
-    public function quote(mixed $value, ?string $type = null): mixed
+    public function quote(mixed $value): string
     {
         if (is_null($value))
         {
             return 'NULL';
         }
 
-        return $this->getConnection()->quote($value, $type);
+        return $this->getConnection()->quote($value);
     }
 
     /**

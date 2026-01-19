@@ -27,7 +27,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      * @throws \Exception
      */
-    public function run()
+    public function run(): Response
     {
         $authenticationValidator = $this->getAuthenticationValidator();
         $securityCode = $this->getRequest()->getFromRequestOrQuery(User::PROPERTY_SECURITY_TOKEN);
@@ -43,13 +43,12 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
 
             if ($user instanceof User)
             {
-                $this->renderCalendar($user);
-                $authentication->logout($user);
+                return $this->renderCalendar($user);
             }
             else
             {
                 $response = new Response();
-                $response->setStatusCode(401);
+                $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
 
                 return $response;
             }
@@ -66,7 +65,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
 
             if ($this->getRequest()->query->has(self::PARAM_DOWNLOAD))
             {
-                $this->renderCalendar($this->getUser());
+                return ($this->renderCalendar($this->getUser()));
             }
             else
             {
@@ -109,7 +108,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
 
                 $html[] = $this->renderFooter();
 
-                return implode(PHP_EOL, $html);
+                return new Response(implode(PHP_EOL, $html));
             }
         }
     }
@@ -124,8 +123,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
         if (!isset($this->calendarRendererProvider))
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
-                $this->getVisibilityRepository(), $user, [],
-                \Chamilo\Application\Calendar\Manager::CONTEXT
+                $this->getVisibilityRepository(), $user, [], Manager::CONTEXT
             );
         }
 
@@ -145,8 +143,8 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
     /**
      * @throws \Exception
      */
-    private function renderCalendar(User $user): void
+    private function renderCalendar(User $user): Response
     {
-        $this->getICalCalendarRenderer()->renderAndSend($this->getCalendarRendererProvider($user));
+        return $this->getICalCalendarRenderer()->renderAndGetResponse($this->getCalendarRendererProvider($user));
     }
 }

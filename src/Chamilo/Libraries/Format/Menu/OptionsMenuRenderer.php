@@ -69,7 +69,7 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
         $array = parent::toArray();
         $choices = [];
 
-        foreach ($array as $index => $item)
+        foreach ($array as $item)
         {
             $prefix = '';
 

@@ -19,7 +19,7 @@ class EventMiniMonthRenderer extends EventMonthRenderer
 
         $eventClasses = $this->determineEventClasses($event, $isFadedEvent, $isEventSourceVisible);
 
-        $title = $this->renderFullTitle($event, $cellStartDate, $cellEndDate);
+        //$title = $this->renderFullTitle($event, $cellStartDate, $cellEndDate);
 
         $html = [];
 

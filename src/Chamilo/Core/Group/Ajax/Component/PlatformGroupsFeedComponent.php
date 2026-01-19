@@ -26,10 +26,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class PlatformGroupsFeedComponent extends GroupsFeedComponent
 {
-    /**
-     * The length for the filter prefix to remove
-     */
     public const FILTER_PREFIX_LENGTH = 2;
+    
     public const PARAM_GROUP = 'group';
     public const PARAM_USER = 'user';
 

@@ -16,8 +16,8 @@ use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
-use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\Interface\TableActionsSupport;
+use Chamilo\Libraries\Format\Table\Interface\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
@@ -160,7 +160,7 @@ class AdminUserTableRenderer extends DataClassListTableRenderer implements Table
         $falseGlyph = new FontAwesomeGlyph('circle', ['text-danger']);
 
         // Add special features here
-        switch ($column->get_name())
+        switch ($column->getName())
         {
             // Exceptions that need post-processing go here ...
             case User::PROPERTY_STATUS :

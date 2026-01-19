@@ -40,7 +40,7 @@ class RequestTableParameterValuesCompiler
                 $pageNumber, $numberOfItemsPerPage, $totalNumberOfItems
             );
         }
-        catch (InvalidPageNumberException $exception)
+        catch (InvalidPageNumberException)
         {
             return 0;
         }
@@ -53,8 +53,8 @@ class RequestTableParameterValuesCompiler
     protected function determineOrderColumnDirection(array $parameterNames, array $defaultParameterValues): int
     {
         return $this->getRequest()->query->get(
-            $parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION],
-            $defaultParameterValues[TableParameterValues::PARAM_ORDER_COLUMN_DIRECTION]
+            $parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION],
+            $defaultParameterValues[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION]
         );
     }
 
@@ -65,8 +65,8 @@ class RequestTableParameterValuesCompiler
     protected function determineOrderColumnIndex(array $parameterNames, array $defaultParameterValues): int
     {
         return $this->getRequest()->query->get(
-            $parameterNames[TableParameterValues::PARAM_ORDER_COLUMN_INDEX],
-            $defaultParameterValues[TableParameterValues::PARAM_ORDER_COLUMN_INDEX]
+            $parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX],
+            $defaultParameterValues[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX]
         );
     }
 
@@ -76,7 +76,7 @@ class RequestTableParameterValuesCompiler
     protected function determinePageNumber(array $parameterNames): int
     {
         return $this->getRequest()->query->get(
-            $parameterNames[TableParameterValues::PARAM_PAGE_NUMBER], 1
+            $parameterNames[AbstractBaseTableParameters::PARAM_PAGE_NUMBER], 1
         );
     }
 

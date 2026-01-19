@@ -7,13 +7,13 @@ use Chamilo\Core\Menu\UserInterface\Table\ItemTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Menu\Component
@@ -21,7 +21,7 @@ use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BrowserComponent extends Manager implements BreadcrumbLessComponentInterface
+class BrowserComponent extends Manager
 {
 
     protected string $parentIdentifier;
@@ -32,7 +32,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Exception
      */
-    public function run()
+    public function run(): Response
     {
         if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
         {
@@ -57,7 +57,7 @@ class BrowserComponent extends Manager implements BreadcrumbLessComponentInterfa
 
         $html[] = $this->renderFooter();
 
-        return implode(PHP_EOL, $html);
+        return new Response(implode(PHP_EOL, $html));
     }
 
     public function getButtonToolbarRenderer(): ButtonToolBarRenderer

@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -24,7 +25,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    public function run()
+    public function run(): Response
     {
         if (!$this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'allow_password_retrieval']))
         {
@@ -94,7 +95,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
 
         $html[] = $this->renderFooter();
 
-        return implode(PHP_EOL, $html);
+        return new Response(implode(PHP_EOL, $html));
     }
 
     /**

@@ -19,8 +19,8 @@ class DataClassPropertyTableColumn extends AbstractSortableTableColumn
      * @param string[] $contentCssClasses
      */
     public function __construct(
-        string $className, string $property, string $title, bool $sortable = true,
-        ?array $headerCssClasses = null, ?array $contentCssClasses = null
+        string $className, string $property, string $title, bool $sortable = true, ?array $headerCssClasses = null,
+        ?array $contentCssClasses = null
     )
     {
         $this->className = $className;
@@ -28,18 +28,20 @@ class DataClassPropertyTableColumn extends AbstractSortableTableColumn
         parent::__construct($property, $title, $sortable, $headerCssClasses, $contentCssClasses);
     }
 
-    public function getConditionVariable(): ConditionVariable
-    {
-        return new PropertyConditionVariable($this->get_class_name(), $this->get_name());
-    }
-
-    public function get_class_name(): string
+    public function getClassName(): string
     {
         return $this->className;
     }
 
-    public function set_class_name(string $className)
+    public function setClassName(string $className): static
     {
         $this->className = $className;
+
+        return $this;
+    }
+
+    public function getConditionVariable(): ConditionVariable
+    {
+        return new PropertyConditionVariable($this->getClassName(), $this->getName());
     }
 }

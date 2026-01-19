@@ -44,7 +44,7 @@ class ConnectionFactory
         {
             return DriverManager::getConnection($connectionParameters, new Configuration());
         }
-        catch (Exception $exception)
+        catch (Exception)
         {
             throw new ConnectionException(
                 'Could not connect to the database. Please contact your system administrator.'

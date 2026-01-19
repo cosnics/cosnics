@@ -5,6 +5,7 @@ use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Home\Component
@@ -13,7 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class TruncaterComponent extends Manager
 {
 
-    public function run()
+    public function run(): Response
     {
         $this->getHomeService()->deleteElementsForUserIdentifier($this->getUser()->getId());
 

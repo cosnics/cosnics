@@ -8,9 +8,9 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessComponentInterface;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Menu\Component
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CreatorComponent extends Manager implements BreadcrumbLessComponentInterface
+class CreatorComponent extends Manager
 {
 
     /**
@@ -27,7 +27,7 @@ class CreatorComponent extends Manager implements BreadcrumbLessComponentInterfa
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
      * @throws \QuickformException
      */
-    public function run()
+    public function run(): Response
     {
         if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
         {
@@ -85,7 +85,7 @@ class CreatorComponent extends Manager implements BreadcrumbLessComponentInterfa
                 );
             }
 
-            $this->redirectWithMessage(
+            return $this->redirectWithMessage(
                 $message, !$success, [
                     Application::PARAM_CONTEXT => $this->getContext(),
                     Application::PARAM_ACTION => Manager::ACTION_BROWSE,
@@ -100,6 +100,6 @@ class CreatorComponent extends Manager implements BreadcrumbLessComponentInterfa
         $html[] = $itemForm->render();
         $html[] = $this->renderFooter();
 
-        return implode(PHP_EOL, $html);
+        return new Response(implode(PHP_EOL, $html));
     }
 }

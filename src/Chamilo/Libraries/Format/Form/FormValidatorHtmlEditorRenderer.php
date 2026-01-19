@@ -183,7 +183,7 @@ class FormValidatorHtmlEditorRenderer
      * @throws \QuickformException
      */
     public function renderHtmlEditor(
-        string $name, string $label, bool $required = true, array $options = [], array $attributes = []
+        string $name, string $label, array $options = [], array $attributes = []
     ): string
     {
         if (!array_key_exists('class', $attributes))

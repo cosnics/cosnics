@@ -5,6 +5,7 @@ use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Libraries\Ajax\Component
@@ -20,7 +21,7 @@ class DeleteTemporaryFileComponent extends Manager
     /**
      * @see \Chamilo\Libraries\Architecture\Application\Application::run()
      */
-    public function run()
+    public function run(): Response
     {
         $temporaryFileName = $this->getRequest()->getFromQueryOrRequest(self::PARAM_FILE);
         $temporaryPath = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__);
@@ -31,11 +32,12 @@ class DeleteTemporaryFileComponent extends Manager
         try
         {
             $this->getFilesystem()->remove($temporaryFilePath);
-            JsonAjaxResult::success($translator->trans('FileRemoved', [], StringUtilities::LIBRARIES));
+
+            return JsonAjaxResult::success($translator->trans('FileRemoved', [], StringUtilities::LIBRARIES));
         }
         catch (Exception)
         {
-            JsonAjaxResult::generalError($translator->trans('FileNotRemoved', [], StringUtilities::LIBRARIES));
+            return JsonAjaxResult::generalError($translator->trans('FileNotRemoved', [], StringUtilities::LIBRARIES));
         }
     }
 

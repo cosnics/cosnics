@@ -73,11 +73,13 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
      */
     public function prepareTableData(
         HTML_Table $htmlTable, array $tableColumns, ArrayCollection $tableRows, ?TableActions $tableActions = null
-    )
+    ): static
     {
         parent::prepareTableData($htmlTable, $tableColumns, $tableRows, $tableActions);
 
         $this->processCellAttributes($htmlTable, $tableColumns, $tableActions);
+
+        return $this;
     }
 
     /**
@@ -89,7 +91,7 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
     protected function processTableColumns(
         HTML_Table $htmlTable, array $tableColumns, array $parameterNames, TableParameterValues $parameterValues,
         ?TableActions $tableActions = null
-    )
+    ): static
     {
         if ($tableActions instanceof TableActions && $tableActions->hasActions())
         {
@@ -112,10 +114,12 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
             $this->setColumnHeader(
                 $htmlTable, $parameterNames, $parameterValues, $key,
                 ($tableActions instanceof TableActions && $tableActions->hasActions() ? $key + 1 : $key),
-                $this->getSecurity()->removeXSS($tableColumn->get_title()),
-                $tableColumn instanceof AbstractSortableTableColumn && $tableColumn->is_sortable(), $headerAttributes
+                $this->getSecurity()->removeXSS($tableColumn->getTitle()),
+                $tableColumn instanceof AbstractSortableTableColumn && $tableColumn->isSortable(), $headerAttributes
             );
         }
+
+        return $this;
     }
 
     /**
@@ -127,7 +131,7 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
     public function setColumnHeader(
         HTML_Table $htmlTable, array $parameterNames, TableParameterValues $parameterValues, int $tableColumnIndex,
         int $htmlColumnIndex, string $label, bool $isSortable = true, ?array $headerAttributes = null
-    )
+    ): static
     {
         $header = $htmlTable->getHeader();
 
@@ -177,5 +181,7 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
 
         $header->setHeaderContents(0, $htmlColumnIndex, $content);
         $header->setColAttributes($htmlColumnIndex, $headerAttributes);
+
+        return $this;
     }
 }

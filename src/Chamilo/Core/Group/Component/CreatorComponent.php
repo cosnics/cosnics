@@ -7,6 +7,7 @@ use Chamilo\Core\Group\UserInterface\Form\GroupForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -17,8 +18,10 @@ class CreatorComponent extends Manager
     /**
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Throwable
      */
-    public function run()
+    public function run(): Response
     {
         if (!$this->getUser()->isPlatformAdmin())
         {
@@ -39,7 +42,7 @@ class CreatorComponent extends Manager
                 self::PARAM_ACTION => self::ACTION_CREATOR,
                 self::PARAM_GROUP_ID => $parentGroupIdentifier
             ]
-        ), $this->getUser()
+        )
         );
 
         if ($form->validate())
@@ -49,7 +52,8 @@ class CreatorComponent extends Manager
             if ($success)
             {
                 $group = $form->get_group();
-                $this->redirectWithMessage(
+
+                return $this->redirectWithMessage(
                     $translator->trans(
                         'ObjectCreated', ['OBJECT' => $translator->trans('Group', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
@@ -62,7 +66,7 @@ class CreatorComponent extends Manager
             }
             else
             {
-                $this->redirectWithMessage(
+                return $this->redirectWithMessage(
                     $translator->trans(
                         'ObjectNotCreated', ['OBJECT' => $translator->trans('Group', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
@@ -82,7 +86,7 @@ class CreatorComponent extends Manager
             $html[] = $form->render();
             $html[] = $this->renderFooter();
 
-            return implode(PHP_EOL, $html);
+            return new Response(implode(PHP_EOL, $html));
         }
     }
 }

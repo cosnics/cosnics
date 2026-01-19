@@ -5,9 +5,10 @@ use Chamilo\Core\User\Ajax\Manager;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserLeavePageEvent;
 use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @package Chamilo\Core\User\Ajax
+ * @package Chamilo\Core\User\Ajax\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -15,12 +16,12 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 class LeaveComponent extends Manager implements NoVisitTraceComponentInterface
 {
 
-    public function run()
+    public function run(): Response
     {
         $this->getEventDispatcher()->dispatch(
             new BeforeUserLeavePageEvent($this->getUser(), $this->getRequest()->request->get('tracker'))
         );
 
-        JsonAjaxResult::success();
+        return JsonAjaxResult::success();
     }
 }

@@ -16,6 +16,7 @@ use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Admin\Component
@@ -31,7 +32,7 @@ class ConfigurerComponent extends Manager
      * @throws \QuickformException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function run()
+    public function run(): Response
     {
         if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
         {
@@ -54,7 +55,8 @@ class ConfigurerComponent extends Manager
         if ($form->validate())
         {
             $success = $form->update_configuration();
-            $this->redirectWithMessage(
+
+            return $this->redirectWithMessage(
                 $translator->trans(
                     $success ? 'ObjectUpdated' : 'ObjectNotUpdated', ['OBJECT' => $translator->trans('Setting')],
                     StringUtilities::LIBRARIES
@@ -118,7 +120,7 @@ class ConfigurerComponent extends Manager
             $html[] = $this->getLinkTabsRenderer()->render($tabs, $form->render());
             $html[] = $this->renderFooter();
 
-            return implode(PHP_EOL, $html);
+            return new Response(implode(PHP_EOL, $html));
         }
     }
 

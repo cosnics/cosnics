@@ -87,7 +87,7 @@ class TeamService
         {
             return $this->teamRepository->getTeam($groupId);
         }
-        catch (Exception $exception)
+        catch (Exception)
         {
             return null;
         }

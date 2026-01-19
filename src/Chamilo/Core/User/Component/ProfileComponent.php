@@ -2,7 +2,6 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbLessPackageInterface;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
@@ -14,7 +13,7 @@ use Chamilo\Libraries\Format\Tabs\TabsCollection;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class ProfileComponent extends Manager implements BreadcrumbLessPackageInterface
+abstract class ProfileComponent extends Manager
 {
 
     /**

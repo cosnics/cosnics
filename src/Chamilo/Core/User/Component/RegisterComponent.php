@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -25,7 +26,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \QuickformException
      */
-    public function run()
+    public function run(): Response
     {
         $configurationConsulter = $this->getConfigurationConsulter();
         $translator = $this->getTranslator();
@@ -56,8 +57,8 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
                     $formValues[User::PROPERTY_FIRSTNAME], $formValues[User::PROPERTY_LASTNAME],
                     $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
                     $formValues[User::PROPERTY_EMAIL], (bool) $formValues[UserForm::PROPERTY_GENERATE_PASSWORD],
-                    $formValues[User::PROPERTY_PASSWORD], 'Chamilo\Libraries\Authentication\Platform', $formValues[User::PROPERTY_STATUS],
-                    (bool) $formValues[UserForm::PROPERTY_SEND_MAIL]
+                    $formValues[User::PROPERTY_PASSWORD], 'Chamilo\Libraries\Authentication\Platform',
+                    $formValues[User::PROPERTY_STATUS], (bool) $formValues[UserForm::PROPERTY_SEND_MAIL]
                 );
 
                 $userPictureProvider = $this->getUserPictureProvider();
@@ -108,11 +109,13 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
         $html[] = $form->render();
         $html[] = $this->renderFooter();
 
-        return implode(PHP_EOL, $html);
+        return new Response(implode(PHP_EOL, $html));
     }
 
-    public function getUserPictureProvider(): UserPictureProviderInterface
+    public function getUserPictureProvider(): ?UserPictureUpdateProviderInterface
     {
-        return $this->getService(UserPictureProviderInterface::class);
+        $service = $this->getService(UserPictureProviderInterface::class);
+
+        return $service instanceof UserPictureUpdateProviderInterface ? $service : null;
     }
 }

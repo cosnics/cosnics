@@ -6,6 +6,7 @@ use Chamilo\Core\Group\UserInterface\Form\GroupMoveForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -17,7 +18,7 @@ class MoverComponent extends Manager
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \QuickformException
      */
-    public function run()
+    public function run(): Response
     {
         if (!$this->getUser()->isPlatformAdmin())
         {
@@ -37,7 +38,7 @@ class MoverComponent extends Manager
                 self::PARAM_ACTION => self::ACTION_MOVE_GROUP,
                 self::PARAM_GROUP_ID => $group_id
             ]
-        ), $this->getUser()
+        )
         );
 
         if ($form->validate())
@@ -48,7 +49,8 @@ class MoverComponent extends Manager
                 $success ? 'ObjectMoved' : 'ObjectNotMoved', ['OBJECT' => $translator->trans('Group')],
                 StringUtilities::LIBRARIES
             );
-            $this->redirectWithMessage(
+
+            return $this->redirectWithMessage(
                 $message, !$success, [
                     Application::PARAM_CONTEXT => $this->getContext(),
                     Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS,
@@ -65,7 +67,7 @@ class MoverComponent extends Manager
             $html[] = $form->render();
             $html[] = $this->renderFooter();
 
-            return implode(PHP_EOL, $html);
+            return new Response(implode(PHP_EOL, $html));
         }
     }
 }

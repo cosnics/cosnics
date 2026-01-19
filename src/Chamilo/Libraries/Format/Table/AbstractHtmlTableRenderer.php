@@ -131,6 +131,13 @@ abstract class AbstractHtmlTableRenderer
         return $this->resourceManager;
     }
 
+    public function setResourceManager(ResourceManager $resourceManager): AbstractHtmlTableRenderer
+    {
+        $this->resourceManager = $resourceManager;
+
+        return $this;
+    }
+
     public function getSecurity(): Security
     {
         return $this->security;
@@ -162,6 +169,13 @@ abstract class AbstractHtmlTableRenderer
         return $this->webPathBuilder;
     }
 
+    public function setWebPathBuilder(WebPathBuilder $webPathBuilder): AbstractHtmlTableRenderer
+    {
+        $this->webPathBuilder = $webPathBuilder;
+
+        return $this;
+    }
+
     /**
      * @param \Chamilo\Libraries\Format\Table\Column\TableColumn[] $tableColumns
      */
@@ -169,7 +183,7 @@ abstract class AbstractHtmlTableRenderer
     {
         foreach ($tableColumns as $tableColumn)
         {
-            if ($tableColumn instanceof AbstractSortableTableColumn && $tableColumn->is_sortable())
+            if ($tableColumn instanceof AbstractSortableTableColumn && $tableColumn->isSortable())
             {
                 return true;
             }
@@ -185,10 +199,12 @@ abstract class AbstractHtmlTableRenderer
      */
     public function prepareTableData(
         HTML_Table $htmlTable, array $tableColumns, ArrayCollection $tableRows, ?TableActions $tableActions = null
-    )
+    ): static
     {
         $this->processSourceData($htmlTable, $tableRows);
         $this->processEmptyCells($htmlTable);
+
+        return $this;
     }
 
     /**
@@ -197,7 +213,7 @@ abstract class AbstractHtmlTableRenderer
      * @throws \TableException
      */
     public function processCellAttributes(HTML_Table $htmlTable, array $tableColumns, ?TableActions $tableActions = null
-    )
+    ): static
     {
         foreach ($tableColumns as $key => $tableColumn)
         {
@@ -213,25 +229,31 @@ abstract class AbstractHtmlTableRenderer
                 );
             }
         }
+
+        return $this;
     }
 
     /**
      * @throws \TableException
      */
-    protected function processEmptyCells(HTML_Table $htmlTable)
+    protected function processEmptyCells(HTML_Table $htmlTable): static
     {
         $htmlTable->setAutoFill('-');
+
+        return $this;
     }
 
     /**
      * @throws \TableException
      */
-    public function processSourceData(HTML_Table $htmlTable, ArrayCollection $tableRows)
+    public function processSourceData(HTML_Table $htmlTable, ArrayCollection $tableRows): static
     {
         foreach ($tableRows as $row)
         {
             $htmlTable->addRow($row);
         }
+
+        return $this;
     }
 
     /**
@@ -365,7 +387,7 @@ abstract class AbstractHtmlTableRenderer
             $dropDownButton->setLabel(
                 $translator->trans(
                     'TableOrderPropertyWithDirection',
-                    ['{PROPERTY}' => $orderProperty->get_title(), '{DIRECTION}' => $orderDirection],
+                    ['{PROPERTY}' => $orderProperty->getTitle(), '{DIRECTION}' => $orderDirection],
                     StringUtilities::LIBRARIES
                 )
             );
@@ -405,7 +427,7 @@ abstract class AbstractHtmlTableRenderer
                 $isSelected = $currentOrderColumnIndex == $index;
 
                 $subButtons[] = new SubButton(
-                    $this->getSecurity()->removeXSS($tableColumn->get_title()), null, $propertyUrl,
+                    $this->getSecurity()->removeXSS($tableColumn->getTitle()), null, $propertyUrl,
                     AbstractButton::DISPLAY_LABEL, null, [], null, $isSelected
                 );
             }
@@ -575,24 +597,5 @@ abstract class AbstractHtmlTableRenderer
         $html[] = '<div class="' . $classes . ' table-navigation-search">';
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
-     *
-     * @return AbstractHtmlTableRenderer
-     */
-    public function setResourceManager(ResourceManager $resourceManager): AbstractHtmlTableRenderer
-    {
-        $this->resourceManager = $resourceManager;
-
-        return $this;
-    }
-
-    public function setWebPathBuilder(WebPathBuilder $webPathBuilder): AbstractHtmlTableRenderer
-    {
-        $this->webPathBuilder = $webPathBuilder;
-
-        return $this;
     }
 }

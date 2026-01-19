@@ -6,6 +6,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -17,7 +18,7 @@ class DeleterComponent extends Manager
      * @throws \Exception
      * @throws \Throwable
      */
-    public function run()
+    public function run(): Response
     {
         $translator = $this->getTranslator();
         $groupService = $this->getGroupService();
@@ -91,7 +92,7 @@ class DeleterComponent extends Manager
                 );
             }
 
-            $this->redirectWithMessage(
+            return $this->redirectWithMessage(
                 $message, (bool) $failures, [
                     Application::PARAM_CONTEXT => $this->getContext(),
                     Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS
@@ -100,8 +101,10 @@ class DeleterComponent extends Manager
         }
         else
         {
-            return $this->display_error_page(
-                htmlentities($translator->trans('NoObjectsSelected', [], StringUtilities::LIBRARIES))
+            return new Response(
+                $this->display_error_page(
+                    htmlentities($translator->trans('NoObjectsSelected', [], StringUtilities::LIBRARIES))
+                )
             );
         }
     }

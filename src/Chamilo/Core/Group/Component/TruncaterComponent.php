@@ -6,6 +6,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -15,8 +16,10 @@ class TruncaterComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      */
-    public function run()
+    public function run(): Response
     {
         if (!$this->getUser()->isPlatformAdmin())
         {
@@ -74,7 +77,7 @@ class TruncaterComponent extends Manager
 
             if (count($groupIdentifiers) == 1)
             {
-                $this->redirectWithMessage(
+                return $this->redirectWithMessage(
                     $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
                         Application::PARAM_CONTEXT => $this->getContext(),
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
@@ -84,7 +87,7 @@ class TruncaterComponent extends Manager
             }
             else
             {
-                $this->redirectWithMessage(
+                return $this->redirectWithMessage(
                     $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
                         Application::PARAM_CONTEXT => $this->getContext(),
                         Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS
@@ -94,8 +97,10 @@ class TruncaterComponent extends Manager
         }
         else
         {
-            return $this->display_error_page(
-                htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
+            return new Response(
+                $this->display_error_page(
+                    htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
+                )
             );
         }
     }

@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder;
 
+use Exception;
+
 /**
  * Class to determine the elements for an advanced element finder
  *
@@ -26,33 +28,13 @@ class AdvancedElementFinderElements
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement[] $elements
+     * @throws \Exception
      */
-    public function set_elements($elements)
+    public function add_element(AdvancedElementFinderElement $element = null): void
     {
-        $this->elements = $elements;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement[]
-     */
-    public function get_elements()
-    {
-        return $this->elements;
-    }
-
-    /**
-     * Adds an element to the elements list
-     *
-     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement $element
-     */
-    public function add_element(AdvancedElementFinderElement $element = null)
-    {
-        if (! $element instanceof AdvancedElementFinderElement)
+        if (!$element instanceof AdvancedElementFinderElement)
         {
-            return false;
+            throw new Exception('The element should be of type AdvancedElementFinderElement');
         }
 
         $this->elements[] = $element;
@@ -75,5 +57,23 @@ class AdvancedElementFinderElements
         }
 
         return $array;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement[]
+     */
+    public function get_elements()
+    {
+        return $this->elements;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement[] $elements
+     */
+    public function set_elements($elements)
+    {
+        $this->elements = $elements;
     }
 }

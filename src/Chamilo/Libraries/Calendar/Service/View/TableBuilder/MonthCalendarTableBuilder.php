@@ -25,7 +25,7 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
                 $cellContent .= $item;
                 $table->setCellContents($row, $column, $cellContent);
             }
-            catch (Exception $exception)
+            catch (Exception)
             {
             }
         }

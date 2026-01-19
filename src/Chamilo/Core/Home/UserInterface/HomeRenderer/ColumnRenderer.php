@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Home\UserInterface\HomeRenderer;
 
 use Chamilo\Core\Home\Architecture\Domain\BlockRendererCollection;
-use Chamilo\Core\Home\Architecture\Interface\AnonymousBlockInterface;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
@@ -52,14 +51,10 @@ class ColumnRenderer
         foreach ($blocks as $block)
         {
             $blockRenderer = $this->getBlockRendererFactory()->getRendererForElement($block);
-
-            if ($blockRenderer instanceof AnonymousBlockInterface || $blockRenderer->isVisible($block, $user))
-            {
-                $html[] = $blockRenderer->render($block, $user);
-            }
+            $html[] = $blockRenderer->render($block, $user);
         }
 
-        $hasMultipleColumns = $this->getHomeService()->tabByUserAndIdentifierHasMultipleColumns(
+        $hasMultipleColumns = $this->getHomeService()->tabByIdentifierHasMultipleColumns(
             $column->getParentId(), $user
         );
 

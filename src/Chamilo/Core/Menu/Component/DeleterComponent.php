@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Menu\Component
@@ -23,7 +24,7 @@ class DeleterComponent extends Manager
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function run()
+    public function run(): Response
     {
         if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
         {
@@ -49,7 +50,7 @@ class DeleterComponent extends Manager
             'SelectedItemsDeleted'
         );
 
-        $this->redirectWithMessage(
+        return $this->redirectWithMessage(
             $message, (bool) $failures, [
                 Application::PARAM_CONTEXT => $this->getContext(),
                 Application::PARAM_ACTION => Manager::ACTION_BROWSE,

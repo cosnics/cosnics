@@ -2,12 +2,11 @@
 namespace Chamilo\Core\Admin\Implementation\Home;
 
 use Chamilo\Core\Admin\Manager;
-use Chamilo\Core\Home\Architecture\Interface\AnonymousBlockInterface;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 
-class PortalHomeBlockRenderer extends BlockRenderer implements AnonymousBlockInterface
+class PortalHomeBlockRenderer extends BlockRenderer
 {
     public const CONTEXT = Manager::CONTEXT;
 

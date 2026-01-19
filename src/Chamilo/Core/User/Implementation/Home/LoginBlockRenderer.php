@@ -2,8 +2,6 @@
 namespace Chamilo\Core\User\Implementation\Home;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Home\Architecture\Interface\AnonymousBlockInterface;
-use Chamilo\Core\Home\Architecture\Interface\ReadOnlyBlockInterface;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
@@ -18,7 +16,7 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
-class LoginBlockRenderer extends BlockRenderer implements AnonymousBlockInterface, ReadOnlyBlockInterface
+class LoginBlockRenderer extends BlockRenderer
 {
     public const CONTEXT = Manager::CONTEXT;
 

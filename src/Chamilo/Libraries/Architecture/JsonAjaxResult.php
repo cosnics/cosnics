@@ -21,32 +21,18 @@ class JsonAjaxResult
 
     public string $resultMessage;
 
-    protected bool $returnActualStatusCode = false;
-
     public function __construct(int $resultCode = 200, array $properties = [])
     {
         $this->setResultCode($resultCode);
         $this->setProperties($properties);
     }
 
-    public static function badRequest(?string $resultMessage = null): void
+    public static function badRequest(?string $resultMessage = null): Response
     {
-        self::error(400, $resultMessage);
+        return self::error(400, $resultMessage);
     }
 
-    public function display(): void
-    {
-        if ($this->returnActualStatusCode)
-        {
-            http_response_code($this->getResultCode());
-        }
-        header('Content-type: application/json');
-
-        echo json_encode($this);
-        exit();
-    }
-
-    public static function error(int $resultCode = 404, ?string $resultMessage = null): void
+    public static function error(int $resultCode = 404, ?string $resultMessage = null): Response
     {
         $json_ajax_result = new self($resultCode);
 
@@ -55,12 +41,12 @@ class JsonAjaxResult
             $json_ajax_result->setResultMessage($resultMessage);
         }
 
-        $json_ajax_result->display();
+        return $json_ajax_result->getResponse();
     }
 
-    public static function generalError(?string $resultMessage = null): void
+    public static function generalError(?string $resultMessage = null): Response
     {
-        self::error(500, $resultMessage);
+        return self::error(500, $resultMessage);
     }
 
     /**
@@ -74,9 +60,11 @@ class JsonAjaxResult
     /**
      * @param string[] $properties
      */
-    public function setProperties(array $properties): void
+    public function setProperties(array $properties): static
     {
         $this->properties = $properties;
+
+        return $this;
     }
 
     public function getProperty(string $property): string
@@ -84,15 +72,24 @@ class JsonAjaxResult
         return $this->properties[$property];
     }
 
+    public function getResponse(): Response
+    {
+        return new Response(
+            json_encode($this), $this->getResultCode() ?: 200, ['Content-Type' => 'application/json']
+        );
+    }
+
     public function getResultCode(): int
     {
         return $this->resultCode;
     }
 
-    public function setResultCode(int $resultCode): void
+    public function setResultCode(int $resultCode): static
     {
         $this->resultCode = $resultCode;
         $this->resultMessage = Response::$statusTexts[$resultCode];
+
+        return $this;
     }
 
     public function getResultMessage(): string
@@ -100,41 +97,39 @@ class JsonAjaxResult
         return $this->resultMessage;
     }
 
-    public function setResultMessage(string $resultMessage): void
+    public function setResultMessage(string $resultMessage): static
     {
         $this->resultMessage = $resultMessage;
+
+        return $this;
     }
 
-    public static function notAllowed(?string $resultMessage = null): void
+    public static function notAllowed(?string $resultMessage = null): Response
     {
-        self::error(403, $resultMessage);
+        return self::error(403, $resultMessage);
     }
 
-    public static function notFound(?string $resultMessage = null): void
+    public static function notFound(?string $resultMessage = null): Response
     {
-        self::error(404, $resultMessage);
+        return self::error(404, $resultMessage);
     }
 
-    public function resetResultMessage(): void
+    public function resetResultMessage(): static
     {
         $this->resultMessage = Response::$statusTexts[$this->getResultCode()];
+
+        return $this;
     }
 
-    /**
-     *  For backwards compatibility. Every response returns a 200 status code unless this function is called
-     */
-    public function returnActualStatusCode(): void
-    {
-        $this->returnActualStatusCode = true;
-    }
-
-    public function setProperty(string $property, mixed $value): void
+    public function setProperty(string $property, mixed $value): static
     {
         $this->properties[$property] = $value;
+
+        return $this;
     }
 
-    public static function success(?string $resultMessage = null): void
+    public static function success(?string $resultMessage = null): Response
     {
-        self::error(200, $resultMessage);
+        return self::error(200, $resultMessage);
     }
 }

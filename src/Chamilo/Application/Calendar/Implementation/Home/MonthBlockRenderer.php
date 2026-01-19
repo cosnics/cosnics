@@ -5,7 +5,6 @@ use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvid
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Home\Architecture\Interface\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
@@ -24,7 +23,7 @@ use Symfony\Component\Translation\Translator;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class MonthBlockRenderer extends BlockRenderer implements StaticBlockTitleInterface
+class MonthBlockRenderer extends BlockRenderer
 {
     public const CONTEXT = Manager::CONTEXT;
 

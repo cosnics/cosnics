@@ -17,6 +17,7 @@ use Chamilo\Libraries\Format\Tabs\ContentTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 use Chamilo\Libraries\Format\Tabs\TabsRenderer;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -29,9 +30,11 @@ class UserDetailComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      * @throws \QuickformException
      */
-    public function run()
+    public function run(): Response
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
@@ -53,17 +56,19 @@ class UserDetailComponent extends Manager
 
             $html[] = $this->renderFooter();
 
-            return implode(PHP_EOL, $html);
+            return new Response(implode(PHP_EOL, $html));
         }
         else
         {
             $translator = $this->getTranslator();
 
-            return $this->display_error_page(
-                htmlentities(
-                    $translator->trans(
-                        'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
-                        StringUtilities::LIBRARIES
+            return new Response(
+                $this->display_error_page(
+                    htmlentities(
+                        $translator->trans(
+                            'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
+                            StringUtilities::LIBRARIES
+                        )
                     )
                 )
             );

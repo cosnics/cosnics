@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -15,6 +16,8 @@ use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Feed to return the course groups of this course
@@ -36,7 +39,7 @@ abstract class GroupsFeedComponent extends Manager
      */
     protected $user_count = 0;
 
-    public function run()
+    public function run(): Response
     {
         $result = new JsonAjaxResult();
 
@@ -50,7 +53,7 @@ abstract class GroupsFeedComponent extends Manager
             $result->setProperty(self::PROPERTY_TOTAL_ELEMENTS, $this->user_count);
         }
 
-        $result->display();
+        return $result->getResponse();
     }
 
     /**
@@ -138,7 +141,7 @@ abstract class GroupsFeedComponent extends Manager
     abstract public function get_user_element(User $user): AdvancedElementFinderElement;
 
     /**
-     * @return int
+     * @return int[]
      */
     abstract public function get_user_ids();
 
@@ -148,7 +151,7 @@ abstract class GroupsFeedComponent extends Manager
     abstract public function retrieve_groups();
 
     /**
-     * @return array|\Chamilo\Core\User\Storage\DataClass\User[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      */
     private function retrieve_users()
     {
@@ -158,10 +161,10 @@ abstract class GroupsFeedComponent extends Manager
 
         if (count($user_ids) == 0)
         {
-            return [];
+            return new ArrayCollection();
         }
 
-        $conditions[] = new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $user_ids);
+        $conditions[] = new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $user_ids);
 
         $search_query = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
 

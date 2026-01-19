@@ -223,7 +223,7 @@ class ICalCalendarRenderer extends CalendarRenderer
 
             $this->getCalendar()->add($vt);
         }
-        catch (Exception $e)
+        catch (Exception)
         {
         }
     }
@@ -241,19 +241,13 @@ class ICalCalendarRenderer extends CalendarRenderer
     /**
      * @throws \Exception
      */
-    public function renderAndSend(CalendarRendererProviderInterface $dataProvider)
-    {
-        $this->sendResponse($this->render($dataProvider));
-    }
-
-    private function sendResponse(string $serializedCalendar)
+    public function renderAndGetResponse(CalendarRendererProviderInterface $dataProvider): Response
     {
         $headers = [];
 
         $headers['Content-Type'] = 'text/calendar; charset=utf-8';
         $headers['Content-Disposition'] = 'attachment; filename="myCalendar.ics"';
 
-        $response = new Response($serializedCalendar, 200, $headers);
-        $response->send();
+        return new Response($this->render($dataProvider), 200, $headers);
     }
 }

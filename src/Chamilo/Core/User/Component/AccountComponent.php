@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -10,6 +9,7 @@ use Chamilo\Core\User\UserInterface\Form\UserForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -27,7 +27,7 @@ class AccountComponent extends ProfileComponent
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \QuickformException
      */
-    public function run()
+    public function run(): Response
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageAccount');
         $translator = $this->getTranslator();
@@ -69,7 +69,7 @@ class AccountComponent extends ProfileComponent
 
             $message = !$success ? 'UserProfileNotUpdated' : 'UserProfileUpdated';
 
-            $this->redirectWithMessage(
+            return $this->redirectWithMessage(
                 $translator->trans($message, [], Manager::CONTEXT), !$success, [
                     Application::PARAM_CONTEXT => $this->getContext(),
                     Application::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT
@@ -78,7 +78,7 @@ class AccountComponent extends ProfileComponent
         }
         else
         {
-            return $this->renderPage();
+            return new Response($this->renderPage());
         }
     }
 
@@ -105,8 +105,10 @@ class AccountComponent extends ProfileComponent
         return $this->getAccountForm()->render();
     }
 
-    public function getUserPictureProvider(): UserPictureProviderInterface
+    public function getUserPictureProvider(): ?UserPictureUpdateProviderInterface
     {
-        return $this->getService(UserPictureProviderInterface::class);
+        $service = $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
+
+        return $service instanceof UserPictureUpdateProviderInterface ? $service : null;
     }
 }

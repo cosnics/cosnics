@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Admin\Component
@@ -21,7 +22,7 @@ class LogViewerComponent extends Manager
      * @throws \QuickformException
      * @throws \TableException
      */
-    public function run()
+    public function run(): Response
     {
         if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
         {
@@ -48,7 +49,7 @@ class LogViewerComponent extends Manager
         $html[] = $this->displayLogfileTable($logFile, $lineCount);
         $html[] = $this->renderFooter();
 
-        return implode(PHP_EOL, $html);
+        return new Response(implode(PHP_EOL, $html));
     }
 
     /**

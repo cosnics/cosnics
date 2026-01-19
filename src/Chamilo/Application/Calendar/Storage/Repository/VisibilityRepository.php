@@ -57,11 +57,11 @@ class VisibilityRepository
     {
         $conditions = [];
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Visibility::class, Visibility::PROPERTY_USER_ID),
+            new PropertyConditionVariable(Visibility::class, GenericVisibility::PROPERTY_USER_ID),
             new StaticConditionVariable($userIdentifier)
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Visibility::class, Visibility::PROPERTY_SOURCE),
+            new PropertyConditionVariable(Visibility::class, GenericVisibility::PROPERTY_SOURCE),
             new StaticConditionVariable($source)
         );
         $condition = new AndCondition($conditions);

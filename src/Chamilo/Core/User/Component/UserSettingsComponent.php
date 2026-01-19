@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -30,7 +31,7 @@ class UserSettingsComponent extends ProfileComponent
      * @throws \QuickformException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function run()
+    public function run(): Response
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageAccount');
 
@@ -44,7 +45,8 @@ class UserSettingsComponent extends ProfileComponent
         if ($this->form->validate())
         {
             $success = $this->form->update_user_settings();
-            $this->redirectWithMessage(
+
+            return $this->redirectWithMessage(
                 $this->getTranslator()->trans($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'), !$success,
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
@@ -55,12 +57,11 @@ class UserSettingsComponent extends ProfileComponent
         }
         else
         {
-            return $this->renderPage();
+            return new Response($this->renderPage());
         }
     }
 
     /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \QuickformException
      */
     public function getContent(): string

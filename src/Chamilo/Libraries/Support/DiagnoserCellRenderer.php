@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Support;
 
-use Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface;
+use Chamilo\Libraries\Format\Table\Interface\SimpleTableCellRendererInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -16,7 +16,7 @@ class DiagnoserCellRenderer implements SimpleTableCellRendererInterface
     }
 
     /**
-     * @see \Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface::get_prefix()
+     * @see \Chamilo\Libraries\Format\Table\Interface\SimpleTableCellRendererInterface::get_prefix()
      */
     public function getPrefix(): string
     {
@@ -24,7 +24,7 @@ class DiagnoserCellRenderer implements SimpleTableCellRendererInterface
     }
 
     /**
-     * @see \Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface::get_properties()
+     * @see \Chamilo\Libraries\Format\Table\Interface\SimpleTableCellRendererInterface::get_properties()
      */
     public function getProperties(): array
     {

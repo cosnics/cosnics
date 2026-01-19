@@ -6,6 +6,7 @@ use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Group\Ajax\Component
@@ -16,24 +17,34 @@ use Doctrine\Common\Collections\ArrayCollection;
 class XmlGroupMenuFeedComponent extends Manager
 {
 
-    public function run()
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     */
+    public function run(): Response
     {
         $groups_tree = $this->getGroupService()->findGroupsForParentIdentifier(
             $this->getRequest()->query->get(NestedSet::PROPERTY_PARENT_ID)
         );
 
-        header('Content-Type: text/xml');
-        echo '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL, '<tree>' . PHP_EOL;
-        $this->dump_groups_tree($groups_tree);
-        echo '</tree>';
+        $html = [];
+
+        $html[] = '<?xml version="1.0" encoding="UTF-8"?>';
+        $html[] = '<tree>';
+        $html[] = $this->dump_groups_tree($groups_tree);
+        $html[] = '</tree>';
+
+        return new Response(implode(PHP_EOL, $html), 200, ['Content-Type' => 'text/xml']);
     }
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group> $groups
+     *
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
      */
-    public function dump_groups_tree(ArrayCollection $groups): void
+    public function dump_groups_tree(ArrayCollection $groups): string
     {
         $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
+        $html[] = [];
 
         foreach ($groups as $group)
         {
@@ -42,10 +53,13 @@ class XmlGroupMenuFeedComponent extends Manager
             );
 
             $has_children = $group->hasChildren() ? 1 : 0;
-            echo '<leaf id="' . $group->getId() . '" classes="' . $glyph->getClassNamesString() . '" has_children="' .
+            $html[] =
+                '<leaf id="' . $group->getId() . '" classes="' . $glyph->getClassNamesString() . '" has_children="' .
                 $has_children . '" title="' . htmlspecialchars($group->get_name()) . '" description="' .
                 htmlspecialchars($description) . '"/>' . PHP_EOL;
         }
+
+        return implode(PHP_EOL, $html);
     }
 
     public function getGroupsTreeTraverser(): GroupsTreeTraverser

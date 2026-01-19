@@ -50,7 +50,7 @@ interface DataClassDatabaseInterface
      */
     public function getLastInsertedIdentifier(string $dataClassStorageUnitName): int|string;
 
-    public function quote(mixed $value, ?string $type = null): mixed;
+    public function quote(mixed $value): string;
 
     /**
      * @return ?string[]

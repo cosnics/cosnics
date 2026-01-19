@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Menu\Component
@@ -21,9 +22,11 @@ class MoverComponent extends Manager
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function run()
+    public function run(): Response
     {
         if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
         {
@@ -54,7 +57,7 @@ class MoverComponent extends Manager
             StringUtilities::LIBRARIES
         );
 
-        $this->redirectWithMessage(
+        return $this->redirectWithMessage(
             $message, !$success, [
                 Application::PARAM_CONTEXT => $this->getContext(),
                 Application::PARAM_ACTION => Manager::ACTION_BROWSE,

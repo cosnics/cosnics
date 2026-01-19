@@ -16,7 +16,7 @@ abstract class AbstractSortableTableColumn extends TableColumn
      * @param string[] $contentCssClasses
      */
     public function __construct(
-        string $name = '', string $title, bool $sortable = true, ?array $headerCssClasses = null,
+        string $name, string $title, bool $sortable = true, ?array $headerCssClasses = null,
         ?array $contentCssClasses = null
     )
     {
@@ -27,13 +27,15 @@ abstract class AbstractSortableTableColumn extends TableColumn
 
     abstract public function getConditionVariable(): ConditionVariable;
 
-    public function is_sortable(): bool
+    public function isSortable(): bool
     {
         return $this->sortable;
     }
 
-    public function set_sortable(bool $sortable)
+    public function setSortable(bool $sortable): static
     {
         $this->sortable = $sortable;
+
+        return $this;
     }
 }

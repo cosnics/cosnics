@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  * This class represents an html table for an \ArrayIterator with the use of a column model, a data provider and a
  * cell renderer
  *
- * @package Chamilo\Libraries\Format\Table\Extension\RecordTable
+ * @package Chamilo\Libraries\Format\Table\Extension
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop>
  */
@@ -21,7 +21,7 @@ abstract class RecordListTableRenderer extends ListTableRenderer
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $record): string
     {
-        return $record[$column->get_name()];
+        return $record[$column->getName()];
     }
 
     /**

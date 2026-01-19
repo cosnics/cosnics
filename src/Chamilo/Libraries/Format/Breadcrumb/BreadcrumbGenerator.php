@@ -21,7 +21,7 @@ use Symfony\Component\Translation\Translator;
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
+class BreadcrumbGenerator
 {
 
     protected BreadcrumbTrail $breadcrumbTrail;

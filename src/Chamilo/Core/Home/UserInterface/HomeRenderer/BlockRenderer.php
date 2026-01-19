@@ -2,9 +2,6 @@
 namespace Chamilo\Core\Home\UserInterface\HomeRenderer;
 
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Home\Architecture\Interface\AnonymousBlockInterface;
-use Chamilo\Core\Home\Architecture\Interface\ReadOnlyBlockInterface;
-use Chamilo\Core\Home\Architecture\Interface\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -47,11 +44,6 @@ abstract class BlockRenderer
 
     public function render(Element $block, ?User $user = null): string
     {
-        if (!$this instanceof AnonymousBlockInterface && !$this->isVisible($block, $user))
-        {
-            return '';
-        }
-
         $html = [];
         $html[] = $this->renderHeader($block);
         $html[] = $this->displayContent($block, $user);
@@ -96,16 +88,6 @@ abstract class BlockRenderer
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
-    }
-
-    public function hasStaticTitle(): bool
-    {
-        return $this instanceof StaticBlockTitleInterface;
-    }
-
-    public function isReadOnly(): bool
-    {
-        return $this instanceof ReadOnlyBlockInterface;
     }
 
     /**

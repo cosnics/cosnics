@@ -17,8 +17,8 @@ use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
 use Chamilo\Libraries\Format\Table\FormAction\TableAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
-use Chamilo\Libraries\Format\Table\Interfaces\TableRowActionsSupport;
+use Chamilo\Libraries\Format\Table\Interface\TableActionsSupport;
+use Chamilo\Libraries\Format\Table\Interface\TableRowActionsSupport;
 use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
@@ -131,7 +131,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
     {
         $itemRendererFactory = $this->getItemRendererFactory();
 
-        return match ($column->get_name())
+        return match ($column->getName())
         {
             Item::PROPERTY_TITLES => $itemRendererFactory->getItemRendererForItem($dataClass)
                 ->renderTitleForCurrentLanguage(

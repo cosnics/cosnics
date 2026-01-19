@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Table\Column\AbstractSortableTableColumn;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\FormAction\TableActions;
-use Chamilo\Libraries\Format\Table\Interfaces\TableActionsSupport;
+use Chamilo\Libraries\Format\Table\Interface\TableActionsSupport;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
@@ -25,9 +25,6 @@ abstract class AbstractTableRenderer
     public const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_ASC;
     public const DEFAULT_ORDER_COLUMN_INDEX = 0;
 
-    /**
-     * The identifier for the table (used for table actions)
-     */
     public const TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
 
     protected ClassnameUtilities $classnameUtilities;
@@ -149,9 +146,6 @@ abstract class AbstractTableRenderer
         return $this->classnameUtilities;
     }
 
-    /**
-     * Gets the column at the given index in the model.
-     */
     public function getColumn(int $index): ?TableColumn
     {
         return $this->columns[$index];
@@ -198,9 +192,6 @@ abstract class AbstractTableRenderer
         return $this->htmlTableRenderer;
     }
 
-    /**
-     * Returns an object table order object by a given column number and order direction
-     */
     public function getOrderProperty(int $columnNumber, int $orderDirection): ?OrderProperty
     {
         $column = $this->getSortableColumn($columnNumber);
@@ -241,14 +232,11 @@ abstract class AbstractTableRenderer
         ];
     }
 
-    /**
-     * Returns a column by a given column index if it exists and is sortable, otherwise it returns the default column.
-     */
     protected function getSortableColumn(int $columnNumber): ?AbstractSortableTableColumn
     {
         $column = $this->getColumn($columnNumber);
 
-        if (!$column instanceof AbstractSortableTableColumn || (!$column->is_sortable()))
+        if (!$column instanceof AbstractSortableTableColumn || (!$column->isSortable()))
         {
             if ($columnNumber != static::DEFAULT_ORDER_COLUMN_INDEX)
             {

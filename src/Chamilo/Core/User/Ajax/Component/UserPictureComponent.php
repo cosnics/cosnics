@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Core\User\Ajax\Component;
 
+use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\User\Ajax
@@ -18,19 +20,19 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      */
-    public function run()
+    public function run(): Response
     {
-        $user = $this->getUserFromRequest();
-
-        $userPictureProvider = $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
-
-        return $userPictureProvider->downloadUserPicture($user, $this->getUser());
+        return $this->getUserPictureProvider()->downloadUserPicture($this->getUserFromRequest());
     }
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exceptions\StorageNoResultException
      */
     protected function getUserFromRequest(): User
     {
@@ -54,5 +56,10 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
         }
 
         return $user;
+    }
+
+    public function getUserPictureProvider(): UserPictureProviderInterface
+    {
+        return $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
     }
 }

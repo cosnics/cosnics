@@ -1,19 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Format\Table;
 
-use Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface;
-use Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererModificationInterface;
+use Chamilo\Libraries\Format\Table\Interface\SimpleTableCellRendererInterface;
+use Chamilo\Libraries\Format\Table\Interface\SimpleTableCellRendererModificationInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_Table;
 use Symfony\Component\Translation\Translator;
 
 /**
- * Class that provides functions to create a simple table with given data A simple table is like the name says a table
- * that is not as abstract as the sortable table Good for tables that don't have lots of data.
- * To use this simpletable
- * you need to provide the defaultProperties you want to view, and provide an array with objects of a dataclass. You
- * also need to provide a cellrenderer so it's easy to add actions to a table row
- *
  * @package Chamilo\Libraries\Format\Table
  * @author  Sven Vanpoucke
  */

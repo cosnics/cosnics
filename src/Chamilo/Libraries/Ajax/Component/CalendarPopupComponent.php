@@ -3,10 +3,9 @@ namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
-use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Libraries\Ajax\Component
@@ -17,10 +16,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class CalendarPopupComponent extends Manager implements NoAuthenticationSupportInterface
 {
 
-    /**
-     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
-     */
-    public function run()
+    public function run(): Response
     {
         $translator = $this->getTranslator();
 
@@ -90,7 +86,7 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
         $html[] = '/* <![CDATA[ */';
         $html[] = 'var month_names = new Array(';
 
-        foreach ($MonthsLong as $index => $month)
+        foreach ($MonthsLong as $month)
         {
             $html[] = '"' . $month . '",';
         }
@@ -98,7 +94,7 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
 
         $html[] = 'var day_names = new Array(';
 
-        foreach ($DaysShort as $index => $day)
+        foreach ($DaysShort as $day)
         {
             $html[] = '"' . $day . '",';
         }
@@ -113,6 +109,6 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
         $html[] = '</script>';
         $html[] = $this->renderFooter();
 
-        return implode(PHP_EOL, $html);
+        return new Response(implode(PHP_EOL, $html));
     }
 }

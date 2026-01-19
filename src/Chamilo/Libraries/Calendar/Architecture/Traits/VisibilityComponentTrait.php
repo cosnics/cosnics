@@ -21,11 +21,11 @@ trait VisibilityComponentTrait
 
         if ($this->getVisibilityService()->changeVisibility($this->getUser()->getId(), $source))
         {
-            JsonAjaxResult::success();
+            return JsonAjaxResult::success();
         }
         else
         {
-            JsonAjaxResult::error(
+            return JsonAjaxResult::error(
                 500, $this->getTranslator()->trans(
                 'VisibilityNotChanged', [], StringUtilities::LIBRARIES
             )
@@ -37,7 +37,9 @@ trait VisibilityComponentTrait
 
     public function getRequiredPostParameters(array $postParameters = []): array
     {
-        return [self::PARAM_SOURCE];
+        $postParameters[] = self::PARAM_SOURCE;
+
+        return $postParameters;
     }
 
     abstract public function getTranslator(): Translator;

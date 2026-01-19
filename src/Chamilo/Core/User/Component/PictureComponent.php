@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -9,6 +8,7 @@ use Chamilo\Core\User\UserInterface\Form\PictureForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -25,7 +25,7 @@ class PictureComponent extends ProfileComponent
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \QuickformException
      */
-    public function run()
+    public function run(): Response
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageAccount');
         $translator = $this->getTranslator();
@@ -69,7 +69,7 @@ class PictureComponent extends ProfileComponent
                     $successMessage = 'UserProfileUpdated';
                 }
 
-                $this->redirectWithMessage(
+                return $this->redirectWithMessage(
                     $this->getTranslator()->trans($success ? $successMessage : $errorMessage), !$success, [
                         Application::PARAM_CONTEXT => $this->getContext(),
                         Application::PARAM_ACTION => self::ACTION_CHANGE_PICTURE
@@ -78,13 +78,15 @@ class PictureComponent extends ProfileComponent
             }
             else
             {
-                return $this->renderPage();
+                return new Response($this->renderPage());
             }
         }
         else
         {
-            return $this->display_error_page(
-                $translator->trans('UserPictureProviderDoesNotSuportUpdates', [], Manager::CONTEXT)
+            return new Response(
+                $this->display_error_page(
+                    $translator->trans('UserPictureProviderDoesNotSuportUpdates', [], Manager::CONTEXT)
+                )
             );
         }
     }
@@ -110,8 +112,10 @@ class PictureComponent extends ProfileComponent
         return $this->pictureForm;
     }
 
-    public function getUserPictureProvider(): UserPictureProviderInterface
+    public function getUserPictureProvider(): ?UserPictureUpdateProviderInterface
     {
-        return $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
+        $service = $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
+
+        return $service instanceof UserPictureUpdateProviderInterface ? $service : null;
     }
 }

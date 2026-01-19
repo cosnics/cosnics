@@ -4,6 +4,7 @@ namespace Chamilo\Core\Home\Component;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Home\Component
@@ -12,7 +13,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class ManagerComponent extends Manager
 {
 
-    public function run()
+    public function run(): Response
     {
         if ($this->getUser()->isPlatformAdmin())
         {

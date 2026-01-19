@@ -48,7 +48,7 @@ class Mail
     protected $to;
 
     /**
-     * Whether or not this mail should be send individually to the target users or not
+     * Whether this mail should be sent individually to the target users or not
      *
      * @var string[]
      */

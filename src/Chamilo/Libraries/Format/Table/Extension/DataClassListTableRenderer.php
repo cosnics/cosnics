@@ -6,7 +6,7 @@ use Chamilo\Libraries\Format\Table\ListTableRenderer;
 use Chamilo\Libraries\Format\Table\TableResultPosition;
 
 /**
- * @package Chamilo\Libraries\Format\Table\Extension\DataClassTable
+ * @package Chamilo\Libraries\Format\Table\Extension
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  * @author  Hans De Bisschop <hans.de.bisschop>
  */
@@ -17,7 +17,7 @@ abstract class DataClassListTableRenderer extends ListTableRenderer
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $dataClass): string
     {
-        return (string) $dataClass->getDefaultProperty($column->get_name());
+        return (string) $dataClass->getDefaultProperty($column->getName());
     }
 
     /**
