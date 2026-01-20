@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\StorageParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @package Chamilo\Configuration\Repository
+ * @package Chamilo\Configuration\Storage\Repository
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
@@ -28,11 +28,18 @@ class ConfigurationRepository
         $this->dataClassRepository = $dataClassRepository;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function createSetting(Setting $setting): bool
     {
         return $this->getDataClassRepository()->create($setting);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function deleteSetting(Setting $setting): bool
     {
         return $this->getDataClassRepository()->delete($setting);
@@ -62,6 +69,7 @@ class ConfigurationRepository
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findSettingContextsForCondition(?Condition $condition = null): array
     {
@@ -74,6 +82,9 @@ class ConfigurationRepository
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function findSettingsAsRecords(): ArrayCollection
     {
         return $this->getDataClassRepository()->records(
@@ -88,6 +99,9 @@ class ConfigurationRepository
         return $this->dataClassRepository;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function updateSetting(Setting $setting): bool
     {
         return $this->getDataClassRepository()->update($setting);

@@ -16,8 +16,8 @@ use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Ehb\Application\TimeEdit\User
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Admin\UserInterface\Table
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WhoIsOnlineTableRenderer extends DataClassListTableRenderer
 {

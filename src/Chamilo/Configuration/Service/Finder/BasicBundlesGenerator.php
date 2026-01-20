@@ -2,8 +2,8 @@
 namespace Chamilo\Configuration\Service\Finder;
 
 /**
- * @package Chamilo\Configuration\Package\Finder
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Configuration\Service\Finder
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BasicBundlesGenerator extends AbstractBundlesGenerator
 {

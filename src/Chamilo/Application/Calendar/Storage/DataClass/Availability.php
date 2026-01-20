@@ -20,34 +20,22 @@ class Availability extends DataClass
     public const PROPERTY_COLOUR = 'colour';
     public const PROPERTY_USER_ID = 'user_id';
 
-    /**
-     * @return int
-     */
-    public function getAvailability()
+    public function getAvailability(): bool
     {
         return $this->getDefaultProperty(self::PROPERTY_AVAILABILITY);
     }
 
-    /**
-     * @return string
-     */
-    public function getCalendarId()
+    public function getCalendarId(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_CALENDAR_ID);
     }
 
-    /**
-     * @return string
-     */
-    public function getCalendarType()
+    public function getCalendarType(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_CALENDAR_TYPE);
     }
 
-    /**
-     * @return string
-     */
-    public function getColour()
+    public function getColour(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_COLOUR);
     }
@@ -68,75 +56,58 @@ class Availability extends DataClass
         );
     }
 
-    /**
-     * @return string
-     */
     public static function getStorageUnitName(): string
     {
         return 'calendar_availability';
     }
 
-    /**
-     * @return int
-     */
-    public function getUserId()
+    public function getUserId(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
-    /**
-     * @return bool
-     */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->getAvailability() == true;
     }
 
-    /**
-     * @return bool
-     */
-    public function isInactive()
+    public function isInactive(): bool
     {
         return $this->getAvailability() == false;
     }
 
-    /**
-     * @param int $availability
-     */
-    public function setAvailability($availability)
+    public function setAvailability(bool $availability): static
     {
         $this->setDefaultProperty(self::PROPERTY_AVAILABILITY, $availability);
+
+        return $this;
     }
 
-    /**
-     * @param string $calendarId
-     */
-    public function setCalendarId($calendarId)
+    public function setCalendarId(string $calendarId): static
     {
         $this->setDefaultProperty(self::PROPERTY_CALENDAR_ID, $calendarId);
+
+        return $this;
     }
 
-    /**
-     * @param string $calendarType
-     */
-    public function setCalendarType($calendarType)
+    public function setCalendarType(string $calendarType): static
     {
         $this->setDefaultProperty(self::PROPERTY_CALENDAR_TYPE, $calendarType);
+
+        return $this;
     }
 
-    /**
-     * @param string $colour
-     */
-    public function setColour($colour)
+    public function setColour(string $colour): static
     {
         $this->setDefaultProperty(self::PROPERTY_COLOUR, $colour);
+
+        return $this;
     }
 
-    /**
-     * @param int $userId
-     */
-    public function setUserId($userId)
+    public function setUserId(string $userId): static
     {
         $this->setDefaultProperty(self::PROPERTY_USER_ID, $userId);
+
+        return $this;
     }
 }

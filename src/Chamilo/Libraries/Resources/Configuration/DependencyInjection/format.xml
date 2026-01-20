@@ -74,5 +74,11 @@
 
         <service id="Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorRenderer"/>
         <service id="Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptionsFactory"/>
+
+        <service id="Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuRenderer">
+            <argument key="$treeMenuDataProvider"
+                      type="service"
+                      id="Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider"/>
+        </service>
     </services>
 </container>

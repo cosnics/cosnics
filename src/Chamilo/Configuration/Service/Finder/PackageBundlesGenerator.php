@@ -6,7 +6,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\SystemPathBuilder;
 
 /**
- * @package Chamilo\Configuration\Package\Finder
+ * @package Chamilo\Configuration\Service\Finder
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>

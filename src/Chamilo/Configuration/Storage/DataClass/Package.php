@@ -5,8 +5,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use stdClass;
 
 /**
- * @package Chamilo\Configuration\Package\Storage\DataClass
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Configuration\Storage\DataClass
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Package extends DataClass
 {

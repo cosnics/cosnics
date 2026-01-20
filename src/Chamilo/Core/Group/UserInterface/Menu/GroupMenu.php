@@ -1,12 +1,10 @@
 <?php
 namespace Chamilo\Core\Group\UserInterface\Menu;
 
-use Chamilo\Core\Group\Ajax\Manager;
+use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
@@ -15,105 +13,54 @@ use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
- * @package group.lib
- */
-
-/**
- * This class provides a navigation menu to allow a user to browse through categories of courses.
- *
+ * @package Chamilo\Core\Group\UserInterface\Menu
  * @author Bart Mollet
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GroupMenu extends HtmlMenu
 {
     public const TREE_NAME = __CLASS__;
 
-    /**
-     * The array renderer used to determine the breadcrumbs.
-     */
-    private $array_renderer;
+    private HtmlMenuArrayRenderer $arrayRenderer;
 
-    private $current_category;
+    private Group $currentGroup;
 
-    private $hide_current_category;
+    private bool $hideCurrentCategory;
 
-    private $include_root;
+    private bool $includeRoot;
 
-    private $show_complete_tree;
+    private bool $showCompleteTree;
 
-    /**
-     * The string passed to sprintf() to format category URLs
-     */
-    private $urlFmt;
+    private string $urlFormat;
 
     /**
-     * Creates a new category navigation menu.
-     *
-     * @param int $owner The ID of the owner of the categories to provide in this menu.
-     * @param int $current_category The ID of the current category in the menu.
-     * @param string $url_format The format to use for the URL of a category. Passed to sprintf(). Defaults to the
-     *                              string "?category=%s".
-     * @param array $extra_items An array of extra tree items, added to the root.
-     *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function __construct(
-        $current_category, $url_format = '?application=group&go=browser&group_id=%s', $include_root = true,
-        $show_complete_tree = false, $hide_current_category = false
+        Group $currentGroup, string $urlFormat, bool $includeRoot = true, bool $showCompleteTree = false,
+        bool $hideCurrentCategory = false
     )
     {
-        $this->include_root = $include_root;
-        $this->show_complete_tree = $show_complete_tree;
-        $this->hide_current_category = $hide_current_category;
+        $this->includeRoot = $includeRoot;
+        $this->showCompleteTree = $showCompleteTree;
+        $this->hideCurrentCategory = $hideCurrentCategory;
+        $this->currentGroup = $currentGroup;
+        $this->urlFormat = $urlFormat;
+        $menu = $this->getMenu();
 
-        if ($current_category == '0' || is_null($current_category))
-        {
-            $this->current_category = $this->getGroupService()->findRootGroup();
-        }
-        else
-        {
-            $this->current_category = $this->getGroupService()->findGroupByIdentifier((string) $current_category);
-        }
-
-        if (!$this->current_category instanceof Group)
-        {
-            throw new ObjectNotExistException(
-                $this->getTranslator()->trans('Group', [], 'Chamilo\Core\Group')
-            );
-        }
-
-        $this->urlFmt = $url_format;
-        $menu = $this->get_menu();
         parent::__construct($menu);
-        $this->array_renderer = new HtmlMenuArrayRenderer();
-        $this->forceCurrentUrl($this->getUrl($this->current_category->getId()));
+
+        $this->arrayRenderer = new HtmlMenuArrayRenderer();
+        $this->forceCurrentUrl($this->getUrl($this->currentGroup->getId()));
     }
 
-    /**
-     * Gets the URL of a given category
-     *
-     * @param int $category The id of the category
-     *
-     * @return string The requested URL
-     */
-    public function getUrl($group)
+    public function getBreadcrumbs(): array
     {
-        return htmlentities(sprintf($this->urlFmt, $group));
-    }
+        $this->render($this->arrayRenderer, 'urhere');
 
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
-    }
+        $breadcrumbs = $this->arrayRenderer->toArray();
 
-    /**
-     * Get the breadcrumbs which lead to the current category.
-     *
-     * @return array The breadcrumbs.
-     */
-    public function get_breadcrumbs()
-    {
-        $this->render($this->array_renderer, 'urhere');
-        $breadcrumbs = $this->array_renderer->toArray();
         foreach ($breadcrumbs as $crumb)
         {
             $crumb['name'] = $crumb['title'];
@@ -123,113 +70,121 @@ class GroupMenu extends HtmlMenu
         return $breadcrumbs;
     }
 
-    private function get_home_url(): string
+    private function getHomeUrl(): string
     {
-        return htmlentities(str_replace('&group_id=%s', '', $this->urlFmt));
+        return $this->getUrlGenerator()->fromParameters(
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_BROWSE_GROUPS]
+        );
     }
 
-    public function get_menu()
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
+    public function getMenu(): array
     {
-        $include_root = $this->include_root;
+        $include_root = $this->includeRoot;
 
         $group = $this->getGroupService()->findRootGroup();
 
         if (!$include_root)
         {
-            return $this->get_menu_items($group->getId());
+            return $this->getMenuItems($group->getId());
         }
         else
         {
             $menu = [];
 
-            $menu_item = [];
-            $menu_item['title'] = $group->get_name();
-            $menu_item['url'] = $this->get_home_url();
+            $menuItem = [];
+            $menuItem['title'] = $group->getName();
+            $menuItem['url'] = $this->getHomeUrl();
 
-            $sub_menu_items = $this->get_menu_items($group->getId());
-            if (count($sub_menu_items) > 0)
+            $subMenuItems = $this->getMenuItems($group->getId());
+
+            if (count($subMenuItems) > 0)
             {
-                $menu_item['sub'] = $sub_menu_items;
+                $menuItem['sub'] = $subMenuItems;
             }
 
             $glyph = new FontAwesomeGlyph('home', [], null, 'fas');
-            $menu_item['class'] = $glyph->getClassNamesString();
-            $menu_item[OptionsMenuRenderer::KEY_ID] = $group->getId();
-            $menu[$group->getId()] = $menu_item;
+
+            $menuItem['class'] = $glyph->getClassNamesString();
+            $menuItem[OptionsMenuRenderer::KEY_ID] = $group->getId();
+
+            $menu[$group->getId()] = $menuItem;
 
             return $menu;
         }
     }
 
     /**
-     * Returns the menu items.
-     *
-     * @param array $extra_items An array of extra tree items, added to the root.
-     *
-     * @return array An array with all menu items. The structure of this array is the structure needed by
-     *         PEAR::HTML_Menu, on which this class is based.
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    private function get_menu_items($parent_id = 0)
+    private function getMenuItems($parent_id = 0): array
     {
-        $current_category = $this->current_category;
+        $currentGroup = $this->currentGroup;
 
-        $show_complete_tree = $this->show_complete_tree;
-        $hide_current_category = $this->hide_current_category;
+        $showCompleteTree = $this->showCompleteTree;
+        $hideCurrentCategory = $this->hideCurrentCategory;
 
         $groups = $this->getGroupService()->findGroupsForParentIdentifier($parent_id);
 
+        $menu = [];
+
         foreach ($groups as $group)
         {
-            $group_id = $group->getId();
-
-            if (!($group_id == $current_category->getId() && $hide_current_category))
+            if (!($group->getId() == $currentGroup->getId() && $hideCurrentCategory))
             {
-                $menu_item = [];
+                $menuItem = [];
 
-                $menu_item['title'] = $group->get_name();
-                $menu_item['url'] = $this->getUrl($group->getId());
+                $menuItem['title'] = $group->getName();
+                $menuItem['url'] = $this->getUrl($group->getId());
 
-                if ($group->isAncestorOf($current_category) || $group->getId() == $current_category->getId() ||
-                    $show_complete_tree)
+                if ($group->isAncestorOf($currentGroup) || $group->getId() == $currentGroup->getId() ||
+                    $showCompleteTree)
                 {
                     if ($group->hasChildren())
                     {
-                        $menu_item['sub'] = $this->get_menu_items($group->getId());
+                        $menuItem['sub'] = $this->getMenuItems($group->getId());
                     }
                 }
                 elseif ($group->hasChildren())
                 {
-                    $menu_item['children'] = 'expand';
+                    $menuItem['children'] = 'expand';
                 }
 
                 $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
-                $menu_item['class'] = $glyph->getClassNamesString();
-                $menu_item[OptionsMenuRenderer::KEY_ID] = $group->getId();
-                $menu[$group->getId()] = $menu_item;
+                $menuItem['class'] = $glyph->getClassNamesString();
+                $menuItem[OptionsMenuRenderer::KEY_ID] = $group->getId();
+
+                $menu[$group->getId()] = $menuItem;
             }
         }
 
         return $menu;
     }
 
-    public static function get_tree_name()
+    public function getUrl($group): string
     {
-        return ClassnameUtilities::getInstance()->getClassnameFromNamespace(self::TREE_NAME, true);
+        return htmlentities(sprintf($this->urlFormat, $group));
     }
 
-    /**
-     * Renders the menu as a tree
-     *
-     * @return string The HTML formatted tree
-     */
-    public function render_as_tree()
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
+    }
+
+    public function renderAsTree(): string
     {
         $feedUrl = $this->getUrlGenerator()->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => 'xml_group_menu_feed']
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => Manager::ACTION_XML_GROUP_MENU_FEED
+            ]
         );
 
-        $renderer = new TreeMenuRenderer($this->get_tree_name(), $feedUrl, $this->urlFmt);
+        $renderer = new TreeMenuRenderer('group_menu', $feedUrl, $this->urlFormat);
         $this->render($renderer, 'sitemap');
 
         return $renderer->toHtml();

@@ -28,6 +28,7 @@ class WhoisOnlineComponent extends Manager
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \TableException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function run(): Response
     {
@@ -71,6 +72,9 @@ class WhoisOnlineComponent extends Manager
         return $this->getService(WhoIsOnlineService::class);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function getWhoIsOnlineTableCondition(): Condition
     {
         $userIdentifiers = $this->getWhoIsOnlineService()->findDistinctOnlineUserIdentifiers();
@@ -94,12 +98,6 @@ class WhoisOnlineComponent extends Manager
         return $this->getService(WhoIsOnlineTableRenderer::class);
     }
 
-    /**
-     * @param string $userIdentifier
-     *
-     * @return string
-     * @throws \TableException
-     */
     private function renderUserInformation(string $userIdentifier): string
     {
         return $this->getUserDetailsRenderer()->renderUserDetailsForUserIdentifier($userIdentifier, $this->getUser());
@@ -109,6 +107,7 @@ class WhoisOnlineComponent extends Manager
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     private function renderWhoIsOnlineTable(): string
     {

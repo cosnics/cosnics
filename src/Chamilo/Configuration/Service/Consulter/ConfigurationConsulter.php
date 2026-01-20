@@ -25,10 +25,8 @@ class ConfigurationConsulter
 
     /**
      * @param string[] $keys
-     *
-     * @return string|string[]
      */
-    public function getSetting(array $keys)
+    public function getSetting(array $keys): mixed
     {
         try
         {

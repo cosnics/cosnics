@@ -65,11 +65,8 @@ class RecurrenceCalculator
 
         foreach ($recurringEvents as $key => $event)
         {
-            $startDateTime = new DateTime();
-            $startDateTime->setTimestamp($event->getStartDate());
-
-            $endDateTime = new DateTime();
-            $endDateTime->setTimestamp($event->getEndDate());
+            $startDateTime = new DateTime('@' . $event->getStartDate());
+            $endDateTime = new DateTime('@' . $event->getEndDate());
 
             /**
              * @var \Sabre\VObject\Component\VEvent $vEvent
@@ -88,11 +85,8 @@ class RecurrenceCalculator
             $vEvent->add('UID', uniqid());
         }
 
-        $fromDateTime = new DateTime();
-        $fromDateTime->setTimestamp($this->getStartTime());
-
-        $toDateTime = new DateTime();
-        $toDateTime->setTimestamp($this->getEndTime());
+        $fromDateTime = new DateTime('@' . $this->getStartTime());
+        $toDateTime = new DateTime('@' . $this->getEndTime());
 
         $vCalendar = $vCalendar->expand($fromDateTime, $toDateTime);
         $calculatedEvents = $vCalendar->VEVENT;

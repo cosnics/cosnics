@@ -4,9 +4,8 @@ namespace Chamilo\Core\Admin;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
- * The admin allows the platform admin to configure certain aspects of his platform
- *
- * @author Hans De Bisschop
+ * @package Chamilo\Core\Admin
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Dieter De Neef
  */
 abstract class Manager extends Application
@@ -23,8 +22,8 @@ abstract class Manager extends Application
     public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_ADMIN_BROWSER;
 
-    public const PARAM_SELECTED_CONTEXT = 'context';
     public const PARAM_DELETE_SELECTED = 'delete_selected';
     public const PARAM_EDIT_SELECTED = 'edit_selected';
+    public const PARAM_SELECTED_CONTEXT = 'context';
     public const PARAM_USER_ID = 'user_id';
 }

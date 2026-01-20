@@ -4,6 +4,10 @@ namespace Chamilo\Core\Group\Storage\DataClass;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 
+/**
+ * @package Chamilo\Core\Group\Storage\DataClass
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class SubscribedUser extends User
 {
     public const CONTEXT = Manager::CONTEXT;

@@ -2,8 +2,7 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Architecture\Domain;
 
 /**
- *
- * @package Chamilo\Application\Calendar\Extension\Google
+ * @package Chamilo\Application\Calendar\Extension\Google\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -11,88 +10,52 @@ namespace Chamilo\Application\Calendar\Extension\Google\Architecture\Domain;
 class CalendarProperties
 {
 
-    /**
-     *
-     * @var string
-     */
-    private $summary;
+    private string $description;
 
-    /**
-     *
-     * @var string
-     */
-    private $description;
+    private string $summary;
 
-    /**
-     *
-     * @var string
-     */
-    private $timeZone;
+    private string $timeZone;
 
-    /**
-     *
-     * @param string $summary
-     * @param string $description
-     * @param string $timeZone
-     */
-    public function __construct($summary, $description, $timeZone)
+    public function __construct(string $summary, string $description, string $timeZone)
     {
         $this->summary = $summary;
         $this->description = $description;
         $this->timeZone = $timeZone;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getSummary()
-    {
-        return $this->summary;
-    }
-
-    /**
-     *
-     * @param string $summary
-     */
-    public function setSummary($summary)
-    {
-        $this->summary = $summary;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     *
-     * @param string $description
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getTimeZone()
+    public function getSummary(): string
+    {
+        return $this->summary;
+    }
+
+    public function setSummary(string $summary): static
+    {
+        $this->summary = $summary;
+
+        return $this;
+    }
+
+    public function getTimeZone(): string
     {
         return $this->timeZone;
     }
 
-    /**
-     *
-     * @param string $timeZone
-     */
-    public function setTimeZone($timeZone)
+    public function setTimeZone(string $timeZone): static
     {
         $this->timeZone = $timeZone;
+
+        return $this;
     }
 }

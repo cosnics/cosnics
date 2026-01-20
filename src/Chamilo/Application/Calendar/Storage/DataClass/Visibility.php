@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Storage\DataClass;
 use Chamilo\Application\Calendar\Manager;
 
 /**
- * @package application\calendar
+ * @package Chamilo\Application\Calendar\Storage\DataClass
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>

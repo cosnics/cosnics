@@ -6,7 +6,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
- * @package Chamilo\Core\Admin\Form
+ * @package Chamilo\Core\Admin\UserInterface\Form
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Dieter De Neef
  */
@@ -32,7 +32,7 @@ class AdminSearchForm extends FormValidator
     /**
      * @throws \QuickformException
      */
-    private function build()
+    private function build(): void
     {
         $renderer = $this->get_renderer();
 

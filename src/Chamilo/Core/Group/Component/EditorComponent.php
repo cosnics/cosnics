@@ -16,7 +16,11 @@ class EditorComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
+     * @throws \Throwable
      */
     public function run(): Response
     {
@@ -50,8 +54,8 @@ class EditorComponent extends Manager
 
             if ($form->validate())
             {
-                $success = $form->update_group();
-                $group = $form->get_group();
+                $success = $form->updateGroup();
+                $group = $form->getGroup();
                 $message = $success ? $translator->trans(
                     'ObjectUpdated', ['OBJECT' => $translator->trans('Group', [], Manager::CONTEXT)],
                     StringUtilities::LIBRARIES

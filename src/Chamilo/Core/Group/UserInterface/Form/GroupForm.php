@@ -4,6 +4,7 @@ namespace Chamilo\Core\Group\UserInterface\Form;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\UserInterface\Menu\GroupMenu;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -21,12 +22,13 @@ class GroupForm extends FormValidator
     public const TYPE_CREATE = 'create';
     public const TYPE_EDIT = 'edit';
 
-    private string $form_type;
+    private string $formType;
 
     private Group $group;
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      */
     public function __construct(string $form_type, Group $group, string $action)
@@ -34,24 +36,26 @@ class GroupForm extends FormValidator
         parent::__construct('groups_settings', self::FORM_METHOD_POST, $action);
 
         $this->group = $group;
-        $this->form_type = $form_type;
-        if ($this->form_type == self::TYPE_EDIT)
+        $this->formType = $form_type;
+
+        if ($this->formType == self::TYPE_EDIT)
         {
-            $this->build_editing_form();
+            $this->buildEditingForm();
         }
-        elseif ($this->form_type == self::TYPE_CREATE)
+        elseif ($this->formType == self::TYPE_CREATE)
         {
-            $this->build_creation_form();
+            $this->buildCreationForm();
         }
 
         $this->setDefaults();
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function build_basic_form(): void
+    public function buildBasicForm(): void
     {
         $this->addElement('text', Group::PROPERTY_NAME, $this->getTranslation('Name', [], Manager::CONTEXT),
             ['size' => '50']);
@@ -67,7 +71,7 @@ class GroupForm extends FormValidator
 
         $this->addElement(
             'select', NestedSet::PROPERTY_PARENT_ID, $this->getTranslation('Location', [], Manager::CONTEXT),
-            $this->get_groups()
+            $this->getGroups()
         );
         $this->addRule(
             NestedSet::PROPERTY_PARENT_ID, $this->getTranslation('ThisFieldIsRequired'), 'required'
@@ -79,12 +83,13 @@ class GroupForm extends FormValidator
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function build_creation_form(): void
+    public function buildCreationForm(): void
     {
-        $this->build_basic_form();
+        $this->buildBasicForm();
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit', $this->getTranslation('Create')
@@ -97,12 +102,13 @@ class GroupForm extends FormValidator
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function build_editing_form(): void
+    public function buildEditingForm(): void
     {
-        $this->build_basic_form();
+        $this->buildBasicForm();
 
         $this->addElement('hidden', DataClass::PROPERTY_ID);
 
@@ -126,27 +132,37 @@ class GroupForm extends FormValidator
         $group = $this->group;
         $values = $this->exportValues();
 
-        $group->set_name($values[Group::PROPERTY_NAME]);
-        $group->set_description($values[Group::PROPERTY_DESCRIPTION]);
-        $group->set_code($values[Group::PROPERTY_CODE]);
+        $group->setName($values[Group::PROPERTY_NAME]);
+        $group->setDescription($values[Group::PROPERTY_DESCRIPTION]);
+        $group->setCode($values[Group::PROPERTY_CODE]);
         $group->setParentId($values[NestedSet::PROPERTY_PARENT_ID]);
 
         return $this->getGroupService()->createGroup($group);
     }
 
-    public function get_group(): Group
+    public function getGroup(): Group
     {
         return $this->group;
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @return array
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function get_groups(): array
+    public function getGroups(): array
     {
         $group = $this->group;
 
-        $group_menu = new GroupMenu($group->getId(), null, true, true, true);
+        $urlFormat = $this->getUrlGenerator()->fromParameters(
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => Manager::ACTION_BROWSE_GROUPS,
+                Manager::PARAM_GROUP_ID => '%s'
+            ]
+        );
+
+        $group_menu = new GroupMenu($group, $urlFormat, true, true, true);
         $renderer = new OptionsMenuRenderer();
         $group_menu->render($renderer, 'sitemap');
 
@@ -162,9 +178,9 @@ class GroupForm extends FormValidator
 
         $defaults[DataClass::PROPERTY_ID] = $group->getId();
         $defaults[NestedSet::PROPERTY_PARENT_ID] = $group->getParentId();
-        $defaults[Group::PROPERTY_NAME] = $group->get_name();
-        $defaults[Group::PROPERTY_CODE] = $group->get_code();
-        $defaults[Group::PROPERTY_DESCRIPTION] = $group->get_description();
+        $defaults[Group::PROPERTY_NAME] = $group->getName();
+        $defaults[Group::PROPERTY_CODE] = $group->getCode();
+        $defaults[Group::PROPERTY_DESCRIPTION] = $group->getDescription();
 
         parent::setDefaults($defaults);
     }
@@ -176,14 +192,14 @@ class GroupForm extends FormValidator
      * @throws \QuickformException
      * @throws \Throwable
      */
-    public function update_group(): bool
+    public function updateGroup(): bool
     {
         $group = $this->group;
         $values = $this->exportValues();
 
-        $group->set_name($values[Group::PROPERTY_NAME]);
-        $group->set_description($values[Group::PROPERTY_DESCRIPTION]);
-        $group->set_code($values[Group::PROPERTY_CODE]);
+        $group->setName($values[Group::PROPERTY_NAME]);
+        $group->setDescription($values[Group::PROPERTY_DESCRIPTION]);
+        $group->setCode($values[Group::PROPERTY_CODE]);
 
         if (!$this->getGroupService()->updateGroup($group))
         {

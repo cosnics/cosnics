@@ -5,7 +5,6 @@ use Chamilo\Application\Calendar\Extension\Office365\Architecture\Domain\Event;
 use Chamilo\Application\Calendar\Extension\Office365\Manager;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Libraries\Calendar\Event\EventAttendee;
-use DateMalformedStringException;
 use DateTime;
 use DateTimeZone;
 use Exception;
@@ -75,7 +74,6 @@ class EventParser
      * @param ?\Microsoft\Graph\Generated\Models\Attendee[] $attendees
      *
      * @return \Chamilo\Libraries\Calendar\Event\EventAttendee[]
-     * @throws \DateMalformedStringException
      */
     private function getAttendees(?array $attendees): array
     {
@@ -117,6 +115,7 @@ class EventParser
 
     /**
      * @return \Chamilo\Application\Calendar\Extension\Office365\Architecture\Domain\Event[]
+     * @throws \Exception
      */
     public function getEvents(
         AvailableCalendar $availableCalendar, \Microsoft\Graph\Generated\Models\Event $sourceEvent
@@ -145,7 +144,7 @@ class EventParser
 
             return [$event];
         }
-        catch (DateMalformedStringException)
+        catch (Exception)
         {
             return [];
         }
@@ -185,7 +184,7 @@ class EventParser
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * @throws \Exception
      */
     private function getTimestamp(string $eventDateTime, ?string $eventTimeZone = null, bool $isAllDay = false): int
     {

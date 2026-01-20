@@ -6,8 +6,8 @@ use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserDeleteEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * @package Chamilo\Core\Group\EventDispatcher\Subscriber
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Group\Architecture\EventDispatcher\Subscriber
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserEventSubscriber implements EventSubscriberInterface
 {
@@ -19,6 +19,10 @@ class UserEventSubscriber implements EventSubscriberInterface
         $this->groupMembershipService = $groupMembershipService;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function beforeDelete(BeforeUserDeleteEvent $beforeUserDeleteEvent): bool
     {
         return $this->getGroupMembershipService()->unsubscribeUserFromAllGroups($beforeUserDeleteEvent->getUser());

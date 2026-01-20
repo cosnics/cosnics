@@ -17,6 +17,9 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use DateTime;
+use Detection\MobileDetect;
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -30,8 +33,12 @@ class BrowserComponent extends Manager
 
     protected CalendarRendererProvider $calendarRendererProvider;
 
+    private int $currentTime;
+
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run(): Response
@@ -108,6 +115,52 @@ class BrowserComponent extends Manager
         return $this->calendarRendererProvider;
     }
 
+    public function getCurrentRendererTime(): int
+    {
+        if (!isset($this->currentTime))
+        {
+            $defaultRenderDate = new DateTime();
+            $defaultRenderDate->setTime(0, 0);
+
+            $this->currentTime = $this->getRequest()->query->get(
+                HtmlCalendarRenderer::PARAM_TIME, $defaultRenderDate->getTimestamp()
+            );
+        }
+
+        return $this->currentTime;
+    }
+
+    public function getCurrentRendererType(): string
+    {
+        $rendererType = $this->getRequest()->query->get(HtmlCalendarRenderer::PARAM_TYPE);
+
+        if (!$rendererType)
+        {
+            $rendererType = $this->getUserSettingService()->getSettingForUser(
+                $this->getUser(), 'Chamilo\Libraries', 'calendar_default_view'
+            );
+
+            if ($rendererType == HtmlCalendarRenderer::TYPE_MONTH)
+            {
+                $detect = new MobileDetect();
+
+                try
+                {
+                    if ($detect->isMobile() && !$detect->isTablet())
+                    {
+                        $rendererType = HtmlCalendarRenderer::TYPE_LIST;
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+        }
+
+        return $rendererType;
+    }
+
     protected function getGeneralActions(): ButtonGroup
     {
         $translator = $this->getTranslator();
@@ -168,9 +221,9 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
      */
-    protected function getViewActions()
+    protected function getViewActions(): array
     {
         $actions = [];
 
@@ -204,6 +257,13 @@ class BrowserComponent extends Manager
         return $renderer->render(
             $this->getCalendarRendererProvider(), $this->getCurrentRendererTime(), $this->getViewActions()
         );
+    }
+
+    public function setCurrentRendererTime(int $currentTime): static
+    {
+        $this->currentTime = $currentTime;
+
+        return $this;
     }
 
 }

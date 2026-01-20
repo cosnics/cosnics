@@ -100,7 +100,7 @@ class AvailabilityForm extends FormValidator
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      */
-    private function setValues()
+    private function setValues(): void
     {
         $defaultValues = [];
         $calendarAvailabilities = $this->getAvailabilityService()->getAvailabilitiesForUser($this->getUser());

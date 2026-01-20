@@ -4,8 +4,8 @@ namespace Chamilo\Configuration\Service\Finder;
 use Chamilo\Libraries\File\SystemPathBuilder;
 
 /**
- * @package Chamilo\Configuration\Package\Finder
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Configuration\Service\Finder
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class AbstractBundlesGenerator
 {

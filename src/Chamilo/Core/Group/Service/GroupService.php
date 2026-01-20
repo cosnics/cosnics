@@ -20,8 +20,6 @@ use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Service to manage the groups of Chamilo
- *
  * @package Chamilo\Core\Group\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -354,6 +352,7 @@ class GroupService
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function truncateGroup(Group $group): bool
     {

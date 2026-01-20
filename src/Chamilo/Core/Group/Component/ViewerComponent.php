@@ -70,9 +70,9 @@ class ViewerComponent extends Manager
         $html[] = '</div>';
 
         $html[] = '<div class="panel-body">';
-        $html[] = '<b>' . $translator->trans('Code', [], Manager::CONTEXT) . '</b>: ' . $group->get_code();
+        $html[] = '<b>' . $translator->trans('Code', [], Manager::CONTEXT) . '</b>: ' . $group->getCode();
         $html[] = '<br /><b>' . $translator->trans('Description', [], StringUtilities::LIBRARIES) . '</b>: ' .
-            $group->get_description();
+            $group->getDescription();
         $html[] = '</div>';
 
         $html[] = '</div>';

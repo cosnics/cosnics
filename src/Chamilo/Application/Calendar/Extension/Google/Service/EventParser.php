@@ -57,7 +57,6 @@ class EventParser
 
     /**
      * @return \Chamilo\Application\Calendar\Extension\Google\Architecture\Domain\Event[]
-     * @throws \DateMalformedStringException
      * @throws \DateInvalidTimeZoneException
      */
     public function getEvents(CalendarProperties $calendarProperties, Google_Service_Calendar_Event $googleCalendarEvent
@@ -104,8 +103,8 @@ class EventParser
     }
 
     /**
-     * @throws \DateMalformedStringException
      * @throws \DateInvalidTimeZoneException
+     * @throws \Exception
      */
     private function getTimestamp(Google_Service_Calendar_EventDateTime $eventDateTime, string $calendarTimeZone): int
     {

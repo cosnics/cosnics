@@ -68,8 +68,8 @@ class UnsubscriberComponent extends Manager
                     continue;
                 }
 
-                $group = $groupService->findGroupByIdentifier($groupUserRelation->get_group_id());
-                $user = $userService->findUserByIdentifier($groupUserRelation->get_user_id());
+                $group = $groupService->findGroupByIdentifier($groupUserRelation->getGroupId());
+                $user = $userService->findUserByIdentifier($groupUserRelation->getUserId());
 
                 try
                 {

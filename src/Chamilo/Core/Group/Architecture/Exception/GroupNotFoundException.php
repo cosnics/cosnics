@@ -4,7 +4,7 @@ namespace Chamilo\Core\Group\Architecture\Exception;
 use RuntimeException;
 
 /**
- * @package Chamilo\Core\Group\Storage\Exception
+ * @package Chamilo\Core\Group\Architecture\Exception
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GroupNotFoundException extends RuntimeException

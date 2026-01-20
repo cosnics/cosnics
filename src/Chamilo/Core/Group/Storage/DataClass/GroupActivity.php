@@ -69,35 +69,35 @@ class GroupActivity extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
-    public function setAction(int $action): GroupActivity
+    public function setAction(int $action): static
     {
         $this->setDefaultProperty(self::PROPERTY_ACTION, $action);
 
         return $this;
     }
 
-    public function setDate(int $date): GroupActivity
+    public function setDate(int $date): static
     {
         $this->setDefaultProperty(self::PROPERTY_DATE, $date);
 
         return $this;
     }
 
-    public function setGroupIdentifier(string $groupIdentifier): GroupActivity
+    public function setGroupIdentifier(string $groupIdentifier): static
     {
         $this->setDefaultProperty(self::PROPERTY_GROUP_ID, $groupIdentifier);
 
         return $this;
     }
 
-    public function setTargetUserIdentifier(?string $targetUserIdentifier): GroupActivity
+    public function setTargetUserIdentifier(?string $targetUserIdentifier): static
     {
         $this->setDefaultProperty(self::PROPERTY_TARGET_USER_ID, $targetUserIdentifier);
 
         return $this;
     }
 
-    public function setUserIdentifier(?string $userIdentifier): GroupActivity
+    public function setUserIdentifier(?string $userIdentifier): static
     {
         $this->setDefaultProperty(self::PROPERTY_USER_ID, $userIdentifier);
 

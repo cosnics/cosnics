@@ -11,6 +11,7 @@ use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use IntlDateFormatter;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -128,11 +129,13 @@ class WeekCalendarRenderer extends SidebarTableCalendarRenderer
         $titleParts[] = $this->getTranslator()->trans('Week', [], StringUtilities::LIBRARIES);
         $titleParts[] = $weekNumber;
         $titleParts[] = ':';
-        $titleParts[] =
-            $dateTimeUtilities->formatLocaleDate('%A %d %B %Y', $calendarTableBuilder->getTableStartTime($displayTime));
+        $titleParts[] = $dateTimeUtilities->formatLocaleDate(
+            $calendarTableBuilder->getTableStartTime($displayTime), IntlDateFormatter::FULL, IntlDateFormatter::NONE
+        );
         $titleParts[] = '-';
         $titleParts[] = $dateTimeUtilities->formatLocaleDate(
-            '%A %d %B %Y', strtotime('+6 Days', $calendarTableBuilder->getTableStartTime($displayTime))
+            strtotime('+6 Days', $calendarTableBuilder->getTableStartTime($displayTime)), IntlDateFormatter::FULL,
+            IntlDateFormatter::NONE
         );
 
         return implode(' ', $titleParts);

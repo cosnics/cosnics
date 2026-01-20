@@ -53,6 +53,8 @@ class ConfigurationService
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function createSetting(Setting $setting): bool
@@ -68,6 +70,8 @@ class ConfigurationService
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function createSettingFromParameters(
@@ -85,6 +89,7 @@ class ConfigurationService
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function deleteSetting(Setting $setting): bool
@@ -115,6 +120,8 @@ class ConfigurationService
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function deleteSettingForContextAndVariableName(string $context, string $variableName): bool
@@ -142,6 +149,7 @@ class ConfigurationService
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findSettingContextsForCondition(?Condition $condition = null): array
     {
@@ -169,6 +177,7 @@ class ConfigurationService
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function updateSetting(Setting $setting): bool
@@ -184,6 +193,8 @@ class ConfigurationService
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function updateSettingFromParameters(

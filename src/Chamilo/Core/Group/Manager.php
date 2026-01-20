@@ -15,12 +15,15 @@ abstract class Manager extends Application
     public const ACTION_CREATE_GROUP = 'Creator';
     public const ACTION_DELETE_GROUP = 'Deleter';
     public const ACTION_EDIT_GROUP = 'Editor';
+    public const ACTION_GROUP_TREE_DATA = 'GroupTreeData';
     public const ACTION_MOVE_GROUP = 'Mover';
+    public const ACTION_PLATFORM_GROUPS_FEED = 'PlatformGroupsFeed';
     public const ACTION_SUBSCRIBE_USER_BROWSER = 'SubscribeUserBrowser';
     public const ACTION_SUBSCRIBE_USER_TO_GROUP = 'Subscriber';
     public const ACTION_TRUNCATE_GROUP = 'Truncater';
     public const ACTION_UNSUBSCRIBE_USER_FROM_GROUP = 'Unsubscriber';
     public const ACTION_VIEW_GROUP = 'Viewer';
+    public const ACTION_XML_GROUP_MENU_FEED = 'XmlGroupMenuFeed';
 
     public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE_GROUPS;

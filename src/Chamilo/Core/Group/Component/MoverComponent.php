@@ -16,7 +16,11 @@ class MoverComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
+     * @throws \Throwable
      */
     public function run(): Response
     {
@@ -43,8 +47,8 @@ class MoverComponent extends Manager
 
         if ($form->validate())
         {
-            $success = $form->move_group();
-            $parent = $form->get_new_parent();
+            $success = $form->moveGroup();
+            $parent = $form->getNewParent();
             $message = $translator->trans(
                 $success ? 'ObjectMoved' : 'ObjectNotMoved', ['OBJECT' => $translator->trans('Group')],
                 StringUtilities::LIBRARIES
@@ -63,7 +67,7 @@ class MoverComponent extends Manager
             $html = [];
 
             $html[] = $this->renderHeader();
-            $html[] = $translator->trans('Group') . ': ' . $group->get_name();
+            $html[] = $translator->trans('Group') . ': ' . $group->getName();
             $html[] = $form->render();
             $html[] = $this->renderFooter();
 

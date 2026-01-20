@@ -4,8 +4,7 @@ namespace Chamilo\Application\Calendar\Extension\Office365;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
- *
- * @package application\calendar
+ * @package Chamilo\Application\Calendar\Extension\Office365
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends Application
@@ -16,5 +15,4 @@ abstract class Manager extends Application
     public const CONTEXT = __NAMESPACE__;
 
     public const DEFAULT_ACTION = self::ACTION_LOGIN;
-    public const PARAM_ACTION = 'office365_action';
 }

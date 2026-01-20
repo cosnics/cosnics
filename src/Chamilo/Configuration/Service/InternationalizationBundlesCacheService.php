@@ -8,7 +8,7 @@ use Chamilo\Libraries\Cache\Traits\SimpleCacheDataPreLoaderTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
- * @package Chamilo\Configuration\Package\Service
+ * @package Chamilo\Configuration\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>

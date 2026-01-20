@@ -9,7 +9,7 @@ use Chamilo\Libraries\Calendar\Architecture\Interfaces\VisibilitySupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 /**
- * @package Chamilo\Application\Calendar\Service
+ * @package Chamilo\Application\Calendar\Implementation\Libraries
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -18,29 +18,21 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     implements VisibilitySupport
 {
 
-    /**
-     * @var \Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository
-     */
-    private $dataProviderRepository;
+    private VisibilityRepository $dataProviderRepository;
 
     /**
      * @var \Chamilo\Application\Calendar\Storage\DataClass\Visibility[]
      */
-    private $visibilities;
+    private array $visibilities;
+
+    private string $visibilityContext;
 
     /**
-     * @var string
-     */
-    private $visibilityContext;
-
-    /**
-     * @param \Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository $dataProviderRepository
-     * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
      * @param string[] $displayParameters ;
-     * @param string $visibilityContext
      */
     public function __construct(
-        VisibilityRepository $dataProviderRepository, User $dataUser, $displayParameters, $visibilityContext
+        VisibilityRepository $dataProviderRepository, User $dataUser, array $displayParameters,
+        string $visibilityContext
     )
     {
         $this->dataProviderRepository = $dataProviderRepository;
@@ -81,15 +73,15 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
         return $calendarProvider->getCalendarExtensionDataProviders();
     }
 
-    /**
-     * @return \Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository
-     */
-    public function getCalendarRendererProviderRepository()
+    public function getCalendarRendererProviderRepository(): VisibilityRepository
     {
         return $this->dataProviderRepository;
     }
 
-    public function getSourceNames()
+    /**
+     * @return string[]
+     */
+    public function getSourceNames(): array
     {
         $sourceNames = [];
 
@@ -108,7 +100,11 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(UrlGenerator::class);
     }
 
-    public function getVisibilities($userIdentifier)
+    /**
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\Visibility[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function getVisibilities($userIdentifier): array
     {
         if (!isset($this->visibilities))
         {
@@ -132,19 +128,14 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
         return $this->visibilityContext;
     }
 
-    /**
-     * @param string $visibilityContext
-     */
-    public function setVisibilityContext($visibilityContext)
-    {
-        $this->visibilityContext = $visibilityContext;
-    }
-
     public function getVisibilityData(): array
     {
         return [];
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function isSourceVisible(string $source, ?int $userIdentifier = null): bool
     {
         if (is_null($userIdentifier))
@@ -153,13 +144,5 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
         }
 
         return !array_key_exists($source, $this->getVisibilities($userIdentifier));
-    }
-
-    /**
-     * @param \Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository $dataProviderRepository
-     */
-    public function setCalendarRendererProviderRepository(VisibilityRepository $dataProviderRepository)
-    {
-        $this->dataProviderRepository = $dataProviderRepository;
     }
 }

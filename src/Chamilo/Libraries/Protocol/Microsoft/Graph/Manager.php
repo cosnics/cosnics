@@ -15,7 +15,6 @@ abstract class Manager extends Application
 
     public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_AUTHENTICATE;
-    public const PARAM_ACTION = 'GraphAction';
 
     /**
      * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService

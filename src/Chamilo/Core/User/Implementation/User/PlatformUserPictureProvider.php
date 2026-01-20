@@ -95,8 +95,7 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
             $response->setPublic();
             $response->setMaxAge(3600 * 24); // 24 hours cache
 
-            $lastModifiedDate = new DateTime();
-            $lastModifiedDate->setTimestamp(filemtime($file));
+            $lastModifiedDate = new DateTime('@' . filemtime($file));
 
             $response->setLastModified($lastModifiedDate);
             $response->setCallback(

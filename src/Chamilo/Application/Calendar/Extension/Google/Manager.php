@@ -5,8 +5,7 @@ use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
- *
- * @package application\calendar
+ * @package Chamilo\Application\Calendar\Extension\Google
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends Application

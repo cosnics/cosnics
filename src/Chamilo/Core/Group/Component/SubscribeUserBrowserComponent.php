@@ -39,6 +39,8 @@ class SubscribeUserBrowserComponent extends Manager
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function run(): Response
     {
@@ -72,6 +74,10 @@ class SubscribeUserBrowserComponent extends Manager
         return new Response(implode(PHP_EOL, $html));
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         $group = $this->getGroup();
@@ -109,6 +115,10 @@ class SubscribeUserBrowserComponent extends Manager
         return $this->buttonToolbarRenderer;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     protected function getGroup(): Group
     {
         if (!isset($this->group))
@@ -126,6 +136,7 @@ class SubscribeUserBrowserComponent extends Manager
 
     /**
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getNonSubscribedUserCondition(): AndCondition
     {
@@ -172,6 +183,7 @@ class SubscribeUserBrowserComponent extends Manager
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function get_user_subscribe_html(): string
     {

@@ -11,8 +11,8 @@ use DateTimeZone;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Admin\Service
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Admin\Implementation\Admin
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class SettingsConnector implements SettingsConnectorInterface
 {
@@ -69,7 +69,6 @@ class SettingsConnector implements SettingsConnectorInterface
 
     /**
      * @return string[]
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getMailers(): array
     {

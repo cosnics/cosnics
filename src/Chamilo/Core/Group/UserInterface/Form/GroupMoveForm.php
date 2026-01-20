@@ -5,6 +5,7 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\UserInterface\Menu\GroupMenu;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -20,7 +21,8 @@ class GroupMoveForm extends FormValidator
     private Group $group;
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      */
     public function __construct(Group $group, $action)
@@ -28,18 +30,19 @@ class GroupMoveForm extends FormValidator
         parent::__construct('group_move', self::FORM_METHOD_POST, $action);
         $this->group = $group;
 
-        $this->build_form();
+        $this->buildForm();
         $this->setDefaults();
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function build_form(): void
+    public function buildForm(): void
     {
         $this->addElement('select', self::PROPERTY_LOCATION, $this->getTranslation('NewLocation', [], Manager::CONTEXT),
-            $this->get_groups());
+            $this->getGroups());
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit', $this->getTranslation('Move'), null, null, new FontAwesomeGlyph('move')
         );
@@ -48,15 +51,24 @@ class GroupMoveForm extends FormValidator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function get_groups(): array
+    public function getGroups(): array
     {
         $group = $this->group;
 
-        $group_menu = new GroupMenu($group->getId(), null, true, true);
+        $urlFormat = $this->getUrlGenerator()->fromParameters(
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => Manager::ACTION_BROWSE_GROUPS,
+                Manager::PARAM_GROUP_ID => '%s'
+            ]
+        );
+
+        $groupMenu = new GroupMenu($group, $urlFormat, true, true);
         $renderer = new OptionsMenuRenderer();
-        $group_menu->render($renderer, 'sitemap');
+        $groupMenu->render($renderer, 'sitemap');
 
         return $renderer->toArray();
     }
@@ -64,7 +76,7 @@ class GroupMoveForm extends FormValidator
     /**
      * @throws \QuickformException
      */
-    public function get_new_parent()
+    public function getNewParent()
     {
         return $this->exportValue(self::PROPERTY_LOCATION);
     }
@@ -73,9 +85,9 @@ class GroupMoveForm extends FormValidator
      * @throws \Throwable
      * @throws \QuickformException
      */
-    public function move_group(): bool
+    public function moveGroup(): bool
     {
-        return $this->getService(GroupService::class)->moveGroup($this->group, $this->get_new_parent());
+        return $this->getService(GroupService::class)->moveGroup($this->group, $this->getNewParent());
     }
 
     public function setDefaults(array $defaultValues = [], $filter = null)

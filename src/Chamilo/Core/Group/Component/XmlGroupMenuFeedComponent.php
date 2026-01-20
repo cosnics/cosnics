@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Core\Group\Ajax\Component;
+namespace Chamilo\Core\Group\Component;
 
-use Chamilo\Core\Group\Ajax\Manager;
+use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @package Chamilo\Core\Group\Ajax\Component
+ * @package Chamilo\Core\Group\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -49,13 +49,13 @@ class XmlGroupMenuFeedComponent extends Manager
         foreach ($groups as $group)
         {
             $description = strip_tags(
-                $this->getGroupsTreeTraverser()->getFullyQualifiedNameForGroup($group) . ' [' . $group->get_code() . ']'
+                $this->getGroupsTreeTraverser()->getFullyQualifiedNameForGroup($group) . ' [' . $group->getCode() . ']'
             );
 
             $has_children = $group->hasChildren() ? 1 : 0;
             $html[] =
                 '<leaf id="' . $group->getId() . '" classes="' . $glyph->getClassNamesString() . '" has_children="' .
-                $has_children . '" title="' . htmlspecialchars($group->get_name()) . '" description="' .
+                $has_children . '" title="' . htmlspecialchars($group->getName()) . '" description="' .
                 htmlspecialchars($description) . '"/>' . PHP_EOL;
         }
 

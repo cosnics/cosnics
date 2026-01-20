@@ -6,6 +6,10 @@ use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 
+/**
+ * @package Chamilo\Core\Admin\Implementation\Home
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class PortalHomeBlockRenderer extends BlockRenderer
 {
     public const CONTEXT = Manager::CONTEXT;

@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\StorageParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @package Chamilo\Application\Calendar\Extension\Google\Repository
+ * @package Chamilo\Application\Calendar\Storage\Repository
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -71,7 +71,10 @@ class VisibilityRepository
         );
     }
 
-
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Calendar\Storage\DataClass\Visibility>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function retrieveVisibilitiesByUserIdentifier(string $userIdentifier): ArrayCollection
     {
         $conditions = [];

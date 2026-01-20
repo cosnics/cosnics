@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Calendar\Implementation\Home;
 
-use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvider;
+use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Service\HomeService;
@@ -13,10 +13,11 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Service\View\MiniDayCalendarRenderer;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use IntlDateFormatter;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Application\Calendar\Service\Home
+ * @package Chamilo\Application\Calendar\Implementation\Home
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -28,7 +29,7 @@ class DayBlockRenderer extends BlockRenderer
     public const CONFIGURATION_TIME_HIDE = 'time_hide';
     public const CONFIGURATION_TIME_START = 'time_start';
 
-    public const CONTEXT = \Chamilo\Application\Calendar\Manager::CONTEXT;
+    public const CONTEXT = Manager::CONTEXT;
 
     protected VisibilityRepository $calendarRendererProviderRepository;
 
@@ -92,7 +93,9 @@ class DayBlockRenderer extends BlockRenderer
 
     public function getTitle(Element $block): string
     {
-        return $this->getDatetimeUtilities()->formatLocaleDate('%A %d %B %Y', $this->getDisplayTime());
+        return $this->getDatetimeUtilities()->formatLocaleDate(
+            $this->getDisplayTime(), IntlDateFormatter::FULL, IntlDateFormatter::NONE
+        );
     }
 
     public function renderContentFooter(): string

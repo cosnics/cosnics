@@ -365,7 +365,6 @@ class GroupRepository
     /**
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @todo This could be generalized to the NestedSetDataClassRepository
      */
     public function findSubGroupIdentifiersForGroup(Group $group, bool $recursiveSubgroups = false): array
     {

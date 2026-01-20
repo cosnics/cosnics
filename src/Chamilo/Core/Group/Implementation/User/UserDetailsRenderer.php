@@ -49,6 +49,9 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         return $this->urlGenerator;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function hasContentForUser(User $user, User $requestingUser): bool
     {
         return $this->getGroupsTreeTraverser()->findAllSubscribedGroupsForUserIdentifier($user->getId())->count() > 0;
@@ -61,6 +64,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
     /**
      * @throws \TableException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function renderUserDetails(User $user, User $requestingUser): string
     {
@@ -98,9 +102,9 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
                 $url = '<a href="' . $viewUrl . '">';
 
-                $table->setCellContents($i, 0, $url . $group->get_code() . '</a>');
+                $table->setCellContents($i, 0, $url . $group->getCode() . '</a>');
                 $table->setCellAttributes($i, 0, ['style' => 'width: 150px;']);
-                $table->setCellContents($i, 1, $url . $group->get_name() . '</a>');
+                $table->setCellContents($i, 1, $url . $group->getName() . '</a>');
                 $i ++;
             }
         }

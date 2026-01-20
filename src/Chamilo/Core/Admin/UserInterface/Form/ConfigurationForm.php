@@ -11,12 +11,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
 
 /**
- * @package admin.lib
- * @author  Hans De Bisschop
- */
-
-/**
- * A form to configure platform settings.
+ * @package Chamilo\Core\Admin\UserInterface\Form
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ConfigurationForm extends FormValidator
 {
@@ -25,33 +21,27 @@ class ConfigurationForm extends FormValidator
 
     private string $context;
 
-    private bool $is_user_setting_form;
+    private ?User $user;
 
     /**
      * @throws \QuickformException
      */
     public function __construct(
-        string $context, string $form_name, string $method = self::FORM_METHOD_POST, ?string $action = null,
-        bool $is_user_setting_form = false
+        string $context, string $formName, string $method = self::FORM_METHOD_POST, ?string $action = null,
+        ?User $user = null
     )
     {
-        parent::__construct($form_name, $method, $action);
+        parent::__construct($formName, $method, $action);
 
-        $this->is_user_setting_form = $is_user_setting_form;
+        $this->user = $user;
         $this->context = $context;
-        // TODO: It might be better to move this functionality to the Path-class
-
-        $this->configuration = $this->parse_application_settings();
+        $this->configuration = $this->parseSettings();
 
         $this->build_form();
         $this->setDefaults();
     }
 
     /**
-     * Builds a form to create or edit a learning object.
-     * Creates fields for default learning object properties. The
-     * result of this function is equal to build_creation_form()'s, but that one may be overridden to extend the form.
-     *
      * @throws \QuickformException
      */
     private function build_form(): void
@@ -72,7 +62,7 @@ class ConfigurationForm extends FormValidator
 
                 foreach ($settings as $name => $setting)
                 {
-                    if (!$this->setting_is_available($setting))
+                    if (!$this->settingIsAvailable($setting))
                     {
                         continue;
                     }
@@ -109,7 +99,7 @@ class ConfigurationForm extends FormValidator
                         {
                             foreach ($validations as $validation)
                             {
-                                if ($this->is_valid_validation_method($validation['rule']))
+                                if ($this->isValidValidationMethod($validation['rule']))
                                 {
                                     if ($validation['rule'] != 'regex')
                                     {
@@ -245,11 +235,6 @@ class ConfigurationForm extends FormValidator
         return $this->getService(SettingsConnectorCollection::class);
     }
 
-    protected function getUser(): ?User
-    {
-        return $this->getService('Chamilo\Core\User\CurrentUser');
-    }
-
     protected function isHidden($setting): bool
     {
         return isset($setting['hidden']) && ($setting['hidden'] == 1 || $setting['hidden'] == 'true');
@@ -265,14 +250,14 @@ class ConfigurationForm extends FormValidator
         return isset($setting['user_setting']) && ($setting['user_setting'] == 1 || $setting['user_setting'] == 'true');
     }
 
-    private function is_valid_validation_method($validation_method): bool
+    private function isValidValidationMethod($validation_method): bool
     {
         $available_validation_methods = ['regex', 'email', 'lettersonly', 'alphanumeric', 'numeric'];
 
         return in_array($validation_method, $available_validation_methods);
     }
 
-    public function parse_application_settings(): array
+    public function parseSettings(): array
     {
         $context = $this->context;
 
@@ -392,12 +377,6 @@ class ConfigurationForm extends FormValidator
     }
 
     /**
-     * Sets default values.
-     * Traditionally, you will want to extend this method so it sets default for your learning
-     * object type's additional properties.
-     *
-     * @param $defaultValues array Default values for this form's parameters.
-     *
      * @throws \QuickformException
      */
     public function setDefaults(array $defaultValues = [], $filter = null): void
@@ -408,10 +387,10 @@ class ConfigurationForm extends FormValidator
         {
             foreach ($settings as $name => $setting)
             {
-                if ($setting['user_setting'] && $this->is_user_setting_form)
+                if ($setting['user_setting'] && $this->user instanceof User)
                 {
                     $configuration_value =
-                        $this->getUserSettingService()->getSettingForUser($this->getUser(), $this->context, $name);
+                        $this->getUserSettingService()->getSettingForUser($this->user, $this->context, $name);
                 }
                 else
                 {
@@ -432,7 +411,7 @@ class ConfigurationForm extends FormValidator
         parent::setDefaults($defaultValues);
     }
 
-    public function setting_is_available(array $setting)
+    public function settingIsAvailable(array $setting)
     {
         $settingsConnector = $this->getSettingsConnectorFactory()->getSettingsConnectorForContext($this->context);
 
@@ -442,7 +421,7 @@ class ConfigurationForm extends FormValidator
         $has_availability_method = isset($setting['availability']) && isset($setting['availability']['source']) &&
             $this->getStringUtilities()->hasValue($setting['availability']['source']);
 
-        if ($this->is_user_setting_form)
+        if ($this->user instanceof User)
         {
             if ($is_user_setting && !$isHidden)
             {
@@ -477,13 +456,13 @@ class ConfigurationForm extends FormValidator
     }
 
     /**
-     * @return bool
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
-    public function update_configuration(): bool
+    public function updateConfiguration(): bool
     {
         $values = $this->exportValues();
 
@@ -533,13 +512,9 @@ class ConfigurationForm extends FormValidator
     }
 
     /**
-     * @return bool
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function update_user_settings(): bool
+    public function updateUserSettings(): bool
     {
         $values = $this->exportValues();
         $problems = 0;
@@ -548,7 +523,7 @@ class ConfigurationForm extends FormValidator
         {
             foreach ($settings as $name => $setting)
             {
-                if (!$this->setting_is_available($setting))
+                if (!$this->settingIsAvailable($setting))
                 {
                     continue;
                 }
@@ -556,7 +531,7 @@ class ConfigurationForm extends FormValidator
                 if ($setting['locked'] != 'true' && $setting['user_setting'])
                 {
                     if (!$this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
-                        $this->context, $name, $this->getUser(), $values[$name] ?? 0
+                        $this->context, $name, $this->user, $values[$name] ?? 0
                     ))
                     {
                         $problems ++;

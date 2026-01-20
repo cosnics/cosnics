@@ -39,12 +39,12 @@ class UserSettingsComponent extends ProfileComponent
             $this->getSelectedContext(), 'config', FormValidator::FORM_METHOD_POST,
             $this->getUrlGenerator()->fromParameters(
                 [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_SELECTED_CONTEXT => $this->getSelectedContext()]
-            ), true
+            ), $this->getUser()
         );
 
         if ($this->form->validate())
         {
-            $success = $this->form->update_user_settings();
+            $success = $this->form->updateUserSettings();
 
             return $this->redirectWithMessage(
                 $this->getTranslator()->trans($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'), !$success,

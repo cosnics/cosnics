@@ -6,6 +6,7 @@ use Chamilo\Core\Admin\Architecture\Interface\SettingsConnectorInterface;
 use Chamilo\Core\User\Architecture\Domain\UserPictureProviderCollection;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use IntlDateFormatter;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -48,11 +49,9 @@ class SettingsConnector implements SettingsConnectorInterface
 
     public function getDateTermsAndConditionsUpdate(): array
     {
-        $dateFormat = '%e-%m-%Y';
-
         $formattedDate = $this->getDatetimeUtilities()->formatLocaleDate(
-            $dateFormat,
-            (int) $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'date_terms_and_conditions_update'])
+            (int) $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'date_terms_and_conditions_update']
+            ), IntlDateFormatter::SHORT, IntlDateFormatter::NONE
         );
 
         return [$formattedDate];

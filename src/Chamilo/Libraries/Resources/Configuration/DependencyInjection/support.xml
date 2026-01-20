@@ -13,7 +13,7 @@
         <service id="Chamilo\Libraries\Support\DiagnoserCellRenderer"/>
         <service id="Chamilo\Libraries\Support"/>
 
-        <service id="Chamilo\Libraries\Format\Table\Interfaces\SimpleTableCellRendererInterface $cellRenderer"
+        <service id="Chamilo\Libraries\Format\Table\Interface\SimpleTableCellRendererInterface $cellRenderer"
                  alias="Chamilo\Libraries\Support\DiagnoserCellRenderer"/>
 
         <service id="Chamilo\Libraries\Support\DiagnoserTableRenderer"

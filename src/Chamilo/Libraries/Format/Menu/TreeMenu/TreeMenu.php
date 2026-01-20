@@ -8,7 +8,6 @@ use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Menu\TreeMenu
  */
 class TreeMenu extends HtmlMenu
@@ -28,7 +27,7 @@ class TreeMenu extends HtmlMenu
         parent::__construct($this->getMenuItems());
 
         $this->htmlMenuArrayRenderer = new HtmlMenuArrayRenderer();
-        $this->forceCurrentUrl($this->dataProvider->getSelectedTreeMenuItemUrl());
+        $this->forceCurrentUrl($this->dataProvider->getTreeMenuItemUrl());
     }
 
     public function getBreadcrumbs(): BreadcrumbTrail
@@ -59,7 +58,7 @@ class TreeMenu extends HtmlMenu
     public function getMenuItems(): array
     {
         $menu_items = [];
-        $menu_items[] = $this->dataProvider->getTreeMenuData()->toArray();
+        $menu_items[] = $this->dataProvider->getData()->toArray();
 
         return $menu_items;
     }

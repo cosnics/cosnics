@@ -8,7 +8,7 @@ use stdClass;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * @package Chamilo\Configuration\Package\Service
+ * @package Chamilo\Configuration\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PackageFactory
@@ -31,9 +31,6 @@ class PackageFactory
     }
 
     /**
-     * @param string $context
-     *
-     * @return \Chamilo\Configuration\Storage\DataClass\Package
      * @throws \OutOfBoundsException
      */
     public function getPackage(string $context): Package

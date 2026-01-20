@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ICalComponent extends Manager implements NoAuthenticationSupportInterface
 {
+    public const PARAM_DOWNLOAD = 'download';
 
     private CalendarRendererProvider $calendarRendererProvider;
 

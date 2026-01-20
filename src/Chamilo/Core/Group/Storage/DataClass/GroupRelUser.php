@@ -17,40 +17,39 @@ class GroupRelUser extends DataClass
     public const PROPERTY_USER_ID = 'user_id';
 
     /**
-     * Get the default properties of all groups.
-     *
-     * @return array The property names.
+     * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames([self::PROPERTY_GROUP_ID, self::PROPERTY_USER_ID]);
     }
 
-    /**
-     * @return string
-     */
+    public function getGroupId(): string
+    {
+        return $this->getDefaultProperty(self::PROPERTY_GROUP_ID);
+    }
+
     public static function getStorageUnitName(): string
     {
         return 'group_group_rel_user';
     }
 
-    public function get_group_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_GROUP_ID);
-    }
-
-    public function get_user_id()
+    public function getUserId(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
-    public function set_group_id($group_id): void
+    public function setGroupId($groupIdentifier): static
     {
-        $this->setDefaultProperty(self::PROPERTY_GROUP_ID, $group_id);
+        $this->setDefaultProperty(self::PROPERTY_GROUP_ID, $groupIdentifier);
+
+        return $this;
     }
 
-    public function set_user_id($user_id): void
+    public function setUserId($userIdentifier): static
     {
-        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $userIdentifier);
+
+        return $this;
     }
 }

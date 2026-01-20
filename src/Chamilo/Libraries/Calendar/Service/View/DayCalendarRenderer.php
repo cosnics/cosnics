@@ -10,6 +10,7 @@ use Chamilo\Libraries\Calendar\Service\View\TableBuilder\DayCalendarTableBuilder
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use IntlDateFormatter;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -109,6 +110,8 @@ class DayCalendarRenderer extends SidebarTableCalendarRenderer
 
     public function renderTitle(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
-        return $this->getDatetimeUtilities()->formatLocaleDate('%A %d %B %Y', $displayTime);
+        return $this->getDatetimeUtilities()->formatLocaleDate(
+            $displayTime, IntlDateFormatter::FULL, IntlDateFormatter::NONE
+        );
     }
 }

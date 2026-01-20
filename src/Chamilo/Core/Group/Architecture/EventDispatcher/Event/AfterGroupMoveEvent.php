@@ -4,8 +4,8 @@ namespace Chamilo\Core\Group\Architecture\EventDispatcher\Event;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 
 /**
- * @package Chamilo\Core\Group\EventDispatcher\Event
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Group\Architecture\EventDispatcher\Event
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class AfterGroupMoveEvent extends AbstractGroupEvent
 {

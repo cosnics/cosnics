@@ -18,6 +18,10 @@ class WhoIsOnlineService
         $this->whoIsOnlineRepository = $whoIsOnlineRepository;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function createWhoIsOnlineForUserIdentifierAndLastAccessDate(string $userIdentifier, int $lastAccessDate
     ): bool
     {
@@ -31,6 +35,7 @@ class WhoIsOnlineService
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findDistinctOnlineUserIdentifiers(): array
     {
@@ -51,12 +56,16 @@ class WhoIsOnlineService
         return $this->whoIsOnlineRepository;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function updateWhoIsOnline(Online $online): bool
     {
         return $this->getWhoIsOnlineRepository()->updateWhoIsOnline($online);
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function updateWhoIsOnlineForUserIdentifierWithCurrentTime(?string $userIdentifier): bool

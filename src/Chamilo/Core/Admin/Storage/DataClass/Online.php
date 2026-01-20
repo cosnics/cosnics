@@ -4,6 +4,10 @@ namespace Chamilo\Core\Admin\Storage\DataClass;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
+/**
+ * @package Chamilo\Core\Admin\Storage\DataClass
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class Online extends DataClass
 {
     public const CONTEXT = Manager::CONTEXT;

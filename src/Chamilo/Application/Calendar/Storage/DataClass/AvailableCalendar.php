@@ -1,102 +1,66 @@
 <?php
 namespace Chamilo\Application\Calendar\Storage\DataClass;
 
+/**
+ * @package Chamilo\Application\Calendar\Storage\DataClass
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class AvailableCalendar
 {
 
-    /**
-     *
-     * @var string
-     */
-    private $type;
+    private string $description;
 
-    /**
-     *
-     * @var string
-     */
-    private $identifier;
+    private string $identifier;
 
-    /**
-     *
-     * @var string
-     */
-    private $name;
+    private string $name;
 
-    /**
-     *
-     * @var string
-     */
-    private $description;
+    private string $type;
 
-    /**
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     *
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getIdentifier()
-    {
-        return $this->identifier;
-    }
-
-    /**
-     *
-     * @param string $identifier
-     */
-    public function setIdentifier($identifier)
-    {
-        $this->identifier = $identifier;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     *
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     *
-     * @param string $description
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
+
+    public function setIdentifier(string $identifier): static
+    {
+        $this->identifier = $identifier;
+
+        return $this;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
+
+        return $this;
     }
 }

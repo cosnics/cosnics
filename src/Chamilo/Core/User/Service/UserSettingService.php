@@ -11,7 +11,6 @@ use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Exception;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Exception\CacheException;
@@ -27,20 +26,17 @@ class UserSettingService
 
     protected ConfigurationService $configurationService;
 
-    protected DatetimeUtilities $datetimeUtilities;
-
     protected UserService $userService;
 
     protected FilesystemAdapter $userSettingsCacheAdapter;
 
     public function __construct(
-        UserService $userService, FilesystemAdapter $userSettingsCacheAdapter, DatetimeUtilities $datetimeUtilities,
+        UserService $userService, FilesystemAdapter $userSettingsCacheAdapter,
         ConfigurationService $configurationService
     )
     {
         $this->userService = $userService;
         $this->userSettingsCacheAdapter = $userSettingsCacheAdapter;
-        $this->datetimeUtilities = $datetimeUtilities;
         $this->configurationService = $configurationService;
     }
 
@@ -52,16 +48,6 @@ class UserSettingService
         return $this->clearCacheDataForAdapterAndKeyParts(
             $this->getUserSettingsCacheAdapter(), [User::class, $user->getId()]
         );
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function convertDateToUserTimezone(User $user, string $date, ?string $format = null): string
-    {
-        $userTimezone = $this->getSettingForUser($user, 'Chamilo\Core\Admin', 'platform_timezone');
-
-        return $this->getDatetimeUtilities()->convertDateToTimezone($date, $format, $userTimezone);
     }
 
     /**
@@ -97,11 +83,6 @@ class UserSettingService
     public function getConfigurationService(): ConfigurationService
     {
         return $this->configurationService;
-    }
-
-    public function getDatetimeUtilities(): DatetimeUtilities
-    {
-        return $this->datetimeUtilities;
     }
 
     public function getSettingForUser(User $user, string $context, string $variable, bool $useCache = true): ?string

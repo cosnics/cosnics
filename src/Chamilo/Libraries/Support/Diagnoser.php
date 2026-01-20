@@ -193,9 +193,7 @@ class Diagnoser
         }
 
         $date = $this->getInstallationDate();
-        $date = $this->datetimeUtilities->formatLocaleDate(
-            $this->getTranslation('DateFormatShort') . ', ' . $this->getTranslation('TimeNoSecFormat'), $date
-        );
+        $date = $this->getDatetimeUtilities()->formatLocaleDate($date);
         $array[] = $this->build_setting(
             1, '[INFORMATION]', $this->getTranslation('InstallDate'), '', $date, '', null,
             $this->getTranslation('InstallDateInfo')
@@ -232,6 +230,11 @@ class Diagnoser
         );
 
         return $array;
+    }
+
+    public function getDatetimeUtilities(): DatetimeUtilities
+    {
+        return $this->getDatetimeUtilities();
     }
 
     public function getDiagnoserTableRenderer(): SimpleTableRenderer

@@ -107,6 +107,12 @@ class UserFactory
                                 $user, 'Chamilo\Core\Admin', 'platform_language'
                             )
                         );
+
+                        date_default_timezone_set(
+                            $this->getUserSettingService()->getSettingForUser(
+                                $user, 'Chamilo\Core\Admin', 'platform_timezone'
+                            )
+                        );
                     }
                 }
 

@@ -159,8 +159,8 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
                     StringUtilities::LIBRARIES),
                 User::PROPERTY_ACTIVATION_DATE, User::PROPERTY_EXPIRATION_DATE => $value == 0 ?
                     $translator->trans('Forever', [], StringUtilities::LIBRARIES) :
-                    $datetimeUtilities->formatLocaleDate(null, $value),
-                User:: PROPERTY_REGISTRATION_DATE => $datetimeUtilities->formatLocaleDate(null, $value),
+                    $datetimeUtilities->formatLocaleDate($value),
+                User:: PROPERTY_REGISTRATION_DATE => $datetimeUtilities->formatLocaleDate($value),
                 default => $value,
             };
 

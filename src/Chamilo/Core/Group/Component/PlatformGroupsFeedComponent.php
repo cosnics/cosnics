@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Group\Ajax\Component;
+namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
@@ -20,14 +20,14 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @package Chamilo\Core\Group\Ajax\Component
+ * @package Chamilo\Core\Group\Component
  * @author  Sven Vanpoucke
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PlatformGroupsFeedComponent extends GroupsFeedComponent
 {
     public const FILTER_PREFIX_LENGTH = 2;
-    
+
     public const PARAM_GROUP = 'group';
     public const PARAM_USER = 'user';
 
@@ -46,9 +46,6 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         return [];
     }
 
-    /**
-     * Returns the id of the selected filter
-     */
     protected function get_filter(): string
     {
         $filter = $this->getRequest()->request->get(self::PARAM_FILTER);
@@ -56,15 +53,18 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         return substr($filter, static::FILTER_PREFIX_LENGTH);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function get_group_element(Group $group): AdvancedElementFinderElement
     {
         $description = strip_tags(
-            $this->getGroupsTreeTraverser()->getFullyQualifiedNameForGroup($group) . ' [' . $group->get_code() . ']'
+            $this->getGroupsTreeTraverser()->getFullyQualifiedNameForGroup($group) . ' [' . $group->getCode() . ']'
         );
         $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
-            self::PARAM_GROUP . '_' . $group->getId(), $glyph->getClassNamesString(), $group->get_name(), $description,
+            self::PARAM_GROUP . '_' . $group->getId(), $glyph->getClassNamesString(), $group->getName(), $description,
             AdvancedElementFinderElement::TYPE_SELECTABLE_AND_FILTER
         );
     }
@@ -80,9 +80,8 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
     }
 
     /**
-     * Retrieves all the users for the selected group
-     *
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function get_user_ids(): array
     {
@@ -98,6 +97,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function retrieve_groups(): ArrayCollection
     {

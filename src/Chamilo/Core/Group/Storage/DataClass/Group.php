@@ -18,6 +18,11 @@ class Group extends NestedSet
     public const PROPERTY_DESCRIPTION = 'description';
     public const PROPERTY_NAME = 'name';
 
+    public function getCode(): ?string
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CODE);
+    }
+
     /**
      * @param string[] $extendedPropertyNames
      *
@@ -34,38 +39,39 @@ class Group extends NestedSet
         );
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
+    }
+
+    public function getName(): ?string
+    {
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
+    }
+
     public static function getStorageUnitName(): string
     {
         return 'group_group';
     }
 
-    public function get_code(): ?string
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CODE);
-    }
-
-    public function get_description(): ?string
-    {
-        return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
-    }
-
-    public function get_name(): ?string
-    {
-        return $this->getDefaultProperty(self::PROPERTY_NAME);
-    }
-
-    public function set_code(?string $code): void
+    public function setCode(?string $code): static
     {
         $this->setDefaultProperty(self::PROPERTY_CODE, $code);
+
+        return $this;
     }
 
-    public function set_description(?string $description): void
+    public function setDescription(?string $description): static
     {
         $this->setDefaultProperty(self::PROPERTY_DESCRIPTION, $description);
+
+        return $this;
     }
 
-    public function set_name(?string $name): void
+    public function setName(?string $name): static
     {
         $this->setDefaultProperty(self::PROPERTY_NAME, $name);
+
+        return $this;
     }
 }

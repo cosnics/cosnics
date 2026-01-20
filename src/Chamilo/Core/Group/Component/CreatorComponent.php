@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Group\Component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CreatorComponent extends Manager
 {
@@ -51,7 +52,7 @@ class CreatorComponent extends Manager
 
             if ($success)
             {
-                $group = $form->get_group();
+                $group = $form->getGroup();
 
                 return $this->redirectWithMessage(
                     $translator->trans(

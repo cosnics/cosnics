@@ -2,7 +2,7 @@
 namespace Chamilo\Configuration\Architecture\Domain;
 
 /**
- * @package Chamilo\Configuration\Storage\DataClass
+ * @package Chamilo\Configuration\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 enum LanguageCodeEnum: string

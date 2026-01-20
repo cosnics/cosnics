@@ -67,14 +67,11 @@ class CalendarRepository
         User $user, string $calendarIdentifier, int $fromDate, int $toDate
     ): Google_Service_Calendar_Events
     {
-        $timeMin = new DateTime();
-        $timeMin->setTimestamp($fromDate);
-
-        $timeMax = new DateTime();
-        $timeMax->setTimestamp($toDate);
-
         try
         {
+            $timeMin = new DateTime('@' . $fromDate);
+            $timeMax = new DateTime('@' . $toDate);
+
             return $this->getCalendarClient($user)->events->listEvents(
                 $calendarIdentifier, [
                     'timeMin' => $timeMin->format(DateTimeInterface::RFC3339),

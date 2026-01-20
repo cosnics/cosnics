@@ -4,12 +4,13 @@ namespace Chamilo\Core\Group\Component;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
-use Chamilo\Core\Group\UserInterface\Menu\GroupMenu;
+use Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider;
 use Chamilo\Core\Group\UserInterface\Table\GroupTableRenderer;
 use Chamilo\Core\Group\UserInterface\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -56,7 +57,8 @@ class BrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function run(): Response
     {
@@ -97,6 +99,10 @@ class BrowserComponent extends Manager
         return $searchProperties;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function getButtonToolbarRenderer(): ButtonToolBarRenderer
     {
         if (!isset($this->buttonToolbarRenderer))
@@ -148,6 +154,17 @@ class BrowserComponent extends Manager
         return $this->buttonToolbarRenderer;
     }
 
+    public function getCurrentGroupIdentifier(): ?string
+    {
+        return $this->getRequest()->query->get(
+            Manager::PARAM_GROUP_ID, $this->getGroupService()->findRootGroup()->getId()
+        );
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function getGroup(): Group
     {
         if (!isset($this->group))
@@ -158,6 +175,10 @@ class BrowserComponent extends Manager
         return $this->group;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function getGroupDetails(): string
     {
         $group = $this->getGroup();
@@ -215,9 +236,9 @@ class BrowserComponent extends Manager
             );
         }
 
-        $html[] = '<b>' . $translator->trans('Code') . '</b>: ' . $group->get_code() . '<br />';
+        $html[] = '<b>' . $translator->trans('Code') . '</b>: ' . $group->getCode() . '<br />';
 
-        $description = $group->get_description();
+        $description = $group->getDescription();
 
         if ($description)
         {
@@ -232,6 +253,10 @@ class BrowserComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function getGroupIdentifier(): string
     {
         if (!isset($this->groupIdentifier))
@@ -244,7 +269,8 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     protected function getGroupTableCondition(): ?Condition
     {
@@ -270,11 +296,20 @@ class BrowserComponent extends Manager
         return $this->getService(GroupTableRenderer::class);
     }
 
+    public function getGroupTreeMenuDataProvider(): GroupTreeMenuDataProvider
+    {
+        return $this->getService(GroupTreeMenuDataProvider::class);
+    }
+
     public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
         return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function getRootGroup(): Group
     {
         if (!isset($this->rootGroup))
@@ -290,9 +325,6 @@ class BrowserComponent extends Manager
         return $this->getService(SubscribedUserTableRenderer::class);
     }
 
-    /**
-     * @throws \QuickformException
-     */
     public function getSubscribedUsersCondition(): ?AndCondition
     {
         return $this->getButtonToolBarSearchCondition(SubscribedUser::class);
@@ -303,23 +335,9 @@ class BrowserComponent extends Manager
         return $this->getService(TabsRenderer::class);
     }
 
-    /**
-     * @return string
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
-     */
-    public function renderApplicationMenu(): string
+    public function getTreeMenuRenderer(): TreeMenuRenderer
     {
-        $url = $this->getUrlGenerator()->fromParameters(
-            [
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Application::ACTION_BROWSER,
-                self::PARAM_GROUP_ID => '%s'
-            ]
-        );
-
-        $group_menu = new GroupMenu($this->getGroupIdentifier(), $url);
-
-        return $group_menu->render_as_tree();
+        return $this->getService(TreeMenuRenderer::class);
     }
 
     public function renderFooter(): string
@@ -337,6 +355,7 @@ class BrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     protected function renderGroupTable(): string
     {
@@ -359,7 +378,8 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function renderHeader(string $pageTitle = ''): string
     {
@@ -367,7 +387,7 @@ class BrowserComponent extends Manager
 
         $html[] = parent::renderHeader();
         $html[] = '<div class="col-xs-12 col-md-4 col-lg-3">';
-        $html[] = $this->renderApplicationMenu();
+        $html[] = $this->renderMenu();
         $html[] = '</div>';
         $html[] = '<div class="col-xs-12 col-md-8 col-lg-9">';
 
@@ -375,9 +395,29 @@ class BrowserComponent extends Manager
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
+    public function renderMenu(): string
+    {
+        $dataUrl = str_replace(
+            '\\', '\\\\', $this->getUrlGenerator()->fromParameters(
+            [
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => Manager::ACTION_GROUP_TREE_DATA,
+            ]
+        )
+        );
+
+        return $this->getTreeMenuRenderer()->render('groupMenu', $dataUrl, $this->getCurrentGroupIdentifier());
+    }
+
+    /**
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     protected function renderSubscribedUsertable(): string
     {
@@ -406,6 +446,8 @@ class BrowserComponent extends Manager
      * @throws \TableException
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function renderTabs(): string
     {

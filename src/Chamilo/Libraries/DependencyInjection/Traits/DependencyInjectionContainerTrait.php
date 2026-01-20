@@ -26,6 +26,7 @@ use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -94,6 +95,11 @@ trait DependencyInjectionContainerTrait
     protected function getDataClassRepository(): DataClassRepository
     {
         return $this->getService('Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\DataClassRepository');
+    }
+
+    public function getDatetimeUtilities(): DatetimeUtilities
+    {
+        return $this->getService(DatetimeUtilities::class);
     }
 
     public function getEventDispatcher(): EventDispatcherInterface

@@ -4,8 +4,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Architecture\Domain;
 use Google_Service_Calendar_Event;
 
 /**
- *
- * @package Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libraries\Calendar\Event
+ * @package Chamilo\Application\Calendar\Extension\Google\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -13,51 +12,31 @@ use Google_Service_Calendar_Event;
 class Event extends \Chamilo\Libraries\Calendar\Event\Event
 {
 
-    /**
-     *
-     * @var \Chamilo\Application\Calendar\Extension\Google\Architecture\Domain\CalendarProperties
-     */
-    private $calendarProperties;
+    private CalendarProperties $calendarProperties;
 
-    /**
-     *
-     * @var \Google_Service_Calendar_Event
-     */
-    private $googleCalendarEvent;
+    private Google_Service_Calendar_Event $googleCalendarEvent;
 
-    /**
-     *
-     * @return \Chamilo\Application\Calendar\Extension\Google\Architecture\Domain\CalendarProperties
-     */
-    public function getCalendarProperties()
+    public function getCalendarProperties(): CalendarProperties
     {
         return $this->calendarProperties;
     }
 
-    /**
-     *
-     * @param \Chamilo\Application\Calendar\Extension\Google\Architecture\Domain\CalendarProperties $calendarProperties
-     */
-    public function setCalendarProperties(CalendarProperties $calendarProperties)
+    public function setCalendarProperties(CalendarProperties $calendarProperties): static
     {
         $this->calendarProperties = $calendarProperties;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return Google_Service_Calendar_Event
-     */
-    public function getGoogleCalendarEvent()
+    public function getGoogleCalendarEvent(): Google_Service_Calendar_Event
     {
         return $this->googleCalendarEvent;
     }
 
-    /**
-     *
-     * @param \Google_Service_Calendar_Event $googleCalendarEvent
-     */
-    public function setGoogleCalendarEvent(Google_Service_Calendar_Event $googleCalendarEvent)
+    public function setGoogleCalendarEvent(Google_Service_Calendar_Event $googleCalendarEvent): static
     {
         $this->googleCalendarEvent = $googleCalendarEvent;
+
+        return $this;
     }
 }

@@ -54,6 +54,14 @@ class TreeMenuItem
         return $this;
     }
 
+    /**
+     * @return \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem[]
+     */
+    public function getChildren(): array
+    {
+        return $this->treeMenuItems;
+    }
+
     public function getClass(): ?string
     {
         return $this->class;
@@ -102,24 +110,6 @@ class TreeMenuItem
         return $this;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem[]
-     */
-    public function getTreeMenuItems(): array
-    {
-        return $this->treeMenuItems;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem[] $treeMenuItems
-     */
-    public function setTreeMenuItems(array $treeMenuItems): static
-    {
-        $this->treeMenuItems = $treeMenuItems;
-
-        return $this;
-    }
-
     public function getUrl(): ?string
     {
         return $this->url;
@@ -134,12 +124,7 @@ class TreeMenuItem
 
     public function hasChildren(): bool
     {
-        if ($this->getTreeMenuItems())
-        {
-            return true;
-        }
-
-        return false;
+        return count($this->treeMenuItems) > 0;
     }
 
     public function removeChild(TreeMenuItem $treeMenuItem): static
@@ -153,6 +138,16 @@ class TreeMenuItem
         }
 
         $this->treeMenuItems = array_values($this->treeMenuItems);
+
+        return $this;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem[] $treeMenuItems
+     */
+    public function setTreeMenuItems(array $treeMenuItems): static
+    {
+        $this->treeMenuItems = $treeMenuItems;
 
         return $this;
     }
@@ -173,7 +168,7 @@ class TreeMenuItem
 
         if ($this->hasChildren())
         {
-            foreach ($this->getTreeMenuItems() as $child)
+            foreach ($this->getChildren() as $child)
             {
                 $children[] = $child->toArray();
             }

@@ -2,67 +2,79 @@
 namespace Chamilo\Core\Group\UserInterface\Menu;
 
 use Chamilo\Core\Group\Service\GroupService;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuDataProvider;
-use Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem;
+use stdClass;
 
 class GroupTreeMenuDataProvider extends TreeMenuDataProvider
 {
-    public const PARAM_ID = 'group_id';
+    protected GroupService $groupService;
 
-    public function getGroupService(): GroupService
+    public function __construct(GroupService $groupService)
     {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(GroupService::class);
-    }
-
-    public function getIdParameterName(): string
-    {
-        return self::PARAM_ID;
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    private function getMenuItems(TreeMenuItem $parent_menu_item, string $parentId = '0'): void
-    {
-        $groups = $this->getGroupService()->findGroupsForParentIdentifier($parentId);
-
-        foreach ($groups as $group)
-        {
-            $menu_item = new TreeMenuItem();
-            $menu_item->setTitle($group->get_name());
-            $menu_item->setId($group->getId());
-            $menu_item->setUrl($this->formatUrl($group->getId()));
-
-            if ($group->hasChildren())
-            {
-                $this->getMenuItems($menu_item, $group->getId());
-            }
-
-            $parent_menu_item->addChild($menu_item);
-        }
+        $this->groupService = $groupService;
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function getTreeMenuData(): TreeMenuItem
+    public function getData(string $urlFormat, ?string $itemIdentifier): array
     {
-        $group = $this->getGroupService()->findRootGroup();
+        $items = [];
 
-        $menu_item = new TreeMenuItem();
-        $menu_item->setTitle($group->get_name());
-        $menu_item->setId($group->getId());
-        $menu_item->setUrl($this->getUrl());
+        if (!$itemIdentifier)
+        {
+            $group = $this->getGroupService()->findRootGroup();
+            $items[] = $this->getItem($group, $urlFormat);
+        }
+        else
+        {
+            $groups = $this->getGroupService()->findGroupsForParentIdentifier($itemIdentifier);
+
+            foreach ($groups as $group)
+            {
+                $items[] = $this->getItem($group, $urlFormat);
+            }
+        }
+
+        return $items;
+    }
+
+    public function getGroupService(): GroupService
+    {
+        return $this->groupService;
+    }
+
+    protected function getItem(Group $group, string $urlFormat): stdClass
+    {
+        $item = new stdClass();
+        $item->text = $group->getName();
+        $item->id = $group->getId();
+
+        $item->a_attr = new stdClass();
+        $item->a_attr->href = html_entity_decode($this->formatUrl($urlFormat, $group->getId()));
 
         if ($group->hasChildren())
         {
-            $this->getMenuItems($menu_item, $group->getId());
+            $item->children = true;
+            //$this->processChildren($urlFormat, $item, $group->getId());
         }
 
-        $menu_item->setClass('home');
-
-        return $menu_item;
+        return $item;
     }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    protected function processChildren(string $urlFormat, stdClass $parentItem, string $parentIdentifier): void
+    {
+        $groups = $this->getGroupService()->findGroupsForParentIdentifier($parentIdentifier);
+
+        foreach ($groups as $group)
+        {
+            $parentItem->children[] = $this->getItem($group, $urlFormat);
+        }
+    }
+
 }

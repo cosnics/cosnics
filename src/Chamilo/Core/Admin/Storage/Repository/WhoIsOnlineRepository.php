@@ -12,8 +12,8 @@ use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
- * @package Chamilo\Core\Admin\Repository
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Admin\Storage\Repository
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WhoIsOnlineRepository
 {

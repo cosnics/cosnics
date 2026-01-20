@@ -62,11 +62,9 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
 
         if (!$accessToken)
         {
-            $parameters = [];
-            $parameters[Application::PARAM_CONTEXT] = Manager::CONTEXT;
-            $parameters[Application::PARAM_ACTION] = Manager::ACTION_LOGIN;
-
-            $link = $this->getUrlGenerator()->fromParameters($parameters);
+            $link = $this->getUrlGenerator()->fromParameters(
+                [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_LOGIN]
+            );
 
             $dropdownButton->addSubButton(
                 new SubButton(
@@ -77,11 +75,9 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
         }
         else
         {
-            $parameters = [];
-            $parameters[Application::PARAM_CONTEXT] = Manager::CONTEXT;
-            $parameters[Application::PARAM_ACTION] = Manager::ACTION_LOGOUT;
-
-            $link = $this->getUrlGenerator()->fromParameters($parameters);
+            $link = $this->getUrlGenerator()->fromParameters(
+                [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_LOGOUT]
+            );
 
             $dropdownButton->addSubButton(
                 new SubButton(

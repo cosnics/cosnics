@@ -49,9 +49,6 @@
         <service id="Chamilo\Libraries\Storage\Repository\NestedSetDataClassRepository"
                  alias="Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\NestedSetDataClassRepository"/>
 
-        <service id="Chamilo\Libraries\Storage\Repository\StorageUnitRepository"
-                 alias="Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\StorageUnitRepository"/>
-
         <!-- Utilities -->
         <service id="Chamilo\Libraries\Storage\Implementations\Doctrine\Service\QueryBuilderConfigurator"/>
 

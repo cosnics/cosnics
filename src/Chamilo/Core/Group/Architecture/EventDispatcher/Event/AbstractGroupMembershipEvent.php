@@ -5,8 +5,8 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
- * @package Chamilo\Core\Group\EventDispatcher\Event
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Group\Architecture\EventDispatcher\Event
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class AbstractGroupMembershipEvent extends AbstractGroupEvent
 {

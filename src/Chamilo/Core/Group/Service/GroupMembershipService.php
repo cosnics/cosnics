@@ -239,8 +239,8 @@ class GroupMembershipService
         {
             $groupRelation = new GroupRelUser();
 
-            $groupRelation->set_user_id($user->getId());
-            $groupRelation->set_group_id($group->getId());
+            $groupRelation->setUserId($user->getId());
+            $groupRelation->setGroupId($group->getId());
 
             if (!$this->getGroupMembershipRepository()->createGroupUserRelation($groupRelation))
             {
@@ -288,6 +288,7 @@ class GroupMembershipService
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function unsubscribeAllUsersFromGroup(Group $group): bool
     {
@@ -300,15 +301,15 @@ class GroupMembershipService
             {
                 throw new RuntimeException(
                     sprintf(
-                        'Could not unsubscribe user %s from group %s', $groupUserRelation->get_user_id(),
-                        $groupUserRelation->get_group_id()
+                        'Could not unsubscribe user %s from group %s', $groupUserRelation->getUserId(),
+                        $groupUserRelation->getGroupId()
                     )
                 );
             }
 
             $this->getEventDispatcher()->dispatch(
                 new AfterGroupUnsubscribeEvent(
-                    $group, $this->getUserService()->findUserByIdentifier($groupUserRelation->get_user_id())
+                    $group, $this->getUserService()->findUserByIdentifier($groupUserRelation->getUserId())
                 )
             );
         }

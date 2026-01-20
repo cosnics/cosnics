@@ -5,7 +5,7 @@ use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use IntlDateFormatter;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -95,29 +95,29 @@ class EventListRenderer extends EventRenderer
 
     public function getRange(Event $event): string
     {
-        $translator = $this->getTranslator();
         $datetimeUtilities = $this->getDatetimeUtilities();
 
         $html = [];
 
-        $dateFormat = $translator->trans('DateTimeFormatLong', [], StringUtilities::LIBRARIES);
+        $dateFormat = IntlDateFormatter::SHORT;
+        $timeFormat = IntlDateFormatter::SHORT;
 
         if ($event->getEndDate() != '')
         {
             if (date('Y m d', $event->getStartDate()) == date('Y m d', $event->getEndDate()))
             {
-                $dateFormat = $translator->trans('TimeNoSecFormat', [], StringUtilities::LIBRARIES);
+                $dateFormat = IntlDateFormatter::NONE;
             }
 
             $html[] = '<div class="calendar-event-range">' . htmlentities(
-                    $datetimeUtilities->formatLocaleDate($dateFormat, $event->getStartDate()) . ' - ' .
-                    $datetimeUtilities->formatLocaleDate($dateFormat, $event->getEndDate())
+                    $datetimeUtilities->formatLocaleDate($event->getStartDate(), $dateFormat, $timeFormat) . ' - ' .
+                    $datetimeUtilities->formatLocaleDate($event->getEndDate(), $dateFormat, $timeFormat)
                 ) . '</div>';
         }
         else
         {
             $html[] = '<div class="calendar-event-range">' . $datetimeUtilities->formatLocaleDate(
-                    $dateFormat, $event->getStartDate()
+                    $event->getStartDate(), $dateFormat, $timeFormat
                 ) . '</div>';
         }
 

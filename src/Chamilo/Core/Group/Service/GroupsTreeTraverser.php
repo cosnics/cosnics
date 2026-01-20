@@ -311,7 +311,7 @@ class GroupsTreeTraverser
 
         foreach ($parentGroups as $parentGroup)
         {
-            $names[] = $parentGroup->get_name();
+            $names[] = $parentGroup->getName();
         }
 
         return implode(' <span class="text-primary">></span> ', array_reverse($names));

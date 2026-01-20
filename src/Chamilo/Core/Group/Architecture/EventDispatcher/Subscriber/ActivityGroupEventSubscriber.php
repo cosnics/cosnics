@@ -14,8 +14,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * @package Chamilo\Core\Group\EventDispatcher\Subscriber
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Group\Architecture\EventDispatcher\Subscriber
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ActivityGroupEventSubscriber implements EventSubscriberInterface
 {
@@ -30,6 +30,10 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
         $this->currentUser = $currentUser;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterCreate(AfterGroupCreateEvent $afterGroupCreateEvent): bool
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
@@ -39,6 +43,10 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterDelete(AfterGroupDeleteEvent $afterGroupDeleteEvent): bool
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
@@ -48,6 +56,10 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterEmptyGroup(AfterGroupEmptyEvent $afterGroupEmptyEvent): bool
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
@@ -57,6 +69,10 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterMove(AfterGroupMoveEvent $afterGroupMoveEvent): bool
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
@@ -66,6 +82,10 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterSubscribe(AfterGroupSubscribeEvent $afterGroupSubscribeEvent): bool
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
@@ -76,6 +96,10 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterUnsubscribe(AfterGroupUnsubscribeEvent $afterGroupUnsubscribeEvent): bool
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
@@ -86,6 +110,10 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterUpdate(AfterGroupUpdateEvent $afterGroupUpdateEvent): bool
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
