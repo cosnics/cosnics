@@ -11,16 +11,19 @@ class TreeMenuRenderer
 {
     protected ResourceManager $resourceManager;
 
-    protected TreeMenuDataProvider $treeMenuDataProvider;
-
-    public function __construct(TreeMenuDataProvider $treeMenuDataProvider, ResourceManager $resourceManager)
+    public function __construct(ResourceManager $resourceManager)
     {
-        $this->treeMenuDataProvider = $treeMenuDataProvider;
         $this->resourceManager = $resourceManager;
     }
 
-    public function render(string $name, string $dataUrl, string $selectedItemIdentifier): string
+    /**
+     * @param string[] $selectedPathIdentifiers
+     */
+    public function render(string $name, string $parameterName, string $dataUrl, array $selectedPathIdentifiers): string
     {
+        $selectedIdentifier = $selectedPathIdentifiers[array_key_last($selectedPathIdentifiers)];
+        $jsonEncodedSelectedPathIdentifiers = json_encode($selectedPathIdentifiers);
+
         $html = [];
 
         $html[] = $this->getResourceManager()->getResourceHtml(
@@ -34,27 +37,58 @@ class TreeMenuRenderer
 
         $html[] = <<< EOT
 <script type="text/javascript">
-$(function () { $('#{$name}').jstree({
-  'core' : {
-    'data' : {
-      'url' : '{$dataUrl}',
-      'dataType' : 'json',
-      'data' : function (node) {
-          console.log(node);
-          if(node.id != '#')
-              {
-                  return { 'group_id' : node.id };
-              }
-          else
-              {return;}
+$(function () {
+    $('#{$name}').jstree({
+        core: {
+            data: {
+                url: '{$dataUrl}',
+                data: function (node) {
+                    if (node.id != '#') {
+                        return {'{$parameterName}': node.id};
+                    }
+                    else {
+                        return;
+                    }
+                }
+            },
+            themes: {
+                name: false,
+                url: false,
+                dots: true,
+                icons: true,
+                ellipsis: true,
+                stripes: false,
+                responsive: true,
+            }
+        }
+    }).on("select_node.jstree", function (event, data) {
+        if (data.event) {
+            if (data.event.type === 'click') {
+                window.location = data.node.a_attr.href;
+            }
+        }
+        $(this).jstree(true).open_node(data.node);
+    }).on("open_node.jstree", function (event, data) {
+        var tree = $(this).jstree(true);
         
-      }
-    }
-  }
-}); });
+        if (data.node.id === '{$selectedIdentifier}') {
+            tree.select_node(data.node);
+        }
 
-$('#{$name}').on("select_node.jstree", function (e, data) {
-window.location = data.node.a_attr.href;
+        data.node.children.forEach(function (childNode) {
+            if (childNode === '{$selectedIdentifier}') {
+                tree.select_node(childNode);
+            }
+        });
+
+    }).on("ready.jstree", function (e, data) {
+        var tree = $(this).jstree(true);
+        var pathIdentifiers = {$jsonEncodedSelectedPathIdentifiers};
+
+        pathIdentifiers.forEach(function (pathIdentifier) {
+            tree.open_node(pathIdentifier);
+        });
+    });
 });
 </script>
 EOT;
@@ -65,10 +99,5 @@ EOT;
     public function getResourceManager(): ResourceManager
     {
         return $this->resourceManager;
-    }
-
-    public function getTreeMenuDataProvider(): TreeMenuDataProvider
-    {
-        return $this->treeMenuDataProvider;
     }
 }

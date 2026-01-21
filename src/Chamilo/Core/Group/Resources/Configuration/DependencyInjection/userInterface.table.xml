@@ -11,5 +11,11 @@
         <service id="Chamilo\Core\Group\UserInterface\Table\SubscribedUserTableRenderer"/>
         <service id="Chamilo\Core\Group\UserInterface\Table\NonSubscribedUserTableRenderer"/>
         <service id="Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider"/>
+        <service id="Chamilo\Core\Group\UserInterface\Menu\GroupJsTreeMenuDataProvider"
+                 class="Chamilo\Libraries\Format\Menu\TreeMenu\JsTreeMenuDataProvider">
+            <argument key="$treeMenuDataProvider"
+                      type="service"
+                      id="Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider"/>
+        </service>
     </services>
 </container>

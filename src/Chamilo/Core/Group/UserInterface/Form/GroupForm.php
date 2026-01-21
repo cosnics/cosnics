@@ -71,7 +71,7 @@ class GroupForm extends FormValidator
 
         $this->addElement(
             'select', NestedSet::PROPERTY_PARENT_ID, $this->getTranslation('Location', [], Manager::CONTEXT),
-            $this->getGroups()
+            $this->getGroupsOptions()
         );
         $this->addRule(
             NestedSet::PROPERTY_PARENT_ID, $this->getTranslation('ThisFieldIsRequired'), 'required'
@@ -150,8 +150,9 @@ class GroupForm extends FormValidator
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function getGroups(): array
+    public function getGroupsOptions(): array
     {
+        // TODO: Get groups as an indented flat list
         $group = $this->group;
 
         $urlFormat = $this->getUrlGenerator()->fromParameters(
@@ -161,6 +162,8 @@ class GroupForm extends FormValidator
                 Manager::PARAM_GROUP_ID => '%s'
             ]
         );
+
+
 
         $group_menu = new GroupMenu($group, $urlFormat, true, true, true);
         $renderer = new OptionsMenuRenderer();

@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
+use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
 use Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider;
@@ -154,13 +155,6 @@ class BrowserComponent extends Manager
         return $this->buttonToolbarRenderer;
     }
 
-    public function getCurrentGroupIdentifier(): ?string
-    {
-        return $this->getRequest()->query->get(
-            Manager::PARAM_GROUP_ID, $this->getGroupService()->findRootGroup()->getId()
-        );
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
@@ -301,6 +295,11 @@ class BrowserComponent extends Manager
         return $this->getService(GroupTreeMenuDataProvider::class);
     }
 
+    public function getGroupsTreeTraverser(): GroupsTreeTraverser
+    {
+        return $this->getService(GroupsTreeTraverser::class);
+    }
+
     public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
         return $this->getService(RequestTableParameterValuesCompiler::class);
@@ -400,16 +399,22 @@ class BrowserComponent extends Manager
      */
     public function renderMenu(): string
     {
-        $dataUrl = str_replace(
-            '\\', '\\\\', $this->getUrlGenerator()->fromParameters(
+        $dataUrl = $this->getUrlGenerator()->fromParameters(
             [
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_CONTEXT => str_replace(
+                    '\\', '\\\\', Manager::CONTEXT
+                ),
                 Application::PARAM_ACTION => Manager::ACTION_GROUP_TREE_DATA,
             ]
-        )
+
         );
 
-        return $this->getTreeMenuRenderer()->render('groupMenu', $dataUrl, $this->getCurrentGroupIdentifier());
+        $selectedPathIdentifiers =
+            $this->getGroupsTreeTraverser()->findParentGroupIdentifiersForGroup($this->getGroup());
+
+        return $this->getTreeMenuRenderer()->render(
+            'groupMenu', Manager::PARAM_GROUP_ID, $dataUrl, $selectedPathIdentifiers
+        );
     }
 
     /**

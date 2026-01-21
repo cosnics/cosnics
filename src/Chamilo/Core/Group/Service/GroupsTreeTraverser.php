@@ -206,7 +206,7 @@ class GroupsTreeTraverser
     }
 
     /**
-     * @return int[]
+     * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findParentGroupIdentifiersForGroup(Group $group, bool $includeSelf = true): array

@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Format\Menu\TreeMenu\JsTreeMenuDataProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,7 +24,7 @@ class GroupTreeDataComponent extends Manager
         );
 
         return new JsonResponse(
-            data: $this->getGroupTreeMenuDataProvider()->getData(
+            data: $this->getJsTreeMenuDataProvider()->getData(
                 $urlFormat, $this->getCurrentGroupIdentifier()
             )
         );
@@ -35,8 +35,8 @@ class GroupTreeDataComponent extends Manager
         return $this->getRequest()->query->get(Manager::PARAM_GROUP_ID);
     }
 
-    public function getGroupTreeMenuDataProvider(): GroupTreeMenuDataProvider
+    public function getJsTreeMenuDataProvider(): JsTreeMenuDataProvider
     {
-        return $this->getService(GroupTreeMenuDataProvider::class);
+        return $this->getService('Chamilo\Core\Group\UserInterface\Menu\GroupJsTreeMenuDataProvider');
     }
 }

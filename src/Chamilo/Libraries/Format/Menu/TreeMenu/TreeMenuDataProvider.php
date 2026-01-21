@@ -1,22 +1,35 @@
 <?php
 namespace Chamilo\Libraries\Format\Menu\TreeMenu;
 
-use stdClass;
-
 /**
  * @package Chamilo\Libraries\Format\Menu\TreeMenu
  */
 abstract class TreeMenuDataProvider
 {
-    public function formatUrl(string $urlFormat, string $selectedItemIdentifier): string
+    abstract public function getData(string $uriFormat, ?string $itemIdentifier): array;
+
+    protected function getTreeNode(
+        string $uriFormat, string $identifier, string $text, array $childNodes = [], bool $hasChildNodes = false
+    ): TreeNode
     {
-        return htmlentities(sprintf($urlFormat, $selectedItemIdentifier));
+        $item = new TreeNode($identifier, $text);
+
+        $item->setAnchorAttributes(['href' => html_entity_decode($this->getTreeNodeUri($uriFormat, $identifier))]);
+
+        if (count($childNodes) > 0)
+        {
+            $item->setChildNodes($childNodes);
+        }
+        else
+        {
+            $item->setHasChildNodes($hasChildNodes);
+        }
+
+        return $item;
     }
 
-    abstract public function getData(string $urlFormat, ?string $itemIdentifier): array;
-
-    public function getTreeMenuItemUrl(string $urlFormat, string $selectedItemIdentifier): string
+    protected function getTreeNodeUri(string $uriFormat, string $selectedItemIdentifier): string
     {
-        return $this->formatUrl($urlFormat, $selectedItemIdentifier);
+        return htmlentities(sprintf($uriFormat, $selectedItemIdentifier));
     }
 }
