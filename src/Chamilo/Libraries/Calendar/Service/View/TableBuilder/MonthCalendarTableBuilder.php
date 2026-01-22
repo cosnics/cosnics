@@ -15,7 +15,7 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
 {
     public const TIME_PLACEHOLDER = '__TIME__';
 
-    protected function addEventItems(HTML_Table $table, $time, $row, $column, $items)
+    protected function addEventItems(HTML_Table $table, $time, $row, $column, $items): void
     {
         foreach ($items as $item)
         {
@@ -31,7 +31,7 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
         }
     }
 
-    protected function addEvents(int $displayTime, HTML_Table $table, array $cellMapping, array $events)
+    protected function addEvents(int $displayTime, HTML_Table $table, array $cellMapping, array $events): void
     {
         foreach ($events as $time => $items)
         {
@@ -131,7 +131,7 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
 
     public function getDayUrl(int $time, string $dayUrlTemplate): string
     {
-        return str_replace(self::TIME_PLACEHOLDER, $time, $dayUrlTemplate);
+        return str_replace(self::TIME_PLACEHOLDER, (string) $time, $dayUrlTemplate);
     }
 
     protected function getFirstDayOfWeek(): ?string
@@ -163,7 +163,7 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
 
     public function getTableStartTime(int $displayTime): int
     {
-        $firstDay = mktime(0, 0, 0, date('m', $displayTime), 1, date('Y', $displayTime));
+        $firstDay = mktime(0, 0, 0, (int) date('m', $displayTime), 1, (int) date('Y', $displayTime));
 
         if ($this->getFirstDayOfWeek() == 'sunday')
         {
@@ -176,7 +176,7 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
     /**
      * @throws \Exception
      */
-    public function setHeader(HTML_Table $table)
+    public function setHeader(HTML_Table $table): void
     {
         $translator = $this->getTranslator();
         $header = $table->getHeader();

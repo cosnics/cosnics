@@ -14,7 +14,7 @@ use QuickformException;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Calendar\Renderer\Form
+ * @package Chamilo\Libraries\Calendar\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */

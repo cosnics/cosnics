@@ -166,7 +166,7 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
     {
         $urlFormat = $this->determineNavigationUrl($dataProvider);
         $nextTime = strtotime('+1 Month', $displayTime);
-        $nextUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, $nextTime, $urlFormat);
+        $nextUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, (string) $nextTime, $urlFormat);
 
         $glyph = new FontAwesomeGlyph('chevron-right', ['pull-right'], null, 'fas');
 
@@ -178,7 +178,7 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
     {
         $urlFormat = $this->determineNavigationUrl($dataProvider);
         $previousTime = strtotime('-1 Month', $displayTime);
-        $previousUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, $previousTime, $urlFormat);
+        $previousUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, (string) $previousTime, $urlFormat);
 
         $glyph = new FontAwesomeGlyph('chevron-left', ['pull-left'], null, 'fas');
 

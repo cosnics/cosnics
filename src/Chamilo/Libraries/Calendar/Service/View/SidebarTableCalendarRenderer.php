@@ -13,7 +13,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\View
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
@@ -23,6 +22,9 @@ abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
 
     abstract public function getPreviousDisplayTime(int $displayTime): int;
 
+    /**
+     * @throws \QuickformException
+     */
     public function renderNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
         $urlFormat = $this->determineNavigationUrl($dataProvider);
@@ -31,9 +33,9 @@ abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
         $previousTime = $this->getPreviousDisplayTime($displayTime);
         $nextTime = $this->getNextDisplayTime($displayTime);
 
-        $todayUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, time(), $urlFormat);
-        $previousUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, $previousTime, $urlFormat);
-        $nextUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, $nextTime, $urlFormat);
+        $todayUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, (string) time(), $urlFormat);
+        $previousUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, (string) $previousTime, $urlFormat);
+        $nextUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, (string) $nextTime, $urlFormat);
 
         $buttonToolBar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();

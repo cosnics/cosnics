@@ -7,15 +7,14 @@ use Exception;
 use HTML_Table;
 
 /**
- * @package Chamilo\Libraries\Calendar\Service\View\Table
- *
+ * @package Chamilo\Libraries\Calendar\Service\View\TableBuilder
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DayCalendarTableBuilder extends CalendarTableBuilder
 {
     use HourBasedCalendarTrait;
 
-    protected function addEvents(int $displayTime, HTML_Table $table, array $cellMapping, array $events)
+    protected function addEvents(int $displayTime, HTML_Table $table, array $cellMapping, array $events): void
     {
 
         $start = 0;
@@ -49,6 +48,9 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
         }
     }
 
+    /**
+     * @throws \TableException
+     */
     protected function buildTable(HTML_Table $table, int $displayTime, ?string $dayUrlTemplate = null): array
     {
         $header = $table->getHeader();
@@ -74,7 +76,7 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
         for ($hour = $startHour; $hour < $endHour; $hour += $this->getHourStep())
         {
             $rowId = ($hour / $this->getHourStep()) - $startHour;
-            $cellContent = str_pad($hour, 2, '0', STR_PAD_LEFT);
+            $cellContent = str_pad((string) $hour, 2, '0', STR_PAD_LEFT);
             $table->setCellContents($rowId, 0, $cellContent);
 
             $classes = [];
@@ -86,7 +88,7 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
                 $classes[] = 'table-calendar-alternate';
             }
 
-            $table->setCellAttributes($rowId, 0, ['class' =>$classes]);
+            $table->setCellAttributes($rowId, 0, ['class' => $classes]);
         }
 
         for ($hour = $startHour; $hour < $endHour; $hour += $this->getHourStep())
@@ -99,7 +101,7 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
 
             if (count($classes) > 0)
             {
-                $table->setCellAttributes($rowId, 1, ['class' =>$classes]);
+                $table->setCellAttributes($rowId, 1, ['class' => $classes]);
             }
         }
 

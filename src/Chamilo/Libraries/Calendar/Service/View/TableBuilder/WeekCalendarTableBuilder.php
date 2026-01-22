@@ -18,7 +18,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
 
     public const TIME_PLACEHOLDER = '__TIME__';
 
-    protected function addEvents(int $displayTime, HTML_Table $table, array $cellMapping, array $events)
+    protected function addEvents(int $displayTime, HTML_Table $table, array $cellMapping, array $events): void
     {
         $workingStart = $this->getStartHour();
         $workingEnd = $this->getEndHour();
@@ -63,6 +63,9 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
         }
     }
 
+    /**
+     * @throws \TableException
+     */
     protected function buildTable(HTML_Table $table, int $displayTime, ?string $dayUrlTemplate = null): array
     {
         $header = $table->getHeader();
@@ -88,7 +91,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
         for ($hour = $start; $hour < $end; $hour += $this->getHourStep())
         {
             $rowId = ($hour / $this->getHourStep()) - $start;
-            $cellContent = str_pad($hour, 2, '0', STR_PAD_LEFT);
+            $cellContent = str_pad((string) $hour, 2, '0', STR_PAD_LEFT);
             $table->setCellContents($rowId, 0, $cellContent);
 
             $classes = [];
@@ -164,7 +167,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
 
     public function getDayUrl(int $time, string $dayUrlTemplate): string
     {
-        return str_replace(self::TIME_PLACEHOLDER, $time, $dayUrlTemplate);
+        return str_replace(self::TIME_PLACEHOLDER, (string) $time, $dayUrlTemplate);
     }
 
     protected function getFirstDayOfWeek(): ?string

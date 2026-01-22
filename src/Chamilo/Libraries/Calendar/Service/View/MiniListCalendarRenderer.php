@@ -11,7 +11,6 @@ use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\View
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MiniListCalendarRenderer extends MiniCalendarRenderer

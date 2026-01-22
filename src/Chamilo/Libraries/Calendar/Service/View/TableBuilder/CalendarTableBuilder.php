@@ -35,6 +35,9 @@ abstract class CalendarTableBuilder
         $this->configurationConsulter = $configurationConsulter;
     }
 
+    /**
+     * @throws \TableException
+     */
     public function render(int $displayTime, array $events, array $classes = [], ?string $dayUrlTemplate = null): string
     {
         array_unshift($classes, 'table-calendar');

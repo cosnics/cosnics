@@ -192,9 +192,11 @@ class LegendRenderer
     /**
      * @param string[] $sources
      */
-    public function setSources(array $sources)
+    public function setSources(array $sources): static
     {
         $this->sources = $sources;
+
+        return $this;
     }
 
     public function getTranslator(): Translator

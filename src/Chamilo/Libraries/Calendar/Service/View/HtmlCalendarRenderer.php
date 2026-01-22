@@ -98,11 +98,17 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
         return $this->urlGenerator;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function isEventSourceVisible(CalendarRendererProviderInterface $dataProvider, Event $event): bool
     {
         return $this->isSourceVisible($dataProvider, $event->getSource());
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function isSourceVisible(
         CalendarRendererProviderInterface $dataProvider, string $source, ?int $userIdentifier = null
     ): bool

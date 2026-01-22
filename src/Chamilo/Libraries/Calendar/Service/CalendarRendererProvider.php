@@ -44,9 +44,11 @@ abstract class CalendarRendererProvider implements CalendarRendererProviderInter
         return $this->dataUser;
     }
 
-    public function setDataUser(User $dataUser)
+    public function setDataUser(User $dataUser): static
     {
         $this->dataUser = $dataUser;
+
+        return $this;
     }
 
     /**
@@ -60,9 +62,11 @@ abstract class CalendarRendererProvider implements CalendarRendererProviderInter
     /**
      * @param string[] $displayParameters
      */
-    public function setDisplayParameters(array $displayParameters)
+    public function setDisplayParameters(array $displayParameters): static
     {
         $this->displayParameters = $displayParameters;
+
+        return $this;
     }
 
     /**

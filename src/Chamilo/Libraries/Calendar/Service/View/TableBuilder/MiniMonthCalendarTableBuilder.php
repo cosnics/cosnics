@@ -6,12 +6,11 @@ use HTML_Table;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\View\TableBuilder
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MiniMonthCalendarTableBuilder extends MonthCalendarTableBuilder
 {
-    protected function addEventItems(HTML_Table $table, $time, $row, $column, $items)
+    protected function addEventItems(HTML_Table $table, $time, $row, $column, $items): void
     {
         $tooltip = htmlentities(implode(PHP_EOL, $items));
 
