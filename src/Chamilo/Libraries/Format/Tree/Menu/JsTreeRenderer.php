@@ -1,10 +1,10 @@
 <?php
-namespace Chamilo\Libraries\Format\Menu\TreeMenu;
+namespace Chamilo\Libraries\Format\Tree\Menu;
 
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
 /**
- * @package Chamilo\Libraries\Format\Menu\TreeMenu
+ * @package Chamilo\Libraries\Format\Tree\Menu
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class JsTreeRenderer

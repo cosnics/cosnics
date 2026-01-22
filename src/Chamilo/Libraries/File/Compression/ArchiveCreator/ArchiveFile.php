@@ -3,29 +3,21 @@ namespace Chamilo\Libraries\File\Compression\ArchiveCreator;
 
 /**
  * @package Chamilo\Libraries\File\Compression\ArchiveCreator
- *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ArchiveFile extends ArchiveItem
 {
-    /**
-     * @var string
-     */
-    protected $originalPath;
+    protected string $originalPath;
 
-    /**
-     * @return string
-     */
-    public function getOriginalPath()
+    public function getOriginalPath(): string
     {
         return $this->originalPath;
     }
 
-    /**
-     * @param string $originalPath
-     */
-    public function setOriginalPath(string $originalPath)
+    public function setOriginalPath(string $originalPath): static
     {
         $this->originalPath = $originalPath;
+
+        return $this;
     }
 }

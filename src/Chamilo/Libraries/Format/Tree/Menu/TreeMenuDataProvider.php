@@ -1,21 +1,17 @@
 <?php
-namespace Chamilo\Libraries\Format\Menu\TreeMenu;
+namespace Chamilo\Libraries\Format\Tree\Menu;
 
+use Chamilo\Libraries\Format\Tree\TreeNode;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Closure;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @package Chamilo\Libraries\Format\Menu\TreeMenu
+ * @package Chamilo\Libraries\Format\Tree\Menu
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class TreeMenuDataProvider
 {
-    /**
-     * @return \Chamilo\Libraries\Format\Menu\TreeMenu\TreeNode[]
-     */
-    abstract public function getData(string $uriFormat, ?string $identifier): array;
-
     protected function __getData(
         string $uriFormat, ?string $identifier, Closure $getIdentifier, Closure $getText, Closure $hasChildNodes
     ): array
@@ -41,6 +37,11 @@ abstract class TreeMenuDataProvider
     }
 
     abstract protected function getChildDataClasses(string $parentIdentifier): ArrayCollection;
+
+    /**
+     * @return \Chamilo\Libraries\Format\Tree\TreeNode[]
+     */
+    abstract public function getData(string $uriFormat, ?string $identifier): array;
 
     abstract protected function getRootDataClass(): DataClass;
 

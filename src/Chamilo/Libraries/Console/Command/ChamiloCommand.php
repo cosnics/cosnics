@@ -5,8 +5,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Translation\Translator;
 
 /**
- * Abstract base for a command in chamilo. Includes the translator
- *
  * @author Sven Vanpoucke - Hogeschool Gent
  * @package Chamilo\Libraries\Console\Command
  */

@@ -1,8 +1,8 @@
 <?php
-namespace Chamilo\Libraries\Format\Menu\TreeMenu;
+namespace Chamilo\Libraries\Format\Tree\Options;
 
 /**
- * @package Chamilo\Libraries\Format\Menu\TreeMenu
+ * @package Chamilo\Libraries\Format\Tree\Options
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class OptionsTreeRenderer
@@ -30,7 +30,7 @@ class OptionsTreeRenderer
 
     /**
      * @param string[] $options
-     * @param \Chamilo\Libraries\Format\Menu\TreeMenu\TreeNode[] $treeNodes
+     * @param \Chamilo\Libraries\Format\Tree\TreeNode[] $treeNodes
      */
     public function processTreeNodes(array &$options, array $treeNodes, int $level = 0): void
     {

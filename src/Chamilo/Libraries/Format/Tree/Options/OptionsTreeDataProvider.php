@@ -1,12 +1,13 @@
 <?php
-namespace Chamilo\Libraries\Format\Menu\TreeMenu;
+namespace Chamilo\Libraries\Format\Tree\Options;
 
+use Chamilo\Libraries\Format\Tree\TreeNode;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Closure;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @package Chamilo\Libraries\Format\Menu\TreeMenu
+ * @package Chamilo\Libraries\Format\Tree\Options
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class OptionsTreeDataProvider
@@ -33,7 +34,7 @@ abstract class OptionsTreeDataProvider
     abstract protected function getChildDataClasses(string $parentIdentifier): ArrayCollection;
 
     /**
-     * @return \Chamilo\Libraries\Format\Menu\TreeMenu\TreeNode[]
+     * @return \Chamilo\Libraries\Format\Tree\TreeNode[]
      */
     abstract public function getData(?string $identifier): array;
 

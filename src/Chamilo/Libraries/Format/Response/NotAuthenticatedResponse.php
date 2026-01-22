@@ -41,7 +41,7 @@ class NotAuthenticatedResponse extends Response
         $form = new FormValidator('formLogin', FormValidator::FORM_METHOD_POST, $this->getRequest()->getUri());
 
         $form->get_renderer()->setElementTemplate('{element}');
-        $form->get_renderer()->setRequiredNoteTemplate(null);
+        $form->get_renderer()->setRequiredNoteTemplate('');
 
         $form->addElement('html', '<div class="form-group">');
         $form->addElement('html', '<div class="input-group">');

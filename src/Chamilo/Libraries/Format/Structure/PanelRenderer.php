@@ -4,8 +4,6 @@ namespace Chamilo\Libraries\Format\Structure;
 use InvalidArgumentException;
 
 /**
- * Renders a bootstrap panel
- *
  * @package Chamilo\Libraries\Format\Structure
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -75,9 +73,6 @@ class PanelRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Renders a panel with a table based on key => value data
-     */
     public function renderTablePanel(array $tableValues = [], ?string $title = null, string $mode = self::MODE_DEFAULT
     ): string
     {
@@ -103,7 +98,7 @@ class PanelRenderer
     /**
      * @throws \InvalidArgumentException
      */
-    protected function validateMode(string $mode = self::MODE_DEFAULT)
+    protected function validateMode(string $mode = self::MODE_DEFAULT): void
     {
         if (!in_array($mode, $this->getAllowedModes()))
         {

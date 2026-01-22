@@ -3,7 +3,7 @@ namespace Chamilo\Core\Group\UserInterface\Menu;
 
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuDataProvider;
+use Chamilo\Libraries\Format\Tree\Menu\TreeMenuDataProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -29,7 +29,7 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Menu\TreeMenu\TreeNode[]
+     * @return \Chamilo\Libraries\Format\Tree\TreeNode[]
      */
     public function getData(string $uriFormat, ?string $identifier): array
     {

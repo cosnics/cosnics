@@ -23,7 +23,7 @@ class NotificationMessageSessionStorage implements NotificationMessageStorageInt
         $this->session = $session;
     }
 
-    public function clear()
+    public function clear(): void
     {
         $this->getSession()->remove(self::PARAM_NOTIFICATION_MESSAGES);
     }
@@ -56,7 +56,7 @@ class NotificationMessageSessionStorage implements NotificationMessageStorageInt
     /**
      * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage[] $notificationMessages
      */
-    public function store(array $notificationMessages = [])
+    public function store(array $notificationMessages = []): void
     {
         $notificationMessagesAsArray = [];
 

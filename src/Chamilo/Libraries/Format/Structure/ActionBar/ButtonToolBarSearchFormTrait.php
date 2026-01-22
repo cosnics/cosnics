@@ -12,6 +12,10 @@ use QuickformException;
  */
 trait ButtonToolBarSearchFormTrait
 {
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function getButtonToolBarSearchCondition(?string $type = null): ?AndCondition
     {
         $searchProperties = $this->getButtonToolBarSearchProperties($type);
@@ -28,6 +32,10 @@ trait ButtonToolBarSearchFormTrait
 
     abstract public function getRequest(): ChamiloRequest;
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function setButtonToolBarSearchFormRequestQuery(): void
     {
         try

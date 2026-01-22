@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\File\Compression\ArchiveCreator;
 
 /**
  * @package Chamilo\Libraries\File\Compression\ArchiveCreator
- *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ArchiveFolder extends ArchiveItem
@@ -11,28 +10,24 @@ class ArchiveFolder extends ArchiveItem
     /**
      * @var ArchiveItem[]
      */
-    protected $archiveItems;
+    protected array $archiveItems;
 
-    /**
-     * Archive constructor.
-     */
     public function __construct()
     {
         $this->archiveItems = [];
     }
 
-    /**
-     * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveItem $archiveItem
-     */
-    public function addItem(ArchiveItem $archiveItem)
+    public function addItem(ArchiveItem $archiveItem): static
     {
         $this->archiveItems[] = $archiveItem;
+
+        return $this;
     }
 
     /**
      * @return \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveItem[]
      */
-    public function getArchiveItems()
+    public function getArchiveItems(): array
     {
         return $this->archiveItems;
     }
@@ -40,8 +35,10 @@ class ArchiveFolder extends ArchiveItem
     /**
      * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveItem[] $archiveItems
      */
-    public function setArchiveItems(array $archiveItems)
+    public function setArchiveItems(array $archiveItems): static
     {
         $this->archiveItems = $archiveItems;
+
+        return $this;
     }
 }

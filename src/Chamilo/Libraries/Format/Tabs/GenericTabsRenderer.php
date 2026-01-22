@@ -4,6 +4,10 @@ namespace Chamilo\Libraries\Format\Tabs;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
+/**
+ * @package Chamilo\Libraries\Format\Tabs
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class GenericTabsRenderer
 {
     public const PARAM_SELECTED_TAB = 'tab';
@@ -21,10 +25,7 @@ class GenericTabsRenderer
     }
 
     /**
-     * @param string $name
      * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\GenericTab> $tabs
-     *
-     * @return ?string
      */
     protected function getSelectedTab(string $name, TabsCollection $tabs): ?string
     {
@@ -47,10 +48,7 @@ class GenericTabsRenderer
     }
 
     /**
-     * @param string $name
      * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\GenericTab> $tabs
-     *
-     * @return string
      */
     public function renderFooter(string $name, TabsCollection $tabs): string
     {

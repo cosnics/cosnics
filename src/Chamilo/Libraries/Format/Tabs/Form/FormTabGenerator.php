@@ -22,14 +22,17 @@ class FormTabGenerator
         return $this->genericTabRenderer;
     }
 
-    public function renderContent(string $formTabsGeneratorName, FormValidator $form, FormTab $tab)
+    /**
+     * @throws \QuickformException
+     */
+    public function renderContent(string $formTabsGeneratorName, FormValidator $form, FormTab $tab): void
     {
         $form->addElement('html', $this->getGenericTabRenderer()->renderContentHeader($formTabsGeneratorName, $tab));
         $this->renderContentSingleTab($form, $tab);
         $form->addElement('html', $this->getGenericTabRenderer()->renderContentFooter());
     }
 
-    public function renderContentSingleTab(FormValidator $form, FormTab $tab)
+    public function renderContentSingleTab(FormValidator $form, FormTab $tab): void
     {
         $method = $tab->getMethod();
 

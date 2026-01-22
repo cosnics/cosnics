@@ -10,7 +10,7 @@ use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Menu\TreeMenu\OptionsTreeRenderer;
+use Chamilo\Libraries\Format\Tree\Options\OptionsTreeRenderer;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -150,9 +150,9 @@ class ItemForm extends FormValidator
     public function getMenuOptionsTreeRenderer(): OptionsTreeRenderer
     {
         /**
-         * @var class-string<\Chamilo\Libraries\Format\Menu\TreeMenu\OptionsTreeRenderer> $className
+         * @var class-string<\Chamilo\Libraries\Format\Tree\Options\OptionsTreeRenderer> $className
          */
-        $className = 'Chamilo\Core\Menu\UserInterface\Menu\MenuOptionsTreeRenderer';
+        $className = 'Chamilo\Core\Menu\UserInterface\Menu\ItemOptionsTreeRenderer';
 
         return $this->getService($className);
     }

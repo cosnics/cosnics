@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Format\Structure\ActionBar;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure\ActionBar
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -22,9 +21,11 @@ trait ActionButtonTrait
         return $this->action;
     }
 
-    public function setAction(?string $action)
+    public function setAction(?string $action): static
     {
         $this->action = $action;
+
+        return $this;
     }
 
     public function getConfirmationMessage(): ?string
@@ -32,9 +33,11 @@ trait ActionButtonTrait
         return $this->confirmationMessage;
     }
 
-    public function setConfirmationMessage(?string $confirmationMessage)
+    public function setConfirmationMessage(?string $confirmationMessage): static
     {
         $this->confirmationMessage = $confirmationMessage;
+
+        return $this;
     }
 
     public function getTarget(): ?string
@@ -42,9 +45,11 @@ trait ActionButtonTrait
         return $this->target;
     }
 
-    public function setTarget(?string $target)
+    public function setTarget(?string $target): static
     {
         $this->target = $target;
+
+        return $this;
     }
 
     /**
@@ -54,11 +59,13 @@ trait ActionButtonTrait
      */
     public function initializeActionButton(
         ?string $action = null, ?string $confirmationMessage = null, ?string $target = null
-    )
+    ): static
     {
         $this->setAction($action);
         $this->setConfirmationMessage($confirmationMessage);
         $this->setTarget($target);
+
+        return $this;
     }
 
     public function needsConfirmation(): bool

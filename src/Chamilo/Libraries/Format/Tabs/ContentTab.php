@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Format\Tabs;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Tabs
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -27,8 +26,10 @@ class ContentTab extends GenericTab
         return $this->content;
     }
 
-    public function setContent(string $content)
+    public function setContent(string $content): static
     {
         $this->content = $content;
+
+        return $this;
     }
 }

@@ -36,9 +36,11 @@ class Actions extends ArrayCollection
         return $this->context;
     }
 
-    public function setContext(string $context)
+    public function setContext(string $context): static
     {
         $this->context = $context;
+
+        return $this;
     }
 
     public function getSearchUrl(): ?string
@@ -46,8 +48,10 @@ class Actions extends ArrayCollection
         return $this->searchUrl;
     }
 
-    public function setSearchUrl(?string $search)
+    public function setSearchUrl(?string $search): static
     {
         $this->searchUrl = $search;
+
+        return $this;
     }
 }

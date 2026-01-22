@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Format\Structure;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -43,30 +42,38 @@ class PageConfiguration
         $this->application = $application;
     }
 
-    public function addCssFile(string $file, string $media = 'screen')
+    public function addCssFile(string $file, string $media = 'screen'): static
     {
         $header = '<link rel="stylesheet" type="text/css" media="' . $media . '" href="' . $file . '" />';
         $this->addHtmlHeader($header);
+
+        return $this;
     }
 
-    public function addHtmlHeader(string $htmlHeader)
+    public function addHtmlHeader(string $htmlHeader): static
     {
         $this->htmlHeaders[] = $htmlHeader;
+
+        return $this;
     }
 
-    public function addJavascriptFile(string $file)
+    public function addJavascriptFile(string $file): static
     {
         $header[] = '<script src="' . $file . '"></script>';
         $this->addHtmlHeader(implode(' ', $header));
+
+        return $this;
     }
 
-    public function addLink(string $url, ?string $rel = null, ?string $title = null, ?string $type = null)
+    public function addLink(string $url, ?string $rel = null, ?string $title = null, ?string $type = null): static
     {
         $type = $type ? ' type="' . $type . '"' : '';
         $title = $title ? ' title="' . htmlentities($title) . '"' : '';
         $rel = $rel ? ' rel="' . $rel . '"' : '';
         $href = ' href="' . $url . '"';
         $this->addHtmlHeader('<link' . $href . $rel . $title . $type . '/>');
+
+        return $this;
     }
 
     public function getApplication(): ?Application
@@ -74,9 +81,11 @@ class PageConfiguration
         return $this->application;
     }
 
-    public function setApplication(?Application $application)
+    public function setApplication(?Application $application): static
     {
         $this->application = $application;
+
+        return $this;
     }
 
     public function getContainerMode(): string
@@ -84,9 +93,11 @@ class PageConfiguration
         return $this->containerMode;
     }
 
-    public function setContainerMode(string $containerMode)
+    public function setContainerMode(string $containerMode): static
     {
         $this->containerMode = $containerMode;
+
+        return $this;
     }
 
     public function getHtmlHeaders(): array

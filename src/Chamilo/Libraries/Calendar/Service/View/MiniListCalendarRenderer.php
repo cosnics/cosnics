@@ -6,6 +6,7 @@ use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderI
 use Chamilo\Libraries\Calendar\Architecture\Traits\AgendaCalendarTrait;
 use Chamilo\Libraries\Calendar\Service\Event\EventListRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -19,13 +20,16 @@ class MiniListCalendarRenderer extends MiniCalendarRenderer
 
     protected EventListRenderer $eventListRenderer;
 
+    protected NotificationMessageRenderer $notificationMessageRenderer;
+
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        EventListRenderer $eventListRenderer
+        EventListRenderer $eventListRenderer, NotificationMessageRenderer $notificationMessageRenderer
     )
     {
         parent::__construct($legendRenderer, $urlGenerator, $translator);
         $this->eventListRenderer = $eventListRenderer;
+        $this->notificationMessageRenderer = $notificationMessageRenderer;
     }
 
     /**
@@ -56,5 +60,10 @@ class MiniListCalendarRenderer extends MiniCalendarRenderer
     public function getEventListRenderer(): EventListRenderer
     {
         return $this->eventListRenderer;
+    }
+
+    public function getNotificationMessageRenderer(): NotificationMessageRenderer
+    {
+        return $this->notificationMessageRenderer;
     }
 }

@@ -6,8 +6,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,10 +59,10 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
                 }
                 else
                 {
-                    $html[] = Display::normal_message(
-                        $translator->trans(
-                            'YourNewPasswordHasBeenMailedToYou', [], Manager::CONTEXT
-                        )
+                    $html[] = $this->getNotificationMessageRenderer()->renderOne(
+                        new NotificationMessage(
+                            $translator->trans('YourNewPasswordHasBeenMailedToYou', [], Manager::CONTEXT)
+                        ), false
                     );
                 }
             }

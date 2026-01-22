@@ -35,19 +35,17 @@ class ArchiveCreator
         $this->configurablePathBuilder = $configurablePathBuilder;
     }
 
-    public function createAndDownloadArchive(Archive $archive, Request $request)
+    public function createAndDownloadArchive(Archive $archive, Request $request): static
     {
         $downloadResponse = $this->createArchiveWithDownloadResponse($archive);
         $downloadResponse->prepare($request);
-
         $downloadResponse->send();
 
         $this->removeArchiveAfterDownload($downloadResponse);
+
+        return $this;
     }
 
-    /**
-     * Makes an actual zipped file from a given archive and returns the path to the archive
-     */
     public function createArchive(Archive $archive): string
     {
         $temporaryFolder =
@@ -61,9 +59,6 @@ class ArchiveCreator
         return $archivePath;
     }
 
-    /**
-     * Makes an actual zipped file from a given archive and embeds the archive in a binary response
-     */
     public function createArchiveWithDownloadResponse(Archive $archive): BinaryFileResponse
     {
         $archivePath = $this->createArchive($archive);
@@ -83,7 +78,7 @@ class ArchiveCreator
         return $this->filesystemTools;
     }
 
-    protected function handleArchiveFile(ArchiveFile $archiveFile, string $temporaryPath)
+    protected function handleArchiveFile(ArchiveFile $archiveFile, string $temporaryPath): static
     {
         $fileName = $this->getFilesystemTools()->createUniqueName($temporaryPath, $archiveFile->getName());
         $filePath = $temporaryPath . DIRECTORY_SEPARATOR . $fileName;
@@ -97,9 +92,11 @@ class ArchiveCreator
         {
             $this->filesystem->copy($originalPath, $filePath);
         }
+
+        return $this;
     }
 
-    protected function handleArchiveFolder(ArchiveFolder $archiveFolder, string $temporaryPath)
+    protected function handleArchiveFolder(ArchiveFolder $archiveFolder, string $temporaryPath): static
     {
         $folderName = $this->getFilesystemTools()->createUniqueName($temporaryPath, $archiveFolder->getName());
         $folderPath = $temporaryPath . DIRECTORY_SEPARATOR . $folderName;
@@ -109,38 +106,43 @@ class ArchiveCreator
         {
             $this->handleArchiveItem($archiveItem, $folderPath);
         }
+
+        return $this;
     }
 
-    protected function handleArchiveItem(ArchiveItem $archiveItem, string $temporaryPath)
+    protected function handleArchiveItem(ArchiveItem $archiveItem, string $temporaryPath): static
     {
         if ($archiveItem instanceof ArchiveFolder)
         {
             $this->handleArchiveFolder($archiveItem, $temporaryPath);
 
-            return;
+            return $this;
         }
 
         /** @var ArchiveFile $archiveItem */
         $this->handleArchiveFile($archiveItem, $temporaryPath);
+
+        return $this;
     }
 
     /**
      * @param \Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveItem[] $archiveItems
      */
-    protected function handleArchiveItems(array $archiveItems, string $temporaryFolder)
+    protected function handleArchiveItems(array $archiveItems, string $temporaryFolder): static
     {
         foreach ($archiveItems as $archiveItem)
         {
             $this->handleArchiveItem($archiveItem, $temporaryFolder);
         }
+
+        return $this;
     }
 
-    /**
-     * Removes the archive path after downloading the
-     */
-    public function removeArchiveAfterDownload(BinaryFileResponse $binaryFileResponse)
+    public function removeArchiveAfterDownload(BinaryFileResponse $binaryFileResponse): static
     {
         $archivePath = $binaryFileResponse->getFile()->getPathname();
         $this->filesystem->remove([$archivePath]);
+
+        return $this;
     }
 }

@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Format\Structure\Glyph;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure\Glyph
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -59,9 +58,6 @@ abstract class InlineGlyph
         return $classes;
     }
 
-    /**
-     * @return string
-     */
     public function getClassNamesString(): string
     {
         return implode(' ', $this->getClassNames());
@@ -76,12 +72,13 @@ abstract class InlineGlyph
     }
 
     /**
-     *
-     * @param string[]
+     * @param string[] $extraClasses
      */
-    public function setExtraClasses(array $extraClasses)
+    public function setExtraClasses(array $extraClasses): static
     {
         $this->extraClasses = $extraClasses;
+
+        return $this;
     }
 
     public function getTitle(): ?string
@@ -89,9 +86,11 @@ abstract class InlineGlyph
         return $this->title;
     }
 
-    public function setTitle(?string $title)
+    public function setTitle(?string $title): static
     {
         $this->title = $title;
+
+        return $this;
     }
 
     public function getType(): string
@@ -99,8 +98,10 @@ abstract class InlineGlyph
         return $this->type;
     }
 
-    public function setType(string $type)
+    public function setType(string $type): static
     {
         $this->type = $type;
+
+        return $this;
     }
 }

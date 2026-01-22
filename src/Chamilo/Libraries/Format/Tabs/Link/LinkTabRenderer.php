@@ -5,8 +5,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
- *
- * @package Chamilo\Libraries\Format\Tabs
+ * @package Chamilo\Libraries\Format\Tabs\Link
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LinkTabRenderer

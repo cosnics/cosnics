@@ -1,22 +1,18 @@
 <?php
 namespace Chamilo\Libraries\Format\Utilities;
 
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 
 /**
  * Manages resources, ensuring that they are only loaded when necessary.
- * Currently only relevant for JavaScript and CSS files.
  *
+ * @package Chamilo\Libraries\Format\Utilities
  * @author  Tim De Pauw
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @package Chamilo\Libraries\Format\Utilities
  */
 class ResourceManager
 {
-
-    private static ?ResourceManager $instance = null;
 
     /**
      * @var string[]
@@ -38,35 +34,11 @@ class ResourceManager
      * Use this function if you load a resource through another function / class and want to make sure that the
      * resource manager does not load it again
      */
-    public function addPathToLoadedResources(string $path)
+    public function addPathToLoadedResources(string $path): static
     {
         $this->resources[] = $path;
-    }
 
-    /**
-     * @throws \Exception
-     * @deprecated Use Dependency injection if possible
-     */
-    public static function getInstance(): ResourceManager
-    {
-        if (!isset(self::$instance))
-        {
-            $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-
-            /**
-             * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
-             */
-
-            $webPathBuilder = $container->get(WebPathBuilder::class);
-            /**
-             * @var \Chamilo\Libraries\File\SystemPathBuilder $systemPathBuilder
-             */
-            $systemPathBuilder = $container->get(SystemPathBuilder::class);
-
-            self::$instance = new ResourceManager($systemPathBuilder, $webPathBuilder);
-        }
-
-        return self::$instance;
+        return $this;
     }
 
     public function getResourceHtml(string $path): string

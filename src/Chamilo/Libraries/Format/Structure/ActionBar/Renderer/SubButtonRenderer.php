@@ -37,12 +37,4 @@ class SubButtonRenderer extends AbstractButtonRenderer
 
         return array_merge($this->getButton()->getClasses(), $classes);
     }
-
-    /**
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton
-     */
-    public function getButton()
-    {
-        return parent::getButton();
-    }
 }

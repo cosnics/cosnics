@@ -3,43 +3,27 @@ namespace Chamilo\Libraries\File\ImageManipulation\Gd;
 
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Exception;
+use GdImage;
 
 /**
- * This class provide image manipulation using php's GD-extension
- *
- * @package Chamilo\Libraries\File\ImageManipulation\Gd$GdImageManipulation
+ * @package Chamilo\Libraries\File\ImageManipulation\Gd
  */
 class GdImageManipulation extends ImageManipulation
 {
 
-    /**
-     * @var resource
-     */
-    private $gdImage = null;
+    private GdImage|null|false $gdImage = null;
 
     /**
-     *
-     * @param string $sourceFile
-     *
      * @throws \Exception
      */
-    public function __construct($sourceFile)
+    public function __construct(string $sourceFile)
     {
         parent::__construct($sourceFile);
-        $this->load_gd_image();
+        $this->loadGdImage();
     }
 
-    /**
-     * @param int $width
-     * @param int $height
-     * @param int $offsetX
-     * @param int $offsetY
-     *
-     * @return bool
-     */
-    public function crop(
-        $width, $height, $offsetX = ImageManipulation::CROP_CENTER, $offsetY = ImageManipulation::CROP_CENTER
-    )
+    public function crop(int $width, int $height, int $offsetX = self::CROP_CENTER, int $offsetY = self::CROP_CENTER
+    ): bool
     {
         if (!function_exists('imagecopy'))
         {
@@ -71,13 +55,11 @@ class GdImageManipulation extends ImageManipulation
     }
 
     /**
-     * Loads the image file in memory using the imagecreatefromXXX functions.
-     *
      * @throws \Exception
      */
-    private function load_gd_image()
+    private function loadGdImage(): void
     {
-        $extension = $this->get_image_extension();
+        $extension = $this->getImageExtension();
         $extension = str_replace('jpg', 'jpeg', $extension);
         $createFunction = 'imagecreatefrom' . $extension;
 
@@ -90,15 +72,9 @@ class GdImageManipulation extends ImageManipulation
     }
 
     /**
-     * Resize an image to an exact set of dimensions, ignoring aspect ratio.
-     *
-     * @param int $width The width of the image after resizing
-     * @param int $height The height of the image after resizing
-     *
-     * @return bool True if successfull, false if not
      * @throws \Exception
      */
-    public function resize($width, $height)
+    public function resize(int $width, int $height): bool
     {
         if (!function_exists('imagecopyresampled'))
         {
@@ -120,22 +96,16 @@ class GdImageManipulation extends ImageManipulation
     }
 
     /**
-     * Write the resulting image (after some manipulations to a file)
-     *
-     * @param string $file Full path of the file to which the image should be written. If null, the original image will
-     *     be overwritten.
-     *
-     * @return bool
      * @throws \Exception
      */
-    public function write_to_file($sourceFile = null)
+    public function writeToFile(?string $sourceFile = null): bool
     {
         if (is_null($sourceFile))
         {
             $sourceFile = $this->sourceFile;
         }
 
-        $extension = $this->get_image_extension();
+        $extension = $this->getImageExtension();
         $extension = str_replace('jpg', 'jpeg', $extension);
         $createFunction = 'image' . $extension;
 

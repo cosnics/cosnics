@@ -34,8 +34,10 @@ abstract class AbstractButtonToolBarItem
     /**
      * @param string[] $classes
      */
-    public function setClasses(array $classes)
+    public function setClasses(array $classes): static
     {
         $this->classes = $classes;
+
+        return $this;
     }
 }

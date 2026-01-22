@@ -17,7 +17,7 @@ class NotificationMessageRenderer
     /**
      * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage[] $notificationMessages
      */
-    public function render(array $notificationMessages = []): string
+    public function render(array $notificationMessages = [], bool $addcontainer = true): string
     {
         if (empty($notificationMessages))
         {
@@ -26,14 +26,20 @@ class NotificationMessageRenderer
 
         $html = [];
 
-        $html[] = '<div class="notifications">';
+        if ($addcontainer)
+        {
+            $html[] = '<div class="notifications">';
+        }
 
         foreach ($notificationMessages as $notificationMessage)
         {
             $html[] = $this->renderNotificationMessage($notificationMessage);
         }
 
-        $html[] = '</div>';
+        if ($addcontainer)
+        {
+            $html[] = '</div>';
+        }
 
         return implode(PHP_EOL, $html);
     }
@@ -52,8 +58,8 @@ class NotificationMessageRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function renderOne(NotificationMessage $notificationMessage): string
+    public function renderOne(NotificationMessage $notificationMessage, bool $addcontainer = true): string
     {
-        return $this->render([$notificationMessage]);
+        return $this->render([$notificationMessage], $addcontainer);
     }
 }

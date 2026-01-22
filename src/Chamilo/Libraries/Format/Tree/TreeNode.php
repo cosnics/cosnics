@@ -1,8 +1,8 @@
 <?php
-namespace Chamilo\Libraries\Format\Menu\TreeMenu;
+namespace Chamilo\Libraries\Format\Tree;
 
 /**
- * @package Chamilo\Libraries\Format\Menu\TreeMenu
+ * @package Chamilo\Libraries\Format\Tree
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TreeNode
@@ -13,7 +13,7 @@ class TreeNode
     public array $anchorAttributes = [];
 
     /**
-     * @var \Chamilo\Libraries\Format\Menu\TreeMenu\TreeNode[]
+     * @var \Chamilo\Libraries\Format\Tree\TreeNode[]
      */
     public array $childNodes = [];
 
@@ -72,7 +72,7 @@ class TreeNode
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Menu\TreeMenu\TreeNode[]
+     * @return \Chamilo\Libraries\Format\Tree\TreeNode[]
      */
     public function getChildNodes(): array
     {
@@ -80,7 +80,7 @@ class TreeNode
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Menu\TreeMenu\TreeNode[] $childNodes
+     * @param \Chamilo\Libraries\Format\Tree\TreeNode[] $childNodes
      */
     public function setChildNodes(array $childNodes): TreeNode
     {

@@ -9,6 +9,7 @@ use Chamilo\Libraries\Calendar\Service\JumpBarRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\View\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -28,10 +29,13 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
 
     protected EventListRenderer $eventListRenderer;
 
+    protected NotificationMessageRenderer $notificationMessageRenderer;
+
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
         MiniMonthCalendarRenderer $miniMonthCalendarRenderer, EventListRenderer $eventListRenderer,
-        WebPathBuilder $webPathBuilder, ResourceManager $resourceManager, JumpBarRenderer $jumpBarRenderer
+        WebPathBuilder $webPathBuilder, ResourceManager $resourceManager, JumpBarRenderer $jumpBarRenderer,
+        NotificationMessageRenderer $notificationMessageRenderer
     )
     {
         parent::__construct(
@@ -40,6 +44,7 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
         );
 
         $this->eventListRenderer = $eventListRenderer;
+        $this->notificationMessageRenderer = $notificationMessageRenderer;
     }
 
     protected function getEndTime(int $displayTime): int
@@ -52,10 +57,18 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
         return $this->eventListRenderer;
     }
 
+    public function getNotificationMessageRenderer(): NotificationMessageRenderer
+    {
+        return $this->notificationMessageRenderer;
+    }
+
+    /**
+     * @throws \QuickformException
+     */
     public function renderNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
         $urlFormat = $this->determineNavigationUrl($dataProvider);
-        $todayUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, time(), $urlFormat);
+        $todayUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, (string) time(), $urlFormat);
 
         $buttonToolBar = new ButtonToolBar();
 

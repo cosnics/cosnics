@@ -83,7 +83,8 @@ class ClearCacheCommand extends ChamiloCommand
         if ($input->getOption(self::OPT_LIST))
         {
             $output->writeln(
-                '<comment>' . $this->translator->trans('AvailableCacheAdapters', [], StringUtilities::LIBRARIES) . '</comment>'
+                '<comment>' . $this->translator->trans('AvailableCacheAdapters', [], StringUtilities::LIBRARIES) .
+                '</comment>'
             );
             $output->writeln('');
 

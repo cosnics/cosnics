@@ -23,7 +23,6 @@ class ButtonToolBar
     private ?string $searchUrl;
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $items
      */
     public function __construct(?string $searchUrl = null, array $items = [], array $classes = [])
@@ -33,30 +32,38 @@ class ButtonToolBar
         $this->classes = $classes;
     }
 
-    public function addButtonGroup(AbstractButtonToolBarItem $buttonToolBarItem)
+    public function addButtonGroup(AbstractButtonToolBarItem $buttonToolBarItem): static
     {
         $this->addItem($buttonToolBarItem);
+
+        return $this;
     }
 
-    public function addClass(string $class)
+    public function addClass(string $class): static
     {
         $this->classes[] = $class;
+
+        return $this;
     }
 
-    public function addItem(AbstractButtonToolBarItem $buttonToolBarItem)
+    public function addItem(AbstractButtonToolBarItem $buttonToolBarItem): static
     {
         $this->items[] = $buttonToolBarItem;
+
+        return $this;
     }
 
     /**
      * @param AbstractButtonToolBarItem[] $buttonToolbarItems
      */
-    public function addItems(array $buttonToolbarItems = [])
+    public function addItems(array $buttonToolbarItems = []): static
     {
         foreach ($buttonToolbarItems as $buttonToolbarItem)
         {
             $this->addItem($buttonToolbarItem);
         }
+
+        return $this;
     }
 
     /**
@@ -70,9 +77,11 @@ class ButtonToolBar
     /**
      * @param string[] $classes
      */
-    public function setClasses(array $classes)
+    public function setClasses(array $classes): static
     {
         $this->classes = $classes;
+
+        return $this;
     }
 
     /**
@@ -86,9 +95,11 @@ class ButtonToolBar
     /**
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $items
      */
-    public function setItems(array $items)
+    public function setItems(array $items): static
     {
         $this->items = $items;
+
+        return $this;
     }
 
     public function getSearchUrl(): ?string
@@ -96,9 +107,11 @@ class ButtonToolBar
         return $this->searchUrl;
     }
 
-    public function setSearchUrl(?string $searchUrl)
+    public function setSearchUrl(?string $searchUrl): static
     {
         $this->searchUrl = $searchUrl;
+
+        return $this;
     }
 
     public function hasItems(): bool
@@ -106,8 +119,10 @@ class ButtonToolBar
         return count($this->items) > 0;
     }
 
-    public function prependItem(AbstractButtonToolBarItem $buttonToolBarItem)
+    public function prependItem(AbstractButtonToolBarItem $buttonToolBarItem): static
     {
         array_unshift($this->items, $buttonToolBarItem);
+
+        return $this;
     }
 }

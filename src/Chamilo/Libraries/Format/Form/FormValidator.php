@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Format\Form;
 
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_advanced_element_finder;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_bootstrap_radio;
 use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_category;
@@ -19,6 +18,7 @@ use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Filetype;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_NumberCompare;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Username;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_ValidateDatabaseConnection;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTabsGenerator;
 use Chamilo\Libraries\Platform\Security;
@@ -139,8 +139,11 @@ EOT;
         }
         elseif ($error)
         {
-
-            $html[] = Display::error_message($this->getTranslation('FormHasErrorsPleaseComplete'));
+            $html[] = $this->getNotificationMessageRenderer()->renderOne(
+                new NotificationMessage(
+                    $this->getTranslation('FormHasErrorsPleaseComplete'), NotificationMessage::TYPE_DANGER
+                ), false
+            );
         }
 
         $html[] = parent::toHtml($in_data);

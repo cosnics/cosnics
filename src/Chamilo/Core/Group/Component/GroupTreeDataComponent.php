@@ -3,7 +3,7 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Menu\TreeMenu\JsTreeMenuDataProvider;
+use Chamilo\Libraries\Format\Tree\Menu\JsTreeMenuDataProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,7 +36,7 @@ class GroupTreeDataComponent extends Manager
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Format\Menu\TreeMenu\JsTreeMenuDataProvider> $className
+     * @param class-string<\Chamilo\Libraries\Format\Tree\Menu\JsTreeMenuDataProvider> $className
      */
     public function getJsTreeDataProvider(
         string $className = 'Chamilo\Core\Group\UserInterface\Menu\GroupJsTreeMenuDataProvider'

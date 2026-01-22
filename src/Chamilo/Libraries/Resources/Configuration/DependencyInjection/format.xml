@@ -75,6 +75,6 @@
         <service id="Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorRenderer"/>
         <service id="Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptionsFactory"/>
 
-        <service id="Chamilo\Libraries\Format\Menu\TreeMenu\JsTreeRenderer"/>
+        <service id="Chamilo\Libraries\Format\Tree\Menu\JsTreeRenderer"/>
     </services>
 </container>

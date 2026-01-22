@@ -3,29 +3,21 @@ namespace Chamilo\Libraries\File\Compression\ArchiveCreator;
 
 /**
  * @package Chamilo\Libraries\File\Compression\ArchiveCreator
- *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class ArchiveItem
 {
-    /**
-     * @var string
-     */
-    protected $name;
+    protected string $name;
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
-    public function setName(string $name)
+    public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
     }
 }

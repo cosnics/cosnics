@@ -21,6 +21,8 @@ use Symfony\Component\Translation\Translator;
  */
 class BannerRenderer
 {
+    protected BreadcrumbTrail $breadcrumbTrail;
+
     private BreadcrumbTrailRenderer $breadcrumbTrailRenderer;
 
     private ConfigurationConsulter $configurationConsulter;
@@ -35,12 +37,10 @@ class BannerRenderer
 
     private UrlGenerator $urlGenerator;
 
-    protected BreadcrumbTrail $breadcrumbTrail;
-
     public function __construct(
         PageConfiguration $pageConfiguration, SessionInterface $session, Translator $translator,
-        ConfigurationConsulter $configurationConsulter, UrlGenerator $urlGenerator, MenuRenderer $menuRenderer, BreadcrumbTrail $breadcrumbTrail,
-        BreadcrumbTrailRenderer $breadcrumbTrailRenderer
+        ConfigurationConsulter $configurationConsulter, UrlGenerator $urlGenerator, MenuRenderer $menuRenderer,
+        BreadcrumbTrail $breadcrumbTrail, BreadcrumbTrailRenderer $breadcrumbTrailRenderer
     )
     {
         $this->pageConfiguration = $pageConfiguration;
@@ -130,8 +130,6 @@ class BannerRenderer
     {
         return $this->breadcrumbTrail;
     }
-
-
 
     public function getBreadcrumbTrailRenderer(): BreadcrumbTrailRenderer
     {

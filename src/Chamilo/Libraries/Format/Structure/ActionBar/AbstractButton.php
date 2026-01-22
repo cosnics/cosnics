@@ -38,9 +38,11 @@ abstract class AbstractButton extends AbstractButtonToolBarItem
         return $this->display;
     }
 
-    public function setDisplay(int $display)
+    public function setDisplay(int $display): static
     {
         $this->display = $display;
+
+        return $this;
     }
 
     public function getInlineGlyph(): ?InlineGlyph
@@ -48,22 +50,22 @@ abstract class AbstractButton extends AbstractButtonToolBarItem
         return $this->inlineGlyph;
     }
 
-    public function setInlineGlyph(?InlineGlyph $inlineGlyph)
+    public function setInlineGlyph(?InlineGlyph $inlineGlyph): static
     {
         $this->inlineGlyph = $inlineGlyph;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return string
-     */
     public function getLabel(): ?string
     {
         return $this->label;
     }
 
-    public function setLabel(?string $label)
+    public function setLabel(?string $label): static
     {
         $this->label = $label;
+
+        return $this;
     }
 }

@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Format\Tabs;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Tabs
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -25,10 +24,7 @@ class TabsRenderer
     }
 
     /**
-     * @param string $name
      * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\GenericTab> $tabs
-     *
-     * @return string
      */
     public function render(string $name, TabsCollection $tabs): string
     {
@@ -73,10 +69,7 @@ class TabsRenderer
     }
 
     /**
-     * @param string $name
      * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\GenericTab> $tabs
-     *
-     * @return string
      */
     public function renderHeader(string $name, TabsCollection $tabs): string
     {

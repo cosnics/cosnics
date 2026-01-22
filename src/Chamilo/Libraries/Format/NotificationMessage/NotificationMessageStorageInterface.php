@@ -2,15 +2,13 @@
 namespace Chamilo\Libraries\Format\NotificationMessage;
 
 /**
- * Interface for a storage for notification messages
- *
  * @package Chamilo\Libraries\Format\NotificationMessage
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface NotificationMessageStorageInterface
 {
 
-    public function clear();
+    public function clear(): void;
 
     /**
      * @return \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage[]
@@ -20,6 +18,6 @@ interface NotificationMessageStorageInterface
     /**
      * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage[] $notificationMessages
      */
-    public function store(array $notificationMessages = []);
+    public function store(array $notificationMessages = []): void;
 }
 

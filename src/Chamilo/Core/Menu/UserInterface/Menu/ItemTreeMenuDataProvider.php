@@ -6,7 +6,7 @@ use Chamilo\Core\Menu\Implementation\Menu\CategoryItemRenderer;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuDataProvider;
+use Chamilo\Libraries\Format\Tree\Menu\TreeMenuDataProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
@@ -55,7 +55,7 @@ class ItemTreeMenuDataProvider extends TreeMenuDataProvider
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Menu\TreeMenu\TreeNode[]
+     * @return \Chamilo\Libraries\Format\Tree\TreeNode[]
      */
     public function getData(string $uriFormat, ?string $identifier): array
     {

@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Format\Tabs;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Tabs
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -33,14 +32,16 @@ class Action
         $this->confirmationMessage = $confirmationMessage;
     }
 
-    public function getConfirmationMessage(): bool
+    public function getConfirmationMessage(): ?string
     {
         return $this->confirmationMessage;
     }
 
-    public function setConfirmationMessage(bool $confirmationMessage)
+    public function setConfirmationMessage(?string $confirmationMessage): static
     {
         $this->confirmationMessage = $confirmationMessage;
+
+        return $this;
     }
 
     public function getContent(): string
@@ -48,9 +49,11 @@ class Action
         return $this->content;
     }
 
-    public function setContent(string $content)
+    public function setContent(string $content): static
     {
         $this->content = $content;
+
+        return $this;
     }
 
     public function getInlineGlyph(): ?InlineGlyph
@@ -58,9 +61,11 @@ class Action
         return $this->inlineGlyph;
     }
 
-    public function setInlineGlyph(?InlineGlyph $inlineGlyph)
+    public function setInlineGlyph(?InlineGlyph $inlineGlyph): static
     {
         $this->inlineGlyph = $inlineGlyph;
+
+        return $this;
     }
 
     public function getTitle(): ?string
@@ -68,9 +73,11 @@ class Action
         return $this->title;
     }
 
-    public function setTitle(?string $title)
+    public function setTitle(?string $title): static
     {
         $this->title = $title;
+
+        return $this;
     }
 
     public function getUrl(): ?string
@@ -78,9 +85,11 @@ class Action
         return $this->url;
     }
 
-    public function setUrl(?string $url)
+    public function setUrl(?string $url): static
     {
         $this->url = $url;
+
+        return $this;
     }
 
     public function hasConfirmationMessage(): bool

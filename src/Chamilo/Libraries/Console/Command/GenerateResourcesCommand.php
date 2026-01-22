@@ -8,10 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
- * Command to generate the aggregated resource files
- *
  * @package Chamilo\Libraries\Console\Command
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GenerateResourcesCommand extends ChamiloCommand
@@ -32,6 +29,9 @@ class GenerateResourcesCommand extends ChamiloCommand
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->resourceGenerator->generateResources();

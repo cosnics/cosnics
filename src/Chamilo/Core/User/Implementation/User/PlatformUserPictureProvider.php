@@ -229,7 +229,7 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
             $imageManipulation = ImageManipulation::factory($path . $imageFile);
             $imageManipulation->scale(400, 400);
 
-            if (!$imageManipulation->write_to_file())
+            if (!$imageManipulation->writeToFile())
             {
                 return false;
             }

@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Format\Structure\Glyph;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Structure\Glyph
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -36,7 +35,7 @@ class FontAwesomeGlyph extends InlineGlyph
         return $this->style;
     }
 
-    public function setStyle(string $style): FontAwesomeGlyph
+    public function setStyle(string $style): static
     {
         $this->style = $style;
 

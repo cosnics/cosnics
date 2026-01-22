@@ -11,14 +11,14 @@
         <service id="Chamilo\Core\Menu\UserInterface\Menu\ItemOptionsTreeDataProvider"/>
 
         <service id="Chamilo\Core\Menu\UserInterface\Menu\ItemJsTreeMenuDataProvider"
-                 class="Chamilo\Libraries\Format\Menu\TreeMenu\JsTreeMenuDataProvider">
+                 class="Chamilo\Libraries\Format\Tree\Menu\JsTreeMenuDataProvider">
             <argument key="$treeMenuDataProvider"
                       type="service"
                       id="Chamilo\Core\Menu\UserInterface\Menu\ItemTreeMenuDataProvider"/>
         </service>
 
         <service id="Chamilo\Core\Menu\UserInterface\Menu\ItemOptionsTreeRenderer"
-                 class="Chamilo\Libraries\Format\Menu\TreeMenu\OptionsTreeRenderer">
+                 class="Chamilo\Libraries\Format\Tree\Options\OptionsTreeRenderer">
             <argument key="$optionsTreeDataProvider"
                       type="service"
                       id="Chamilo\Core\Menu\UserInterface\Menu\ItemOptionsTreeDataProvider"/>

@@ -41,7 +41,7 @@ class TabsCollection extends ArrayCollection
         return false;
     }
 
-    public function sortByLabel()
+    public function sortByLabel(): static
     {
         $tabs = $this->toArray();
 
@@ -57,5 +57,7 @@ class TabsCollection extends ArrayCollection
         {
             $this->add($tab);
         }
+
+        return $this;
     }
 }

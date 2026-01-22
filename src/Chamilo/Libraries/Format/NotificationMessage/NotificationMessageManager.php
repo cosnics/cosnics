@@ -2,8 +2,6 @@
 namespace Chamilo\Libraries\Format\NotificationMessage;
 
 /**
- * Manages notification messages
- *
  * @package Chamilo\Libraries\Format\NotificationMessage
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -26,7 +24,7 @@ class NotificationMessageManager
     /**
      * @param int $limitByCategory Limits the number of messages of the same category by the given number (0 = infinite)
      */
-    public function addMessage(NotificationMessage $notificationMessage, int $limitByCategory = 0)
+    public function addMessage(NotificationMessage $notificationMessage, int $limitByCategory = 0): static
     {
         $notificationMessages = $this->getNotificationMessageStorage()->retrieve();
 
@@ -36,6 +34,8 @@ class NotificationMessageManager
         }
 
         $this->getNotificationMessageStorage()->store($notificationMessages);
+
+        return $this;
     }
 
     /**
@@ -76,11 +76,6 @@ class NotificationMessageManager
         return $this->notificationMessageStorage;
     }
 
-    /**
-     * Renders the messages on the screen and clears them from the storage
-     *
-     * @return string
-     */
     public function renderMessages(): string
     {
         $messages = $this->getNotificationMessageStorage()->retrieve();

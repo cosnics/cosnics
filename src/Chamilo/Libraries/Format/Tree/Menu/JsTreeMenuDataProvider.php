@@ -1,10 +1,10 @@
 <?php
-namespace Chamilo\Libraries\Format\Menu\TreeMenu;
+namespace Chamilo\Libraries\Format\Tree\Menu;
 
 use stdClass;
 
 /**
- * @package Chamilo\Libraries\Format\Menu\TreeMenu
+ * @package Chamilo\Libraries\Format\Tree\Menu
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class JsTreeMenuDataProvider
@@ -17,7 +17,7 @@ class JsTreeMenuDataProvider
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Menu\TreeMenu\TreeNode[] $treeNodes
+     * @param \Chamilo\Libraries\Format\Tree\TreeNode[] $treeNodes
      */
     protected function convertTreeNodes(array $treeNodes): array
     {

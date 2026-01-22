@@ -50,6 +50,9 @@ class PreLoadCacheCommand extends ChamiloCommand
         );
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($this->listCacheDataPreLoaderServices($input, $output))
@@ -78,7 +81,8 @@ class PreLoadCacheCommand extends ChamiloCommand
         if ($input->getOption(self::OPT_LIST))
         {
             $output->writeln(
-                '<comment>' . $this->translator->trans('AvailableCacheDataPreLoaderServices', [], StringUtilities::LIBRARIES) .
+                '<comment>' .
+                $this->translator->trans('AvailableCacheDataPreLoaderServices', [], StringUtilities::LIBRARIES) .
                 '</comment>'
             );
             $output->writeln('');
@@ -94,7 +98,10 @@ class PreLoadCacheCommand extends ChamiloCommand
         return false;
     }
 
-    protected function preLoad(InputInterface $input, OutputInterface $output)
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
+    protected function preLoad(InputInterface $input, OutputInterface $output): void
     {
         $this->cacheDataPreLoaderManager->preLoad($this->getSelectedCacheDataPreLoadServices($input));
         $output->writeln($this->translator->trans('CachePreLoaded', [], StringUtilities::LIBRARIES));

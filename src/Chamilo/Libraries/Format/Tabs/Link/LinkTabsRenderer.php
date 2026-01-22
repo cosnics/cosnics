@@ -4,8 +4,7 @@ namespace Chamilo\Libraries\Format\Tabs\Link;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 
 /**
- *
- * @package Chamilo\Libraries\Format\Tabs
+ * @package Chamilo\Libraries\Format\Tabs\Link
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LinkTabsRenderer

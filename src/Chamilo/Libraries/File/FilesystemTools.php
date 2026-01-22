@@ -26,9 +26,6 @@ class FilesystemTools
         $this->stringUtilities = $stringUtilities;
     }
 
-    /**
-     * Creates a safe name for a file or directory
-     */
     public function createSafeName(string $desiredName): string
     {
         $asciiString = $this->getStringUtilities()->createString($desiredName)->toAscii()->__toString();
@@ -66,11 +63,6 @@ class FilesystemTools
         }
     }
 
-    /**
-     * Creates a unique name for a file or a directory.
-     * This function will also use the function
-     * FilesystemTools::createSafeName to make sure the resulting name is safe to use.
-     */
     public function createUniqueName(string $desiredPath, ?string $desiredFilename = null): string
     {
         $index = 0;
@@ -107,9 +99,6 @@ class FilesystemTools
         return $uniquePath;
     }
 
-    /**
-     * Transform the file size in a human readable format
-     */
     public function formatFileSize(int $fileSize, bool $postfix = true): string
     {
         // Todo: Megabyte vs Mebibyte...
@@ -211,24 +200,6 @@ class FilesystemTools
     public function getStringUtilities(): StringUtilities
     {
         return $this->stringUtilities;
-    }
-
-    /**
-     * This function detects every uncreated directory of a given path and returns it as an array of paths
-     *
-     * @return string[]
-     */
-    public static function getUncreatedDirectories(string $path): array
-    {
-        $uncreatedDirectories = [];
-
-        while (!is_dir($path))
-        {
-            $uncreatedDirectories[] = $path;
-            $path = dirname($path);
-        }
-
-        return $uncreatedDirectories;
     }
 
     /**

@@ -5,8 +5,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Format\Tabs\AbstractTab;
 
 /**
- *
- * @package Chamilo\Libraries\Format\Tabs
+ * @package Chamilo\Libraries\Format\Tabs\Link
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LinkTab extends AbstractTab
@@ -46,9 +45,11 @@ class LinkTab extends AbstractTab
         return $this->confirmationMessage;
     }
 
-    public function setConfirmationMessage(?string $confirmationMessage)
+    public function setConfirmationMessage(?string $confirmationMessage): static
     {
         $this->confirmationMessage = $confirmationMessage;
+
+        return $this;
     }
 
     public function getLink(): string
@@ -56,9 +57,11 @@ class LinkTab extends AbstractTab
         return $this->link;
     }
 
-    public function setLink(string $link)
+    public function setLink(string $link): static
     {
         $this->link = $link;
+
+        return $this;
     }
 
     public function getPosition(): string
@@ -66,9 +69,11 @@ class LinkTab extends AbstractTab
         return $this->position;
     }
 
-    public function setPosition(string $position)
+    public function setPosition(string $position): static
     {
         $this->position = $position;
+
+        return $this;
     }
 
     public function getTarget(): int
@@ -76,9 +81,11 @@ class LinkTab extends AbstractTab
         return $this->target;
     }
 
-    public function setTarget(int $target)
+    public function setTarget(int $target): static
     {
         $this->target = $target;
+
+        return $this;
     }
 
     public function hasConfirmationMessage(): bool
@@ -96,9 +103,11 @@ class LinkTab extends AbstractTab
         return $this->isSelected;
     }
 
-    public function setIsSelected(bool $isSelected)
+    public function setIsSelected(bool $isSelected): static
     {
         $this->isSelected = $isSelected;
+
+        return $this;
     }
 
     public function opensInPopup(): bool

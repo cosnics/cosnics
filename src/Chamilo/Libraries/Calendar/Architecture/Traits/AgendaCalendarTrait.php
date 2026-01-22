@@ -5,7 +5,9 @@ use Chamilo\Libraries\Calendar\Architecture\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Service\Event\EventListRenderer;
-use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Calendar\Architecture\Traits
@@ -71,6 +73,10 @@ trait AgendaCalendarTrait
      */
     abstract public function getEvents(CalendarRendererProviderInterface $dataProvider, int $startTime, int $endTime
     ): array;
+
+    abstract public function getNotificationMessageRenderer(): NotificationMessageRenderer;
+
+    abstract public function getTranslator(): Translator;
 
     abstract public function isEventSourceVisible(CalendarRendererProviderInterface $dataProvider, Event $event): bool;
 
@@ -139,8 +145,10 @@ trait AgendaCalendarTrait
         }
         else
         {
-            $html[] = Display::normal_message(
-                $this->getTranslator()->trans('NoUpcomingEvents', [], 'Chamilo\Libraries')
+            $html[] = $this->getNotificationMessageRenderer()->renderOne(
+                new NotificationMessage(
+                    $this->getTranslator()->trans('NoUpcomingEvents', [], 'Chamilo\Libraries')
+                ), false
             );
         }
 

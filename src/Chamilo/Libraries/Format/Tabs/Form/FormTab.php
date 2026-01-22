@@ -5,7 +5,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Format\Tabs\GenericTab;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Tabs
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -15,7 +14,7 @@ class FormTab extends GenericTab
     /**
      * @var string|string[] $method
      */
-    private $method;
+    private string|array $method;
 
     /**
      * @var string[]
@@ -38,7 +37,7 @@ class FormTab extends GenericTab
     /**
      * @return string|string[]
      */
-    public function getMethod()
+    public function getMethod(): array|string
     {
         return $this->method;
     }
@@ -46,9 +45,11 @@ class FormTab extends GenericTab
     /**
      * @param string|string[] $method
      */
-    public function setMethod($method)
+    public function setMethod(array|string $method): static
     {
         $this->method = $method;
+
+        return $this;
     }
 
     /**
@@ -62,7 +63,7 @@ class FormTab extends GenericTab
     /**
      * @param string[] $parameters
      */
-    public function setParameters(array $parameters): FormTab
+    public function setParameters(array $parameters): static
     {
         $this->parameters = $parameters;
 

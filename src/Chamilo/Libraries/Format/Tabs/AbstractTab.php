@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Format\Tabs;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Tabs
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -37,9 +36,11 @@ abstract class AbstractTab
         return $this->display;
     }
 
-    public function setDisplay(int $display)
+    public function setDisplay(int $display): static
     {
         $this->display = $display;
+
+        return $this;
     }
 
     public function getIdentifier(): string
@@ -47,9 +48,11 @@ abstract class AbstractTab
         return $this->identifier;
     }
 
-    public function setIdentifier(string $identifier)
+    public function setIdentifier(string $identifier): static
     {
         $this->identifier = $identifier;
+
+        return $this;
     }
 
     public function getInlineGlyph(): ?InlineGlyph
@@ -57,9 +60,11 @@ abstract class AbstractTab
         return $this->inlineGlyph;
     }
 
-    public function setInlineGlyph(?InlineGlyph $inlineGlyph)
+    public function setInlineGlyph(?InlineGlyph $inlineGlyph): static
     {
         $this->inlineGlyph = $inlineGlyph;
+
+        return $this;
     }
 
     public function getLabel(): string
@@ -67,9 +72,11 @@ abstract class AbstractTab
         return $this->label;
     }
 
-    public function setLabel(string $label)
+    public function setLabel(string $label): static
     {
         $this->label = $label;
+
+        return $this;
     }
 
     public function isIconVisible(): bool

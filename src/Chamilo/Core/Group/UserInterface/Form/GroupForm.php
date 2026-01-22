@@ -4,8 +4,8 @@ namespace Chamilo\Core\Group\UserInterface\Form;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Menu\TreeMenu\OptionsTreeRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Tree\Options\OptionsTreeRenderer;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
 
@@ -138,7 +138,7 @@ class GroupForm extends FormValidator
     public function getGroupOptionsTreeRenderer(): OptionsTreeRenderer
     {
         /**
-         * @var class-string<\Chamilo\Libraries\Format\Menu\TreeMenu\OptionsTreeRenderer> $className
+         * @var class-string<\Chamilo\Libraries\Format\Tree\Options\OptionsTreeRenderer> $className
          */
         $className = 'Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeRenderer';
 

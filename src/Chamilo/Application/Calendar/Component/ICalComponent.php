@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Authentication\SecurityToken\SecurityTokenAuthentication;
 use Chamilo\Libraries\Calendar\Service\View\ICalCalendarRenderer;
-use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -94,18 +94,22 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
 
                 $html[] = $this->renderHeader();
 
-                $html[] = Display::normal_message(
+                $notificationMessages = [];
+
+                $notificationMessages[] = new NotificationMessage(
                     $translator->trans('ICalExternalMessage', ['{URL}' => $icalExternalUrl], Manager::CONTEXT)
                 );
 
-                $html[] = Display::normal_message(
+                $notificationMessages[] = new NotificationMessage(
                     $translator->trans('ICalDownloadMessage', ['{URL}' => $icalDownloadUrl], Manager::CONTEXT)
                 );
 
-                $html[] = Display::warning_message(
+                $notificationMessages[] = new NotificationMessage(
                     $translator->trans('ICalWarningMessage', ['{INCLUDED_CALENDARS}' => $includedCalendars],
-                        Manager::CONTEXT)
+                        Manager::CONTEXT), NotificationMessage::TYPE_WARNING
                 );
+
+                $html[] = $this->getNotificationMessageRenderer()->render($notificationMessages, false);
 
                 $html[] = $this->renderFooter();
 

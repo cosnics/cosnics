@@ -40,7 +40,7 @@ class ButtonSearchForm extends FormValidator
         //            $this->setDefaults([self::PARAM_SIMPLE_SEARCH_QUERY => $this->getQuery()]);
         //        }else
         //        {
-                    $this->setDefaults([self::PARAM_SIMPLE_SEARCH_QUERY => 'blah']);
+        $this->setDefaults([self::PARAM_SIMPLE_SEARCH_QUERY => 'blah']);
         //        }
 
         $this->buildForm();
@@ -56,7 +56,7 @@ class ButtonSearchForm extends FormValidator
     /**
      * @throws \QuickformException
      */
-    private function buildForm()
+    private function buildForm(): void
     {
         $this->renderer->setFormTemplate('<form {attributes}>{content}</form>');
 

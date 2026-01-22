@@ -20,24 +20,24 @@ trait DropdownButtonTrait
      */
     private array $subButtons;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButtonInterface $subButton
-     */
-    public function addSubButton(SubButtonInterface $subButton)
+    public function addSubButton(SubButtonInterface $subButton): static
     {
         $this->subButtons[] = $subButton;
+
+        return $this;
     }
 
     /**
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButtonInterface[] $subButtons
      */
-    public function addSubButtons(array $subButtons)
+    public function addSubButtons(array $subButtons): static
     {
         foreach ($subButtons as $subButton)
         {
             $this->addSubButton($subButton);
         }
+
+        return $this;
     }
 
     /**
@@ -53,9 +53,11 @@ trait DropdownButtonTrait
      *
      * @param string[] $dropdownClasses
      */
-    public function setDropdownClasses(array $dropdownClasses)
+    public function setDropdownClasses(array $dropdownClasses): static
     {
         $this->dropdownClasses = $dropdownClasses;
+
+        return $this;
     }
 
     /**
@@ -71,9 +73,11 @@ trait DropdownButtonTrait
      *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButtonInterface[] $subButtons
      */
-    public function setSubButtons(array $subButtons)
+    public function setSubButtons(array $subButtons): static
     {
         $this->subButtons = $subButtons;
+
+        return $this;
     }
 
     public function hasButtons(): bool
@@ -86,30 +90,32 @@ trait DropdownButtonTrait
      * https://bugs.php.net/bug.php?id=65576
      * TODO: fix this once everyone moves to PHP 5.6
      */
-    public function initializeDropdownButton(array $dropdownClasses = [], array $subButtons = [])
+    public function initializeDropdownButton(array $dropdownClasses = [], array $subButtons = []): static
     {
         $this->setDropdownClasses($dropdownClasses);
         $this->setSubButtons($subButtons);
+
+        return $this;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButtonInterface $subButton
-     */
-    public function prependSubButton(SubButtonInterface $subButton)
+    public function prependSubButton(SubButtonInterface $subButton): static
     {
         array_unshift($this->subButtons, $subButton);
+
+        return $this;
     }
 
     /**
      *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButtonInterface[] $subButtons
      */
-    public function prependSubButtons(array $subButtons)
+    public function prependSubButtons(array $subButtons): static
     {
         foreach ($subButtons as $subButton)
         {
             $this->prependSubButton($subButton);
         }
+
+        return $this;
     }
 }

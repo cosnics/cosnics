@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Response;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,8 +25,11 @@ class ExceptionResponse extends Response
         $this->getPageConfiguration()->setApplication($application);
 
         $html = [];
+
         $html[] = $this->getHeaderRenderer()->render();
-        $html[] = Display::error_message($exception->getMessage());
+        $html[] = $this->getNotificationMessageRenderer()->renderOne(
+            new NotificationMessage($exception->getMessage(), NotificationMessage::TYPE_DANGER), false
+        );
         $html[] = $this->getFooterRenderer()->render();
 
         parent::__construct(implode(PHP_EOL, $html));

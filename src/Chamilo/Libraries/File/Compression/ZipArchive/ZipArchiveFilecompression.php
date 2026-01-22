@@ -119,19 +119,7 @@ class ZipArchiveFilecompression
         return $this->configurablePathBuilder;
     }
 
-    public function getFilesystem(): Filesystem
-    {
-        return $this->filesystem;
-    }
-
-    public function getFilesystemTools(): FilesystemTools
-    {
-        return $this->filesystemTools;
-    }
-
     /**
-     * Retrieves the file information metadata from the zip archive
-     *
      * @return string[][]
      */
     protected function getFilesInfo(ZipArchive $zipArchive): array
@@ -157,9 +145,17 @@ class ZipArchiveFilecompression
         return $filesInfo;
     }
 
+    public function getFilesystem(): Filesystem
+    {
+        return $this->filesystem;
+    }
+
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return $this->filesystemTools;
+    }
+
     /**
-     * Retrieves an array of all supported mimetypes for this file compression implementation.
-     *
      * @return string[]
      */
     public function getSupportedMimetypes(): array

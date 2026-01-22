@@ -6,7 +6,6 @@ use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
 
 /**
- *
  * @package Chamilo\Libraries\Format\Tabs
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -23,11 +22,11 @@ class FormTabsGenerator
     }
 
     /**
-     * @param string $name
-     * @param \Chamilo\Libraries\Format\Form\FormValidator $form
      * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\Form\FormTab> $tabs
+     *
+     * @throws \QuickformException
      */
-    public function generate(string $name, FormValidator $form, TabsCollection $tabs)
+    public function generate(string $name, FormValidator $form, TabsCollection $tabs): void
     {
         if ($tabs->hasMultipleTabs())
         {
@@ -63,10 +62,7 @@ class FormTabsGenerator
     }
 
     /**
-     * @param string $name
      * @param \Chamilo\Libraries\Format\Tabs\TabsCollection<\Chamilo\Libraries\Format\Tabs\Form\FormTab> $tabs
-     *
-     * @return string
      */
     protected function renderHeader(string $name, TabsCollection $tabs): string
     {
