@@ -18,6 +18,9 @@ class HtmlCalendarRendererFactory
      */
     public function getRenderer(string $rendererType): HtmlCalendarRenderer
     {
+        /**
+         * @var class-string<\Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer> $className
+         */
         $className = 'Chamilo\Libraries\Calendar\Service\View\\' . $rendererType . 'CalendarRenderer';
 
         return $this->getService($className);

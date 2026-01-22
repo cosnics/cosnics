@@ -2,11 +2,11 @@
 namespace Chamilo\Core\Menu\Component;
 
 use Chamilo\Core\Menu\Manager;
-use Chamilo\Core\Menu\UserInterface\Menu\ItemMenu;
 use Chamilo\Core\Menu\UserInterface\Table\ItemTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Menu\TreeMenu\JsTreeRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
@@ -47,7 +47,7 @@ class BrowserComponent extends Manager
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12 col-lg-2">';
-        $html[] = $this->getMenu()->renderAsTree();
+        $html[] = $this->renderMenu();
         $html[] = '</div>';
 
         $html[] = '<div class="col-xs-12 col-lg-10">';
@@ -102,19 +102,9 @@ class BrowserComponent extends Manager
         return $this->getService(ItemTableRenderer::class);
     }
 
-    public function getMenu(): ItemMenu
+    public function getJsTreeRenderer(): JsTreeRenderer
     {
-        $urlFormat = $this->getUrlGenerator()->fromParameters(
-            [
-                self::PARAM_CONTEXT => Manager::CONTEXT,
-                self::PARAM_ACTION => self::ACTION_BROWSE,
-                self::PARAM_PARENT => '__ITEM__'
-            ]
-        );
-
-        return new ItemMenu(
-            $this->getItemRendererFactory(), $this->getItemService(), $urlFormat, $this->getParentIdentifier()
-        );
+        return $this->getService(JsTreeRenderer::class);
     }
 
     public function getParentIdentifier(): string
@@ -130,6 +120,27 @@ class BrowserComponent extends Manager
     public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
         return $this->getService(RequestTableParameterValuesCompiler::class);
+    }
+
+    public function renderMenu(): string
+    {
+        $dataUrl = $this->getUrlGenerator()->fromParameters(
+            [
+                Application::PARAM_CONTEXT => 'Chamilo\\\Core\\\Menu',
+                Application::PARAM_ACTION => Manager::ACTION_ITEM_TREE_DATA,
+            ]
+        );
+
+        $selectedPathIdentifiers = ['0'];
+
+        if ($this->getParentIdentifier() != '0')
+        {
+            $selectedPathIdentifiers = ['0', $this->getParentIdentifier()];
+        }
+
+        return $this->getJsTreeRenderer()->render(
+            'itemMenu', Manager::PARAM_PARENT, $dataUrl, $selectedPathIdentifiers
+        );
     }
 
     /**

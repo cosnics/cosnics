@@ -31,6 +31,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'implementation.menu.xml',
                 'service.xml',
                 'storage.xml',
+                'userInterface.menu.xml',
                 'userInterface.menuRenderer.xml',
                 'userInterface.table.xml'
             ]

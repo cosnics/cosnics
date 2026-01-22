@@ -58,8 +58,12 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
         return $user;
     }
 
-    public function getUserPictureProvider(): UserPictureProviderInterface
+    /**
+     * @param class-string<\Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface> $className
+     */
+    public function getUserPictureProvider(string $className = 'Chamilo\Core\User\Picture\UserPictureProvider'
+    ): UserPictureProviderInterface
     {
-        return $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
+        return $this->getService($className);
     }
 }

@@ -17,7 +17,7 @@ class TreeNode
      */
     public array $childNodes = [];
 
-    public bool $hasChildNodes;
+    public bool $hasChildNodes = false;
 
     public ?string $icon;
 
@@ -34,12 +34,18 @@ class TreeNode
     public string $text;
 
     public function __construct(
-        string $identifier, string $text, ?string $icon = null
+        string $identifier, string $text, ?string $icon = null, array $listAttributes = [],
+        array $anchorAttributes = [], array $state = [], array $childNodes = [], bool $hasChildNodes = false
     )
     {
-        $this->identifier = $identifier;
-        $this->text = $text;
-        $this->icon = $icon;
+        $this->setIdentifier($identifier);
+        $this->setText($text);
+        $this->setIcon($icon);
+        $this->setListAttributes($listAttributes);
+        $this->setAnchorAttributes($anchorAttributes);
+        $this->setState($state);
+        $this->setChildNodes($childNodes);
+        $this->setHasChildNodes($hasChildNodes);
     }
 
     public function addChildNode(TreeNode $child): static
@@ -95,11 +101,21 @@ class TreeNode
 
     public function setHasChildNodes(bool $hasChildNodes): TreeNode
     {
-        $this->hasChildNodes = $hasChildNodes;
-
         if (!$hasChildNodes)
         {
-            $this->childNodes = [];
+            if (count($this->getChildNodes()) > 0)
+            {
+                $this->hasChildNodes = true;
+            }
+            else
+            {
+                $this->hasChildNodes = false;
+                $this->childNodes = [];
+            }
+        }
+        else
+        {
+            $this->hasChildNodes = true;
         }
 
         return $this;
@@ -152,15 +168,12 @@ class TreeNode
         return $this->state;
     }
 
-    public function setState(
-        bool $isOpened = false, bool $isDisabled = false, bool $isSelected = false
-    ): static
+    /**
+     * @param bool[] $state
+     */
+    public function setState(array $state): TreeNode
     {
-        $this->state = [
-            'opened' => $isOpened,
-            'disabled' => $isDisabled,
-            'selected' => $isSelected,
-        ];
+        $this->state = $state;
 
         return $this;
     }
@@ -173,6 +186,19 @@ class TreeNode
     public function setText(string $text): TreeNode
     {
         $this->text = $text;
+
+        return $this;
+    }
+
+    public function setStateByParameters(
+        bool $isOpened = false, bool $isDisabled = false, bool $isSelected = false
+    ): static
+    {
+        $this->state = [
+            'opened' => $isOpened,
+            'disabled' => $isDisabled,
+            'selected' => $isSelected,
+        ];
 
         return $this;
     }

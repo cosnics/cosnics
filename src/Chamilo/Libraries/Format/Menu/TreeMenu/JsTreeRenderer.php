@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
  * @package Chamilo\Libraries\Format\Menu\TreeMenu
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class TreeMenuRenderer
+class JsTreeRenderer
 {
     protected ResourceManager $resourceManager;
 

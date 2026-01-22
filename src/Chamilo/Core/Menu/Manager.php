@@ -19,6 +19,7 @@ abstract class Manager extends Application
     public const ACTION_CREATE = 'Creator';
     public const ACTION_DELETE = 'Deleter';
     public const ACTION_EDIT = 'Editor';
+    public const ACTION_ITEM_TREE_DATA = 'ItemTreeData';
     public const ACTION_MOVE = 'Mover';
 
     public const CONTEXT = __NAMESPACE__;

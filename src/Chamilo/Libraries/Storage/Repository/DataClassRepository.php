@@ -540,6 +540,8 @@ class DataClassRepository
     }
 
     /**
+     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -556,7 +558,7 @@ class DataClassRepository
         )
         );
 
-        $record = $this->getDataClassDatabase()->retrieve($dataClassName, $parameters);
+        $record = $this->getDataClassDatabase()->retrieve($dataClassName::getStorageUnitName(), $parameters);
 
         return (int) $record[self::ALIAS_MAX_SORT];
     }

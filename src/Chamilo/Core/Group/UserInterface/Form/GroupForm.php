@@ -3,10 +3,8 @@ namespace Chamilo\Core\Group\UserInterface\Form;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\UserInterface\Menu\GroupMenu;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
+use Chamilo\Libraries\Format\Menu\TreeMenu\OptionsTreeRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
@@ -27,8 +25,6 @@ class GroupForm extends FormValidator
     private Group $group;
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      */
     public function __construct(string $form_type, Group $group, string $action)
@@ -51,8 +47,6 @@ class GroupForm extends FormValidator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      */
     public function buildBasicForm(): void
@@ -71,7 +65,7 @@ class GroupForm extends FormValidator
 
         $this->addElement(
             'select', NestedSet::PROPERTY_PARENT_ID, $this->getTranslation('Location', [], Manager::CONTEXT),
-            $this->getGroupsOptions()
+            $this->getGroupOptionsTreeRenderer()->getOptions()
         );
         $this->addRule(
             NestedSet::PROPERTY_PARENT_ID, $this->getTranslation('ThisFieldIsRequired'), 'required'
@@ -83,8 +77,6 @@ class GroupForm extends FormValidator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      */
     public function buildCreationForm(): void
@@ -102,8 +94,6 @@ class GroupForm extends FormValidator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      */
     public function buildEditingForm(): void
@@ -145,31 +135,14 @@ class GroupForm extends FormValidator
         return $this->group;
     }
 
-    /**
-     * @return array
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     */
-    public function getGroupsOptions(): array
+    public function getGroupOptionsTreeRenderer(): OptionsTreeRenderer
     {
-        // TODO: Get groups as an indented flat list
-        $group = $this->group;
+        /**
+         * @var class-string<\Chamilo\Libraries\Format\Menu\TreeMenu\OptionsTreeRenderer> $className
+         */
+        $className = 'Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeRenderer';
 
-        $urlFormat = $this->getUrlGenerator()->fromParameters(
-            [
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_BROWSE_GROUPS,
-                Manager::PARAM_GROUP_ID => '%s'
-            ]
-        );
-
-
-
-        $group_menu = new GroupMenu($group, $urlFormat, true, true, true);
-        $renderer = new OptionsMenuRenderer();
-        $group_menu->render($renderer, 'sitemap');
-
-        return $renderer->toArray();
+        return $this->getService($className);
     }
 
     /**

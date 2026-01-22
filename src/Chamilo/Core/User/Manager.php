@@ -51,9 +51,13 @@ abstract class Manager extends Application
 
     public const SESSION_USER_ID = '_uid';
 
-    protected function getActiveMailer(): MailerInterface
+    /**
+     * @param class-string<\Chamilo\Libraries\Mail\Mailer\MailerInterface> $className
+     */
+    protected function getActiveMailer(string $className = 'Chamilo\Libraries\Mail\Mailer\ActiveMailer'
+    ): MailerInterface
     {
-        return $this->getService('Chamilo\Libraries\Mail\Mailer\ActiveMailer');
+        return $this->getService($className);
     }
 
     public function getAuthenticationValidator(): AuthenticationValidator

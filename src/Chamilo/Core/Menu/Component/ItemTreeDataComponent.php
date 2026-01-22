@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Core\Group\Component;
+namespace Chamilo\Core\Menu\Component;
 
-use Chamilo\Core\Group\Manager;
+use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Menu\TreeMenu\JsTreeMenuDataProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -11,35 +11,35 @@ use Symfony\Component\HttpFoundation\Response;
  * @package Chamilo\Core\Group\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class GroupTreeDataComponent extends Manager
+class ItemTreeDataComponent extends Manager
 {
     public function run(): Response
     {
         $urlFormat = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_BROWSE_GROUPS,
-                Manager::PARAM_GROUP_ID => '%s'
+                Application::PARAM_ACTION => Manager::ACTION_BROWSE,
+                Manager::PARAM_PARENT => '%s'
             ]
         );
 
         return new JsonResponse(
             data: $this->getJsTreeDataProvider()->getData(
-                $urlFormat, $this->getCurrentGroupIdentifier()
+                $urlFormat, $this->getCurrentParentIdentifier()
             )
         );
     }
 
-    public function getCurrentGroupIdentifier(): ?string
+    public function getCurrentParentIdentifier(): ?string
     {
-        return $this->getRequest()->query->get(Manager::PARAM_GROUP_ID);
+        return $this->getRequest()->query->get(Manager::PARAM_PARENT);
     }
 
     /**
      * @param class-string<\Chamilo\Libraries\Format\Menu\TreeMenu\JsTreeMenuDataProvider> $className
      */
     public function getJsTreeDataProvider(
-        string $className = 'Chamilo\Core\Group\UserInterface\Menu\GroupJsTreeMenuDataProvider'
+        string $className = 'Chamilo\Core\Menu\UserInterface\Menu\ItemJsTreeMenuDataProvider'
     ): JsTreeMenuDataProvider
     {
         return $this->getService($className);

@@ -5,6 +5,7 @@ use stdClass;
 
 /**
  * @package Chamilo\Libraries\Format\Menu\TreeMenu
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class JsTreeMenuDataProvider
 {

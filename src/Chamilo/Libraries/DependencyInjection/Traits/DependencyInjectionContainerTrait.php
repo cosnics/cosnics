@@ -92,9 +92,14 @@ trait DependencyInjectionContainerTrait
         return $this;
     }
 
-    protected function getDataClassRepository(): DataClassRepository
+    /**
+     * @param class-string<\Chamilo\Libraries\Storage\Repository\DataClassRepository> $className
+     */
+    protected function getDataClassRepository(
+        string $className = 'Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\DataClassRepository'
+    ): DataClassRepository
     {
-        return $this->getService('Chamilo\Libraries\Storage\Implementations\Doctrine\Repository\DataClassRepository');
+        return $this->getService($className);
     }
 
     public function getDatetimeUtilities(): DatetimeUtilities
@@ -102,14 +107,23 @@ trait DependencyInjectionContainerTrait
         return $this->getService(DatetimeUtilities::class);
     }
 
-    public function getEventDispatcher(): EventDispatcherInterface
+    /**
+     * @param class-string<\Symfony\Component\EventDispatcher\EventDispatcherInterface> $className
+     */
+    public function getEventDispatcher(string $className = 'Symfony\Component\EventDispatcher'
+    ): EventDispatcherInterface
     {
-        return $this->getService('Symfony\Component\EventDispatcher');
+        return $this->getService($className);
     }
 
-    protected function getExceptionLogger(): ExceptionLoggerInterface
+    /**
+     * @param class-string<\Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface> $className
+     */
+    protected function getExceptionLogger(
+        string $className = 'Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger'
+    ): ExceptionLoggerInterface
     {
-        return $this->getService('Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger');
+        return $this->getService($className);
     }
 
     public function getFilesystem(): Filesystem
@@ -198,14 +212,23 @@ trait DependencyInjectionContainerTrait
         return $this->getService(SystemPathBuilder::class);
     }
 
-    public function getThemeSystemPathBuilder(): ThemePathBuilder
+    /**
+     * @param class-string<\Chamilo\Libraries\Format\Theme\ThemePathBuilder> $className
+     */
+    public function getThemeSystemPathBuilder(
+        string $className = 'Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder'
+    ): ThemePathBuilder
     {
-        return $this->getService('Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder');
+        return $this->getService($className);
     }
 
-    public function getThemeWebPathBuilder(): ThemePathBuilder
+    /**
+     * @param class-string<\Chamilo\Libraries\Format\Theme\ThemePathBuilder> $className
+     */
+    public function getThemeWebPathBuilder(string $className = 'Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder'
+    ): ThemePathBuilder
     {
-        return $this->getService('Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder');
+        return $this->getService($className);
     }
 
     public function getTranslator(): Translator

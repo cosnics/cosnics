@@ -3,14 +3,14 @@ namespace Chamilo\Core\Group\UserInterface\Menu;
 
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuDataProvider;
+use Chamilo\Libraries\Format\Menu\TreeMenu\OptionsTreeDataProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Core\Group\UserInterface\Menu
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class GroupTreeMenuDataProvider extends TreeMenuDataProvider
+class GroupOptionsTreeDataProvider extends OptionsTreeDataProvider
 {
     protected GroupService $groupService;
 
@@ -20,7 +20,6 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     protected function getChildDataClasses(string $parentIdentifier): ArrayCollection
@@ -31,7 +30,7 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
     /**
      * @return \Chamilo\Libraries\Format\Menu\TreeMenu\TreeNode[]
      */
-    public function getData(string $uriFormat, ?string $identifier): array
+    public function getData(?string $identifier): array
     {
         $getIdentifier = function (Group $group) {
             return $group->getId();
@@ -41,11 +40,16 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
             return $group->getName();
         };
 
-        $hasChildren = function (Group $group) {
-            return $group->hasChildren();
-        };
+        return [$this->__getData($getIdentifier, $getText, $identifier)];
+    }
 
-        return $this->__getData($uriFormat, $identifier, $getIdentifier, $getText, $hasChildren);
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
+    protected function getDataClassByIdentifier(string $identifier): Group
+    {
+        return $this->getGroupService()->findGroupByIdentifier($identifier);
     }
 
     public function getGroupService(): GroupService
@@ -53,9 +57,12 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
         return $this->groupService;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     protected function getRootDataClass(): Group
     {
         return $this->getGroupService()->findRootGroup();
     }
-
 }

@@ -1,35 +1,80 @@
 <?php
 namespace Chamilo\Libraries\Format\Menu\TreeMenu;
 
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Closure;
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * @package Chamilo\Libraries\Format\Menu\TreeMenu
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class TreeMenuDataProvider
 {
-    abstract public function getData(string $uriFormat, ?string $itemIdentifier): array;
+    /**
+     * @return \Chamilo\Libraries\Format\Menu\TreeMenu\TreeNode[]
+     */
+    abstract public function getData(string $uriFormat, ?string $identifier): array;
+
+    protected function __getData(
+        string $uriFormat, ?string $identifier, Closure $getIdentifier, Closure $getText, Closure $hasChildNodes
+    ): array
+    {
+        if (!$identifier)
+        {
+            $rootDataClass = $this->getRootDataClass();
+            $identifier = $getIdentifier($rootDataClass);
+
+            return [
+                $this->getTreeNode(
+                    uriFormat: $uriFormat, identifier: $identifier, text: $getText($rootDataClass),
+                    childNodes: $this->processChildren(
+                        $uriFormat, $identifier, $getIdentifier, $getText, $hasChildNodes
+                    )
+                )
+            ];
+        }
+        else
+        {
+            return $this->processChildren($uriFormat, $identifier, $getIdentifier, $getText, $hasChildNodes);
+        }
+    }
+
+    abstract protected function getChildDataClasses(string $parentIdentifier): ArrayCollection;
+
+    abstract protected function getRootDataClass(): DataClass;
 
     protected function getTreeNode(
         string $uriFormat, string $identifier, string $text, array $childNodes = [], bool $hasChildNodes = false
     ): TreeNode
     {
-        $item = new TreeNode($identifier, $text);
-
-        $item->setAnchorAttributes(['href' => html_entity_decode($this->getTreeNodeUri($uriFormat, $identifier))]);
-
-        if (count($childNodes) > 0)
-        {
-            $item->setChildNodes($childNodes);
-        }
-        else
-        {
-            $item->setHasChildNodes($hasChildNodes);
-        }
-
-        return $item;
+        return new TreeNode(identifier: $identifier, text: $text, anchorAttributes: [
+            'href' => html_entity_decode(
+                $this->getTreeNodeUri($uriFormat, $identifier)
+            )
+        ], childNodes: $childNodes, hasChildNodes: $hasChildNodes);
     }
 
     protected function getTreeNodeUri(string $uriFormat, string $selectedItemIdentifier): string
     {
         return htmlentities(sprintf($uriFormat, $selectedItemIdentifier));
+    }
+
+    protected function processChildren(
+        string $uriFormat, string $parentIdentifier, Closure $getIdentifier, Closure $getText, Closure $hasChildNodes
+    ): array
+    {
+        $childDataClasses = $this->getChildDataClasses($parentIdentifier);
+        $childTreeNodes = [];
+
+        foreach ($childDataClasses as $childDataClass)
+        {
+            $childTreeNodes[] = $this->getTreeNode(
+                uriFormat: $uriFormat, identifier: $getIdentifier($childDataClass), text: $getText($childDataClass),
+                hasChildNodes: $hasChildNodes($childDataClass)
+            );
+        }
+
+        return $childTreeNodes;
     }
 }

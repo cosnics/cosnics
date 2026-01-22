@@ -4,11 +4,9 @@ namespace Chamilo\Core\Group\UserInterface\Form;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\UserInterface\Menu\GroupMenu;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Menu\TreeMenu\OptionsTreeRenderer;
+use HTML_QuickForm_select;
 
 /**
  * @package Chamilo\Core\Group\Form
@@ -21,8 +19,6 @@ class GroupMoveForm extends FormValidator
     private Group $group;
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      */
     public function __construct(Group $group, $action)
@@ -35,42 +31,35 @@ class GroupMoveForm extends FormValidator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \QuickformException
+     */
+    public function addNewLocationSelect(): HTML_QuickForm_select
+    {
+        return $this->addElement(
+            'select', self::PROPERTY_LOCATION, $this->getTranslation('NewLocation', [], Manager::CONTEXT),
+            $this->getGroupOptionsTreeRenderer()->getOptions()
+        );
+    }
+
+    /**
      * @throws \QuickformException
      */
     public function buildForm(): void
     {
-        $this->addElement('select', self::PROPERTY_LOCATION, $this->getTranslation('NewLocation', [], Manager::CONTEXT),
-            $this->getGroups());
-        $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', $this->getTranslation('Move'), null, null, new FontAwesomeGlyph('move')
-        );
+        $selectElement = $this->addNewLocationSelect();
+        $selectElement->disableOptionByValue($this->group->getId());
 
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+        $this->addSaveResetButtons();
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     */
-    public function getGroups(): array
+    public function getGroupOptionsTreeRenderer(): OptionsTreeRenderer
     {
-        $group = $this->group;
+        /**
+         * @var class-string<\Chamilo\Libraries\Format\Menu\TreeMenu\OptionsTreeRenderer> $className
+         */
+        $className = 'Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeRenderer';
 
-        $urlFormat = $this->getUrlGenerator()->fromParameters(
-            [
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_BROWSE_GROUPS,
-                Manager::PARAM_GROUP_ID => '%s'
-            ]
-        );
-
-        $groupMenu = new GroupMenu($group, $urlFormat, true, true);
-        $renderer = new OptionsMenuRenderer();
-        $groupMenu->render($renderer, 'sitemap');
-
-        return $renderer->toArray();
+        return $this->getService($className);
     }
 
     /**
