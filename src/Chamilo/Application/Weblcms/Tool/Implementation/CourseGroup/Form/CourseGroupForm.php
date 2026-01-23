@@ -954,7 +954,7 @@ class CourseGroupForm extends FormValidator
         // check parent's max size >= combined total size of parent's children (could be more than just this group)
         // new children size
 
-        $new_max_size = $values[CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS] * $qty;
+        $new_max_size = intval($values[CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS]) * $qty;
 
         $parent_group_select = $values[self::PARENT_GROUP_SELECTION];
         $parent_group_id = null;
