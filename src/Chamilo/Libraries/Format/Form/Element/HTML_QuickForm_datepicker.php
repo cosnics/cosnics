@@ -1,14 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Format\Form\Element;
 
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\WebPathBuilder;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use HTML_QuickForm_date;
-use HTML_QuickForm_element;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Translation\Translator;
+use HTML_QuickForm_Renderer_Default;
 
 /**
  * Form element to select a date and hour (with popup datepicker)
@@ -17,14 +13,12 @@ use Symfony\Component\Translation\Translator;
  */
 class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 {
+    use DependencyInjectionContainerTrait;
 
     private ?string $formName;
 
     private ?bool $includeTimePicker;
 
-    /**
-     * @throws \Exception
-     */
     public function __construct(
         ?string $formName = null, ?string $elementName = null, ?string $elementLabel = null, $attributes = null,
         ?bool $includeTimePicker = true
@@ -37,7 +31,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 
         $attributes = $this->addFormControlToElementAttributes($attributes);
 
-        HTML_QuickForm_element::__construct($elementName, $elementLabel, $attributes);
+        parent::__construct($elementName, $elementLabel, $attributes);
 
         $this->_persistantFreeze = true;
         $this->_appendName = true;
@@ -123,11 +117,6 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         return $result;
     }
 
-    protected function getContainer(): ContainerInterface
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer();
-    }
-
     public function getDateFormat(string $elementName, bool $includeTimePicker): string
     {
         $js_form_name = $this->formName;
@@ -153,21 +142,6 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         }
     }
 
-    public function getResourceManager(): ResourceManager
-    {
-        return $this->getContainer()->get(ResourceManager::class);
-    }
-
-    protected function getTranslator(): Translator
-    {
-        return $this->getContainer()->get(Translator::class);
-    }
-
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return $this->getContainer()->get(WebPathBuilder::class);
-    }
-
     /**
      * Inheritance of setValue due to limitations of the date element When the default value is bigger then the maximum
      * possible selected value the default year is the lowest possible year.
@@ -176,7 +150,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
      *
      * @param string $value
      */
-    public function setValue($value)
+    public function setValue($value): void
     {
         if (empty($value))
         {
@@ -236,7 +210,13 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $html[] = '<script>';
         $html[] = 'var max_year="' . ((int) date('Y') + 10) . '";';
         $html[] = '</script>';
-        $html[] = parent::toHtml();
+
+        $renderer = new HTML_QuickForm_Renderer_Default();
+        $renderer->setElementTemplate('{element}');
+
+        parent::accept($renderer);
+
+        $html[] = $this->_wrap[0] . $renderer->toHtml() . $this->_wrap[1];
 
         return implode(PHP_EOL, $html);
     }

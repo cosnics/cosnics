@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Format\Form\Element;
 
 use HTML_QuickForm;
-use HTML_QuickForm_checkbox;
 use HTML_QuickForm_input;
 use ReflectionClass;
 
@@ -12,8 +11,9 @@ use ReflectionClass;
  * @package Chamilo\Libraries\Format\Form\Element
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
-class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
+class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
 {
+    protected string $_text = '';
 
     /**
      * The return value if the checkbox is not selected
@@ -21,27 +21,28 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
     private ?string $return_value;
 
     /**
-     * @param string $text               (optional)Checkbox display text
+     * @param string $text (optional)Checkbox display text
      * @param ?array|?string $attributes Associative array of tag attributes or HTML attributes name="value" pairs
-     * @param int $value                 The value for the checkbox
-     * @param ?string $return_value      The return value when the checkbox is not selected
+     * @param int $value The value for the checkbox
+     * @param ?string $return_value The return value when the checkbox is not selected
      */
     public function __construct(
-        ?string $elementName = null, ?string $elementLabel = null, string $text = '', $attributes = null,
-        int $value = 1, ?string $return_value = null
+        ?string $elementName = null, ?string $elementLabel = null, string $text = '',
+        null|array|string $attributes = null, int $value = 1, ?string $return_value = null
     )
     {
-        parent::__construct($elementName, $elementLabel, $text, $attributes);
+        parent::__construct($elementName, $elementLabel, $attributes);
 
+        $this->_persistantFreeze = true;
+        $this->_text = $text;
+        $this->setType('checkbox');
+        $this->updateAttributes(['value' => 1]);
         $this->setValue($value);
 
         $this->return_value = $return_value;
     }
 
-    /**
-     * Returns a 'safe' element's value
-     */
-    public function exportValue(array &$submitValues, bool $assoc = false)
+    public function exportValue(array &$submitValues, bool $assoc = false): mixed
     {
         $value = $this->_findValue($submitValues);
 
@@ -58,17 +59,32 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
         return 'checkbox no-toggle-style';
     }
 
+    public function getChecked(): bool
+    {
+        return (bool) $this->getAttribute('checked');
+    }
+
     public function getReturnValue(): ?string
     {
         return $this->return_value;
     }
 
-    public function setReturnValue(?string $return_value)
+    public function setReturnValue(?string $return_value): void
     {
         $this->return_value = $return_value;
     }
 
-    public function getValue()
+    public function getText(): string
+    {
+        return $this->_text;
+    }
+
+    public function setText(string $text): void
+    {
+        $this->_text = $text;
+    }
+
+    public function getValue(): ?string
     {
         return $this->getAttribute('value');
     }
@@ -76,11 +92,11 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
     /**
      * Called by HTML_QuickForm whenever form event is made on this element
      *
-     * @param string $event            Name of event
-     * @param mixed $arg               event arguments
+     * @param string $event Name of event
+     * @param mixed $arg event arguments
      * @param ?\HTML_QuickForm $caller calling object
      */
-    public function onQuickFormEvent(string $event, $arg, ?HTML_QuickForm $caller = null): bool
+    public function onQuickFormEvent(string $event, mixed $arg, ?HTML_QuickForm $caller = null): bool
     {
         switch ($event)
         {
@@ -157,7 +173,19 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
         return true;
     }
 
-    public function setValue($value)
+    public function setChecked(?bool $checked): void
+    {
+        if (!$checked)
+        {
+            $this->removeAttribute('checked');
+        }
+        else
+        {
+            $this->updateAttributes(['checked' => 'checked']);
+        }
+    }
+
+    public function setValue($value): void
     {
         $this->updateAttributes(['value' => $value]);
     }
@@ -169,7 +197,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
             $html = [];
 
             $html[] = '<div class="' . $this->getCheckboxClasses() . '">';
-            $html[] = HTML_QuickForm_input::toHtml();
+            $html[] = parent::toHtml();
             $html[] = '<label>';
             $html[] = $this->_text;
             $html[] = '</label>';
@@ -178,6 +206,21 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
             return implode(PHP_EOL, $html);
         }
 
-        return parent::toHtml();
+        $this->_generateId(); // Seems to be necessary when this is used in a group.
+
+        if (0 == strlen($this->_text))
+        {
+            $label = '';
+        }
+        elseif ($this->_flagFrozen)
+        {
+            $label = $this->_text;
+        }
+        else
+        {
+            $label = '<label for="' . $this->getAttribute('id') . '">' . $this->_text . '</label>';
+        }
+
+        return parent::toHtml() . $label;
     }
 }

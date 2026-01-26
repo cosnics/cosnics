@@ -5,6 +5,7 @@ use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_QuickForm_html;
 use HTML_QuickForm_textarea;
 use Symfony\Component\Translation\Translator;
 
@@ -80,14 +81,14 @@ class FormValidatorHtmlEditorRenderer
         FormValidatorHtmlEditorOptions $formValidatorHtmlOptions, array $attributes = []
     ): HTML_QuickForm_textarea
     {
-        $formValidator->addElement('html', implode(PHP_EOL, $this->getJavascriptForCreate()));
+        $formValidator->addElement(HTML_QuickForm_html::class, implode(PHP_EOL, $this->getJavascriptForCreate()));
 
         $formValidator->addElement(
             'html', implode(PHP_EOL, $this->getJavascriptForRender($name, $formValidatorHtmlOptions))
         );
-        $formValidator->register_html_editor($name);
+        $formValidator->registerHtmlEditor($name);
 
-        return $formValidator->createElement('textarea', $name, $label, $attributes);
+        return $formValidator->createElement(HTML_QuickForm_textarea::class, $name, $label, $attributes);
     }
 
     protected function getFormValidatorHtmlEditorOptionsFactory(): FormValidatorHtmlEditorOptionsFactory

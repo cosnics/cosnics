@@ -30,16 +30,13 @@ class AjaxResultGenerator
         $this->setSearchQuery($searchQuery)->setOffset($offset)->setAjaxResultDataProvider($ajaxResultDataProvider);
     }
 
-    /**
-     * @return \Chamilo\Libraries\Architecture\JsonAjaxResult
-     */
     public function generateAjaxResult(): JsonAjaxResult
     {
         $result = new JsonAjaxResult();
 
         $elements = new AdvancedElementFinderElements();
         $this->getAjaxResultDataProvider()->generateElements($elements);
-        $elements = $elements->as_array();
+        $elements = $elements->asArray();
 
         $result->setProperty(self::PROPERTY_ELEMENTS, $elements);
         $result->setProperty(
@@ -49,17 +46,34 @@ class AjaxResultGenerator
         return $result;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultDataProviderInterface
-     */
     public function getAjaxResultDataProvider(): AjaxResultDataProviderInterface
     {
         return $this->ajaxResultDataProvider;
     }
 
+    public function setAjaxResultDataProvider(AjaxResultDataProviderInterface $ajaxResultDataProvider
+    ): AjaxResultGenerator
+    {
+        $this->ajaxResultDataProvider = $ajaxResultDataProvider;
+
+        return $this;
+    }
+
     public function getOffset(): int
     {
         return $this->offset;
+    }
+
+    public function setOffset(int $offset = 0): AjaxResultGenerator
+    {
+        if (empty($offset))
+        {
+            $offset = 0;
+        }
+
+        $this->offset = $offset;
+
+        return $this;
     }
 
     /**
@@ -81,26 +95,6 @@ class AjaxResultGenerator
     public function getSearchQuery(): ?string
     {
         return $this->searchQuery;
-    }
-
-    public function setAjaxResultDataProvider(AjaxResultDataProviderInterface $ajaxResultDataProvider
-    ): AjaxResultGenerator
-    {
-        $this->ajaxResultDataProvider = $ajaxResultDataProvider;
-
-        return $this;
-    }
-
-    public function setOffset(int $offset = 0): AjaxResultGenerator
-    {
-        if (empty($offset))
-        {
-            $offset = 0;
-        }
-
-        $this->offset = $offset;
-
-        return $this;
     }
 
     public function setSearchQuery(?string $searchQuery): AjaxResultGenerator

@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Storage\Cache;
 use Chamilo\Libraries\Storage\Query\ConditionPart;
 
 /**
- *
  * @package Chamilo\Libraries\Storage\Cache
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>

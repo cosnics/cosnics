@@ -34,7 +34,7 @@ class AdminSearchForm extends FormValidator
      */
     private function build(): void
     {
-        $renderer = $this->get_renderer();
+        $renderer = $this->getRenderer();
 
         $renderer->setFormTemplate(
             '<form {attributes}>{content}</form>'

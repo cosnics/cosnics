@@ -34,7 +34,7 @@ class CaseElementConditionVariable extends ConditionVariable
         return $this->condition;
     }
 
-    public function setCondition($condition): CaseElementConditionVariable
+    public function setCondition($condition): static
     {
         $this->condition = $condition;
 
@@ -64,7 +64,7 @@ class CaseElementConditionVariable extends ConditionVariable
         return $this->statement;
     }
 
-    public function setStatement(ConditionVariable $statement): CaseElementConditionVariable
+    public function setStatement(ConditionVariable $statement): static
     {
         $this->statement = $statement;
 

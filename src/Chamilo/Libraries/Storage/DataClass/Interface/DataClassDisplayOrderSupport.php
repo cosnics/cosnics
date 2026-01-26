@@ -1,9 +1,9 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataClass\Interfaces;
+namespace Chamilo\Libraries\Storage\DataClass\Interface;
 
 /**
- * Interface DisplayOrderDataClassSupport
- * @package Chamilo\Libraries\Storage\DataClass\Interfaces
+ * @package Chamilo\Libraries\Storage\DataClass\Interface
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 interface DataClassDisplayOrderSupport
 {

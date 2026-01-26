@@ -3,7 +3,8 @@ namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Architecture\Interfaces\HashableInterface;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
-use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Describes the order by functionality of a query.
@@ -18,22 +19,25 @@ class OrderProperty implements HashableInterface
 {
     use HashableTrait;
 
-    private ConditionVariable $conditionVariable;
+    private StaticConditionVariable|PropertyConditionVariable $conditionVariable;
 
     private int $direction;
 
-    public function __construct(ConditionVariable $conditionVariable, ?int $direction = SORT_ASC)
+    public function __construct(
+        StaticConditionVariable|PropertyConditionVariable $conditionVariable, ?int $direction = SORT_ASC
+    )
     {
         $this->conditionVariable = $conditionVariable;
         $this->direction = $direction;
     }
 
-    public function getConditionVariable(): ConditionVariable
+    public function getConditionVariable(): StaticConditionVariable|PropertyConditionVariable
     {
         return $this->conditionVariable;
     }
 
-    public function setConditionVariable(ConditionVariable $conditionVariable): OrderProperty
+    public function setConditionVariable(StaticConditionVariable|PropertyConditionVariable $conditionVariable
+    ): OrderProperty
     {
         $this->conditionVariable = $conditionVariable;
 

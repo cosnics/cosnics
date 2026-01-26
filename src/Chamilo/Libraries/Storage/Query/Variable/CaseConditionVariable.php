@@ -29,9 +29,11 @@ class CaseConditionVariable extends ConditionVariable
         $this->alias = $alias;
     }
 
-    public function add(CaseElementConditionVariable $caseElementConditionVariable)
+    public function add(CaseElementConditionVariable $caseElementConditionVariable): static
     {
         $this->caseElementConditionVariables[] = $caseElementConditionVariable;
+
+        return $this;
     }
 
     /**
@@ -47,7 +49,7 @@ class CaseConditionVariable extends ConditionVariable
         return $this->alias;
     }
 
-    public function setAlias(string $alias): CaseConditionVariable
+    public function setAlias(string $alias): static
     {
         $this->alias = $alias;
 
@@ -76,7 +78,7 @@ class CaseConditionVariable extends ConditionVariable
     /**
      * @param \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable[] $caseElementConditionVariables
      */
-    public function set(array $caseElementConditionVariables): CaseConditionVariable
+    public function set(array $caseElementConditionVariables): static
     {
         $this->caseElementConditionVariables = $caseElementConditionVariables;
 

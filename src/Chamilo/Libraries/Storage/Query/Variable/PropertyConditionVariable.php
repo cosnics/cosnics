@@ -30,7 +30,7 @@ class PropertyConditionVariable extends PropertiesConditionVariable
         return $this->alias;
     }
 
-    public function setAlias(string $alias): PropertyConditionVariable
+    public function setAlias(string $alias): static
     {
         $this->alias = $alias;
 
@@ -57,7 +57,7 @@ class PropertyConditionVariable extends PropertiesConditionVariable
         return $this->propertyName;
     }
 
-    public function setPropertyName(string $propertyName): PropertyConditionVariable
+    public function setPropertyName(string $propertyName): static
     {
         $this->propertyName = $propertyName;
 

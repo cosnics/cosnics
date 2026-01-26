@@ -62,7 +62,7 @@ class OperationConditionVariable extends ConditionVariable
         return $this->leftConditionVariable;
     }
 
-    public function setLeftConditionVariable(ConditionVariable $leftConditionVariable): OperationConditionVariable
+    public function setLeftConditionVariable(ConditionVariable $leftConditionVariable): static
     {
         $this->leftConditionVariable = $leftConditionVariable;
 
@@ -74,7 +74,7 @@ class OperationConditionVariable extends ConditionVariable
         return $this->operator;
     }
 
-    public function setOperator(int $operator): OperationConditionVariable
+    public function setOperator(int $operator): static
     {
         $this->operator = $operator;
 
@@ -86,7 +86,7 @@ class OperationConditionVariable extends ConditionVariable
         return $this->rightConditionVariable;
     }
 
-    public function setRightConditionVariable(ConditionVariable $rightConditionVariable): OperationConditionVariable
+    public function setRightConditionVariable(ConditionVariable $rightConditionVariable): static
     {
         $this->rightConditionVariable = $rightConditionVariable;
 

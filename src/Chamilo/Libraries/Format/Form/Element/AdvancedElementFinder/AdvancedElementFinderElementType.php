@@ -9,139 +9,87 @@ namespace Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder;
 class AdvancedElementFinderElementType
 {
     public const PROPERTY_CONTEXT = 'application';
-
     public const PROPERTY_ID = 'id';
-
     public const PROPERTY_METHOD = 'go';
-
     public const PROPERTY_NAME = 'name';
-
     public const PROPERTY_PARAMETERS = 'parameters';
 
-    /**
-     * Associative array for the properties
-     *
-     * @var string[]
-     */
-    private $properties;
+    private array $properties;
 
     /**
-     *
-     * @param string $id
-     * @param string $name
-     * @param string $context
-     * @param string $method
      * @param string[] $parameters
      */
-    public function __construct($id, $name, $context, $method, $parameters = [])
+    public function __construct(string $id, string $name, string $context, string $method, array $parameters = [])
     {
-        $this->set_id($id);
-        $this->set_name($name);
-        $this->set_context($context);
-        $this->set_method($method);
-        $this->set_parameters($parameters);
+        $this->setId($id);
+        $this->setName($name);
+        $this->setContext($context);
+        $this->setMethod($method);
+        $this->setParameters($parameters);
     }
 
     /**
-     * Returns this element as an array
-     *
      * @return string[]
      */
-    public function as_array()
+    public function asArray(): array
     {
         return $this->properties;
     }
 
-    /**
-     * Returns the id of this element type
-     *
-     * @return string
-     */
-    public function get_id()
+    public function getId(): string
     {
-        return $this->get_property(self::PROPERTY_ID);
+        return $this->getProperty(self::PROPERTY_ID);
     }
 
-    /**
-     * Returns the name of this element type
-     *
-     * @return string
-     */
-    public function get_name()
+    public function getName(): string
     {
-        return $this->get_property(self::PROPERTY_NAME);
+        return $this->getProperty(self::PROPERTY_NAME);
     }
 
-    /**
-     * Retrieves a property from the associative array of properties
-     *
-     * @param string $propertyName
-     *
-     * @return mixed
-     */
-    public function get_property($propertyName)
+    public function getProperty(string $propertyName): mixed
     {
         return $this->properties[$propertyName];
     }
 
-    /**
-     * Sets the context of this element
-     *
-     * @param string $context
-     */
-    public function set_context($context)
+    public function setContext(string $context): static
     {
-        $this->set_property(self::PROPERTY_CONTEXT, $context);
+        $this->setProperty(self::PROPERTY_CONTEXT, $context);
+
+        return $this;
     }
 
-    /**
-     * Sets the id of this element type
-     *
-     * @param string $id
-     */
-    public function set_id($id)
+    public function setId(string $id): static
     {
-        $this->set_property(self::PROPERTY_ID, $id);
+        $this->setProperty(self::PROPERTY_ID, $id);
+
+        return $this;
     }
 
-    /**
-     * Sets the method of this element
-     *
-     * @param string $method
-     */
-    public function set_method($method)
+    public function setMethod(string $method): static
     {
-        $this->set_property(self::PROPERTY_METHOD, $method);
+        $this->setProperty(self::PROPERTY_METHOD, $method);
+
+        return $this;
     }
 
-    /**
-     * Sets the name of this element
-     *
-     * @param string $name
-     */
-    public function set_name($name)
+    public function setName(string $name): static
     {
-        $this->set_property(self::PROPERTY_NAME, $name);
+        $this->setProperty(self::PROPERTY_NAME, $name);
+
+        return $this;
     }
 
-    /**
-     * Sets the parameters of this element
-     *
-     * @param string[] $parameters
-     */
-    public function set_parameters($parameters)
+    public function setParameters(array $parameters): static
     {
-        $this->set_property(self::PROPERTY_PARAMETERS, $parameters);
+        $this->setProperty(self::PROPERTY_PARAMETERS, $parameters);
+
+        return $this;
     }
 
-    /**
-     * Sets a property in the associative array of properties
-     *
-     * @param string $propertyName
-     * @param mixed $value
-     */
-    public function set_property($propertyName, $value)
+    public function setProperty(string $propertyName, mixed $value): static
     {
         $this->properties[$propertyName] = $value;
+
+        return $this;
     }
 }

@@ -13,16 +13,12 @@ interface AjaxResultDataProviderInterface
 {
 
     /**
-     * Generates the elements for the advanced element finder
-     *
      * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements $advancedElementFinderElements
      */
     public function generateElements(AdvancedElementFinderElements $advancedElementFinderElements);
 
     /**
-     * Returns the number of total elements (without the offset)
-     *
-     * @return integer
+     * @return int
      */
-    public function getTotalNumberOfElements();
+    public function getTotalNumberOfElements(): int;
 }

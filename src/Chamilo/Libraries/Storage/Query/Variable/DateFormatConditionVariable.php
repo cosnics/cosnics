@@ -29,9 +29,11 @@ class DateFormatConditionVariable extends ConditionVariable
         return $this->alias;
     }
 
-    public function setAlias(?string $alias)
+    public function setAlias(?string $alias): static
     {
         $this->alias = $alias;
+
+        return $this;
     }
 
     public function getConditionVariable(): ConditionVariable
@@ -39,7 +41,7 @@ class DateFormatConditionVariable extends ConditionVariable
         return $this->conditionVariable;
     }
 
-    public function setConditionVariable(ConditionVariable $conditionVariable): DateFormatConditionVariable
+    public function setConditionVariable(ConditionVariable $conditionVariable): static
     {
         $this->conditionVariable = $conditionVariable;
 
@@ -51,7 +53,7 @@ class DateFormatConditionVariable extends ConditionVariable
         return $this->format;
     }
 
-    public function setFormat(string $format): DateFormatConditionVariable
+    public function setFormat(string $format): static
     {
         $this->format = $format;
 

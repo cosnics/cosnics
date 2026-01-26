@@ -4,8 +4,6 @@ namespace Chamilo\Libraries\Storage\DataClass;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 
 /**
- * Abstract class that describes a dataclass
- *
  * @package Chamilo\Libraries\Storage\DataClass
  * @author  Hans De Bisschop - Erasmus Hogeschool Brussel
  * @author  Sven Vanpoucke - Hogeschool Gent

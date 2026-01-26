@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Form\Rule;
 
-use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm_Rule;
+use Stringy\Stringy;
 
 /**
  * QuickForm rule to check if a username is of the correct format
@@ -21,7 +21,7 @@ class HTML_QuickForm_Rule_Username extends HTML_QuickForm_Rule
      */
     public function validate($value, $options = null): bool
     {
-        $filteredUsername = StringUtilities::getInstance()->createString($value)->toAscii()->__toString();
+        $filteredUsername = Stringy::create($value, 'UTF-8')->toAscii()->__toString();
 
         return $filteredUsername == $value;
     }

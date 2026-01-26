@@ -1,12 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Format\Form\Element;
 
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm_file;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Format\Form\Element
@@ -16,16 +14,7 @@ use Symfony\Component\Translation\Translator;
  */
 class HTML_QuickForm_stylefile extends HTML_QuickForm_file
 {
-
-    protected function getContainer(): ContainerInterface
-    {
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer();
-    }
-
-    protected function getTranslator(): Translator
-    {
-        return $this->getContainer()->get(Translator::class);
-    }
+    use DependencyInjectionContainerTrait;
 
     public function toHtml(): string
     {

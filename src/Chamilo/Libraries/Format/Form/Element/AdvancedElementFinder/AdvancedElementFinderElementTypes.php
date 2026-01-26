@@ -11,64 +11,57 @@ class AdvancedElementFinderElementTypes
 {
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType[]
      */
-    private $types;
+    private array $types;
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType[] $types
      */
-    public function __construct($types = [])
+    public function __construct(array $types = [])
     {
-        $this->set_types($types);
+        $this->setTypes($types);
     }
 
-    /**
-     * Adds an element type to the types list
-     *
-     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType $type
-     */
-    public function add_element_type(AdvancedElementFinderElementType $type)
+    public function addElementType(AdvancedElementFinderElementType $type): static
     {
         $this->types[] = $type;
+
+        return $this;
     }
 
     /**
-     * Renders the types as an array
-     *
      * @return string[][]
      */
-    public function as_array()
+    public function asArray(): array
     {
         $array = [];
 
-        $types = $this->get_types();
+        $types = $this->getTypes();
 
         foreach ($types as $type)
         {
-            $array[] = $type->as_array();
+            $array[] = $type->asArray();
         }
 
         return $array;
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType[]
      */
-    public function get_types()
+    public function getTypes(): array
     {
         return $this->types;
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType[] $types
      */
-    public function set_types($types)
+    public function setTypes(array $types): static
     {
         $this->types = $types;
+
+        return $this;
     }
 }

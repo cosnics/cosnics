@@ -107,7 +107,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             try
             {
-
                 $record = $this->getConnection()->executeQuery($sqlQuery)->fetchNumeric();
 
                 return (int) $record[0];

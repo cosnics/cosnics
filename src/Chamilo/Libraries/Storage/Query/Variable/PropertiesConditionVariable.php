@@ -25,7 +25,7 @@ class PropertiesConditionVariable extends ConditionVariable
         return $this->dataClassName;
     }
 
-    public function setDataClassName(string $dataClassName): PropertiesConditionVariable
+    public function setDataClassName(string $dataClassName): static
     {
         $this->dataClassName = $dataClassName;
 

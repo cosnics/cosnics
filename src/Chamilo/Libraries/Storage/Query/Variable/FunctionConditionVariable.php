@@ -36,7 +36,7 @@ class FunctionConditionVariable extends ConditionVariable
         return $this->alias;
     }
 
-    public function setAlias(?string $alias): ConditionVariable
+    public function setAlias(?string $alias): static
     {
         $this->alias = $alias;
 
@@ -60,7 +60,7 @@ class FunctionConditionVariable extends ConditionVariable
         return $this->function;
     }
 
-    public function setFunction(int $function): ConditionVariable
+    public function setFunction(int $function): static
     {
         $this->function = $function;
 

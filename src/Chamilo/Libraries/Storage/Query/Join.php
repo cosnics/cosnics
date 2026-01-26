@@ -40,9 +40,11 @@ class Join implements HashableInterface
         return $this->condition;
     }
 
-    public function setCondition(?Condition $condition = null)
+    public function setCondition(?Condition $condition = null): static
     {
         $this->condition = $condition;
+
+        return $this;
     }
 
     /**
@@ -53,9 +55,11 @@ class Join implements HashableInterface
         return $this->dataClassName;
     }
 
-    public function setDataClassName(string $dataClassName)
+    public function setDataClassName(string $dataClassName): static
     {
         $this->dataClassName = $dataClassName;
+
+        return $this;
     }
 
     public function getHashParts(): array
@@ -74,8 +78,10 @@ class Join implements HashableInterface
         return $this->type;
     }
 
-    public function setType(int $type)
+    public function setType(int $type): static
     {
         $this->type = $type;
+
+        return $this;
     }
 }

@@ -1,20 +1,16 @@
 <?php
 namespace Chamilo\Libraries\Format\Form\Element;
 
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\WebPathBuilder;
+use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use HTML_QuickForm_element;
 use HTML_QuickForm_group;
 use HTML_QuickForm_hidden;
 use HTML_QuickForm_Renderer;
 use HTML_QuickForm_select;
 use HTML_QuickForm_text;
-use Symfony\Component\Translation\Translator;
 
 /**
  * Advanced ajax based element finder.
@@ -25,6 +21,8 @@ use Symfony\Component\Translation\Translator;
  */
 class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 {
+    use DependencyInjectionContainerTrait;
+
     public const DEFAULT_HEIGHT = 300;
     public const DEFAULT_WIDTH = 292;
 
@@ -56,7 +54,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         ?array $config = []
     )
     {
-        HTML_QuickForm_element::__construct($elementName, $elementLabel);
+        parent::__construct($elementName, $elementLabel);
 
         $this->configuration = $config;
         $this->_type = 'advanced_element_finder';
@@ -80,24 +78,17 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
      * Accepts a renderer
      *
      * @param HTML_QuickForm_Renderer $renderer An HTML_QuickForm_Renderer object
-     * @param bool $required                    Whether an element is required
-     * @param ?string $error                    An error message associated with an element
+     * @param bool $required Whether an element is required
+     * @param ?string $error An error message associated with an element
      */
-    public function accept(HTML_QuickForm_Renderer $renderer, bool $required = false, ?string $error = null)
+    public function accept(HTML_QuickForm_Renderer $renderer, bool $required = false, ?string $error = null): void
     {
         $renderer->renderElement($this, $required, $error);
     }
 
-    /**
-     * Builds the list of elements
-     */
-    private function build_elements()
+    private function build_elements(): void
     {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-        /**
-         * @var \Symfony\Component\Translation\Translator $translator
-         */
-        $translator = $container->get(Translator::class);
+        $translator = $this->getTranslator();
 
         $active_hidden_id = 'hidden_active_elements';
         $activate_button_id = 'activate_button';
@@ -114,9 +105,9 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $element_types_array[- 1] =
             '-- ' . $translator->trans('SelectElementType', [], StringUtilities::LIBRARIES) . ' --';
 
-        foreach ($this->element_types->get_types() as $element_type)
+        foreach ($this->element_types->getTypes() as $element_type)
         {
-            $element_types_array[$element_type->get_id()] = $element_type->get_name();
+            $element_types_array[$element_type->getId()] = $element_type->getName();
         }
 
         $this->_elements[] = new HTML_QuickForm_select(
@@ -149,7 +140,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
      * Returns a 'safe' element's value
      *
      * @param array $submitValues array of submitted values to search
-     * @param bool $assoc         whether to return the value as associative array
+     * @param bool $assoc whether to return the value as associative array
      */
     public function exportValue(array &$submitValues, bool $assoc = false)
     {
@@ -161,7 +152,12 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         return $this->height;
     }
 
-    public function getValue()
+    public function setHeight(int $height): void
+    {
+        $this->height = $height;
+    }
+
+    public function getValue(): array
     {
         $results = [];
         $values = json_decode($this->_elements[0]->getValue());
@@ -184,7 +180,12 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         return $this->width;
     }
 
-    public function setDefaultValues(?AdvancedElementFinderElements $defaultValues)
+    public function setWidth(int $width): void
+    {
+        $this->width = $width;
+    }
+
+    public function setDefaultValues(?AdvancedElementFinderElements $defaultValues): void
     {
         if (!$defaultValues)
         {
@@ -195,36 +196,19 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 
         $default_ids = [];
 
-        foreach ($defaultValues->get_elements() as $default_value)
+        foreach ($defaultValues->getElements() as $default_value)
         {
-            $default_ids[] = $default_value->get_id();
+            $default_ids[] = $default_value->getId();
         }
 
         $encoded = json_encode($default_ids);
         $this->_elements[0]->setValue($encoded);
     }
 
-    public function setHeight(int $height)
-    {
-        $this->height = $height;
-    }
-
-    public function setWidth(int $width)
-    {
-        $this->width = $width;
-    }
-
     public function toHtml(): string
     {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-        /**
-         * @var \Chamilo\Libraries\Format\Utilities\ResourceManager $resourceManager
-         */
-        $resourceManager = $container->get(ResourceManager::class);
-        /**
-         * @var \Chamilo\Libraries\File\WebPathBuilder $webPathBuilder
-         */
-        $webPathBuilder = $container->get(WebPathBuilder::class);
+        $resourceManager = $this->getResourceManager();
+        $webPathBuilder = $this->getWebPathBuilder();
 
         // Create a safe name for the id (remove array values)
         $safe_name = str_replace('[', '_', $this->getName());
@@ -315,7 +299,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 
         if ($this->defaultValues)
         {
-            $defaultValuesText = 'defaultValues: ' . json_encode($this->defaultValues->as_array()) . ', ';
+            $defaultValuesText = 'defaultValues: ' . json_encode($this->defaultValues->asArray()) . ', ';
         }
         else
         {
@@ -332,7 +316,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $configurationJson = substr($configurationJson, 0, strlen($configurationJson) - 2);
 
         $html[] = '$("#' . $id . '").advelementfinder({ name: "' . $safe_name . '", ' . $defaultValuesText .
-            'elementTypes: ' . json_encode($this->element_types->as_array()) . ',' . $configurationJson . '});';
+            'elementTypes: ' . json_encode($this->element_types->asArray()) . ',' . $configurationJson . '});';
 
         $html[] = '</script>';
 

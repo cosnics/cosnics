@@ -53,6 +53,10 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
         return $this->groupService;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     protected function getRootDataClass(): Group
     {
         return $this->getGroupService()->findRootGroup();

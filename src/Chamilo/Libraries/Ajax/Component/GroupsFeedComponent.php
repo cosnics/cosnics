@@ -44,7 +44,7 @@ abstract class GroupsFeedComponent extends Manager
         $result = new JsonAjaxResult();
 
         $elements = $this->get_elements();
-        $elements = $elements->as_array();
+        $elements = $elements->asArray();
 
         $result->setProperty(self::PROPERTY_ELEMENTS, $elements);
 
@@ -84,11 +84,11 @@ abstract class GroupsFeedComponent extends Manager
                 'groups', $glyph->getClassNamesString(), $translator->trans('Groups', [], StringUtilities::LIBRARIES),
                 $translator->trans('Groups', [], StringUtilities::LIBRARIES)
             );
-            $elements->add_element($group_category);
+            $elements->addElement($group_category);
 
             foreach ($groups as $group)
             {
-                $group_category->add_child($this->get_group_element($group));
+                $group_category->addChild($this->get_group_element($group));
             }
         }
 
@@ -101,11 +101,11 @@ abstract class GroupsFeedComponent extends Manager
         {
             // Add user category
             $user_category = new AdvancedElementFinderElement('users', $glyph->getClassNamesString(), 'Users', 'Users');
-            $elements->add_element($user_category);
+            $elements->addElement($user_category);
 
             foreach ($users as $user)
             {
-                $user_category->add_child($this->get_user_element($user));
+                $user_category->addChild($this->get_user_element($user));
             }
         }
 

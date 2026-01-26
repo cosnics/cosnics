@@ -15,15 +15,23 @@ use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Date;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_DateCompare;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Filetype;
-use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_NumberCompare;
 use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Username;
-use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_ValidateDatabaseConnection;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Form\FormTabsGenerator;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm;
+use HTML_QuickForm_element;
+use HTML_QuickForm_group;
+use HTML_QuickForm_hidden;
+use HTML_QuickForm_html;
+use HTML_QuickForm_password;
+use HTML_QuickForm_Renderer_Default;
+use HTML_QuickForm_Rule_Required;
+use HTML_QuickForm_select;
+use HTML_QuickForm_static;
+use HTML_QuickForm_text;
 use HTML_QuickForm_textarea;
 
 /**
@@ -47,21 +55,16 @@ class FormValidator extends HTML_QuickForm
     public const PROPERTY_TIME_PERIOD_TO_DATE = 'to_date';
 
     /**
-     * The HTML-editors in this form
-     *
      * @var string[]
      */
-    private $html_editors;
+    private array $html_editors = [];
 
-    /**
-     * @var bool
-     */
-    private $no_errors;
+    private bool $no_errors;
 
     /**
      * @var \HTML_QuickForm_Renderer_Default
      */
-    private $renderer;
+    private HTML_QuickForm_Renderer_Default $renderer;
 
     /**
      * Constructor
@@ -73,10 +76,12 @@ class FormValidator extends HTML_QuickForm
      * @param string[] $attributes (optional)Extra attributes for <form> tag
      * @param bool $trackSubmit (optional)Whether to track if the form was submitted by adding a special hidden field
      *                             (default = true)
+     *
+     * @throws \QuickformException
      */
     public function __construct(
-        $formName = '', $method = self::FORM_METHOD_POST, $action = '', $target = '', $attributes = [],
-        $trackSubmit = true
+        string $formName = '', string $method = self::FORM_METHOD_POST, string $action = '', string $target = '',
+        array $attributes = [], bool $trackSubmit = true
     )
     {
         $attributes['onreset'] = 'resetElements()';
@@ -87,7 +92,7 @@ class FormValidator extends HTML_QuickForm
         $this->registerAdditionalRules();
 
         $this->addElement(
-            'html', $this->getResourceManager()->getResourceHtml(
+            HTML_QuickForm_html::class, $this->getResourceManager()->getResourceHtml(
             $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'Reset.js'
         )
         );
@@ -101,9 +106,6 @@ class FormValidator extends HTML_QuickForm
     }
 
     /**
-     * Returns the HTML representation of this form.
-     *
-     * @return string
      * @throws \QuickformException
      */
     public function render(?string $in_data = null): string
@@ -152,16 +154,37 @@ EOT;
     }
 
     /**
-     * @param string $elementName
-     * @param string[] $dropzoneOptions
-     * @param bool $includeLabel
-     * @param bool $markRequired
-     *
-     * @internal param string $uploadType
+     * @throws \QuickformException
+     */
+    public function addDatepicker(string $name, string $label, bool $includeTimePicker = true
+    ): HTML_QuickForm_element|HTML_QuickForm_datepicker
+    {
+        $element = $this->addElement(
+            HTML_QuickForm_datepicker::class, $this->getAttribute('name'), $name, $label, ['class' => $name],
+            $includeTimePicker
+        );
+        $this->addRule($name, $this->getTranslation('InvalidDate'), HTML_QuickForm_Rule_Date::class);
+
+        $this->getRenderer()->setElementTemplate($this->getDatePickerTemplate(), $name);
+
+        return $element;
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function addErrorMessage(string $name, string $label, string $message, bool $noMargin = false
+    ): HTML_QuickForm_html
+    {
+        return $this->addMessage('danger', $name, $label, $message, $noMargin);
+    }
+
+    /**
+     * @throws \QuickformException
      */
     public function addFileDropzone(
-        $elementName, $dropzoneOptions = [], $includeLabel = true, $markRequired = false
-    )
+        string $elementName, array $dropzoneOptions = [], bool $includeLabel = true, bool $markRequired = false
+    ): void
     {
         if (array_key_exists('autoProcessQueue', $dropzoneOptions))
         {
@@ -171,11 +194,11 @@ EOT;
             }
         }
 
-        $this->addElement('html', '<div id="' . $elementName . '-upload-container">');
+        $this->addElement(HTML_QuickForm_html::class, '<div id="' . $elementName . '-upload-container">');
 
-        $this->addElement('html', '<div id="' . $elementName . '-upload-input">');
-        $this->addElement('file', $elementName, sprintf($this->getTranslation('FileName')));
-        $this->addElement('html', '</div>');
+        $this->addElement(HTML_QuickForm_html::class, '<div id="' . $elementName . '-upload-input">');
+        $this->addElement(HTML_QuickForm_stylefile::class, $elementName, $this->getTranslation('FileName'));
+        $this->addElement(HTML_QuickForm_html::class, '</div>');
 
         $dropzoneHtml = [];
 
@@ -264,8 +287,10 @@ EOT;
             $label .= '<span class="text-danger">&nbsp;' . $glyph->render() . '</span>';
         }
 
-        $this->addElement('static', $elementName . '_static_data', $label, implode(PHP_EOL, $dropzoneHtml));
-        $this->addElement('hidden', $elementName . '_upload_data');
+        $this->addElement(
+            HTML_QuickForm_static::class, $elementName . '_static_data', $label, implode(PHP_EOL, $dropzoneHtml)
+        );
+        $this->addElement(HTML_QuickForm_hidden::class, $elementName . '_upload_data');
 
         $dropzoneOptionsString = [];
 
@@ -275,7 +300,7 @@ EOT;
         }
 
         $this->addElement(
-            'html', $this->getResourceManager()->getResourceHtml(
+            HTML_QuickForm_html::class, $this->getResourceManager()->getResourceHtml(
             $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'Jquery/jquery.file.upload.js'
         )
         );
@@ -289,9 +314,9 @@ EOT;
         $javascriptHtml[] = '});';
         $javascriptHtml[] = '</script>';
 
-        $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
+        $this->addElement(HTML_QuickForm_html::class, implode(PHP_EOL, $javascriptHtml));
 
-        $this->addElement('html', '</div>');
+        $this->addElement(HTML_QuickForm_html::class, '</div>');
     }
 
     /**
@@ -299,71 +324,91 @@ EOT;
      *
      * @return string[]
      */
-    protected function addFormControlToElementAttributes($attributes)
+    protected function addFormControlToElementAttributes(array $attributes = []): array
     {
-        if (is_array($attributes))
+        if (!array_key_exists('class', $attributes))
         {
-            if (!array_key_exists('class', $attributes))
+            $attributes['class'] = 'form-control';
+        }
+        else
+        {
+            $classAttributes = $attributes['class'];
+
+            if (!is_array($classAttributes))
             {
-                $attributes['class'] = 'form-control';
+                $classAttributes = explode(' ', $classAttributes);
             }
-            else
+
+            if (!in_array('form-control', $classAttributes))
             {
-                $classAttributes = $attributes['class'];
-
-                if (!is_array($classAttributes))
-                {
-                    $classAttributes = explode(' ', $classAttributes);
-                }
-
-                if (!in_array('form-control', $classAttributes))
-                {
-                    array_unshift($classAttributes, 'form-control');
-                }
-
-                $attributes['class'] = implode(' ', $classAttributes);
+                array_unshift($classAttributes, 'form-control');
             }
+
+            $attributes['class'] = implode(' ', $classAttributes);
         }
 
         return $attributes;
     }
 
     /**
-     * @param string $name
-     * @param string $label
+     * @param string[] $options
+     * @param string[] $attributes
+     *
+     * @throws \Exception
      */
-    public function addImageUploader($name, $label)
+    public function addHtmlEditor(
+        string $name, string $label, bool $required = true, array $options = [], array $attributes = []
+    ): void
     {
-        $this->addElement('html', '<div class="image-uploader" id="image-uploader-' . $name . '">');
+        $formValidatorHtmlEditorRenderer = $this->getFormValidatorHtmlEditorRenderer();
+        $formValidatorHtmlEditorRenderer->addHtmlEditor($this, $name, $label, $required, $options, $attributes);
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function addImageUploader(string $name, string $label): void
+    {
+        $this->addElement(HTML_QuickForm_html::class, '<div class="image-uploader" id="image-uploader-' . $name . '">');
         $this->addElement(
-            'hidden', $name, null, ' id="' . $name . '" data-element="' . $name . '" class="image-uploader-data"'
+            HTML_QuickForm_hidden::class, $name, null,
+            ' id="' . $name . '" data-element="' . $name . '" class="image-uploader-data"'
         );
 
         $glyph = new FontAwesomeGlyph('image', ['image-uploader-preview', 'fa-10x', 'text-muted'], null, 'fas');
 
         $this->addElement(
-            'static', 'thumbnail', $label,
+            HTML_QuickForm_static::class, 'thumbnail', $label,
             '<div class="thumbnail" data-element="' . $name . '">' . $glyph->render() . '</div>'
         );
-        $this->addElement('file', $name . '-file', null, 'class="image-uploader-file" data-element="' . $name . '"');
+        $this->addElement(
+            HTML_QuickForm_stylefile::class, $name . '-file', null,
+            'class="image-uploader-file" data-element="' . $name . '"'
+        );
 
-        $this->addElement('html', '</div>');
+        $this->addElement(HTML_QuickForm_html::class, '</div>');
 
         $this->addElement(
-            'html', $this->getResourceManager()->getResourceHtml(
+            HTML_QuickForm_html::class, $this->getResourceManager()->getResourceHtml(
             $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'ImageUploader.js'
         )
         );
     }
 
     /**
-     * @param string $type
-     * @param string $name
-     * @param string $label
-     * @param string $message
-     * @param bool $noMargin
+     * @throws \QuickformException
      */
-    protected function addMessage($type, $name, $label, $message, $noMargin = false)
+    public function addInformationMessage(string $name, string $label, string $message, bool $noMargin = false
+    ): HTML_QuickForm_html
+    {
+        return $this->addMessage('info', $name, $label, $message, $noMargin);
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    protected function addMessage(string $type, string $name, string $label, string $message, bool $noMargin = false
+    ): HTML_QuickForm_html
     {
         $html = [];
 
@@ -386,6 +431,7 @@ EOT;
         {
             $html[] = '<b>' . $label . '</b><br />';
         }
+
         $html[] = $message;
 
         $html[] = '</div>';
@@ -393,30 +439,76 @@ EOT;
 
         $html[] = '</div>';
 
-        $this->addElement('html', implode(PHP_EOL, $html));
+        return $this->addElement(HTML_QuickForm_html::class, implode(PHP_EOL, $html));
     }
 
-    public function addSaveResetButtons()
+    /**
+     * @param string[] $attributes
+     *
+     * @throws \QuickformException
+     */
+    public function addPassword(string $name, string $label, bool $required = true, array $attributes = []
+    ): HTML_QuickForm_password
+    {
+        /**
+         * @var \HTML_QuickForm_password $element
+         */
+        $element = $this->addElement($this->createPassword($name, $label, $attributes));
+
+        if ($required)
+        {
+            $this->addRule(
+                $name, $this->getTranslation('ThisFieldIsRequired'), HTML_QuickForm_Rule_Required::class
+            );
+        }
+
+        return $element;
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function addSaveResetButtons(): HTML_QuickForm_group
     {
         $buttons = [];
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', $this->getTranslation('Save', []), ['class' => 'positive']
+            HTML_QuickForm_stylesubmitbutton::class, 'submit', $this->getTranslation('Save'), ['class' => 'positive']
         );
 
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', $this->getTranslation('Reset', []), ['class' => 'normal empty']
+            HTML_QuickForm_styleresetbutton::class, 'reset', $this->getTranslation('Reset'), ['class' => 'normal empty']
         );
 
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+        return $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     /**
-     * @param string $elementName
-     * @param string[] $dropzoneOptions
-     * @param bool $includeLabel
+     * @param string[] $values Associative array of possible values.
+     * @param string[] $attributes Element attributes (optional).
+     *
+     * @throws \QuickformException
      */
-    public function addSingleFileDropzone($elementName, $dropzoneOptions = [], $includeLabel = true)
+    public function addSelect(string $name, string $label, array $values, bool $required = true, array $attributes = []
+    ): HTML_QuickForm_select
+    {
+        $element = $this->addElement($this->createSelect($name, $label, $values, $attributes));
+
+        if ($required)
+        {
+            $this->addRule(
+                $name, $this->getTranslation('ThisFieldIsRequired'), HTML_QuickForm_Rule_Required::class
+            );
+        }
+
+        return $element;
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function addSingleFileDropzone(string $elementName, array $dropzoneOptions = [], bool $includeLabel = true
+    ): void
     {
         $dropzoneOptions['maxFiles'] = 1;
         $dropzoneOptions['successCallbackFunction'] = 'chamilo.libraries.single.processUploadedFile';
@@ -427,7 +519,7 @@ EOT;
         $this->disableSubmitButton();
 
         $this->addElement(
-            'html', $this->getResourceManager()->getResourceHtml(
+            HTML_QuickForm_html::class, $this->getResourceManager()->getResourceHtml(
             $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) .
             'Jquery/jquery.file.upload.single.js'
         )
@@ -435,17 +527,35 @@ EOT;
     }
 
     /**
-     * @param string $elementLabel
-     * @param string $fromElementName
-     * @param string $toElementName
-     * @param string $foreverElementName
-     * @param string $elementNamePrefix
+     * @param string[] $attributes Optional list of attributes for the form-element
+     *
+     * @throws \QuickformException
+     */
+    public function addTextfield(string $name, string $label, bool $required = true, array $attributes = []
+    ): HTML_QuickForm_text
+    {
+        $element = $this->addElement($this->create_textfield($name, $label, $attributes));
+
+        $this->applyFilter($name, 'trim');
+
+        if ($required)
+        {
+            $this->addRule(
+                $name, $this->getTranslation('ThisFieldIsRequired'), HTML_QuickForm_Rule_Required::class
+            );
+        }
+
+        return $element;
+    }
+
+    /**
+     * @throws \QuickformException
      */
     public function addTimePeriodSelection(
         string $elementLabel, string $fromElementName = self::PROPERTY_TIME_PERIOD_FROM_DATE,
         string $toElementName = self::PROPERTY_TIME_PERIOD_TO_DATE,
         string $foreverElementName = self::PROPERTY_TIME_PERIOD_FOREVER, string $elementNamePrefix = null
-    )
+    ): void
     {
         if ($elementNamePrefix)
         {
@@ -457,25 +567,25 @@ EOT;
         $choices = [];
 
         $choices[] = $this->createElement(
-            'radio', $foreverElementName, '', $this->getTranslation('Forever'), 1
+            HTML_QuickForm_bootstrap_radio::class::class, $foreverElementName, '', $this->getTranslation('Forever'), 1
         );
 
         $choices[] = $this->createElement(
-            'radio', $foreverElementName, '', $this->getTranslation('LimitedPeriod'), 0
+            HTML_QuickForm_bootstrap_radio::class, $foreverElementName, '', $this->getTranslation('LimitedPeriod'), 0
         );
 
-        $this->addElement('html', '<div class="form-time-period">');
+        $this->addElement(HTML_QuickForm_html::class, '<div class="form-time-period">');
 
         $this->addGroup($choices, null, $this->getTranslation($elementLabel), '', false);
 
-        $this->addElement('html', '<div class="form-time-period-dates hidden">');
-        $this->add_timewindow($fromElementName, $toElementName, '', '');
-        $this->addElement('html', '</div>');
+        $this->addElement(HTML_QuickForm_html::class, '<div class="form-time-period-dates hidden">');
+        $this->addTimewindow($fromElementName, $toElementName, '', '');
+        $this->addElement(HTML_QuickForm_html::class, '</div>');
 
-        $this->addElement('html', '</div>');
+        $this->addElement(HTML_QuickForm_html::class, '</div>');
 
         $this->addElement(
-            'html', $this->getResourceManager()->getResourceHtml(
+            HTML_QuickForm_html::class, $this->getResourceManager()->getResourceHtml(
             $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'FormTimePeriod.min.js'
         )
         );
@@ -485,210 +595,49 @@ EOT;
             $this->getDatePickerTemplate()
         );
 
-        $this->get_renderer()->setElementTemplate($template, $fromElementName);
-        $this->get_renderer()->setElementTemplate($template, $toElementName);
+        $this->getRenderer()->setElementTemplate($template, $fromElementName);
+        $this->getRenderer()->setElementTemplate($template, $toElementName);
     }
 
     /**
-     * Add a datepicker element to the form A rule is added to check if the date is a valid one
-     *
-     * @param string $name The element name
-     * @param string $label The label for the form-element
-     * @param bool $includeTimePicker
-     *
-     * @return \Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_datepicker
-     */
-    public function add_datepicker($name, $label, $includeTimePicker = true)
-    {
-        $element = $this->addElement(
-            'datepicker', $this->getAttribute('name'), $name, $label, ['class' => $name], $includeTimePicker
-        );
-        $this->addRule($name, $this->getTranslation('InvalidDate'), 'date');
-
-        $this->get_renderer()->setElementTemplate($this->getDatePickerTemplate(), $name);
-
-        return $element;
-    }
-
-    /**
-     * Adds an error message to the form.
-     *
-     * @param string $name
-     * @param string $label
-     * @param string $message
-     * @param bool $noMargin
-     */
-    public function add_error_message($name, $label, $message, $noMargin = false)
-    {
-        return $this->addMessage('danger', $name, $label, $message, $noMargin);
-    }
-
-    /**
-     * Add a HTML-editor to the form to fill in a title.
-     * A trim-filter is attached to the field. A HTML-filter is
-     * attached to the field (cleans HTML) A rule is attached to check for unwanted HTML
-     *
-     * @param string $name
-     * @param string $label
-     * @param bool $required
-     * @param string[] $options
-     * @param string[] $attributes
-     */
-    public function add_html_editor($name, $label, $required = true, $options = [], $attributes = [])
-    {
-        $formValidatorHtmlEditorRenderer = $this->getFormValidatorHtmlEditorRenderer();
-        $formValidatorHtmlEditorRenderer->addHtmlEditor($this, $name, $label, $required, $options, $attributes);
-    }
-
-    /**
-     * Adds an error message to the form.
-     *
-     * @param string $name
-     * @param string $label
-     * @param string $message
-     * @param bool $noMargin
-     */
-    public function add_information_message($name, $label, $message, $noMargin = false)
-    {
-        return $this->addMessage('info', $name, $label, $message, $noMargin);
-    }
-
-    /**
-     * Add a password field to the form.
-     *
-     * @param string $name
-     * @param string $label
-     * @param bool $required
-     * @param string[] $attributes
-     *
-     * @return \HTML_QuickForm_password
-     */
-    public function add_password($name, $label, $required = true, $attributes = [])
-    {
-        /**
-         * @var \HTML_QuickForm_password $element
-         */
-        $element = $this->addElement($this->create_password($name, $label, $attributes));
-
-        if ($required)
-        {
-            $this->addRule(
-                $name, $this->getTranslation('ThisFieldIsRequired', []), 'required'
-            );
-        }
-
-        return $element;
-    }
-
-    /**
-     * Adds a select control to the form.
-     *
-     * @param string $name The element name.
-     * @param string $label The element label.
-     * @param string[] $values Associative array of possible values.
-     * @param bool $required <code>true</code> if required (default), <code>false</code> otherwise.
-     * @param string[] $attributes Element attributes (optional).
-     *
-     * @return \HTML_QuickForm_select The element.
-     */
-    public function add_select($name, $label, $values, $required = true, $attributes = [])
-    {
-        /**
-         * @var \HTML_QuickForm_select $element
-         */
-        $element = $this->addElement($this->create_select($name, $label, $values, $attributes));
-
-        if ($required)
-        {
-            $this->addRule(
-                $name, $this->getTranslation('ThisFieldIsRequired', []), 'required'
-            );
-        }
-
-        return $element;
-    }
-
-    /**
-     * Add a textfield to the form.
-     * A trim-filter is attached to the field.
-     *
-     * @param string $name The element name
-     * @param string $label The label for the form-element
-     * @param bool $required Is the form-element required (default=true)
-     * @param string[] $attributes Optional list of attributes for the form-element
-     *
-     * @return \HTML_QuickForm_text The element.
+     * @return \Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_datepicker[]
      * @throws \QuickformException
      */
-    public function add_textfield($name, $label, $required = true, $attributes = [])
-    {
-        /**
-         * @var \HTML_QuickForm_text $element
-         */
-        $element = $this->addElement($this->create_textfield($name, $label, $attributes));
-
-        $this->applyFilter($name, 'trim');
-
-        if ($required)
-        {
-            $this->addRule(
-                $name, $this->getTranslation('ThisFieldIsRequired', []), 'required'
-            );
-        }
-
-        return $element;
-    }
-
-    /**
-     * Add a timewindow element to the form.
-     * 2 datepicker elements are added and a rule to check if the first date is
-     * before the second one.
-     *
-     * @param string $firstName The element name
-     * @param string $secondName The element name
-     * @param string $firstLabel The label for the form-element
-     * @param string $secondLabel The label for the form-element
-     * @param bool $includeTimePicker
-     *
-     * @return \Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_datepicker[]
-     */
-    public function add_timewindow($firstName, $secondName, $firstLabel, $secondLabel, $includeTimePicker = true)
+    public function addTimewindow(
+        string $firstName, string $secondName, string $firstLabel, string $secondLabel, bool $includeTimePicker = true
+    ): array
     {
         $elements = [];
 
-        $elements[] = $this->add_datepicker($firstName, $firstLabel, $includeTimePicker);
-        $elements[] = $this->add_datepicker($secondName, $secondLabel, $includeTimePicker);
+        $elements[] = $this->addDatepicker($firstName, $firstLabel, $includeTimePicker);
+        $elements[] = $this->addDatepicker($secondName, $secondLabel, $includeTimePicker);
 
         $this->addRule(
-            [$firstName, $secondName], $this->getTranslation('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte'
+            [$firstName, $secondName], $this->getTranslation('StartDateShouldBeBeforeEndDate'),
+            HTML_QuickForm_Rule_DateCompare::class, 'lte'
         );
 
         return $elements;
     }
 
     /**
-     * Adds a warning message to the form.
-     *
-     * @param string $name
-     * @param string $label
-     * @param string $message
-     * @param bool $noMargin
+     * @throws \QuickformException
      */
-    public function add_warning_message($name, $label, $message, $noMargin = false)
+    public function addWarningMessage(string $name, string $label, string $message, bool $noMargin = false
+    ): HTML_QuickForm_html
     {
         return $this->addMessage('warning', $name, $label, $message, $noMargin);
     }
 
     /**
      * @param \HTML_QuickForm_element[] $elements
-     * @param string $name
-     * @param string $groupLabel
-     * @param string $separator
-     * @param bool $appendName
      *
-     * @return \HTML_QuickForm_group
+     * @throws \QuickformException
      */
-    public function createGroup($elements, $name = null, $groupLabel = '', $separator = null, $appendName = true)
+    public function createGroup(
+        array $elements, ?string $name = null, string $groupLabel = '', ?string $separator = null,
+        bool $appendName = true
+    ): HTML_QuickForm_group
     {
         static $anonGroups = 1;
 
@@ -698,7 +647,9 @@ EOT;
             $appendName = false;
         }
 
-        return $this->createElement('group', $name, $groupLabel, $elements, $separator, $appendName);
+        return $this->createElement(
+            HTML_QuickForm_group::class, $name, $groupLabel, $elements, $separator, $appendName
+        );
     }
 
     /**
@@ -707,7 +658,7 @@ EOT;
      *
      * @throws \QuickformException
      */
-    public function create_html_editor(string $name, string $label, array $options = [], array $attributes = []
+    public function createHtmlEditor(string $name, string $label, array $options = [], array $attributes = []
     ): HTML_QuickForm_textarea
     {
         $htmlEditorOptionsFactory = $this->getFormValidatorHtmlEditorOptionsFactory();
@@ -719,46 +670,43 @@ EOT;
     }
 
     /**
-     * Create a password field.
-     *
-     * @param string $name
-     * @param string $label
      * @param string[] $attributes
      *
-     * @return \HTML_QuickForm_password
+     * @throws \QuickformException
      */
-    public function create_password($name, $label, $attributes = [])
+    public function createPassword(string $name, string $label, array $attributes = []): HTML_QuickForm_password
     {
         $attributes = $this->addFormControlToElementAttributes($attributes);
 
-        return $this->createElement('password', $name, $label, $attributes);
-    }
-
-    public function create_select($name, $label, $values, $attributes = [])
-    {
-        $attributes = $this->addFormControlToElementAttributes($attributes);
-
-        return $this->createElement('select', $name, $label, $values, $attributes);
+        return $this->createElement(HTML_QuickForm_password::class, $name, $label, $attributes);
     }
 
     /**
-     * @param string $name
-     * @param string $label
-     * @param string[] $attributes
-     *
-     * @return \HTML_QuickForm_text
+     * @throws \QuickformException
      */
-    public function create_textfield($name, $label, $attributes = [])
+    public function createSelect($name, $label, $values, $attributes = []): HTML_QuickForm_select
     {
         $attributes = $this->addFormControlToElementAttributes($attributes);
 
-        return $this->createElement('text', $name, $label, $attributes);
+        return $this->createElement(HTML_QuickForm_select::class, $name, $label, $values, $attributes);
     }
 
     /**
-     * Disables the submit button
+     * @param string[] $attributes
+     *
+     * @throws \QuickformException
      */
-    protected function disableSubmitButton()
+    public function create_textfield(string $name, string $label, array $attributes = []): HTML_QuickForm_text
+    {
+        $attributes = $this->addFormControlToElementAttributes($attributes);
+
+        return $this->createElement(HTML_QuickForm_text::class, $name, $label, $attributes);
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    protected function disableSubmitButton(): void
     {
         $javascriptHtml = [];
 
@@ -768,28 +716,23 @@ EOT;
         $javascriptHtml[] = '});';
         $javascriptHtml[] = '</script>';
 
-        $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
+        $this->addElement(HTML_QuickForm_html::class, implode(PHP_EOL, $javascriptHtml));
     }
 
     public function exportValues($elementList = null): array
     {
         $values = parent::exportValues($elementList);
-        $values[self::PROPERTY_HTML_EDITORS] = $this->get_html_editors();
+        $values[self::PROPERTY_HTML_EDITORS] = $this->getHtmlEditors();
 
         return $values;
     }
 
-    protected function getDatePickerTemplate()
+    protected function getDatePickerTemplate(): string
     {
         return str_replace('<div class="element">', '<div class="element form-inline">', $this->getElementTemplate());
     }
 
-    /**
-     * @param string $extraClasses
-     *
-     * @return string
-     */
-    public function getElementTemplate($extraClasses = null)
+    public function getElementTemplate(?string $extraClasses = null): string
     {
         $html = [];
         $glyph = new FontAwesomeGlyph('star', ['text-danger', 'fa-xs'], null, 'fas');
@@ -814,10 +757,7 @@ EOT;
         return $this->getService(FormTabsGenerator::class);
     }
 
-    /**
-     * @return string
-     */
-    public function getFormTemplate()
+    public function getFormTemplate(): string
     {
         $html = [];
 
@@ -839,7 +779,25 @@ EOT;
         return $this->getService(FormValidatorHtmlEditorRenderer::class);
     }
 
-    public function getRequiredNoteTemplate()
+    /**
+     * @return string[]
+     */
+    public function getHtmlEditors(): array
+    {
+        return $this->html_editors;
+    }
+
+    public function getRenderer(): HTML_QuickForm_Renderer_Default
+    {
+        return $this->renderer;
+    }
+
+    public function setRenderer(HTML_QuickForm_Renderer_Default $renderer): void
+    {
+        $this->renderer = $renderer;
+    }
+
+    public function getRequiredNoteTemplate(): string
     {
         $html = [];
 
@@ -851,151 +809,61 @@ EOT;
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @return \Chamilo\Libraries\Platform\Security
-     */
     private function getSecurity(): Security
     {
         return $this->getService(Security::class);
     }
 
-    /**
-     * Helper Function
-     *
-     * @param string $variable
-     * @param string[] $parameters
-     * @param string $context
-     *
-     * @return string
-     */
-    protected function getTranslation($variable, $parameters = [], $context = StringUtilities::LIBRARIES)
+    protected function getTranslation(
+        string $variable, array $parameters = [], string $context = StringUtilities::LIBRARIES
+    ): string
     {
         return $this->getTranslator()->trans($variable, $parameters, $context);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function get_html_editors()
-    {
-        return $this->html_editors;
-    }
-
-    /**
-     * Returns the renderer
-     *
-     * @return \HTML_QuickForm_Renderer_Default
-     */
-    public function get_renderer()
-    {
-        return $this->renderer;
-    }
-
-    /**
-     * @param \HTML_QuickForm_Renderer_Default $renderer
-     */
-    public function set_renderer($renderer)
-    {
-        $this->renderer = $renderer;
-    }
-
-    /**
-     * Formats an multiple dimension array to a single dimension array to support default values in the quickform
-     * library because quickform produces arrays when an array is used in the name, but quickform does not accept arrays
-     * for the default values, instead the inner arrays are converted as strings
-     *
-     * @param string[][] $array
-     * @param int $level
-     *
-     * @return string[]
-     */
-    protected function multi_dimensional_array_to_single_dimensional_array($array, $level = 0)
-    {
-        $single_dimension_array = [];
-
-        foreach ($array as $key => $element)
-        {
-            $key = ($level == 0) ? $key : '[' . $key . ']';
-
-            if (is_array($element))
-            {
-                $single_array = $this->multi_dimensional_array_to_single_dimensional_array($element, $level + 1);
-                foreach ($single_array as $child_key => $child_element)
-                {
-                    $single_dimension_array[$key . $child_key] = $child_element;
-                }
-            }
-            else
-            {
-                $element_string = $element;
-                $single_dimension_array[$key] = $element_string;
-            }
-        }
-
-        return $single_dimension_array;
-    }
-
-    /**
-     * @param int $value
-     *
-     * @return int
-     */
-    public function parse_checkbox_value($value = null)
-    {
-        if (isset($value) && $value == 1)
-        {
-            return 1;
-        }
-        else
-        {
-            return 0;
-        }
     }
 
     public function registerAdditionalElements(): void
     {
         // Date and timepicker elements
-        static::registerElementType('datepicker', HTML_QuickForm_datepicker::class);
+        static::registerElementType(HTML_QuickForm_datepicker::class);
 
         // Element finder elements
-        static::registerElementType('advanced_element_finder', HTML_QuickForm_advanced_element_finder::class);
+        static::registerElementType(HTML_QuickForm_advanced_element_finder::class);
 
         // Button elements
-        static::registerElementType('style_button', HTML_QuickForm_stylebutton::class);
-        static::registerElementType('style_submit_button', HTML_QuickForm_stylesubmitbutton::class);
-        static::registerElementType('style_reset_button', HTML_QuickForm_styleresetbutton::class);
+        static::registerElementType(HTML_QuickForm_stylebutton::class);
+        static::registerElementType(HTML_QuickForm_stylesubmitbutton::class);
+        static::registerElementType(HTML_QuickForm_styleresetbutton::class);
+
+        // Toggle and category elements
+        static::registerElementType(HTML_QuickForm_toggle::class);
+        static::registerElementType(HTML_QuickForm_category::class);
 
         // Replacing some default elements
-        static::registerElementType('radio', HTML_QuickForm_bootstrap_radio::class);
-        static::registerElementType('checkbox', HTML_QuickForm_extended_checkbox::class);
-        static::registerElementType('file', HTML_QuickForm_stylefile::class);
-        static::registerElementType('toggle', HTML_QuickForm_toggle::class);
-        static::registerElementType('category', HTML_QuickForm_category::class);
+        static::registerElementType(HTML_QuickForm_bootstrap_radio::class);
+        static::registerElementType(HTML_QuickForm_extended_checkbox::class);
+        static::registerElementType(HTML_QuickForm_stylefile::class);
     }
 
     public function registerAdditionalRules(): void
     {
-        static::registerRule('date', null, HTML_QuickForm_Rule_Date::class);
-        static::registerRule('date_compare', null, HTML_QuickForm_Rule_DateCompare::class);
-        static::registerRule('username', null, HTML_QuickForm_Rule_Username::class);
-        static::registerRule('filetype', null, HTML_QuickForm_Rule_Filetype::class);
+        static::registerRule(HTML_QuickForm_Rule_Date::class);
+        static::registerRule(HTML_QuickForm_Rule_DateCompare::class);
+        static::registerRule(HTML_QuickForm_Rule_Username::class);
+        static::registerRule(HTML_QuickForm_Rule_Filetype::class);
     }
 
-    /**
-     * @param string $name
-     */
-    public function register_html_editor($name)
+    public function registerHtmlEditor(string $name): void
     {
         $this->html_editors[] = $name;
     }
 
-    public function setDefaultTemplates()
+    public function setDefaultTemplates(): void
     {
         $glyph = new FontAwesomeGlyph('star', ['text-danger', 'fa-xs'], null, 'fas');
 
         HTML_QuickForm::setRequiredNote(
             '<span class="text-danger">&nbsp;' . $glyph->render() . '&nbsp;<small>' .
-            $this->getTranslation('ThisFieldIsRequired', []) . '</small></span>'
+            $this->getTranslation('ThisFieldIsRequired') . '</small></span>'
         );
 
         $this->renderer = $this->defaultRenderer();
@@ -1005,10 +873,7 @@ EOT;
         $this->renderer->setRequiredNoteTemplate($this->getRequiredNoteTemplate());
     }
 
-    /**
-     * @param string $name
-     */
-    public function unregister_html_editor($name)
+    public function unregisterHtmlEditor(string $name): void
     {
         $key = array_search($name, $this->html_editors);
 

@@ -13,24 +13,22 @@ class AdvancedElementFinderElements
 {
 
     /**
-     *
      * @var \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement[]
      */
-    private $elements;
+    private array $elements;
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement[] $elements
      */
-    public function __construct($elements = [])
+    public function __construct(array $elements = [])
     {
-        $this->set_elements($elements);
+        $this->setElements($elements);
     }
 
     /**
      * @throws \Exception
      */
-    public function add_element(AdvancedElementFinderElement $element = null): void
+    public function addElement(AdvancedElementFinderElement $element = null): void
     {
         if (!$element instanceof AdvancedElementFinderElement)
         {
@@ -41,39 +39,37 @@ class AdvancedElementFinderElements
     }
 
     /**
-     * Renders the elements as an array
-     *
      * @return string[][]
      */
-    public function as_array()
+    public function asArray(): array
     {
         $array = [];
 
-        $elements = $this->get_elements();
+        $elements = $this->getElements();
 
         foreach ($elements as $element)
         {
-            $array[] = $element->as_array();
+            $array[] = $element->asArray();
         }
 
         return $array;
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement[]
      */
-    public function get_elements()
+    public function getElements(): array
     {
         return $this->elements;
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement[] $elements
      */
-    public function set_elements($elements)
+    public function setElements(array $elements): static
     {
         $this->elements = $elements;
+
+        return $this;
     }
 }

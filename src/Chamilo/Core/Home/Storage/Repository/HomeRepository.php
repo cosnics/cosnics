@@ -24,6 +24,9 @@ class HomeRepository
         $this->dataClassRepository = $dataClassRepository;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function countElementsByParentIdentifier(string $parentIdentifier): int
     {
         $condition = new EqualityCondition(
@@ -36,6 +39,9 @@ class HomeRepository
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function countElementsByUserIdentifier(string $userIdentifier): int
     {
         $parameters = new StorageParameters(condition: $this->getElementsByUserIdentifierCondition($userIdentifier));
@@ -43,11 +49,18 @@ class HomeRepository
         return $this->getDataClassRepository()->count(Element::class, $parameters);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function createElement(Element $element): bool
     {
         return $this->getDataClassRepository()->create($element);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function deleteElement(Element $element): bool
     {
         return $this->getDataClassRepository()->delete($element);
@@ -57,6 +70,7 @@ class HomeRepository
      * @param string $userIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findBlocksByUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -83,6 +97,7 @@ class HomeRepository
      * @param string[] $columnIdentifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findBlocksForColumnIdentifiers(array $columnIdentifiers): ArrayCollection
     {
@@ -104,6 +119,7 @@ class HomeRepository
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findColumnIdentifiersForTabIdentifier(string $tabIdentifier): array
     {
@@ -129,6 +145,10 @@ class HomeRepository
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function findElementByIdentifier(string $elementIdentifier): ?Element
     {
         return $this->getDataClassRepository()->retrieveById(Element::class, $elementIdentifier);
@@ -138,6 +158,7 @@ class HomeRepository
      * @param string $parentIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findElementsByParentIdentifier(string $parentIdentifier): ArrayCollection
     {
@@ -157,6 +178,7 @@ class HomeRepository
      * @param string $parentIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findElementsByTypeUserIdentifierAndParentIdentifier(
         string $type, string $userIdentifier, string $parentIdentifier = '0'
@@ -189,6 +211,7 @@ class HomeRepository
      * @param string $userIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findElementsByUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -215,6 +238,9 @@ class HomeRepository
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function updateElement(Element $element): bool
     {
         return $this->getDataClassRepository()->update($element);

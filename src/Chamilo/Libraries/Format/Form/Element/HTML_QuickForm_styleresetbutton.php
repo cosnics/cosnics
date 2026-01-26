@@ -13,16 +13,9 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 class HTML_QuickForm_styleresetbutton extends HTML_QuickForm_stylebutton
 {
 
-    /**
-     * @param ?string $elementName
-     * @param ?string $elementLabel
-     * @param ?array|?string $attributes Associative array of tag attributes or HTML attributes name="value" pairs
-     * @param ?string $value
-     * @param ?\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $glyph
-     */
     public function __construct(
-        ?string $elementName = null, ?string $elementLabel = null, $attributes = null, ?string $value = null,
-        ?InlineGlyph $glyph = null
+        ?string $elementName = null, ?string $elementLabel = null, null|array|string $attributes = null,
+        ?string $value = null, ?InlineGlyph $glyph = null
     )
     {
         // Quickform forces all arguments to "null", so the defaults in the constructor are not triggered
@@ -41,13 +34,7 @@ class HTML_QuickForm_styleresetbutton extends HTML_QuickForm_stylebutton
         $this->setAttribute('class', implode(' ', $defaultAttributes));
     }
 
-    /**
-     * Returns a 'safe' element's value
-     *
-     * @param array $submitValues array of submitted values to search
-     * @param bool $assoc         whether to return the value as associative array
-     */
-    public function exportValue(array &$submitValues, bool $assoc = false)
+    public function exportValue(array &$submitValues, bool $assoc = false): mixed
     {
         return $this->_prepareValue($this->_findValue($submitValues), $assoc);
     }

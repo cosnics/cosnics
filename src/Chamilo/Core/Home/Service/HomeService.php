@@ -51,11 +51,17 @@ class HomeService
         $this->displayOrderHandler = $displayOrderHandler;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function countElementsByParentIdentifier(string $parentIdentifier): int
     {
         return $this->getHomeRepository()->countElementsByParentIdentifier($parentIdentifier);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function countElementsByUserIdentifier(string $userIdentifier): int
     {
         return $this->getHomeRepository()->countElementsByUserIdentifier($userIdentifier);
@@ -63,6 +69,8 @@ class HomeService
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function createElement(Element $element): bool
     {
@@ -74,6 +82,9 @@ class HomeService
         return $this->getHomeRepository()->createElement($element);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function deleteElement(Element $element): bool
     {
         $childElements = $this->findElementsByParentIdentifier($element->getId());
@@ -99,6 +110,9 @@ class HomeService
         return true;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function deleteElementsForUserIdentifier(string $userIdentifier): bool
     {
         $userTabs = $this->getHomeRepository()->findElementsByTypeUserIdentifierAndParentIdentifier(
@@ -116,15 +130,17 @@ class HomeService
         return true;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function elementHasChildren(Element $element): bool
     {
         return $this->countElementsByParentIdentifier($element->getId()) > 0;
     }
 
     /**
-     * @param string $tabIdentifier
-     *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findBlocksForTabIdentifier(string $tabIdentifier): ArrayCollection
     {
@@ -135,21 +151,25 @@ class HomeService
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findColumnIdentifiersForTabIdentifier(string $tabIdentifier): array
     {
         return $this->getHomeRepository()->findColumnIdentifiersForTabIdentifier($tabIdentifier);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function findElementByIdentifier(string $elementIdentifier): ?Element
     {
         return $this->getHomeRepository()->findElementByIdentifier($elementIdentifier);
     }
 
     /**
-     * @param string $parentIdentifier
-     *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findElementsByParentIdentifier(string $parentIdentifier): ArrayCollection
     {
@@ -157,14 +177,10 @@ class HomeService
     }
 
     /**
-     * @param string $type
-     * @param ?\Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $parentIdentifier
-     *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function findElementsByTypeUserAndParentIdentifier(
+    public function findElementsByTypeAndParentIdentifier(
         string $type, string $parentIdentifier = '0'
     ): ArrayCollection
     {
@@ -198,15 +214,18 @@ class HomeService
         return $this->displayOrderHandler;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function getElementByIdentifier(string $elementIdentifier): ?Element
     {
         return $this->getHomeRepository()->findElementByIdentifier($elementIdentifier);
     }
 
     /**
-     * @param string $userIdentifier
-     *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getElementsByUserIdentifier(string $userIdentifier): ArrayCollection
     {
@@ -233,11 +252,17 @@ class HomeService
         return ($currentTabIdentifier == $tab->getId() || (!isset($currentTabIdentifier) && $tabKey == 0));
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function tabByIdentifierHasMultipleColumns(string $tabIdentifier): bool
     {
-        return $this->findElementsByTypeUserAndParentIdentifier(Element::TYPE_COLUMN, $tabIdentifier)->count() > 1;
+        return $this->findElementsByTypeAndParentIdentifier(Element::TYPE_COLUMN, $tabIdentifier)->count() > 1;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function tabCanBeDeleted(Element $tab): bool
     {
         $tabBlocks = $this->findBlocksForTabIdentifier($tab->getId());
@@ -255,6 +280,7 @@ class HomeService
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function updateElement(Element $element): bool
     {

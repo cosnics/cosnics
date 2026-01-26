@@ -38,7 +38,7 @@ abstract class UserForm extends FormValidator
 
         if ($isLockoutRisk)
         {
-            $this->add_warning_message(
+            $this->addWarningMessage(
                 'admin_lockout_message', null, $translator->trans('LockOutWarningMessage', [], Manager::CONTEXT)
             );
         }
@@ -54,16 +54,6 @@ abstract class UserForm extends FormValidator
 
         $this->addElement(
             'toggle', User::PROPERTY_PLATFORMADMIN, $translator->trans('PlatformAdministrator', [], Manager::CONTEXT)
-        );
-
-        // Disk Quota
-        $this->add_textfield(
-            User::PROPERTY_DISK_QUOTA, $translator->trans('DiskQuota', [], Manager::CONTEXT), false
-        );
-
-        $this->addRule(
-            User::PROPERTY_DISK_QUOTA, $translator->trans('ThisFieldMustBeNumeric', [], StringUtilities::LIBRARIES),
-            'numeric'
         );
     }
 
@@ -169,7 +159,7 @@ abstract class UserForm extends FormValidator
         }
 
         // Firstname
-        $this->add_textfield(
+        $this->addTextfield(
             User::PROPERTY_FIRSTNAME, $translator->trans('FirstName', [], Manager::CONTEXT), $allowedToChangeFirstName
         );
 
@@ -184,7 +174,7 @@ abstract class UserForm extends FormValidator
         }
 
         // Lastname
-        $this->add_textfield(
+        $this->addTextfield(
             User::PROPERTY_LASTNAME, $translator->trans('LastName', [], Manager::CONTEXT), $allowedToChangeLastName
         );
 
@@ -199,7 +189,7 @@ abstract class UserForm extends FormValidator
         }
 
         // Email
-        $this->add_textfield(
+        $this->addTextfield(
             User::PROPERTY_EMAIL, $translator->trans('Email', [], Manager::CONTEXT),
             $allowedToChangeEmailAddress && $requiresEmail
         );
@@ -218,7 +208,7 @@ abstract class UserForm extends FormValidator
         $this->addRule(User::PROPERTY_EMAIL, $translator->trans('WrongEmail', [], Manager::CONTEXT), 'email');
 
         // Username
-        $this->add_textfield(
+        $this->addTextfield(
             User::PROPERTY_USERNAME, $translator->trans('Username', [], Manager::CONTEXT), $allowedToChangeUsername
         );
 
@@ -236,7 +226,7 @@ abstract class UserForm extends FormValidator
         }
 
         // Official Code
-        $this->add_textfield(
+        $this->addTextfield(
             User::PROPERTY_OFFICIAL_CODE, $translator->trans('OfficialCode', [], Manager::CONTEXT),
             $allowedToChangeOfficialCode && $requiresOfficialCode
         );
@@ -252,7 +242,7 @@ abstract class UserForm extends FormValidator
         }
 
         // Phone Number
-        $this->add_textfield(
+        $this->addTextfield(
             User::PROPERTY_PHONE, $translator->trans('PhoneNumber', [], Manager::CONTEXT), false
         );
     }

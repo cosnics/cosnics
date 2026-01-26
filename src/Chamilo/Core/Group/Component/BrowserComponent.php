@@ -329,6 +329,10 @@ class BrowserComponent extends Manager
         return $this->getService(SubscribedUserTableRenderer::class);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function getSubscribedUsersCondition(): ?AndCondition
     {
         return $this->getButtonToolBarSearchCondition(SubscribedUser::class);

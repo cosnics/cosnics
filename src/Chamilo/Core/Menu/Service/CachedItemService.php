@@ -35,12 +35,16 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
 
     /**
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[][]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     protected function __findItemsGroupedByParentIdentifier(): array
     {
         return $this->getItemService()->findItemsGroupedByParentIdentifier();
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function countItemsByParentIdentifier(string $parentIdentifier): int
     {
         return $this->getItemService()->countItemsByParentIdentifier($parentIdentifier);
@@ -84,9 +88,10 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function deleteItemChildren(Item $item): bool
     {
@@ -107,22 +112,33 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findApplicationItems(): ArrayCollection
     {
         return $this->getItemService()->findApplicationItems();
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function findItemByIdentifier(string $identifier): ?Item
     {
         return $this->getItemService()->findItemByIdentifier($identifier);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function findItems(): ArrayCollection
     {
         return $this->getItemService()->findItems();
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function findItemsByIdentifiers(array $identifiers): ArrayCollection
     {
         return $this->getItemService()->findItemsByIdentifiers($identifiers);
@@ -163,6 +179,9 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function findRootCategoryItems(): ArrayCollection
     {
         return $this->getItemService()->findRootCategoryItems();
@@ -178,6 +197,10 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         return $this->itemService;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function getNextItemSortValueByParentIdentifier(string $parentIdentifier): int
     {
         return $this->getItemService()->getNextItemSortValueByParentIdentifier($parentIdentifier);
@@ -191,6 +214,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function moveItemInDirection(Item $item, int $moveDirection): bool
     {
@@ -210,6 +234,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function saveItemFromValues(Item $item, array $values): bool
     {

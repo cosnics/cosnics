@@ -42,9 +42,6 @@ class MenuRenderer
         $this->themeWebPathBuilder = $themeWebPathBuilder;
     }
 
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
     public function render(string $containerMode = 'container-fluid', ?User $user = null): string
     {
         $html = [];

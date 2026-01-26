@@ -22,11 +22,6 @@ class HashingFactory
         return $this->configuredHashingAlgorithm;
     }
 
-    public function setConfiguredHashingAlgorithm(string $configuredHashingAlgorithm)
-    {
-        $this->configuredHashingAlgorithm = $configuredHashingAlgorithm;
-    }
-
     /**
      * @throws \Exception
      */
@@ -49,10 +44,5 @@ class HashingFactory
     public function getStringUtilities(): StringUtilities
     {
         return $this->stringUtilities;
-    }
-
-    public function setStringUtilities(StringUtilities $stringUtilities)
-    {
-        $this->stringUtilities = $stringUtilities;
     }
 }

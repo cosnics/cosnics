@@ -22,20 +22,14 @@ use HTML_QuickForm_radio;
 class HTML_QuickForm_bootstrap_radio extends HTML_QuickForm_radio
 {
 
-    /**
-     * @param ?array|?string $attributes Associative array of tag attributes or HTML attributes name="value" pairs
-     */
     public function __construct(
         ?string $elementName = null, ?string $elementLabel = null, ?string $text = null, ?string $value = null,
-        $attributes = null
+        null|array|string $attributes = null
     )
     {
         parent::__construct($elementName, $elementLabel, $text, $value, $attributes);
     }
 
-    /**
-     * @see HTML_QuickForm_radio::toHtml()
-     */
     public function toHtml(): string
     {
         if (!$this->isFrozen())

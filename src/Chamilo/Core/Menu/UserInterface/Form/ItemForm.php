@@ -159,6 +159,7 @@ class ItemForm extends FormValidator
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     protected function getParentItems(): array
     {

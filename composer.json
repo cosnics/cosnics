@@ -26,7 +26,7 @@
         "ext-soap": "*",
         "ext-zip": "*",
         "apereo/phpcas": "1.6.*",
-        "chamilo/pear-libraries": "dev-refactor/database",
+        "chamilo/pear-libraries": "dev-symfony",
         "composer/composer": "2.9.*",
         "doctrine/collections": "2.*",
         "doctrine/dbal": "4.*",

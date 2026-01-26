@@ -13,8 +13,6 @@ class StringUtilities
 {
     public const LIBRARIES = 'Chamilo\Libraries';
 
-    protected static ?StringUtilities $instance = null;
-
     private string $encoding;
 
     public function __construct(string $encoding = 'UTF-8')
@@ -88,16 +86,6 @@ class StringUtilities
         return $this->encoding;
     }
 
-    public static function getInstance(): StringUtilities
-    {
-        if (is_null(static::$instance))
-        {
-            self::$instance = new static();
-        }
-
-        return static::$instance;
-    }
-
     public function hasValue(mixed $string, bool $forHumans = false): bool
     {
         return !$this->isNullOrEmpty($string, $forHumans);
@@ -131,7 +119,7 @@ class StringUtilities
 
         return $haystack;
     }
-    
+
     public function isNullOrEmpty(mixed $string, bool $forHumans = false): bool
     {
         if (is_null($string))

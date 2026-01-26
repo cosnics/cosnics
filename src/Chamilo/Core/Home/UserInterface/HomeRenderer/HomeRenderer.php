@@ -49,11 +49,12 @@ class HomeRenderer
     }
 
     /**
-     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Exception
      */
     public function render(?int $currentTabIdentifier = null, ?User $user = null): string
     {
-        $html[] = $this->renderTabs($currentTabIdentifier, $user);
+        $html[] = $this->renderTabs($currentTabIdentifier);
 
         $html[] = $this->renderPackageContainer();
         $html[] = $this->renderContent($currentTabIdentifier, $user);
@@ -97,7 +98,6 @@ class HomeRenderer
     }
 
     /**
-     * @throws \QuickformException
      * @throws \Exception
      */
     public function renderContent(?int $currentTabIdentifier = null, ?User $user = null): string
@@ -108,7 +108,7 @@ class HomeRenderer
 
         $html[] = '<div class="portal-tabs">';
 
-        $tabs = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(Element::TYPE_TAB);
+        $tabs = $this->getHomeService()->findElementsByTypeAndParentIdentifier(Element::TYPE_TAB);
 
         foreach ($tabs as $tabKey => $tab)
         {
@@ -211,10 +211,9 @@ class HomeRenderer
     }
 
     /**
-     * @throws \QuickformException
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function renderTabs(?int $currentTabIdentifier = null, ?User $user = null): string
+    public function renderTabs(?int $currentTabIdentifier = null): string
     {
         $tabHeaderRenderer = $this->getTabHeaderRenderer();
 
@@ -222,7 +221,7 @@ class HomeRenderer
 
         $html[] = '<ul class="nav nav-tabs portal-nav-tabs">';
 
-        $tabs = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(Element::TYPE_TAB);
+        $tabs = $this->getHomeService()->findElementsByTypeAndParentIdentifier(Element::TYPE_TAB);
 
         foreach ($tabs as $tabKey => $tab)
         {

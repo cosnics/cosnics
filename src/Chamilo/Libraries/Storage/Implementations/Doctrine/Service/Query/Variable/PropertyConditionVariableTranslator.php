@@ -33,9 +33,14 @@ class PropertyConditionVariableTranslator extends ConditionVariableTranslator
 
         $translationParts = [];
 
-        $translationParts[] = $dataClassDatabase->escapeColumnName(
-            $propertyConditionVariable->getPropertyName(), $alias
-        );
+        if (!empty($alias))
+        {
+            $translationParts[] = $alias . '.' . $propertyConditionVariable->getPropertyName();
+        }
+        else
+        {
+            $translationParts[] = $propertyConditionVariable->getPropertyName();
+        }
 
         if ($propertyConditionVariable->getAlias())
         {

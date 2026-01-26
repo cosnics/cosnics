@@ -1,9 +1,9 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataClass\Interfaces;
+namespace Chamilo\Libraries\Storage\DataClass\Interface;
 
 /**
- * @package Chamilo\Libraries\Storage\DataClass
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Libraries\Storage\DataClass\Interface
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 interface ConfigurableDataClassInterface
 {

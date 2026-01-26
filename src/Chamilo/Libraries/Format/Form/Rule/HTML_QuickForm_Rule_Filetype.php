@@ -14,7 +14,7 @@ class HTML_QuickForm_Rule_Filetype extends HTML_QuickForm_Rule
     /**
      * Function to check if a filetype is allowed
      *
-     * @param string[] $value   Uploaded file
+     * @param string[] $value Uploaded file
      * @param string[] $options Allowed extensions
      *
      * @return bool True if filetype is allowed

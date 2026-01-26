@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 class TruncaterComponent extends Manager
 {
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function run(): Response
     {
         $this->getHomeService()->deleteElementsForUserIdentifier($this->getUser()->getId());

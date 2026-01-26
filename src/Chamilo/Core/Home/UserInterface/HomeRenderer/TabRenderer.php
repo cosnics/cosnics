@@ -25,7 +25,7 @@ class TabRenderer
     }
 
     /**
-     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function render(
         Element $tab, int $tabKey, ?int $currentTabIdentifier = null, ?User $user = null
@@ -40,7 +40,7 @@ class TabRenderer
             '<div class="row portal-tab ' . ($isActiveTab ? 'show' : 'hidden') . '" data-element-id="' . $tab->getId() .
             '">';
 
-        $columns = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(
+        $columns = $this->getHomeService()->findElementsByTypeAndParentIdentifier(
             Element::TYPE_COLUMN, $tab->getId()
         );
 

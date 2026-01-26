@@ -20,6 +20,6 @@ class HTML_QuickForm_Rule_Date extends HTML_QuickForm_Rule
      */
     public function validate($value, $options = null): bool
     {
-        return checkdate($value['F'], $value['d'], $value['Y']);
+        return checkdate((int) $value['F'], (int) $value['d'], (int) $value['Y']);
     }
 }

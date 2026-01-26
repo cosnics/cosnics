@@ -6,7 +6,6 @@ use Chamilo\Libraries\Storage\StorageParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- *
  * @package Chamilo\Libraries\Storage\Cache
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -23,8 +22,6 @@ class DataClassRepositoryCache
     public const TYPE_RETRIEVES = 7;
 
     /**
-     * The cache
-     *
      * @var array[][][]
      */
     private array $cache;

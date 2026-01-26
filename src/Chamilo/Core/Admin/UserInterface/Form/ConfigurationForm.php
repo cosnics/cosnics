@@ -88,7 +88,7 @@ class ConfigurationForm extends FormValidator
                     }
                     elseif ($setting['field'] == 'text')
                     {
-                        $this->add_textfield(
+                        $this->addTextfield(
                             $name, $translator->trans(
                             (string) $stringUtilities->createString($name)->upperCamelize(), [], $context
                         ), ($setting['required'] == 'true')
@@ -116,7 +116,7 @@ class ConfigurationForm extends FormValidator
                     }
                     elseif ($setting['field'] == 'html_editor')
                     {
-                        $this->add_html_editor(
+                        $this->addHtmlEditor(
                             $name, $translator->trans(
                             (string) $stringUtilities->createString($name)->upperCamelize(), [], $context
                         ), ($setting['required'] == 'true')
@@ -132,7 +132,7 @@ class ConfigurationForm extends FormValidator
                     }
                     elseif ($setting['field'] == 'password')
                     {
-                        $this->add_password(
+                        $this->addPassword(
                             $name, $translator->trans(
                             (string) $stringUtilities->createString($name)->upperCamelize(), [], $context
                         ), ($setting['required'] == 'true')

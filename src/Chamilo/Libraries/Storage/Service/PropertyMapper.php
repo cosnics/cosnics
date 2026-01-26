@@ -5,7 +5,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use stdClass;
 
 /**
- * @package Chamilo\Libraries\Storage\DataClass
+ * @package Chamilo\Libraries\Storage\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PropertyMapper
@@ -82,7 +82,7 @@ class PropertyMapper
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[][]
      */
-    public function groupDataClassByProperty($dataClasses, string $propertyName): array
+    public function groupDataClassByProperty(ArrayCollection|array $dataClasses, string $propertyName): array
     {
         $mappedDataClasses = [];
 

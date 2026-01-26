@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\Repository;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
+use Chamilo\Libraries\Storage\DataClass\Interface\DataClassDisplayOrderSupport;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -29,6 +29,9 @@ class DisplayOrderRepository
         $this->dataClassRepository = $dataClassRepository;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function addDisplayOrderToContext(DataClassDisplayOrderSupport $dataClass): bool
     {
         $conditions = [];
@@ -52,6 +55,9 @@ class DisplayOrderRepository
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function countOtherDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass): int
     {
         $conditions = [];
@@ -90,6 +96,8 @@ class DisplayOrderRepository
 
     /**
      * @param string[] $contextProperties
+     *
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function deleteDisplayOrderFromContext(
         DataClassDisplayOrderSupport $dataClass, array $contextProperties, int $displayOrder
@@ -121,6 +129,8 @@ class DisplayOrderRepository
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function findDisplayOrderPropertiesRecord(DataClassDisplayOrderSupport $dataClass): array
     {
@@ -139,6 +149,10 @@ class DisplayOrderRepository
         return $this->getDataClassRepository()->record($dataClassName, $parameters);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function findNextDisplayOrderValue(DataClassDisplayOrderSupport $dataClass): int
     {
         return $this->getDataClassRepository()->retrieveNextValue(

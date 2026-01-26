@@ -71,7 +71,7 @@ class GroupForm extends FormValidator
             NestedSet::PROPERTY_PARENT_ID, $this->getTranslation('ThisFieldIsRequired'), 'required'
         );
 
-        $this->add_html_editor(
+        $this->addHtmlEditor(
             Group::PROPERTY_DESCRIPTION, $this->getTranslation('Description'), false
         );
     }

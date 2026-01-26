@@ -22,7 +22,7 @@ class DistinctConditionVariable extends ConditionVariable
         $this->conditionVariables = $conditionVariables;
     }
 
-    public function add(ConditionVariable $conditionVariable): DistinctConditionVariable
+    public function add(ConditionVariable $conditionVariable): static
     {
         $this->conditionVariables[] = $conditionVariable;
 
@@ -63,7 +63,7 @@ class DistinctConditionVariable extends ConditionVariable
      *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $conditionVariables
      */
-    public function set(array $conditionVariables): DistinctConditionVariable
+    public function set(array $conditionVariables): static
     {
         $this->conditionVariables = $conditionVariables;
 

@@ -259,7 +259,12 @@ class NestedSetDataClassRepository
      */
     public function findRelatedNestedSetByIdentifier(NestedSet $nestedSet, string $nestedSetIdentifier): NestedSet
     {
-        return $this->getDataClassRepository()->retrieveById(get_class($nestedSet), $nestedSetIdentifier);
+        /**
+         * @var class-string<\Chamilo\Libraries\Storage\DataClass\NestedSet> $nestedSetClass
+         */
+        $nestedSetClass = get_class($nestedSet);
+
+        return $this->getDataClassRepository()->retrieveById($nestedSetClass, $nestedSetIdentifier);
     }
 
     /**
@@ -400,7 +405,12 @@ class NestedSetDataClassRepository
      */
     public function getParent(NestedSet $nestedSet): NestedSet
     {
-        return $this->getDataClassRepository()->retrieveById(get_class($nestedSet), $nestedSet->getParentId());
+        /**
+         * @var class-string<\Chamilo\Libraries\Storage\DataClass\NestedSet> $nestedSetClass
+         */
+        $nestedSetClass = get_class($nestedSet);
+
+        return $this->getDataClassRepository()->retrieveById($nestedSetClass, $nestedSet->getParentId());
     }
 
     /**

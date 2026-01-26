@@ -116,11 +116,11 @@ class ApplicationItemRenderer extends ItemRenderer
             $translator->trans('UseTranslation', [], 'Chamilo\Core\Menu')
         );
 
-        $formValidator->add_textfield(
+        $formValidator->addTextfield(
             Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_COMPONENT . ']',
             $translator->trans('Component', [], 'Chamilo\Core\Menu'), false
         );
-        $formValidator->add_textfield(
+        $formValidator->addTextfield(
             Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_EXTRA_PARAMETERS . ']',
             $translator->trans('ExtraParameters', [], 'Chamilo\Core\Menu'), false
         );

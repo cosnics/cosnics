@@ -35,7 +35,7 @@ class NotAllowedException extends UserException
 
         $form = new FormValidator('formLogin', FormValidator::FORM_METHOD_POST, $this->getRequest()->getUri());
 
-        $form->get_renderer()->setElementTemplate('{element}');
+        $form->getRenderer()->setElementTemplate('{element}');
 
         $form->setRequiredNote('');
 

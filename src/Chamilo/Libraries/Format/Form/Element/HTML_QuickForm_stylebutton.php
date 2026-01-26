@@ -18,16 +18,9 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
 
     private ?string $styleButtonLabel;
 
-    /**
-     * @param ?string $elementName
-     * @param ?string $elementLabel
-     * @param ?array|?string $attributes Associative array of tag attributes or HTML attributes name="value" pairs
-     * @param ?string $value
-     * @param ?\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $glyph
-     */
     public function __construct(
-        ?string $elementName = null, ?string $elementLabel = null, $attributes = null, ?string $value = null,
-        ?InlineGlyph $glyph = null
+        ?string $elementName = null, ?string $elementLabel = null, null|array|string $attributes = null,
+        ?string $value = null, ?InlineGlyph $glyph = null
     )
     {
         parent::__construct($elementName, null, $attributes);
@@ -52,13 +45,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
         }
     }
 
-    /**
-     * Returns a 'safe' element's value
-     *
-     * @param array $submitValues array of submitted values to search
-     * @param bool $assoc         whether to return the value as associative array
-     */
-    public function exportValue(array &$submitValues, bool $assoc = false)
+    public function exportValue(array &$submitValues, bool $assoc = false): mixed
     {
         $type = $this->getType();
 
@@ -92,7 +79,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
         return $this->styleButtonLabel;
     }
 
-    public function getValue()
+    public function getValue(): ?string
     {
         return $this->getAttribute('value');
     }
@@ -100,11 +87,11 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
     /**
      * Called by HTML_QuickForm whenever form event is made on this element
      *
-     * @param string $event            Name of event
-     * @param mixed $arg               event arguments
+     * @param string $event Name of event
+     * @param mixed $arg event arguments
      * @param ?\HTML_QuickForm $caller calling object
      */
-    public function onQuickFormEvent(string $event, $arg, ?HTML_QuickForm $caller = null): bool
+    public function onQuickFormEvent(string $event, mixed $arg, ?HTML_QuickForm $caller = null): bool
     {
         // do not use submit values for button-type elements
         $type = $this->getType();
@@ -131,18 +118,18 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
         return true;
     }
 
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->updateAttributes(['name' => $name]);
     }
 
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->_type = $type;
         $this->updateAttributes(['type' => $type]);
     }
 
-    public function setValue($value)
+    public function setValue($value): void
     {
         $this->updateAttributes(['value' => $value]);
     }

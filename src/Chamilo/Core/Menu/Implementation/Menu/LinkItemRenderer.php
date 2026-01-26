@@ -96,7 +96,7 @@ class LinkItemRenderer extends ItemRenderer
     {
         $formValidator->addElement('category', $this->getTranslator()->trans('Properties', [], Manager::CONTEXT));
 
-        $formValidator->add_textfield(
+        $formValidator->addTextfield(
             Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_URL . ']',
             $this->getTranslator()->trans('URL', [], Manager::CONTEXT), true, ['size' => '100']
         );

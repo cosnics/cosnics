@@ -44,7 +44,7 @@ class AvailabilityForm extends FormValidator
      */
     public function build(): void
     {
-        $this->add_information_message(
+        $this->addInformationMessage(
             'calendar_availability', null,
             $this->getTranslation('CalendarAvailabilityInformation', [], Manager::CONTEXT), true
         );

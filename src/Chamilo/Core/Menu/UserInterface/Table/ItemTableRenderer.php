@@ -124,8 +124,6 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $dataClass
-     *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $dataClass): string
     {
@@ -145,6 +143,8 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $result
+     *
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, $result): string
     {
@@ -170,7 +170,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
             $toolbar->addItem(
                 new ToolbarItem(
                     $translator->trans('MoveUpNA', [], StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('sort-up', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
+                    new FontAwesomeGlyph('up-long', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -178,7 +178,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         {
             $toolbar->addItem(
                 new ToolbarItem(
-                    $translator->trans('MoveUp', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-up'),
+                    $translator->trans('MoveUp', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('up-long'),
                     $this->getItemMovingUrl($result, ItemService::PARAM_DIRECTION_UP), ToolbarItem::DISPLAY_ICON
                 )
             );
@@ -189,7 +189,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
             $toolbar->addItem(
                 new ToolbarItem(
                     $translator->trans('MoveDownNA', [], StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('sort-down', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
+                    new FontAwesomeGlyph('down-long', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
                 )
             );
         }
@@ -197,7 +197,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         {
             $toolbar->addItem(
                 new ToolbarItem(
-                    $translator->trans('MoveDown', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('sort-down'),
+                    $translator->trans('MoveDown', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('down-long'),
                     $this->getItemMovingUrl($result, ItemService::PARAM_DIRECTION_DOWN), ToolbarItem::DISPLAY_ICON
                 )
             );

@@ -1,9 +1,9 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataClass\Traits;
+namespace Chamilo\Libraries\Storage\DataClass\Trait;
 
 /**
- * @package Chamilo\Libraries\Storage\DataClass
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Libraries\Storage\DataClass\Trait
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 trait ConfigurableDataClassTrait
 {

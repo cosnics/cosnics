@@ -3,9 +3,9 @@ namespace Chamilo\Core\Home\Storage\DataClass;
 
 use Chamilo\Core\Home\Manager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\ConfigurableDataClassInterface;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport;
-use Chamilo\Libraries\Storage\DataClass\Traits\ConfigurableDataClassTrait;
+use Chamilo\Libraries\Storage\DataClass\Interface\ConfigurableDataClassInterface;
+use Chamilo\Libraries\Storage\DataClass\Interface\DataClassDisplayOrderSupport;
+use Chamilo\Libraries\Storage\DataClass\Trait\ConfigurableDataClassTrait;
 
 /**
  * @package Chamilo\Core\Home\Storage\DataClass

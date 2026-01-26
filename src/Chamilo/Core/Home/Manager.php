@@ -46,6 +46,9 @@ abstract class Manager extends Application
     public const TYPE_ROW = 'row';
     public const TYPE_TAB = 'tab';
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);

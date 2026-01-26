@@ -79,10 +79,5 @@ class BreadcrumbTrailRenderer
 
         return implode(PHP_EOL, $html);
     }
-
-    public function setStringUtilities(StringUtilities $stringUtilities)
-    {
-        $this->stringUtilities = $stringUtilities;
-    }
 }
 

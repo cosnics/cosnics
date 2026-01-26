@@ -34,7 +34,7 @@ class ColumnRenderer
     }
 
     /**
-     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function render(Element $column, ?User $user = null): string
     {
@@ -44,7 +44,7 @@ class ColumnRenderer
             $column->getParentId() . '" data-element-id="' . $column->getId() . '" data-element-width="' .
             $column->getWidth() . '">';
 
-        $blocks = $this->getHomeService()->findElementsByTypeUserAndParentIdentifier(
+        $blocks = $this->getHomeService()->findElementsByTypeAndParentIdentifier(
             Element::TYPE_BLOCK, $column->getId()
         );
 
@@ -55,7 +55,7 @@ class ColumnRenderer
         }
 
         $hasMultipleColumns = $this->getHomeService()->tabByIdentifierHasMultipleColumns(
-            $column->getParentId(), $user
+            $column->getParentId()
         );
 
         $html[] = $this->renderEmptyColumn($column->getId(), (count($blocks) > 0), !$hasMultipleColumns);

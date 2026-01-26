@@ -35,7 +35,7 @@ class EmailForm extends FormValidator
         $this->addElement('text', 'title', $translator->trans('EmailTitle', [], Manager::CONTEXT), ['size' => '50']);
         $this->addRule('title', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required');
 
-        $this->add_html_editor(
+        $this->addHtmlEditor(
             'message', $translator->trans('EmailMessage', [], Manager::CONTEXT), true, ['height' => 500, 'width' => 750]
         );
 

@@ -14,9 +14,9 @@ class HTML_QuickForm_Rule_DateCompare extends HTML_QuickForm_Rule_Compare
     /**
      * Validate 2 dates
      *
-     * @param string[][] $values Array with the 2 dates. Each element in this array
+     * @param int[][] $values Array with the 2 dates. Each element in this array
      *                           should be an array width keys F (month), d (day) and Y (year)
-     * @param string $operator   The operator to use (default '==')
+     * @param string $operator The operator to use (default '==')
      *
      * @return bool True if the 2 given dates match the operator
      */

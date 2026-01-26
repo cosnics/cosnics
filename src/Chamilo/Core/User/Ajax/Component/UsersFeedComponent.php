@@ -36,7 +36,7 @@ class UsersFeedComponent extends Manager
     {
         $result = new JsonAjaxResult();
 
-        $result->setProperty(self::PROPERTY_ELEMENTS, $this->getElements()->as_array());
+        $result->setProperty(self::PROPERTY_ELEMENTS, $this->getElements()->asArray());
         $result->setProperty(self::PROPERTY_TOTAL_ELEMENTS, $this->userCount);
 
         return $result->getResponse();
@@ -93,11 +93,11 @@ class UsersFeedComponent extends Manager
             'users', $glyph->getClassNamesString(), $translator->trans('Users', [], Manager::CONTEXT),
             $translator->trans('Users', [], Manager::CONTEXT)
         );
-        $elements->add_element($user_category);
+        $elements->addElement($user_category);
 
         foreach ($this->retrieveUsers() as $user)
         {
-            $user_category->add_child($this->getElementForUser($user));
+            $user_category->addChild($this->getElementForUser($user));
         }
 
         return $elements;

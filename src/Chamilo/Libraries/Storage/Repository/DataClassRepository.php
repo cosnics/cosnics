@@ -5,7 +5,7 @@ use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
-use Chamilo\Libraries\Storage\DataClass\Interfaces\UuidDataClassInterface;
+use Chamilo\Libraries\Storage\DataClass\Interface\UuidDataClassInterface;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -106,11 +106,11 @@ class DataClassRepository
     /**
      * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
      *
-     * @return ?string[]
+     * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    protected function __record(string $dataClassName, StorageParameters $parameters): ?array
+    protected function __record(string $dataClassName, StorageParameters $parameters): array
     {
         $this->applyDataClassPropertiesToParameters($dataClassName, $parameters);
 
@@ -140,7 +140,7 @@ class DataClassRepository
      *
      * @param class-string<tInternalRetrieveClass> $dataClassName
      *
-     * @return ?tInternalRetrieveClass
+     * @return tInternalRetrieveClass
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
@@ -500,7 +500,7 @@ class DataClassRepository
      *
      * @param class-string<retrieveDataClassName> $dataClassName
      *
-     * @return ?retrieveDataClassName
+     * @return retrieveDataClassName
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
@@ -528,7 +528,7 @@ class DataClassRepository
      * @param class-string<retrieveById> $dataClassName
      * @param string $identifier
      *
-     * @return ?retrieveById
+     * @return retrieveById
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */

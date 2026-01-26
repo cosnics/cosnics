@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Storage\DataClass;
 
 /**
- *
  * @package Chamilo\Libraries\Storage\DataClass
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillarexd@ehb.be>
@@ -11,7 +10,6 @@ class DataClassFactory
 {
 
     /**
-     *
      * @template tGetDataClass
      *
      * @param class-string<tGetDataClass> $dataClassName
@@ -21,9 +19,6 @@ class DataClassFactory
      */
     public function getDataClass(string $dataClassName, array $record = [])
     {
-        /**
-         * @var \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
-         */
         $dataClass = new $dataClassName();
 
         foreach ($dataClass::getDefaultPropertyNames() as $property)
