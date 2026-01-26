@@ -40,16 +40,6 @@ class HomeRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function countElementsByUserIdentifier(string $userIdentifier): int
-    {
-        $parameters = new StorageParameters(condition: $this->getElementsByUserIdentifierCondition($userIdentifier));
-
-        return $this->getDataClassRepository()->count(Element::class, $parameters);
-    }
-
-    /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -64,33 +54,6 @@ class HomeRepository
     public function deleteElement(Element $element): bool
     {
         return $this->getDataClassRepository()->delete($element);
-    }
-
-    /**
-     * @param string $userIdentifier
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findBlocksByUserIdentifier(string $userIdentifier): ArrayCollection
-    {
-        $conditions = [];
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_USER_ID),
-            new StaticConditionVariable($userIdentifier)
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE),
-            new StaticConditionVariable(Element::TYPE_BLOCK)
-        );
-
-        return $this->getDataClassRepository()->retrieves(
-            Element::class, new StorageParameters(
-                condition: new AndCondition($conditions)
-            )
-        );
     }
 
     /**
@@ -174,14 +137,13 @@ class HomeRepository
 
     /**
      * @param string $type
-     * @param string $userIdentifier
      * @param string $parentIdentifier
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function findElementsByTypeUserIdentifierAndParentIdentifier(
-        string $type, string $userIdentifier, string $parentIdentifier = '0'
+    public function findElementsByTypeAndParentIdentifier(
+        string $type, string $parentIdentifier = '0'
     ): ArrayCollection
     {
         $conditions = [];
@@ -189,8 +151,6 @@ class HomeRepository
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE), new StaticConditionVariable($type)
         );
-
-        $conditions[] = $this->getElementsByUserIdentifierCondition($userIdentifier);
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID),
@@ -207,35 +167,9 @@ class HomeRepository
         return $this->getDataClassRepository()->retrieves(Element::class, $parameters);
     }
 
-    /**
-     * @param string $userIdentifier
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findElementsByUserIdentifier(string $userIdentifier): ArrayCollection
-    {
-        $parameters = new StorageParameters(
-            condition: $this->getElementsByUserIdentifierCondition($userIdentifier), orderBy: new OrderBy([
-            new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE)),
-            new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_SORT))
-        ])
-        );
-
-        return $this->getDataClassRepository()->retrieves(Element::class, $parameters);
-    }
-
     protected function getDataClassRepository(): DataClassRepository
     {
         return $this->dataClassRepository;
-    }
-
-    public function getElementsByUserIdentifierCondition(string $userIdentifier): EqualityCondition
-    {
-        return new EqualityCondition(
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_USER_ID),
-            new StaticConditionVariable($userIdentifier)
-        );
     }
 
     /**

@@ -27,8 +27,6 @@ class HomeComponent extends Manager implements NoAuthenticationSupportInterface
 
         $currentTabIdentifier = $this->getRequest()->query->get(self::PARAM_TAB_ID);
 
-        $this->getBreadcrumbTrail()->truncate();
-
         $html = [];
 
         $html[] = $this->renderHeader();

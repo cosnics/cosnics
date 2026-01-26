@@ -16,16 +16,6 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
  */
 abstract class Manager extends Application
 {
-    public const ACTION_CONFIGURE_HOME = 'Configurer';
-    public const ACTION_CONFIGURE_HOME_ADMIN = 'AdminConfigurer';
-    public const ACTION_CONFIGURE_HOME_PERSONAL = 'HomeConfigurer';
-    public const ACTION_EDIT_HOME = 'Editor';
-    public const ACTION_EDIT_HOME_ADMIN = 'AdminEditor';
-    public const ACTION_EDIT_HOME_PERSONAL = 'HomeEditor';
-    public const ACTION_MANAGE_HOME = 'Manager';
-    public const ACTION_PERSONAL = 'Personal';
-    public const ACTION_TRUNCATE = 'Truncater';
-    public const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
     public const ACTION_VIEW_HOME = 'Home';
 
     public const CONTEXT = __NAMESPACE__;
@@ -38,8 +28,6 @@ abstract class Manager extends Application
     public const PARAM_PARENT_ID = 'parent_id';
     public const PARAM_RENDERER_TYPE = 'renderer_type';
     public const PARAM_TAB_ID = 'tab';
-
-    public const SESSION_GENERAL_MODE = 'Chamilo\Core\Home\General';
 
     public const TYPE_BLOCK = 'block';
     public const TYPE_COLUMN = 'column';

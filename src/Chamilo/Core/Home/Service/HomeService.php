@@ -60,17 +60,10 @@ class HomeService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function countElementsByUserIdentifier(string $userIdentifier): int
-    {
-        return $this->getHomeRepository()->countElementsByUserIdentifier($userIdentifier);
-    }
-
-    /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function createElement(Element $element): bool
     {
@@ -105,26 +98,6 @@ class HomeService
         if (!$this->getDisplayOrderHandler()->handleDisplayOrderAfterDelete($element))
         {
             return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function deleteElementsForUserIdentifier(string $userIdentifier): bool
-    {
-        $userTabs = $this->getHomeRepository()->findElementsByTypeUserIdentifierAndParentIdentifier(
-            Element::TYPE_TAB, $userIdentifier
-        );
-
-        foreach ($userTabs as $userTab)
-        {
-            if (!$this->deleteElement($userTab))
-            {
-                return false;
-            }
         }
 
         return true;
@@ -184,8 +157,8 @@ class HomeService
         string $type, string $parentIdentifier = '0'
     ): ArrayCollection
     {
-        return $this->getHomeRepository()->findElementsByTypeUserIdentifierAndParentIdentifier(
-            $type, '0', $parentIdentifier
+        return $this->getHomeRepository()->findElementsByTypeAndParentIdentifier(
+            $type, $parentIdentifier
         );
     }
 
@@ -221,15 +194,6 @@ class HomeService
     public function getElementByIdentifier(string $elementIdentifier): ?Element
     {
         return $this->getHomeRepository()->findElementByIdentifier($elementIdentifier);
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function getElementsByUserIdentifier(string $userIdentifier): ArrayCollection
-    {
-        return $this->getHomeRepository()->findElementsByUserIdentifier($userIdentifier);
     }
 
     public function getHomeRepository(): HomeRepository
@@ -281,6 +245,7 @@ class HomeService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function updateElement(Element $element): bool
     {

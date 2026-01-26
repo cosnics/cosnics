@@ -9,7 +9,6 @@
 
         <service id="Chamilo\Core\Home\UserInterface\HomeRenderer\HomeRenderer"/>
         <service id="Chamilo\Core\Home\UserInterface\HomeRenderer\TabRenderer"/>
-        <service id="Chamilo\Core\Home\UserInterface\HomeRenderer\TabHeaderRenderer"/>
         <service id="Chamilo\Core\Home\UserInterface\HomeRenderer\ColumnRenderer"/>
         <service id="Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRendererFactory"/>
     </services>

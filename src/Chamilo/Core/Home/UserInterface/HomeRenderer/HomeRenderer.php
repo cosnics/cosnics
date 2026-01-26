@@ -23,8 +23,6 @@ class HomeRenderer
 
     protected HomeService $homeService;
 
-    protected TabHeaderRenderer $tabHeaderRenderer;
-
     protected TabRenderer $tabRenderer;
 
     protected Translator $translator;
@@ -35,8 +33,7 @@ class HomeRenderer
 
     public function __construct(
         ConfigurationConsulter $configurationConsulter, HomeService $homeService, Translator $translator,
-        UrlGenerator $urlGenerator, WebPathBuilder $webPathBuilder, TabHeaderRenderer $tabHeaderRenderer,
-        TabRenderer $tabRenderer
+        UrlGenerator $urlGenerator, WebPathBuilder $webPathBuilder, TabRenderer $tabRenderer
     )
     {
         $this->configurationConsulter = $configurationConsulter;
@@ -44,7 +41,6 @@ class HomeRenderer
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
         $this->webPathBuilder = $webPathBuilder;
-        $this->tabHeaderRenderer = $tabHeaderRenderer;
         $this->tabRenderer = $tabRenderer;
     }
 
@@ -54,8 +50,6 @@ class HomeRenderer
      */
     public function render(?int $currentTabIdentifier = null, ?User $user = null): string
     {
-        $html[] = $this->renderTabs($currentTabIdentifier);
-
         $html[] = $this->renderPackageContainer();
         $html[] = $this->renderContent($currentTabIdentifier, $user);
 
@@ -70,11 +64,6 @@ class HomeRenderer
     protected function getHomeService(): HomeService
     {
         return $this->homeService;
-    }
-
-    public function getTabHeaderRenderer(): TabHeaderRenderer
-    {
-        return $this->tabHeaderRenderer;
     }
 
     public function getTabRenderer(): TabRenderer

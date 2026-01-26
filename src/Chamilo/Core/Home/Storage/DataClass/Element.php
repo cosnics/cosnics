@@ -28,7 +28,6 @@ class Element extends DataClass implements DataClassDisplayOrderSupport, Configu
     public const PROPERTY_SORT = 'sort';
     public const PROPERTY_TITLE = 'title';
     public const PROPERTY_TYPE = 'type';
-    public const PROPERTY_USER_ID = 'user_id';
 
     public const TYPE_BLOCK = 'Chamilo\Core\Home\Storage\DataClass\Block';
     public const TYPE_COLUMN = 'Chamilo\Core\Home\Storage\DataClass\Column';
@@ -60,7 +59,6 @@ class Element extends DataClass implements DataClassDisplayOrderSupport, Configu
         $extendedPropertyNames[] = self::PROPERTY_PARENT_ID;
         $extendedPropertyNames[] = self::PROPERTY_TITLE;
         $extendedPropertyNames[] = self::PROPERTY_SORT;
-        $extendedPropertyNames[] = self::PROPERTY_USER_ID;
         $extendedPropertyNames[] = self::PROPERTY_CONFIGURATION;
 
         return parent::getDefaultPropertyNames($extendedPropertyNames);
@@ -102,11 +100,6 @@ class Element extends DataClass implements DataClassDisplayOrderSupport, Configu
     public function getType(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
-    }
-
-    public function getUserId(): string
-    {
-        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     public function getVisibility(): ?bool
@@ -213,13 +206,6 @@ class Element extends DataClass implements DataClassDisplayOrderSupport, Configu
     public function setType(string $type): Element
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
-
-        return $this;
-    }
-
-    public function setUserId(string $userId): Element
-    {
-        $this->setDefaultProperty(self::PROPERTY_USER_ID, $userId);
 
         return $this;
     }
