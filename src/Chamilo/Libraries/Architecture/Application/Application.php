@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Architecture\Application;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
+use Chamilo\Libraries\Authentication\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
@@ -141,6 +141,34 @@ abstract class Application
             $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'site_name']);
     }
 
+    public function getResult(
+        int $failures, int $count, string $failMessageSingle, string $failMessageMultiple, string $succesMessageSingle,
+        string $succesMessageMultiple, ?string $context = null
+    ): string
+    {
+        if ($failures)
+        {
+            if ($count == 1)
+            {
+                $message = $failMessageSingle;
+            }
+            else
+            {
+                $message = $failMessageMultiple;
+            }
+        }
+        elseif ($count == 1)
+        {
+            $message = $succesMessageSingle;
+        }
+        else
+        {
+            $message = $succesMessageMultiple;
+        }
+
+        return $this->getTranslator()->trans($message, [], $context ?: static::CONTEXT);
+    }
+
     public function getUser(): ?User
     {
         return $this->getApplicationConfiguration()->getUser();
@@ -179,34 +207,6 @@ abstract class Application
         }
 
         return $this->getTranslator()->trans($message, $param, static::CONTEXT);
-    }
-
-    public function get_result(
-        int $failures, int $count, string $failMessageSingle, string $failMessageMultiple, string $succesMessageSingle,
-        string $succesMessageMultiple, string $context = null
-    ): string
-    {
-        if ($failures)
-        {
-            if ($count == 1)
-            {
-                $message = $failMessageSingle;
-            }
-            else
-            {
-                $message = $failMessageMultiple;
-            }
-        }
-        elseif ($count == 1)
-        {
-            $message = $succesMessageSingle;
-        }
-        else
-        {
-            $message = $succesMessageMultiple;
-        }
-
-        return $this->getTranslator()->trans($message, [], $context ?: static::CONTEXT);
     }
 
     /**

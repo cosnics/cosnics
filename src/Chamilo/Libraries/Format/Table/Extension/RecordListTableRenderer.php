@@ -17,18 +17,18 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 abstract class RecordListTableRenderer extends ListTableRenderer
 {
     /**
-     * @param string[] $record
+     * @param string[] $result
      */
-    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $record): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, mixed $result): string
     {
-        return $record[$column->getName()];
+        return $result[$column->getName()];
     }
 
     /**
-     * @param string[] $record
+     * @param string[] $result
      */
-    protected function renderIdentifierCell($record): string
+    protected function renderIdentifierCell(mixed $result): string
     {
-        return $record[DataClass::PROPERTY_ID];
+        return $result[DataClass::PROPERTY_ID];
     }
 }

@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Breadcrumb;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Configuration\Service\FileConfigurationLocator;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\UserInterface\HomeRenderer;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;

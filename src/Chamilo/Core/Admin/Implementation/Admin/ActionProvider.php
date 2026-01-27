@@ -27,7 +27,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_CONFIGURE_PLATFORM
+            Application::PARAM_ACTION => Manager::ACTION_CONFIGURE
         ];
 
         $links[] = new Action(
@@ -59,7 +59,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_WHOIS_ONLINE
+            Application::PARAM_ACTION => Manager::ACTION_ONLINE
         ];
 
         $links[] = new Action(

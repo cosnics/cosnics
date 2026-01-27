@@ -26,37 +26,37 @@ class UserSetting extends DataClass
         );
     }
 
+    public function getSettingIdentifier(): string
+    {
+        return $this->getDefaultProperty(self::PROPERTY_SETTING_ID);
+    }
+
     public static function getStorageUnitName(): string
     {
         return 'user_user_setting';
     }
 
-    public function get_setting_id(): string
-    {
-        return $this->getDefaultProperty(self::PROPERTY_SETTING_ID);
-    }
-
-    public function get_user_id(): string
+    public function getUserIdentifier(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
-    public function get_value(): mixed
+    public function getValue(): mixed
     {
         return $this->getDefaultProperty(self::PROPERTY_VALUE);
     }
 
-    public function set_setting_id(string $setting_id): void
+    public function setSettingIdentifier(string $setting_id): void
     {
         $this->setDefaultProperty(self::PROPERTY_SETTING_ID, $setting_id);
     }
 
-    public function set_user_id(string $user_id): void
+    public function setUserIdentifier(string $user_id): void
     {
         $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
-    public function set_value(mixed $value): void
+    public function setValue(mixed $value): void
     {
         $this->setDefaultProperty(self::PROPERTY_VALUE, $value);
     }

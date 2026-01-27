@@ -23,13 +23,13 @@ use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Group\Table
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Group\UserInterface\Table
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class SubscribedUserTableRenderer extends DataClassListTableRenderer
     implements TableRowActionsSupport, TableActionsSupport
 {
-    public const TABLE_IDENTIFIER = Manager::PARAM_GROUP_REL_USER_ID;
+    public const TABLE_IDENTIFIER = Manager::PARAM_RELATION_ID;
 
     protected GroupUrlGenerator $groupUrlGenerator;
 
@@ -61,7 +61,7 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
 
         $unsubscribeUrl = $urlGenerator->fromParameters([
             Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => Manager::ACTION_UNSUBSCRIBE_USER_FROM_GROUP
+            Application::PARAM_ACTION => Manager::ACTION_UNSUBSCRIBE
         ]);
 
         $actions->addAction(
@@ -76,23 +76,23 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
     protected function initializeColumns(): void
     {
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(SubscribedUser::class, User::PROPERTY_FIRSTNAME)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(SubscribedUser::class, User::PROPERTY_GIVEN_NAME)
         );
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(SubscribedUser::class, User::PROPERTY_LASTNAME)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(SubscribedUser::class, User::PROPERTY_SURNAME)
         );
     }
 
     /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\SubscribedUser $subscribedUser
+     * @param \Chamilo\Core\Group\Storage\DataClass\SubscribedUser $result
      */
-    public function renderTableRowActions(TableResultPosition $resultPosition, $subscribedUser): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
     {
         $translator = $this->getTranslator();
 
         $toolbar = new Toolbar();
 
-        $unsubscribeUrl = $this->getGroupUrlGenerator()->getUnsubscribeUserUrl($subscribedUser);
+        $unsubscribeUrl = $this->getGroupUrlGenerator()->getUnsubscribeUserUrl($result);
 
         $toolbar->addItem(
             new ToolbarItem(

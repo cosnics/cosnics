@@ -7,8 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use OutOfBoundsException;
 
 /**
- * @package Chamilo\Core\Menu\Factory
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Menu\Architecture\Domain
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ItemRendererCollection extends ArrayCollection
 {

@@ -4,7 +4,9 @@ namespace Chamilo\Application\Calendar\UserInterface\Form;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_extended_checkbox;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use HTML_QuickForm_static;
 
 /**
  * @package Chamilo\Application\Calendar\Form
@@ -45,8 +47,8 @@ class AvailabilityForm extends FormValidator
     public function build(): void
     {
         $this->addInformationMessage(
-            'calendar_availability', null,
-            $this->getTranslation('CalendarAvailabilityInformation', [], Manager::CONTEXT), true
+            'calendar_availability', '', $this->getTranslation('CalendarAvailabilityInformation', [], Manager::CONTEXT),
+            true
         );
 
         $availableCalendars = $this->getAvailableCalendars();
@@ -58,12 +60,14 @@ class AvailabilityForm extends FormValidator
             foreach ($ownedCalendars as $ownedCalendar)
             {
                 $calendarElements[] = $this->createElement(
-                    'checkbox', AvailabilityService::PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
+                    HTML_QuickForm_extended_checkbox::class,
+                    AvailabilityService::PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
                     $ownedCalendar->getIdentifier() . '][' . AvailabilityService::PROPERTY_AVAILABLE . ']', null,
                     $ownedCalendar->getName(), null, 1, 0
                 );
 
-                $calendarElements[] = $this->createElement('static', null, null, $ownedCalendar->getDescription());
+                $calendarElements[] =
+                    $this->createElement(HTML_QuickForm_static::class, null, null, $ownedCalendar->getDescription());
             }
 
             $this->addGroup($calendarElements, 'calendars', $this->getTranslation('TypeName', [], $ownedCalendarType),

@@ -1,13 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Authentication;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserLoginEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserLogoutEvent;
-use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Authentication\Exception\AuthenticationException;
+use Chamilo\Libraries\Authentication\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -23,10 +24,14 @@ use Symfony\Component\Translation\Translator;
  */
 class AuthenticationValidator
 {
+    public const PARAM_AS_ADMIN = '_as_admin';
+
     public const PARAM_AUTHENTICATION_ERROR = 'authentication_error';
 
+    public const SESSION_USER_ID = '_uid';
+
     /**
-     * @var \Chamilo\Libraries\Authentication\AuthenticationInterface[]
+     * @var \Chamilo\Libraries\Authentication\Interface\AuthenticationInterface[]
      */
     protected array $authentications;
 
@@ -67,7 +72,7 @@ class AuthenticationValidator
     {
         foreach ($this->authentications as $authentication)
         {
-            if ($authenticationType == $authentication->getAuthenticationType())
+            if ($authenticationType == get_class($authentication))
             {
                 return $authentication;
             }
@@ -83,7 +88,7 @@ class AuthenticationValidator
 
     public function isAuthenticated(): bool
     {
-        $user_id = $this->session->get(Manager::SESSION_USER_ID);
+        $user_id = $this->session->get(AuthenticationValidator::SESSION_USER_ID);
 
         return !empty($user_id);
     }
@@ -96,7 +101,7 @@ class AuthenticationValidator
 
         foreach ($this->authentications as $authentication)
         {
-            if ($authentication->getAuthenticationType() == $user->getAuthenticationSource())
+            if (get_class($authentication) == $user->getAuthenticationSource())
             {
                 $authentication->logout($user);
             }
@@ -128,11 +133,11 @@ class AuthenticationValidator
 
     protected function setAuthenticatedUser(User $user): void
     {
-        $this->session->set(Manager::SESSION_USER_ID, $user->getId());
+        $this->session->set(AuthenticationValidator::SESSION_USER_ID, $user->getId());
     }
 
     /**
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \Chamilo\Libraries\Authentication\Exception\AuthenticationException
      */
     public function validate(): bool
     {
@@ -150,7 +155,7 @@ class AuthenticationValidator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \Chamilo\Libraries\Authentication\Exception\AuthenticationException
      */
     public function validateForAuthentication(Authentication $authentication, bool $redirectAfterLogin = true): bool
     {
@@ -174,17 +179,11 @@ class AuthenticationValidator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \Chamilo\Libraries\Authentication\Exception\AuthenticationException
      */
     protected function validateUser(User $user): void
     {
-        $userExpirationDate = $user->get_expiration_date();
-        $userActivationDate = $user->get_activation_date();
-
-        $accountHasExpired = ($userExpirationDate != '0' && $userExpirationDate < time());
-        $accountNotActivated = ($userActivationDate != '0' && $userActivationDate > time());
-
-        if (($accountHasExpired || $accountNotActivated || !$user->get_active()) && !$user->isPlatformAdmin())
+        if (!$user->getActive() && !$user->isPlatformAdministrator())
         {
             throw new AuthenticationException(
                 $this->translator->trans('AccountNotActive', [], StringUtilities::LIBRARIES)

@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Configuration\Service\DataLoader\FileConfigurationCacheDataPreLoader;
-use Chamilo\Configuration\Service\FileConfigurationLocator;
-use Chamilo\Configuration\Service\Finder\PackageBundlesGenerator;
-use Chamilo\Configuration\Service\PackageBundlesCacheService;
-use Chamilo\Configuration\Service\PackageFactory;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\DataLoader\FileConfigurationCacheDataPreLoader;
+use Chamilo\Core\Admin\Service\FileConfigurationLocator;
+use Chamilo\Core\Admin\Service\Finder\PackageBundlesGenerator;
+use Chamilo\Core\Admin\Service\PackageBundlesCacheService;
+use Chamilo\Core\Admin\Service\PackageFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\ExtensionFinder\PackagesContainerExtensionFinder;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInterface;
@@ -145,7 +145,7 @@ class DependencyInjectionContainerBuilder
         {
             $this->connectionFactory = new ConnectionFactory(
                 new DataSourceName(
-                    $this->getFileConfigurationConsulter()->getSetting(['Chamilo\Configuration', 'database'])
+                    $this->getFileConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'database'])
                 )
             );
         }

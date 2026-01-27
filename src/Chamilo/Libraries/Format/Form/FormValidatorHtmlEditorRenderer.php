@@ -6,6 +6,7 @@ use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTML_QuickForm_html;
+use HTML_QuickForm_Rule_Required;
 use HTML_QuickForm_textarea;
 use Symfony\Component\Translation\Translator;
 
@@ -50,7 +51,7 @@ class FormValidatorHtmlEditorRenderer
     }
 
     /**
-     * @throws \Exception
+     * @throws \QuickformException
      */
     public function addHtmlEditor(
         FormValidator $formValidator, string $name, string $label, bool $required = true, array $options = [],
@@ -68,7 +69,8 @@ class FormValidatorHtmlEditorRenderer
         if ($required)
         {
             $formValidator->addRule(
-                $name, $this->getTranslator()->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+                $name, $this->getTranslator()->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
+                HTML_QuickForm_Rule_Required::class
             );
         }
     }
@@ -84,7 +86,8 @@ class FormValidatorHtmlEditorRenderer
         $formValidator->addElement(HTML_QuickForm_html::class, implode(PHP_EOL, $this->getJavascriptForCreate()));
 
         $formValidator->addElement(
-            'html', implode(PHP_EOL, $this->getJavascriptForRender($name, $formValidatorHtmlOptions))
+            HTML_QuickForm_html::class,
+            implode(PHP_EOL, $this->getJavascriptForRender($name, $formValidatorHtmlOptions))
         );
         $formValidator->registerHtmlEditor($name);
 
@@ -198,7 +201,7 @@ class FormValidatorHtmlEditorRenderer
 
         $html = [];
 
-        $html[] = $formValidator->createElement('textarea', $name, $label, $attributes)->toHtml();
+        $html[] = $formValidator->createElement(HTML_QuickForm_textarea::class, $name, $label, $attributes)->toHtml();
         $html[] = implode(PHP_EOL, $this->getJavascriptForRender($name, $formValidatorHtmlOptions));
 
         return implode(PHP_EOL, $html);

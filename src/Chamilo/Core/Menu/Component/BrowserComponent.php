@@ -30,11 +30,14 @@ class BrowserComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \QuickformException
+     * @throws \TableException
      */
     public function run(): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator())
         {
             throw new NotAllowedException();
         }
@@ -147,7 +150,7 @@ class BrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \TableException
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     protected function renderTable(): string
     {

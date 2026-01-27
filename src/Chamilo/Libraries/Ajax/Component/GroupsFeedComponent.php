@@ -93,9 +93,6 @@ abstract class GroupsFeedComponent extends Manager
         }
 
         // Add users
-        /**
-         * @var \Doctrine\Common\Collections\ArrayCollection $users
-         */
         $users = $this->retrieve_users();
         if ($users && $users->count() > 0)
         {
@@ -174,8 +171,8 @@ abstract class GroupsFeedComponent extends Manager
             $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
                 $search_query, [
                     new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
-                    new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
-                    new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)
+                    new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME),
+                    new PropertyConditionVariable(User::class, User::PROPERTY_SURNAME)
                 ]
             );
         }
@@ -186,8 +183,8 @@ abstract class GroupsFeedComponent extends Manager
 
         return $this->getUserService()->findUsers(
             $condition, $this->get_offset(), 100, new OrderBy([
-                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
-                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_SURNAME)),
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME))
             ])
         );
     }

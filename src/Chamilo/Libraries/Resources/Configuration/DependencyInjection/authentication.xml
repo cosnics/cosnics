@@ -10,15 +10,15 @@
         <service id="Chamilo\Libraries\Authentication\AuthenticationValidator"/>
 
         <service id="Chamilo\Libraries\Authentication\Cas\CasAuthentication">
-            <tag name="Chamilo\Libraries\Authentication\AuthenticationInterface"/>
+            <tag name="Chamilo\Libraries\Authentication\Interface\AuthenticationInterface"/>
         </service>
 
         <service id="Chamilo\Libraries\Authentication\Platform\PlatformAuthentication">
-            <tag name="Chamilo\Libraries\Authentication\AuthenticationInterface"/>
+            <tag name="Chamilo\Libraries\Authentication\Interface\AuthenticationInterface"/>
         </service>
 
         <service id="Chamilo\Libraries\Authentication\SecurityToken\SecurityTokenAuthentication">
-            <tag name="Chamilo\Libraries\Authentication\AuthenticationInterface"/>
+            <tag name="Chamilo\Libraries\Authentication\Interface\AuthenticationInterface"/>
         </service>
     </services>
 </container>

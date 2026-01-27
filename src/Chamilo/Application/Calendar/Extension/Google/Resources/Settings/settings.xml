@@ -3,16 +3,16 @@
     <settings>
         <category name="general">
             <setting name="developer_key"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default=""/>
             <setting name="client_id"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default=""/>
             <setting name="client_secret"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default=""/>
             <setting name="token"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default=""
                      user_setting="1"/>
         </category>

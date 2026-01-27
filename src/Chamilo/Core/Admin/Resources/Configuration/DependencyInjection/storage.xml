@@ -7,6 +7,9 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Core\Admin\Storage\Repository\WhoIsOnlineRepository"/>
+        <service id="Chamilo\Core\Admin\Storage\Repository\OnlineRepository"/>
+        <service id="Chamilo\Core\Admin\Storage\Repository\ConfigurationRepository"/>
+        <service id="Chamilo\Core\Admin\Storage\Repository\LanguageRepository"/>
+        <service id="Chamilo\Core\Admin\Storage\Repository\RegistrationRepository"/>
     </services>
 </container>

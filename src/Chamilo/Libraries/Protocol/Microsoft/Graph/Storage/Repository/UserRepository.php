@@ -34,7 +34,7 @@ class UserRepository
     {
         try
         {
-            $graphUser = $this->getGraphServiceClient()->users()->byUserId($user->get_email())->get()->wait();
+            $graphUser = $this->getGraphServiceClient()->users()->byUserId($user->getEmail())->get()->wait();
 
             if ($graphUser instanceof \Microsoft\Graph\Generated\Models\User)
             {

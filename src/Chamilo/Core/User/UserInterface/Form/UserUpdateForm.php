@@ -38,7 +38,7 @@ class UserUpdateForm extends UserForm
 
         $this->buildPersonalDetailsCategoryForm();
         $this->buildPasswordCategoryForm();
-        $this->buildPictureCategoryForm($encodedUserPicture, $user->get_fullname());
+        $this->buildPictureCategoryForm($encodedUserPicture, $user->getFullName());
         $this->buildAccountCategoryForm($this->isLockoutRisk());
         $this->buildOtherCategoryForm();
         $this->addSaveResetButtons();
@@ -62,34 +62,22 @@ class UserUpdateForm extends UserForm
     /**
      * @throws \QuickformException
      */
-    public function setDefaults($defaultValues = [], $filter = null)
+    public function setDefaults($defaultValues = [], $filter = null): void
     {
         $user = $this->getUser();
 
-        $expirationDate = $user->get_expiration_date();
-
-        $defaultValues[self::PROPERTY_TIME_PERIOD_FOREVER] = $expirationDate != 0 ? 0 : 1;
         $defaultValues[self::PROPERTY_GENERATE_PASSWORD] = 0;
         $defaultValues[self::PROPERTY_SEND_MAIL] = 0;
 
-        if ($expirationDate != 0)
-        {
-            $defaultValues[User::PROPERTY_ACTIVATION_DATE] = $user->get_activation_date();
-            $defaultValues[User::PROPERTY_EXPIRATION_DATE] = $user->get_expiration_date();
-        }
-
-        $defaultValues[User::PROPERTY_DATABASE_QUOTA] = $user->get_database_quota();
-        $defaultValues[User::PROPERTY_DISK_QUOTA] = $user->get_disk_quota();
-        $defaultValues[User::PROPERTY_PLATFORMADMIN] = $user->getPlatformAdmin();
-        $defaultValues[User::PROPERTY_LASTNAME] = $user->get_lastname();
-        $defaultValues[User::PROPERTY_FIRSTNAME] = $user->get_firstname();
-        $defaultValues[User::PROPERTY_EMAIL] = $user->get_email();
-        $defaultValues[User::PROPERTY_USERNAME] = $user->get_username();
-        $defaultValues[User::PROPERTY_OFFICIAL_CODE] = $user->get_official_code();
-        $defaultValues[User::PROPERTY_PICTURE_URI] = $user->get_picture_uri();
-        $defaultValues[User::PROPERTY_PHONE] = $user->get_phone();
-        $defaultValues[User::PROPERTY_STATUS] = $user->get_status();
-        $defaultValues[User::PROPERTY_ACTIVE] = $user->get_active() ? 1 : 0;
+        $defaultValues[User::PROPERTY_PLATFORM_ADMINISTRATOR] = $user->getPlatformAdmin();
+        $defaultValues[User::PROPERTY_SURNAME] = $user->getSurname();
+        $defaultValues[User::PROPERTY_GIVEN_NAME] = $user->getGivenName();
+        $defaultValues[User::PROPERTY_EMAIL] = $user->getEmail();
+        $defaultValues[User::PROPERTY_USERNAME] = $user->getUsername();
+        $defaultValues[User::PROPERTY_OFFICIAL_CODE] = $user->getOfficialCode();
+        $defaultValues[User::PROPERTY_PICTURE_URI] = $user->getPictureUri();
+        $defaultValues[User::PROPERTY_STATUS] = $user->getStatus();
+        $defaultValues[User::PROPERTY_ACTIVE] = $user->getActive() ? 1 : 0;
 
         parent::setDefaults($defaultValues);
     }

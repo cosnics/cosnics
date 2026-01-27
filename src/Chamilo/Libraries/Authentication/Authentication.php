@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Authentication;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Authentication\Exception\AuthenticationException;
+use Chamilo\Libraries\Authentication\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
@@ -52,7 +54,7 @@ abstract class Authentication implements AuthenticationInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \Chamilo\Libraries\Authentication\Exception\AuthenticationException
      */
     protected function getUserFromCredentialsRequest(): ?User
     {
@@ -73,7 +75,7 @@ abstract class Authentication implements AuthenticationInterface
             );
         }
 
-        if ($user->getAuthenticationSource() != $this->getAuthenticationType())
+        if ($user->getAuthenticationSource() != static::class)
         {
             return null;
         }
@@ -96,7 +98,7 @@ abstract class Authentication implements AuthenticationInterface
     protected function isAuthSourceActive(): bool
     {
         return (bool) $this->getConfigurationConsulter()->getSetting(
-            ['Chamilo\Libraries', 'enable' . str_replace('\\', '', $this->getAuthenticationType())]
+            ['Chamilo\Libraries', 'enable' . str_replace('\\', '', static::class)]
         );
     }
 

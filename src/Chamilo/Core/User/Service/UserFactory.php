@@ -1,16 +1,16 @@
 <?php
 namespace Chamilo\Core\User\Service;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\User\Manager;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
 use Throwable;
 
 /**
- * @package Chamilo\Core\User\Factory
+ * @package Chamilo\Core\User\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
@@ -73,13 +73,13 @@ class UserFactory
 
     public function getUser(): ?User
     {
-        $userIdentifier = $this->getSession()->get(Manager::SESSION_USER_ID);
+        $userIdentifier = $this->getSession()->get(AuthenticationValidator::SESSION_USER_ID);
 
         if ($userIdentifier)
         {
             try
             {
-                $user = $this->getUserService()->findUserByIdentifier((string) $userIdentifier);
+                $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
 
                 if ($user instanceof User)
                 {

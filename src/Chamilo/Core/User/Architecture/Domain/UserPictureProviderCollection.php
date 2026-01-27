@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Core\User\Architecture\Domain;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\User\Architecture\Domain\Collection
+ * @package Chamilo\Core\User\Architecture\Domain
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class UserPictureProviderCollection extends ArrayCollection
@@ -31,7 +31,7 @@ class UserPictureProviderCollection extends ArrayCollection
     }
 
     /**
-     * @return UserPictureProviderInterface
+     * @return \Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface
      * @throws \Exception
      */
     public function getActivePictureProvider(): UserPictureProviderInterface

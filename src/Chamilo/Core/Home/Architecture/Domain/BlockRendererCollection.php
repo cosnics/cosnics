@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use OutOfBoundsException;
 
 /**
- * @package Chamilo\Core\Home\Renderer
+ * @package Chamilo\Core\Home\Architecture\Domain
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>

@@ -4,8 +4,8 @@ namespace Chamilo\Core\User\Architecture\EventDispatcher\Event;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
- * @package Chamilo\Core\User\EventDispatcher\Event
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\User\Architecture\EventDispatcher\Event
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BeforeUserLeavePageEvent extends AbstractUserEvent
 {

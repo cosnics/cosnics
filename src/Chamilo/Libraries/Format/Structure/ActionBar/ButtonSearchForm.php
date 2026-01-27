@@ -1,10 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure\ActionBar;
 
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_stylebutton;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_QuickForm_html;
 use HTML_QuickForm_Renderer_Default;
+use HTML_QuickForm_text;
 use QuickformException;
 
 /**
@@ -28,20 +31,17 @@ class ButtonSearchForm extends FormValidator
      */
     public function __construct(string $url)
     {
-        parent::__construct(self::FORM_NAME, self::FORM_METHOD_POST, $url);
+        parent::__construct(self::FORM_NAME, self::FORM_METHOD_POST, $url, '', [], false);
 
         $this->actionUrl = $url;
 
         $this->setAttribute('class', 'form-inline');
         $this->renderer = clone $this->defaultRenderer();
 
-        //        if($this->getQuery())
-        //        {
-        //            $this->setDefaults([self::PARAM_SIMPLE_SEARCH_QUERY => $this->getQuery()]);
-        //        }else
-        //        {
-        $this->setDefaults([self::PARAM_SIMPLE_SEARCH_QUERY => 'blah']);
-        //        }
+        if ($this->getQuery())
+        {
+            $this->setDefaults([self::PARAM_SIMPLE_SEARCH_QUERY => $this->getQuery()]);
+        }
 
         $this->buildForm();
     }
@@ -60,19 +60,21 @@ class ButtonSearchForm extends FormValidator
     {
         $this->renderer->setFormTemplate('<form {attributes}>{content}</form>');
 
-        $this->addElement('html', '<div class="action-bar input-group pull-right">');
+        $this->addElement(HTML_QuickForm_html::class, '<div class="action-bar input-group pull-right">');
 
         $this->addElement(
-            'text', self::PARAM_SIMPLE_SEARCH_QUERY,
+            HTML_QuickForm_text::class, self::PARAM_SIMPLE_SEARCH_QUERY,
             $this->getTranslator()->trans('Search', [], StringUtilities::LIBRARIES),
             ['class' => 'form-group form-control action-bar-search']
         );
 
         $this->renderer->setElementTemplate('{element} ', self::PARAM_SIMPLE_SEARCH_QUERY);
 
-        $this->addElement('html', '<div class="input-group-btn">');
+        $this->addElement(HTML_QuickForm_html::class, '<div class="input-group-btn">');
 
-        $this->addElement('style_button', 'submit', null, null, 'submit', new FontAwesomeGlyph('search'));
+        $this->addElement(
+            HTML_QuickForm_stylebutton::class, 'submit', null, null, 'submit', new FontAwesomeGlyph('search')
+        );
 
         $buttonElementTemplate = '{element}';
 
@@ -80,12 +82,14 @@ class ButtonSearchForm extends FormValidator
 
         if ($this->getQuery())
         {
-            $this->addElement('style_button', 'clear', null, null, 'clear', new FontAwesomeGlyph('times'));
+            $this->addElement(
+                HTML_QuickForm_stylebutton::class, 'clear', null, null, 'clear', new FontAwesomeGlyph('times')
+            );
             $this->renderer->setElementTemplate($buttonElementTemplate, 'clear');
         }
 
-        $this->addElement('html', '</div>');
-        $this->addElement('html', '</div>');
+        $this->addElement(HTML_QuickForm_html::class, '</div>');
+        $this->addElement(HTML_QuickForm_html::class, '</div>');
     }
 
     public function clearFormSubmitted(): bool

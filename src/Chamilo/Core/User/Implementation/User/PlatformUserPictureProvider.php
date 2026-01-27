@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Implementation\User;
 
+use Chamilo\Core\User\Architecture\Exception\NoPictureForUserException;
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Service\UserService;
@@ -10,6 +11,7 @@ use Chamilo\Libraries\File\FilesystemTools;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\File\WebPathBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
+use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
 use DateTime;
 use Exception;
 use Symfony\Component\Filesystem\Filesystem;
@@ -51,29 +53,33 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
 
     public function deleteUserPicture(User $targetUser, User $requestUser): bool
     {
-        if ($this->doesUserHavePicture($targetUser))
+        try
         {
-            try
+            if ($this->doesUserHavePicture($targetUser))
             {
-                $path = $this->getUserPicturePath($targetUser);
+                $path = $this->getUserPicturePath($targetUser, false);
                 $this->getFilesystem()->remove($path);
-            }
-            catch (Exception)
-            {
-                return false;
+
+                $targetUser->setPictureUri(null);
+
+                return $this->getUserService()->updateUser($targetUser);
             }
 
-            $targetUser->set_picture_uri(null);
-
-            return $this->getUserService()->updateUser($targetUser);
+            return true;
         }
-
-        return true;
+        catch (NoPictureForUserException)
+        {
+            return true;
+        }
+        catch (StorageMethodException)
+        {
+            return false;
+        }
     }
 
     public function doesUserHavePicture(User $user): bool
     {
-        $uri = $user->get_picture_uri();
+        $uri = $user->getPictureUri();
 
         return ((strlen($uri) > 0) && ($this->getWebPathBuilder()->isWebUri($uri) || file_exists(
                     $this->getConfigurablePathBuilder()->getProfilePicturePath() . $uri
@@ -180,13 +186,13 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
     }
 
     /**
-     * @throws \Exception
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoPictureForUserException
      */
     private function getUserPicturePath(User $user, bool $useFallback = true): string
     {
         if ($this->doesUserHavePicture($user))
         {
-            return $this->getConfigurablePathBuilder()->getProfilePicturePath() . $user->get_picture_uri();
+            return $this->getConfigurablePathBuilder()->getProfilePicturePath() . $user->getPictureUri();
         }
         elseif ($useFallback)
         {
@@ -194,7 +200,7 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
         }
         else
         {
-            throw new Exception('NoPictureForUser');
+            throw new NoPictureForUserException();
         }
     }
 
@@ -208,6 +214,9 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
         return $this->webPathBuilder;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function setUserPicture(User $targetUser, User $requestUser, ?UploadedFile $fileInformation = null): bool
     {
         if (!$this->deleteUserPicture($targetUser, $requestUser))
@@ -239,7 +248,7 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
             return false;
         }
 
-        $targetUser->set_picture_uri($imageFile);
+        $targetUser->setPictureUri($imageFile);
 
         return $this->getUserService()->updateUser($targetUser);
     }
@@ -248,21 +257,28 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
         User $targetUser, User $requestUser, ?UploadedFile $fileInformation = null, bool $removeExistingPicture = false
     ): bool
     {
-        if ($removeExistingPicture)
+        try
         {
-            if (!$this->deleteUserPicture($targetUser, $requestUser))
+            if ($removeExistingPicture)
             {
-                return false;
+                if (!$this->deleteUserPicture($targetUser, $requestUser))
+                {
+                    return false;
+                }
             }
-        }
-        elseif (!is_null($fileInformation) && strlen($fileInformation->getClientOriginalName()) > 0)
-        {
-            if (!$fileInformation->isValid() || !$this->setUserPicture($targetUser, $requestUser, $fileInformation))
+            elseif (!is_null($fileInformation) && strlen($fileInformation->getClientOriginalName()) > 0)
             {
-                return false;
+                if (!$fileInformation->isValid() || !$this->setUserPicture($targetUser, $requestUser, $fileInformation))
+                {
+                    return false;
+                }
             }
-        }
 
-        return true;
+            return true;
+        }
+        catch (StorageMethodException)
+        {
+            return false;
+        }
     }
 }

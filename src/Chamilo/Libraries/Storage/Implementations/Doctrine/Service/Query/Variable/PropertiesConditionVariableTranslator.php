@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable;
 
-use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable
@@ -17,7 +17,7 @@ class PropertiesConditionVariableTranslator extends ConditionVariableTranslator
     public const CONDITION_CLASS = PropertiesConditionVariable::class;
 
     public function translate(
-        DataClassDatabaseInterface $dataClassDatabase, PropertiesConditionVariable $propertiesConditionVariable,
+        QueryBuilder $querybuilder, PropertiesConditionVariable $propertiesConditionVariable,
         ?bool $enableAliasing = true
     ): string
     {

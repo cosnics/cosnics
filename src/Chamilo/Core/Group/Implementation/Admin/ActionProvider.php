@@ -27,7 +27,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_BROWSE_GROUPS
+            Application::PARAM_ACTION => Manager::ACTION_BROWSE
         ];
 
         $links[] = new Action(
@@ -38,7 +38,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_CREATE_GROUP,
+            Application::PARAM_ACTION => Manager::ACTION_CREATE,
             Manager::PARAM_GROUP_ID => 0
         ];
 
@@ -50,7 +50,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_BROWSE_GROUPS
+            Application::PARAM_ACTION => Manager::ACTION_BROWSE
         ];
 
         return new Actions($context, $links, $urlGenerator->fromParameters($parameters));

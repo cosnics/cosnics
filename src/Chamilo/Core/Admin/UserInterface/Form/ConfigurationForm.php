@@ -1,14 +1,22 @@
 <?php
 namespace Chamilo\Core\Admin\UserInterface\Form;
 
-use Chamilo\Configuration\Service\ConfigurationService;
-use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\Admin\Architecture\Domain\SettingsConnectorCollection;
 use Chamilo\Core\Admin\Architecture\Interface\SettingsConnectorInterface;
+use Chamilo\Core\Admin\Service\ConfigurationService;
+use Chamilo\Core\Admin\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_bootstrap_radio;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_extended_checkbox;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use DOMDocument;
+use HTML_QuickForm_html;
+use HTML_QuickForm_password;
+use HTML_QuickForm_select;
+use HTML_QuickForm_static;
+use HTML_QuickForm_text;
 
 /**
  * @package Chamilo\Core\Admin\UserInterface\Form
@@ -69,9 +77,9 @@ class ConfigurationForm extends FormValidator
 
                     if (!$has_settings)
                     {
-                        $this->addElement('html', '<fieldset>');
+                        $this->addElement(HTML_QuickForm_html::class, '<fieldset>');
                         $this->addElement(
-                            'html', '<legend>' . $translator->trans(
+                            HTML_QuickForm_html::class, '<legend>' . $translator->trans(
                                 (string) $stringUtilities->createString($category_name)->upperCamelize(), [], $context
                             ) . '</legend>'
                         );
@@ -81,40 +89,20 @@ class ConfigurationForm extends FormValidator
                     if ($this->isLocked($setting))
                     {
                         $this->addElement(
-                            'static', $name, $translator->trans(
+                            HTML_QuickForm_static::class, $name, $translator->trans(
                             (string) $stringUtilities->createString($name)->upperCamelize(), [], $context
                         )
                         );
                     }
-                    elseif ($setting['field'] == 'text')
+                    elseif ($setting['field'] == HTML_QuickForm_text::class)
                     {
                         $this->addTextfield(
                             $name, $translator->trans(
                             (string) $stringUtilities->createString($name)->upperCamelize(), [], $context
                         ), ($setting['required'] == 'true')
                         );
-
-                        $validations = $setting['validations'];
-                        if ($validations)
-                        {
-                            foreach ($validations as $validation)
-                            {
-                                if ($this->isValidValidationMethod($validation['rule']))
-                                {
-                                    if ($validation['rule'] != 'regex')
-                                    {
-                                        $validation['format'] = null;
-                                    }
-
-                                    $this->addRule(
-                                        $name, $translator->trans($validation['message'], [], $context),
-                                        $validation['rule'], $validation['format']
-                                    );
-                                }
-                            }
-                        }
                     }
-                    elseif ($setting['field'] == 'html_editor')
+                    elseif ($setting['field'] == 'HTML_QuickForm_html_editor')
                     {
                         $this->addHtmlEditor(
                             $name, $translator->trans(
@@ -122,7 +110,7 @@ class ConfigurationForm extends FormValidator
                         ), ($setting['required'] == 'true')
                         );
                     }
-                    elseif ($setting['field'] == 'image_uploader')
+                    elseif ($setting['field'] == 'HTML_QuickForm_image_uploader')
                     {
                         $this->addImageUploader(
                             $name, $translator->trans(
@@ -130,7 +118,7 @@ class ConfigurationForm extends FormValidator
                         )
                         );
                     }
-                    elseif ($setting['field'] == 'password')
+                    elseif ($setting['field'] == HTML_QuickForm_password::class)
                     {
                         $this->addPassword(
                             $name, $translator->trans(
@@ -160,14 +148,16 @@ class ConfigurationForm extends FormValidator
                             $options = $setting['options']['values'];
                         }
 
-                        if ($setting['field'] == 'radio' || $setting['field'] == 'checkbox' ||
-                            $setting['field'] == 'toggle')
+                        if ($setting['field'] == HTML_QuickForm_bootstrap_radio::class ||
+                            $setting['field'] == HTML_QuickForm_extended_checkbox::class ||
+                            $setting['field'] == HTML_QuickForm_toggle::class)
                         {
                             $group = [];
 
                             foreach ($options as $option_value => $option_name)
                             {
-                                if ($setting['field'] == 'checkbox' || $setting['field'] == 'toggle')
+                                if ($setting['field'] == HTML_QuickForm_extended_checkbox::class ||
+                                    $setting['field'] == HTML_QuickForm_toggle::class)
                                 {
                                     $group[] = $this->createElement(
                                         $setting['field'], $name, null, null, $option_value
@@ -190,10 +180,10 @@ class ConfigurationForm extends FormValidator
                             ), '', false
                             );
                         }
-                        elseif ($setting['field'] == 'select')
+                        elseif ($setting['field'] == HTML_QuickForm_select::class)
                         {
                             $this->addElement(
-                                'select', $name, $translator->trans(
+                                HTML_QuickForm_select::class, $name, $translator->trans(
                                 (string) $stringUtilities->createString($name)->upperCamelize(), [], $context
                             ), $options, ['class' => 'form-control']
                             );
@@ -203,23 +193,16 @@ class ConfigurationForm extends FormValidator
 
                 if ($has_settings)
                 {
-                    $this->addElement('html', '</fieldset>');
+                    $this->addElement(HTML_QuickForm_html::class, '</fieldset>');
                 }
             }
 
-            $buttons = [];
-            $buttons[] = $this->createElement(
-                'style_submit_button', 'submit', $translator->trans('Save', [], StringUtilities::LIBRARIES)
-            );
-            $buttons[] = $this->createElement(
-                'style_reset_button', 'reset', $translator->trans('Reset', [], StringUtilities::LIBRARIES)
-            );
-            $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+            $this->addSaveResetButtons();
         }
         else
         {
             $this->addElement(
-                'html', '<div class="warning-message">' .
+                HTML_QuickForm_html::class, '<div class="warning-message">' .
                 $translator->trans('NoConfigurableSettings', [], StringUtilities::LIBRARIES) . '</div>'
             );
         }
@@ -248,13 +231,6 @@ class ConfigurationForm extends FormValidator
     protected function isUserSetting($setting): bool
     {
         return isset($setting['user_setting']) && ($setting['user_setting'] == 1 || $setting['user_setting'] == 'true');
-    }
-
-    private function isValidValidationMethod($validation_method): bool
-    {
-        $available_validation_methods = ['regex', 'email', 'lettersonly', 'alphanumeric', 'numeric'];
-
-        return in_array($validation_method, $available_validation_methods);
     }
 
     public function parseSettings(): array
@@ -322,26 +298,6 @@ class ConfigurationForm extends FormValidator
                                     $options_info[$option->getAttribute('value')] = $option->getAttribute('name');
                                 }
                                 $property_info['options']['values'] = $options_info;
-                            }
-                        }
-
-                        $property_validations = $property->getElementsByTagname('validations')->item(0);
-
-                        if ($property_validations)
-                        {
-                            if ($property_validations->hasChildNodes())
-                            {
-                                $validations = $property_validations->getElementsByTagname('validation');
-                                $validation_info = [];
-                                foreach ($validations as $validation)
-                                {
-                                    $validation_info[] = [
-                                        'rule' => $validation->getAttribute('rule'),
-                                        'message' => $validation->getAttribute('message'),
-                                        'format' => $validation->getAttribute('format')
-                                    ];
-                                }
-                                $property_info['validations'] = $validation_info;
                             }
                         }
 
@@ -513,6 +469,7 @@ class ConfigurationForm extends FormValidator
 
     /**
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function updateUserSettings(): bool
     {

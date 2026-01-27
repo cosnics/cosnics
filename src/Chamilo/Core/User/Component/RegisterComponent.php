@@ -9,7 +9,7 @@ use Chamilo\Core\User\UserInterface\Form\RegisterForm;
 use Chamilo\Core\User\UserInterface\Form\UserForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
+use Chamilo\Libraries\Authentication\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -42,7 +42,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
             $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => Manager::ACTION_REGISTER_USER
+                    Application::PARAM_ACTION => Manager::ACTION_REGISTER
                 ]
             )
         );
@@ -54,7 +54,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
                 $formValues = $form->exportValues();
 
                 $user = $this->getUserService()->registerUserFromParameters(
-                    $formValues[User::PROPERTY_FIRSTNAME], $formValues[User::PROPERTY_LASTNAME],
+                    $formValues[User::PROPERTY_GIVEN_NAME], $formValues[User::PROPERTY_SURNAME],
                     $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
                     $formValues[User::PROPERTY_EMAIL], (bool) $formValues[UserForm::PROPERTY_GENERATE_PASSWORD],
                     $formValues[User::PROPERTY_PASSWORD], 'Chamilo\Libraries\Authentication\Platform',

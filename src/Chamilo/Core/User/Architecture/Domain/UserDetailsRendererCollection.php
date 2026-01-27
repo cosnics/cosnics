@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use OutOfBoundsException;
 
 /**
- * @package Chamilo\Core\User\Architecture\Domain\Collection
+ * @package Chamilo\Core\User\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserDetailsRendererCollection extends ArrayCollection

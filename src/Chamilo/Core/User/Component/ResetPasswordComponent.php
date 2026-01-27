@@ -5,11 +5,15 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
+use Chamilo\Libraries\Authentication\Interface\NoAuthenticationSupportInterface;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_stylesubmitbutton;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_QuickForm_Rule_Email;
+use HTML_QuickForm_Rule_Required;
+use HTML_QuickForm_text;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -83,7 +87,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
                 {
                     $html[] = '<div class="alert alert-success">' . $translator->trans(
                             'ResetLinkSendForUser',
-                            ['USER' => $user->get_fullname() . ' (' . $user->get_username() . ')'], Manager::CONTEXT
+                            ['USER' => $user->getFullName() . ' (' . $user->getUsername() . ')'], Manager::CONTEXT
                         ) . '</div>';
                 }
             }
@@ -112,17 +116,19 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
             );
 
             $this->passwordResetForm->addElement(
-                'text', User::PROPERTY_EMAIL, $translator->trans('Email', [], Manager::CONTEXT)
+                HTML_QuickForm_text::class, User::PROPERTY_EMAIL, $translator->trans('Email', [], Manager::CONTEXT)
             );
             $this->passwordResetForm->addRule(
                 User::PROPERTY_EMAIL, $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
-                'required'
+                HTML_QuickForm_Rule_Required::class
             );
             $this->passwordResetForm->addRule(
-                User::PROPERTY_EMAIL, $translator->trans('WrongEmail', [], Manager::CONTEXT), 'email'
+                User::PROPERTY_EMAIL, $translator->trans('WrongEmail', [], Manager::CONTEXT),
+                HTML_QuickForm_Rule_Email::class
             );
             $this->passwordResetForm->addElement(
-                'style_submit_button', 'submit', $translator->trans('Ok', [], StringUtilities::LIBRARIES)
+                HTML_QuickForm_stylesubmitbutton::class, 'submit',
+                $translator->trans('Ok', [], StringUtilities::LIBRARIES)
             );
         }
 

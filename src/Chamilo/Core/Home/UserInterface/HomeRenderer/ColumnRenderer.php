@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Home\Renderer
+ * @package Chamilo\Core\Home\UserInterface\HomeRenderer
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>

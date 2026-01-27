@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Format\Tabs\Form;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Tabs\GenericTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\TabsCollection;
+use HTML_QuickForm_html;
 
 /**
  * @package Chamilo\Libraries\Format\Tabs
@@ -30,7 +31,7 @@ class FormTabsGenerator
     {
         if ($tabs->hasMultipleTabs())
         {
-            $form->addElement('html', $this->renderHeader($name, $tabs));
+            $form->addElement(HTML_QuickForm_html::class, $this->renderHeader($name, $tabs));
         }
 
         foreach ($tabs as $tab)
@@ -47,7 +48,7 @@ class FormTabsGenerator
 
         if ($tabs->hasMultipleTabs())
         {
-            $form->addElement('html', $this->getGenericTabsRenderer()->renderFooter($name, $tabs));
+            $form->addElement(HTML_QuickForm_html::class, $this->getGenericTabsRenderer()->renderFooter($name, $tabs));
         }
     }
 

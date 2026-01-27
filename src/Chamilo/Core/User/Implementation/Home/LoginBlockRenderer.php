@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Implementation\Home;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
@@ -10,10 +10,16 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_stylesubmitbutton;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_QuickForm_html;
+use HTML_QuickForm_password;
+use HTML_QuickForm_Rule_Required;
+use HTML_QuickForm_static;
+use HTML_QuickForm_text;
 use Symfony\Component\Translation\Translator;
 
 class LoginBlockRenderer extends BlockRenderer
@@ -41,7 +47,7 @@ class LoginBlockRenderer extends BlockRenderer
     {
         $html = [];
 
-        if (!$user instanceof User || $user->is_anonymous_user())
+        if (!$user instanceof User)
         {
             $message = $this->getRequest()->query->get(AuthenticationValidator::PARAM_AUTHENTICATION_ERROR);
 
@@ -58,9 +64,9 @@ class LoginBlockRenderer extends BlockRenderer
         {
             $profilePhotoUrl = $this->getUrlGenerator()->fromParameters(
                 [
-                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::CONTEXT,
-                    Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                    Manager::PARAM_USER_USER_ID => $user->getId()
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
+                    Application::PARAM_ACTION => Manager::ACTION_USER_PICTURE,
+                    Manager::PARAM_USER_ID => $user->getId()
                 ]
             );
 
@@ -75,11 +81,11 @@ class LoginBlockRenderer extends BlockRenderer
                 ]
             );
 
-            $html[] = '<img src="' . htmlspecialchars($profilePhotoUrl) . '" alt="' .
-                htmlspecialchars($user->get_fullname()) . '"  class="img-thumbnail" style="max-width: 100%; ' .
-                $maximumHeight . '" />';
-            $html[] = '<h3>' . htmlspecialchars($user->get_fullname()) . '</h3>';
-            $html[] = '<p>' . htmlspecialchars($user->get_email()) . '</p>';
+            $html[] =
+                '<img src="' . htmlspecialchars($profilePhotoUrl) . '" alt="' . htmlspecialchars($user->getFullName()) .
+                '"  class="img-thumbnail" style="max-width: 100%; ' . $maximumHeight . '" />';
+            $html[] = '<h3>' . htmlspecialchars($user->getFullName()) . '</h3>';
+            $html[] = '<p>' . htmlspecialchars($user->getEmail()) . '</p>';
             $html[] = '<p><a href="' . $logoutLink . '" class="btn btn-danger" role="button">' . htmlspecialchars(
                     $this->getTranslator()->trans('Logout', [], Manager::CONTEXT)
                 ) . '</a></p>';
@@ -101,22 +107,26 @@ class LoginBlockRenderer extends BlockRenderer
         $renderer->setElementTemplate('<div class="form-row">{label}<br />{element}</div>');
         $form->setRequiredNote('');
         $html = '<script>$(document).ready(function(){document.formLogin.login.focus();});</script>';
-        $form->addElement('html', $html);
+        $form->addElement(HTML_QuickForm_html::class, $html);
         $form->addElement(
-            'text', 'login', $translator->trans('UserName', [], Manager::CONTEXT), ['style' => 'width: 90%;']
+            HTML_QuickForm_text::class, 'login', $translator->trans('UserName', [], Manager::CONTEXT),
+            ['style' => 'width: 90%;']
         );
-        $form->addRule('login', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required');
+        $form->addRule('login', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
+            HTML_QuickForm_Rule_Required::class);
         $form->addElement(
-            'password', 'password', $translator->trans('Password', [], Manager::CONTEXT), ['style' => 'width: 90%;']
+            HTML_QuickForm_password::class, 'password', $translator->trans('Password', [], Manager::CONTEXT),
+            ['style' => 'width: 90%;']
         );
         $form->addRule(
-            'password', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+            'password', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
+            HTML_QuickForm_Rule_Required::class
         );
 
         $buttons = [];
         $buttons[] = $form->createElement(
-            'style_submit_button', 'submitAuth', $translator->trans('Login', [], Manager::CONTEXT), null, null,
-            new FontAwesomeGlyph('sign-in-alt')
+            HTML_QuickForm_stylesubmitbutton::class, 'submitAuth', $translator->trans('Login', [], Manager::CONTEXT),
+            null, null, new FontAwesomeGlyph('sign-in-alt')
         );
 
         if ($configurationConsulter->getSetting(
@@ -132,14 +142,14 @@ class LoginBlockRenderer extends BlockRenderer
                 $link = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_REGISTER_USER
+                        Application::PARAM_ACTION => Manager::ACTION_REGISTER
                     ]
                 );
 
                 $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
                 $buttons[] = $form->createElement(
-                    'static', null, null,
+                    HTML_QuickForm_static::class, null, null,
                     '<a href="' . htmlspecialchars($link) . '" class="btn btn-default">' . $glyph->render() . ' ' .
                     htmlspecialchars(
                         $translator->trans('Reg', [], Manager::CONTEXT)
@@ -160,7 +170,7 @@ class LoginBlockRenderer extends BlockRenderer
                 $glyph = new FontAwesomeGlyph('question-circle', [], null, 'fas');
 
                 $buttons[] = $form->createElement(
-                    'static', null, null,
+                    HTML_QuickForm_static::class, null, null,
                     '<a href="' . htmlspecialchars($link) . '" class="btn btn-default">' . $glyph->render() . ' ' .
                     htmlspecialchars(
                         $translator->trans('ResetPassword', [], Manager::CONTEXT)

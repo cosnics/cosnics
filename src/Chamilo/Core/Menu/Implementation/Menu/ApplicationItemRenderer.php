@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Implementation\Menu;
 
-use Chamilo\Configuration\Service\PackageBundlesCacheService;
+use Chamilo\Core\Admin\Service\PackageBundlesCacheService;
 use Chamilo\Core\Menu\Architecture\Interface\ConfigurableItemInterface;
 use Chamilo\Core\Menu\Architecture\Interface\SelectableItemInterface;
 use Chamilo\Core\Menu\Architecture\Interface\TranslatableItemInterface;
@@ -13,6 +13,8 @@ use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_category;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_extended_checkbox;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
@@ -20,11 +22,13 @@ use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_QuickForm_Rule_Required;
+use HTML_QuickForm_select;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Menu\Service\Renderer\ItemRenderer
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Menu\Implementation\Menu
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ApplicationItemRenderer extends ItemRenderer
     implements SelectableItemInterface, TranslatableItemInterface, ConfigurableItemInterface
@@ -98,21 +102,25 @@ class ApplicationItemRenderer extends ItemRenderer
     {
         $translator = $this->getTranslator();
 
-        $formValidator->addElement('category', $translator->trans('Properties', [], 'Chamilo\Core\Menu'));
+        $formValidator->addElement(
+            HTML_QuickForm_category::class, $translator->trans('Properties', [], 'Chamilo\Core\Menu')
+        );
 
         $formValidator->addElement(
-            'select', Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_APPLICATION . ']',
+            HTML_QuickForm_select::class, Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_APPLICATION . ']',
             $translator->trans('Application', [], 'Chamilo\Core\Menu'), $this->getApplicationOptions(),
             ['class' => 'form-control']
         );
 
         $formValidator->addRule(
             Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_APPLICATION . ']',
-            $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+            $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
+            HTML_QuickForm_Rule_Required::class
         );
 
         $formValidator->addElement(
-            'checkbox', Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_USE_TRANSLATION . ']',
+            HTML_QuickForm_extended_checkbox::class,
+            Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_USE_TRANSLATION . ']',
             $translator->trans('UseTranslation', [], 'Chamilo\Core\Menu')
         );
 

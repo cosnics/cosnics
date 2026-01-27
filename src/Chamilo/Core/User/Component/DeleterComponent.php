@@ -22,12 +22,12 @@ class DeleterComponent extends Manager
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        if (!$this->getUser()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdministrator())
         {
             throw new NotAllowedException();
         }
 
-        $userIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_USER_ID);
+        $userIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_ID);
 
         $translator = $this->getTranslator();
         $userService = $this->getUserService();
@@ -51,14 +51,14 @@ class DeleterComponent extends Manager
                 }
             }
 
-            $message = $this->get_result(
+            $message = $this->getResult(
                 $failures, count($userIdentifiers), 'UserNotDeleted', 'UsersNotDeleted', 'UserDeleted', 'UsersDeleted'
             );
 
             return $this->redirectWithMessage(
                 $message, ($failures > 0), [
                     Application::PARAM_CONTEXT => $this->getContext(),
-                    Application::PARAM_ACTION => self::ACTION_BROWSE_USERS
+                    Application::PARAM_ACTION => self::ACTION_BROWSE
                 ]
             );
         }

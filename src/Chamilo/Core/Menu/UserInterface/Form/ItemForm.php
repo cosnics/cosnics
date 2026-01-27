@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\UserInterface\Form;
 
-use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
+use Chamilo\Core\Admin\Service\Consulter\LanguageConsulter;
 use Chamilo\Core\Menu\Architecture\Domain\ItemRendererCollection;
 use Chamilo\Core\Menu\Architecture\Interface\ConfigurableItemInterface;
 use Chamilo\Core\Menu\Architecture\Interface\TranslatableItemInterface;
@@ -9,13 +9,18 @@ use Chamilo\Core\Menu\Implementation\Menu\CategoryItemRenderer;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_category;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_extended_checkbox;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Tree\Options\OptionsTreeRenderer;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_QuickForm_Rule_Required;
+use HTML_QuickForm_select;
+use HTML_QuickForm_text;
 
 /**
- * @package Chamilo\Core\Menu\Form
+ * @package Chamilo\Core\Menu\UserInterface\Form
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -48,7 +53,7 @@ class ItemForm extends FormValidator
     {
         $translator = $this->getTranslator();
 
-        $this->addElement('category', $translator->trans('General', [], 'Chamilo\Core\Menu'));
+        $this->addElement(HTML_QuickForm_category::class, $translator->trans('General', [], 'Chamilo\Core\Menu'));
 
         if ($this->getItemType() === CategoryItemRenderer::class)
         {
@@ -60,18 +65,22 @@ class ItemForm extends FormValidator
         }
 
         $this->addElement(
-            'select', Item::PROPERTY_PARENT, $translator->trans('Parent', [], 'Chamilo\Core\Menu'), $options,
-            ['class' => 'form-control']
+            HTML_QuickForm_select::class, Item::PROPERTY_PARENT, $translator->trans('Parent', [], 'Chamilo\Core\Menu'),
+            $options, ['class' => 'form-control']
         );
 
         $this->addRule(
-            Item::PROPERTY_PARENT, $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+            Item::PROPERTY_PARENT, $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
+            HTML_QuickForm_Rule_Required::class
         );
 
-        $this->addElement('checkbox', Item::PROPERTY_HIDDEN, $translator->trans('Hidden', [], 'Chamilo\Core\Menu'));
         $this->addElement(
-            'text', Item::PROPERTY_ICON_CLASS, $translator->trans('IconClass', [], 'Chamilo\Core\Menu'),
-            ['class' => 'form-control']
+            HTML_QuickForm_extended_checkbox::class, Item::PROPERTY_HIDDEN,
+            $translator->trans('Hidden', [], 'Chamilo\Core\Menu')
+        );
+        $this->addElement(
+            HTML_QuickForm_text::class, Item::PROPERTY_ICON_CLASS,
+            $translator->trans('IconClass', [], 'Chamilo\Core\Menu'), ['class' => 'form-control']
         );
     }
 
@@ -82,7 +91,7 @@ class ItemForm extends FormValidator
     {
         $translator = $this->getTranslator();
 
-        $this->addElement('category', $translator->trans('Titles', [], 'Chamilo\Core\Menu'));
+        $this->addElement(HTML_QuickForm_category::class, $translator->trans('Titles', [], 'Chamilo\Core\Menu'));
 
         $activeLanguages = $this->getLanguageConsulter()->getLanguages();
         $platformLanguage = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'platform_language']);
@@ -90,14 +99,16 @@ class ItemForm extends FormValidator
         foreach ($activeLanguages as $isocode => $language)
         {
             $this->addElement(
-                'text', Item::PROPERTY_TITLES . '[' . $isocode . ']', $language, ['class' => 'form-control']
+                HTML_QuickForm_text::class, Item::PROPERTY_TITLES . '[' . $isocode . ']', $language,
+                ['class' => 'form-control']
             );
 
             if ($isocode == $platformLanguage)
             {
                 $this->addRule(
                     Item::PROPERTY_TITLES . '[' . $isocode . ']',
-                    $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+                    $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
+                    HTML_QuickForm_Rule_Required::class
                 );
             }
         }

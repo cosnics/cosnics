@@ -7,6 +7,48 @@
                   autoconfigure="true"
                   public="true"/>
 
-        <service id="Chamilo\Core\Admin\Service\WhoIsOnlineService"/>
+        <service id="Chamilo\Core\Admin\Service\OnlineService"/>
+
+        <service id="Chamilo\Core\Admin\Service\FileConfigurationLocator"/>
+        <service id="Chamilo\Core\Admin\Service\PackageFactory"/>
+
+        <service id="Chamilo\Core\Admin\Service\PackageBundlesCacheService">
+            <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
+            <argument key="$cacheAdapter"
+                      type="service"
+                      id="Chamilo\Core\Admin\Service\PackageBundlesCacheAdapter"/>
+        </service>
+
+        <service id="Chamilo\Core\Admin\Service\PackageBundlesCacheAdapter"
+                 class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createFilesystemAdapter"/>
+            <argument key="$namespace">Chamilo\Core\Admin\PackageBundles</argument>
+        </service>
+
+        <service id="Chamilo\Core\Admin\Service\ConfigurationService">
+            <argument key="$storageConfigurationCacheAdapter"
+                      type="service"
+                      id="Chamilo\Core\Admin\Service\DataLoader\StorageConfigurationCacheAdapter"/>
+            <argument key="$userSettingsCacheAdapter"
+                      type="service"
+                      id="Chamilo\Core\User\Service\Cache\UserSettingCacheService"/>
+        </service>
+
+        <service id="Chamilo\Core\Admin\Service\InternationalizationBundlesCacheService">
+            <tag name="Chamilo\Libraries\Cache\CacheDataPreLoaderService"/>
+            <argument key="$cacheAdapter"
+                      type="service"
+                      id="Chamilo\Core\Admin\Service\InternationalizationBundlesCacheAdapter"/>
+        </service>
+
+        <service id="Chamilo\Core\Admin\Service\InternationalizationBundlesCacheAdapter"
+                 class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <tag name="Symfony\Component\Cache\Adapter"/>
+            <factory service="Chamilo\Libraries\Cache\SymfonyCacheAdapterFactory"
+                     method="createFilesystemAdapter"/>
+            <argument key="$namespace">Chamilo\Core\Admin\InternationalizationBundles</argument>
+        </service>
     </services>
 </container>

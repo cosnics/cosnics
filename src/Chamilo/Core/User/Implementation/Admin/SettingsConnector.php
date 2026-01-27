@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\User\Implementation\Admin;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Architecture\Interface\SettingsConnectorInterface;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Architecture\Domain\UserPictureProviderCollection;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;

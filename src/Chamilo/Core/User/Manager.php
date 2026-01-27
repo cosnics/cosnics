@@ -11,45 +11,34 @@ use Chamilo\Libraries\Mail\Mailer\MailerInterface;
  */
 abstract class Manager extends Application
 {
-    public const ACTION_ACCESS_ANONYMOUSLY = 'AnonymousAccess';
-    public const ACTION_ACTIVATE = 'Activator';
-    public const ACTION_ADMIN_USER = 'AdminUser';
+    public const ACTION_ACCOUNT = 'Account';
+    public const ACTION_ACTIVE = 'Active';
     public const ACTION_APPROVE_USER = 'UserApprove';
-    public const ACTION_BROWSE_USERS = 'AdminUserBrowser';
-    public const ACTION_CHANGE_ACTIVATION = 'ActiveChanger';
+    public const ACTION_BROWSE = 'Browse';
     public const ACTION_CHANGE_PICTURE = 'Picture';
-    public const ACTION_CHANGE_USER = 'ChangeUser';
-    public const ACTION_CREATE_USER = 'Creator';
-    public const ACTION_DEACTIVATE = 'Deactivator';
-    public const ACTION_DELETE_USER = 'Deleter';
+    public const ACTION_CREATE = 'Create';
+    public const ACTION_DELETE = 'Deleter';
     public const ACTION_EMAIL = 'Emailer';
-    public const ACTION_EXPORT_USERS = 'Exporter';
-    public const ACTION_IMPORT_USERS = 'Importer';
+    public const ACTION_LANGUAGE = 'Language';
+    public const ACTION_LOGIN_AS = 'LoginAs';
     public const ACTION_LOGOUT = 'Logout';
-    public const ACTION_QUICK_LANG = 'QuickLanguage';
-    public const ACTION_REGISTER_USER = 'Register';
+    public const ACTION_REGISTER = 'Register';
     public const ACTION_RESET_PASSWORD = 'ResetPassword';
-    public const ACTION_RESET_PASSWORD_MULTI = 'MultiPasswordResetter';
-    public const ACTION_UPDATE_USER = 'Updater';
-    public const ACTION_USER_DETAIL = 'UserDetail';
-    public const ACTION_USER_SETTINGS = 'UserSettings';
-    public const ACTION_VIEW_ACCOUNT = 'Account';
-
-    public const CHOICE_APPROVE = 1;
-    public const CHOICE_DENY = 0;
+    public const ACTION_RESET_PASSWORD_MULTI = 'MultiPasswordReset';
+    public const ACTION_SETTINGS = 'Settings';
+    public const ACTION_UPDATE = 'Updater';
+    public const ACTION_USERS_FEED = 'UsersFeed';
+    public const ACTION_USER_PICTURE = 'UserPicture';
+    public const ACTION_VIEW = 'View';
 
     public const CONTEXT = __NAMESPACE__;
-    public const DEFAULT_ACTION = self::ACTION_BROWSE_USERS;
+    public const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public const PARAM_ACTIVE = 'active';
-    public const PARAM_CHOICE = 'choice';
-    public const PARAM_EXPORT_TYPE = 'export_type';
-    public const PARAM_FIRSTLETTER = 'firstletter';
+    public const PARAM_LANGUAGE = 'language';
     public const PARAM_REFER = 'refer';
     public const PARAM_RESET_KEY = 'key';
-    public const PARAM_USER_USER_ID = 'user_id';
-
-    public const SESSION_USER_ID = '_uid';
+    public const PARAM_USER_ID = 'user_id';
 
     /**
      * @param class-string<\Chamilo\Libraries\Mail\Mailer\MailerInterface> $className
@@ -60,12 +49,12 @@ abstract class Manager extends Application
         return $this->getService($className);
     }
 
-    public function getAuthenticationValidator(): AuthenticationValidator
+    protected function getAuthenticationValidator(): AuthenticationValidator
     {
         return $this->getService(AuthenticationValidator::class);
     }
 
-    public function getUserUrlGenerator(): UserUrlGenerator
+    protected function getUserUrlGenerator(): UserUrlGenerator
     {
         return $this->getService(UserUrlGenerator::class);
     }

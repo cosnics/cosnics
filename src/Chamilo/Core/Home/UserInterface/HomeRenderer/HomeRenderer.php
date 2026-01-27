@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\UserInterface\HomeRenderer;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Home\Renderer
+ * @package Chamilo\Core\Home\UserInterface\HomeRenderer
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -46,7 +46,6 @@ class HomeRenderer
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Exception
      */
     public function render(?int $currentTabIdentifier = null, ?User $user = null): string
     {
@@ -87,7 +86,7 @@ class HomeRenderer
     }
 
     /**
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function renderContent(?int $currentTabIdentifier = null, ?User $user = null): string
     {
@@ -197,30 +196,5 @@ class HomeRenderer
             'portal-tab-panel', 'portal-tab-panel-hide', $translator->trans('EditTabTitle', [], Manager::CONTEXT),
             implode(PHP_EOL, $html)
         );
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function renderTabs(?int $currentTabIdentifier = null): string
-    {
-        $tabHeaderRenderer = $this->getTabHeaderRenderer();
-
-        $html = [];
-
-        $html[] = '<ul class="nav nav-tabs portal-nav-tabs">';
-
-        $tabs = $this->getHomeService()->findElementsByTypeAndParentIdentifier(Element::TYPE_TAB);
-
-        foreach ($tabs as $tabKey => $tab)
-        {
-            $html[] = $tabHeaderRenderer->render(
-                $tab, $tabKey, $currentTabIdentifier
-            );
-        }
-
-        $html[] = '</ul>';
-
-        return implode(PHP_EOL, $html);
     }
 }

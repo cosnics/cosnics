@@ -214,7 +214,7 @@ class GroupMembershipService
     /**
      * Shortcut method to remove the users from a group by the group identifiers, only directly after removal of the
      * groups because no notifiers are called. This is due to the fact that a group removal already triggers an event
-     * and therefore this cleanup action of the users after a delete should not trigger a new event.
+     * and therefore this clean-up action of the users after a delete should not trigger a new event.
      *
      * @param string[] $groupIdentifiers
      *

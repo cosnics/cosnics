@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition;
 
-use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\Condition\MultipleAggregateCondition;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition
@@ -14,8 +14,7 @@ abstract class MultipleAggregateConditionTranslator extends ConditionTranslator
 {
 
     public function translate(
-        DataClassDatabaseInterface $dataClassDatabase, MultipleAggregateCondition $multipleAggregateCondition,
-        ?bool $enableAliasing = true
+        QueryBuilder $querybuilder, MultipleAggregateCondition $multipleAggregateCondition, ?bool $enableAliasing = true
     ): string
     {
         $string = '';
@@ -25,7 +24,7 @@ abstract class MultipleAggregateConditionTranslator extends ConditionTranslator
         foreach ($multipleAggregateCondition->getConditions() as $condition)
         {
             $translation = $this->getConditionPartTranslatorService()->translate(
-                $dataClassDatabase, $condition, $enableAliasing
+                $querybuilder, $condition, $enableAliasing
             );
 
             if (!empty($translation))

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable;
 
-use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Query\Variable\DateFormatConditionVariable;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable
@@ -16,7 +16,7 @@ class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
     public const CONDITION_CLASS = DateFormatConditionVariable::class;
 
     public function translate(
-        DataClassDatabaseInterface $dataClassDatabase, DateFormatConditionVariable $dateFormatConditionVariable,
+        QueryBuilder $querybuilder, DateFormatConditionVariable $dateFormatConditionVariable,
         ?bool $enableAliasing = true
     ): string
     {
@@ -27,7 +27,7 @@ class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
         $strings[] = '(';
 
         $strings[] = $this->getConditionPartTranslatorService()->translate(
-            $dataClassDatabase, $dateFormatConditionVariable->getConditionVariable(), $enableAliasing
+            $querybuilder, $dateFormatConditionVariable->getConditionVariable(), $enableAliasing
         );
         $strings[] = ', ';
         $strings[] = "'" . $dateFormatConditionVariable->getFormat() . "'";

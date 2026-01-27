@@ -5,8 +5,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
- * @package Chamilo\Core\User\EventDispatcher\Event
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\User\Architecture\EventDispatcher\Event
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class AbstractUserEvent extends Event
 {

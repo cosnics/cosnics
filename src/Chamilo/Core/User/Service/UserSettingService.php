@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\User\Service;
 
-use Chamilo\Configuration\Service\ConfigurationService;
-use Chamilo\Configuration\Storage\DataClass\Setting;
+use Chamilo\Core\Admin\Service\ConfigurationService;
+use Chamilo\Core\Admin\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
@@ -51,6 +51,9 @@ class UserSettingService
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function createUserSettingForSettingContextVariableAndUser(
@@ -69,6 +72,7 @@ class UserSettingService
 
     /**
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findUserSettingContexts(): array
     {
@@ -145,6 +149,9 @@ class UserSettingService
         return $this->userSettingsCacheAdapter;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     */
     public function saveUserSettingForSettingContextVariableAndUser(
         string $context, string $variable, User $user, ?string $value = null
     ): bool
@@ -193,6 +200,8 @@ class UserSettingService
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function updateUserSettingForSettingContextVariableAndUser(
         string $context, string $variable, User $user, ?string $value = null

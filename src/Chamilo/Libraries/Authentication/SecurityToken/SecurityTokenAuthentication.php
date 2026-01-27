@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\Authentication\SecurityToken;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Authentication\Authentication;
-use Chamilo\Libraries\Authentication\AuthenticationException;
-use Chamilo\Libraries\Authentication\AuthenticationInterface;
+use Chamilo\Libraries\Authentication\Exception\AuthenticationException;
+use Chamilo\Libraries\Authentication\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -24,11 +24,6 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
     public function disableAuthSourceCheck(): void
     {
         $this->disableAuthSourceCheck = true;
-    }
-
-    public function getAuthenticationType(): string
-    {
-        return __NAMESPACE__;
     }
 
     public function getPriority(): int

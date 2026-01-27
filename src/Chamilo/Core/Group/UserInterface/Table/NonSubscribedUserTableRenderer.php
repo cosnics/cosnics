@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\UserInterface\Table;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -22,8 +22,8 @@ use Chamilo\Libraries\Format\Table\TableResultPosition;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Group\Table
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Group\UserInterface\Table
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
     implements TableRowActionsSupport, TableActionsSupport
@@ -60,7 +60,7 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
 
         $unsubscribeUrl = $urlGenerator->fromRequest([
             Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => Manager::ACTION_SUBSCRIBE_USER_TO_GROUP
+            Application::PARAM_ACTION => Manager::ACTION_SUBSCRIBE
         ]);
 
         $actions->addAction(
@@ -75,10 +75,10 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
     protected function initializeColumns(): void
     {
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_LASTNAME)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_SURNAME)
         );
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_FIRSTNAME)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_GIVEN_NAME)
         );
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_USERNAME)
@@ -97,14 +97,14 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
             $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_STATUS)
         );
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_PLATFORMADMIN)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_PLATFORM_ADMINISTRATOR)
         );
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Core\User\Storage\DataClass\User $result
      */
-    public function renderTableRowActions(TableResultPosition $resultPosition, $user): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
     {
         $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();
@@ -112,8 +112,8 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
         $toolbar = new Toolbar();
 
         $subscribeUrl = $urlGenerator->fromRequest([
-            Application::PARAM_ACTION => Manager::ACTION_SUBSCRIBE_USER_TO_GROUP,
-            Manager::PARAM_USER_ID => $user->getId()
+            Application::PARAM_ACTION => Manager::ACTION_SUBSCRIBE,
+            Manager::PARAM_USER_ID => $result->getId()
 
         ]);
 

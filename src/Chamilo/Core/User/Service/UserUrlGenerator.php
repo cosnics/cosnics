@@ -21,7 +21,7 @@ class UserUrlGenerator
 
     public function getChangeUserUrl(User $user): string
     {
-        return $this->getUserActionUrl(Manager::ACTION_CHANGE_USER, $user);
+        return $this->getUserActionUrl(Manager::ACTION_LOGIN_AS, $user);
     }
 
     public function getDataClassUrlGenerator(): DataClassUrlGenerator
@@ -32,13 +32,13 @@ class UserUrlGenerator
     public function getDeleteUrl(User $user): string
     {
         return $this->getDataClassUrlGenerator()->getDeleteUrl(
-            Manager::CONTEXT, Application::PARAM_ACTION, Manager::PARAM_USER_USER_ID, $user
+            Manager::CONTEXT, Application::PARAM_ACTION, Manager::PARAM_USER_ID, $user
         );
     }
 
     public function getDetailUrl(User $user): string
     {
-        return $this->getUserActionUrl(Manager::ACTION_USER_DETAIL, $user);
+        return $this->getUserActionUrl(Manager::ACTION_VIEW, $user);
     }
 
     public function getEmailUrl(User $user): string
@@ -49,7 +49,7 @@ class UserUrlGenerator
     public function getUpdateUrl(User $user): string
     {
         return $this->getDataClassUrlGenerator()->getUpdateUrl(
-            Manager::CONTEXT, Application::PARAM_ACTION, Manager::PARAM_USER_USER_ID, $user
+            Manager::CONTEXT, Application::PARAM_ACTION, Manager::PARAM_USER_ID, $user
         );
     }
 
@@ -59,7 +59,7 @@ class UserUrlGenerator
     protected function getUserActionUrl(string $action, User $user, array $additionalParameters = []): string
     {
         return $this->getDataClassUrlGenerator()->getActionUrl(
-            Manager::CONTEXT, Application::PARAM_ACTION, Manager::PARAM_USER_USER_ID, $action, $user,
+            Manager::CONTEXT, Application::PARAM_ACTION, Manager::PARAM_USER_ID, $action, $user,
             $additionalParameters
         );
     }

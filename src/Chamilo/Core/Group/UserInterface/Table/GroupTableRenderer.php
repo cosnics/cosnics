@@ -27,8 +27,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Group\Table
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Group\UserInterface\Table
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GroupTableRenderer extends DataClassListTableRenderer implements TableRowActionsSupport, TableActionsSupport
 {
@@ -93,7 +93,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
         $removeUrl = $urlGenerator->fromParameters([
             Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => Manager::ACTION_TRUNCATE_GROUP
+            Application::PARAM_ACTION => Manager::ACTION_TRUNCATE
         ]);
 
         $actions->addAction(
@@ -104,7 +104,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
         $truncateUrl = $urlGenerator->fromParameters([
             Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => Manager::ACTION_TRUNCATE_GROUP
+            Application::PARAM_ACTION => Manager::ACTION_TRUNCATE
         ]);
 
         $actions->addAction(
@@ -142,11 +142,11 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
     }
 
     /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $result
      *
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $group): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, mixed $result): string
     {
         $translator = $this->getTranslator();
         $urlGenerator = $this->getUrlGenerator();
@@ -156,7 +156,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         switch ($column->getName())
         {
             case Group::PROPERTY_NAME :
-                $title = parent::renderCell($column, $resultPosition, $group);
+                $title = parent::renderCell($column, $resultPosition, $result);
                 $title_short = $title;
 
                 if (strlen($title_short) > 53)
@@ -167,14 +167,14 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
                 $viewUrl = $urlGenerator->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_VIEW_GROUP,
-                        Manager::PARAM_GROUP_ID => $group->getId()
+                        Application::PARAM_ACTION => Manager::ACTION_VIEW,
+                        Manager::PARAM_GROUP_ID => $result->getId()
                     ]
                 );
 
                 return '<a href="' . htmlentities($viewUrl) . '" title="' . $title . '">' . $title_short . '</a>';
             case Group::PROPERTY_DESCRIPTION :
-                $description = strip_tags(parent::renderCell($column, $resultPosition, $group));
+                $description = strip_tags(parent::renderCell($column, $resultPosition, $result));
 
                 if (strlen($description) > 175)
                 {
@@ -183,20 +183,20 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
                 return $stringUtilities->truncate($description);
             case $translator->trans(self::COLUMN_USERS, [], 'Chamilo\Core\User\Manager') :
-                return (string) $groupsTreeTraverser->countUsersForGroup($group);
+                return (string) $groupsTreeTraverser->countUsersForGroup($result);
             case $translator->trans(self::COLUMN_SUBGROUPS, [], 'Chamilo\Core\User\Manager') :
-                return (string) $groupsTreeTraverser->countSubGroupsForGroup($group, true);
+                return (string) $groupsTreeTraverser->countSubGroupsForGroup($result, true);
         }
 
-        return parent::renderCell($column, $resultPosition, $group);
+        return parent::renderCell($column, $resultPosition, $result);
     }
 
     /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $result
      *
      * @throws \Exception
      */
-    public function renderTableRowActions(TableResultPosition $resultPosition, $group): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
     {
         $translator = $this->getTranslator();
         $groupMembershipService = $this->getGroupMembershipService();
@@ -204,7 +204,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
         $toolbar = new Toolbar();
 
-        $editUrl = $groupUrlGenerator->getUpdateUrl($group);
+        $editUrl = $groupUrlGenerator->getUpdateUrl($result);
 
         $toolbar->addItem(
             new ToolbarItem(
@@ -213,7 +213,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
             )
         );
 
-        $subscribeUrl = $groupUrlGenerator->getSubscribeUrl($group);
+        $subscribeUrl = $groupUrlGenerator->getSubscribeUrl($result);
 
         $toolbar->addItem(
             new ToolbarItem(
@@ -222,11 +222,11 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
             )
         );
 
-        $visible = ($groupMembershipService->countSubscribedUsersForGroupIdentifier($group->getId()) > 0);
+        $visible = ($groupMembershipService->countSubscribedUsersForGroupIdentifier($result->getId()) > 0);
 
         if ($visible)
         {
-            $truncateUrl = $groupUrlGenerator->getTruncateUrl($group);
+            $truncateUrl = $groupUrlGenerator->getTruncateUrl($result);
 
             $toolbar->addItem(
                 new ToolbarItem(
@@ -250,7 +250,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
             );
         }
 
-        $deleteUrl = $groupUrlGenerator->getDeleteUrl($group);
+        $deleteUrl = $groupUrlGenerator->getDeleteUrl($result);
 
         $toolbar->addItem(
             new ToolbarItem(
@@ -263,7 +263,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
             )
         );
 
-        $moveUrl = $groupUrlGenerator->getMoveUrl($group);
+        $moveUrl = $groupUrlGenerator->getMoveUrl($result);
 
         $toolbar->addItem(
             new ToolbarItem(

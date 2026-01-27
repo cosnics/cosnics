@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition;
 
-use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\Condition\RegularExpressionCondition;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition
@@ -15,12 +15,11 @@ class RegularExpressionConditionTranslator extends ConditionTranslator
     public const CONDITION_CLASS = RegularExpressionCondition::class;
 
     public function translate(
-        DataClassDatabaseInterface $dataClassDatabase, RegularExpressionCondition $regularExpressionCondition,
-        ?bool $enableAliasing = true
+        QueryBuilder $querybuilder, RegularExpressionCondition $regularExpressionCondition, ?bool $enableAliasing = true
     ): string
     {
         return $this->getConditionPartTranslatorService()->translate(
-                $dataClassDatabase, $regularExpressionCondition->getConditionVariable(), $enableAliasing
-            ) . ' REGEXP ' . $dataClassDatabase->quote($regularExpressionCondition->getRegularExpression());
+                $querybuilder, $regularExpressionCondition->getConditionVariable(), $enableAliasing
+            ) . ' REGEXP ' . $querybuilder->createNamedParameter($regularExpressionCondition->getRegularExpression());
     }
 }

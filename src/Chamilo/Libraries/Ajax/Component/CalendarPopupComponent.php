@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Ajax\Component;
 
 use Chamilo\Libraries\Ajax\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
+use Chamilo\Libraries\Authentication\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\Response;

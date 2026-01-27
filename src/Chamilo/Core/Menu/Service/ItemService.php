@@ -60,12 +60,10 @@ class ItemService implements ItemServiceInterface
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     *
-     * @return bool
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function createItem(Item $item): bool
     {
@@ -86,7 +84,9 @@ class ItemService implements ItemServiceInterface
      * @param string[]|string[][] $values
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function createItemForTypeFromValues(string $itemType, array $values): ?Item
     {
@@ -119,7 +119,7 @@ class ItemService implements ItemServiceInterface
     /**
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function deleteItem(Item $item): bool
     {
@@ -316,6 +316,7 @@ class ItemService implements ItemServiceInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function moveItemInDirection(Item $item, int $moveDirection): bool
     {
@@ -330,6 +331,7 @@ class ItemService implements ItemServiceInterface
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function saveItemFromValues(Item $item, array $values): bool
     {
@@ -366,6 +368,7 @@ class ItemService implements ItemServiceInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function updateItem(Item $item): bool
     {

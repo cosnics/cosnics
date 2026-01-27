@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\MenuRenderer;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -69,7 +69,7 @@ class BannerRenderer
             $pageConfiguration->getApplication()->getUser() instanceof User)
         {
             $user = $pageConfiguration->getApplication()->getUser();
-            $userFullName = $user->get_fullname();
+            $userFullName = $user->getFullName();
         }
         else
         {
@@ -98,7 +98,7 @@ class BannerRenderer
         {
             $link = $this->getUrlGenerator()->fromParameters([
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_ADMIN_USER
+                Application::PARAM_ACTION => Manager::ACTION_LOGIN_AS
             ]);
 
             $html[] = '<div class="warning-banner bg-warning text-warning">';

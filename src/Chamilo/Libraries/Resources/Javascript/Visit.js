@@ -10,7 +10,7 @@
         	var ajaxUri = getPath('WEB_PATH') + 'index.php';
         	
         	parameters = new Object();
-        	parameters.application = 'Chamilo\\Core\\User\\Ajax';
+        	parameters.application = 'Chamilo\\Core\\User';
         	parameters.go = 'Leave';
         	parameters.tracker = tracker;
 

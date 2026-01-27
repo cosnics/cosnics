@@ -5,8 +5,8 @@ use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvid
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
+use Chamilo\Libraries\Authentication\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Authentication\SecurityToken\SecurityTokenAuthentication;
 use Chamilo\Libraries\Calendar\Service\View\ICalCalendarRenderer;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
@@ -25,7 +25,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
     private CalendarRendererProvider $calendarRendererProvider;
 
     /**
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \Chamilo\Libraries\Authentication\Exception\AuthenticationException
      * @throws \Exception
      */
     public function run(): Response
@@ -82,7 +82,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
                         self::PARAM_ACTION => Manager::ACTION_ICAL,
-                        User::PROPERTY_SECURITY_TOKEN => $this->getUser()->get_security_token()
+                        User::PROPERTY_SECURITY_TOKEN => $this->getUser()->getSecurityToken()
                     ]
                 );
 

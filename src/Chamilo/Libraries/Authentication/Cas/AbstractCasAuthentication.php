@@ -1,12 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Authentication\Cas;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Authentication\Authentication;
-use Chamilo\Libraries\Authentication\AuthenticationException;
-use Chamilo\Libraries\Authentication\AuthenticationInterface;
+use Chamilo\Libraries\Authentication\AuthenticationValidator;
+use Chamilo\Libraries\Authentication\Exception\AuthenticationException;
+use Chamilo\Libraries\Authentication\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -39,8 +40,6 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
         $this->session = $session;
     }
-
-    abstract public function getAuthenticationType(): string;
 
     abstract protected function getCasUserIdentifierFromAttributes(string $casUser, array $casUserAttributes = []
     ): string;
@@ -156,7 +155,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
     }
 
     /**
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \Chamilo\Libraries\Authentication\Exception\AuthenticationException
      * @throws \Exception
      */
     public function login(): ?User
@@ -210,7 +209,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
                 {
                     $surrogateUserName = array_pop($userAttributes['surrogatePrincipal']);
                     $surrogateUser = $this->getUserService()->findUserByUsername($surrogateUserName);
-                    $this->getSession()->set('_as_admin', $surrogateUser->getId());
+                    $this->getSession()->set(AuthenticationValidator::PARAM_AS_ADMIN, $surrogateUser->getId());
                 }
 
                 return $user;
@@ -241,7 +240,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
      * @param string[] $casUserAttributes
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \Chamilo\Libraries\Authentication\Exception\AuthenticationException
      * @throws \Exception
      */
     abstract protected function registerUser(string $casUser, array $casUserAttributes = []): User;

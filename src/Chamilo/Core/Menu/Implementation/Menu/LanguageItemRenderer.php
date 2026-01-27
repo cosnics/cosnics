@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Implementation\Menu;
 
-use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
+use Chamilo\Core\Admin\Service\Consulter\LanguageConsulter;
 use Chamilo\Core\Menu\Architecture\Domain\ItemRendererCollection;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -16,8 +16,8 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Menu\Service\Renderer
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Menu\Implementation\Menu
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LanguageItemRenderer extends ItemRenderer
 {
@@ -39,13 +39,6 @@ class LanguageItemRenderer extends ItemRenderer
         $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
-     * @throws \Exception
-     */
     public function render(Item $item, User $user): string
     {
         $languages = $this->getLanguageConsulter()->getOtherLanguages($this->getTranslator()->getLocale());
@@ -63,8 +56,8 @@ class LanguageItemRenderer extends ItemRenderer
                 $languageUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_QUICK_LANG,
-                        Manager::PARAM_CHOICE => $isocode,
+                        Application::PARAM_ACTION => Manager::ACTION_LANGUAGE,
+                        Manager::PARAM_LANGUAGE => $isocode,
                         Manager::PARAM_REFER => $this->getRequest()->getUri()
                     ]
                 );
@@ -185,8 +178,8 @@ class LanguageItemRenderer extends ItemRenderer
                 $languageUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_QUICK_LANG,
-                        Manager::PARAM_CHOICE => $isocode,
+                        Application::PARAM_ACTION => Manager::ACTION_LANGUAGE,
+                        Manager::PARAM_LANGUAGE => $isocode,
                         Manager::PARAM_REFER => $currentUrl
                     ]
                 );

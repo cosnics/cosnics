@@ -32,17 +32,9 @@ class UserCreationForm extends UserForm
     /**
      * @throws \QuickformException
      */
-    public function setDefaults($defaultValues = [], $filter = null)
+    public function setDefaults($defaultValues = [], $filter = null): void
     {
-        $defaultValues[self::PROPERTY_TIME_PERIOD_FOREVER] = 1;
-
-        $defaultValues[User::PROPERTY_EXPIRATION_DATE] = strtotime(
-            '+ ' . intval($this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'days_valid'])) . 'Days',
-            time()
-        );
-
-        $defaultValues[User::PROPERTY_DISK_QUOTA] = '209715200';
-        $defaultValues[User::PROPERTY_PLATFORMADMIN] = 0;
+        $defaultValues[User::PROPERTY_PLATFORM_ADMINISTRATOR] = 0;
         $defaultValues[User::PROPERTY_ACTIVE] = 1;
         $defaultValues[User::PROPERTY_STATUS] = User::STATUS_STUDENT;
         $defaultValues[self::PROPERTY_SEND_MAIL] = 0;

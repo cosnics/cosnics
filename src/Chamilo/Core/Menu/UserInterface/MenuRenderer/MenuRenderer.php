@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\UserInterface\MenuRenderer;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Menu\Architecture\Domain\ItemRendererCollection;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -11,8 +11,8 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @package Chamilo\Core\Menu\Service\Renderer
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Menu\UserInterface\MenuRenderer
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MenuRenderer
 {
@@ -29,8 +29,8 @@ class MenuRenderer
     private WebPathBuilder $webPathBuilder;
 
     public function __construct(
-        CachedItemService $itemCacheService, ItemRendererCollection $itemRendererFactory, ChamiloRequest $chamiloRequest,
-        ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder,
+        CachedItemService $itemCacheService, ItemRendererCollection $itemRendererFactory,
+        ChamiloRequest $chamiloRequest, ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder,
         ThemePathBuilder $themeWebPathBuilder
     )
     {
@@ -126,7 +126,7 @@ class MenuRenderer
         }
         else
         {
-            $brandSource = $this->getThemeWebPathBuilder()->getImagePath('Chamilo\Configuration', 'LogoHeader');
+            $brandSource = $this->getThemeWebPathBuilder()->getImagePath('Chamilo\Core\Admin', 'LogoHeader');
         }
 
         $basePath = $this->getWebPathBuilder()->getBasePath();

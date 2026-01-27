@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition;
 
-use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition
@@ -24,12 +24,12 @@ class PatternMatchConditionTranslator extends ConditionTranslator
     }
 
     public function translate(
-        DataClassDatabaseInterface $dataClassDatabase, PatternMatchCondition $patternMatchCondition,
-        ?bool $enableAliasing = true
+        QueryBuilder $querybuilder, PatternMatchCondition $patternMatchCondition, ?bool $enableAliasing = true
     ): string
     {
         return $this->getConditionPartTranslatorService()->translate(
-                $dataClassDatabase, $patternMatchCondition->getConditionVariable(), $enableAliasing
-            ) . ' LIKE ' . $dataClassDatabase->quote($this->processPattern($patternMatchCondition->getPattern()));
+                $querybuilder, $patternMatchCondition->getConditionVariable(), $enableAliasing
+            ) . ' LIKE ' .
+            $querybuilder->createNamedParameter($this->processPattern($patternMatchCondition->getPattern()));
     }
 }

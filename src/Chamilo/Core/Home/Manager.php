@@ -6,13 +6,8 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
- * @package home.lib.home_manager
- */
-
-/**
- * A user manager provides some functionalities to the admin to manage his users.
- * For each functionality a component is
- * available.
+ * @package Chamilo\Core\Home
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class Manager extends Application
 {

@@ -1,9 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Exceptions;
 
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_stylesubmitbutton;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_QuickForm_html;
+use HTML_QuickForm_password;
+use HTML_QuickForm_Rule_Required;
+use HTML_QuickForm_text;
 
 /**
  * This class represents a parameter not defined exception.
@@ -39,51 +44,55 @@ class NotAllowedException extends UserException
 
         $form->setRequiredNote('');
 
-        $form->addElement('html', '<div class="form-group">');
-        $form->addElement('html', '<div class="input-group">');
+        $form->addElement(HTML_QuickForm_html::class, '<div class="form-group">');
+        $form->addElement(HTML_QuickForm_html::class, '<div class="input-group">');
 
         $form->addElement(
-            'html', '<div class="input-group-addon">' . $translator->trans('Username', [], StringUtilities::LIBRARIES) .
+            HTML_QuickForm_html::class,
+            '<div class="input-group-addon">' . $translator->trans('Username', [], StringUtilities::LIBRARIES) .
             '</div>'
         );
 
         $form->addElement(
-            'text', 'login', $translator->trans('UserName', [], StringUtilities::LIBRARIES),
+            HTML_QuickForm_text::class, 'login', $translator->trans('UserName', [], StringUtilities::LIBRARIES),
             ['size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control']
         );
 
-        $form->addElement('html', '</div>');
-        $form->addElement('html', '</div>');
+        $form->addElement(HTML_QuickForm_html::class, '</div>');
+        $form->addElement(HTML_QuickForm_html::class, '</div>');
 
-        $form->addElement('html', '<div class="form-group">');
-        $form->addElement('html', '<div class="input-group">');
+        $form->addElement(HTML_QuickForm_html::class, '<div class="form-group">');
+        $form->addElement(HTML_QuickForm_html::class, '<div class="input-group">');
 
         $form->addElement(
-            'html', '<div class="input-group-addon">' . $translator->trans('Password', [], StringUtilities::LIBRARIES) .
+            HTML_QuickForm_html::class,
+            '<div class="input-group-addon">' . $translator->trans('Password', [], StringUtilities::LIBRARIES) .
             '</div>'
         );
 
         $form->addElement(
-            'password', 'password', $translator->trans('Pass', [], StringUtilities::LIBRARIES),
+            HTML_QuickForm_password::class, 'password', $translator->trans('Pass', [], StringUtilities::LIBRARIES),
             ['size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control']
         );
 
-        $form->addElement('html', '</div>');
-        $form->addElement('html', '</div>');
+        $form->addElement(HTML_QuickForm_html::class, '</div>');
+        $form->addElement(HTML_QuickForm_html::class, '</div>');
 
-        $form->addElement('html', '<div class="form-group text-right">');
+        $form->addElement(HTML_QuickForm_html::class, '<div class="form-group text-right">');
         $form->addElement(
-            'style_submit_button', 'submitAuth', $translator->trans('Login', [], StringUtilities::LIBRARIES), null,
-            null, new FontAwesomeGlyph('sign-in-alt')
+            HTML_QuickForm_stylesubmitbutton::class, 'submitAuth',
+            $translator->trans('Login', [], StringUtilities::LIBRARIES), null, null, new FontAwesomeGlyph('sign-in-alt')
         );
-        $form->addElement('html', '</div>');
+        $form->addElement(HTML_QuickForm_html::class, '</div>');
 
         $form->addRule(
-            'password', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+            'password', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
+            HTML_QuickForm_Rule_Required::class
         );
 
         $form->addRule(
-            'login', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+            'login', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
+            HTML_QuickForm_Rule_Required::class
         );
 
         return $form;

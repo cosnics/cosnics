@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\User\Implementation\Admin;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Architecture\Domain\AbstractActionProvider;
 use Chamilo\Core\Admin\Architecture\Interface\ActionProviderInterface;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
@@ -35,7 +35,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_BROWSE_USERS
+            Application::PARAM_ACTION => Manager::ACTION_BROWSE
         ];
 
         $links[] = new Action(
@@ -45,7 +45,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_CREATE_USER
+            Application::PARAM_ACTION => Manager::ACTION_CREATE
         ];
 
         $links[] = new Action(
@@ -56,30 +56,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_EXPORT_USERS
-        ];
-
-        $links[] = new Action(
-            $translator->trans('ExportDescription', [], $context),
-            $translator->trans('Export', [], StringUtilities::LIBRARIES),
-            new FontAwesomeGlyph('download', ['fa-fw', 'fa-2x'], null, 'fas'),
-            $urlGenerator->fromParameters($parameters)
-        );
-
-        $parameters = [
-            Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_IMPORT_USERS
-        ];
-
-        $links[] = new Action(
-            $translator->trans('ImportDescription', [], $context),
-            $translator->trans('Import', [], StringUtilities::LIBRARIES),
-            new FontAwesomeGlyph('upload', ['fa-fw', 'fa-2x'], null, 'fas'), $urlGenerator->fromParameters($parameters)
-        );
-
-        $parameters = [
-            Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_BROWSE_USERS
+            Application::PARAM_ACTION => Manager::ACTION_BROWSE
         ];
 
         return new Actions($context, $links, $urlGenerator->fromParameters($parameters));

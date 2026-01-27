@@ -3,11 +3,14 @@ namespace Chamilo\Core\Admin\DependencyInjection;
 
 use Chamilo\Core\Admin\DependencyInjection\CompilerPass\ActionProviderCompilerPass;
 use Chamilo\Core\Admin\DependencyInjection\CompilerPass\SettingsConnectorsCompilerPass;
+use Chamilo\Core\Admin\Service\FileConfigurationLocator;
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 /**
  * @package Chamilo\Core\Admin\DependencyInjection
@@ -16,7 +19,10 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     implements ExtensionInterface, ICompilerPassExtension
 {
-    use ExtensionTrait;
+    use ExtensionTrait
+    {
+        load as public extensionLoad;
+    }
 
     public function getAlias(): string
     {
@@ -31,10 +37,34 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'implementation.admin.xml',
                 'implementation.home.xml',
                 'service.xml',
+                'service.consulter.xml',
+                'service.dataLoader.xml',
+                'service.finder.xml',
                 'storage.xml',
                 'userInterface.table.xml'
             ]
         ];
+    }
+
+    public function load(array $configs, ContainerBuilder $container): void
+    {
+        $this->extensionLoad($configs, $container);
+
+        $fileConfigurationLocator = new FileConfigurationLocator($this->getSystemPathBuilder());
+
+        if ($fileConfigurationLocator->isAvailable())
+        {
+            $configurationFilePath = $fileConfigurationLocator->getFilePath();
+            $configurationFileName = $fileConfigurationLocator->getFileName();
+        }
+        else
+        {
+            $configurationFilePath = $fileConfigurationLocator->getDefaultFilePath();
+            $configurationFileName = $fileConfigurationLocator->getDefaultFileName();
+        }
+
+        $configurationXmlFileLoader = new XmlFileLoader($container, new FileLocator($configurationFilePath));
+        $configurationXmlFileLoader->load($configurationFileName);
     }
 
     public function registerCompilerPasses(ContainerBuilder $container): void

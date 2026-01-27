@@ -50,6 +50,13 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         return $this->getItemService()->countItemsByParentIdentifier($parentIdentifier);
     }
 
+    /**
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function createItem(Item $item): bool
     {
         if (!$this->getItemService()->createItem($item))
@@ -60,6 +67,13 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     */
     public function createItemForTypeFromValues(string $itemType, array $values): ?Item
     {
         $item = $this->getItemService()->createItemForTypeFromValues($itemType, $values);
@@ -77,6 +91,12 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
         return $item;
     }
 
+    /**
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function deleteItem(Item $item): bool
     {
         if (!$this->getItemService()->deleteItem($item))
@@ -215,6 +235,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function moveItemInDirection(Item $item, int $moveDirection): bool
     {
@@ -235,6 +256,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function saveItemFromValues(Item $item, array $values): bool
     {

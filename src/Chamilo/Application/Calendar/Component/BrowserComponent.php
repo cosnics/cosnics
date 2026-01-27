@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionActionProv
 use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProviderCollection;
 use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Manager;
-use Chamilo\Core\User\Component\UserSettingsComponent;
+use Chamilo\Core\User\Component\SettingsComponent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -74,7 +74,7 @@ class BrowserComponent extends Manager
         if ($asAdmin && $asAdmin > 0)
         {
             $user = $this->getUserService()->findUserByIdentifier($asAdmin);
-            if (!$user instanceof User || !$user->isPlatformAdmin())
+            if (!$user instanceof User || !$user->isPlatformAdministrator())
             {
                 throw new NotAllowedException();
             }
@@ -194,8 +194,8 @@ class BrowserComponent extends Manager
         $settingsUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::CONTEXT,
-                Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_USER_SETTINGS,
-                UserSettingsComponent::PARAM_SELECTED_CONTEXT => 'Chamilo\Core\User'
+                Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_SETTINGS,
+                SettingsComponent::PARAM_SELECTED_CONTEXT => 'Chamilo\Core\User'
             ]
         );
 

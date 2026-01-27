@@ -9,6 +9,10 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\Action;
 use Chamilo\Libraries\Format\Tabs\Actions;
 
+/**
+ * @package Chamilo\Core\Menu\Implementation\Admin
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class ActionProvider extends AbstractActionProvider implements ActionProviderInterface
 {
 

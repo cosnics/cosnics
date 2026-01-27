@@ -3,7 +3,12 @@ namespace Chamilo\Core\User\UserInterface\Form;
 
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_category;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_extended_checkbox;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_QuickForm_Rule_Required;
+use HTML_QuickForm_select;
+use HTML_QuickForm_textarea;
 
 /**
  * @package Chamilo\Core\User\Form
@@ -30,17 +35,20 @@ class RegisterForm extends UserForm
         {
             $translator = $this->getTranslator();
 
-            $this->addElement('category', $translator->trans('Information', [], Manager::CONTEXT));
+            $this->addElement(HTML_QuickForm_category::class, $translator->trans('Information', [], Manager::CONTEXT));
             $this->addElement(
-                'textarea', 'conditions', $translator->trans('TermsAndConditions', [], Manager::CONTEXT),
+                HTML_QuickForm_textarea::class, 'conditions',
+                $translator->trans('TermsAndConditions', [], Manager::CONTEXT),
                 ['cols' => 80, 'rows' => 10, 'disabled' => 'disabled', 'style' => 'background-color: white;']
             );
             $this->addElement(
-                'checkbox', self::PROPERTY_ACCEPT_CONDITIONS, '', $translator->trans('IAccept', [], Manager::CONTEXT)
+                HTML_QuickForm_extended_checkbox::class, self::PROPERTY_ACCEPT_CONDITIONS, '',
+                $translator->trans('IAccept', [], Manager::CONTEXT)
             );
             $this->addRule(
                 self::PROPERTY_ACCEPT_CONDITIONS,
-                $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+                $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
+                HTML_QuickForm_Rule_Required::class
             );
         }
     }
@@ -84,7 +92,8 @@ class RegisterForm extends UserForm
             $status[1] = $translator->trans('CourseAdmin');
 
             $this->addElement(
-                'select', User::PROPERTY_STATUS, $translator->trans('Status', [], Manager::CONTEXT), $status
+                HTML_QuickForm_select::class, User::PROPERTY_STATUS, $translator->trans('Status', [], Manager::CONTEXT),
+                $status
             );
         }
     }
@@ -94,8 +103,6 @@ class RegisterForm extends UserForm
      */
     public function setDefaults(array $defaultValues = [], $filter = null): void
     {
-        $defaults[User::PROPERTY_DATABASE_QUOTA] = '300';
-        $defaults[User::PROPERTY_DISK_QUOTA] = '209715200';
         $defaults[UserForm::PROPERTY_SEND_MAIL] = 1;
         $defaults[self::PROPERTY_CONDITIONS] =
             file_get_contents($this->getSystemPathBuilder()->getRootPath() . 'LICENSE');

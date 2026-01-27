@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
 use Microsoft\Graph\Model\Group;
 use RuntimeException;
@@ -40,7 +40,7 @@ class GroupService
      *
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService $userService
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository $groupRepository
-     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter $configurationConsulter
      */
     public function __construct(
         UserService $userService, GroupRepository $groupRepository, ConfigurationConsulter $configurationConsulter

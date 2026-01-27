@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View\TableBuilder;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use HTML_Table;

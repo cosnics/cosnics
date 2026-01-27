@@ -31,7 +31,7 @@ class AccountItemRenderer extends MenuItemRenderer implements SelectableItemInte
         return $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_VIEW_ACCOUNT
+                Application::PARAM_ACTION => Manager::ACTION_ACCOUNT
             ]
         );
     }
@@ -41,7 +41,7 @@ class AccountItemRenderer extends MenuItemRenderer implements SelectableItemInte
         $currentContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
         $currentAction = $this->getRequest()->query->get(Application::PARAM_ACTION);
 
-        return $currentContext == Manager::CONTEXT && $currentAction == Manager::ACTION_VIEW_ACCOUNT;
+        return $currentContext == Manager::CONTEXT && $currentAction == Manager::ACTION_ACCOUNT;
     }
 
     public function renderTitleForCurrentLanguage(Item $item): string

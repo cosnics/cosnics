@@ -14,5 +14,5 @@ interface TableRowActionsSupport
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
      */
-    public function renderTableRowActions(TableResultPosition $resultPosition, $result): string;
+    public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string;
 }

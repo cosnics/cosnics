@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Microsoft\Graph\GraphServiceClient;
 use Microsoft\Kiota\Authentication\Oauth\ClientCredentialContext;
 

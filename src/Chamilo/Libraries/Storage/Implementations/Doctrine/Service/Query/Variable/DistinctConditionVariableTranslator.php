@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable;
 
-use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable
@@ -14,8 +14,7 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
     public const CONDITION_CLASS = DistinctConditionVariable::class;
 
     public function translate(
-        DataClassDatabaseInterface $dataClassDatabase, DistinctConditionVariable $distinctConditionVariable,
-        ?bool $enableAliasing = true
+        QueryBuilder $querybuilder, DistinctConditionVariable $distinctConditionVariable, ?bool $enableAliasing = true
     ): string
     {
         $strings = [];
@@ -29,7 +28,7 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
             foreach ($distinctConditionVariable->get() as $conditionVariable)
             {
                 $distinctStrings[] = $this->getConditionPartTranslatorService()->translate(
-                    $dataClassDatabase, $conditionVariable, $enableAliasing
+                    $querybuilder, $conditionVariable, $enableAliasing
                 );
             }
         }

@@ -13,18 +13,18 @@ use Chamilo\Libraries\Format\Table\TableResultPosition;
 abstract class DataClassListTableRenderer extends ListTableRenderer
 {
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $result
      */
-    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $dataClass): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, mixed $result): string
     {
-        return (string) $dataClass->getDefaultProperty($column->getName());
+        return (string) $result->getDefaultProperty($column->getName());
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $result
      */
-    protected function renderIdentifierCell($dataClass): string
+    protected function renderIdentifierCell(mixed $result): string
     {
-        return $dataClass->getId();
+        return $result->getId();
     }
 }

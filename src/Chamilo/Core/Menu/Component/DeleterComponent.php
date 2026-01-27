@@ -20,13 +20,14 @@ class DeleterComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
-     * @throws \Exception
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Psr\Cache\InvalidArgumentException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run(): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator())
         {
             throw new NotAllowedException();
         }
@@ -45,7 +46,7 @@ class DeleterComponent extends Manager
             $parentIdentifier = $item->getParentId();
         }
 
-        $message = $this->get_result(
+        $message = $this->getResult(
             $failures, count($items), 'SelectedItemNotDeleted', 'SelectedItemsNotDeleted', 'SelectedItemDeleted',
             'SelectedItemsDeleted'
         );

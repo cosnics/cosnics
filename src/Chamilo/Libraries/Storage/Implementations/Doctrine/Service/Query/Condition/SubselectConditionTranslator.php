@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition;
 
-use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition
@@ -15,21 +15,20 @@ class SubselectConditionTranslator extends ConditionTranslator
     public const CONDITION_CLASS = SubselectCondition::class;
 
     public function translate(
-        DataClassDatabaseInterface $dataClassDatabase, SubselectCondition $subselectCondition,
-        ?bool $enableAliasing = true
+        QueryBuilder $querybuilder, SubselectCondition $subselectCondition, ?bool $enableAliasing = true
     ): string
     {
         $string = [];
 
         $string[] = $this->getConditionPartTranslatorService()->translate(
-            $dataClassDatabase, $subselectCondition->getConditionVariable(), $enableAliasing
+            $querybuilder, $subselectCondition->getConditionVariable(), $enableAliasing
         );
 
         $string[] = 'IN (';
         $string[] = 'SELECT';
 
         $string[] = $this->getConditionPartTranslatorService()->translate(
-            $dataClassDatabase, $subselectCondition->getSubselectConditionVariable(), $enableAliasing
+            $querybuilder, $subselectCondition->getSubselectConditionVariable(), $enableAliasing
         );
 
         $string[] = 'FROM';
@@ -47,7 +46,7 @@ class SubselectConditionTranslator extends ConditionTranslator
         {
             $string[] = 'WHERE ';
             $string[] = $this->getConditionPartTranslatorService()->translate(
-                $dataClassDatabase, $subselectCondition->getCondition(), $enableAliasing
+                $querybuilder, $subselectCondition->getCondition(), $enableAliasing
             );
         }
 

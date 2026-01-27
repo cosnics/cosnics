@@ -26,8 +26,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Menu\Table
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Menu\UserInterface\Table
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ItemTableRenderer extends DataClassListTableRenderer implements TableRowActionsSupport, TableActionsSupport
 {
@@ -123,21 +123,19 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
     }
 
     /**
-     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $dataClass
+     * @param \Chamilo\Core\Menu\Storage\DataClass\Item $result
      */
-    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $dataClass): string
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, mixed $result): string
     {
         $itemRendererFactory = $this->getItemRendererFactory();
 
         return match ($column->getName())
         {
-            Item::PROPERTY_TITLES => $itemRendererFactory->getItemRendererForItem($dataClass)
-                ->renderTitleForCurrentLanguage(
-                    $dataClass
-                ),
-            self::PROPERTY_TYPE => $itemRendererFactory->getItemRendererForItem($dataClass)->getRendererTypeGlyph()
+            Item::PROPERTY_TITLES => $itemRendererFactory->getItemRendererForItem($result)
+                ->renderTitleForCurrentLanguage($result),
+            self::PROPERTY_TYPE => $itemRendererFactory->getItemRendererForItem($result)->getRendererTypeGlyph()
                 ->render(),
-            default => parent::renderCell($column, $resultPosition, $dataClass),
+            default => parent::renderCell($column, $resultPosition, $result),
         };
     }
 
@@ -146,7 +144,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function renderTableRowActions(TableResultPosition $resultPosition, $result): string
+    public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
     {
         $numberOfSiblings = $this->getItemService()->countItemsByParentIdentifier($result->getParentId());
 

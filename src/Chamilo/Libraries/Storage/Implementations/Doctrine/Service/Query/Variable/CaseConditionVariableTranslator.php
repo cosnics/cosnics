@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable;
 
-use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Query\Variable\CaseConditionVariable;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable
@@ -17,8 +17,7 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
     public const CONDITION_CLASS = CaseConditionVariable::class;
 
     public function translate(
-        DataClassDatabaseInterface $dataClassDatabase, CaseConditionVariable $caseConditionVariable,
-        ?bool $enableAliasing = true
+        QueryBuilder $querybuilder, CaseConditionVariable $caseConditionVariable, ?bool $enableAliasing = true
     ): string
     {
         $strings = [];
@@ -28,7 +27,7 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
         foreach ($caseConditionVariable->get() as $caseElement)
         {
             $strings[] = $this->getConditionPartTranslatorService()->translate(
-                $dataClassDatabase, $caseElement, $enableAliasing
+                $querybuilder, $caseElement, $enableAliasing
             );
         }
 

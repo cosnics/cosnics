@@ -3,8 +3,19 @@ namespace Chamilo\Core\User\UserInterface\Form;
 
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_category;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_stylefile;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle;
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Filetype;
+use Chamilo\Libraries\Format\Form\Rule\HTML_QuickForm_Rule_Username;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_QuickForm_html;
+use HTML_QuickForm_password;
+use HTML_QuickForm_Rule_Compare;
+use HTML_QuickForm_Rule_Email;
+use HTML_QuickForm_select;
+use HTML_QuickForm_static;
 
 abstract class UserForm extends FormValidator
 {
@@ -33,7 +44,9 @@ abstract class UserForm extends FormValidator
 
         if ($includeCategoryTitle)
         {
-            $this->addElement('category', $translator->trans('AccountProperties', [], Manager::CONTEXT));
+            $this->addElement(
+                HTML_QuickForm_category::class, $translator->trans('AccountProperties', [], Manager::CONTEXT)
+            );
         }
 
         if ($isLockoutRisk)
@@ -43,17 +56,20 @@ abstract class UserForm extends FormValidator
             );
         }
 
-        $this->addElement('select', User::PROPERTY_STATUS, $translator->trans('Status', [], Manager::CONTEXT), [
-            User::STATUS_STUDENT => $translator->trans('Student', [], Manager::CONTEXT),
-            User::STATUS_TEACHER => $translator->trans('CourseAdmin', [], Manager::CONTEXT)
-        ]);
-
-        $this->addElement('toggle', User::PROPERTY_ACTIVE, $translator->trans('Active', [], Manager::CONTEXT));
-
-        $this->addTimePeriodSelection('ExpirationDate', User::PROPERTY_ACTIVATION_DATE, User::PROPERTY_EXPIRATION_DATE);
+        $this->addElement(
+            HTML_QuickForm_select::class, User::PROPERTY_STATUS, $translator->trans('Status', [], Manager::CONTEXT), [
+                User::STATUS_STUDENT => $translator->trans('Student', [], Manager::CONTEXT),
+                User::STATUS_TEACHER => $translator->trans('CourseAdmin', [], Manager::CONTEXT)
+            ]
+        );
 
         $this->addElement(
-            'toggle', User::PROPERTY_PLATFORMADMIN, $translator->trans('PlatformAdministrator', [], Manager::CONTEXT)
+            HTML_QuickForm_toggle::class, User::PROPERTY_ACTIVE, $translator->trans('Active', [], Manager::CONTEXT)
+        );
+
+        $this->addElement(
+            HTML_QuickForm_toggle::class, User::PROPERTY_PLATFORM_ADMINISTRATOR,
+            $translator->trans('PlatformAdministrator', [], Manager::CONTEXT)
         );
     }
 
@@ -68,11 +84,12 @@ abstract class UserForm extends FormValidator
 
         if ($includeCategoryTitle)
         {
-            $this->addElement('category', $translator->trans('Other', [], Manager::CONTEXT));
+            $this->addElement(HTML_QuickForm_category::class, $translator->trans('Other', [], Manager::CONTEXT));
         }
 
         $this->addElement(
-            'toggle', self::PROPERTY_SEND_MAIL, $translator->trans('SendMailToUser', [], Manager::CONTEXT)
+            HTML_QuickForm_toggle::class, self::PROPERTY_SEND_MAIL,
+            $translator->trans('SendMailToUser', [], Manager::CONTEXT)
         );
     }
 
@@ -91,13 +108,13 @@ abstract class UserForm extends FormValidator
 
             if ($includeCategoryTitle)
             {
-                $this->addElement('category', $translator->trans('Password', [], Manager::CONTEXT));
+                $this->addElement(HTML_QuickForm_category::class, $translator->trans('Password', [], Manager::CONTEXT));
             }
 
             if ($allowedToGeneratePassword)
             {
                 $this->addElement(
-                    'toggle', self::PROPERTY_GENERATE_PASSWORD,
+                    HTML_QuickForm_toggle::class, self::PROPERTY_GENERATE_PASSWORD,
                     $translator->trans('AutoGeneratePassword', [], Manager::CONTEXT)
                 );
             }
@@ -105,7 +122,7 @@ abstract class UserForm extends FormValidator
             if ($requiresCurrentPassword)
             {
                 $this->addElement(
-                    'password', self::PROPERTY_CURRENT_PASSWORD,
+                    HTML_QuickForm_password::class, self::PROPERTY_CURRENT_PASSWORD,
                     $translator->trans('CurrentPassword', [], Manager::CONTEXT),
                     ['autocomplete' => 'off', 'class' => 'form-control']
                 );
@@ -114,26 +131,27 @@ abstract class UserForm extends FormValidator
             }
 
             $this->addElement(
-                'password', User::PROPERTY_PASSWORD, $translator->trans('Password', [], Manager::CONTEXT),
+                HTML_QuickForm_password::class, User::PROPERTY_PASSWORD,
+                $translator->trans('Password', [], Manager::CONTEXT),
                 ['autocomplete' => 'off', 'class' => 'form-control']
             );
 
             if ($requiresPasswordConfirmation)
             {
                 $this->addElement(
-                    'password', self::PROPERTY_CONFIRM_PASSWORD,
+                    HTML_QuickForm_password::class, self::PROPERTY_CONFIRM_PASSWORD,
                     $translator->trans('PasswordConfirmation', [], Manager::CONTEXT),
                     ['autocomplete' => 'off', 'class' => 'form-control']
                 );
 
                 $this->addRule(
                     [User::PROPERTY_PASSWORD, self::PROPERTY_CONFIRM_PASSWORD],
-                    $translator->trans('PassTwo', [], Manager::CONTEXT), 'compare'
+                    $translator->trans('PassTwo', [], Manager::CONTEXT), HTML_QuickForm_Rule_Compare::class
                 );
             }
 
             $this->addElement(
-                'html', $this->getResourceManager()->getResourceHtml(
+                HTML_QuickForm_html::class, $this->getResourceManager()->getResourceHtml(
                 $this->getWebPathBuilder()->getPluginPath(StringUtilities::LIBRARIES) . 'Jquery/jquery.jpassword.js'
             )
             );
@@ -155,37 +173,39 @@ abstract class UserForm extends FormValidator
 
         if ($includeCategoryTitle)
         {
-            $this->addElement('category', $translator->trans('PersonalDetails', [], Manager::CONTEXT));
+            $this->addElement(
+                HTML_QuickForm_category::class, $translator->trans('PersonalDetails', [], Manager::CONTEXT)
+            );
         }
 
         // Firstname
         $this->addTextfield(
-            User::PROPERTY_FIRSTNAME, $translator->trans('FirstName', [], Manager::CONTEXT), $allowedToChangeFirstName
+            User::PROPERTY_GIVEN_NAME, $translator->trans('FirstName', [], Manager::CONTEXT), $allowedToChangeFirstName
         );
 
         if (!$allowedToChangeFirstName)
         {
-            $this->freeze([User::PROPERTY_FIRSTNAME]);
+            $this->freeze([User::PROPERTY_GIVEN_NAME]);
         }
         else
         {
-            $this->applyFilter(User::PROPERTY_FIRSTNAME, 'stripslashes');
-            $this->applyFilter(User::PROPERTY_FIRSTNAME, 'trim');
+            $this->applyFilter(User::PROPERTY_GIVEN_NAME, 'stripslashes');
+            $this->applyFilter(User::PROPERTY_GIVEN_NAME, 'trim');
         }
 
         // Lastname
         $this->addTextfield(
-            User::PROPERTY_LASTNAME, $translator->trans('LastName', [], Manager::CONTEXT), $allowedToChangeLastName
+            User::PROPERTY_SURNAME, $translator->trans('LastName', [], Manager::CONTEXT), $allowedToChangeLastName
         );
 
         if (!$allowedToChangeLastName)
         {
-            $this->freeze([User::PROPERTY_LASTNAME]);
+            $this->freeze([User::PROPERTY_SURNAME]);
         }
         else
         {
-            $this->applyFilter(User::PROPERTY_FIRSTNAME, 'stripslashes');
-            $this->applyFilter(User::PROPERTY_FIRSTNAME, 'trim');
+            $this->applyFilter(User::PROPERTY_GIVEN_NAME, 'stripslashes');
+            $this->applyFilter(User::PROPERTY_GIVEN_NAME, 'trim');
         }
 
         // Email
@@ -200,12 +220,14 @@ abstract class UserForm extends FormValidator
         }
         else
         {
-            $this->addRule(User::PROPERTY_EMAIL, $translator->trans('EmailWrong', [], Manager::CONTEXT), 'email');
+            $this->addRule(User::PROPERTY_EMAIL, $translator->trans('EmailWrong', [], Manager::CONTEXT),
+                HTML_QuickForm_Rule_Email::class);
             $this->applyFilter(User::PROPERTY_EMAIL, 'stripslashes');
             $this->applyFilter(User::PROPERTY_EMAIL, 'trim');
         }
 
-        $this->addRule(User::PROPERTY_EMAIL, $translator->trans('WrongEmail', [], Manager::CONTEXT), 'email');
+        $this->addRule(User::PROPERTY_EMAIL, $translator->trans('WrongEmail', [], Manager::CONTEXT),
+            HTML_QuickForm_Rule_Email::class);
 
         // Username
         $this->addTextfield(
@@ -221,7 +243,8 @@ abstract class UserForm extends FormValidator
             $this->applyFilter(User::PROPERTY_USERNAME, 'stripslashes');
             $this->applyFilter(User::PROPERTY_USERNAME, 'trim');
             $this->addRule(
-                User::PROPERTY_USERNAME, $translator->trans('UsernameWrong', [], Manager::CONTEXT), 'username'
+                User::PROPERTY_USERNAME, $translator->trans('UsernameWrong', [], Manager::CONTEXT),
+                HTML_QuickForm_Rule_Username::class
             );
         }
 
@@ -240,11 +263,6 @@ abstract class UserForm extends FormValidator
             $this->applyFilter(User::PROPERTY_OFFICIAL_CODE, 'stripslashes');
             $this->applyFilter(User::PROPERTY_OFFICIAL_CODE, 'trim');
         }
-
-        // Phone Number
-        $this->addTextfield(
-            User::PROPERTY_PHONE, $translator->trans('PhoneNumber', [], Manager::CONTEXT), false
-        );
     }
 
     /**
@@ -258,24 +276,26 @@ abstract class UserForm extends FormValidator
 
         if ($includeCategoryTitle)
         {
-            $this->addElement('category', $translator->trans('PictureTitle', [], Manager::CONTEXT));
+            $this->addElement(HTML_QuickForm_category::class, $translator->trans('PictureTitle', [], Manager::CONTEXT));
         }
 
         if (!is_null($encodedUserPicture))
         {
             $this->addElement(
-                'static', 'current_image', $translator->trans('CurrentImage', [], Manager::CONTEXT),
+                HTML_QuickForm_static::class, 'current_image', $translator->trans('CurrentImage', [], Manager::CONTEXT),
                 '<img class="my-account-photo" src="' . $encodedUserPicture . '" alt="' . $userFullname . '" />'
             );
         }
 
-        $this->addElement('file', User::PROPERTY_PICTURE_URI, $translator->trans('AddPicture'));
+        $this->addElement(
+            HTML_QuickForm_stylefile::class, User::PROPERTY_PICTURE_URI, $translator->trans('AddPicture')
+        );
         $this->addRule(
-            User::PROPERTY_PICTURE_URI, $translator->trans('OnlyImagesAllowed', [], Manager::CONTEXT), 'filetype',
-            ['jpg', 'jpeg', 'png', 'gif', 'JPG', 'JPEG', 'PNG', 'GIF']
+            User::PROPERTY_PICTURE_URI, $translator->trans('OnlyImagesAllowed', [], Manager::CONTEXT),
+            HTML_QuickForm_Rule_Filetype::class, ['jpg', 'jpeg', 'png', 'gif', 'JPG', 'JPEG', 'PNG', 'GIF']
         );
         $this->addElement(
-            'static', 'allowed_profile_image_formats', null,
+            HTML_QuickForm_static::class, 'allowed_profile_image_formats', null,
             $translator->trans('AllowedProfileImageFormats', [], Manager::CONTEXT)
         );
     }

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Architecture\EventDispatcher\Subscriber;
 
-use Chamilo\Core\Admin\Service\WhoIsOnlineService;
+use Chamilo\Core\Admin\Service\OnlineService;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserCreateEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserDeleteEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserEnterPageEvent;
@@ -33,11 +33,11 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
 
     protected UserTrackingRepository $userTrackingRepository;
 
-    protected WhoIsOnlineService $whoIsOnlineService;
+    protected OnlineService $whoIsOnlineService;
 
     public function __construct(
         UserTrackingRepository $userTrackingRepository, ?User $currentUser, PageConfiguration $pageConfiguration,
-        WhoIsOnlineService $whoIsOnlineService
+        OnlineService $whoIsOnlineService
     )
     {
         $this->userTrackingRepository = $userTrackingRepository;
@@ -46,6 +46,10 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         $this->whoIsOnlineService = $whoIsOnlineService;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterUserCreate(AfterUserCreateEvent $afterUserCreateEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
@@ -56,6 +60,10 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterUserDelete(AfterUserDeleteEvent $afterUserDeleteEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
@@ -66,11 +74,15 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterUserEnterPage(AfterUserEnterPageEvent $afterUserEnterPage): bool
     {
         $userIdentifier = $afterUserEnterPage->getUser()->getId();
 
-        if (!$this->getWhoIsOnlineService()->updateWhoIsOnlineForUserIdentifierWithCurrentTime(
+        if (!$this->getWhoIsOnlineService()->updateOnlineForUserIdentifierWithCurrentTime(
             $userIdentifier
         ))
         {
@@ -92,6 +104,10 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         return true;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterUserExport(AfterUserExportEvent $afterUserExportEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
@@ -102,6 +118,10 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterUserImport(AfterUserImportEvent $afterUserImportEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
@@ -112,6 +132,10 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterUserLogin(AfterUserLoginEvent $afterUserLoginEvent): bool
     {
         return $this->createAuthenticationActivityFormParameters(
@@ -120,6 +144,10 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterUserPasswordReset(AfterUserPasswordResetEvent $afterUserPasswordResetEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
@@ -130,6 +158,10 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterUserRegistration(AfterUserRegistrationEvent $afterUserRegistrationEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
@@ -139,6 +171,10 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function afterUserUpdate(AfterUserUpdateEvent $afterUserUpdateEvent): bool
     {
         return $this->getUserTrackingRepository()->createUserActivity(
@@ -149,6 +185,10 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     public function beforeUserLeavePage(BeforeUserLeavePageEvent $beforeUserLeavePage): bool
     {
         $userVisit = $this->getUserTrackingRepository()->findUserVisitByIdentifier(
@@ -165,6 +205,10 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         return true;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function beforeUserLogout(BeforeUserLogoutEvent $beforeUserLogoutEvent): bool
     {
         return $this->createAuthenticationActivityFormParameters(
@@ -173,6 +217,10 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     protected function createAuthenticationActivityFormParameters(int $action, string $userIdentifier, ?string $clientIp
     ): bool
     {
@@ -218,7 +266,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         return $this->userTrackingRepository;
     }
 
-    public function getWhoIsOnlineService(): WhoIsOnlineService
+    public function getWhoIsOnlineService(): OnlineService
     {
         return $this->whoIsOnlineService;
     }

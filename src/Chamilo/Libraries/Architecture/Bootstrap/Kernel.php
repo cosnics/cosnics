@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Bootstrap;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Admin\Service\WhoIsOnlineService;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\OnlineService;
 use Chamilo\Core\Home\Manager as HomeManager;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserEnterPageEvent;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -44,7 +44,7 @@ class Kernel
 
     protected SessionInterface $session;
 
-    protected WhoIsOnlineService $whoIsOnlineService;
+    protected OnlineService $whoIsOnlineService;
 
     private ?Application $application = null;
 
@@ -66,7 +66,7 @@ class Kernel
 
     public function __construct(
         ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
-        SessionInterface $session, ExceptionLoggerInterface $exceptionLogger, WhoIsOnlineService $whoIsOnlineService,
+        SessionInterface $session, ExceptionLoggerInterface $exceptionLogger, OnlineService $whoIsOnlineService,
         AuthenticationValidator $authenticationValidator, UrlGenerator $urlGenerator,
         PageConfiguration $pageConfiguration, EventDispatcherInterface $eventDispatcher, User $user = null
     )
@@ -107,14 +107,14 @@ class Kernel
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \Chamilo\Libraries\Authentication\Exception\AuthenticationException
      * @throws \Exception
      */
     protected function checkAuthentication(): Kernel
     {
         $applicationClassName = $this->getApplicationFactory()->getClassName($this->getContext());
         $applicationRequiresAuthentication = !is_subclass_of(
-            $applicationClassName, 'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupportInterface'
+            $applicationClassName, 'Chamilo\Libraries\Authentication\Interface\NoAuthenticationSupportInterface'
         );
 
         if ($applicationRequiresAuthentication)
@@ -137,7 +137,7 @@ class Kernel
         {
             $asAdmin = $this->getSession()->get('_as_admin');
 
-            if ($this->getUser() instanceof User && !$this->getUser()->isPlatformAdmin() && !$asAdmin)
+            if ($this->getUser() instanceof User && !$this->getUser()->isPlatformAdministrator() && !$asAdmin)
             {
                 throw new PlatformNotAvailableException('Platform temporarily unavailable due to maintenance.');
             }
@@ -189,6 +189,11 @@ class Kernel
         return $this->application;
     }
 
+    public function setApplication(Application $application): void
+    {
+        $this->application = $application;
+    }
+
     protected function getApplicationConfiguration(): ApplicationConfiguration
     {
         return new ApplicationConfiguration($this->getRequest(), $this->getUser());
@@ -218,6 +223,11 @@ class Kernel
         }
 
         return $this->context;
+    }
+
+    public function setContext(string $context): void
+    {
+        $this->context = $context;
     }
 
     public function getEventDispatcher(): EventDispatcherInterface
@@ -269,7 +279,7 @@ class Kernel
         return $this->user;
     }
 
-    public function getWhoIsOnlineService(): WhoIsOnlineService
+    public function getWhoIsOnlineService(): OnlineService
     {
         return $this->whoIsOnlineService;
     }
@@ -362,29 +372,12 @@ class Kernel
             throw new Exception('Must call buildApplication before runApplication');
         }
 
-        $response = $application->run();
-
-        if (!$response instanceof Response)
-        {
-            $response = new Response($response);
-        }
-
-        return $response;
+        return $application->run();
     }
 
     protected function sendResponse(Response $response): void
     {
         $response->send();
-    }
-
-    public function setApplication(Application $application): void
-    {
-        $this->application = $application;
-    }
-
-    public function setContext(string $context): void
-    {
-        $this->context = $context;
     }
 
     /**

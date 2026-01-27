@@ -9,12 +9,12 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @package Chamilo\Core\Home\DependencyInjection\CompilerPass
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class AvailableBlockRendererCompilerPass implements CompilerPassInterface
 {
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if ($container->hasDefinition(BlockRendererCollection::class))
         {

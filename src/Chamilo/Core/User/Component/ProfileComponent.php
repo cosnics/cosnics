@@ -26,11 +26,11 @@ abstract class ProfileComponent extends Manager
         $tabs = [];
 
         $tabs[] = new LinkTab(
-            self::ACTION_VIEW_ACCOUNT,
-            htmlentities($translator->trans(self::ACTION_VIEW_ACCOUNT . 'Title', [], Manager::CONTEXT)),
+            self::ACTION_ACCOUNT,
+            htmlentities($translator->trans(self::ACTION_ACCOUNT . 'Title', [], Manager::CONTEXT)),
             new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas'), $this->getUrlGenerator()->fromParameters(
-            [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT]
-        ), self::ACTION_VIEW_ACCOUNT == $action
+            [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_ACCOUNT]
+        ), self::ACTION_ACCOUNT == $action
         );
 
         if ($this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'allow_change_user_picture']))
@@ -45,11 +45,11 @@ abstract class ProfileComponent extends Manager
         }
 
         $tabs[] = new LinkTab(
-            self::ACTION_USER_SETTINGS,
-            htmlentities($translator->trans(self::ACTION_USER_SETTINGS . 'Title', [], Manager::CONTEXT)),
+            self::ACTION_SETTINGS,
+            htmlentities($translator->trans(self::ACTION_SETTINGS . 'Title', [], Manager::CONTEXT)),
             new FontAwesomeGlyph('cog', ['fa-lg'], null, 'fas'), $this->getUrlGenerator()->fromParameters(
-            [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_USER_SETTINGS]
-        ), self::ACTION_USER_SETTINGS == $action
+            [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_SETTINGS]
+        ), self::ACTION_SETTINGS == $action
         );
 
         return $tabs;

@@ -9,7 +9,7 @@ use Chamilo\Libraries\Format\Tree\Options\OptionsTreeRenderer;
 use HTML_QuickForm_select;
 
 /**
- * @package Chamilo\Core\Group\Form
+ * @package Chamilo\Core\Group\UserInterface\Form
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GroupMoveForm extends FormValidator
@@ -36,7 +36,8 @@ class GroupMoveForm extends FormValidator
     public function addNewLocationSelect(): HTML_QuickForm_select
     {
         return $this->addElement(
-            'select', self::PROPERTY_LOCATION, $this->getTranslation('NewLocation', [], Manager::CONTEXT),
+            HTML_QuickForm_select::class, self::PROPERTY_LOCATION,
+            $this->getTranslation('NewLocation', [], Manager::CONTEXT),
             $this->getGroupOptionsTreeRenderer()->getOptions()
         );
     }
@@ -79,7 +80,7 @@ class GroupMoveForm extends FormValidator
         return $this->getService(GroupService::class)->moveGroup($this->group, $this->getNewParent());
     }
 
-    public function setDefaults(array $defaultValues = [], $filter = null)
+    public function setDefaults(array $defaultValues = [], $filter = null): void
     {
         $group = $this->group;
         $defaults[self::PROPERTY_LOCATION] = $group->getParentId();

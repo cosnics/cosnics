@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\Authentication\Cas;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Authentication\AuthenticationException;
-use Chamilo\Libraries\Authentication\AuthenticationInterface;
+use Chamilo\Libraries\Authentication\Exception\AuthenticationException;
+use Chamilo\Libraries\Authentication\Interface\AuthenticationInterface;
 
 /**
  * @package Chamilo\Libraries\Authentication\Cas
@@ -13,11 +13,6 @@ use Chamilo\Libraries\Authentication\AuthenticationInterface;
  */
 class CasAuthentication extends AbstractCasAuthentication implements AuthenticationInterface
 {
-    public function getAuthenticationType(): string
-    {
-        return __NAMESPACE__;
-    }
-
     protected function getCasUserIdentifierFromAttributes(string $casUser, array $casUserAttributes = []): string
     {
         return $casUser;
@@ -38,22 +33,22 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
      * @param string[] $casUserAttributes
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \Chamilo\Libraries\Authentication\Exception\AuthenticationException
      * @throws \Exception
      */
     protected function registerUser(string $casUser, array $casUserAttributes = []): User
     {
         $user = new User();
 
-        $user->set_username($casUser);
-        $user->set_password('PLACEHOLDER');
-        $user->set_status(User::STATUS_STUDENT);
-        $user->set_auth_source(__NAMESPACE__);
-        $user->set_platformadmin(false);
-        $user->set_email($casUserAttributes['email']);
-        $user->set_lastname($casUserAttributes['last_name']);
-        $user->set_firstname($casUserAttributes['first_name']);
-        $user->set_official_code($casUserAttributes['person_number']);
+        $user->setUsername($casUser);
+        $user->setPassword('PLACEHOLDER');
+        $user->setStatus(User::STATUS_STUDENT);
+        $user->setAuthenticationSource(__NAMESPACE__);
+        $user->setPlatformAdministrator(false);
+        $user->setEmail($casUserAttributes['email']);
+        $user->setSurname($casUserAttributes['last_name']);
+        $user->setGivenName($casUserAttributes['first_name']);
+        $user->setOfficialCode($casUserAttributes['person_number']);
 
         if (!$this->getUserService()->createUser($user))
         {

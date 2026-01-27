@@ -3,55 +3,37 @@
     <settings>
         <category name="administrator">
             <setting name="administrator_name"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default="Chamilo"/>
             <setting name="administrator_email"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default="chamilo.admin@mychamilo.com">
-                <validations>
-                    <validation rule="email"
-                                message="MustBeAnEMailAddress"/>
-                </validations>
             </setting>
             <setting name="administrator_website"
-                     field="text"/>
+                     field="HTML_QuickForm_text"/>
         </category>
         <category name="whoisonline">
             <setting name="timelimit"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default="30">
-                <validations>
-                    <validation rule="numeric"
-                                message="MustBeNumeric"/>
-                </validations>
             </setting>
         </category>
         <category name="platform">
             <setting name="site_name"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default="Chamilo"/>
             <setting name="institution"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default="Chamilo"/>
             <setting name="institution_url"
-                     field="text"
-                     default="http://www.chamilo.org">
-                <validations>
-                    <validation rule="regex"
-                                format="/http:\/\/.*/"
-                                message="MustStartWithHTTP"/>
-                </validations>
-            </setting>
+                     field="HTML_QuickForm_text"
+                     default="http://www.chamilo.org"></setting>
             <setting name="no_reply_email"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default="">
-                <validations>
-                    <validation rule="email"
-                                message="MustBeAnEMailAddress"/>
-                </validations>
             </setting>
             <setting name="mailer"
-                     field="select"
+                     field="HTML_QuickForm_select"
                      default="Chamilo\Libraries\Mail\Mailer\PhpMailer\Mailer"
                      user_setting="0">
                 <options type="dynamic"
@@ -60,7 +42,7 @@
         </category>
         <category name="maintenance">
             <setting name="maintenance_warning_show"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="0">
                 <options type="static">
                     <option name="maintenance_warning_show"
@@ -68,10 +50,10 @@
                 </options>
             </setting>
             <setting name="maintenance_warning_message"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default=""/>
             <setting name="maintenance_block_access"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="0">
                 <options type="static">
                     <option name="maintenance_block_access"
@@ -81,7 +63,7 @@
         </category>
         <category name="visual">
             <setting name="platform_language"
-                     field="select"
+                     field="HTML_QuickForm_select"
                      default="english"
                      user_setting="1">
                 <options type="dynamic"
@@ -89,7 +71,7 @@
                 <availability source="isAllowedToChangePlatformLanguage"/>
             </setting>
             <setting name="platform_timezone"
-                     field="select"
+                     field="HTML_QuickForm_select"
                      default="Europe/Brussels"
                      user_setting="1">
                 <options type="dynamic"
@@ -97,7 +79,7 @@
                 <availability source="isAllowedToChangePlatformTimezone"/>
             </setting>
             <setting name="theme"
-                     field="select"
+                     field="HTML_QuickForm_select"
                      default="Aqua"
                      user_setting="1">
                 <options type="dynamic"
@@ -105,13 +87,13 @@
                 <availability source="isAllowedToChangeTheme"/>
             </setting>
             <setting name="portal_home"
-                     field="html_editor"
+                     field="HTML_QuickForm_html_editor"
                      default=""/>
         </category>
 
         <category name="caching">
             <setting name="refresh_external"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default="60"
                      user_setting="1"/>
         </category>

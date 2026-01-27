@@ -3,14 +3,14 @@
     <settings>
         <category name="authentication">
             <setting name="enableExternalAuthentication"
-                     field="toggle">
+                     field="HTML_QuickForm_HTML_QuickForm_toggle">
                 <options type="static">
                     <option name="enableExternalAuthentication"
                             value="1"/>
                 </options>
             </setting>
             <setting name="enableChamiloLibrariesAuthenticationPlatform"
-                     field="toggle"
+                     field="HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="enablePlatformAuthenticationPlatform"
@@ -18,21 +18,21 @@
                 </options>
             </setting>
             <setting name="enableChamiloLibrariesAuthenticationSecurityToken"
-                     field="toggle">
+                     field="HTML_QuickForm_toggle">
                 <options type="static">
                     <option name="enableChamiloLibrariesAuthenticationSecurityToken"
                             value="1"/>
                 </options>
             </setting>
             <setting name="enableChamiloLibrariesAuthenticationAnonymous"
-                     field="toggle">
+                     field="HTML_QuickForm_toggle">
                 <options type="static">
                     <option name="enableChamiloLibrariesAuthenticationAnonymous"
                             value="0"/>
                 </options>
             </setting>
             <setting name="enableChamiloLibrariesAuthenticationCas"
-                     field="toggle">
+                     field="HTML_QuickForm_toggle">
                 <options type="static">
                     <option name="enableChamiloLibrariesAuthenticationCas"
                             value="1"/>
@@ -41,16 +41,16 @@
         </category>
         <category name="cas_authentication">
             <setting name="cas_host"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default=""/>
             <setting name="cas_port"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default=""/>
             <setting name="cas_uri"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default=""/>
             <setting name="cas_version"
-                     field="radio"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_bootstrap_radio"
                      default="SAML_VERSION_1_1">
                 <options type="static">
                     <option name="SAML VERSION 1.1"
@@ -60,7 +60,7 @@
                 </options>
             </setting>
             <setting name="cas_check_certificate"
-                     field="toggle"
+                     field="HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="cas_check_certificate"
@@ -68,30 +68,26 @@
                 </options>
             </setting>
             <setting name="cas_certificate"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default=""/>
             <setting name="cas_enable_log"
-                     field="toggle">
+                     field="HTML_QuickForm_toggle">
                 <options type="static">
                     <option name="cas_enable_log"
                             value="1"/>
                 </options>
             </setting>
             <setting name="cas_log"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default=""/>
         </category>
         <category name="calendar">
             <setting name="calendar_hour_step"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default="1">
-                <validations>
-                    <validation rule="numeric"
-                                message="MustBeNumeric"/>
-                </validations>
             </setting>
             <setting name="calendar_working_hours_start"
-                     field="select"
+                     field="HTML_QuickForm_select"
                      default="0"
                      user_setting="1">
                 <options type="static">
@@ -146,7 +142,7 @@
                 </options>
             </setting>
             <setting name="calendar_working_hours_end"
-                     field="select"
+                     field="HTML_QuickForm_select"
                      default="24"
                      user_setting="1">
                 <options type="static">
@@ -201,7 +197,7 @@
                 </options>
             </setting>
             <setting name="calendar_hide_non_working_hours"
-                     field="toggle"
+                     field="HTML_QuickForm_toggle"
                      default="0"
                      user_setting="1">
                 <options type="static">
@@ -210,7 +206,7 @@
                 </options>
             </setting>
             <setting name="calendar_default_view"
-                     field="radio"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_bootstrap_radio"
                      default="Month"
                      user_setting="1">
                 <options type="static">
@@ -225,7 +221,7 @@
                 </options>
             </setting>
             <setting name="calendar_first_day_of_week"
-                     field="radio"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_bootstrap_radio"
                      default="monday"
                      user_setting="1">
                 <options type="static">
@@ -238,36 +234,36 @@
         </category>
         <category name="microsoft_graph_general">
             <setting name="microsoft_graph_client_id"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default=""/>
             <setting name="microsoft_graph_client_secret"
-                     field="password"
+                     field="HTML_QuickForm_password"
                      default=""/>
             <setting name="microsoft_graph_access_token"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default=""
                      user_setting="true"
                      locked="true"
                      hidden="true"/>
             <setting name="microsoft_graph_external_user_id"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default=""
                      user_setting="true"
                      locked="true"
                      hidden="true"/>
             <setting name="microsoft_graph_tenant_id"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default=""/>
             <setting name="cosnics_prefix"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default="cosnics_"/>
         </category>
         <category name="microsoft_graph_groups">
             <setting name="microsoft_graph_planner_base_uri"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default="https://tasks.office.com/tenantName.onmicrosoft.com/nl-NL/Home/Planner"/>
             <setting name="microsoft_graph_group_base_uri"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default="https://outlook.office.com/owa/?realm=realm&amp;exsvurl=1&amp;ll-cc=1043&amp;modurl=0&amp;path=/group/{GROUP_ID}@tenant.onmicrosoft.com/people"/>
         </category>
     </settings>

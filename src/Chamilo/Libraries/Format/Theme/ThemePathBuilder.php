@@ -47,7 +47,7 @@ class ThemePathBuilder
     {
         $availableThemes = [];
 
-        $path = $this->getCssPath('Chamilo\Configuration', false);
+        $path = $this->getCssPath('Chamilo\Core\Admin', false);
         $directories =
             $this->getFilesystemTools()->getDirectoryContent($path, FileTypeFilterIterator::ONLY_FILES, false);
 

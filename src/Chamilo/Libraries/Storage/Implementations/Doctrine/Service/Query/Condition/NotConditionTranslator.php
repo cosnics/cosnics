@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition;
 
-use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition
@@ -15,14 +15,14 @@ class NotConditionTranslator extends ConditionTranslator
     public const CONDITION_CLASS = NotCondition::class;
 
     public function translate(
-        DataClassDatabaseInterface $dataClassDatabase, NotCondition $notCondition, ?bool $enableAliasing = true
+        QueryBuilder $querybuilder, NotCondition $notCondition, ?bool $enableAliasing = true
     ): string
     {
         $string = [];
 
         $string[] = 'NOT (';
         $string[] = $this->getConditionPartTranslatorService()->translate(
-            $dataClassDatabase, $notCondition->getCondition(), $enableAliasing
+            $querybuilder, $notCondition->getCondition(), $enableAliasing
         );
         $string[] = ')';
 

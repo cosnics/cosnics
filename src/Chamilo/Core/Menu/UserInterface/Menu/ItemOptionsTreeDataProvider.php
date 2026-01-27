@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\UserInterface\Menu;
 
-use Chamilo\Configuration\Service\Consulter\LanguageConsulter;
+use Chamilo\Core\Admin\Service\Consulter\LanguageConsulter;
 use Chamilo\Core\Menu\Implementation\Menu\CategoryItemRenderer;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\ItemService;

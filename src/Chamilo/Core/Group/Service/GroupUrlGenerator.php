@@ -27,7 +27,7 @@ class GroupUrlGenerator
 
     public function getCreateUrl(Group $parentGroup): string
     {
-        return $this->getGroupActionUrl(Manager::ACTION_CREATE_GROUP, $parentGroup);
+        return $this->getGroupActionUrl(Manager::ACTION_CREATE, $parentGroup);
     }
 
     public function getDataClassUrlGenerator(): DataClassUrlGenerator
@@ -37,7 +37,7 @@ class GroupUrlGenerator
 
     public function getDeleteUrl(Group $group): string
     {
-        return $this->getGroupActionUrl(Manager::ACTION_DELETE_GROUP, $group);
+        return $this->getGroupActionUrl(Manager::ACTION_DELETE, $group);
     }
 
     /**
@@ -52,24 +52,24 @@ class GroupUrlGenerator
 
     public function getMoveUrl(Group $group): string
     {
-        return $this->getGroupActionUrl(Manager::ACTION_MOVE_GROUP, $group);
+        return $this->getGroupActionUrl(Manager::ACTION_MOVE, $group);
     }
 
     public function getSubscribeUrl(Group $group): string
     {
-        return $this->getGroupActionUrl(Manager::ACTION_SUBSCRIBE_USER_BROWSER, $group);
+        return $this->getGroupActionUrl(Manager::ACTION_BROWSE_NON_SUBSCRIBED_USERS, $group);
     }
 
     public function getSubscribeUserUrl(Group $group, User $user): string
     {
         return $this->getGroupActionUrl(
-            Manager::ACTION_SUBSCRIBE_USER_TO_GROUP, $group, [Manager::PARAM_USER_ID => $user->getId()]
+            Manager::ACTION_SUBSCRIBE, $group, [Manager::PARAM_USER_ID => $user->getId()]
         );
     }
 
     public function getTruncateUrl(Group $group): string
     {
-        return $this->getGroupActionUrl(Manager::ACTION_TRUNCATE_GROUP, $group);
+        return $this->getGroupActionUrl(Manager::ACTION_TRUNCATE, $group);
     }
 
     public function getUnsubscribeUserUrl(SubscribedUser $subscribedUser): string
@@ -77,15 +77,15 @@ class GroupUrlGenerator
         return $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_UNSUBSCRIBE_USER_FROM_GROUP,
-                Manager::PARAM_GROUP_REL_USER_ID => $subscribedUser->getRelationId()
+                Application::PARAM_ACTION => Manager::ACTION_UNSUBSCRIBE,
+                Manager::PARAM_RELATION_ID => $subscribedUser->getRelationId()
             ]
         );
     }
 
     public function getUpdateUrl(Group $group): string
     {
-        return $this->getGroupActionUrl(Manager::ACTION_EDIT_GROUP, $group);
+        return $this->getGroupActionUrl(Manager::ACTION_UPDATE, $group);
     }
 
     public function getUrlGenerator(): UrlGenerator
@@ -95,6 +95,6 @@ class GroupUrlGenerator
 
     public function getViewUrl(Group $group): string
     {
-        return $this->getGroupActionUrl(Manager::ACTION_VIEW_GROUP, $group);
+        return $this->getGroupActionUrl(Manager::ACTION_VIEW, $group);
     }
 }

@@ -2,8 +2,11 @@
 namespace Chamilo\Core\Admin\UserInterface\Form;
 
 use Chamilo\Core\Admin\Manager;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_stylesubmitbutton;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use HTML_QuickForm_html;
+use HTML_QuickForm_text;
 
 /**
  * @package Chamilo\Core\Admin\UserInterface\Form
@@ -24,7 +27,7 @@ class AdminSearchForm extends FormValidator
      */
     public function __construct(string $url, string $form_id = '')
     {
-        parent::__construct(self::FORM_NAME . $form_id, self::FORM_METHOD_POST, $url);
+        parent::__construct(self::FORM_NAME . $form_id, self::FORM_METHOD_POST, $url, '', [], false);
         $this->updateAttributes(['id' => self::FORM_NAME . $form_id]);
         $this->build();
     }
@@ -41,20 +44,20 @@ class AdminSearchForm extends FormValidator
         );
         $renderer->setElementTemplate('{element}');
 
-        $this->addElement('html', '<div class="input-group">');
+        $this->addElement(HTML_QuickForm_html::class, '<div class="input-group">');
 
         $this->addElement(
-            'text', self::PARAM_SIMPLE_SEARCH_QUERY, null, 'size="20" class="form-control"'
+            HTML_QuickForm_text::class, self::PARAM_SIMPLE_SEARCH_QUERY, null, 'size="20" class="form-control"'
         );
 
-        $this->addElement('html', '<span class="input-group-btn">');
+        $this->addElement(HTML_QuickForm_html::class, '<span class="input-group-btn">');
 
         $this->addElement(
-            'style_submit_button', 'submit', $this->getTranslator()->trans('Search', [], Manager::CONTEXT), null, null,
-            new FontAwesomeGlyph('search')
+            HTML_QuickForm_stylesubmitbutton::class, 'submit',
+            $this->getTranslator()->trans('Search', [], Manager::CONTEXT), null, null, new FontAwesomeGlyph('search')
         );
 
-        $this->addElement('html', '</span>');
-        $this->addElement('html', '</div>');
+        $this->addElement(HTML_QuickForm_html::class, '</span>');
+        $this->addElement(HTML_QuickForm_html::class, '</div>');
     }
 }

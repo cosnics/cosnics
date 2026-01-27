@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Translation;
 
-use Chamilo\Configuration\Service\InternationalizationBundlesCacheService;
+use Chamilo\Core\Admin\Service\InternationalizationBundlesCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
 use Chamilo\Libraries\File\SystemPathBuilder;

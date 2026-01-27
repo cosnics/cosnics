@@ -28,7 +28,7 @@ class MoverComponent extends Manager
      */
     public function run(): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator())
         {
             throw new NotAllowedException();
         }

@@ -33,7 +33,7 @@ class PictureForm extends UserForm
             $user, $user
         );
 
-        $this->buildPictureCategoryForm($encodedUserPicture, $user->get_fullname(), false);
+        $this->buildPictureCategoryForm($encodedUserPicture, $user->getFullName(), false);
         $this->addSaveResetButtons();
     }
 

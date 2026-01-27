@@ -99,5 +99,6 @@ abstract class ListTableRenderer extends AbstractTableRenderer
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|array $result
      */
-    abstract protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, $result): string;
+    abstract protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, mixed $result
+    ): string;
 }

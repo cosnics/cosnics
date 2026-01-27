@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection\Traits;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserSettingService;

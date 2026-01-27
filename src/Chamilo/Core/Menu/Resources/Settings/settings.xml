@@ -3,7 +3,7 @@
     <settings>
         <category name="visual">
             <setting name="brand_image"
-                     field="image_uploader"/>
+                     field="HTML_QuickForm_image_uploader"/>
         </category>
     </settings>
 </package>

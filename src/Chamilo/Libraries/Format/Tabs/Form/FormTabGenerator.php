@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Format\Tabs\Form;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Tabs\GenericTabRenderer;
+use HTML_QuickForm_html;
 
 /**
  * @package Chamilo\Libraries\Format\Tabs
@@ -27,9 +28,12 @@ class FormTabGenerator
      */
     public function renderContent(string $formTabsGeneratorName, FormValidator $form, FormTab $tab): void
     {
-        $form->addElement('html', $this->getGenericTabRenderer()->renderContentHeader($formTabsGeneratorName, $tab));
+        $form->addElement(
+            HTML_QuickForm_html::class,
+            $this->getGenericTabRenderer()->renderContentHeader($formTabsGeneratorName, $tab)
+        );
         $this->renderContentSingleTab($form, $tab);
-        $form->addElement('html', $this->getGenericTabRenderer()->renderContentFooter());
+        $form->addElement(HTML_QuickForm_html::class, $this->getGenericTabRenderer()->renderContentFooter());
     }
 
     public function renderContentSingleTab(FormValidator $form, FormTab $tab): void

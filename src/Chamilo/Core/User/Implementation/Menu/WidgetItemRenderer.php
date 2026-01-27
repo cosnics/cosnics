@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Implementation\Menu;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
@@ -72,7 +72,7 @@ class WidgetItemRenderer extends ItemRenderer
         $html[] = '<ul class="dropdown-menu">';
 
         // Header
-        $html[] = '<li><a><div >' . $user->get_fullname() . '</div></a></li>';
+        $html[] = '<li><a><div >' . $user->getFullName() . '</div></a></li>';
 
         // Divider
         $html[] = '<li role="separator" class="divider"></li>';
@@ -122,7 +122,7 @@ class WidgetItemRenderer extends ItemRenderer
 
     public function getAccountUrl(): string
     {
-        return $this->getUserUrl(Manager::ACTION_VIEW_ACCOUNT);
+        return $this->getUserUrl(Manager::ACTION_ACCOUNT);
     }
 
     public function getConfigurationConsulter(): ConfigurationConsulter
@@ -152,7 +152,7 @@ class WidgetItemRenderer extends ItemRenderer
 
     public function getSettingsUrl(): string
     {
-        return $this->getUserUrl(Manager::ACTION_USER_SETTINGS);
+        return $this->getUserUrl(Manager::ACTION_SETTINGS);
     }
 
     public function getUrlGenerator(): UrlGenerator

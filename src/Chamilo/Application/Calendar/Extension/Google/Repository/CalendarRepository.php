@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Extension\Google\Architecture\Exception\NotConf
 use Chamilo\Application\Calendar\Extension\Google\Implementation\Calendar\CalendarExtensionDataProvider;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;

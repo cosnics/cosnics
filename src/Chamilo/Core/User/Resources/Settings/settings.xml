@@ -3,7 +3,7 @@
     <settings>
         <category name="name">
             <setting name="allow_change_username"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="allow_change_username"
@@ -11,7 +11,7 @@
                 </options>
             </setting>
             <setting name="allow_change_firstname"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="allow_change_firstname"
@@ -19,7 +19,7 @@
                 </options>
             </setting>
             <setting name="allow_change_lastname"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="allow_change_lastname"
@@ -29,7 +29,7 @@
         </category>
         <category name="profile">
             <setting name="allow_change_email"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="allow_change_email"
@@ -37,7 +37,7 @@
                 </options>
             </setting>
             <setting name="allow_change_phone"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="allow_change_phone"
@@ -45,7 +45,7 @@
                 </options>
             </setting>
             <setting name="allow_change_official_code"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="allow_change_official_code"
@@ -53,7 +53,7 @@
                 </options>
             </setting>
             <setting name="allow_change_password"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="allow_change_password"
@@ -61,7 +61,7 @@
                 </options>
             </setting>
             <setting name="allow_change_user_picture"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="allow_change_user_picture"
@@ -69,7 +69,7 @@
                 </options>
             </setting>
             <setting name="restrict_picture_height"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="restrict_picture_height"
@@ -77,7 +77,7 @@
                 </options>
             </setting>
             <setting name="allow_change_placeholder_data"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="allow_change_placeholder_data"
@@ -85,7 +85,7 @@
                 </options>
             </setting>
             <setting name="show_personal_token"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="show_personal_token"
@@ -93,10 +93,10 @@
                 </options>
             </setting>
             <setting name="personal_data_placeholder"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default="???"/>
             <setting name="user_picture_provider"
-                     field="select"
+                     field="HTML_QuickForm_select"
                      default="Chamilo\Core\User\Picture\Provider\Platform\UserPictureProvider">
                 <options type="dynamic"
                          source="getUserPictureProviders"/>
@@ -104,7 +104,7 @@
         </category>
         <category name="personalisation">
             <setting name="allow_user_change_platform_timezone"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="allow_user_change_platform_timezone"
@@ -112,7 +112,7 @@
                 </options>
             </setting>
             <setting name="allow_user_change_platform_language"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="allow_user_change_platform_language"
@@ -120,7 +120,7 @@
                 </options>
             </setting>
             <setting name="allow_user_theme_selection"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="allow_user_theme_selection"
@@ -128,7 +128,7 @@
                 </options>
             </setting>
             <setting name="allow_user_quick_change_platform_language"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="allow_user_quick_change_platform_language"
@@ -138,19 +138,10 @@
         </category>
         <category name="registration">
             <setting name="allow_registration"
-                     field="radio"
-                     default="1">
-                <options type="static">
-                    <option name="after_aproval"
-                            value="2"/>
-                    <option name="confirm_true"
-                            value="1"/>
-                    <option name="confirm_false"
-                            value="0"/>
-                </options>
-            </setting>
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_bootstrap_toggle"
+                     default="0"></setting>
             <setting name="allow_teacher_registration"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="allow_teacher_registration"
@@ -158,13 +149,13 @@
                 </options>
             </setting>
             <setting name="date_terms_and_conditions_update"
-                     field="select"
+                     field="HTML_QuickForm_select"
                      default=" ">
                 <options type="dynamic"
                          source="getDateTermsAndConditionsUpdate"/>
             </setting>
             <setting name="enable_terms_and_conditions"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="0">
                 <options type="static">
                     <option name="enable_terms_and_conditions"
@@ -172,7 +163,7 @@
                 </options>
             </setting>
             <setting name="allow_password_retrieval"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="allow_password_retrieval"
@@ -180,7 +171,7 @@
                 </options>
             </setting>
             <setting name="require_official_code"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="require_official_code"
@@ -188,7 +179,7 @@
                 </options>
             </setting>
             <setting name="require_email"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="require_email"
@@ -196,23 +187,15 @@
                 </options>
             </setting>
             <setting name="require_language"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="require_language"
                             value="1"/>
                 </options>
             </setting>
-            <setting name="days_valid"
-                     field="text"
-                     default="366">
-                <validations>
-                    <validation rule="numeric"
-                                message="MustBeNumeric"/>
-                </validations>
-            </setting>
             <setting name="show_email_addresses"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
                 <options type="static">
                     <option name="show_email_addresses"
@@ -220,13 +203,13 @@
                 </options>
             </setting>
             <setting name="email_template"
-                     field="html_editor"
+                     field="HTML_QuickForm_html_editor"
                      default="[username] - [password]"/>
 
         </category>
         <category name="session">
             <setting name="prevent_double_login"
-                     field="toggle"
+                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="0">
                 <options type="static">
                     <option name="prevent_double_login"
@@ -234,7 +217,7 @@
                 </options>
             </setting>
             <setting name="double_login_exceptions"
-                     field="text"
+                     field="HTML_QuickForm_text"
                      default=""/>
         </category>
 

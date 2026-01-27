@@ -15,6 +15,10 @@ use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\StorageParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * @package Chamilo\Core\Home\Storage\Repository
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class HomeRepository
 {
     protected DataClassRepository $dataClassRepository;

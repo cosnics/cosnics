@@ -80,7 +80,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         $html[] = '<h3 class="panel-title">';
 
         $glyph = new FontAwesomeGlyph('user-circle', [], null, 'fas');
-        $html[] = $glyph->render() . '&nbsp;' . $user->get_fullname();
+        $html[] = $glyph->render() . '&nbsp;' . $user->getFullName();
 
         $html[] = '</h3>';
         $html[] = '</div>';
@@ -89,19 +89,19 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
         $html[] = '<div class="panel-body">';
 
-        $html[] = '<img class="img-thumbnail pull-right" src="' . $userPicture . '" alt="' . $user->get_fullname() .
+        $html[] = '<img class="img-thumbnail pull-right" src="' . $userPicture . '" alt="' . $user->getFullName() .
             '" style="max-height: 150px;"/>';
 
         $translator = $this->getTranslator();
 
         $html[] = $translator->trans('Email', [], Manager::CONTEXT) . ': ' .
-            $this->getStringUtilities()->encryptMailLink($user->get_email());
-        $html[] = '<br />' . $translator->trans('Username', [], Manager::CONTEXT) . ': ' . $user->get_username();
+            $this->getStringUtilities()->encryptMailLink($user->getEmail());
+        $html[] = '<br />' . $translator->trans('Username', [], Manager::CONTEXT) . ': ' . $user->getUsername();
         $html[] = '<br />' . $translator->trans('Status', [], Manager::CONTEXT) . ': ' .
-            ($user->get_status() == 1 ? $translator->trans('Teacher', [], Manager::CONTEXT) :
+            ($user->getStatus() == 1 ? $translator->trans('Teacher', [], Manager::CONTEXT) :
                 $translator->trans('Student', [], Manager::CONTEXT));
 
-        if ($user->isPlatformAdmin())
+        if ($user->isPlatformAdministrator())
         {
             $html[] = ', ' . $translator->trans('PlatformAdministrator', [], Manager::CONTEXT);
         }
@@ -120,7 +120,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
      */
     public function renderUserProperties(User $user, User $requestingUser): string
     {
-        if (!$requestingUser->isPlatformAdmin())
+        if (!$requestingUser->isPlatformAdministrator())
         {
             return '';
         }
@@ -133,14 +133,8 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         $attributes = [
             'official_code',
             'auth_source',
-            'phone',
             'language',
-            'active',
-            'activation_date',
-            'expiration_date',
-            'registration_date',
-            'disk_quota',
-            'database_quota'
+            'active'
         ];
 
         foreach ($attributes as $i => $attribute)
@@ -157,9 +151,6 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
             {
                 User::PROPERTY_ACTIVE => $translator->trans(($value ? 'ConfirmYes' : 'ConfirmNo'), [],
                     StringUtilities::LIBRARIES),
-                User::PROPERTY_ACTIVATION_DATE, User::PROPERTY_EXPIRATION_DATE => $value == 0 ?
-                    $translator->trans('Forever', [], StringUtilities::LIBRARIES) :
-                    $datetimeUtilities->formatLocaleDate($value),
                 User:: PROPERTY_REGISTRATION_DATE => $datetimeUtilities->formatLocaleDate($value),
                 default => $value,
             };

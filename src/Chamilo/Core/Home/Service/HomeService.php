@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\Service;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Architecture\Domain\BlockRendererCollection;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\Repository\HomeRepository;

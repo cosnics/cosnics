@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service;
 
-use Chamilo\Libraries\Storage\Implementations\Doctrine\Database\DataClassDatabase;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\GroupBy;
@@ -34,39 +33,36 @@ class QueryBuilderConfigurator
     }
 
     public function applyParameters(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, StorageParameters $parameters,
-        string $dataClassStorageUnitName
+        QueryBuilder $queryBuilder, StorageParameters $parameters, string $dataClassStorageUnitName
     ): void
     {
-        $this->processCondition($dataClassDatabase, $queryBuilder, $parameters->getCondition());
-        $this->processJoins($dataClassDatabase, $queryBuilder, $dataClassStorageUnitName, $parameters->getJoins());
-        $this->processRetrieveProperties(
-            $dataClassDatabase, $queryBuilder, $parameters->getRetrieveProperties()
-        );
-        $this->processOrderBy($dataClassDatabase, $queryBuilder, $parameters->getOrderBy());
-        $this->processGroupBy($dataClassDatabase, $queryBuilder, $parameters->getGroupBy());
-        $this->processHavingCondition($dataClassDatabase, $queryBuilder, $parameters->getHavingCondition());
+        $this->processCondition($queryBuilder, $parameters->getCondition());
+        $this->processJoins($queryBuilder, $dataClassStorageUnitName, $parameters->getJoins());
+        $this->processRetrieveProperties($queryBuilder, $parameters->getRetrieveProperties());
+        $this->processOrderBy($queryBuilder, $parameters->getOrderBy());
+        $this->processGroupBy($queryBuilder, $parameters->getGroupBy());
+        $this->processHavingCondition($queryBuilder, $parameters->getHavingCondition());
         $this->processLimit($queryBuilder, $parameters->getCount(), $parameters->getOffset());
     }
 
     public function applyUpdate(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, UpdateProperties $properties,
-        Condition $condition
+        QueryBuilder $queryBuilder, UpdateProperties $properties, Condition $condition
     ): void
     {
         foreach ($properties as $dataClassProperty)
         {
             $key = $this->translateConditionPart(
-                $dataClassDatabase, $dataClassProperty->getPropertyConditionVariable(), false
+                $queryBuilder, $dataClassProperty->getPropertyConditionVariable(), false
             );
+
             $value = $this->translateConditionPart(
-                $dataClassDatabase, $dataClassProperty->getValueConditionVariable(), false
+                $queryBuilder, $dataClassProperty->getValueConditionVariable(), false
             );
 
             $queryBuilder->set($key, $value);
         }
 
-        $this->processCondition($dataClassDatabase, $queryBuilder, $condition, false);
+        $this->processCondition($queryBuilder, $condition, false);
     }
 
     public function getConditionPartTranslatorService(): ConditionPartTranslatorService
@@ -80,46 +76,44 @@ class QueryBuilderConfigurator
     }
 
     protected function processCondition(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?Condition $condition = null,
-        ?bool $enableAliasing = true
+        QueryBuilder $queryBuilder, ?Condition $condition = null, ?bool $enableAliasing = true
     ): void
     {
         if ($condition instanceof Condition)
         {
-            $queryBuilder->where($this->translateConditionPart($dataClassDatabase, $condition, $enableAliasing));
+            $queryBuilder->where($this->translateConditionPart($queryBuilder, $condition, $enableAliasing));
         }
     }
 
     protected function processGroupBy(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, GroupBy $groupBy = new GroupBy()
+        QueryBuilder $queryBuilder, GroupBy $groupBy = new GroupBy()
     ): void
     {
         foreach ($groupBy as $groupByVariable)
         {
-            $queryBuilder->addGroupBy($this->translateConditionPart($dataClassDatabase, $groupByVariable));
+            $queryBuilder->addGroupBy($this->translateConditionPart($queryBuilder, $groupByVariable));
         }
     }
 
     protected function processHavingCondition(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?Condition $condition = null
+        QueryBuilder $queryBuilder, ?Condition $condition = null
     ): void
     {
         if ($condition instanceof Condition)
         {
-            $queryBuilder->having($this->translateConditionPart($dataClassDatabase, $condition));
+            $queryBuilder->having($this->translateConditionPart($queryBuilder, $condition));
         }
     }
 
     protected function processJoins(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, string $dataClassStorageUnitName,
-        Joins $joins = new Joins()
+        QueryBuilder $queryBuilder, string $dataClassStorageUnitName, Joins $joins = new Joins()
     ): void
     {
         $storageAliasGenerator = $this->getStorageAliasGenerator();
 
         foreach ($joins as $join)
         {
-            $joinCondition = $this->translateConditionPart($dataClassDatabase, $join->getCondition());
+            $joinCondition = $this->translateConditionPart($queryBuilder, $join->getCondition());
 
             /**
              * @var class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $joinDataClassName
@@ -159,35 +153,34 @@ class QueryBuilderConfigurator
     }
 
     protected function processOrderBy(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, OrderBy $orderBy = new OrderBy()
+        QueryBuilder $queryBuilder, OrderBy $orderBy = new OrderBy()
     ): void
     {
         foreach ($orderBy as $orderByProperty)
         {
             $queryBuilder->addOrderBy(
-                $this->translateConditionPart($dataClassDatabase, $orderByProperty->getConditionVariable()),
+                $this->translateConditionPart($queryBuilder, $orderByProperty->getConditionVariable()),
                 ($orderByProperty->getDirection() == SORT_DESC ? 'DESC' : 'ASC')
             );
         }
     }
 
     protected function processRetrieveProperties(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder,
-        RetrieveProperties $properties = new RetrieveProperties()
+        QueryBuilder $queryBuilder, RetrieveProperties $properties = new RetrieveProperties()
     ): void
     {
         foreach ($properties as $conditionVariable)
         {
-            $queryBuilder->addSelect($this->translateConditionPart($dataClassDatabase, $conditionVariable));
+            $queryBuilder->addSelect($this->translateConditionPart($queryBuilder, $conditionVariable));
         }
     }
 
     protected function translateConditionPart(
-        DataClassDatabase $dataClassDatabase, ConditionPart $conditionPart, ?bool $enableAliasing = true
+        QueryBuilder $queryBuilder, ConditionPart $conditionPart, ?bool $enableAliasing = true
     ): string
     {
         return $this->getConditionPartTranslatorService()->translate(
-            $dataClassDatabase, $conditionPart, $enableAliasing
+            $queryBuilder, $conditionPart, $enableAliasing
         );
     }
 }

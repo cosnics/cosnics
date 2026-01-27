@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Mail\Mailer\PhpMailer;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use Chamilo\Libraries\Mail\Mailer\AbstractMailer;
 use Chamilo\Libraries\Mail\ValueObject\Mail;

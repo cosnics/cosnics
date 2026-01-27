@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable;
 
-use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable
@@ -18,7 +18,7 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
     public const CONDITION_CLASS = CaseElementConditionVariable::class;
 
     public function translate(
-        DataClassDatabaseInterface $dataClassDatabase, CaseElementConditionVariable $caseElementConditionVariable,
+        QueryBuilder $querybuilder, CaseElementConditionVariable $caseElementConditionVariable,
         ?bool $enableAliasing = true
     ): string
     {
@@ -28,7 +28,7 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
         {
             $strings[] = 'WHEN ';
             $strings[] = $this->getConditionPartTranslatorService()->translate(
-                $dataClassDatabase, $caseElementConditionVariable->getCondition(), $enableAliasing
+                $querybuilder, $caseElementConditionVariable->getCondition(), $enableAliasing
             );
             $strings[] = ' THEN ';
         }
@@ -38,7 +38,7 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
         }
 
         $strings[] = $this->getConditionPartTranslatorService()->translate(
-            $dataClassDatabase, $caseElementConditionVariable->getStatement(), $enableAliasing
+            $querybuilder, $caseElementConditionVariable->getStatement(), $enableAliasing
         );
 
         return implode('', $strings);

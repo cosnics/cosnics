@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\Format\Structure\PageConfiguration;
 use Exception;
 use Sentry\Event;
@@ -53,15 +54,15 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
                 'dsn' => $sentryConnectionString,
                 'traces_sample_rate' => 0.01,
                 'before_send' => function (Event $event) use ($session, $urlGenerator): ?Event {
-                    $userId = $session->get(Manager::SESSION_USER_ID);
+                    $userId = $session->get(AuthenticationValidator::SESSION_USER_ID);
 
                     if ($userId)
                     {
                         $profilePageUrl = $urlGenerator->fromParameters(
                             [
                                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                                Application::PARAM_ACTION => Manager::ACTION_USER_DETAIL,
-                                Manager::PARAM_USER_USER_ID => $userId
+                                Application::PARAM_ACTION => Manager::ACTION_VIEW,
+                                Manager::PARAM_USER_ID => $userId
                             ]
                         );
 
@@ -91,7 +92,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
                 crossorigin="anonymous"
             ></script>';
 
-        $userId = $this->getSession()->get(Manager::SESSION_USER_ID);
+        $userId = $this->getSession()->get(AuthenticationValidator::SESSION_USER_ID);
 
         $profilePage = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_NAME'] .
             '?application=Chamilo\\\\Core\\\\User&go=UserDetail&user_id=' . $userId;

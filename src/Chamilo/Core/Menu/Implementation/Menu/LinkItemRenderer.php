@@ -12,16 +12,19 @@ use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\WebPathBuilder;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_category;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_QuickForm_Rule_Required;
+use HTML_QuickForm_select;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Menu\Service\Renderer
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Menu\Implementation\Menu
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LinkItemRenderer extends ItemRenderer
     implements TranslatableItemInterface, ConfigurableItemInterface, SelectableItemInterface
@@ -94,7 +97,9 @@ class LinkItemRenderer extends ItemRenderer
      */
     public function addConfigurationToForm(FormValidator $formValidator): void
     {
-        $formValidator->addElement('category', $this->getTranslator()->trans('Properties', [], Manager::CONTEXT));
+        $formValidator->addElement(
+            HTML_QuickForm_category::class, $this->getTranslator()->trans('Properties', [], Manager::CONTEXT)
+        );
 
         $formValidator->addTextfield(
             Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_URL . ']',
@@ -102,14 +107,15 @@ class LinkItemRenderer extends ItemRenderer
         );
 
         $formValidator->addElement(
-            'select', Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_TARGET . ']',
+            HTML_QuickForm_select::class, Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_TARGET . ']',
             $this->getTranslator()->trans('Target', [], Manager::CONTEXT), ['_blank', '_self', '_parent', '_top'],
             ['class' => 'form-control']
         );
 
         $formValidator->addRule(
             Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_TARGET . ']',
-            $this->getTranslator()->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES), 'required'
+            $this->getTranslator()->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
+            HTML_QuickForm_Rule_Required::class
         );
     }
 

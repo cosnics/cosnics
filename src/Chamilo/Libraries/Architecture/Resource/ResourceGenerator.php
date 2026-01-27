@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Resource;
 
-use Chamilo\Configuration\Service\PackageBundlesCacheService;
-use Chamilo\Configuration\Storage\DataClass\Package;
+use Chamilo\Core\Admin\Service\PackageBundlesCacheService;
+use Chamilo\Core\Admin\Storage\DataClass\Package;
 use Chamilo\Libraries\File\SystemPathBuilder;
 use stdClass;
 use Symfony\Component\Filesystem\Filesystem;
@@ -32,7 +32,7 @@ class ResourceGenerator
     /**
      * @param \stdClass $resourceDefinition
      * @param string[][] $resourceFiles
-     * @param \Chamilo\Configuration\Storage\DataClass\Package $package
+     * @param \Chamilo\Core\Admin\Storage\DataClass\Package $package
      */
     protected function addResourceDefinitiontoResourceFiles(
         stdClass $resourceDefinition, array &$resourceFiles, Package $package

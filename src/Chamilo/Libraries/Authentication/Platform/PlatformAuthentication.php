@@ -1,16 +1,16 @@
 <?php
 namespace Chamilo\Libraries\Authentication\Platform;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Architecture\Interfaces\ChangeablePasswordInterface;
-use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsernameInterface;
 use Chamilo\Libraries\Authentication\Authentication;
-use Chamilo\Libraries\Authentication\AuthenticationException;
-use Chamilo\Libraries\Authentication\AuthenticationInterface;
+use Chamilo\Libraries\Authentication\Exception\AuthenticationException;
+use Chamilo\Libraries\Authentication\Interface\AuthenticationInterface;
+use Chamilo\Libraries\Authentication\Interface\ChangeablePasswordInterface;
+use Chamilo\Libraries\Authentication\Interface\ChangeableUsernameInterface;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -60,20 +60,15 @@ class PlatformAuthentication extends Authentication
         $oldPasswordHash = $hashingUtilities->hashString($oldPassword);
 
         // Verify that the entered old password matches the stored password
-        if ($oldPasswordHash != $user->get_password())
+        if ($oldPasswordHash != $user->getPassword())
         {
             return false;
         }
 
         // Set the password
-        $user->set_password($hashingUtilities->hashString($newPassword));
+        $user->setPassword($hashingUtilities->hashString($newPassword));
 
         return $this->getUserService()->updateUser($user);
-    }
-
-    public function getAuthenticationType(): string
-    {
-        return __NAMESPACE__;
     }
 
     public function getHashingUtilities(): HashingUtilities
@@ -97,7 +92,7 @@ class PlatformAuthentication extends Authentication
     }
 
     /**
-     * @throws \Chamilo\Libraries\Authentication\AuthenticationException
+     * @throws \Chamilo\Libraries\Authentication\Exception\AuthenticationException
      */
     public function login(): ?User
     {
@@ -111,7 +106,7 @@ class PlatformAuthentication extends Authentication
 
         $passwordHash = $this->getHashingUtilities()->hashString($password);
 
-        if ($user->get_password() == $passwordHash)
+        if ($user->getPassword() == $passwordHash)
         {
             return $user;
         }

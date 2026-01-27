@@ -25,11 +25,15 @@ class CreatorComponent extends Manager
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run(): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdmin())
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator())
         {
             throw new NotAllowedException();
         }

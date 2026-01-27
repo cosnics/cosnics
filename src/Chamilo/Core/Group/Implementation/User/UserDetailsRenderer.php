@@ -14,8 +14,8 @@ use HTML_Table;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Group\Service\UserDetails
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Group\Implementation\User
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserDetailsRenderer implements UserDetailsRendererInterface
 {
@@ -95,7 +95,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
                 $viewUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_VIEW_GROUP,
+                        Application::PARAM_ACTION => Manager::ACTION_VIEW,
                         Manager::PARAM_GROUP_ID => $group->getId()
                     ]
                 );

@@ -508,18 +508,18 @@ class DataClassRepository
         string $dataClassName, StorageParameters $parameters = new StorageParameters()
     )
     {
-        if ($this->isQueryCacheEnabled())
-        {
-            return $this->getDataClassRepositoryCache()->addForRetrieve(
-                $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
-                return $this->__retrieve($dataClassName, $parameters);
-            }
-            );
-        }
-        else
-        {
+//        if ($this->isQueryCacheEnabled())
+//        {
+//            return $this->getDataClassRepositoryCache()->addForRetrieve(
+//                $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
+//                return $this->__retrieve($dataClassName, $parameters);
+//            }
+//            );
+//        }
+//        else
+//        {
             return $this->__retrieve($dataClassName, $parameters);
-        }
+//        }
     }
 
     /**

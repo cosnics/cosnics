@@ -34,7 +34,7 @@ class ErrorHandler
 
     protected function displayGeneralErrorPage()
     {
-        $path = $this->getThemeSystemPathBuilder()->getTemplatePath('Chamilo\Configuration', false) . 'Error.html.tpl';
+        $path = $this->getThemeSystemPathBuilder()->getTemplatePath('Chamilo\Core\Admin', false) . 'Error.html.tpl';
 
         $template = file_get_contents($path);
 
@@ -64,7 +64,7 @@ class ErrorHandler
     }
 
     protected function getTranslation(
-        string $variable, array $parameters = [], string $context = 'Chamilo\Configuration'
+        string $variable, array $parameters = [], string $context = 'Chamilo\Core\Admin'
     ): string
     {
         return $this->getTranslator()->trans($variable, $parameters, $context);

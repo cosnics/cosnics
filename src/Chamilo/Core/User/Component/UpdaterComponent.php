@@ -9,7 +9,6 @@ use Chamilo\Core\User\UserInterface\Form\UserForm;
 use Chamilo\Core\User\UserInterface\Form\UserUpdateForm;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
@@ -34,7 +33,7 @@ class UpdaterComponent extends Manager
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        if (!$this->getUser()->isPlatformAdmin())
+        if (!$this->getUser()->isPlatformAdministrator())
         {
             throw new NotAllowedException();
         }
@@ -42,17 +41,17 @@ class UpdaterComponent extends Manager
         $translator = $this->getTranslator();
         $urlGenerator = $this->getUrlGenerator();
 
-        $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_USER_ID);
+        $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
 
         if ($userIdentifier)
         {
             $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
-            $isLockoutRisk = $this->getUser()->getId() == $user->getId() && $user->isPlatformAdmin();
+            $isLockoutRisk = $this->getUser()->getId() == $user->getId() && $user->isPlatformAdministrator();
 
             $updateUrl = $urlGenerator->fromParameters([
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_UPDATE_USER,
-                self::PARAM_USER_USER_ID => $userIdentifier
+                Application::PARAM_ACTION => Manager::ACTION_UPDATE,
+                self::PARAM_USER_ID => $userIdentifier
             ]);
 
             $form = new UserUpdateForm($user, $isLockoutRisk, $updateUrl);
@@ -64,14 +63,12 @@ class UpdaterComponent extends Manager
                     $formValues = $form->exportValues();
 
                     $this->getUserService()->updateUserFromParameters(
-                        $user, $formValues[User::PROPERTY_FIRSTNAME], $formValues[User::PROPERTY_LASTNAME],
+                        $user, $formValues[User::PROPERTY_GIVEN_NAME], $formValues[User::PROPERTY_SURNAME],
                         $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
                         $formValues[User::PROPERTY_EMAIL], (bool) $formValues[UserForm::PROPERTY_GENERATE_PASSWORD],
-                        $formValues[User::PROPERTY_PASSWORD], (bool) $formValues[User::PROPERTY_PLATFORMADMIN],
-                        $formValues[User::PROPERTY_STATUS], (bool) $formValues[User::PROPERTY_ACTIVE], null,
-                        (bool) $formValues[FormValidator::PROPERTY_TIME_PERIOD_FOREVER],
-                        $formValues[User::PROPERTY_ACTIVATION_DATE], $formValues[User::PROPERTY_EXPIRATION_DATE],
-                        $formValues[User::PROPERTY_DISK_QUOTA], (bool) $formValues[UserForm::PROPERTY_SEND_MAIL]
+                        $formValues[User::PROPERTY_PASSWORD], (bool) $formValues[User::PROPERTY_PLATFORM_ADMINISTRATOR],
+                        $formValues[User::PROPERTY_STATUS], (bool) $formValues[User::PROPERTY_ACTIVE],
+                        (bool) $formValues[UserForm::PROPERTY_SEND_MAIL]
                     );
 
                     $userPictureProvider = $this->getUserPictureProvider();
@@ -106,7 +103,7 @@ class UpdaterComponent extends Manager
                         $urlGenerator->fromParameters(
                             [
                                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                                Application::PARAM_ACTION => Manager::ACTION_BROWSE_USERS
+                                Application::PARAM_ACTION => Manager::ACTION_BROWSE
                             ]
                         )
                     );

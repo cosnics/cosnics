@@ -82,7 +82,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
      * @param array $submitValues array of submitted values to search
      * @param bool $assoc whether to return the value as associative array
      */
-    public function exportValue(array &$submitValues, bool $assoc = false)
+    public function exportValue(array &$submitValues, bool $assoc = false): mixed
     {
         $values = parent::getValue();
 

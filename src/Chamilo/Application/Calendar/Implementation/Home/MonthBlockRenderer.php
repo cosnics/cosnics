@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Implementation\Home;
 use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;

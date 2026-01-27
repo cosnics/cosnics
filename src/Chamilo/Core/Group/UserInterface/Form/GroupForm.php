@@ -4,13 +4,17 @@ namespace Chamilo\Core\Group\UserInterface\Form;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tree\Options\OptionsTreeRenderer;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
+use HTML_QuickForm_hidden;
+use HTML_QuickForm_Rule_Required;
+use HTML_QuickForm_select;
+use HTML_QuickForm_text;
 
 /**
  * @package Chamilo\Core\Group\UserInterface\Form
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GroupForm extends FormValidator
 {
@@ -51,24 +55,29 @@ class GroupForm extends FormValidator
      */
     public function buildBasicForm(): void
     {
-        $this->addElement('text', Group::PROPERTY_NAME, $this->getTranslation('Name', [], Manager::CONTEXT),
-            ['size' => '50']);
-        $this->addRule(
-            Group::PROPERTY_NAME, $this->getTranslation('ThisFieldIsRequired'), 'required'
+        $this->addElement(
+            HTML_QuickForm_text::class, Group::PROPERTY_NAME, $this->getTranslation('Name', [], Manager::CONTEXT),
+            ['size' => '50']
         );
-
-        $this->addElement('text', Group::PROPERTY_CODE, $this->getTranslation('Code', [], Manager::CONTEXT),
-            ['size' => '50']);
         $this->addRule(
-            Group::PROPERTY_CODE, $this->getTranslation('ThisFieldIsRequired'), 'required'
+            Group::PROPERTY_NAME, $this->getTranslation('ThisFieldIsRequired'), HTML_QuickForm_Rule_Required::class
         );
 
         $this->addElement(
-            'select', NestedSet::PROPERTY_PARENT_ID, $this->getTranslation('Location', [], Manager::CONTEXT),
-            $this->getGroupOptionsTreeRenderer()->getOptions()
+            HTML_QuickForm_text::class, Group::PROPERTY_CODE, $this->getTranslation('Code', [], Manager::CONTEXT),
+            ['size' => '50']
         );
         $this->addRule(
-            NestedSet::PROPERTY_PARENT_ID, $this->getTranslation('ThisFieldIsRequired'), 'required'
+            Group::PROPERTY_CODE, $this->getTranslation('ThisFieldIsRequired'), HTML_QuickForm_Rule_Required::class
+        );
+
+        $this->addElement(
+            HTML_QuickForm_select::class, NestedSet::PROPERTY_PARENT_ID,
+            $this->getTranslation('Location', [], Manager::CONTEXT), $this->getGroupOptionsTreeRenderer()->getOptions()
+        );
+        $this->addRule(
+            NestedSet::PROPERTY_PARENT_ID, $this->getTranslation('ThisFieldIsRequired'),
+            HTML_QuickForm_Rule_Required::class
         );
 
         $this->addHtmlEditor(
@@ -83,14 +92,7 @@ class GroupForm extends FormValidator
     {
         $this->buildBasicForm();
 
-        $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', $this->getTranslation('Create')
-        );
-        $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', $this->getTranslation('Reset')
-        );
-
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+        $this->addSaveResetButtons();
     }
 
     /**
@@ -99,18 +101,8 @@ class GroupForm extends FormValidator
     public function buildEditingForm(): void
     {
         $this->buildBasicForm();
-
-        $this->addElement('hidden', DataClass::PROPERTY_ID);
-
-        $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', $this->getTranslation('Update'), null, null,
-            new FontAwesomeGlyph('arrow-right')
-        );
-        $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', $this->getTranslation('Reset')
-        );
-
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+        $this->addElement(HTML_QuickForm_hidden::class, DataClass::PROPERTY_ID);
+        $this->addSaveResetButtons();
     }
 
     /**
@@ -148,7 +140,7 @@ class GroupForm extends FormValidator
     /**
      * @throws \QuickformException
      */
-    public function setDefaults(array $defaultValues = [], $filter = null)
+    public function setDefaults(array $defaultValues = [], $filter = null): void
     {
         $group = $this->group;
 

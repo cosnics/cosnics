@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
-use Chamilo\Configuration\Service\Consulter\ConfigurationConsulter;
+use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use League\OAuth2\Client\Provider\GenericProvider;
@@ -31,7 +31,7 @@ class GraphRepositoryFactory
     protected $chamiloRequest;
 
     /**
-     * @var \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter
+     * @var \Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter
      */
     protected $configurationConsulter;
 
@@ -40,7 +40,7 @@ class GraphRepositoryFactory
     /**
      * MicrosoftGraphRepositoryFactory constructor.
      *
-     * @param \Chamilo\Configuration\Service\Consulter\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepositoryInterface $accessTokenRepository
      * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
      */

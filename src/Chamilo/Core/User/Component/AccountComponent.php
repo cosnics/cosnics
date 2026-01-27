@@ -39,7 +39,7 @@ class AccountComponent extends ProfileComponent
             $formValues = $accountForm->exportValues();
 
             $success = $this->getUserService()->updateAccountFromParameters(
-                $this->getUser(), $formValues[User::PROPERTY_FIRSTNAME], $formValues[User::PROPERTY_LASTNAME],
+                $this->getUser(), $formValues[User::PROPERTY_GIVEN_NAME], $formValues[User::PROPERTY_SURNAME],
                 $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
                 $formValues[User::PROPERTY_EMAIL], $formValues[UserForm::PROPERTY_CURRENT_PASSWORD],
                 $formValues[User::PROPERTY_PASSWORD]
@@ -72,7 +72,7 @@ class AccountComponent extends ProfileComponent
             return $this->redirectWithMessage(
                 $translator->trans($message, [], Manager::CONTEXT), !$success, [
                     Application::PARAM_CONTEXT => $this->getContext(),
-                    Application::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT
+                    Application::PARAM_ACTION => self::ACTION_ACCOUNT
                 ]
             );
         }

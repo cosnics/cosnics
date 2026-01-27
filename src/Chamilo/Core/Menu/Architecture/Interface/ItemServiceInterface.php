@@ -15,7 +15,6 @@ interface ItemServiceInterface
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
-     * @throws \Exception
      */
     public function createItem(Item $item): bool;
 
@@ -23,14 +22,12 @@ interface ItemServiceInterface
      * @param string[][] $values
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
-     * @throws \Exception
      */
     public function createItemForTypeFromValues(string $itemType, array $values): ?Item;
 
     /**
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \Exception
      */
     public function deleteItem(Item $item): bool;
 

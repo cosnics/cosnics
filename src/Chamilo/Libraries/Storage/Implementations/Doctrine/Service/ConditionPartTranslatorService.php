@@ -3,10 +3,10 @@ namespace Chamilo\Libraries\Storage\Implementations\Doctrine\Service;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionPartTranslatorServiceInterface;
-use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionPartTranslator;
+use Doctrine\DBAL\Query\QueryBuilder;
 use OutOfBoundsException;
 
 /**
@@ -65,29 +65,29 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
     }
 
     public function translate(
-        DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart, ?bool $enableAliasing = true
+        QueryBuilder $queryBuilder, ConditionPart $conditionPart, ?bool $enableAliasing = true
     ): string
     {
-        if ($this->isQueryCacheEnabled())
-        {
-            return $this->getConditionPartCache()->add(
-                $conditionPart, $enableAliasing, function () use ($dataClassDatabase, $conditionPart, $enableAliasing) {
-                return $this->translateConditionPart($dataClassDatabase, $conditionPart, $enableAliasing);
-            }
-            );
-        }
-        else
-        {
-            return $this->translateConditionPart($dataClassDatabase, $conditionPart, $enableAliasing);
-        }
+//        if ($this->isQueryCacheEnabled())
+//        {
+//            return $this->getConditionPartCache()->add(
+//                $conditionPart, $enableAliasing, function () use ($queryBuilder, $conditionPart, $enableAliasing) {
+//                return $this->translateConditionPart($queryBuilder, $conditionPart, $enableAliasing);
+//            }
+//            );
+//        }
+//        else
+//        {
+            return $this->translateConditionPart($queryBuilder, $conditionPart, $enableAliasing);
+//        }
     }
 
     private function translateConditionPart(
-        DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart, ?bool $enableAliasing
+        QueryBuilder $queryBuilder, ConditionPart $conditionPart, ?bool $enableAliasing
     ): string
     {
         return $this->getConditionPartTranslator($conditionPart)->translate(
-            $dataClassDatabase, $conditionPart, $enableAliasing
+            $queryBuilder, $conditionPart, $enableAliasing
         );
     }
 

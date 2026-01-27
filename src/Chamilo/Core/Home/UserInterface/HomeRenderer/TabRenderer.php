@@ -6,7 +6,7 @@ use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
- * @package Chamilo\Core\Home\Renderer
+ * @package Chamilo\Core\Home\UserInterface\HomeRenderer
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>

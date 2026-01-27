@@ -74,6 +74,8 @@ class ActionProviderCollection extends ArrayCollection
                 )
             );
 
+            $actionsTab->setActions($actions->toArray());
+
             if ($actions->getSearchUrl())
             {
                 $search_form = new AdminSearchForm($actions->getSearchUrl(), (string) $index);
@@ -85,8 +87,6 @@ class ActionProviderCollection extends ArrayCollection
                     )
                 );
             }
-
-            $actionsTab->setActions($actions->toArray());
 
             $tabsCollection->add($actionsTab);
         }

@@ -59,8 +59,6 @@ class FormValidator extends HTML_QuickForm
      */
     private array $html_editors = [];
 
-    private bool $no_errors;
-
     /**
      * @var \HTML_QuickForm_Renderer_Default
      */
@@ -123,23 +121,7 @@ class FormValidator extends HTML_QuickForm
 
         $html = [];
 
-        if ($this->no_errors)
-        {
-            $renderer = $this->defaultRenderer();
-            $element_template = <<<EOT
-	<div class="form-row">
-		<div class="form-label">
-			<!-- BEGIN required --><span class="text-danger">*</span> <!-- END required -->{label}
-		</div>
-		<div class="formw">
-			<!-- BEGIN error --><!-- END error -->	{element}
-		</div>
-	</div>
-
-EOT;
-            $renderer->setElementTemplate($element_template);
-        }
-        elseif ($error)
+        if ($error)
         {
             $html[] = $this->getNotificationMessageRenderer()->renderOne(
                 new NotificationMessage(
@@ -173,7 +155,7 @@ EOT;
     /**
      * @throws \QuickformException
      */
-    public function addErrorMessage(string $name, string $label, string $message, bool $noMargin = false
+    public function addErrorMessage(string $name, ?string $label, string $message, bool $noMargin = false
     ): HTML_QuickForm_html
     {
         return $this->addMessage('danger', $name, $label, $message, $noMargin);
@@ -354,7 +336,7 @@ EOT;
      * @param string[] $options
      * @param string[] $attributes
      *
-     * @throws \Exception
+     * @throws \QuickformException
      */
     public function addHtmlEditor(
         string $name, string $label, bool $required = true, array $options = [], array $attributes = []
@@ -398,7 +380,7 @@ EOT;
     /**
      * @throws \QuickformException
      */
-    public function addInformationMessage(string $name, string $label, string $message, bool $noMargin = false
+    public function addInformationMessage(string $name, ?string $label, string $message, bool $noMargin = false
     ): HTML_QuickForm_html
     {
         return $this->addMessage('info', $name, $label, $message, $noMargin);
@@ -407,7 +389,7 @@ EOT;
     /**
      * @throws \QuickformException
      */
-    protected function addMessage(string $type, string $name, string $label, string $message, bool $noMargin = false
+    protected function addMessage(string $type, string $name, ?string $label, string $message, bool $noMargin = false
     ): HTML_QuickForm_html
     {
         $html = [];
@@ -450,9 +432,6 @@ EOT;
     public function addPassword(string $name, string $label, bool $required = true, array $attributes = []
     ): HTML_QuickForm_password
     {
-        /**
-         * @var \HTML_QuickForm_password $element
-         */
         $element = $this->addElement($this->createPassword($name, $label, $attributes));
 
         if ($required)
@@ -567,7 +546,7 @@ EOT;
         $choices = [];
 
         $choices[] = $this->createElement(
-            HTML_QuickForm_bootstrap_radio::class::class, $foreverElementName, '', $this->getTranslation('Forever'), 1
+            HTML_QuickForm_bootstrap_radio::class, $foreverElementName, '', $this->getTranslation('Forever'), 1
         );
 
         $choices[] = $this->createElement(
@@ -623,7 +602,7 @@ EOT;
     /**
      * @throws \QuickformException
      */
-    public function addWarningMessage(string $name, string $label, string $message, bool $noMargin = false
+    public function addWarningMessage(string $name, ?string $label, string $message, bool $noMargin = false
     ): HTML_QuickForm_html
     {
         return $this->addMessage('warning', $name, $label, $message, $noMargin);

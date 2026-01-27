@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\StorageParameters;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Result;
 use Exception;
 use Throwable;
@@ -58,11 +59,14 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         try
         {
-            $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
+            $queryBuilder = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
+            $sqlQuery = $queryBuilder->getSQL();
 
             try
             {
-                return $this->getConnection()->executeQuery($sqlQuery);
+                return $this->getConnection()->executeQuery(
+                    $sqlQuery, $queryBuilder->getParameters(), $queryBuilder->getParameterTypes()
+                );
             }
             catch (Throwable $throwable)
             {
@@ -81,19 +85,16 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
     }
 
-    /**
-     * @throws \Doctrine\DBAL\Exception
-     */
-    protected function buildFromQuery(string $dataClassStorageUnitName, StorageParameters $parameters): string
+    protected function buildFromQuery(string $dataClassStorageUnitName, StorageParameters $parameters): QueryBuilder
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
 
         $queryBuilder->from($dataClassStorageUnitName, $this->getAlias($dataClassStorageUnitName));
         $this->getQueryBuilderConfigurator()->applyParameters(
-            $this, $queryBuilder, $parameters, $dataClassStorageUnitName
+            $queryBuilder, $parameters, $dataClassStorageUnitName
         );
 
-        return $queryBuilder->getSQL();
+        return $queryBuilder;
     }
 
     /**
@@ -103,11 +104,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         try
         {
-            $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
+            $queryBuilder = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
 
             try
             {
-                $record = $this->getConnection()->executeQuery($sqlQuery)->fetchNumeric();
+                $record = $queryBuilder->fetchNumeric();
 
                 return (int) $record[0];
             }
@@ -116,7 +117,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
                 $this->handleError($throwable);
 
                 throw new StorageMethodException(
-                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $queryBuilder->getSQL()
                 );
             }
         }
@@ -137,17 +138,29 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         try
         {
-            $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
-            $result = $this->getConnection()->executeQuery($sqlQuery);
+            $queryBuilder = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
 
-            $counts = [];
-
-            while ($record = $result->fetchNumeric())
+            try
             {
-                $counts[$record[0]] = $record[1];
-            }
+                $counts = [];
 
-            return $counts;
+                $records = $queryBuilder->fetchAllNumeric();
+
+                foreach ($records as $record)
+                {
+                    $counts[$record[0]] = $record[1];
+                }
+
+                return $counts;
+            }
+            catch (Throwable $throwable)
+            {
+                $this->handleError($throwable);
+
+                throw new StorageMethodException(
+                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $queryBuilder->getSQL()
+                );
+            }
         }
         catch (Throwable $throwable)
         {
@@ -189,10 +202,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             if (isset($condition))
             {
-                $queryBuilder->where($this->getConditionPartTranslatorService()->translate($this, $condition, false));
+                $queryBuilder->where(
+                    $this->getConditionPartTranslatorService()->translate($queryBuilder, $condition, false)
+                );
             }
 
-            $this->getConnection()->executeQuery($queryBuilder->getSQL());
+            $queryBuilder->executeStatement();
 
             return true;
         }
@@ -212,16 +227,15 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         try
         {
-            $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
+            $queryBuilder = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
 
             try
             {
 
-                $statement = $this->getConnection()->executeQuery($sqlQuery);
-
                 $distinctElements = [];
+                $records = $queryBuilder->fetchAllAssociative();
 
-                while ($record = $statement->fetchAssociative())
+                foreach ($records as $record)
                 {
                     if (count($record) > 1)
                     {
@@ -240,7 +254,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
                 $this->handleError($throwable);
 
                 throw new StorageMethodException(
-                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $queryBuilder->getSQL()
                 );
             }
         }
@@ -347,16 +361,17 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         try
         {
-            $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
+            $queryBuilder = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
 
             try
             {
-                $record = $this->getConnection()->executeQuery($sqlQuery)->fetchAssociative();
+                $record = $queryBuilder->fetchAssociative();
 
                 if ($record === false)
                 {
                     throw new StorageNoResultException(
-                        __FUNCTION__, $dataClassStorageUnitName, $parameters, 'No result for query: ' . $sqlQuery
+                        __FUNCTION__, $dataClassStorageUnitName, $parameters,
+                        'No result for query: ' . $queryBuilder->getSQL()
                     );
                 }
 
@@ -370,7 +385,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             {
                 $this->handleError($throwable);
                 throw new StorageMethodException(
-                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $queryBuilder->getSQL()
                 );
             }
         }
@@ -391,17 +406,17 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         try
         {
-            $sqlQuery = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
+            $queryBuilder = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
 
             try
             {
-                return $this->getConnection()->executeQuery($sqlQuery)->fetchAllAssociative();
+                return $queryBuilder->fetchAllAssociative();
             }
             catch (Throwable $throwable)
             {
                 $this->handleError($throwable);
                 throw new StorageMethodException(
-                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $queryBuilder->getSQL()
                 );
             }
         }
@@ -463,12 +478,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $queryBuilder = $this->getConnection()->createQueryBuilder();
         $queryBuilder->update($dataClassStorageUnitName);
-        $this->getQueryBuilderConfigurator()->applyUpdate($this, $queryBuilder, $properties, $condition);
+        $this->getQueryBuilderConfigurator()->applyUpdate($queryBuilder, $properties, $condition);
         $sqlQuery = $queryBuilder->getSQL();
 
         try
         {
-            $this->getConnection()->executeQuery($sqlQuery);
+            $queryBuilder->executeStatement();
 
             return true;
         }

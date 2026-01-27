@@ -3,10 +3,12 @@ namespace Chamilo\Core\User\UserInterface\Form;
 
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Interfaces\ChangeablePasswordInterface;
-use Chamilo\Libraries\Architecture\Interfaces\ChangeableUsernameInterface;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
+use Chamilo\Libraries\Authentication\Interface\ChangeablePasswordInterface;
+use Chamilo\Libraries\Authentication\Interface\ChangeableUsernameInterface;
+use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_category;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use HTML_QuickForm_static;
 
 /**
  * @package Chamilo\Core\User\Form
@@ -75,9 +77,11 @@ class AccountForm extends UserForm
 
             if ($includeCategoryTitle)
             {
-                $this->addElement('category', $translator->trans('Other'));
+                $this->addElement(HTML_QuickForm_category::class, $translator->trans('Other'));
             }
-            $this->addElement('static', User::PROPERTY_SECURITY_TOKEN, $translator->trans('SecurityToken'));
+            $this->addElement(
+                HTML_QuickForm_static::class, User::PROPERTY_SECURITY_TOKEN, $translator->trans('SecurityToken')
+            );
         }
     }
 
@@ -138,17 +142,17 @@ class AccountForm extends UserForm
      *
      * @throws \QuickformException
      */
-    public function setDefaults(array $defaultValues = [], $filter = null)
+    public function setDefaults(array $defaultValues = [], $filter = null): void
     {
         $user = $this->user;
 
         $defaultValues[DataClass::PROPERTY_ID] = $user->getId();
-        $defaultValues[User::PROPERTY_LASTNAME] = $user->get_lastname();
-        $defaultValues[User::PROPERTY_FIRSTNAME] = $user->get_firstname();
-        $defaultValues[User::PROPERTY_EMAIL] = $user->get_email();
-        $defaultValues[User::PROPERTY_USERNAME] = $user->get_username();
-        $defaultValues[User::PROPERTY_OFFICIAL_CODE] = $user->get_official_code();
-        $defaultValues[User::PROPERTY_SECURITY_TOKEN] = $user->get_security_token();
+        $defaultValues[User::PROPERTY_SURNAME] = $user->getSurname();
+        $defaultValues[User::PROPERTY_GIVEN_NAME] = $user->getGivenName();
+        $defaultValues[User::PROPERTY_EMAIL] = $user->getEmail();
+        $defaultValues[User::PROPERTY_USERNAME] = $user->getUsername();
+        $defaultValues[User::PROPERTY_OFFICIAL_CODE] = $user->getOfficialCode();
+        $defaultValues[User::PROPERTY_SECURITY_TOKEN] = $user->getSecurityToken();
 
         parent::setDefaults($defaultValues);
     }

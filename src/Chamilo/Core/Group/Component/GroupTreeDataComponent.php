@@ -18,7 +18,7 @@ class GroupTreeDataComponent extends Manager
         $urlFormat = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_BROWSE_GROUPS,
+                Application::PARAM_ACTION => Manager::ACTION_BROWSE,
                 Manager::PARAM_GROUP_ID => '%s'
             ]
         );

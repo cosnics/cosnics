@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Bootstrap;
 
-use Chamilo\Configuration\Service\FileConfigurationLocator;
+use Chamilo\Core\Admin\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;

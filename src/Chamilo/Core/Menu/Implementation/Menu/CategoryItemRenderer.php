@@ -16,8 +16,8 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Core\Menu\Service\Renderer
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Core\Menu\Implementation\Menu
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInterface
 {

@@ -142,7 +142,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
      * @param array $submitValues array of submitted values to search
      * @param bool $assoc whether to return the value as associative array
      */
-    public function exportValue(array &$submitValues, bool $assoc = false)
+    public function exportValue(array &$submitValues, bool $assoc = false): mixed
     {
         return $this->_prepareValue($this->getValue(), $assoc);
     }
