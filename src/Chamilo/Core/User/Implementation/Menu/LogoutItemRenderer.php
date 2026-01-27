@@ -3,9 +3,9 @@ namespace Chamilo\Core\User\Implementation\Menu;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
 /**
  * @package Chamilo\Core\User\Service\Menu

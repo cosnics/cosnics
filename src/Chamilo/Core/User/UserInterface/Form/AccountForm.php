@@ -3,11 +3,11 @@ namespace Chamilo\Core\User\UserInterface\Form;
 
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\Authentication\Interface\ChangeablePasswordInterface;
-use Chamilo\Libraries\Authentication\Interface\ChangeableUsernameInterface;
-use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_category;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeablePasswordInterface;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeableUsernameInterface;
+use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_category;
 use HTML_QuickForm_static;
 
 /**

@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Calendar\Storage\DataClass;
 
 use Chamilo\Application\Calendar\Manager;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 
 /**
  * @package Chamilo\Application\Calendar\Storage\DataClass

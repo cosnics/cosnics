@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Architecture\Interface;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
 /**
  * @package Chamilo\Core\User\Architecture\Interface

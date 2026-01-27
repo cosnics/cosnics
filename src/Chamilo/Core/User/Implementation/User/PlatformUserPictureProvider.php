@@ -6,12 +6,12 @@ use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\FilesystemTools;
-use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
-use Chamilo\Libraries\File\WebPathBuilder;
-use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
+use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
+use Chamilo\Libraries\Filesystem\Service\FilesystemTools;
+use Chamilo\Libraries\Filesystem\Service\ImageManipulation\ImageManipulation;
+use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
+use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use DateTime;
 use Exception;
 use Symfony\Component\Filesystem\Filesystem;
@@ -122,7 +122,7 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
     }
 
     /**
-     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
+     * @return \Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder
      */
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {

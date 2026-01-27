@@ -9,12 +9,12 @@ use Chamilo\Core\Menu\Implementation\Menu\CategoryItemRenderer;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_category;
-use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_extended_checkbox;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Tree\Options\OptionsTreeRenderer;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_category;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_extended_checkbox;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
+use Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer;
 use HTML_QuickForm_Rule_Required;
 use HTML_QuickForm_select;
 use HTML_QuickForm_text;
@@ -161,7 +161,7 @@ class ItemForm extends FormValidator
     public function getMenuOptionsTreeRenderer(): OptionsTreeRenderer
     {
         /**
-         * @var class-string<\Chamilo\Libraries\Format\Tree\Options\OptionsTreeRenderer> $className
+         * @var class-string<\Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer> $className
          */
         $className = 'Chamilo\Core\Menu\UserInterface\Menu\ItemOptionsTreeRenderer';
 

@@ -1,17 +1,17 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Event\Event;
+use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
+use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\Event\EventMiniMonthRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Calendar\Service\View\TableBuilder\CalendarTableBuilder;
-use Chamilo\Libraries\Calendar\Service\View\TableBuilder\MiniMonthCalendarTableBuilder;
-use Chamilo\Libraries\File\WebPathBuilder;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
+use Chamilo\Libraries\Calendar\Service\TableBuilder\MiniMonthCalendarTableBuilder;
+use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
+use Chamilo\Libraries\Service\Resource\ResourceManager;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
 
 /**

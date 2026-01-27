@@ -2,10 +2,10 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Hashing\HashingUtilities;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Protocol\Security\Service\HashingUtilities;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,7 +16,7 @@ class MultiPasswordResetComponent extends Manager
 {
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */

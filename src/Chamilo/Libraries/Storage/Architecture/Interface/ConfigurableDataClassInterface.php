@@ -1,0 +1,21 @@
+<?php
+namespace Chamilo\Libraries\Storage\Architecture\Interface;
+
+/**
+ * @package Chamilo\Libraries\Storage\DataClass\Interface
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
+interface ConfigurableDataClassInterface
+{
+    /**
+     * @return string[]
+     */
+    public function getConfiguration(): array;
+
+    /**
+     * @param string[] $configuration
+     */
+    public function setConfiguration(array $configuration): static;
+
+    public function setSetting(string $variable, mixed $value): static;
+}

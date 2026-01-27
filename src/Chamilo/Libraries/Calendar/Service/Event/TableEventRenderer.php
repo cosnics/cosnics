@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\Event;
 
-use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\Event

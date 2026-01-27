@@ -9,7 +9,7 @@ use Google_Service_Calendar_Event;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Event extends \Chamilo\Libraries\Calendar\Event\Event
+class Event extends \Chamilo\Libraries\Calendar\Architecture\Domain\Event
 {
 
     private CalendarProperties $calendarProperties;

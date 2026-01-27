@@ -5,29 +5,29 @@ use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserSettingService;
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
-use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\FilesystemTools;
-use Chamilo\Libraries\File\SystemPathBuilder;
-use Chamilo\Libraries\File\WebPathBuilder;
-use Chamilo\Libraries\Format\Breadcrumb\BreadcrumbTrail;
-use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
-use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer;
-use Chamilo\Libraries\Format\Structure\FooterRenderer;
-use Chamilo\Libraries\Format\Structure\FooterRendererInterface;
-use Chamilo\Libraries\Format\Structure\HeaderRenderer;
-use Chamilo\Libraries\Format\Structure\HeaderRendererInterface;
-use Chamilo\Libraries\Format\Structure\PageConfiguration;
-use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
+use Chamilo\Libraries\Filesystem\Service\FilesystemTools;
+use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
+use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
+use Chamilo\Libraries\Service\Bootstrap\ApplicationFactory;
+use Chamilo\Libraries\Service\Resource\ResourceManager;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
+use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
+use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration;
+use Chamilo\Libraries\UserInterface\Layout\Architecture\Interface\FooterRendererInterface;
+use Chamilo\Libraries\UserInterface\Layout\Architecture\Interface\HeaderRendererInterface;
+use Chamilo\Libraries\UserInterface\Layout\Service\FooterRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\HeaderRenderer;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageManager;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageRenderer;
+use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -117,7 +117,7 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface> $className
+     * @param class-string<\Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface> $className
      */
     protected function getExceptionLogger(
         string $className = 'Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger'
@@ -213,7 +213,7 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Format\Theme\ThemePathBuilder> $className
+     * @param class-string<\Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder> $className
      */
     public function getThemeSystemPathBuilder(
         string $className = 'Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder'
@@ -223,7 +223,7 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Format\Theme\ThemePathBuilder> $className
+     * @param class-string<\Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder> $className
      */
     public function getThemeWebPathBuilder(string $className = 'Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder'
     ): ThemePathBuilder

@@ -4,8 +4,8 @@ namespace Chamilo\Application\Calendar\Component;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\UserInterface\Form\AvailabilityForm;
-use Chamilo\Libraries\Architecture\ActionResultRenderer;
-use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Service\Utilities\ActionResultRenderer;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +20,7 @@ class AvailabilityComponent extends Manager
 {
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
      * @throws \Exception
      */

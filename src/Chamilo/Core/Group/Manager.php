@@ -3,8 +3,8 @@ namespace Chamilo\Core\Group;
 
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationConfigurationInterface;
 
 /**
  * @package Chamilo\Core\Group
@@ -33,7 +33,7 @@ abstract class Manager extends Application
     public const PARAM_USER_ID = 'user_id';
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {

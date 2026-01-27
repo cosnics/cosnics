@@ -2,9 +2,9 @@
 namespace Chamilo\Core\User;
 
 use Chamilo\Core\User\Service\UserUrlGenerator;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\Mail\Mailer\MailerInterface;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
 
 /**
  * @package Chamilo\Core\User
@@ -41,7 +41,7 @@ abstract class Manager extends Application
     public const PARAM_USER_ID = 'user_id';
 
     /**
-     * @param class-string<\Chamilo\Libraries\Mail\Mailer\MailerInterface> $className
+     * @param class-string<\Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface> $className
      */
     protected function getActiveMailer(string $className = 'Chamilo\Libraries\Mail\Mailer\ActiveMailer'
     ): MailerInterface

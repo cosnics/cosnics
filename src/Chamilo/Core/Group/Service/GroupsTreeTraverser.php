@@ -3,7 +3,7 @@ namespace Chamilo\Core\Group\Service;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Service\PropertyMapper;
 use Doctrine\Common\Collections\ArrayCollection;
 

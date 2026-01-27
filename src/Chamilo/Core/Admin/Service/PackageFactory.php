@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Admin\Service;
 
 use Chamilo\Core\Admin\Storage\DataClass\Package;
-use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use OutOfBoundsException;
 use stdClass;
 use Symfony\Component\Filesystem\Filesystem;

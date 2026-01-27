@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Admin\Service\Consulter;
 
 use Chamilo\Core\Admin\Storage\Repository\LanguageRepository;
-use Chamilo\Libraries\File\FilesystemTools;
-use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\Filesystem\Service\FilesystemTools;
+use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 
 /**
  * @package Chamilo\Core\Admin\Service\Consulter

@@ -1,22 +1,22 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Architecture\Traits\AgendaCalendarTrait;
+use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Architecture\Trait\AgendaCalendarTrait;
 use Chamilo\Libraries\Calendar\Service\Event\EventListRenderer;
 use Chamilo\Libraries\Calendar\Service\JumpBarRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Calendar\Service\View\TableBuilder\CalendarTableBuilder;
-use Chamilo\Libraries\File\WebPathBuilder;
-use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer;
-use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
+use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
+use Chamilo\Libraries\Service\Resource\ResourceManager;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageRenderer;
 use Symfony\Component\Translation\Translator;
 
 /**

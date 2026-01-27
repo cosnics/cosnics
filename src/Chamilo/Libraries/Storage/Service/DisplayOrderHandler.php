@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Storage\Service;
 
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException;
-use Chamilo\Libraries\Storage\DataClass\Interface\DataClassDisplayOrderSupport;
+use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDisplayOrderSupport;
 use Chamilo\Libraries\Storage\Repository\DisplayOrderRepository;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**

@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProvid
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
 use Chamilo\Application\Calendar\Storage\Repository\AvailabilityRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\ActionResult;
+use Chamilo\Libraries\Architecture\Domain\ActionResult;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
@@ -187,7 +187,7 @@ class AvailabilityService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string[][][] $calendarAvailabilityTypes
      *
-     * @return \Chamilo\Libraries\Architecture\ActionResult
+     * @return \Chamilo\Libraries\Architecture\Domain\ActionResult
      * @throws \Exception
      */
     public function setAvailabilities(User $user, array $calendarAvailabilityTypes = []): ActionResult

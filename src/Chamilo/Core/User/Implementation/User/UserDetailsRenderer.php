@@ -7,11 +7,11 @@ use Chamilo\Core\User\Architecture\Trait\UserDetailsRendererTrait;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
-use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\NamespaceIdentGlyph;
 use HTML_Table;
 use Symfony\Component\Translation\Translator;
 

@@ -45,7 +45,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
     }
 
     /**
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      * @throws \DateInvalidTimeZoneException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
@@ -130,7 +130,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
     }
 
     /**
-     * @return array|\Chamilo\Libraries\Calendar\Event\Event[]
+     * @return array|\Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \DateInvalidTimeZoneException
      * @throws \DateMalformedStringException

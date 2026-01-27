@@ -3,14 +3,14 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\Authentication\Interface\NoAuthenticationSupportInterface;
-use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_stylesubmitbutton;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Architecture\Exception\UserException;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylesubmitbutton;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use HTML_QuickForm_Rule_Email;
 use HTML_QuickForm_Rule_Required;
 use HTML_QuickForm_text;
@@ -25,9 +25,9 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
     protected FormValidator $passwordResetForm;
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      */
     public function run(): Response
     {

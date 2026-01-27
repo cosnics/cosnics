@@ -1,19 +1,19 @@
 <?php
 namespace Chamilo\Libraries\Storage\Repository;
 
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Interface\DataClassDisplayOrderSupport;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\RetrieveProperties;
-use Chamilo\Libraries\Storage\Query\UpdateProperties;
-use Chamilo\Libraries\Storage\Query\UpdateProperty;
-use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\StorageParameters;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\NotCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\OperationConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperties;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperty;
+use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
+use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDisplayOrderSupport;
 
 /**
  * @package Chamilo\Libraries\Storage\Repository

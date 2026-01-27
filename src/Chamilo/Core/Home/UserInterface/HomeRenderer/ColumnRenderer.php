@@ -6,7 +6,7 @@ use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
 
 /**

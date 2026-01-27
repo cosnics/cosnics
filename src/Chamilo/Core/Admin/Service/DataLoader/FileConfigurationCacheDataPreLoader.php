@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Admin\Service\DataLoader;
 
 use Chamilo\Core\Admin\Service\FileConfigurationLocator;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
-use Chamilo\Libraries\Cache\Traits\SimpleCacheAdapterHandlerTrait;
-use Chamilo\Libraries\Cache\Traits\SimpleCacheDataPreLoaderTrait;
+use Chamilo\Libraries\Storage\Architecture\Interface\CacheDataPreLoaderInterface;
+use Chamilo\Libraries\Storage\Architecture\Trait\SimpleCacheAdapterHandlerTrait;
+use Chamilo\Libraries\Storage\Architecture\Trait\SimpleCacheDataPreLoaderTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

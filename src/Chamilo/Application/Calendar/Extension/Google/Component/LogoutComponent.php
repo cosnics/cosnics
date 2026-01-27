@@ -3,7 +3,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Component;
 
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
-use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Domain\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 

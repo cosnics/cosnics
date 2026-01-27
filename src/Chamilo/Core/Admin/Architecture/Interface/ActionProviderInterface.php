@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Architecture\Interface;
 
-use Chamilo\Libraries\Format\Tabs\Actions;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\Actions;
 
 /**
  * @package Chamilo\Core\Admin\Architecture\Interface

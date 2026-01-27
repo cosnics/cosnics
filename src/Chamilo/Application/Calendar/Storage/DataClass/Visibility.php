@@ -9,7 +9,7 @@ use Chamilo\Application\Calendar\Manager;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Visibility extends \Chamilo\Libraries\Calendar\Event\Visibility
+class Visibility extends \Chamilo\Libraries\Calendar\Architecture\Domain\Visibility
 {
     public const CONTEXT = Manager::CONTEXT;
 

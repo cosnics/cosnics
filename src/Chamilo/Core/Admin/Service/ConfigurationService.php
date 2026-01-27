@@ -5,8 +5,8 @@ use Chamilo\Core\Admin\Service\DataLoader\StorageConfigurationCacheDataPreLoader
 use Chamilo\Core\Admin\Storage\DataClass\Setting;
 use Chamilo\Core\Admin\Storage\Repository\ConfigurationRepository;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Architecture\Trait\CacheAdapterHandlerTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 

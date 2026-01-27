@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Interface\AccessTokenRepositoryInterface;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 

@@ -2,10 +2,10 @@
 namespace Chamilo\Core\Home\Storage\DataClass;
 
 use Chamilo\Core\Home\Manager;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Interface\ConfigurableDataClassInterface;
-use Chamilo\Libraries\Storage\DataClass\Interface\DataClassDisplayOrderSupport;
-use Chamilo\Libraries\Storage\DataClass\Trait\ConfigurableDataClassTrait;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConfigurableDataClassInterface;
+use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDisplayOrderSupport;
+use Chamilo\Libraries\Storage\Architecture\Trait\ConfigurableDataClassTrait;
 
 /**
  * @package Chamilo\Core\Home\Storage\DataClass

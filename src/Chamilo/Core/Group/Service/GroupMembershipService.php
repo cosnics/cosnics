@@ -9,8 +9,8 @@ use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Doctrine\Common\Collections\ArrayCollection;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -113,10 +113,10 @@ class GroupMembershipService
 
     /**
      * @param string $groupIdentifier
-     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition $condition
      * @param ?int $offset
      * @param ?int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\SubscribedUser>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -131,10 +131,10 @@ class GroupMembershipService
 
     /**
      * @param string[] $groupIdentifiers
-     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition $condition
      * @param ?int $offset
      * @param ?int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\SubscribedUser>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException

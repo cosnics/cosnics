@@ -3,7 +3,7 @@ namespace Chamilo\Application\Calendar\Service;
 
 use Chamilo\Application\Calendar\Storage\DataClass\Visibility;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
-use Chamilo\Libraries\Calendar\Architecture\Interfaces\VisibilityServiceInterface;
+use Chamilo\Libraries\Calendar\Architecture\Interface\VisibilityServiceInterface;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 
 /**

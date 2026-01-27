@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Calendar\Service\View\TableBuilder\DayCalendarTableBuilder;
+use Chamilo\Libraries\Calendar\Service\TableBuilder\DayCalendarTableBuilder;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Symfony\Component\Translation\Translator;
 
 /**

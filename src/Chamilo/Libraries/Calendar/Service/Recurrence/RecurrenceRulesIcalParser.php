@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\Recurrence;
 
-use Chamilo\Libraries\Calendar\Event\RecurrenceRules;
+use Chamilo\Libraries\Calendar\Architecture\Domain\RecurrenceRules;
 
 /**
  *
@@ -29,7 +29,7 @@ class RecurrenceRulesIcalParser
         foreach ($icalRecurrenceRules as $rulePart)
         {
             // Split the part name and value
-            list($rulePartName, $rulePartValue) = explode('=', $rulePart);
+            [$rulePartName, $rulePartValue] = explode('=', $rulePart);
 
             if (in_array($rulePartName, ['FREQ', 'UNTIL', 'COUNT', 'INTERVAL']))
             {

@@ -6,8 +6,8 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Form\AccountForm;
 use Chamilo\Core\User\UserInterface\Form\UserForm;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,8 +23,8 @@ class AccountComponent extends ProfileComponent
     private AccountForm $accountForm;
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
      */
     public function run(): Response

@@ -1,25 +1,25 @@
 <?php
 namespace Chamilo\Libraries\Storage\Repository;
 
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClassRepositoryCache;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\DistinctConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\FunctionConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\OperationConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertiesConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperties;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperty;
+use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
-use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
-use Chamilo\Libraries\Storage\DataClass\Interface\UuidDataClassInterface;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\RetrieveProperties;
-use Chamilo\Libraries\Storage\Query\UpdateProperties;
-use Chamilo\Libraries\Storage\Query\UpdateProperty;
-use Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\StorageParameters;
+use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
+use Chamilo\Libraries\Storage\Factory\DataClassFactory;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Uid\Uuid;
 
@@ -52,7 +52,7 @@ class DataClassRepository
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $dataClassName
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -75,7 +75,7 @@ class DataClassRepository
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $dataClassName
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -90,7 +90,7 @@ class DataClassRepository
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $dataClassName
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -104,7 +104,7 @@ class DataClassRepository
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $dataClassName
      *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -122,7 +122,7 @@ class DataClassRepository
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $dataClassName
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -155,7 +155,7 @@ class DataClassRepository
      * @template tInternalRetrievesClass
      *
      * @param class-string<tInternalRetrievesClass> $dataClassName
-     * @param \Chamilo\Libraries\Storage\StorageParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters $parameters
      *
      * @return ArrayCollection<tInternalRetrievesClass>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -175,7 +175,7 @@ class DataClassRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\StorageParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters $parameters
      * @param string $dataClassName
      *
      * @return void
@@ -287,7 +287,7 @@ class DataClassRepository
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $dataClassName
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -312,7 +312,7 @@ class DataClassRepository
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $dataClassName
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -334,7 +334,7 @@ class DataClassRepository
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $dataClassName
      */
     protected function determineDataClassStorageUnitName(string $dataClassName): string
     {
@@ -469,7 +469,7 @@ class DataClassRepository
 
     /**
      * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\StorageParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters $parameters
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<string[]>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -540,7 +540,7 @@ class DataClassRepository
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $dataClassName
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -576,7 +576,7 @@ class DataClassRepository
      * @template tRetrieves
      *
      * @param class-string<tRetrieves> $dataClassName
-     * @param \Chamilo\Libraries\Storage\StorageParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters $parameters
      *
      * @return ArrayCollection<tRetrieves>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -641,7 +641,7 @@ class DataClassRepository
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClassName
+     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $dataClassName
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */

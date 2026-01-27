@@ -2,12 +2,12 @@
 namespace Chamilo\Core\User\UserInterface\Form;
 
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_category;
-use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_styleresetbutton;
-use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_stylesubmitbutton;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_category;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_styleresetbutton;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylesubmitbutton;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use HTML_QuickForm_Rule_Required;
 use HTML_QuickForm_text;
 

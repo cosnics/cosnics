@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\DependencyInjection\ExtensionFinder;
 
 use Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInterface;
-use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinderAware;
+use Chamilo\Libraries\Filesystem\Service\PackagesContentFinder\PackagesClassFinderAware;
 
 /**
  * Finds dependency injection extensions in a given list of packages

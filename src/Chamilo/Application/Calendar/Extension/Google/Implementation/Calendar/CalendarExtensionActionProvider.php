@@ -5,12 +5,12 @@ use Chamilo\Application\Calendar\Architecture\Interface\CalendarExtensionActionP
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Core\User\Service\UserSettingService;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropdownButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -41,7 +41,7 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
+     * @return \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButtonToolBarItem[]
      */
     public function getAdditional(Application $application): array
     {
@@ -96,7 +96,7 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
+     * @return \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButtonToolBarItem[]
      */
     public function getPrimary(Application $application): array
     {

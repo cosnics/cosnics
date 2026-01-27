@@ -3,12 +3,12 @@ namespace Chamilo\Application\Calendar\Storage\Repository;
 
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\StorageParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**

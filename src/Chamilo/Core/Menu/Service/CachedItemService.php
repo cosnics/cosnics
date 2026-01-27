@@ -3,9 +3,9 @@ namespace Chamilo\Core\Menu\Service;
 
 use Chamilo\Core\Menu\Architecture\Interface\ItemServiceInterface;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
-use Chamilo\Libraries\Cache\Traits\SingleCacheAdapterHandlerTrait;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
+use Chamilo\Libraries\Storage\Architecture\Interface\CacheDataPreLoaderInterface;
+use Chamilo\Libraries\Storage\Architecture\Trait\SingleCacheAdapterHandlerTrait;
 use Chamilo\Libraries\Storage\Service\PropertyMapper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -168,7 +168,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      * @param string $parentIdentifier
      * @param ?int $count
      * @param ?int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      */

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Service;
 
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
-use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ContainsCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
 
 /**
  * @package Chamilo\Libraries\Storage\Service

@@ -3,11 +3,11 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\Admin\UserInterface\Form\ConfigurationForm;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
-use Chamilo\Libraries\Format\Tabs\TabsCollection;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\NamespaceIdentGlyph;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -25,7 +25,7 @@ class SettingsComponent extends ProfileComponent
     private string $selectedContext;
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */

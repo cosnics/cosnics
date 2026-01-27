@@ -3,10 +3,10 @@ namespace Chamilo\Core\Admin\Component;
 
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_stylesubmitbutton;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylesubmitbutton;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use HTML_QuickForm_html;
 use HTML_QuickForm_select;
 use HTML_Table;
@@ -21,7 +21,7 @@ class ViewLogsComponent extends Manager
 {
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
      * @throws \TableException
      */

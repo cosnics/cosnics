@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Service\Finder;
 
-use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 
 /**
  * @package Chamilo\Core\Admin\Service\Finder

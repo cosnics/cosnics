@@ -5,12 +5,12 @@ use Chamilo\Core\Admin\Architecture\Domain\AbstractActionProvider;
 use Chamilo\Core\Admin\Architecture\Interface\ActionProviderInterface;
 use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\Action;
-use Chamilo\Libraries\Format\Tabs\Actions;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\Action;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\Actions;
 use Symfony\Component\Translation\Translator;
 
 class ActionProvider extends AbstractActionProvider implements ActionProviderInterface

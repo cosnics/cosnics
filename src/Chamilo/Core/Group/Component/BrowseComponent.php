@@ -9,28 +9,28 @@ use Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider;
 use Chamilo\Core\Group\UserInterface\Table\GroupTableRenderer;
 use Chamilo\Core\Group\UserInterface\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBarSearchFormTrait;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Toolbar;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Format\Tabs\ContentTab;
-use Chamilo\Libraries\Format\Tabs\TabsCollection;
-use Chamilo\Libraries\Format\Tabs\TabsRenderer;
-use Chamilo\Libraries\Format\Tree\Menu\JsTreeRenderer;
-use Chamilo\Libraries\Storage\DataClass\NestedSet;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonToolBarSearchFormTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\Toolbar;
+use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ContentTab;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
+use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
+use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\UserInterface\Tree\Service\JsTreeRenderer;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -54,8 +54,8 @@ class BrowseComponent extends Manager
     private ?Group $rootGroup;
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
+     * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -355,7 +355,7 @@ class BrowseComponent extends Manager
 
     /**
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
@@ -421,7 +421,7 @@ class BrowseComponent extends Manager
 
     /**
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
@@ -451,7 +451,7 @@ class BrowseComponent extends Manager
 
     /**
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException

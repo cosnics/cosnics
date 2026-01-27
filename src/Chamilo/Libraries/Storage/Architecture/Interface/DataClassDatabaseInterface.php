@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Interface;
 
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\UpdateProperties;
-use Chamilo\Libraries\Storage\StorageParameters;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperties;
+use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 
 /**
  * @package Chamilo\Libraries\Storage\Architecture\Interface

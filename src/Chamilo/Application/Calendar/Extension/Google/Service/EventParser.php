@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Service;
 use Chamilo\Application\Calendar\Extension\Google\Architecture\Domain\CalendarProperties;
 use Chamilo\Application\Calendar\Extension\Google\Architecture\Domain\Event;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
-use Chamilo\Libraries\Calendar\Event\RecurrenceRules;
+use Chamilo\Libraries\Calendar\Architecture\Domain\RecurrenceRules;
 use Chamilo\Libraries\Calendar\Service\Recurrence\RecurrenceRulesIcalParser;
 use DateTime;
 use DateTimeZone;

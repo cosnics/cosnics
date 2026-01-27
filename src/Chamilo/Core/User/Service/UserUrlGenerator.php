@@ -3,8 +3,8 @@ namespace Chamilo\Core\User\Service;
 
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\Routing\DataClassUrlGenerator;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Service\Routing\DataClassUrlGenerator;
 
 /**
  * @package Chamilo\Core\User\Service

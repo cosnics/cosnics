@@ -3,8 +3,8 @@ namespace Chamilo\Core\User\Service;
 
 use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
+use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
 use Throwable;

@@ -4,8 +4,8 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Architecture\Exception\NoObjectSelectedException;
+use Chamilo\Libraries\Storage\Architecture\Exception\ObjectNotExistException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -18,8 +18,8 @@ class UserPictureComponent extends Manager
 {
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exception\NoObjectSelectedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectNotExistException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
@@ -29,8 +29,8 @@ class UserPictureComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exception\NoObjectSelectedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectNotExistException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */

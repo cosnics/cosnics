@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\DependencyInjection;
 
 use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Libraries\Cache\FileBasedCacheService;
-use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
+use Chamilo\Libraries\Storage\Service\FileBasedCacheService;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

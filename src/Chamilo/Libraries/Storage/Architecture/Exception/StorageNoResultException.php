@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Exception;
 
-use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\Storage\StorageParameters;
+use Chamilo\Libraries\Architecture\Exception\UserException;
+use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 
 /**
  * @package Chamilo\Libraries\Storage\Exception

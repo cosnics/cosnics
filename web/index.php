@@ -1,8 +1,8 @@
 <?php
 
-use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
-use Chamilo\Libraries\Architecture\Bootstrap\Kernel;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Service\Bootstrap\Bootstrap;
+use Chamilo\Libraries\Service\Bootstrap\Kernel;
 
 require realpath(__DIR__ . '/../') . '/vendor/autoload.php';
 

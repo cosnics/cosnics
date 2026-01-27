@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection\CompilerPass;
 
-use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\Authentication\Interface\AuthenticationInterface;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
+use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;

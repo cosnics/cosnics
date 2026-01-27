@@ -3,13 +3,13 @@ namespace Chamilo\Core\Admin\Storage\Repository;
 
 use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Storage\DataClass\Online;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\RetrieveProperties;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
+use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\StorageParameters;
 
 /**
  * @package Chamilo\Core\Admin\Storage\Repository

@@ -7,10 +7,10 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Form\UserForm;
 use Chamilo\Core\User\UserInterface\Form\UserUpdateForm;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,7 +24,7 @@ class UpdaterComponent extends Manager
 {
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException

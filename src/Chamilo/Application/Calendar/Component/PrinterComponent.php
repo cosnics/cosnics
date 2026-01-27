@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Manager;
-use Chamilo\Libraries\Format\Structure\PageConfiguration;
+use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

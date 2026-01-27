@@ -5,7 +5,7 @@ use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Form\PictureForm;
-use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Domain\Application;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +22,7 @@ class PictureComponent extends ProfileComponent
     protected PictureForm $pictureForm;
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
      */
     public function run(): Response

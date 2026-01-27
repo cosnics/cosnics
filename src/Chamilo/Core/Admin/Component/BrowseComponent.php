@@ -5,8 +5,8 @@ use Chamilo\Core\Admin\Architecture\Domain\ActionProviderCollection;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Service\PackageBundlesCacheService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Tabs\TabsRenderer;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -20,7 +20,7 @@ class BrowseComponent extends Manager
     private string $currentTab;
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
      */
     public function run(): Response

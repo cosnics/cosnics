@@ -4,8 +4,8 @@ namespace Chamilo\Application\Calendar\UserInterface\Form;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_extended_checkbox;
-use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_extended_checkbox;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use HTML_QuickForm_static;
 
 /**

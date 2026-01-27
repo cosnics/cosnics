@@ -4,11 +4,11 @@ namespace Chamilo\Core\Admin\Implementation\Admin;
 use Chamilo\Core\Admin\Architecture\Domain\AbstractActionProvider;
 use Chamilo\Core\Admin\Architecture\Interface\ActionProviderInterface;
 use Chamilo\Core\Admin\Manager;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\Action;
-use Chamilo\Libraries\Format\Tabs\Actions;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\Action;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\Actions;
 
 /**
  * @package Chamilo\Core\Admin\Implementation\Admin

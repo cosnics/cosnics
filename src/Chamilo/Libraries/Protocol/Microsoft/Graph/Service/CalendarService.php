@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\CalendarRepository;
 use Microsoft\Graph\Generated\Models\Calendar;
 
@@ -44,8 +44,8 @@ class CalendarService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\CalendarNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\CalendarNotFoundException
      */
     public function getCalendarByIdentifier(string $calendarIdentifier, User $user): Calendar
     {
@@ -60,7 +60,7 @@ class CalendarService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
      */
     protected function getUserIdentifier(User $user): ?string
     {

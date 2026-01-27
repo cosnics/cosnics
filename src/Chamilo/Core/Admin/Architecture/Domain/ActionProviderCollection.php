@@ -3,13 +3,13 @@ namespace Chamilo\Core\Admin\Architecture\Domain;
 
 use Chamilo\Core\Admin\Architecture\Interface\ActionProviderInterface;
 use Chamilo\Core\Admin\UserInterface\Form\AdminSearchForm;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
-use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
-use Chamilo\Libraries\Format\Tabs\Action;
-use Chamilo\Libraries\Format\Tabs\ActionsTab;
-use Chamilo\Libraries\Format\Tabs\TabsCollection;
+use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\IdentGlyph;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\NamespaceIdentGlyph;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\Action;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ActionsTab;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 

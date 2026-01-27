@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\Recurrence;
 
-use Chamilo\Libraries\Calendar\Event\RecurrenceRules;
+use Chamilo\Libraries\Calendar\Architecture\Domain\RecurrenceRules;
 
 /**
  *

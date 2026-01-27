@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Admin\Storage\DataClass;
 
 use Chamilo\Core\Admin\Manager;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 
 /**
  * @package Chamilo\Core\Admin\Storage\DataClass

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Office365;
 
-use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Domain\Application;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Office365

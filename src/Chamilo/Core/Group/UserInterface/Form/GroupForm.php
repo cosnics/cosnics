@@ -3,10 +3,10 @@ namespace Chamilo\Core\Group\UserInterface\Form;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Tree\Options\OptionsTreeRenderer;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\NestedSet;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
+use Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer;
 use HTML_QuickForm_hidden;
 use HTML_QuickForm_Rule_Required;
 use HTML_QuickForm_select;
@@ -130,7 +130,7 @@ class GroupForm extends FormValidator
     public function getGroupOptionsTreeRenderer(): OptionsTreeRenderer
     {
         /**
-         * @var class-string<\Chamilo\Libraries\Format\Tree\Options\OptionsTreeRenderer> $className
+         * @var class-string<\Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer> $className
          */
         $className = 'Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeRenderer';
 

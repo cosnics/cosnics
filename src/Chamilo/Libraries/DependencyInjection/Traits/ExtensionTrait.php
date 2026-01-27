@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection\Traits;
 
-use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;

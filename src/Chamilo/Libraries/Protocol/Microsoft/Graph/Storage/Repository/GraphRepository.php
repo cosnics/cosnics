@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Interface\AccessTokenRepositoryInterface;
 use Exception;
 use GuzzleHttp\Exception\ClientException;
 use League\OAuth2\Client\Provider\AbstractProvider;
@@ -400,7 +401,7 @@ class GraphRepository
 
     /**
      *
-     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepositoryInterface
+     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Interface\AccessTokenRepositoryInterface
      */
     protected function getAccessTokenRepository()
     {
@@ -409,7 +410,7 @@ class GraphRepository
 
     /**
      *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\AccessTokenRepositoryInterface $accessTokenRepository
+     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Interface\AccessTokenRepositoryInterface $accessTokenRepository
      */
     protected function setAccessTokenRepository(AccessTokenRepositoryInterface $accessTokenRepository)
     {

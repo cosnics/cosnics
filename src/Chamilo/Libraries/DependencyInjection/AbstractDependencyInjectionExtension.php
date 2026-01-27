@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\SystemPathBuilder;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
+use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 
 /**

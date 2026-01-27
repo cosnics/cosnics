@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection\CompilerPass;
 
-use Chamilo\Libraries\Cache\CacheManagement\SymfonyCacheAdapterManager;
+use Chamilo\Libraries\Storage\Service\SymfonyCacheAdapterManager;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;

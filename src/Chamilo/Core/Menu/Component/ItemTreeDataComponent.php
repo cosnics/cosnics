@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Menu\Component;
 
 use Chamilo\Core\Menu\Manager;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Tree\Menu\JsTreeMenuDataProvider;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\UserInterface\Tree\Service\JsTreeMenuDataProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -36,7 +36,7 @@ class ItemTreeDataComponent extends Manager
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Format\Tree\Menu\JsTreeMenuDataProvider> $className
+     * @param class-string<\Chamilo\Libraries\UserInterface\Tree\Service\JsTreeMenuDataProvider> $className
      */
     public function getJsTreeDataProvider(
         string $className = 'Chamilo\Core\Menu\UserInterface\Menu\ItemJsTreeMenuDataProvider'

@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
@@ -30,7 +30,7 @@ class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
      */
     public function getAndSaveUserIdentifier(User $user): ?string
     {
@@ -57,7 +57,7 @@ class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
      */
     public function getUser(User $user): \Microsoft\Graph\Generated\Models\User
     {
@@ -65,7 +65,7 @@ class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
      */
     public function getUserIdentifier(User $user): string
     {

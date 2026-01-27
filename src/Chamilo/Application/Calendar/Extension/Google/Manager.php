@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Calendar\Extension\Google;
 
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
-use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Domain\Application;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Google

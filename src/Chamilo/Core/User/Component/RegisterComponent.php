@@ -7,10 +7,10 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Form\RegisterForm;
 use Chamilo\Core\User\UserInterface\Form\UserForm;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Authentication\Interface\NoAuthenticationSupportInterface;
-use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,7 +23,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
 {
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
      */
     public function run(): Response

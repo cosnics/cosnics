@@ -2,12 +2,12 @@
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Core\Menu\Manager;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Interface\ConfigurableDataClassInterface;
-use Chamilo\Libraries\Storage\DataClass\Interface\DataClassDisplayOrderSupport;
-use Chamilo\Libraries\Storage\DataClass\Trait\ConfigurableDataClassTrait;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConfigurableDataClassInterface;
+use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDisplayOrderSupport;
+use Chamilo\Libraries\Storage\Architecture\Trait\ConfigurableDataClassTrait;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
 /**
  * @package Chamilo\Core\Menu\Storage\DataClass

@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\Recurrence\RecurrenceCalculator;
 
 /**
@@ -21,7 +21,7 @@ abstract class CalendarRendererProvider implements CalendarRendererProviderInter
     private array $displayParameters;
 
     /**
-     * @var \Chamilo\Libraries\Calendar\Event\Event[][]
+     * @var \Chamilo\Libraries\Calendar\Architecture\Domain\Event[][]
      */
     private array $events;
 
@@ -35,7 +35,7 @@ abstract class CalendarRendererProvider implements CalendarRendererProviderInter
     }
 
     /**
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      */
     abstract public function aggregateEvents(?int $startTime = null, ?int $endTime = null): array;
 
@@ -70,7 +70,7 @@ abstract class CalendarRendererProvider implements CalendarRendererProviderInter
     }
 
     /**
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      * @throws \Sabre\VObject\InvalidDataException
      */
     public function getEvents(?int $startTime = null, ?int $endTime = null, bool $calculateRecurrence = false): array
@@ -96,7 +96,7 @@ abstract class CalendarRendererProvider implements CalendarRendererProviderInter
     }
 
     /**
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      * @throws \Sabre\VObject\InvalidDataException
      */
     public function getEventsInPeriod(int $startTime, int $endTime, bool $calculateRecurrence = true): array

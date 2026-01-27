@@ -7,16 +7,16 @@ use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvid
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Core\User\Component\SettingsComponent;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Calendar\Architecture\Factory\HtmlCalendarRendererFactory;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Calendar\Service\HtmlCalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
-use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SplitDropdownButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use DateTime;
 use Detection\MobileDetect;
 use Exception;
@@ -36,7 +36,7 @@ class BrowserComponent extends Manager
     private int $currentTime;
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Symfony\Component\Cache\Exception\CacheException
@@ -63,7 +63,7 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
@@ -221,7 +221,7 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
+     * @return \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButtonToolBarItem[]
      */
     protected function getViewActions(): array
     {

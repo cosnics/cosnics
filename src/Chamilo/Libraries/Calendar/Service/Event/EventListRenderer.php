@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\Event;
 
-use Chamilo\Libraries\Calendar\Event\Event;
+use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Format\Structure\Toolbar;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\Toolbar;
 use IntlDateFormatter;
 use Symfony\Component\Translation\Translator;
 
@@ -30,7 +30,7 @@ class EventListRenderer extends EventRenderer
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $eventActions
+     * @param \Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem[] $eventActions
      *
      * @throws \Exception
      */

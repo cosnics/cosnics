@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Admin\UserInterface\Form;
 
 use Chamilo\Core\Admin\Manager;
-use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_stylesubmitbutton;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylesubmitbutton;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use HTML_QuickForm_html;
 use HTML_QuickForm_text;
 

@@ -4,8 +4,8 @@ namespace Chamilo\Core\Group\UserInterface\Form;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Tree\Options\OptionsTreeRenderer;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
+use Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer;
 use HTML_QuickForm_select;
 
 /**
@@ -56,7 +56,7 @@ class GroupMoveForm extends FormValidator
     public function getGroupOptionsTreeRenderer(): OptionsTreeRenderer
     {
         /**
-         * @var class-string<\Chamilo\Libraries\Format\Tree\Options\OptionsTreeRenderer> $className
+         * @var class-string<\Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer> $className
          */
         $className = 'Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeRenderer';
 

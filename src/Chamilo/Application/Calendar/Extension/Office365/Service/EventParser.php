@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Extension\Office365\Service;
 use Chamilo\Application\Calendar\Extension\Office365\Architecture\Domain\Event;
 use Chamilo\Application\Calendar\Extension\Office365\Manager;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
-use Chamilo\Libraries\Calendar\Event\EventAttendee;
+use Chamilo\Libraries\Calendar\Architecture\Domain\EventAttendee;
 use DateTime;
 use DateTimeZone;
 use Exception;
@@ -73,7 +73,7 @@ class EventParser
     /**
      * @param ?\Microsoft\Graph\Generated\Models\Attendee[] $attendees
      *
-     * @return \Chamilo\Libraries\Calendar\Event\EventAttendee[]
+     * @return \Chamilo\Libraries\Calendar\Architecture\Domain\EventAttendee[]
      */
     private function getAttendees(?array $attendees): array
     {

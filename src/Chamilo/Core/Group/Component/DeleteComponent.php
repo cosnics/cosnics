@@ -2,10 +2,10 @@
 namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

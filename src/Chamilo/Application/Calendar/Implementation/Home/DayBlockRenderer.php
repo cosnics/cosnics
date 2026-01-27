@@ -9,10 +9,10 @@ use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use Chamilo\Libraries\Calendar\Service\View\MiniDayCalendarRenderer;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
 use IntlDateFormatter;
 use Symfony\Component\Translation\Translator;
 

@@ -3,10 +3,10 @@ namespace Chamilo\Core\Menu\Component;
 
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -19,8 +19,8 @@ class MoverComponent extends Manager
 {
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException

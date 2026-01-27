@@ -3,16 +3,16 @@ namespace Chamilo\Core\Menu\Storage\Repository;
 
 use Chamilo\Core\Menu\Implementation\Menu\CategoryItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
-use Chamilo\Libraries\Storage\StorageParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -104,7 +104,7 @@ class ItemRepository
      * @param string $parentIdentifier
      * @param ?int $count
      * @param ?int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException

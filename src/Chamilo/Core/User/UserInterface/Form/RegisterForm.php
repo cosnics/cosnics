@@ -3,9 +3,9 @@ namespace Chamilo\Core\User\UserInterface\Form;
 
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_category;
-use Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_extended_checkbox;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_category;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_extended_checkbox;
 use HTML_QuickForm_Rule_Required;
 use HTML_QuickForm_select;
 use HTML_QuickForm_textarea;

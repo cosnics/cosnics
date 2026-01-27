@@ -23,7 +23,7 @@ interface CalendarExtensionDataProviderInterface
     /**
      * Gets the events published in the implementing context
      *
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      */
     public function getEvents(CalendarRendererProvider $calendarRendererProvider, int $fromDate, int $toDate): array;
 

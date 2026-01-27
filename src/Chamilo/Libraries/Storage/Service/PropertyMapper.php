@@ -78,9 +78,9 @@ class PropertyMapper
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Doctrine\Common\Collections\ArrayCollection $dataClasses
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\DataClass[]|\Doctrine\Common\Collections\ArrayCollection $dataClasses
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[][]
+     * @return \Chamilo\Libraries\Storage\Architecture\Domain\DataClass[][]
      */
     public function groupDataClassByProperty(ArrayCollection|array $dataClasses, string $propertyName): array
     {
@@ -108,10 +108,10 @@ class PropertyMapper
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\DataClass> $dataClasses
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $dataClasses
      * @param string $methodName
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[][]
+     * @return \Chamilo\Libraries\Storage\Architecture\Domain\DataClass[][]
      */
     public function groupDataClassCollectionByMethod(ArrayCollection $dataClasses, string $methodName): array
     {
@@ -187,9 +187,9 @@ class PropertyMapper
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
+     * @param \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Libraries\Storage\Architecture\Domain\DataClass[] $dataClasses
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]|ArrayCollection
+     * @return \Chamilo\Libraries\Storage\Architecture\Domain\DataClass[]|ArrayCollection
      */
     public function mapDataClassByMethod(array|ArrayCollection $dataClasses, string $methodName): array|ArrayCollection
     {
@@ -214,9 +214,9 @@ class PropertyMapper
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
+     * @param \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Libraries\Storage\Architecture\Domain\DataClass[] $dataClasses
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]|ArrayCollection
+     * @return \Chamilo\Libraries\Storage\Architecture\Domain\DataClass[]|ArrayCollection
      */
     public function mapDataClassByProperty(array|ArrayCollection $dataClasses, string $propertyName
     ): array|ArrayCollection

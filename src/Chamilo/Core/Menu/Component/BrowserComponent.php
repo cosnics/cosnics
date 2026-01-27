@@ -4,15 +4,15 @@ namespace Chamilo\Core\Menu\Component;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\UserInterface\Table\ItemTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Format\Tree\Menu\JsTreeRenderer;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropdownButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
+use Chamilo\Libraries\UserInterface\Tree\Service\JsTreeRenderer;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -29,8 +29,8 @@ class BrowserComponent extends Manager
     private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
+     * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      * @throws \TableException
@@ -147,7 +147,7 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException

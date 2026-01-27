@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Group\Storage\DataClass;
 
 use Chamilo\Core\Group\Manager;
-use Chamilo\Libraries\Storage\DataClass\NestedSet;
+use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 
 /**
  * @package Chamilo\Core\Group\Storage\DataClass

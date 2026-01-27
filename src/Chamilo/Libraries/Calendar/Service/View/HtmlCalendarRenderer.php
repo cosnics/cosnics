@@ -1,18 +1,18 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Architecture\Interfaces\VisibilitySupport;
-use Chamilo\Libraries\Calendar\Event\Event;
+use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
+use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Architecture\Interface\VisibilitySupport;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Calendar\Service\View\TableBuilder\CalendarTableBuilder;
-use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropdownButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -57,7 +57,7 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
     }
 
     /**
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      */
     public function getEvents(CalendarRendererProviderInterface $dataProvider, int $startTime, int $endTime): array
     {

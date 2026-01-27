@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Storage\DataClass;
 
-use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 
 /**
  * @package Chamilo\Core\User\Storage\DataClass

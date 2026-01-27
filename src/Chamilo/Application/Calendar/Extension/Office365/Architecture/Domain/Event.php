@@ -7,7 +7,7 @@ namespace Chamilo\Application\Calendar\Extension\Office365\Architecture\Domain;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Event extends \Chamilo\Libraries\Calendar\Event\Event
+class Event extends \Chamilo\Libraries\Calendar\Architecture\Domain\Event
 {
     private \Microsoft\Graph\Generated\Models\Event $sourceEvent;
 

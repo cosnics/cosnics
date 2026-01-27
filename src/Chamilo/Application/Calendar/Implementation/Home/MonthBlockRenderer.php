@@ -9,12 +9,12 @@ use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Calendar\Service\View\MiniMonthCalendarRenderer;
 use Chamilo\Libraries\Platform\ChamiloRequest;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**

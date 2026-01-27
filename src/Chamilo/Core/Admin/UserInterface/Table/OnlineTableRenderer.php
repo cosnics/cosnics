@@ -4,15 +4,15 @@ namespace Chamilo\Core\Admin\UserInterface\Table;
 use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumnFactory;
-use Chamilo\Libraries\Format\Table\Column\TableColumn;
-use Chamilo\Libraries\Format\Table\Extension\DataClassListTableRenderer;
-use Chamilo\Libraries\Format\Table\ListHtmlTableRenderer;
-use Chamilo\Libraries\Format\Table\Pager;
-use Chamilo\Libraries\Format\Table\TableResultPosition;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableResultPosition;
+use Chamilo\Libraries\UserInterface\Table\Factory\DataClassPropertyTableColumnFactory;
+use Chamilo\Libraries\UserInterface\Table\Service\DataClassListTableRenderer;
+use Chamilo\Libraries\UserInterface\Table\Service\ListHtmlTableRenderer;
+use Chamilo\Libraries\UserInterface\Table\Service\Pager;
 use Symfony\Component\Translation\Translator;
 
 /**

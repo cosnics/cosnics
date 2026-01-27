@@ -72,7 +72,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
     }
 
     /**
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      */
     protected function getCalendarEvents(string $calendarIdentifier, User $user, int $fromDate, int $toDate): array
     {
@@ -194,7 +194,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
     }
 
     /**
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getEvents(CalendarRendererProvider $calendarRendererProvider, int $fromDate, int $toDate): array

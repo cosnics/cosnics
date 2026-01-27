@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service;
 
-use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Architecture\Interfaces\VisibilitySupport;
-use Chamilo\Libraries\File\WebPathBuilder;
-use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
-use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Architecture\Interface\VisibilitySupport;
+use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
+use Chamilo\Libraries\Service\Resource\ResourceManager;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageManager;
 use Exception;
 use Symfony\Component\Translation\Translator;
 

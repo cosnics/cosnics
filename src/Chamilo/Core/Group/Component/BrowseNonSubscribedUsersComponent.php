@@ -5,23 +5,23 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\UserInterface\Table\NonSubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ContainsCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\NotCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem;
+use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -35,9 +35,9 @@ class BrowseNonSubscribedUsersComponent extends Manager
     private ?Group $group;
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
@@ -181,7 +181,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
 
     /**
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */

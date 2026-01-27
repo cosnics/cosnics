@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\Recurrence;
 
-use Chamilo\Libraries\Calendar\Event\RecurrenceRules;
+use Chamilo\Libraries\Calendar\Architecture\Domain\RecurrenceRules;
 
 /**
  *
@@ -13,7 +13,7 @@ class VObjectRecurrenceRulesFormatter extends IcalRecurrenceRulesFormatter
 
     /**
      *
-     * @param \Chamilo\Libraries\Calendar\Event\RecurrenceRules $recurrenceRules
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\RecurrenceRules $recurrenceRules
      *
      * @return string[]
      */

@@ -1,9 +1,9 @@
 <?php
 
-use Chamilo\Libraries\Architecture\Bootstrap\Bootstrap;
-use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Console;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
+use Chamilo\Libraries\Service\Bootstrap\Bootstrap;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 $autoloader = require __DIR__ . '/vendor/autoload.php';
@@ -12,7 +12,7 @@ $container = DependencyInjectionContainerBuilder::getInstance()->createContainer
 $container->get(Bootstrap::class)->setup();
 
 /**
- * @var \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+ * @var \Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface $exceptionLogger
  */
 $exceptionLogger = $container->get('Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger');
 

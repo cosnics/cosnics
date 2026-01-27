@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\Event;
 
-use Chamilo\Libraries\Calendar\Event\Event;
+use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\Event

@@ -1,0 +1,58 @@
+<?php
+namespace Chamilo\Libraries\Storage\Service\ConditionVariable;
+
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\OperationConditionVariable;
+use Chamilo\Libraries\Storage\Service\ConditionVariableTranslator;
+use Doctrine\DBAL\Query\QueryBuilder;
+
+/**
+ * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Magali Gillard <magali.gillard@ehb.be>
+ * @author  Eduard Vossen <eduard.vossen@ehb.be>
+ */
+class OperationConditionVariableTranslator extends ConditionVariableTranslator
+{
+    public const CONDITION_CLASS = OperationConditionVariable::class;
+
+    public function translate(
+        QueryBuilder $querybuilder, OperationConditionVariable $operationConditionVariable, ?bool $enableAliasing = true
+    ): string
+    {
+        $strings = [];
+
+        $strings[] = '(';
+        $strings[] = $this->getConditionPartTranslatorService()->translate(
+            $querybuilder, $operationConditionVariable->getLeftConditionVariable(), $enableAliasing
+        );
+
+        switch ($operationConditionVariable->getOperator())
+        {
+            case OperationConditionVariable::ADDITION :
+                $strings[] = '+';
+                break;
+            case OperationConditionVariable::DIVISION :
+                $strings[] = '/';
+                break;
+            case OperationConditionVariable::MINUS :
+                $strings[] = '-';
+                break;
+            case OperationConditionVariable::MULTIPLICATION :
+                $strings[] = '*';
+                break;
+            case OperationConditionVariable::BITWISE_AND :
+                $strings[] = '&';
+                break;
+            case OperationConditionVariable::BITWISE_OR :
+                $strings[] = '|';
+                break;
+        }
+
+        $strings[] = $this->getConditionPartTranslatorService()->translate(
+            $querybuilder, $operationConditionVariable->getRightConditionVariable(), $enableAliasing
+        );
+        $strings[] = ')';
+
+        return implode(' ', $strings);
+    }
+}

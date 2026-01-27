@@ -18,7 +18,7 @@ use Chamilo\Core\User\Storage\DataClass\UserActivity;
 use Chamilo\Core\User\Storage\DataClass\UserAuthenticationActivity;
 use Chamilo\Core\User\Storage\DataClass\UserVisit;
 use Chamilo\Core\User\Storage\Repository\UserTrackingRepository;
-use Chamilo\Libraries\Format\Structure\PageConfiguration;
+use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

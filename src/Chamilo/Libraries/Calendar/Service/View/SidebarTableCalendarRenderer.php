@@ -1,15 +1,15 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Service\View\TableBuilder\CalendarTableBuilder;
-use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\View

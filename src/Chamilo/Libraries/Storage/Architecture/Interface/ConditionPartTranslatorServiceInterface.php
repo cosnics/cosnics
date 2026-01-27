@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Interface;
 
-use Chamilo\Libraries\Storage\Query\ConditionPart;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionPart;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**

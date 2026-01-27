@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\Recurrence;
 
-use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Calendar\Event\RecurrenceRules;
+use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
+use Chamilo\Libraries\Calendar\Architecture\Domain\RecurrenceRules;
 use DateTime;
 use Sabre\VObject;
 
@@ -17,14 +17,14 @@ class RecurrenceCalculator
     private int $endTime;
 
     /**
-     * @var \Chamilo\Libraries\Calendar\Event\Event[]
+     * @var \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      */
     private array $events;
 
     private int $startTime;
 
     /**
-     * @param \Chamilo\Libraries\Calendar\Event\Event[] $events
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
      */
     public function __construct(array $events, int $startTime, int $endTime)
     {
@@ -34,7 +34,7 @@ class RecurrenceCalculator
     }
 
     /**
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      * @throws \Sabre\VObject\InvalidDataException
      */
     public function expandEvents(): array
@@ -119,7 +119,7 @@ class RecurrenceCalculator
     }
 
     /**
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      */
     public function getEvents(): array
     {
@@ -144,7 +144,7 @@ class RecurrenceCalculator
     }
 
     /**
-     * @param \Chamilo\Libraries\Calendar\Event\Event[] $events
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
      */
     public function setEvent(array $events)
     {

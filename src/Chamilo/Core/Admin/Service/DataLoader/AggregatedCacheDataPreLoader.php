@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Admin\Service\DataLoader;
 
-use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
-use Chamilo\Libraries\Cache\Traits\SimpleCacheAdapterHandlerTrait;
-use Chamilo\Libraries\Cache\Traits\SimpleCacheDataPreLoaderTrait;
+use Chamilo\Libraries\Storage\Architecture\Interface\CacheDataPreLoaderInterface;
+use Chamilo\Libraries\Storage\Architecture\Trait\SimpleCacheAdapterHandlerTrait;
+use Chamilo\Libraries\Storage\Architecture\Trait\SimpleCacheDataPreLoaderTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
@@ -17,12 +17,12 @@ class AggregatedCacheDataPreLoader implements CacheDataPreLoaderInterface
     use SimpleCacheDataPreLoaderTrait;
 
     /**
-     * @var \Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface[]
+     * @var \Chamilo\Libraries\Storage\Architecture\Interface\CacheDataPreLoaderInterface[]
      */
     private array $dataPreLoaders;
 
     /**
-     * @param \Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface[] $dataPreLoaders
+     * @param \Chamilo\Libraries\Storage\Architecture\Interface\CacheDataPreLoaderInterface[] $dataPreLoaders
      */
     public function __construct(AdapterInterface $cacheAdapter, array $dataPreLoaders = [])
     {
@@ -46,7 +46,7 @@ class AggregatedCacheDataPreLoader implements CacheDataPreLoaderInterface
     }
 
     /**
-     * @return \Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface[]
+     * @return \Chamilo\Libraries\Storage\Architecture\Interface\CacheDataPreLoaderInterface[]
      */
     protected function getDataPreLoaders(): array
     {

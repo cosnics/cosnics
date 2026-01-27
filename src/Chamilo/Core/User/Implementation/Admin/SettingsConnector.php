@@ -5,7 +5,7 @@ use Chamilo\Core\Admin\Architecture\Interface\SettingsConnectorInterface;
 use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Architecture\Domain\UserPictureProviderCollection;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
 use IntlDateFormatter;
 use Symfony\Component\Translation\Translator;
 

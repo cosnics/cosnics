@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Event\Event;
-use Chamilo\Libraries\Calendar\Event\EventAttendee;
+use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
+use Chamilo\Libraries\Calendar\Architecture\Domain\EventAttendee;
+use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\Recurrence\VObjectRecurrenceRulesFormatter;
 use DateTime;
 use DateTimeZone;

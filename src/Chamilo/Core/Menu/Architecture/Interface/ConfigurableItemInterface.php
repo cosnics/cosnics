@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Architecture\Interface;
 
-use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 
 /**
  * @package Chamilo\Core\Menu\Architecture\Interface

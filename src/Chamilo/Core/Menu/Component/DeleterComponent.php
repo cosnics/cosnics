@@ -3,9 +3,9 @@ namespace Chamilo\Core\Menu\Component;
 
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,8 +18,8 @@ use Symfony\Component\HttpFoundation\Response;
 class DeleterComponent extends Manager
 {
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -62,7 +62,7 @@ class DeleterComponent extends Manager
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     protected function getItems(): ArrayCollection

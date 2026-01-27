@@ -1,0 +1,52 @@
+<?php
+namespace Chamilo\Libraries\UserInterface\Tab\Service;
+
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ActionsTab;
+
+/**
+ * @package Chamilo\Libraries\Format\Tabs
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
+class ActionsTabRenderer
+{
+    private ActionRenderer $actionRenderer;
+
+    private GenericTabRenderer $tabRenderer;
+
+    public function __construct(GenericTabRenderer $tabRenderer, ActionRenderer $actionRenderer)
+    {
+        $this->tabRenderer = $tabRenderer;
+        $this->actionRenderer = $actionRenderer;
+    }
+
+    public function getActionRenderer(): ActionRenderer
+    {
+        return $this->actionRenderer;
+    }
+
+    public function getTabRenderer(): GenericTabRenderer
+    {
+        return $this->tabRenderer;
+    }
+
+    public function renderContent(string $tabsRendererName, ActionsTab $tab): string
+    {
+        $html = [];
+
+        $html[] = $this->getTabRenderer()->renderContentHeaderForList($tabsRendererName, $tab);
+
+        foreach ($tab->getActions() as $action)
+        {
+            $html[] = $this->getActionRenderer()->render($action);
+        }
+
+        $html[] = $this->getTabRenderer()->renderContentFooterForList();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderNavigation(string $tabsRendererName, ActionsTab $tab): string
+    {
+        return $this->getTabRenderer()->renderNavigation($tabsRendererName, $tab);
+    }
+}

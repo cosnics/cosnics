@@ -11,20 +11,20 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\Authentication\Interface\ChangeablePasswordInterface;
-use Chamilo\Libraries\Cache\Traits\CacheAdapterHandlerTrait;
-use Chamilo\Libraries\File\WebPathBuilder;
-use Chamilo\Libraries\Hashing\HashingUtilities;
-use Chamilo\Libraries\Mail\Mailer\MailerInterface;
-use Chamilo\Libraries\Mail\ValueObject\Mail;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Exception\UserException;
+use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeablePasswordInterface;
+use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\Protocol\Mail\Architecture\Domain\Mail;
+use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
+use Chamilo\Libraries\Protocol\Security\Service\HashingUtilities;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Architecture\Trait\CacheAdapterHandlerTrait;
 use Chamilo\Libraries\Storage\Service\PropertyMapper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
@@ -737,7 +737,7 @@ class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      */
     public function sendPasswordResetLinkforUser(User $user): bool
     {

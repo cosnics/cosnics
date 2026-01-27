@@ -10,9 +10,9 @@ use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 use Symfony\Component\Translation\Translator;
 
 /**

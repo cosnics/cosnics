@@ -5,10 +5,10 @@ use Chamilo\Core\Menu\Architecture\Interface\ItemServiceInterface;
 use Chamilo\Core\Menu\Implementation\Menu\ApplicationItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Chamilo\Libraries\Storage\Service\PropertyMapper;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
@@ -211,7 +211,7 @@ class ItemService implements ItemServiceInterface
      * @param string $parentIdentifier
      * @param ?int $count
      * @param ?int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException

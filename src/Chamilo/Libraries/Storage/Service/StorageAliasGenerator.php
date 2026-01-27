@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Service;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 
 /**
  *
@@ -54,7 +54,7 @@ class StorageAliasGenerator
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Storage\DataClass\DataClass> $class
+     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $class
      */
     public function getDataClassAlias(string $class): string
     {

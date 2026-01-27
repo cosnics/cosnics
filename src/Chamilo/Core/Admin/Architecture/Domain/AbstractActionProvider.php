@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Admin\Architecture\Domain;
 
 use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Symfony\Component\Translation\Translator;
 
 /**

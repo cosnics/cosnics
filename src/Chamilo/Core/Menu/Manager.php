@@ -4,8 +4,8 @@ namespace Chamilo\Core\Menu;
 use Chamilo\Core\Menu\Architecture\Domain\ItemRendererCollection;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\ItemService;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationConfigurationInterface;
 
 /**
  * @package Chamilo\Core\Menu
@@ -33,9 +33,9 @@ abstract class Manager extends Application
     public const PARAM_TYPE = 'type';
 
     /**
-     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
+     * @param \Chamilo\Libraries\Architecture\Interface\ApplicationConfigurationInterface $applicationConfiguration
      *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {

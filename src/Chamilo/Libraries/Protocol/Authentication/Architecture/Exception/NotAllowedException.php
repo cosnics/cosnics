@@ -1,0 +1,101 @@
+<?php
+namespace Chamilo\Libraries\Protocol\Authentication\Architecture\Exception;
+
+use Chamilo\Libraries\Architecture\Exception\UserException;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylesubmitbutton;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use HTML_QuickForm_html;
+use HTML_QuickForm_password;
+use HTML_QuickForm_Rule_Required;
+use HTML_QuickForm_text;
+
+/**
+ * This class represents a parameter not defined exception.
+ * Throw this if you expected an URL parameter that is not
+ * there
+ *
+ * @package Chamilo\Libraries\Architecture\Exceptions
+ */
+class NotAllowedException extends UserException
+{
+
+    public function __construct(bool $showLoginForm = false)
+    {
+        $this->getSession()->set('request_uri', $_SERVER['REQUEST_URI']);
+
+        $html = [];
+
+        $html[] = $this->getTranslator()->trans('NotAllowed', [], StringUtilities::LIBRARIES);
+
+        parent::__construct(implode(PHP_EOL, $html));
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function getLoginForm(): FormValidator
+    {
+        $translator = $this->getTranslator();
+
+        $form = new FormValidator('formLogin', FormValidator::FORM_METHOD_POST, $this->getRequest()->getUri());
+
+        $form->getRenderer()->setElementTemplate('{element}');
+
+        $form->setRequiredNote('');
+
+        $form->addElement(HTML_QuickForm_html::class, '<div class="form-group">');
+        $form->addElement(HTML_QuickForm_html::class, '<div class="input-group">');
+
+        $form->addElement(
+            HTML_QuickForm_html::class,
+            '<div class="input-group-addon">' . $translator->trans('Username', [], StringUtilities::LIBRARIES) .
+            '</div>'
+        );
+
+        $form->addElement(
+            HTML_QuickForm_text::class, 'login', $translator->trans('UserName', [], StringUtilities::LIBRARIES),
+            ['size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control']
+        );
+
+        $form->addElement(HTML_QuickForm_html::class, '</div>');
+        $form->addElement(HTML_QuickForm_html::class, '</div>');
+
+        $form->addElement(HTML_QuickForm_html::class, '<div class="form-group">');
+        $form->addElement(HTML_QuickForm_html::class, '<div class="input-group">');
+
+        $form->addElement(
+            HTML_QuickForm_html::class,
+            '<div class="input-group-addon">' . $translator->trans('Password', [], StringUtilities::LIBRARIES) .
+            '</div>'
+        );
+
+        $form->addElement(
+            HTML_QuickForm_password::class, 'password', $translator->trans('Pass', [], StringUtilities::LIBRARIES),
+            ['size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control']
+        );
+
+        $form->addElement(HTML_QuickForm_html::class, '</div>');
+        $form->addElement(HTML_QuickForm_html::class, '</div>');
+
+        $form->addElement(HTML_QuickForm_html::class, '<div class="form-group text-right">');
+        $form->addElement(
+            HTML_QuickForm_stylesubmitbutton::class, 'submitAuth',
+            $translator->trans('Login', [], StringUtilities::LIBRARIES), null, null, new FontAwesomeGlyph('sign-in-alt')
+        );
+        $form->addElement(HTML_QuickForm_html::class, '</div>');
+
+        $form->addRule(
+            'password', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
+            HTML_QuickForm_Rule_Required::class
+        );
+
+        $form->addRule(
+            'login', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
+            HTML_QuickForm_Rule_Required::class
+        );
+
+        return $form;
+    }
+}

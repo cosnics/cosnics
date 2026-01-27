@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Service\Consulter;
 
-use Chamilo\Libraries\Cache\Interfaces\CacheDataPreLoaderInterface;
+use Chamilo\Libraries\Storage\Architecture\Interface\CacheDataPreLoaderInterface;
 use Exception;
 
 /**

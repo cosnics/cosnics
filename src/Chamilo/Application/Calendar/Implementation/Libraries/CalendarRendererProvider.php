@@ -4,9 +4,9 @@ namespace Chamilo\Application\Calendar\Implementation\Libraries;
 use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProviderCollection;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Calendar\Architecture\Interfaces\VisibilitySupport;
+use Chamilo\Libraries\Calendar\Architecture\Interface\VisibilitySupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 
 /**
  * @package Chamilo\Application\Calendar\Implementation\Libraries
@@ -42,7 +42,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Service\Calen
     }
 
     /**
-     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      */
     public function aggregateEvents(?int $startTime = null, ?int $endTime = null): array
     {

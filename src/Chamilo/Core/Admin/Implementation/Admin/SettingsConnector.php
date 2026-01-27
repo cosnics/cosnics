@@ -5,8 +5,8 @@ use Chamilo\Core\Admin\Architecture\Interface\SettingsConnectorInterface;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Service\Consulter\LanguageConsulter;
-use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Protocol\Mail\Factory\MailerFactory;
+use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use DateTimeZone;
 use Symfony\Component\Translation\Translator;
 

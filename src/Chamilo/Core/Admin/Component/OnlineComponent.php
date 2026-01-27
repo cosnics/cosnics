@@ -6,14 +6,14 @@ use Chamilo\Core\Admin\Service\OnlineService;
 use Chamilo\Core\Admin\UserInterface\Table\OnlineTableRenderer;
 use Chamilo\Core\User\Implementation\User\UserDetailsRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Table\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
+use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -24,8 +24,8 @@ class OnlineComponent extends Manager
 {
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
-     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
+     * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -100,7 +100,7 @@ class OnlineComponent extends Manager
 
     /**
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Format\Table\Exception\InvalidPageNumberException
+     * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */

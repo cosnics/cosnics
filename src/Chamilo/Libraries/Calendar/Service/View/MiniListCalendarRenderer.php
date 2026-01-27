@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Calendar\Architecture\Interfaces\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Architecture\Traits\AgendaCalendarTrait;
+use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
+use Chamilo\Libraries\Calendar\Architecture\Trait\AgendaCalendarTrait;
 use Chamilo\Libraries\Calendar\Service\Event\EventListRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
-use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageRenderer;
 use Symfony\Component\Translation\Translator;
 
 /**

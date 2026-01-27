@@ -3,8 +3,8 @@ namespace Chamilo\Core\Home\Component;
 
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\HomeRenderer;
-use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\Authentication\Interface\NoAuthenticationSupportInterface;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
+use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -17,7 +17,7 @@ class HomeComponent extends Manager implements NoAuthenticationSupportInterface
 {
 
     /**
-     * @throws \Chamilo\Libraries\Authentication\Exception\AuthenticationException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function run(): Response

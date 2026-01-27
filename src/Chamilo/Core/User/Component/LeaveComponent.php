@@ -3,8 +3,8 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserLeavePageEvent;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface;
-use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Architecture\Interface\NoVisitTraceComponentInterface;
+use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

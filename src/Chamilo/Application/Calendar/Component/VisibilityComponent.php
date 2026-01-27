@@ -3,8 +3,8 @@ namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\VisibilityService;
-use Chamilo\Libraries\Calendar\Architecture\Interfaces\VisibilityServiceInterface;
-use Chamilo\Libraries\Calendar\Architecture\Traits\VisibilityComponentTrait;
+use Chamilo\Libraries\Calendar\Architecture\Interface\VisibilityServiceInterface;
+use Chamilo\Libraries\Calendar\Architecture\Trait\VisibilityComponentTrait;
 
 class VisibilityComponent extends Manager
 {

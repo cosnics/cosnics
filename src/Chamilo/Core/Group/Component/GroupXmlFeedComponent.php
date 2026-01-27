@@ -3,8 +3,8 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\DataClass\NestedSet;
+use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Admin\Service\Finder;
 
 use Chamilo\Core\Admin\Service\PackageFactory;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
+use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 
 /**
  * @package Chamilo\Core\Admin\Service\Finder

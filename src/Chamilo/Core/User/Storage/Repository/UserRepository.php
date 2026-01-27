@@ -4,25 +4,25 @@ namespace Chamilo\Core\User\Storage\Repository;
 use Chamilo\Core\Admin\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Join;
-use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
-use Chamilo\Libraries\Storage\Query\RetrieveProperties;
-use Chamilo\Libraries\Storage\Query\Variable\CaseConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\CaseConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\CaseElementConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Join;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Joins;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
+use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
-use Chamilo\Libraries\Storage\StorageParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -397,7 +397,7 @@ class UserRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $retrieveProperties
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\ConditionVariable[] $retrieveProperties
      *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -440,10 +440,10 @@ class UserRepository
     }
 
     /**
-     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition $condition
      * @param ?int $count
      * @param ?int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy $orderBy
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException

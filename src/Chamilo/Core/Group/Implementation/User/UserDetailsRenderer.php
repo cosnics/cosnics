@@ -6,10 +6,10 @@ use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\User\Architecture\Interface\UserDetailsRendererInterface;
 use Chamilo\Core\User\Architecture\Trait\UserDetailsRendererTrait;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
-use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
-use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\NamespaceIdentGlyph;
 use HTML_Table;
 use Symfony\Component\Translation\Translator;
 

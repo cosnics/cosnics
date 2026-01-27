@@ -3,8 +3,8 @@ namespace Chamilo\Core\Admin\Storage\Repository;
 
 use Chamilo\Core\Admin\Architecture\Domain\Language;
 use Chamilo\Core\Admin\Architecture\Domain\LanguageCodeEnum;
-use Chamilo\Libraries\File\FilesystemTools;
-use Chamilo\Libraries\File\SystemPathBuilder;
+use Chamilo\Libraries\Filesystem\Service\FilesystemTools;
+use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 

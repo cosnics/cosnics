@@ -5,9 +5,9 @@ use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Menu\Architecture\Domain\ItemRendererCollection;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\File\WebPathBuilder;
-use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
+use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**

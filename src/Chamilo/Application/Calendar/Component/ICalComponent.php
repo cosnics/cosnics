@@ -4,12 +4,12 @@ namespace Chamilo\Application\Calendar\Component;
 use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\Authentication\Interface\NoAuthenticationSupportInterface;
-use Chamilo\Libraries\Authentication\SecurityToken\SecurityTokenAuthentication;
+use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Calendar\Service\View\ICalCalendarRenderer;
-use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
+use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\Protocol\Authentication\Service\SecurityTokenAuthentication;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -25,7 +25,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
     private CalendarRendererProvider $calendarRendererProvider;
 
     /**
-     * @throws \Chamilo\Libraries\Authentication\Exception\AuthenticationException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
      * @throws \Exception
      */
     public function run(): Response

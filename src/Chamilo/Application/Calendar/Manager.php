@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Calendar;
 
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
-use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Domain\Application;
 
 /**
  * @package Chamilo\Application\Calendar

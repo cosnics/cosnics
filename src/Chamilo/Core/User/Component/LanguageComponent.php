@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class LanguageComponent extends Manager
 {
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function run(): Response

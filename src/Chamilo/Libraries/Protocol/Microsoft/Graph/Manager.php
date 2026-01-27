@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph;
 
-use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
 
 /**

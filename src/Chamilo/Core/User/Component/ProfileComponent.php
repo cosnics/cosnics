@@ -2,10 +2,10 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Format\Tabs\Link\LinkTab;
-use Chamilo\Libraries\Format\Tabs\Link\LinkTabsRenderer;
-use Chamilo\Libraries\Format\Tabs\TabsCollection;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
+use Chamilo\Libraries\UserInterface\Tab\Service\LinkTabsRenderer;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -17,7 +17,7 @@ abstract class ProfileComponent extends Manager
 {
 
     /**
-     * @return \Chamilo\Libraries\Format\Tabs\Link\LinkTab[]
+     * @return \Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab[]
      */
     public function getAvailableTabs(): array
     {

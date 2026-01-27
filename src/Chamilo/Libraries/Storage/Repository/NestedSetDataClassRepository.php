@@ -1,23 +1,23 @@
 <?php
 namespace Chamilo\Libraries\Storage\Repository;
 
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\NestedSet;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
-use Chamilo\Libraries\Storage\Query\RetrieveProperties;
-use Chamilo\Libraries\Storage\Query\UpdateProperties;
-use Chamilo\Libraries\Storage\Query\UpdateProperty;
-use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\StorageParameters;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\NotCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\OperationConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperties;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperty;
+use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 
@@ -152,10 +152,10 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\NestedSet $nestedSet
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition|null $condition
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\Architecture\Domain\NestedSet>
      * @throws \Throwable
      */
     public function delete(NestedSet $nestedSet, ?Condition $condition = null): ArrayCollection
@@ -217,11 +217,11 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\NestedSet $nestedSet
      * @param bool $includeSelf
-     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition $condition
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\Architecture\Domain\NestedSet>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findAncestors(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null
@@ -236,11 +236,11 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\NestedSet $nestedSet
      * @param bool $recursive
-     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition $condition
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\Architecture\Domain\NestedSet>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findDescendants(NestedSet $nestedSet, bool $recursive = true, ?Condition $condition = null
@@ -260,7 +260,7 @@ class NestedSetDataClassRepository
     public function findRelatedNestedSetByIdentifier(NestedSet $nestedSet, string $nestedSetIdentifier): NestedSet
     {
         /**
-         * @var class-string<\Chamilo\Libraries\Storage\DataClass\NestedSet> $nestedSetClass
+         * @var class-string<\Chamilo\Libraries\Storage\Architecture\Domain\NestedSet> $nestedSetClass
          */
         $nestedSetClass = get_class($nestedSet);
 
@@ -268,11 +268,11 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\NestedSet $nestedSet
      * @param bool $includeSelf
-     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition $condition
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\Architecture\Domain\NestedSet>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findSiblings(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null
@@ -406,7 +406,7 @@ class NestedSetDataClassRepository
     public function getParent(NestedSet $nestedSet): NestedSet
     {
         /**
-         * @var class-string<\Chamilo\Libraries\Storage\DataClass\NestedSet> $nestedSetClass
+         * @var class-string<\Chamilo\Libraries\Storage\Architecture\Domain\NestedSet> $nestedSetClass
          */
         $nestedSetClass = get_class($nestedSet);
 
@@ -949,7 +949,7 @@ class NestedSetDataClassRepository
      * @template tRetrieves
      *
      * @param class-string<tRetrieves> $dataClassName
-     * @param \Chamilo\Libraries\Storage\StorageParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters $parameters
      *
      * @return ArrayCollection<tRetrieves>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException

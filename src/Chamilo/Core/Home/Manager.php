@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Home;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationConfigurationInterface;
 
 /**
  * @package Chamilo\Core\Home
@@ -30,7 +30,7 @@ abstract class Manager extends Application
     public const TYPE_TAB = 'tab';
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
