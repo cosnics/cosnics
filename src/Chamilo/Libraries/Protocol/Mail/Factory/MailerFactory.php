@@ -2,10 +2,9 @@
 namespace Chamilo\Libraries\Protocol\Mail\Factory;
 
 use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Exception;
+use Chamilo\Libraries\Protocol\Mail\Service\Platform;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -18,48 +17,77 @@ class MailerFactory
 
     protected ConfigurationConsulter $configurationConsulter;
 
+    protected string $configuredMailerClass;
+
+    /**
+     * @var \Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface[]
+     */
+    protected array $mailers = [];
+
     protected Translator $translator;
 
-    public function __construct(ConfigurationConsulter $configurationConsulter, Translator $translator)
+    public function __construct(
+        ConfigurationConsulter $configurationConsulter, Translator $translator, string $configuredMailerClass
+    )
     {
         $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
+        $this->configuredMailerClass = $configuredMailerClass;
     }
 
-    /**
-     * @throws \Exception
-     */
+    public function addMailer(MailerInterface $mailer): static
+    {
+        $this->mailers[get_class($mailer)] = $mailer;
+
+        return $this;
+    }
+
     public function getActiveMailer(): MailerInterface
     {
-        $mailerClass = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'mailer']);
-
-        if (!class_exists($mailerClass) || !is_subclass_of($mailerClass, MailerInterface::class))
+        try
         {
-            throw new Exception($this->getTranslator()->trans('InvalidMailerClass', [], StringUtilities::LIBRARIES));
+            return $this->getMailer($this->getConfiguredMailerClass());
         }
-
-        /**
-         * @var \Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface
-         */
-        return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get($mailerClass);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getAvailableMailers(): array
-    {
-        $mailers = [];
-
-        $mailers['Chamilo\Libraries\Protocol\Mail\Service\PhpMailer\Mailer'] = 'PhpMailer';
-        $mailers['Chamilo\Libraries\Protocol\Mail\Service\Platform\Mailer'] = 'Platform Mailer';
-
-        return $mailers;
+        catch (ClassNotExistException)
+        {
+            return $this->getDefaultMailer();
+        }
     }
 
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
+    }
+
+    public function getConfiguredMailerClass(): string
+    {
+        return $this->configuredMailerClass;
+    }
+
+    public function getDefaultMailer(): MailerInterface
+    {
+        return $this->mailers[Platform\Mailer::class];
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     */
+    public function getMailer(string $mailerClass): MailerInterface
+    {
+        if (!isset($this->mailers[$mailerClass]))
+        {
+            throw new ClassNotExistException($mailerClass);
+        }
+
+        return $this->mailers[$mailerClass];
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface[]
+     */
+    public function getMailers(): array
+    {
+        return $this->mailers;
     }
 
     public function getTranslator(): Translator

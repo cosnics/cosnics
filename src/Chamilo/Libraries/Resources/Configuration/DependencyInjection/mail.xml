@@ -12,8 +12,14 @@
                      method="getActiveMailer"/>
         </service>
 
-        <service id="Chamilo\Libraries\Mail\Mailer\MailerFactory"/>
-        <service id="Chamilo\Libraries\Mail\Mailer\PhpMailer\Mailer"/>
-        <service id="Chamilo\Libraries\Mail\Mailer\Platform\Mailer"/>
+        <service id="Chamilo\Libraries\Mail\Mailer\MailerFactory">
+            <argument key="$configuredMailerClass">chamilo.configuration.mailer</argument>
+        </service>
+        <service id="Chamilo\Libraries\Mail\Mailer\PhpMailer\Mailer">
+            <tag name="Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface"/>
+        </service>
+        <service id="Chamilo\Libraries\Mail\Mailer\Platform\Mailer">
+            <tag name="Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface"/>
+        </service>
     </services>
 </container>

@@ -72,7 +72,7 @@ class SettingsConnector implements SettingsConnectorInterface
      */
     public function getMailers(): array
     {
-        return $this->getMailerFactory()->getAvailableMailers();
+        return $this->getMailerFactory()->getMailers();
     }
 
     public function getThemeSystemPathBuilder(): ThemePathBuilder
