@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Console\Command\Vendor\Doctrine;
+namespace Chamilo\Libraries\Protocol\Console\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Tools\Console\ConnectionProvider;

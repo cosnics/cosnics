@@ -30,6 +30,7 @@ use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMess
 use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -110,8 +111,7 @@ trait DependencyInjectionContainerTrait
     /**
      * @param class-string<\Symfony\Component\EventDispatcher\EventDispatcherInterface> $className
      */
-    public function getEventDispatcher(string $className = 'Symfony\Component\EventDispatcher'
-    ): EventDispatcherInterface
+    public function getEventDispatcher(string $className = EventDispatcher::class): EventDispatcherInterface
     {
         return $this->getService($className);
     }
@@ -216,7 +216,7 @@ trait DependencyInjectionContainerTrait
      * @param class-string<\Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder> $className
      */
     public function getThemeSystemPathBuilder(
-        string $className = 'Chamilo\Libraries\Format\Theme\ThemeSystemPathBuilder'
+        string $className = 'Chamilo\Libraries\UserInterface\Theme\Service\ThemeSystemPathBuilder'
     ): ThemePathBuilder
     {
         return $this->getService($className);

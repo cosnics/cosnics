@@ -27,10 +27,10 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         return [
             'Chamilo\Application\Calendar' => [
-                'architecture.domain.xml',
-                'implementation.home.xml',
-                'service.xml',
-                'storage.xml'
+                'architecture.domain.php',
+                'implementation.home.php',
+                'service.php',
+                'storage.php'
             ]
         ];
     }

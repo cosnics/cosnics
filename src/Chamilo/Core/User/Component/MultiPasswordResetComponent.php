@@ -4,7 +4,7 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
-use Chamilo\Libraries\Protocol\Security\Service\HashingUtilities;
+use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -73,9 +73,9 @@ class MultiPasswordResetComponent extends Manager
         }
     }
 
-    public function getHashingUtilities(): HashingUtilities
+    public function getHashingUtilities(): HashingAlgorithm
     {
-        return $this->getService(HashingUtilities::class);
+        return $this->getService(HashingAlgorithm::class);
     }
 
     public function getPasswordGenerator(): PasswordGeneratorInterface

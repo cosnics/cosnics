@@ -18,7 +18,7 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeableP
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Domain\Mail;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
-use Chamilo\Libraries\Protocol\Security\Service\HashingUtilities;
+use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
@@ -62,7 +62,7 @@ class UserService
 
     protected WebPathBuilder $webPathBuilder;
 
-    private HashingUtilities $hashingUtilities;
+    private HashingAlgorithm $hashingUtilities;
 
     private PropertyMapper $propertyMapper;
 
@@ -71,7 +71,7 @@ class UserService
     private UserRepository $userRepository;
 
     public function __construct(
-        UserRepository $userRepository, HashingUtilities $hashingUtilities, PropertyMapper $propertyMapper,
+        UserRepository $userRepository, HashingAlgorithm $hashingUtilities, PropertyMapper $propertyMapper,
         Translator $translator, FilesystemAdapter $userSettingsCacheAdapter,
         ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder, MailerInterface $activeMailer,
         PasswordGeneratorInterface $passwordGenerator, AuthenticationValidator $authenticationValidator,
@@ -596,7 +596,7 @@ class UserService
         return $this->eventDispatcher;
     }
 
-    protected function getHashingUtilities(): HashingUtilities
+    protected function getHashingUtilities(): HashingAlgorithm
     {
         return $this->hashingUtilities;
     }

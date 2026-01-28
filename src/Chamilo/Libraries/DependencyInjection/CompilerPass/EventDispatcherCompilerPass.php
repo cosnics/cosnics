@@ -5,6 +5,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * @package Chamilo\Libraries\DependencyInjection\CompilerPass
@@ -12,18 +13,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class EventDispatcherCompilerPass implements CompilerPassInterface
 {
-    /**
-     * You can modify the container here before it is dumped to PHP code.
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @throws \Exception
-     */
-    public function process(ContainerBuilder $container)
+
+    public function process(ContainerBuilder $container): void
     {
         if ($container->has(EventDispatcherInterface::class))
         {
-            $taggedServices = $container->findTaggedServiceIds('Chamilo\Libraries\EventDispatcher\Subscriber');
+            $taggedServices = $container->findTaggedServiceIds(EventSubscriberInterface::class);
 
             $definition = $container->findDefinition(EventDispatcherInterface::class);
 

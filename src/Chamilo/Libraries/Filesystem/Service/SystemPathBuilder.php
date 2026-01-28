@@ -16,7 +16,7 @@ class SystemPathBuilder extends AbstractPathBuilder
 
             $this->cache[self::BASE] = realpath(
                     __DIR__ . $directorySeparator . '..' . $directorySeparator . '..' . $directorySeparator . '..' .
-                    $directorySeparator
+                    $directorySeparator . '..' . $directorySeparator
                 ) . $directorySeparator;
         }
 

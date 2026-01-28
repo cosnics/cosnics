@@ -1,0 +1,45 @@
+parameters:
+  # Database
+  chamilo.configuration.database:
+    driver: 'Doctrine\DBAL\Driver\PDO\MySQL\Driver'
+    username: ~
+    password: ~
+    host: ~
+    name: ~
+    charset: ~
+
+  # Storage
+  chamilo.configuration.storage:
+    archive_path: './../files/archive/'
+    cache_path: './../files/cache/'
+    garbage_path: './../files/garbage/'
+    logs_path: './../files/logs/'
+    temp_path: './../files/temp/'
+    userpictures_path: './../files/userpictures/'
+
+  # Error handling
+  chamilo.configuration.error_handling:
+    exception_logger:
+      file: 'Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\FileExceptionLogger'
+    exception_logger_builder:
+      file: 'Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\FileExceptionLoggerBuilder'
+
+  # User interface
+  chamilo.configuration.general.language: 'en'
+  chamilo.configuration.general.language.fallback:
+    - 'en'
+  chamilo.configuration.general.theme: 'Aqua'
+
+  # General configuration
+  chamilo.configuration.general.hashing_algorithm: 'Sha1'
+  chamilo.configuration.general.install_date: 1435740089
+  chamilo.configuration.general.security_key: ~
+
+  # Debug
+  chamilo.configuration.debug.show_errors: 0
+  chamilo.configuration.debug.enable_query_cache: 1
+
+  # Various
+  chamilo.configuration.cache.external.defaultLifetime: 3600
+  chamilo.configuration.mailer: 'Chamilo\Libraries\Protocol\Mail\Service\Platform\Mailer'
+  chamilo.configuration.version: 7

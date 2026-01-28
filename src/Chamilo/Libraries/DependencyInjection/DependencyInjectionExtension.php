@@ -7,6 +7,8 @@ use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheDataPreLoaderCompile
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\DoctrineConditionPartTranslatorCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\EventDispatcherCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\HashingCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\MailerCompilerPass;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -34,24 +36,24 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         return [
             'Chamilo\Libraries' => [
-                'architecture.xml',
-                'authentication.xml',
-                'cache.xml',
-                'calendar.xml',
-                'file.xml',
-                'format.xml',
-                'hashing.xml',
-                'mail.xml',
-                'platform.xml',
-                'protocol.microsoft.xml',
-                'storage.xml',
-                'storage.doctrine.xml',
-                'support.xml',
-                'translation.xml',
-                'utilities.xml',
-                'vendor.xml',
-                'console.xml',
-                'console.doctrine.xml'
+                'architecture.php',
+                'authentication.php',
+                'cache.php',
+                'calendar.php',
+                'file.php',
+                'format.php',
+                'hashing.php',
+                'mail.php',
+                'platform.php',
+                'protocol.microsoft.php',
+                'storage.php',
+                'storage.doctrine.php',
+                'support.php',
+                'translation.php',
+                'utilities.php',
+                'vendor.php',
+                'console.php',
+                'console.doctrine.php'
             ]
         ];
     }
@@ -61,7 +63,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         return 'Chamilo\Libraries';
     }
 
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $this->extentensionLoad($configs, $container);
     }
@@ -69,6 +71,8 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     public function registerCompilerPasses(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new ConsoleCompilerPass());
+        $container->addCompilerPass(new HashingCompilerPass());
+        $container->addCompilerPass(new MailerCompilerPass());
         $container->addCompilerPass(new CacheDataPreLoaderCompilerPass());
         $container->addCompilerPass(new CacheAdapterCompilerPass());
         $container->addCompilerPass(new AuthenticationCompilerPass());

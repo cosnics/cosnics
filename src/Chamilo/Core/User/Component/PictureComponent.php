@@ -114,7 +114,7 @@ class PictureComponent extends ProfileComponent
 
     public function getUserPictureProvider(): ?UserPictureUpdateProviderInterface
     {
-        $service = $this->getService('Chamilo\Core\User\Picture\UserPictureProvider');
+        $service = $this->getService('Chamilo\Core\User\Service\UserPictureProvider');
 
         return $service instanceof UserPictureUpdateProviderInterface ? $service : null;
     }

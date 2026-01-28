@@ -61,7 +61,7 @@ class UserPictureComponent extends Manager
     /**
      * @param class-string<\Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface> $className
      */
-    public function getUserPictureProvider(string $className = 'Chamilo\Core\User\Picture\UserPictureProvider'
+    public function getUserPictureProvider(string $className = 'Chamilo\Core\User\Service\UserPictureProvider'
     ): UserPictureProviderInterface
     {
         return $this->getService($className);

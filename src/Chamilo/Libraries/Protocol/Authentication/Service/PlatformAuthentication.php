@@ -10,7 +10,7 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\Authenticat
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeablePasswordInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeableUsernameInterface;
-use Chamilo\Libraries\Protocol\Security\Service\HashingUtilities;
+use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,15 +27,15 @@ class PlatformAuthentication extends Authentication
 {
 
     /**
-     * @var \Chamilo\Libraries\Protocol\Security\Service\HashingUtilities
+     * @var \Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm
      */
-    protected HashingUtilities $hashingUtilities;
+    protected HashingAlgorithm $hashingUtilities;
 
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
-        UserService $userService, HashingUtilities $hashingUtilities, UrlGenerator $urlGenerator
+        UserService $userService, HashingAlgorithm $hashingUtilities, UrlGenerator $urlGenerator
     )
     {
         parent::__construct($configurationConsulter, $translator, $request, $userService);
@@ -70,7 +70,7 @@ class PlatformAuthentication extends Authentication
         return $this->getUserService()->updateUser($user);
     }
 
-    public function getHashingUtilities(): HashingUtilities
+    public function getHashingUtilities(): HashingAlgorithm
     {
         return $this->hashingUtilities;
     }

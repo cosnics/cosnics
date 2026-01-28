@@ -5,23 +5,21 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * @package Chamilo\Libraries\Platform
+ * @package Chamilo\Libraries\Protocol\Security\Service
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class SecurityUtilities
 {
     private ChamiloRequest $chamiloRequest;
 
-    private HashingUtilities $hashingUtilities;
-
     private SessionInterface $session;
 
     public function __construct(
-        SessionInterface $session, ChamiloRequest $chamiloRequest, HashingUtilities $hashingUtilities
+        SessionInterface $session, ChamiloRequest $chamiloRequest
     )
     {
         $this->session = $session;
         $this->chamiloRequest = $chamiloRequest;
-        $this->hashingUtilities = $hashingUtilities;
     }
 
     /**
@@ -57,11 +55,6 @@ class SecurityUtilities
     public function getChamiloRequest(): ChamiloRequest
     {
         return $this->chamiloRequest;
-    }
-
-    public function getHashingUtilities(): HashingUtilities
-    {
-        return $this->hashingUtilities;
     }
 
     public function getSession(): SessionInterface

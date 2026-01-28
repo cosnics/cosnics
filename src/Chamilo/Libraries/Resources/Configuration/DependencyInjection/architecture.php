@@ -1,0 +1,43 @@
+<?php
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+
+use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
+use Chamilo\Libraries\Protocol\Error\Factory\ExceptionLoggerFactory;
+use Chamilo\Libraries\Protocol\Error\Service\ErrorHandler;
+use Chamilo\Libraries\Service\Bootstrap\ApplicationFactory;
+use Chamilo\Libraries\Service\Bootstrap\Bootstrap;
+use Chamilo\Libraries\Service\Bootstrap\Kernel;
+use Chamilo\Libraries\Service\Resource\ResourceGenerator;
+use Chamilo\Libraries\Service\Routing\DataClassUrlGenerator;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\Service\Utilities\ActionResultRenderer;
+use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
+
+return static function (ContainerConfigurator $container) {
+    $services = $container->services();
+    $services->defaults()->public()->autowire()->autoconfigure();
+
+    $services->set(Bootstrap::class)->args(['$showErrors' => '%chamilo.configuration.debug.show_errors%']);
+    $services->set(Kernel::class)->args(['$user' => service('Chamilo\Core\User\CurrentUser')]);
+    $services->set(ApplicationFactory::class);
+
+    $services->set(ErrorHandler::class)->args(
+        ['$themeSystemPathBuilder' => service('Chamilo\Libraries\UserInterface\Theme\Service\ThemeSystemPathBuilder')]
+    );
+
+    $services->set('Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger')->factory(
+        [service(ExceptionLoggerFactory::class), 'createExceptionLogger']
+    );
+
+    $services->alias(ExceptionLoggerInterface::class, 'Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger');
+
+    $services->set(ExceptionLoggerFactory::class)->args(
+        ['$errorHandlingConfiguration' => '%chamilo.configuration.error_handling%']
+    );
+
+    $services->set(ClassnameUtilities::class);
+    $services->set(DataClassUrlGenerator::class);
+    $services->set(UrlGenerator::class);
+    $services->set(ResourceGenerator::class);
+    $services->set(ActionResultRenderer::class);
+};

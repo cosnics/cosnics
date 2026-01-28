@@ -26,11 +26,10 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         return [
             'Chamilo\Core\Home' => [
-                'architecture.domain.xml',
-                'service.xml',
-                'storage.xml',
-                'userInterface.homeRenderer.xml',
-                'userInterface.table.xml'
+                'architecture.domain.php',
+                'service.php',
+                'storage.php',
+                'userInterface.homeRenderer.php'
             ]
         ];
     }

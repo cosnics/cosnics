@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection\CompilerPass;
 
+use Chamilo\Libraries\Storage\Architecture\Interface\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\Storage\Service\CacheDataPreLoaderManager;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -16,11 +17,11 @@ use Symfony\Component\DependencyInjection\Reference;
 class CacheDataPreLoaderCompilerPass implements CompilerPassInterface
 {
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if ($container->hasDefinition(CacheDataPreLoaderManager::class))
         {
-            $taggedServices = $container->findTaggedServiceIds('Chamilo\Libraries\Cache\CacheDataPreLoaderService');
+            $taggedServices = $container->findTaggedServiceIds(CacheDataPreLoaderInterface::class);
 
             $definition = $container->getDefinition(CacheDataPreLoaderManager::class);
 

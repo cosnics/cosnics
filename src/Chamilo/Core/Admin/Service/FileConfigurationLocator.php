@@ -20,7 +20,7 @@ class FileConfigurationLocator
 
     public function getDefaultFileName(): string
     {
-        return 'configuration.default.xml';
+        return 'configuration.default.yaml';
     }
 
     public function getDefaultFilePath(): string
@@ -35,7 +35,7 @@ class FileConfigurationLocator
 
     public function getFileName(): string
     {
-        return 'configuration.xml';
+        return 'configuration.yaml';
     }
 
     public function getFilePath(): string

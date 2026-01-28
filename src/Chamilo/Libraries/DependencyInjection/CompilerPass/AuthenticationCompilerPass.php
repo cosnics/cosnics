@@ -15,14 +15,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class AuthenticationCompilerPass implements CompilerPassInterface
 {
-    /**
-     * You can modify the container here before it is dumped to PHP code.
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @throws \Exception
-     */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if ($container->hasDefinition(AuthenticationValidator::class))
         {

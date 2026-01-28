@@ -1,13 +1,12 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection\CompilerPass;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Compiler pass to add commands to the console runner
- *
  * @package Chamilo\Libraries\DependencyInjection\CompilerPass
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -15,19 +14,12 @@ use Symfony\Component\DependencyInjection\Reference;
 class ConsoleCompilerPass implements CompilerPassInterface
 {
 
-    /**
-     * You can modify the container here before it is dumped to PHP code.
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @throws \Exception
-     */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
-        if ($container->hasDefinition('Chamilo\Libraries\Console'))
+        if ($container->hasDefinition('Chamilo\Libraries\Protocol\Console\Console'))
         {
-            $taggedServices = $container->findTaggedServiceIds('Chamilo\Libraries\Console\Command');
-            $consoleDefinition = $container->getDefinition('Chamilo\Libraries\Console');
+            $taggedServices = $container->findTaggedServiceIds(Command::class);
+            $consoleDefinition = $container->getDefinition('Chamilo\Libraries\Protocol\Console\Console');
 
             foreach ($taggedServices as $taggedServiceId => $tags)
             {
@@ -35,10 +27,10 @@ class ConsoleCompilerPass implements CompilerPassInterface
             }
         }
 
-        if ($container->hasDefinition('Chamilo\Libraries\Console\HelperSet'))
+        if ($container->hasDefinition('Chamilo\Libraries\Protocol\Console\HelperSet'))
         {
             $taggedServices = $container->findTaggedServiceIds('chamilo.libraries.console.helper');
-            $helperSetDefinition = $container->getDefinition('Chamilo\Libraries\Console\HelperSet');
+            $helperSetDefinition = $container->getDefinition('Chamilo\Libraries\Protocol\Console\HelperSet');
 
             foreach ($taggedServices as $taggedServiceId => $tags)
             {

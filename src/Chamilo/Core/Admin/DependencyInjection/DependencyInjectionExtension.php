@@ -10,7 +10,7 @@ use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * @package Chamilo\Core\Admin\DependencyInjection
@@ -33,15 +33,15 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         return [
             'Chamilo\Core\Admin' => [
-                'architecture.domain.xml',
-                'implementation.admin.xml',
-                'implementation.home.xml',
-                'service.xml',
-                'service.consulter.xml',
-                'service.dataLoader.xml',
-                'service.finder.xml',
-                'storage.xml',
-                'userInterface.table.xml'
+                'architecture.domain.php',
+                'implementation.admin.php',
+                'implementation.home.php',
+                'service.php',
+                'service.consulter.php',
+                'service.dataLoader.php',
+                'service.finder.php',
+                'storage.php',
+                'userInterface.table.php'
             ]
         ];
     }
@@ -63,7 +63,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
             $configurationFileName = $fileConfigurationLocator->getDefaultFileName();
         }
 
-        $configurationXmlFileLoader = new XmlFileLoader($container, new FileLocator($configurationFilePath));
+        $configurationXmlFileLoader = new YamlFileLoader($container, new FileLocator($configurationFilePath));
         $configurationXmlFileLoader->load($configurationFileName);
     }
 

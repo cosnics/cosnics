@@ -26,14 +26,14 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         return [
             'Chamilo\Core\Menu' => [
-                'architecture.domain.xml',
-                'implementation.admin.xml',
-                'implementation.menu.xml',
-                'service.xml',
-                'storage.xml',
-                'userInterface.menu.xml',
-                'userInterface.menuRenderer.xml',
-                'userInterface.table.xml'
+                'architecture.domain.php',
+                'implementation.admin.php',
+                'implementation.menu.php',
+                'service.php',
+                'storage.php',
+                'userInterface.menu.php',
+                'userInterface.menuRenderer.php',
+                'userInterface.table.php'
             ]
         ];
     }
