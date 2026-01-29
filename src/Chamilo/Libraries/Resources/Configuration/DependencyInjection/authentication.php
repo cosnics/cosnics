@@ -5,7 +5,7 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\Authenticat
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\Authentication\Service\PlatformAuthentication;
 use Chamilo\Libraries\Protocol\Authentication\Service\SecurityTokenAuthentication;
-use Ehb\Libraries\Authentication\Cas\CasAuthentication;
+use Ehb\Libraries\Protocol\Authentication\Service\CasAuthentication;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();

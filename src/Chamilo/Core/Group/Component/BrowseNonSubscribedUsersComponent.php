@@ -95,7 +95,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
             );
             $commonActions = new ButtonGroup();
 
-            $commonActions->addButton(
+            $commonActions->addGroupButton(
                 new Button(
                     $this->getTranslator()->trans('ShowAll', [], StringUtilities::LIBRARIES),
                     new FontAwesomeGlyph('folder'), $this->getUrlGenerator()->fromParameters(
@@ -108,7 +108,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
                 )
             );
 
-            $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButton($commonActions);
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
 

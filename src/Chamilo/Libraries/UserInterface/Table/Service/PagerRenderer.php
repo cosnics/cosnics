@@ -4,11 +4,11 @@ namespace Chamilo\Libraries\UserInterface\Table\Service;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropdownButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropDownButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
@@ -113,7 +113,7 @@ class PagerRenderer
 
         $buttonToolBar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();
-        $buttonToolBar->addButtonGroup($buttonGroup);
+        $buttonToolBar->addButton($buttonGroup);
         $translator = $this->getTranslator();
 
         $defaultTranslationVariables[Application::PARAM_CONTEXT] = StringUtilities::LIBRARIES;
@@ -140,9 +140,10 @@ class PagerRenderer
             );
         }
 
-        $dropDownButton = new DropdownButton($dropDownButtonLabel, null, AbstractButton::DISPLAY_LABEL, ['btn-sm'],
-            ['dropdown-menu-right']);
-        $buttonGroup->addButton($dropDownButton);
+        $dropDownButton =
+            new DropDownButton($dropDownButtonLabel, null, ButtonDisplayInterface::DISPLAY_LABEL, ['btn-sm'],
+                ['dropdown-menu-right']);
+        $buttonGroup->addGroupButton($dropDownButton);
 
         for (
             $nr = Pager::DISPLAY_PER_INCREMENT; $nr <= $parameterValues->getTotalNumberOfItems() && $nr <= 100;
@@ -151,14 +152,14 @@ class PagerRenderer
         {
             $numberrOfRowsOption = ($nr / $parameterValues->getNumberOfColumnsPerPage());
 
-            $dropDownButton->addSubButton(
+            $dropDownButton->addDropDownButton(
                 new SubButton(
                     $translator->trans(
                         $translationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW], ['{NUMBER}' => $nr],
                         $translationVariables[Application::PARAM_CONTEXT]
                     ), null, $this->getUrlGenerator()->fromRequest(
                     [$itemsPerPageParameterName => $numberrOfRowsOption]
-                ), AbstractButton::DISPLAY_LABEL, null, [], null,
+                ), ButtonDisplayInterface::DISPLAY_LABEL, null, [], null,
                     $numberrOfRowsOption == $parameterValues->getNumberOfRowsPerPage()
                 )
             );
@@ -166,14 +167,14 @@ class PagerRenderer
 
         if ($parameterValues->getTotalNumberOfItems() < Pager::DISPLAY_PER_PAGE_LIMIT)
         {
-            $dropDownButton->addSubButton(
+            $dropDownButton->addDropDownButton(
                 new SubButton(
                     $translator->trans(
                         $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL], [],
                         $translationVariables[Application::PARAM_CONTEXT]
                     ), null, $this->getUrlGenerator()->fromRequest(
                     [$itemsPerPageParameterName => Pager::DISPLAY_ALL]
-                ), AbstractButton::DISPLAY_LABEL, null, [], null,
+                ), ButtonDisplayInterface::DISPLAY_LABEL, null, [], null,
                     $numberOfItemsPerPage == $parameterValues->getTotalNumberOfItems()
                 )
             );

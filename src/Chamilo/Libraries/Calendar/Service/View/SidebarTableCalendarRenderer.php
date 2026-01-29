@@ -4,10 +4,10 @@ namespace Chamilo\Libraries\Calendar\Service\View;
 use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 
@@ -40,25 +40,25 @@ abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
         $buttonToolBar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();
 
-        $buttonToolBar->addItem(
+        $buttonToolBar->addButton(
             new Button(
                 $translator->trans('Today', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'), $todayUrl,
-                AbstractButton::DISPLAY_ICON
+                ButtonDisplayInterface::DISPLAY_ICON
             )
         );
 
-        $buttonToolBar->addItem($buttonGroup);
+        $buttonToolBar->addButton($buttonGroup);
 
-        $buttonGroup->addButton(
+        $buttonGroup->addGroupButton(
             new Button(
                 $translator->trans('Previous', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('caret-left'),
-                $previousUrl, AbstractButton::DISPLAY_ICON
+                $previousUrl, ButtonDisplayInterface::DISPLAY_ICON
             )
         );
-        $buttonGroup->addButton(
+        $buttonGroup->addGroupButton(
             new Button(
                 $translator->trans('Next', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('caret-right'),
-                $nextUrl, AbstractButton::DISPLAY_ICON
+                $nextUrl, ButtonDisplayInterface::DISPLAY_ICON
             )
         );
 

@@ -7,10 +7,10 @@ use Chamilo\Libraries\Calendar\Architecture\Interface\VisibilitySupport;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropdownButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropDownButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
@@ -121,7 +121,7 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
         return true;
     }
 
-    public function renderTypeButton(CalendarRendererProviderInterface $dataProvider): DropdownButton
+    public function renderTypeButton(CalendarRendererProviderInterface $dataProvider): DropDownButton
     {
         $rendererTypes = [
             HtmlCalendarRenderer::TYPE_MONTH,
@@ -134,20 +134,21 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
         $currentRendererType = $displayParameters[self::PARAM_TYPE];
         $translator = $this->getTranslator();
 
-        $button = new DropdownButton(
+        $button = new DropDownButton(
             $translator->trans($currentRendererType . 'View', [], 'Chamilo\Libraries'),
-            new FontAwesomeGlyph('calendar-alt'), AbstractButton::DISPLAY_ICON_AND_LABEL, [], ['dropdown-menu-right']
+            new FontAwesomeGlyph('calendar-alt'), ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, [],
+            ['dropdown-menu-right']
         );
 
         foreach ($rendererTypes as $rendererType)
         {
             $displayParameters[self::PARAM_TYPE] = $rendererType;
 
-            $button->addSubButton(
+            $button->addDropDownButton(
                 new SubButton(
                     $translator->trans($rendererType . 'View', [], 'Chamilo\Libraries'), null,
-                    $this->getUrlGenerator()->fromParameters($displayParameters), AbstractButton::DISPLAY_LABEL, null,
-                    [], null, $currentRendererType == $rendererType
+                    $this->getUrlGenerator()->fromParameters($displayParameters), ButtonDisplayInterface::DISPLAY_LABEL,
+                    null, [], null, $currentRendererType == $rendererType
                 )
             );
         }
@@ -164,10 +165,10 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
 
         foreach ($viewActions as $viewAction)
         {
-            $buttonToolBar->addItem($viewAction);
+            $buttonToolBar->addButton($viewAction);
         }
 
-        $buttonToolBar->addItem($this->renderTypeButton($dataProvider));
+        $buttonToolBar->addButton($this->renderTypeButton($dataProvider));
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 

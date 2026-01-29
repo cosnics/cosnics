@@ -3,12 +3,12 @@ namespace Chamilo\Libraries\Calendar\Service;
 
 use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropdownButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropDownButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
 use QuickformException;
 use Symfony\Component\Translation\Translator;
@@ -45,13 +45,13 @@ class JumpBarRenderer
         $buttonToolbar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();
 
-        $buttonToolbar->addItem(
+        $buttonToolbar->addButton(
             new Button($this->getTranslator()->trans('JumpTo', [], StringUtilities::LIBRARIES), null, null,
-                AbstractButton::DISPLAY_LABEL, null, ['btn-link'])
+                ButtonDisplayInterface::DISPLAY_LABEL, null, ['btn-link'])
         );
-        $buttonToolbar->addItem($buttonGroup);
+        $buttonToolbar->addButton($buttonGroup);
 
-        $dateButton = new DropdownButton(date('j', $currentTime));
+        $dateButton = new DropDownButton(date('j', $currentTime));
 
         foreach ($this->getDays($currentTime) as $day)
         {
@@ -62,13 +62,14 @@ class JumpBarRenderer
             );
 
             $isActive = date('j', $currentTime) == $day;
-            $dateButton->addSubButton(
-                new SubButton((string) $day, null, $dayUrl, AbstractButton::DISPLAY_LABEL, null, [], null, $isActive)
+            $dateButton->addDropDownButton(
+                new SubButton((string) $day, null, $dayUrl, ButtonDisplayInterface::DISPLAY_LABEL, null, [], null,
+                    $isActive)
             );
         }
 
         $months = $this->getMonths();
-        $monthButton = new DropdownButton($months[date('n', $currentTime)]);
+        $monthButton = new DropDownButton($months[date('n', $currentTime)]);
 
         foreach ($this->getMonths() as $month => $monthLabel)
         {
@@ -79,12 +80,13 @@ class JumpBarRenderer
             );
 
             $isActive = date('n', $currentTime) == $month;
-            $monthButton->addSubButton(
-                new SubButton($monthLabel, null, $monthUrl, AbstractButton::DISPLAY_LABEL, null, [], null, $isActive)
+            $monthButton->addDropDownButton(
+                new SubButton($monthLabel, null, $monthUrl, ButtonDisplayInterface::DISPLAY_LABEL, null, [], null,
+                    $isActive)
             );
         }
 
-        $yearButton = new DropdownButton(date('Y', $currentTime));
+        $yearButton = new DropDownButton(date('Y', $currentTime));
 
         foreach ($this->getYears($currentTime) as $year)
         {
@@ -95,14 +97,15 @@ class JumpBarRenderer
             );
 
             $isActive = date('Y', $currentTime) == $year;
-            $yearButton->addSubButton(
-                new SubButton((string) $year, null, $yearUrl, AbstractButton::DISPLAY_LABEL, null, [], null, $isActive)
+            $yearButton->addDropDownButton(
+                new SubButton((string) $year, null, $yearUrl, ButtonDisplayInterface::DISPLAY_LABEL, null, [], null,
+                    $isActive)
             );
         }
 
-        $buttonGroup->addButton($dateButton);
-        $buttonGroup->addButton($monthButton);
-        $buttonGroup->addButton($yearButton);
+        $buttonGroup->addGroupButton($dateButton);
+        $buttonGroup->addGroupButton($monthButton);
+        $buttonGroup->addGroupButton($yearButton);
 
         return new ButtonToolBarRenderer($buttonToolbar);
     }

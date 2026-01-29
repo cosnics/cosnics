@@ -1,33 +1,51 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain;
 
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ActionButtonTrait;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\DropdownButtonTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonActionInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDropDownInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonActionTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonClassesTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonDisplayTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonDropDownTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\SplitDropdownButtonRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @package Chamilo\Libraries\Format\Structure\ActionBar
+ * @package Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class SplitDropdownButton extends AbstractButton
+class SplitDropdownButton
+    implements ButtonInterface, ButtonDisplayInterface, ButtonActionInterface, ButtonDropDownInterface
 {
-    use DropdownButtonTrait;
-    use ActionButtonTrait;
+    use ButtonClassesTrait;
+    use ButtonDisplayTrait;
+    use ButtonActionTrait;
+    use ButtonDropDownTrait;
 
-    /**
-     * @todo Move this to trait once everyone moves to PHP 5.6. Currently not working in trait due to bug
-     *       https://bugs.php.net/bug.php?id=65576
-     */
     public function __construct(
         ?string $label = null, ?InlineGlyph $inlineGlyph = null, ?string $action = null,
         int $display = self::DISPLAY_ICON_AND_LABEL, ?string $confirmationMessage = null, array $classes = [],
-        ?string $target = null, array $dropdownClasses = [], array $subButtons = []
+        ?string $target = null, array $dropDownClasses = [], ArrayCollection $dropDownButtons = new ArrayCollection()
     )
     {
-        parent::__construct($label, $inlineGlyph, $display, $classes);
-        $this->initializeActionButton($action, $confirmationMessage, $target);
-        $this->initializeDropdownButton($dropdownClasses, $subButtons);
+        $this->setLabel($label);
+        $this->setInlineGlyph($inlineGlyph);
+        $this->setAction($action);
+        $this->setDisplay($display);
+        $this->setConfirmationMessage($confirmationMessage);
+        $this->setClasses($classes);
+        $this->setTarget($target);
+        $this->setDropDownClasses($dropDownClasses);
+        $this->setDropDownButtons($dropDownButtons);
+    }
+
+    public function getButtonRendererClass(): string
+    {
+        return SplitDropdownButtonRenderer::class;
     }
 }

@@ -1,91 +1,36 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain;
 
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonGroupButtonsInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonClassesTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonGroupButtonsTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonGroupRenderer;
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
- * @package Chamilo\Libraries\Format\Structure\ActionBar
+ * @package Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ButtonGroup extends AbstractButtonToolBarItem
+class ButtonGroup implements ButtonInterface, ButtonGroupButtonsInterface
 {
+    use ButtonClassesTrait;
+    use ButtonGroupButtonsTrait;
 
     /**
-     * @var \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton[]
-     */
-    private array $buttons;
-
-    /**
-     * @param \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton[] $buttons
+     * @param ArrayCollection<\Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button|\Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropDownButton|\Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SplitDropdownButton> $groupButtons
      * @param string[] $classes
      */
-    public function __construct($buttons = [], array $classes = [])
+    public function __construct(ArrayCollection $groupButtons = new ArrayCollection(), array $classes = [])
     {
-        parent::__construct($classes);
-
-        $this->buttons = $buttons;
+        $this->setGroupButtons($groupButtons);
+        $this->setClasses($classes);
     }
 
-    public function addButton(AbstractButton $button): static
+    public function getButtonRendererClass(): string
     {
-        $this->buttons[] = $button;
-
-        return $this;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton[] $buttons
-     */
-    public function addButtons(array $buttons): static
-    {
-        foreach ($buttons as $button)
-        {
-            $this->addButton($button);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton[]
-     */
-    public function getButtons(): array
-    {
-        return $this->buttons;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton[] $buttons
-     */
-    public function setButtons(array $buttons): static
-    {
-        $this->buttons = $buttons;
-
-        return $this;
-    }
-
-    public function hasButtons(): bool
-    {
-        return count($this->buttons) > 0;
-    }
-
-    public function prependButton(AbstractButton $button): static
-    {
-        array_unshift($this->buttons, $button);
-
-        return $this;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton[] $buttons
-     */
-    public function prependButtons(array $buttons): static
-    {
-        foreach ($buttons as $button)
-        {
-            $this->prependButton($button);
-        }
-
-        return $this;
+        return ButtonGroupRenderer::class;
     }
 }

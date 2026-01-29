@@ -87,7 +87,7 @@ class ViewComponent extends Manager
 
             $editUrl = $this->getUserUrlGenerator()->getUpdateUrl($user);
 
-            $commonActions->addButton(
+            $commonActions->addGroupButton(
                 new Button(
                     $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $editUrl, ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -96,7 +96,7 @@ class ViewComponent extends Manager
 
             $deleteUrl = $this->getUserUrlGenerator()->getDeleteUrl($user);
 
-            $commonActions->addButton(
+            $commonActions->addGroupButton(
                 new Button(
                     $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                     $deleteUrl, ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -105,15 +105,15 @@ class ViewComponent extends Manager
 
             $changeUserUrl = $this->getUserUrlGenerator()->getChangeUserUrl($user);
 
-            $toolActions->addButton(
+            $toolActions->addGroupButton(
                 new Button(
                     $translator->trans('LoginAsUser', [], Manager::CONTEXT), new FontAwesomeGlyph('mask'),
                     $changeUserUrl, ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
-            $buttonToolbar->addButtonGroup($commonActions);
-            $buttonToolbar->addButtonGroup($toolActions);
+            $buttonToolbar->addButton($commonActions);
+            $buttonToolbar->addButton($toolActions);
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }

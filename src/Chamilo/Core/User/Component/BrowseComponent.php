@@ -74,7 +74,7 @@ class BrowseComponent extends Manager
 
             if ($this->getUser()->isPlatformAdministrator())
             {
-                $commonActions->addButton(
+                $commonActions->addGroupButton(
                     new Button(
                         $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                         $this->getUrlGenerator()->fromParameters(
@@ -84,7 +84,7 @@ class BrowseComponent extends Manager
                 );
             }
 
-            $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButton($commonActions);
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }

@@ -1,14 +1,15 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain;
 
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonActionInterface;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDropDownInterface;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonInterface;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonActionTrait;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonClassesTrait;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonDisplayTrait;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonRenderer;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonDropDownTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\DropDownButtonRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain
@@ -16,29 +17,27 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Button implements ButtonInterface, ButtonDisplayInterface, ButtonActionInterface
+class DropDownButton implements ButtonInterface, ButtonDisplayInterface, ButtonDropDownInterface
 {
     use ButtonClassesTrait;
     use ButtonDisplayTrait;
-    use ButtonActionTrait;
+    use ButtonDropDownTrait;
 
     public function __construct(
-        ?string $label = null, ?InlineGlyph $inlineGlyph = null, ?string $action = null,
-        int $display = self::DISPLAY_ICON_AND_LABEL, ?string $confirmationMessage = null, array $classes = [],
-        ?string $target = null
+        ?string $label = null, ?InlineGlyph $inlineGlyph = null, int $display = self::DISPLAY_ICON_AND_LABEL,
+        array $classes = [], array $dropDownClasses = [], ArrayCollection $dropDownButtons = new ArrayCollection()
     )
     {
         $this->setLabel($label);
         $this->setInlineGlyph($inlineGlyph);
-        $this->setAction($action);
         $this->setDisplay($display);
-        $this->setConfirmationMessage($confirmationMessage);
         $this->setClasses($classes);
-        $this->setTarget($target);
+        $this->setDropDownClasses($dropDownClasses);
+        $this->setDropDownButtons($dropDownButtons);
     }
 
     public function getButtonRendererClass(): string
     {
-        return ButtonRenderer::class;
+        return DropDownButtonRenderer::class;
     }
 }

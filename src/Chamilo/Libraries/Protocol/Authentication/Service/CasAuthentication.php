@@ -6,7 +6,7 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\Authenticat
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
 
 /**
- * @package Chamilo\Libraries\Authentication\Cas
+ * @package Chamilo\Libraries\Protocol\Authentication\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -23,6 +23,10 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
         return 500;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
     protected function getUserByCasUserIdentifier(string $userIdentifier): ?User
     {
         return $this->getUserService()->findUserByUsername($userIdentifier);
@@ -34,7 +38,8 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     protected function registerUser(string $casUser, array $casUserAttributes = []): User
     {
@@ -43,7 +48,7 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
         $user->setUsername($casUser);
         $user->setPassword('PLACEHOLDER');
         $user->setStatus(User::STATUS_STUDENT);
-        $user->setAuthenticationSource(__NAMESPACE__);
+        $user->setAuthenticationSource(static::class);
         $user->setPlatformAdministrator(false);
         $user->setEmail($casUserAttributes['email']);
         $user->setSurname($casUserAttributes['last_name']);

@@ -126,7 +126,7 @@ class ViewComponent extends Manager
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
 
-            $commonActions->addButton(
+            $commonActions->addGroupButton(
                 new Button(
                     $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
                     $this->getUrlGenerator()->fromParameters(
@@ -139,7 +139,7 @@ class ViewComponent extends Manager
                 )
             );
 
-            $commonActions->addButton(
+            $commonActions->addGroupButton(
                 new Button(
                     $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->getGroupUrlGenerator()->getUpdateUrl($currentGroup), ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -148,7 +148,7 @@ class ViewComponent extends Manager
 
             if ($currentGroup->getId() != $rootGroup->getId())
             {
-                $commonActions->addButton(
+                $commonActions->addGroupButton(
                     new Button(
                         $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
                         $this->getGroupUrlGenerator()->getDeleteUrl($currentGroup), ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -156,7 +156,7 @@ class ViewComponent extends Manager
                 );
             }
 
-            $toolActions->addButton(
+            $toolActions->addGroupButton(
                 new Button(
                     $translator->trans('AddUsers', [], \Chamilo\Core\User\Manager::CONTEXT),
                     new FontAwesomeGlyph('plus-circle'), $this->getGroupUrlGenerator()->getSubscribeUrl($currentGroup),
@@ -169,7 +169,7 @@ class ViewComponent extends Manager
 
             if ($userCount > 0)
             {
-                $toolActions->addButton(
+                $toolActions->addGroupButton(
                     new Button(
                         $translator->trans('Truncate', [], Manager::CONTEXT), new FontAwesomeGlyph('trash-alt'),
                         $this->getGroupUrlGenerator()->getTruncateUrl($currentGroup),
@@ -179,7 +179,7 @@ class ViewComponent extends Manager
             }
             else
             {
-                $toolActions->addButton(
+                $toolActions->addGroupButton(
                     new Button(
                         $translator->trans('TruncateNA', [], Manager::CONTEXT),
                         new FontAwesomeGlyph('trash-alt', ['text-muted']), null, ToolbarItem::DISPLAY_ICON_AND_LABEL
@@ -187,8 +187,8 @@ class ViewComponent extends Manager
                 );
             }
 
-            $buttonToolbar->addButtonGroup($commonActions);
-            $buttonToolbar->addButtonGroup($toolActions);
+            $buttonToolbar->addButton($commonActions);
+            $buttonToolbar->addButton($toolActions);
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }

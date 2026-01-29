@@ -11,11 +11,11 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Calendar\Service\HtmlCalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SplitDropdownButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use DateTime;
 use Detection\MobileDetect;
@@ -175,7 +175,7 @@ class BrowserComponent extends Manager
             ]
         );
 
-        $buttonGroup->addButton(
+        $buttonGroup->addGroupButton(
             new Button(
                 $translator->trans('PrinterComponent', [], Manager::CONTEXT), new FontAwesomeGlyph('print'), $printUrl
             )
@@ -185,7 +185,7 @@ class BrowserComponent extends Manager
             [Application::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => Manager::ACTION_ICAL]
         );
 
-        $buttonGroup->addButton(
+        $buttonGroup->addGroupButton(
             new Button(
                 $translator->trans('ICalExternal', [], Manager::CONTEXT), new FontAwesomeGlyph('globe'), $iCalUrl
             )
@@ -201,27 +201,27 @@ class BrowserComponent extends Manager
 
         $splitDropdownButton = new SplitDropdownButton(
             $translator->trans('ConfigComponent', [], Manager::CONTEXT), new FontAwesomeGlyph('cog'), $settingsUrl,
-            AbstractButton::DISPLAY_ICON_AND_LABEL, null, [], null, ['dropdown-menu-right']
+            ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, null, [], null, ['dropdown-menu-right']
         );
 
         $availabilityUrl = $this->getUrlGenerator()->fromParameters(
             [Application::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => Manager::ACTION_AVAILABILITY]
         );
 
-        $splitDropdownButton->addSubButton(
+        $splitDropdownButton->addDropDownButton(
             new SubButton(
                 $translator->trans('AvailabilityComponent', [], Manager::CONTEXT), new FontAwesomeGlyph('check-circle'),
                 $availabilityUrl
             )
         );
 
-        $buttonGroup->addButton($splitDropdownButton);
+        $buttonGroup->addGroupButton($splitDropdownButton);
 
         return $buttonGroup;
     }
 
     /**
-     * @return \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButtonToolBarItem[]
+     * @return \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonInterface[]
      */
     protected function getViewActions(): array
     {

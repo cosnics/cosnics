@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\DependencyInjection;
 
 use Chamilo\Libraries\DependencyInjection\CompilerPass\AuthenticationCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\ButtonRendererCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheAdapterCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheDataPreLoaderCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
@@ -78,5 +79,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         $container->addCompilerPass(new AuthenticationCompilerPass());
         $container->addCompilerPass(new DoctrineConditionPartTranslatorCompilerPass());
         $container->addCompilerPass(new EventDispatcherCompilerPass());
+        $container->addCompilerPass(new ButtonRendererCompilerPass());
     }
 }

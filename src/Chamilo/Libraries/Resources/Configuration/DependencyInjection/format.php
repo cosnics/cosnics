@@ -6,6 +6,15 @@ use Chamilo\Core\Home\UserInterface\HomeRenderer\TabRenderer;
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonRendererInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonGroupRenderer;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonRenderer;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\DropDownButtonRenderer;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\SplitDropdownButtonRenderer;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\SubButtonDividerRenderer;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\SubButtonHeaderRenderer;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\SubButtonRenderer;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Service\BreadcrumbGenerator;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Service\BreadcrumbTrailRenderer;
@@ -39,7 +48,6 @@ use Chamilo\Libraries\UserInterface\Table\Service\Pager;
 use Chamilo\Libraries\UserInterface\Table\Service\PagerRenderer;
 use Chamilo\Libraries\UserInterface\Table\Service\PropertiesTableRenderer;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
-use Chamilo\Libraries\UserInterface\Table\Service\SimpleTableRenderer;
 use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use Chamilo\Libraries\UserInterface\Tree\Service\JsTreeRenderer;
 
@@ -106,4 +114,13 @@ return static function (ContainerConfigurator $container) {
     $services->set(FormValidatorHtmlEditorOptionsFactory::class);
 
     $services->set(JsTreeRenderer::class);
+
+    $services->set(ButtonToolBarRenderer::class);
+    $services->set(ButtonGroupRenderer::class)->tag(ButtonRendererInterface::class);
+    $services->set(ButtonRenderer::class)->tag(ButtonRendererInterface::class);
+    $services->set(DropDownButtonRenderer::class)->tag(ButtonRendererInterface::class);
+    $services->set(SplitDropdownButtonRenderer::class)->tag(ButtonRendererInterface::class);
+    $services->set(SubButtonDividerRenderer::class)->tag(ButtonRendererInterface::class);
+    $services->set(SubButtonHeaderRenderer::class)->tag(ButtonRendererInterface::class);
+    $services->set(SubButtonRenderer::class)->tag(ButtonRendererInterface::class);
 };

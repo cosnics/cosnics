@@ -11,9 +11,9 @@ use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageRenderer;
@@ -72,10 +72,10 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
 
         $buttonToolBar = new ButtonToolBar();
 
-        $buttonToolBar->addItem(
+        $buttonToolBar->addButton(
             new Button(
                 $this->getTranslator()->trans('Today', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'),
-                $todayUrl, AbstractButton::DISPLAY_ICON
+                $todayUrl, ButtonDisplayInterface::DISPLAY_ICON
             )
         );
 

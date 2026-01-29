@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropdownButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropDownButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
@@ -73,11 +73,11 @@ class BrowserComponent extends Manager
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
 
-            $dropDownButton = new DropdownButton($translator->trans('AddMenuItem', [], Manager::CONTEXT));
+            $dropDownButton = new DropDownButton($translator->trans('AddMenuItem', [], Manager::CONTEXT));
 
             foreach ($this->getItemRendererFactory()->getItemRenderers() as $itemRenderer)
             {
-                $dropDownButton->addSubButton(
+                $dropDownButton->addDropDownButton(
                     new SubButton(
                         $itemRenderer->getRendererTypeName(), $itemRenderer->getRendererTypeGlyph(),
                         $this->getUrlGenerator()->fromParameters([
@@ -89,10 +89,10 @@ class BrowserComponent extends Manager
                 );
             }
 
-            $commonActions->addButton($dropDownButton);
+            $commonActions->addGroupButton($dropDownButton);
 
-            $buttonToolbar->addButtonGroup($commonActions);
-            $buttonToolbar->addButtonGroup($toolActions);
+            $buttonToolbar->addButton($commonActions);
+            $buttonToolbar->addButton($toolActions);
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }

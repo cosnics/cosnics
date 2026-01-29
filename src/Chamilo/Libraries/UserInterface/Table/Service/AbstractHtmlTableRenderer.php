@@ -6,14 +6,14 @@ use Chamilo\Libraries\Protocol\Security\Service\SecurityUtilities;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropdownButton;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropDownButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SplitDropdownButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButtonDivider;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButtonHeader;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\AbstractBaseTableParameters;
@@ -71,27 +71,27 @@ abstract class AbstractHtmlTableRenderer
         if ($formActionsCount > 1)
         {
             $button = new SplitDropdownButton(
-                $firstAction->getTitle(), null, $firstAction->getAction(), AbstractButton::DISPLAY_LABEL,
+                $firstAction->getTitle(), null, $firstAction->getAction(), ButtonDisplayInterface::DISPLAY_LABEL,
                 $firstAction->getConfirmationMessage(), ['btn-sm btn-table-action'], null, ['btn-table-action']
             );
 
             foreach ($formActions as $formAction)
             {
-                $button->addSubButton(
+                $button->addDropDownButton(
                     new SubButton(
-                        $formAction->getTitle(), null, $formAction->getAction(), AbstractButton::DISPLAY_LABEL,
+                        $formAction->getTitle(), null, $formAction->getAction(), ButtonDisplayInterface::DISPLAY_LABEL,
                         $formAction->getConfirmationMessage()
                     )
                 );
             }
 
-            $buttonToolBar->addItem($button);
+            $buttonToolBar->addButton($button);
         }
         else
         {
-            $buttonToolBar->addItem(
+            $buttonToolBar->addButton(
                 new Button(
-                    $firstAction->getTitle(), null, $firstAction->getAction(), AbstractButton::DISPLAY_LABEL,
+                    $firstAction->getTitle(), null, $firstAction->getAction(), ButtonDisplayInterface::DISPLAY_LABEL,
                     $firstAction->getConfirmationMessage(), ['btn-sm', 'btn-table-action']
                 )
             );
@@ -326,7 +326,7 @@ abstract class AbstractHtmlTableRenderer
 
             $subButtons[] = new SubButton(
                 $translator->trans('ASC', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('chevron-down'),
-                $propertyUrl, AbstractButton::DISPLAY_ICON_AND_LABEL, null, [], null, $isSelected
+                $propertyUrl, ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, null, [], null, $isSelected
             );
 
             $propertyUrl = $this->getUrlGenerator()->fromRequest(
@@ -336,7 +336,7 @@ abstract class AbstractHtmlTableRenderer
 
             $subButtons[] = new SubButton(
                 $translator->trans('DESC', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('chevron-up'),
-                $propertyUrl, AbstractButton::DISPLAY_ICON_AND_LABEL, null, [], null, $isSelected
+                $propertyUrl, ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, null, [], null, $isSelected
             );
         }
 
@@ -357,7 +357,7 @@ abstract class AbstractHtmlTableRenderer
         if ($this->hasSortableColumns($tableColumns))
         {
             $buttonToolBar = new ButtonToolBar();
-            $dropDownButton = new DropdownButton();
+            $dropDownButton = new DropDownButton();
             $translator = $this->getTranslator();
 
             $currentFirstOrderColumn = $parameterValues->getOrderColumnIndex();
@@ -365,20 +365,20 @@ abstract class AbstractHtmlTableRenderer
 
             $orderProperty = $tableColumns[$currentFirstOrderColumn];
 
-            $dropDownButton->addSubButton(
+            $dropDownButton->addDropDownButton(
                 new SubButtonHeader($translator->trans('SortingProperty', [], StringUtilities::LIBRARIES))
             );
-            $dropDownButton->addSubButtons(
+            $dropDownButton->addDropDownButtons(
                 $this->renderPropertySubButtons($tableColumns, $parameterValues, $parameterNames)
             );
             $dropDownButton->setClasses(['btn-sm']);
             $dropDownButton->setDropdownClasses(['dropdown-menu-right']);
 
-            $dropDownButton->addSubButton(new SubButtonDivider());
-            $dropDownButton->addSubButton(
+            $dropDownButton->addDropDownButton(new SubButtonDivider());
+            $dropDownButton->addDropDownButton(
                 new SubButtonHeader($translator->trans('SortingDirection', [], StringUtilities::LIBRARIES))
             );
-            $dropDownButton->addSubButtons(
+            $dropDownButton->addDropDownButtons(
                 $this->renderPropertyDirectionSubButtons($tableColumns, $parameterValues, $parameterNames)
             );
 
@@ -394,7 +394,7 @@ abstract class AbstractHtmlTableRenderer
                 )
             );
 
-            $buttonToolBar->addItem($dropDownButton);
+            $buttonToolBar->addButton($dropDownButton);
 
             $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
@@ -430,7 +430,7 @@ abstract class AbstractHtmlTableRenderer
 
                 $subButtons[] = new SubButton(
                     $this->getSecurity()->removeXSS($tableColumn->getTitle()), null, $propertyUrl,
-                    AbstractButton::DISPLAY_LABEL, null, [], null, $isSelected
+                    ButtonDisplayInterface::DISPLAY_LABEL, null, [], null, $isSelected
                 );
             }
         }

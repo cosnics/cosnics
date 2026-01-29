@@ -121,14 +121,14 @@ class BrowseComponent extends Manager
             );
             $commonActions = new ButtonGroup();
 
-            $commonActions->addButton(
+            $commonActions->addGroupButton(
                 new Button(
                     $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                     $this->getGroupUrlGenerator()->getCreateUrl($this->getGroup()), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
-            $commonActions->addButton(
+            $commonActions->addGroupButton(
                 new Button(
                     $translator->trans('Root', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'),
                     $this->getGroupUrlGenerator()->getViewUrl($this->getRootGroup()),
@@ -136,7 +136,7 @@ class BrowseComponent extends Manager
                 )
             );
 
-            $commonActions->addButton(
+            $commonActions->addGroupButton(
                 new Button(
                     $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
                     $this->getUrlGenerator()->fromParameters(
@@ -148,7 +148,7 @@ class BrowseComponent extends Manager
                     ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
-            $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButton($commonActions);
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
 

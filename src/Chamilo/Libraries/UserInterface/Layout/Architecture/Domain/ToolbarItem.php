@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Layout\Architecture\Domain;
 
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
 /**
- * @package Chamilo\Libraries\Format\Structure
+ * @package Chamilo\Libraries\UserInterface\Layout\Architecture\Domain
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ToolbarItem
 {
@@ -70,7 +70,7 @@ class ToolbarItem
         }
         else
         {
-            $display = AbstractButton::DISPLAY_ICON_AND_LABEL;
+            $display = self::DISPLAY_ICON_AND_LABEL;
         }
 
         $elementClasses = !empty($this->class) ? explode(' ', $this->class) : [];

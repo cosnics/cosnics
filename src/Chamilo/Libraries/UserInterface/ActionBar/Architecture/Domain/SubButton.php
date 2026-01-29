@@ -1,7 +1,15 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain;
 
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\SubButtonInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonActionInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonStateInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonActionTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonClassesTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonDisplayTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonStateTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Service\SubButtonRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
 /**
@@ -10,28 +18,31 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class SubButton extends Button implements SubButtonInterface
+class SubButton implements ButtonInterface, ButtonDisplayInterface, ButtonActionInterface, ButtonStateInterface
 {
-    private bool $isActive;
+    use ButtonClassesTrait;
+    use ButtonDisplayTrait;
+    use ButtonActionTrait;
+    use ButtonStateTrait;
 
     public function __construct(
         ?string $label = null, ?InlineGlyph $inlineGlyph = null, ?string $action = null,
         int $display = self::DISPLAY_ICON_AND_LABEL, ?string $confirmationMessage = null, array $classes = [],
-        ?string $target = null, bool $isActive = false
+        ?string $target = null, bool $state = false
     )
     {
-        parent::__construct($label, $inlineGlyph, $action, $display, $confirmationMessage, $classes, $target);
-        $this->isActive = $isActive;
+        $this->setLabel($label);
+        $this->setInlineGlyph($inlineGlyph);
+        $this->setAction($action);
+        $this->setDisplay($display);
+        $this->setConfirmationMessage($confirmationMessage);
+        $this->setClasses($classes);
+        $this->setTarget($target);
+        $this->setState($state);
     }
 
-    public function isActive(): bool
+    public function getButtonRendererClass(): string
     {
-        return $this->isActive;
+        return SubButtonRenderer::class;
     }
-
-    public function setIsActive(bool $isActive): void
-    {
-        $this->isActive = $isActive;
-    }
-
 }

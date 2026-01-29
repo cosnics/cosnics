@@ -10,16 +10,16 @@ use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ButtonGroupRenderer extends AbstractButtonToolbarItemRenderer
+class ButtonGroupRenderer
 {
 
-    public function render(): string
+    public function render(ButtonGroup $button): string
     {
         $html = [];
 
-        $html[] = '<div class="' . implode(' ', $this->determineClasses()) . '">';
+        $html[] = '<div class="' . implode(' ', $this->determineClasses($button)) . '">';
 
-        foreach ($this->getButtonGroup()->getButtons() as $button)
+        foreach ($button->getGroupButtons() as $button)
         {
             $rendererClassName =
                 __NAMESPACE__ . '\\' . ClassnameUtilities::getInstance()->getClassnameFromObject($button) . 'Renderer';
@@ -36,21 +36,13 @@ class ButtonGroupRenderer extends AbstractButtonToolbarItemRenderer
     /**
      * @return string[]
      */
-    protected function determineClasses(): array
+    protected function determineClasses(ButtonGroup $buttonGroup): array
     {
-        return array_merge($this->getButtonGroup()->getClasses(), ['action-bar', 'btn-group']);
+        return array_merge($buttonGroup->getClasses(), ['action-bar', 'btn-group']);
     }
 
-    public function getButtonGroup(): ButtonGroup
+    public function getButtonClass(): string
     {
-        return $this->getButton();
-    }
-
-    /**
-     * @param \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup $buttonGroup
-     */
-    public function setButtonGroup(ButtonGroup $buttonGroup)
-    {
-        $this->setButton($buttonGroup);
+        return ButtonGroup::class;
     }
 }

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ActionBar\Service;
 
-use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonRendererCollection;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
 use Chamilo\Libraries\UserInterface\ActionBar\Form\ButtonSearchForm;
 use QuickformException;
@@ -16,38 +16,36 @@ use QuickformException;
  */
 class ButtonToolBarRenderer
 {
+    protected ButtonRendererCollection $buttonRendererCollection;
 
-    private ButtonToolBar $buttonToolBar;
+    protected SearchQueryConditionGenerator $searchQueryConditionGenerator;
 
-    private ?ButtonSearchForm $searchForm;
-
-    public function __construct(ButtonToolBar $buttonToolBar, ?ButtonSearchForm $buttonSearchForm = null)
+    public function __construct(
+        SearchQueryConditionGenerator $searchQueryConditionGenerator, ButtonRendererCollection $buttonRendererCollection
+    )
     {
-        $this->buttonToolBar = $buttonToolBar;
-        $this->searchForm = $buttonSearchForm;
+        $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
+        $this->buttonRendererCollection = $buttonRendererCollection;
     }
 
     /**
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
-    public function render(): string
+    public function render(ButtonToolBar $buttonToolBar): string
     {
         $html = [];
 
-        $html[] = '<div class="' . implode(' ', $this->determineClasses()) . '">';
+        $html[] = '<div class="' . implode(' ', $this->determineClasses($buttonToolBar)) . '">';
 
-        foreach ($this->getButtonToolBar()->getItems() as $buttonGroup)
+        foreach ($buttonToolBar->getButtonCollection() as $button)
         {
-            $rendererClassName =
-                __NAMESPACE__ . '\\' . ClassnameUtilities::getInstance()->getClassnameFromObject($buttonGroup) .
-                'Renderer';
-            $renderer = new $rendererClassName($buttonGroup);
-            $html[] = $renderer->render($buttonGroup);
+            $html[] = $this->getButtonRendererCollection()->getButtonRendererForButton($button)->render($button);
         }
 
-        if ($this->getButtonToolBar()->getSearchUrl())
+        if ($buttonToolBar->getSearchUrl())
         {
-            $html[] = $this->getSearchForm()->render();
+            $html[] = $this->getSearchForm($buttonToolBar->getSearchUrl())->render();
         }
 
         $html[] = '</div>';
@@ -58,14 +56,14 @@ class ButtonToolBarRenderer
     /**
      * @return string[]
      */
-    protected function determineClasses(): array
+    protected function determineClasses(ButtonToolBar $buttonToolBar): array
     {
-        return array_merge(['btn-toolbar', 'btn-action-toolbar'], $this->getButtonToolBar()->getClasses());
+        return array_merge(['btn-toolbar', 'btn-action-toolbar'], $buttonToolBar->getClasses());
     }
 
-    public function getButtonToolBar(): ButtonToolBar
+    public function getButtonRendererCollection(): ButtonRendererCollection
     {
-        return $this->buttonToolBar;
+        return $this->buttonRendererCollection;
     }
 
     /**
@@ -93,14 +91,9 @@ class ButtonToolBarRenderer
     /**
      * @throws \QuickformException
      */
-    public function getSearchForm(): ButtonSearchForm
+    public function getSearchForm(string $searchUri = ''): ButtonSearchForm
     {
-        if (!isset($this->searchForm))
-        {
-            $this->searchForm = new ButtonSearchForm($this->getButtonToolBar()->getSearchUrl());
-        }
-
-        return $this->searchForm;
+        return new ButtonSearchForm($searchUri);
     }
 
     public function getSearchQuery(): ?string
@@ -113,5 +106,10 @@ class ButtonToolBarRenderer
         {
             return null;
         }
+    }
+
+    public function getSearchQueryConditionGenerator(): SearchQueryConditionGenerator
+    {
+        return $this->searchQueryConditionGenerator;
     }
 }
