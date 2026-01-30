@@ -1,6 +1,10 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait;
 
+/**
+ * @package Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 trait ButtonClassesTrait
 {
     /**

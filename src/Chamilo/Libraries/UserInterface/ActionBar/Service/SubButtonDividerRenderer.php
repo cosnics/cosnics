@@ -1,26 +1,32 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ActionBar\Service;
 
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButtonDivider;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonRendererInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonRendererClassesTrait;
 
 /**
  * @package Chamilo\Libraries\UserInterface\ActionBar\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class SubButtonDividerRenderer
+class SubButtonDividerRenderer implements ButtonRendererInterface
 {
+    use ButtonRendererClassesTrait;
 
     public function render(SubButtonDivider $subButtonDivider): string
     {
-        return '<li role="separator" class="' .
-            implode(' ', array_merge(['divider'], $subButtonDivider->getClasses())) . '"></li>';
+        $html = [];
+
+        $html[] = '<li';
+        $html[] = 'role="separator"';
+        $html[] = 'class="' . $this->renderClasses($subButtonDivider, ['divider']) . '">';
+        $html[] = '</li>';
+
+        return implode(PHP_EOL, $html);
     }
 
     public function getButtonClass(): string
     {
-        return SubButton::class;
+        return SubButtonDivider::class;
     }
 }

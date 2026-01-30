@@ -7,6 +7,9 @@ namespace Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface;
  */
 interface ButtonInterface
 {
+    /**
+     * @return class-string<\Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonRendererInterface>
+     */
     public function getButtonRendererClass(): string;
 
     public function getClasses(): array;

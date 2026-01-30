@@ -6,6 +6,10 @@ use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropDownButton
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SplitDropdownButton;
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * @package Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 trait ButtonGroupButtonsTrait
 {
     /**
@@ -25,8 +29,7 @@ trait ButtonGroupButtonsTrait
      */
     public function addGroupButtons(ArrayCollection $dropDownButtons): static
     {
-        foreach ($dropDownButtons as $dropDownButton)
-        {
+        foreach ($dropDownButtons as $dropDownButton) {
             $this->addGroupButton($dropDownButton);
         }
 

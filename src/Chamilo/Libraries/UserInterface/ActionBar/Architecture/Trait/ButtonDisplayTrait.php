@@ -3,6 +3,10 @@ namespace Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait;
 
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
+/**
+ * @package Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 trait ButtonDisplayTrait
 {
     private int $display = 0;

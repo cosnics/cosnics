@@ -2,105 +2,30 @@
 namespace Chamilo\Libraries\UserInterface\ActionBar\Service;
 
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonRendererActionInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonRendererDisplayInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonRendererInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonRendererActionTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonRendererDisplayTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonRendererLinkTrait;
 
 /**
- * @package Chamilo\Libraries\Format\Structure\ActionBar\Renderer
+ * @package Chamilo\Libraries\UserInterface\ActionBar\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ButtonRenderer
+class ButtonRenderer implements ButtonRendererInterface, ButtonRendererDisplayInterface, ButtonRendererActionInterface
 {
+    use ButtonRendererDisplayTrait;
+    use ButtonRendererActionTrait;
+    use ButtonRendererLinkTrait;
+
     public function render(Button $button): string
     {
-        $html = [];
-
-        $html[] = $this->renderLinkOpeningTag($button);
-        $html[] = $this->renderLinkContent($button);
-        $html[] = '</a>';
-
-        return implode(PHP_EOL, $html);
+        return $this->renderLink($button, ['btn', 'btn-default']);
     }
 
-    /**
-     * @return string[]
-     */
-    public function determineClasses(Button $button): array
+    public function getButtonClass(): string
     {
-        $classes = array_merge(['btn', 'btn-default'], $button->getClasses());
-
-        if (!$button->getAction())
-        {
-            $classes[] = 'disabled';
-        }
-
-        return $classes;
-    }
-
-    public function getTitle(Button $button): ?string
-    {
-        return htmlspecialchars(strip_tags($button->getLabel()));
-    }
-
-    public function renderAction(Button $button): string
-    {
-        $html = [];
-
-        if ($button->getAction())
-        {
-            $html[] = 'href="' . htmlentities($button->getAction()) . '"';
-
-            if ($button->getTarget())
-            {
-                $html[] = 'target="' . $button->getTarget() . '"';
-            }
-
-            if ($button->needsConfirmation())
-            {
-                $html[] = 'onclick="return confirm(\'' . addslashes(htmlentities($button->getConfirmationMessage())) .
-                    '\');"';
-            }
-        }
-
-        return implode(' ', $html);
-    }
-
-    public function renderClasses(Button $button): string
-    {
-        return 'class="' . implode(' ', $this->determineClasses($button)) . '"';
-    }
-
-    public function renderLinkContent(Button $button): string
-    {
-        $html = [];
-
-        $displayLabel = $button->getDisplay() != ButtonDisplayInterface::DISPLAY_ICON && $button->getLabel();
-        $displayIcon = $button->getDisplay() != ButtonDisplayInterface::DISPLAY_LABEL && $button->getInlineGlyph();
-
-        if ($displayIcon)
-        {
-            $html[] = $button->getInlineGlyph()->render();
-        }
-
-        if ($displayLabel)
-        {
-            $html[] = '<span>' . $button->getLabel() . '</span> ';
-        }
-
-        return implode('', $html);
-    }
-
-    public function renderLinkOpeningTag(Button $button): string
-    {
-        $html = [];
-
-        $html[] = '<a';
-        $html[] = $this->renderClasses($button);
-        $html[] = 'title="' . htmlentities($this->getTitle($button)) . '"';
-        $html[] = $this->renderAction($button);
-        $html[] = '>';
-
-        return implode(' ', $html);
+        return Button::class;
     }
 }

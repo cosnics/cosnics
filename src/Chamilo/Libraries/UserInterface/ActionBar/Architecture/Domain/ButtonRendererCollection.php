@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain;
 
 use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonInterface;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonRenderer;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonRendererInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -12,29 +12,31 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class ButtonRendererCollection extends ArrayCollection
 {
-
-    public function addButtonRenderer(ButtonRenderer $buttonRenderer): void
+    public function addButtonRenderer(ButtonRendererInterface $buttonRenderer): void
     {
         $this->set(get_class($buttonRenderer), $buttonRenderer);
     }
 
     /**
+     * @template tGetButtonRenderer
+     * @param class-string<tGetButtonRenderer> $buttonRendererClass
+     *
+     * @return tGetButtonRenderer|ButtonRendererInterface
      * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
-    public function getButtonRenderer(string $buttonRendererType): ButtonRenderer
+    public function getButtonRenderer(string $buttonRendererClass): ButtonRendererInterface
     {
-        if (!$this->containsKey($buttonRendererType))
-        {
-            throw new ClassNotExistException($buttonRendererType);
+        if (!$this->hasButtonRenderer($buttonRendererClass)) {
+            throw new ClassNotExistException($buttonRendererClass);
         }
 
-        return $this->get($buttonRendererType);
+        return $this->get($buttonRendererClass);
     }
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
-    public function getButtonRendererForButton(ButtonInterface $button): ButtonRenderer
+    public function getButtonRendererForButton(ButtonInterface $button): ButtonRendererInterface
     {
         return $this->getButtonRenderer($button->getButtonRendererClass());
     }
@@ -48,11 +50,15 @@ class ButtonRendererCollection extends ArrayCollection
     }
 
     /**
-     * @return \Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer[]
+     * @return \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonRendererInterface[]
      */
     public function getButtonRenderers(): array
     {
         return $this->toArray();
     }
 
+    public function hasButtonRenderer(string $buttonRendererClass): bool
+    {
+        return $this->containsKey($buttonRendererClass);
+    }
 }

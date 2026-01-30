@@ -6,6 +6,10 @@ use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButtonDivid
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButtonHeader;
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * @package Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 trait ButtonDropDownTrait
 {
     /**
@@ -30,8 +34,7 @@ trait ButtonDropDownTrait
      */
     public function addDropDownButtons(ArrayCollection $dropDownButtons): static
     {
-        foreach ($dropDownButtons as $dropDownButton)
-        {
+        foreach ($dropDownButtons as $dropDownButton) {
             $this->addDropDownButton($dropDownButton);
         }
 
@@ -75,5 +78,4 @@ trait ButtonDropDownTrait
     {
         return !$this->getDropDownButtons()->isEmpty();
     }
-
 }

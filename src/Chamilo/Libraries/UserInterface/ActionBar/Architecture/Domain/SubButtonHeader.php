@@ -29,6 +29,9 @@ class SubButtonHeader implements ButtonInterface, ButtonDisplayInterface
         $this->setClasses($classes);
     }
 
+    /**
+     * @return class-string<\Chamilo\Libraries\UserInterface\ActionBar\Service\SubButtonHeaderRenderer>
+     */
     public function getButtonRendererClass(): string
     {
         return SubButtonHeaderRenderer::class;

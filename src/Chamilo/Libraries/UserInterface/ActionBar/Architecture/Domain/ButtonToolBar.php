@@ -12,7 +12,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class ButtonToolBar
 {
-
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonInterface>
      */
@@ -50,8 +49,7 @@ class ButtonToolBar
      */
     public function addButtons(ArrayCollection $buttons = new ArrayCollection()): static
     {
-        foreach ($buttons as $button)
-        {
+        foreach ($buttons as $button) {
             $this->addButton($button);
         }
 
@@ -99,12 +97,5 @@ class ButtonToolBar
     public function hasButtons(): bool
     {
         return count($this->buttonCollection) > 0;
-    }
-
-    public function prependItem(ButtonInterface $button): static
-    {
-        array_unshift($this->buttonCollection, $button);
-
-        return $this;
     }
 }

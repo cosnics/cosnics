@@ -44,6 +44,9 @@ class SplitDropdownButton
         $this->setDropDownButtons($dropDownButtons);
     }
 
+    /**
+     * @return class-string<\Chamilo\Libraries\UserInterface\ActionBar\Service\SplitDropdownButtonRenderer>
+     */
     public function getButtonRendererClass(): string
     {
         return SplitDropdownButtonRenderer::class;

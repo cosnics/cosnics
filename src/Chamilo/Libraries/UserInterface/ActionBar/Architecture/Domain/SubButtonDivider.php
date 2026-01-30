@@ -15,6 +15,9 @@ class SubButtonDivider implements ButtonInterface
 {
     use ButtonClassesTrait;
 
+    /**
+     * @return class-string<\Chamilo\Libraries\UserInterface\ActionBar\Service\SubButtonDividerRenderer>
+     */
     public function getButtonRendererClass(): string
     {
         return SubButtonDividerRenderer::class;

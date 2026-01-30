@@ -38,13 +38,11 @@ class ButtonToolBarRenderer
 
         $html[] = '<div class="' . implode(' ', $this->determineClasses($buttonToolBar)) . '">';
 
-        foreach ($buttonToolBar->getButtonCollection() as $button)
-        {
+        foreach ($buttonToolBar->getButtonCollection() as $button) {
             $html[] = $this->getButtonRendererCollection()->getButtonRendererForButton($button)->render($button);
         }
 
-        if ($buttonToolBar->getSearchUrl())
-        {
+        if ($buttonToolBar->getSearchUrl()) {
             $html[] = $this->getSearchForm($buttonToolBar->getSearchUrl())->render();
         }
 
@@ -71,15 +69,13 @@ class ButtonToolBarRenderer
      */
     public function getConditions(array $properties = []): ?AndCondition
     {
-        if (!is_array($properties))
-        {
+        if (!is_array($properties)) {
             $properties = [$properties];
         }
 
         $query = $this->getSearchQuery();
 
-        if ($query && count($properties))
-        {
+        if ($query && count($properties)) {
             $searchQueryConditionGenerator = new SearchQueryConditionGenerator();
 
             return $searchQueryConditionGenerator->getSearchConditions($query, $properties);
@@ -98,12 +94,10 @@ class ButtonToolBarRenderer
 
     public function getSearchQuery(): ?string
     {
-        try
-        {
+        try {
             return $this->getSearchForm()->getQuery();
         }
-        catch (QuickformException)
-        {
+        catch (QuickformException) {
             return null;
         }
     }

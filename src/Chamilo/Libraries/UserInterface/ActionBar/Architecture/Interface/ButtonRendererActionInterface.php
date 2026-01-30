@@ -5,7 +5,7 @@ namespace Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface;
  * @package Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-interface ButtonRendererInterface
+interface ButtonRendererActionInterface
 {
-    public function getButtonClass(): string;
+    public function renderAction(ButtonActionInterface $button): string;
 }

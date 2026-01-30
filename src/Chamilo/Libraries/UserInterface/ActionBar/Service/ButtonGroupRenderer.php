@@ -1,44 +1,30 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ActionBar\Service;
 
-use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonRendererInterface;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonRendererClassesTrait;
+use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonRendererSubButtonsTrait;
 
 /**
- * @package Chamilo\Libraries\Format\Structure\ActionBar\Renderer
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author  Magali Gillard <magali.gillard@ehb.be>
- * @author  Eduard Vossen <eduard.vossen@ehb.be>
+ * @package Chamilo\Libraries\UserInterface\ActionBar\Service
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ButtonGroupRenderer
+class ButtonGroupRenderer extends AbstractButtonCollectionButtonRenderer implements ButtonRendererInterface
 {
+    use ButtonRendererSubButtonsTrait;
+    use ButtonRendererClassesTrait;
 
-    public function render(ButtonGroup $button): string
+    public function render(ButtonGroup $buttonGroup): string
     {
         $html = [];
 
-        $html[] = '<div class="' . implode(' ', $this->determineClasses($button)) . '">';
-
-        foreach ($button->getGroupButtons() as $button)
-        {
-            $rendererClassName =
-                __NAMESPACE__ . '\\' . ClassnameUtilities::getInstance()->getClassnameFromObject($button) . 'Renderer';
-            $renderer = new $rendererClassName($button);
-
-            $html[] = $renderer->render($button);
-        }
-
+        $html[] = '<div';
+        $html[] = 'class="' . $this->renderClasses($buttonGroup, [], ['action-bar', 'btn-group']) . '">';
+        $html[] = $this->renderSubButtons($buttonGroup->getGroupButtons());
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function determineClasses(ButtonGroup $buttonGroup): array
-    {
-        return array_merge($buttonGroup->getClasses(), ['action-bar', 'btn-group']);
     }
 
     public function getButtonClass(): string

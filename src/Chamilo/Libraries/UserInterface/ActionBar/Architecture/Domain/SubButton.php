@@ -41,6 +41,9 @@ class SubButton implements ButtonInterface, ButtonDisplayInterface, ButtonAction
         $this->setState($state);
     }
 
+    /**
+     * @return class-string<\Chamilo\Libraries\UserInterface\ActionBar\Service\SubButtonRenderer>
+     */
     public function getButtonRendererClass(): string
     {
         return SubButtonRenderer::class;

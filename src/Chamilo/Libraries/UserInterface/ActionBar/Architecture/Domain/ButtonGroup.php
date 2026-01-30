@@ -29,6 +29,9 @@ class ButtonGroup implements ButtonInterface, ButtonGroupButtonsInterface
         $this->setClasses($classes);
     }
 
+    /**
+     * @return class-string<\Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonGroupRenderer>
+     */
     public function getButtonRendererClass(): string
     {
         return ButtonGroupRenderer::class;

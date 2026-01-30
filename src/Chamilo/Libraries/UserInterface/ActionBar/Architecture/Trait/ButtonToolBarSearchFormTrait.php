@@ -8,8 +8,8 @@ use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
 use QuickformException;
 
 /**
- * @package Chamilo\Libraries\Format\Structure\ActionBar
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 trait ButtonToolBarSearchFormTrait
 {
@@ -39,23 +39,18 @@ trait ButtonToolBarSearchFormTrait
      */
     public function setButtonToolBarSearchFormRequestQuery(): void
     {
-        try
-        {
+        try {
             $searchForm = $this->getButtonToolbarRenderer()->getSearchForm();
 
-            if (!$searchForm->clearFormSubmitted())
-            {
+            if (!$searchForm->clearFormSubmitted()) {
                 $this->getRequest()->query->set(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, $searchForm->getQuery());
             }
-            else
-            {
+            else {
                 $this->getRequest()->request->remove(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY);
                 $this->getRequest()->query->remove(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY);
             }
         }
-        catch (QuickformException)
-        {
+        catch (QuickformException) {
         }
     }
-
 }

@@ -36,6 +36,9 @@ class DropDownButton implements ButtonInterface, ButtonDisplayInterface, ButtonD
         $this->setDropDownButtons($dropDownButtons);
     }
 
+    /**
+     * @return class-string<\Chamilo\Libraries\UserInterface\ActionBar\Service\DropDownButtonRenderer>
+     */
     public function getButtonRendererClass(): string
     {
         return DropDownButtonRenderer::class;

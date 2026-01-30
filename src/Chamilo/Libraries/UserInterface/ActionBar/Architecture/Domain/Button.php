@@ -37,6 +37,9 @@ class Button implements ButtonInterface, ButtonDisplayInterface, ButtonActionInt
         $this->setTarget($target);
     }
 
+    /**
+     * @return class-string<\Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonRenderer>
+     */
     public function getButtonRendererClass(): string
     {
         return ButtonRenderer::class;
