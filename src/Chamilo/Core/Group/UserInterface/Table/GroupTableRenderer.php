@@ -165,10 +165,10 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         switch ($column->getName()) {
             case Group::PROPERTY_NAME :
                 $title = parent::renderCell($column, $resultPosition, $result);
-                $title_short = $title;
+                $shortTitle = $title;
 
-                if (strlen($title_short) > 53) {
-                    $title_short = mb_substr($title_short, 0, 50) . '&hellip;';
+                if (strlen($shortTitle) > 53) {
+                    $shortTitle = mb_substr($shortTitle, 0, 50) . '&hellip;';
                 }
 
                 $viewUrl = $urlGenerator->fromParameters(
@@ -179,7 +179,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
                     ]
                 );
 
-                return '<a href="' . htmlentities($viewUrl) . '" title="' . $title . '">' . $title_short . '</a>';
+                return '<a href="' . htmlentities($viewUrl) . '" title="' . $title . '">' . $shortTitle . '</a>';
             case Group::PROPERTY_DESCRIPTION :
                 $description = strip_tags(parent::renderCell($column, $resultPosition, $result));
 

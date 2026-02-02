@@ -186,8 +186,8 @@ class ApplicationItemRenderer extends ItemRenderer
                 continue;
             }
 
-            $activeApplications[$package->get_context()] =
-                $this->getTranslator()->trans('TypeName', [], $package->get_context());
+            $activeApplications[$package->getContext()] =
+                $this->getTranslator()->trans('TypeName', [], $package->getContext());
         }
 
         return $activeApplications;

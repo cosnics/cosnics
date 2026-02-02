@@ -11,6 +11,7 @@ use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -27,12 +28,12 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
         MiniMonthCalendarRenderer $miniMonthCalendarRenderer, EventMonthRenderer $eventMonthRenderer,
         MonthCalendarTableBuilder $monthCalendarTableBuilder, WebPathBuilder $webPathBuilder,
-        ResourceManager $resourceManager, JumpBarRenderer $jumpBarRenderer
+        ResourceManager $resourceManager, JumpBarRenderer $jumpBarRenderer, ButtonToolBarRenderer $buttonToolBarRenderer
     )
     {
         parent::__construct(
             $legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer, $webPathBuilder, $resourceManager,
-            $jumpBarRenderer
+            $jumpBarRenderer, $buttonToolBarRenderer
         );
 
         $this->eventMonthRenderer = $eventMonthRenderer;
@@ -91,19 +92,16 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
         $tableDate = $startTime;
         $eventsToShow = [];
 
-        while ($tableDate <= $endTime)
-        {
+        while ($tableDate <= $endTime) {
             $nextTableDate = strtotime('+1 Day', $tableDate);
 
-            foreach ($events as $event)
-            {
+            foreach ($events as $event) {
                 $startDate = $event->getStartDate();
                 $endDate = $event->getEndDate();
 
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
                     $tableDate < $endDate && $endDate <= $nextTableDate ||
-                    $startDate <= $tableDate && $nextTableDate <= $endDate)
-                {
+                    $startDate <= $tableDate && $nextTableDate <= $endDate) {
                     $eventsToShow[$tableDate][] = $this->getEventMonthRenderer()->render(
                         $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($dataProvider, $event),
                         $this->isFadedEvent($displayTime, $event)

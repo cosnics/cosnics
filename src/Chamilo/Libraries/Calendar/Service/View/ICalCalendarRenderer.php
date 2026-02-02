@@ -82,41 +82,34 @@ class ICalCalendarRenderer extends CalendarRenderer
 
         $event->add('UID', md5(serialize($uniqueIdentifiers)));
 
-        if ($providedEvent->getUrl())
-        {
+        if ($providedEvent->getUrl()) {
             $event->add('URL', $providedEvent->getUrl());
         }
 
         $vObjectRecurrenceRulesFormatter = new VObjectRecurrenceRulesFormatter();
 
-        if ($providedEvent->getRecurrenceRules()->hasRecurrence())
-        {
+        if ($providedEvent->getRecurrenceRules()->hasRecurrence()) {
             $event->add('RRULE', $vObjectRecurrenceRulesFormatter->format($providedEvent->getRecurrenceRules()));
         }
 
-        if ($providedEvent->getOrganizer() instanceof EventAttendee)
-        {
+        if ($providedEvent->getOrganizer() instanceof EventAttendee) {
             $organizerValue = 'MAILTO:' . $providedEvent->getOrganizer()->getEmail();
 
-            if ($providedEvent->getOrganizer()->getName())
-            {
+            if ($providedEvent->getOrganizer()->getName()) {
                 $organizerValue = 'CN=' . $providedEvent->getOrganizer()->getName() . ':' . $organizerValue;
             }
 
             $event->add('ORGANIZER', $organizerValue);
         }
 
-        foreach ($providedEvent->getAttendees() as $attendee)
-        {
+        foreach ($providedEvent->getAttendees() as $attendee) {
             $attendeeValues = [];
 
-            if ($attendee->getICalType())
-            {
+            if ($attendee->getICalType()) {
                 $attendeeValues['ROLE'] = $attendee->getICalType();
             }
 
-            if ($attendee->getICalResponseStatus())
-            {
+            if ($attendee->getICalResponseStatus()) {
                 $attendeeValues['PARTSTAT'] = $attendee->getICalResponseStatus();
             }
 
@@ -135,8 +128,7 @@ class ICalCalendarRenderer extends CalendarRenderer
             strtotime('first day of 2 months ago midnight'), strtotime('last day of +6 months midnight')
         );
 
-        foreach ($providedEvents as $providedEvent)
-        {
+        foreach ($providedEvents as $providedEvent) {
             $this->addEvent($providedEvent);
         }
     }
@@ -152,8 +144,7 @@ class ICalCalendarRenderer extends CalendarRenderer
         $from = time();
         $to = $from;
 
-        try
-        {
+        try {
             $tz = new DateTimeZone(date_default_timezone_get());
 
             // get all transitions for one year back/ahead
@@ -166,35 +157,30 @@ class ICalCalendarRenderer extends CalendarRenderer
             $std = null;
             $dst = null;
 
-            foreach ($transitions as $i => $trans)
-            {
+            foreach ($transitions as $i => $trans) {
                 $cmp = null;
 
                 // skip the first entry...
-                if ($i == 0)
-                {
+                if ($i == 0) {
                     // ... but remember the offset for the next TZOFFSETFROM value
                     $tzfrom = $trans['offset'] / 3600;
                     continue;
                 }
 
                 // daylight saving time definition
-                if ($trans['isdst'])
-                {
-                    $t_dst = $trans['ts'];
+                if ($trans['isdst']) {
+                    $tDst = $trans['ts'];
                     $dst = new Component($this->getCalendar(), 'DAYLIGHT');
                     $cmp = $dst;
                 }
                 // standard time definition
-                else
-                {
-                    $t_std = $trans['ts'];
+                else {
+                    $tStd = $trans['ts'];
                     $std = new Component($this->getCalendar(), 'STANDARD');
                     $cmp = $std;
                 }
 
-                if ($cmp)
-                {
+                if ($cmp) {
                     $dt = new DateTime($trans['time']);
                     $offset = $trans['offset'] / 3600;
 
@@ -205,8 +191,7 @@ class ICalCalendarRenderer extends CalendarRenderer
                         sprintf('%s%02d%02d', $offset >= 0 ? '+' : '', floor($offset), ($offset - floor($offset)) * 60);
 
                     // add abbreviated timezone name if available
-                    if (!empty($trans['abbr']))
-                    {
+                    if (!empty($trans['abbr'])) {
                         $cmp->TZNAME = $trans['abbr'];
                     }
 
@@ -215,16 +200,14 @@ class ICalCalendarRenderer extends CalendarRenderer
                 }
 
                 // we covered the entire date range
-                if ($std && $dst && min($t_std, $t_dst) < $from && max($t_std, $t_dst) > $to)
-                {
+                if ($std && $dst && min($tStd, $tDst) < $from && max($tStd, $tDst) > $to) {
                     break;
                 }
             }
 
             $this->getCalendar()->add($vt);
         }
-        catch (Exception)
-        {
+        catch (Exception) {
         }
     }
 

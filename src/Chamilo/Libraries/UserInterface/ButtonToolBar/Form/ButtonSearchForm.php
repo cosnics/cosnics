@@ -44,7 +44,7 @@ class ButtonSearchForm extends FormValidator
         $this->buildForm();
     }
 
-    public function render(?string $in_data = null): string
+    public function render(): string
     {
         $this->accept($this->renderer);
 

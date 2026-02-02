@@ -96,15 +96,15 @@ class UsersFeedComponent extends Manager
         $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         // Add user category
-        $user_category = new AdvancedElementFinderElement(
+        $userCategory = new AdvancedElementFinderElement(
             'users', $glyph->getClassNamesString(), $translator->trans('Users', [], Manager::CONTEXT),
             $translator->trans('Users', [], Manager::CONTEXT)
         );
-        $elements->addElement($user_category);
+        $elements->addElement($userCategory);
 
         foreach ($this->retrieveUsers() as $user)
         {
-            $user_category->addChild($this->getElementForUser($user));
+            $userCategory->addChild($this->getElementForUser($user));
         }
 
         return $elements;

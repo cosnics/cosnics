@@ -7,6 +7,7 @@ use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -26,10 +27,10 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
         MiniMonthCalendarRenderer $miniMonthCalendarRenderer, WebPathBuilder $webPathBuilder,
-        ResourceManager $resourceManager, JumpBarRenderer $jumpBarRenderer
+        ResourceManager $resourceManager, JumpBarRenderer $jumpBarRenderer, ButtonToolBarRenderer $buttonToolBarRenderer
     )
     {
-        parent::__construct($legendRenderer, $urlGenerator, $translator);
+        parent::__construct($legendRenderer, $urlGenerator, $translator, $buttonToolBarRenderer);
 
         $this->miniMonthCalendarRenderer = $miniMonthCalendarRenderer;
         $this->webPathBuilder = $webPathBuilder;

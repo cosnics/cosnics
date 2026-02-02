@@ -117,7 +117,7 @@ class SubscribeComponent extends Manager
         else
         {
             return new Response(
-                $this->display_error_page(
+                $this->displayErrorPage(
                     htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
                 )
             );

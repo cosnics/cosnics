@@ -48,7 +48,7 @@ class CreateComponent extends Manager
 
         if ($form->validate())
         {
-            $success = $form->create_group();
+            $success = $form->createGroup();
 
             if ($success)
             {

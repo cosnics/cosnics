@@ -61,8 +61,7 @@ class ActionProviderCollection extends ArrayCollection
     {
         $tabsCollection = new TabsCollection();
         $index = 0;
-        foreach ($this->getActionProviders() as $actionProvider)
-        {
+        foreach ($this->getActionProviders() as $actionProvider) {
             $index ++;
 
             $actions = $actionProvider->getActions();
@@ -76,12 +75,11 @@ class ActionProviderCollection extends ArrayCollection
 
             $actionsTab->setActions($actions->toArray());
 
-            if ($actions->getSearchUrl())
-            {
-                $search_form = new AdminSearchForm($actions->getSearchUrl(), (string) $index);
+            if ($actions->getSearchUrl()) {
+                $searchForm = new AdminSearchForm($actions->getSearchUrl(), (string) $index);
                 $actionsTab->addAction(
                     new Action(
-                        $search_form->render(), null, new FontAwesomeGlyph(
+                        $searchForm->render(), null, new FontAwesomeGlyph(
                             'search', ['fa-fw', 'fa-2x'], null, 'fas'
                         )
                     )

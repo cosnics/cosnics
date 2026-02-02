@@ -103,7 +103,7 @@ class DeleteComponent extends Manager
         else
         {
             return new Response(
-                $this->display_error_page(
+                $this->displayErrorPage(
                     htmlentities($translator->trans('NoObjectsSelected', [], StringUtilities::LIBRARIES))
                 )
             );

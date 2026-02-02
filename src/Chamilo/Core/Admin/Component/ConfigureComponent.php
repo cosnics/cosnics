@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ConfigureComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -35,8 +34,7 @@ class ConfigureComponent extends Manager
      */
     public function run(): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -53,8 +51,7 @@ class ConfigureComponent extends Manager
             )
         );
 
-        if ($form->validate())
-        {
+        if ($form->validate()) {
             $success = $form->updateConfiguration();
 
             return $this->redirectWithMessage(
@@ -68,8 +65,7 @@ class ConfigureComponent extends Manager
                 ]
             );
         }
-        else
-        {
+        else {
             $this->getBreadcrumbTrail()->add(
                 new Breadcrumb(
                     $this->getUrlGenerator()->fromParameters([
@@ -83,24 +79,20 @@ class ConfigureComponent extends Manager
 
             $packages = $this->getPackageBundlesCacheService()->getPackages();
 
-            foreach ($packages as $package)
-            {
-                if ($this->getConfigurationConsulter()->hasSettingsForContext($package->get_context()))
-                {
-                    $package_names[$package->get_context()] = $translator->trans(
-                        'TypeName', [], $package->get_context()
+            foreach ($packages as $package) {
+                if ($this->getConfigurationConsulter()->hasSettingsForContext($package->getContext())) {
+                    $packageNames[$package->getContext()] = $translator->trans(
+                        'TypeName', [], $package->getContext()
                     );
                 }
             }
 
-            asort($package_names);
+            asort($packageNames);
 
             $tabs = new TabsCollection();
 
-            foreach ($package_names as $package => $package_name)
-            {
-                if ($this->getConfigurationConsulter()->hasSettingsForContext($package))
-                {
+            foreach ($packageNames as $package => $packageName) {
+                if ($this->getConfigurationConsulter()->hasSettingsForContext($package)) {
                     $tabs->add(
                         new LinkTab(
                             $package, $translator->trans('TypeName', [], $package), new NamespaceIdentGlyph(

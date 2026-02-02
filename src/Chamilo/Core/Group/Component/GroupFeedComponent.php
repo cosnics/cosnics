@@ -27,9 +27,24 @@ use Doctrine\Common\Collections\ArrayCollection;
 class GroupFeedComponent extends GroupsFeedComponent
 {
     public const FILTER_PREFIX_LENGTH = 2;
-
     public const PARAM_GROUP = 'group';
     public const PARAM_USER = 'user';
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function getGroupElement(Group $group): AdvancedElementFinderElement
+    {
+        $description = strip_tags(
+            $this->getGroupsTreeTraverser()->getFullyQualifiedNameForGroup($group) . ' [' . $group->getCode() . ']'
+        );
+        $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
+
+        return new AdvancedElementFinderElement(
+            self::PARAM_GROUP . '_' . $group->getId(), $glyph->getClassNamesString(), $group->getName(), $description,
+            AdvancedElementFinderElement::TYPE_SELECTABLE_AND_FILTER
+        );
+    }
 
     public function getGroupMembershipService(): GroupMembershipService
     {
@@ -46,30 +61,7 @@ class GroupFeedComponent extends GroupsFeedComponent
         return [];
     }
 
-    protected function get_filter(): string
-    {
-        $filter = $this->getRequest()->request->get(self::PARAM_FILTER);
-
-        return substr($filter, static::FILTER_PREFIX_LENGTH);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function get_group_element(Group $group): AdvancedElementFinderElement
-    {
-        $description = strip_tags(
-            $this->getGroupsTreeTraverser()->getFullyQualifiedNameForGroup($group) . ' [' . $group->getCode() . ']'
-        );
-        $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
-
-        return new AdvancedElementFinderElement(
-            self::PARAM_GROUP . '_' . $group->getId(), $glyph->getClassNamesString(), $group->getName(), $description,
-            AdvancedElementFinderElement::TYPE_SELECTABLE_AND_FILTER
-        );
-    }
-
-    public function get_user_element(User $user): AdvancedElementFinderElement
+    public function getUserElement(User $user): AdvancedElementFinderElement
     {
         $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
@@ -83,48 +75,51 @@ class GroupFeedComponent extends GroupsFeedComponent
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function get_user_ids(): array
+    public function getUserIdentifiers(): array
     {
-        $filter_id = $this->get_filter();
+        $filterIdentifier = $this->get_filter();
 
-        if (!$filter_id)
-        {
+        if (!$filterIdentifier) {
             return [];
         }
 
-        return $this->getGroupMembershipService()->findSubscribedUserIdentifiersForGroupIdentifier($filter_id);
+        return $this->getGroupMembershipService()->findSubscribedUserIdentifiersForGroupIdentifier($filterIdentifier);
+    }
+
+    protected function get_filter(): string
+    {
+        $filter = $this->getRequest()->request->get(self::PARAM_FILTER);
+
+        return substr($filter, static::FILTER_PREFIX_LENGTH);
     }
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function retrieve_groups(): ArrayCollection
+    public function retrieveGroups(): ArrayCollection
     {
         // Set the conditions for the search query
-        $search_query = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
-        if ($search_query && $search_query != '')
-        {
-            $name_conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), $search_query
+        $searchQuery = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
+        if ($searchQuery && $searchQuery != '') {
+            $nameConditions[] = new ContainsCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), $searchQuery
             );
-            $name_conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), $search_query
+            $nameConditions[] = new ContainsCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), $searchQuery
             );
-            $conditions[] = new OrCondition($name_conditions);
+            $conditions[] = new OrCondition($nameConditions);
         }
 
-        $filter_id = $this->get_filter();
+        $filterIdentifier = $this->get_filter();
 
-        if ($filter_id)
-        {
+        if ($filterIdentifier) {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
-                new StaticConditionVariable($filter_id)
+                new StaticConditionVariable($filterIdentifier)
             );
         }
-        else
-        {
+        else {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
                 new StaticConditionVariable(0)

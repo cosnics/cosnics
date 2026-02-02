@@ -14,32 +14,21 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 class User extends DataClass
 {
     public const CONTEXT = Manager::CONTEXT;
-
     public const PROPERTY_ACTIVATION_DATE = 'activation_date';
     public const PROPERTY_ACTIVE = 'active';
     public const PROPERTY_AUTHENTICATION_SOURCE = 'auth_source';
     public const PROPERTY_CREATOR_IDENTIFIER = 'creator_id';
     public const PROPERTY_EMAIL = 'email';
     public const PROPERTY_GIVEN_NAME = 'firstname';
-
     public const PROPERTY_OFFICIAL_CODE = 'official_code';
-
     public const PROPERTY_PASSWORD = 'password';
-
     public const PROPERTY_PICTURE_URI = 'picture_uri';
-
     public const PROPERTY_PLATFORM_ADMINISTRATOR = 'admin';
-
     public const PROPERTY_REGISTRATION_DATE = 'registration_date';
-
     public const PROPERTY_SECURITY_TOKEN = 'security_token';
-
     public const PROPERTY_STATUS = 'status';
-
     public const PROPERTY_SURNAME = 'lastname';
-
     public const PROPERTY_USERNAME = 'username';
-
     public const STATUS_ANONYMOUS = 0;
     public const STATUS_STUDENT = 5;
     public const STATUS_TEACHER = 1;
@@ -166,9 +155,9 @@ class User extends DataClass
         $this->setDefaultProperty(self::PROPERTY_ACTIVE, (int) $active);
     }
 
-    public function setAuthenticationSource(string $auth_source): void
+    public function setAuthenticationSource(string $authenticationSource): void
     {
-        $this->setDefaultProperty(self::PROPERTY_AUTHENTICATION_SOURCE, $auth_source);
+        $this->setDefaultProperty(self::PROPERTY_AUTHENTICATION_SOURCE, $authenticationSource);
     }
 
     public function setCreatorIdentifier(?string $creatorIdentifier): void
@@ -186,9 +175,9 @@ class User extends DataClass
         $this->setDefaultProperty(self::PROPERTY_GIVEN_NAME, $givenName);
     }
 
-    public function setOfficialCode(?string $official_code): void
+    public function setOfficialCode(?string $officialCode): void
     {
-        $this->setDefaultProperty(self::PROPERTY_OFFICIAL_CODE, $official_code);
+        $this->setDefaultProperty(self::PROPERTY_OFFICIAL_CODE, $officialCode);
     }
 
     public function setPassword(?string $password): void
@@ -196,9 +185,9 @@ class User extends DataClass
         $this->setDefaultProperty(self::PROPERTY_PASSWORD, $password);
     }
 
-    public function setPictureUri(?string $picture_uri): void
+    public function setPictureUri(?string $pictureUri): void
     {
-        $this->setDefaultProperty(self::PROPERTY_PICTURE_URI, $picture_uri);
+        $this->setDefaultProperty(self::PROPERTY_PICTURE_URI, $pictureUri);
     }
 
     public function setPlatformAdministrator(bool $admin): void

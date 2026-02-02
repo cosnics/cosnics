@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class JsonAjaxResult
 {
-
     /**
      * @var string[]
      */
@@ -34,14 +33,13 @@ class JsonAjaxResult
 
     public static function error(int $resultCode = 404, ?string $resultMessage = null): Response
     {
-        $json_ajax_result = new self($resultCode);
+        $jsonAjaxResult = new self($resultCode);
 
-        if ($resultMessage)
-        {
-            $json_ajax_result->setResultMessage($resultMessage);
+        if ($resultMessage) {
+            $jsonAjaxResult->setResultMessage($resultMessage);
         }
 
-        return $json_ajax_result->getResponse();
+        return $jsonAjaxResult->getResponse();
     }
 
     public static function generalError(?string $resultMessage = null): Response

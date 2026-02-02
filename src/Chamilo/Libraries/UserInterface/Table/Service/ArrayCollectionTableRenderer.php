@@ -197,10 +197,10 @@ class ArrayCollectionTableRenderer
         {
             if (strlen(strip_tags($row[$column])) != 0)
             {
-                $check_date = strtotime(strip_tags($row[$column]));
+                $checkDate = strtotime(strip_tags($row[$column]));
                 // strtotime Returns a timestamp on success, FALSE otherwise.
                 // Previous to PHP 5.1.0, this function would return -1 on failure.
-                $isDate &= ($check_date != - 1 && $check_date != false);
+                $isDate &= ($checkDate != - 1 && $checkDate != false);
             }
             else
             {

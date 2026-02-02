@@ -88,9 +88,9 @@ class AuthenticationValidator
 
     public function isAuthenticated(): bool
     {
-        $user_id = $this->session->get(AuthenticationValidator::SESSION_USER_ID);
+        $userIdentifier = $this->session->get(AuthenticationValidator::SESSION_USER_ID);
 
-        return !empty($user_id);
+        return !empty($userIdentifier);
     }
 
     public function logout(User $user): void

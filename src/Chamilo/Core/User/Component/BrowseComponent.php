@@ -88,14 +88,14 @@ class BrowseComponent extends Manager
 
     public function getUserTableCondition(): ?Condition
     {
-        $search_properties = [];
-        $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME);
-        $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_SURNAME);
-        $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME);
-        $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE);
-        $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL);
+        $searchProperties = [];
+        $searchProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME);
+        $searchProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_SURNAME);
+        $searchProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME);
+        $searchProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE);
+        $searchProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL);
 
-        return $this->getButtonToolBarRenderer()->getConditions($search_properties);
+        return $this->getButtonToolBarRenderer()->getConditions($searchProperties);
     }
 
     /**

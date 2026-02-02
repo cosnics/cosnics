@@ -75,8 +75,7 @@ class Diagnoser
 
         $tabs = new TabsCollection();
 
-        foreach ($sections as $section)
-        {
+        foreach ($sections as $section) {
             $data = call_user_func([$this, 'get' . $section . 'Data']);
             $table = $this->getDiagnoserTableRenderer()->render($data);
 
@@ -96,20 +95,19 @@ class Diagnoser
      * @param string $section
      * @param string $title
      * @param string $url
-     * @param mixed $current_value
-     * @param mixed $expected_value
+     * @param mixed $currentValue
+     * @param mixed $expectedValue
      * @param mixed $formatter
      * @param string $comment
      *
      * @return array
      */
-    public function build_setting(
-        int $status, string $section, string $title, string $url, mixed $current_value, mixed $expected_value,
+    public function buildSetting(
+        int $status, string $section, string $title, string $url, mixed $currentValue, mixed $expectedValue,
         mixed $formatter, string $comment
     ): array
     {
-        switch ($status)
-        {
+        switch ($status) {
             case self::STATUS_OK :
                 $glyph = new FontAwesomeGlyph(
                     'check-circle', ['text-success'], (string) $status, 'fas'
@@ -135,28 +133,24 @@ class Diagnoser
 
         $image = $glyph->render();
 
-        if ($url)
-        {
+        if ($url) {
             $url = $this->getLink($title, $url);
         }
-        else
-        {
+        else {
             $url = $title;
         }
 
-        $formatted_current_value = $current_value;
-        $formatted_expected_value = $expected_value;
+        $formattedCurrentValue = $currentValue;
+        $formattedExpectedValue = $expectedValue;
 
-        if ($formatter)
-        {
-            if (method_exists($this, 'format_' . $formatter))
-            {
-                $formatted_current_value = call_user_func([$this, 'format_' . $formatter], $current_value);
-                $formatted_expected_value = call_user_func([$this, 'format_' . $formatter], $expected_value);
+        if ($formatter) {
+            if (method_exists($this, 'format_' . $formatter)) {
+                $formattedCurrentValue = call_user_func([$this, 'format_' . $formatter], $currentValue);
+                $formattedExpectedValue = call_user_func([$this, 'format_' . $formatter], $expectedValue);
             }
         }
 
-        return [$image, $section, $url, $formatted_current_value, $formatted_expected_value, $comment];
+        return [$image, $section, $url, $formattedCurrentValue, $formattedExpectedValue, $comment];
     }
 
     public function formatOnOff(string $value): string
@@ -177,15 +171,14 @@ class Diagnoser
     {
         $array = [];
 
-        $writable_folders = [];
-        $writable_folders[] = $this->systemPathBuilder->getPublicStoragePath();
-        $writable_folders[] = $this->configurablePathBuilder->getTemporaryPath();
+        $writableFolders = [];
+        $writableFolders[] = $this->systemPathBuilder->getPublicStoragePath();
+        $writableFolders[] = $this->configurablePathBuilder->getTemporaryPath();
 
-        foreach ($writable_folders as $folder)
-        {
+        foreach ($writableFolders as $folder) {
             $writable = is_writable($folder);
             $status = $writable ? self::STATUS_OK : self::STATUS_ERROR;
-            $array[] = $this->build_setting(
+            $array[] = $this->buildSetting(
                 $status, '[FILES]', $this->getTranslation('IsWritable') . ': ' . $folder,
                 'https://www.php.net/manual/en/function.is-writable.php', $writable, 1, 'yes_no',
                 $this->getTranslation('DirectoryMustBeWritable')
@@ -194,7 +187,7 @@ class Diagnoser
 
         $date = $this->getInstallationDate();
         $date = $this->getDatetimeUtilities()->formatLocaleDate($date);
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             1, '[INFORMATION]', $this->getTranslation('InstallDate'), '', $date, '', null,
             $this->getTranslation('InstallDateInfo')
         );
@@ -214,17 +207,17 @@ class Diagnoser
 
         $array = [];
 
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             self::STATUS_INFORMATION, '[Database]', 'databaseName', '', $databaseName, null, null,
             $this->getTranslation('DatabaseName')
         );
 
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             self::STATUS_INFORMATION, '[Database]', 'driverClass', '', $driverClass, null, null,
             $this->getTranslation('DriverClass')
         );
 
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             self::STATUS_INFORMATION, '[Database]', 'databasePlatformClass', '', $databasePlatformClass, null, null,
             $this->getTranslation('DatabasePlatformClass')
         );
@@ -263,173 +256,163 @@ class Diagnoser
 
         $version = phpversion();
         $status = $version > '5.2' ? self::STATUS_OK : self::STATUS_ERROR;
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             $status, '[PHP]', 'phpversion()', 'https://www.php.net/manual/en/function.phpversion.php', phpversion(),
             '>= 5.2', null, $this->getTranslation('PHPVersionInfo')
         );
 
         $setting = ini_get('output_buffering');
-        $req_setting = 0;
-        $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
-        $array[] = $this->build_setting(
+        $reqSetting = 0;
+        $status = $setting == $reqSetting ? self::STATUS_OK : self::STATUS_ERROR;
+        $array[] = $this->buildSetting(
             $status, '[INI]', 'output_buffering',
-            'https://www.php.net/manual/en/outcontrol.configuration.php#ini.output-buffering', $setting, $req_setting,
+            'https://www.php.net/manual/en/outcontrol.configuration.php#ini.output-buffering', $setting, $reqSetting,
             'on_off', $this->getTranslation('OutputBufferingInfo')
         );
 
         $setting = ini_get('file_uploads');
-        $req_setting = 1;
-        $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
-        $array[] = $this->build_setting(
+        $reqSetting = 1;
+        $status = $setting == $reqSetting ? self::STATUS_OK : self::STATUS_ERROR;
+        $array[] = $this->buildSetting(
             $status, '[INI]', 'file_uploads', 'https://www.php.net/manual/en/ini.core.php#ini.file-uploads', $setting,
-            $req_setting, 'on_off', $this->getTranslation('FileUploadsInfo')
+            $reqSetting, 'on_off', $this->getTranslation('FileUploadsInfo')
         );
 
-        $req_setting = 0;
+        $reqSetting = 0;
 
         $setting = ini_get('magic_quotes_runtime');
-        $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
-        $array[] = $this->build_setting(
+        $status = $setting == $reqSetting ? self::STATUS_OK : self::STATUS_ERROR;
+        $array[] = $this->buildSetting(
             $status, '[INI]', 'magic_quotes_runtime',
-            'https://www.php.net/manual/en/ini.core.php#ini.magic-quotes-runtime', $setting, $req_setting, 'on_off',
+            'https://www.php.net/manual/en/ini.core.php#ini.magic-quotes-runtime', $setting, $reqSetting, 'on_off',
             $this->getTranslation('MagicQuotesRuntimeInfo')
         );
 
         $setting = ini_get('safe_mode');
-        $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
-        $array[] = $this->build_setting(
+        $status = $setting == $reqSetting ? self::STATUS_OK : self::STATUS_WARNING;
+        $array[] = $this->buildSetting(
             $status, '[INI]', 'safe_mode', 'https://www.php.net/manual/en/ini.core.php#ini.safe-mode', $setting,
-            $req_setting, 'on_off', $this->getTranslation('SafeModeInfo')
+            $reqSetting, 'on_off', $this->getTranslation('SafeModeInfo')
         );
 
         $setting = ini_get('register_globals');
-        $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
-        $array[] = $this->build_setting(
+        $status = $setting == $reqSetting ? self::STATUS_OK : self::STATUS_ERROR;
+        $array[] = $this->buildSetting(
             $status, '[INI]', 'register_globals', 'https://www.php.net/manual/en/ini.core.php#ini.register-globals',
-            $setting, $req_setting, 'on_off', $this->getTranslation('RegisterGlobalsInfo')
+            $setting, $reqSetting, 'on_off', $this->getTranslation('RegisterGlobalsInfo')
         );
 
         $setting = ini_get('short_open_tag');
-        $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
-        $array[] = $this->build_setting(
+        $status = $setting == $reqSetting ? self::STATUS_OK : self::STATUS_WARNING;
+        $array[] = $this->buildSetting(
             $status, '[INI]', 'short_open_tag', 'https://www.php.net/manual/en/ini.core.php#ini.short-open-tag',
-            $setting, $req_setting, 'on_off', $this->getTranslation('ShortOpenTagInfo')
+            $setting, $reqSetting, 'on_off', $this->getTranslation('ShortOpenTagInfo')
         );
 
         $setting = ini_get('magic_quotes_gpc');
-        $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
-        $array[] = $this->build_setting(
+        $status = $setting == $reqSetting ? self::STATUS_OK : self::STATUS_ERROR;
+        $array[] = $this->buildSetting(
             $status, '[INI]', 'magic_quotes_gpc', 'https://www.php.net/manual/en/ini.core.php#ini.magic_quotes_gpc',
-            $setting, $req_setting, 'on_off', $this->getTranslation('MagicQuotesGpcInfo')
+            $setting, $reqSetting, 'on_off', $this->getTranslation('MagicQuotesGpcInfo')
         );
 
         $setting = ini_get('display_errors');
-        $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
-        $array[] = $this->build_setting(
+        $status = $setting == $reqSetting ? self::STATUS_OK : self::STATUS_WARNING;
+        $array[] = $this->buildSetting(
             $status, '[INI]', 'display_errors', 'https://www.php.net/manual/en/ini.core.php#ini.display_errors',
-            $setting, $req_setting, 'on_off', $this->getTranslation('DisplayErrorsInfo')
+            $setting, $reqSetting, 'on_off', $this->getTranslation('DisplayErrorsInfo')
         );
 
         $setting = ini_get('upload_max_filesize');
-        $req_setting = '10M - 100M - ...';
-        if ($setting < 10)
-        {
+        $reqSetting = '10M - 100M - ...';
+        if ($setting < 10) {
             $status = self::STATUS_ERROR;
         }
-        if ($setting >= 10 && $setting < 100)
-        {
+        if ($setting >= 10 && $setting < 100) {
             $status = self::STATUS_WARNING;
         }
-        if ($setting >= 100)
-        {
+        if ($setting >= 100) {
             $status = self::STATUS_OK;
         }
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             $status, '[INI]', 'upload_max_filesize',
-            'https://www.php.net/manual/en/ini.core.php#ini.upload_max_filesize', $setting, $req_setting, null,
+            'https://www.php.net/manual/en/ini.core.php#ini.upload_max_filesize', $setting, $reqSetting, null,
             $this->getTranslation('UploadMaxFilesizeInfo')
         );
 
         $setting = ini_get('default_charset');
-        if ($setting == '')
-        {
+        if ($setting == '') {
             $setting = null;
         }
-        $req_setting = 'UTF-8';
-        $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
-        $array[] = $this->build_setting(
+        $reqSetting = 'UTF-8';
+        $status = $setting == $reqSetting ? self::STATUS_OK : self::STATUS_ERROR;
+        $array[] = $this->buildSetting(
             $status, '[INI]', 'default_charset', 'https://www.php.net/manual/en/ini.core.php#ini.default-charset',
-            $setting, $req_setting, null, $this->getTranslation('DefaultCharsetInfo')
+            $setting, $reqSetting, null, $this->getTranslation('DefaultCharsetInfo')
         );
 
         $setting = ini_get('max_execution_time');
-        $req_setting = '300 (' . $this->getTranslation('Minimum') . ')';
+        $reqSetting = '300 (' . $this->getTranslation('Minimum') . ')';
         $status = $setting >= 300 ? self::STATUS_OK : self::STATUS_WARNING;
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             $status, '[INI]', 'max_execution_time', 'https://www.php.net/manual/en/ini.core.php#ini.max-execution-time',
-            $setting, $req_setting, null, $this->getTranslation('MaxExecutionTimeInfo')
+            $setting, $reqSetting, null, $this->getTranslation('MaxExecutionTimeInfo')
         );
 
         $setting = ini_get('max_input_time');
-        $req_setting = '300 (' . $this->getTranslation('Minimum') . ')';
+        $reqSetting = '300 (' . $this->getTranslation('Minimum') . ')';
         $status = $setting >= 300 ? self::STATUS_OK : self::STATUS_WARNING;
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             $status, '[INI]', 'max_input_time', 'https://www.php.net/manual/en/ini.core.php#ini.max-input-time',
-            $setting, $req_setting, null, $this->getTranslation('MaxInputTimeInfo')
+            $setting, $reqSetting, null, $this->getTranslation('MaxInputTimeInfo')
         );
 
-        $req_setting = '10M - 100M - ...';
+        $reqSetting = '10M - 100M - ...';
 
         $setting = ini_get('memory_limit');
-        if ($setting < 10)
-        {
+        if ($setting < 10) {
             $status = self::STATUS_ERROR;
         }
-        if ($setting >= 10 && $setting < 100)
-        {
+        if ($setting >= 10 && $setting < 100) {
             $status = self::STATUS_WARNING;
         }
-        if ($setting >= 100)
-        {
+        if ($setting >= 100) {
             $status = self::STATUS_OK;
         }
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             $status, '[INI]', 'memory_limit', 'https://www.php.net/manual/en/ini.core.php#ini.memory-limit', $setting,
-            $req_setting, null, $this->getTranslation('MemoryLimitInfo')
+            $reqSetting, null, $this->getTranslation('MemoryLimitInfo')
         );
 
         $setting = ini_get('post_max_size');
-        if ($setting < 10)
-        {
+        if ($setting < 10) {
             $status = self::STATUS_ERROR;
         }
-        if ($setting >= 10 && $setting < 100)
-        {
+        if ($setting >= 10 && $setting < 100) {
             $status = self::STATUS_WARNING;
         }
-        if ($setting >= 100)
-        {
+        if ($setting >= 100) {
             $status = self::STATUS_OK;
         }
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             $status, '[INI]', 'post_max_size', 'https://www.php.net/manual/en/ini.core.php#ini.post-max-size', $setting,
-            $req_setting, null, $this->getTranslation('PostMaxSizeInfo')
+            $reqSetting, null, $this->getTranslation('PostMaxSizeInfo')
         );
 
         $setting = ini_get('variables_order');
-        $req_setting = 'GPCS';
-        $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_ERROR;
-        $array[] = $this->build_setting(
+        $reqSetting = 'GPCS';
+        $status = $setting == $reqSetting ? self::STATUS_OK : self::STATUS_ERROR;
+        $array[] = $this->buildSetting(
             $status, '[INI]', 'variables_order', 'https://www.php.net/manual/en/ini.core.php#ini.variables-order',
-            $setting, $req_setting, null, $this->getTranslation('VariablesOrderInfo')
+            $setting, $reqSetting, null, $this->getTranslation('VariablesOrderInfo')
         );
 
         $setting = ini_get('session.gc_maxlifetime');
-        $req_setting = '4320';
-        $status = $setting == $req_setting ? self::STATUS_OK : self::STATUS_WARNING;
-        $array[] = $this->build_setting(
+        $reqSetting = '4320';
+        $status = $setting == $reqSetting ? self::STATUS_OK : self::STATUS_WARNING;
+        $array[] = $this->buildSetting(
             $status, '[SESSION]', 'session.gc_maxlifetime',
-            'https://www.php.net/manual/en/ini.core.php#session.gc-maxlifetime', $setting, $req_setting, null,
+            'https://www.php.net/manual/en/ini.core.php#session.gc-maxlifetime', $setting, $reqSetting, null,
             $this->getTranslation('SessionGCMaxLifetimeInfo')
         );
 
@@ -444,11 +427,10 @@ class Diagnoser
             'xsl' => 'https://www.php.net/xsl'
         ];
 
-        foreach ($extensions as $extension => $url)
-        {
+        foreach ($extensions as $extension => $url) {
             $loaded = extension_loaded($extension);
             $status = $loaded ? self::STATUS_OK : self::STATUS_ERROR;
-            $array[] = $this->build_setting(
+            $array[] = $this->buildSetting(
                 $status, '[EXTENSION]', $this->getTranslation('ExtensionLoaded') . ': ' . $extension, $url, $loaded, 1,
                 'yes_no', $this->getTranslation('ExtensionMustBeLoaded')
             );
@@ -476,25 +458,25 @@ class Diagnoser
     {
         $array = [];
 
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_ADDR"]',
             'https://www.php.net/reserved.variables.server', $_SERVER['SERVER_ADDR'], null, null,
             $this->getTranslation('ServerIPInfo')
         );
 
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_SOFTWARE"]',
             'https://www.php.net/reserved.variables.server', $_SERVER['SERVER_SOFTWARE'], null, null,
             $this->getTranslation('ServerSoftwareInfo')
         );
 
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["REMOTE_ADDR"]',
             'https://www.php.net/reserved.variables.server', $_SERVER['REMOTE_ADDR'], null, null,
             $this->getTranslation('ServerRemoteInfo')
         );
 
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["HTTP_USER_AGENT"]',
             'https://www.php.net/reserved.variables.server', $_SERVER['HTTP_USER_AGENT'], null, null,
             $this->getTranslation('ServerRemoteInfo')
@@ -503,18 +485,18 @@ class Diagnoser
         $path = $this->request->getUri();
         $request = $_SERVER['REQUEST_URI'];
         $status = $request != $path ? self::STATUS_ERROR : self::STATUS_OK;
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             $status, '[SERVER]', '$_SERVER["REQUEST_URI"]', 'https://www.php.net/reserved.variables.server', $request,
             $path, null, $this->getTranslation('RequestURIInfo')
         );
 
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_PROTOCOL"]',
             'https://www.php.net/reserved.variables.server', $_SERVER['SERVER_PROTOCOL'], null, null,
             $this->getTranslation('ServerProtocolInfo')
         );
 
-        $array[] = $this->build_setting(
+        $array[] = $this->buildSetting(
             self::STATUS_INFORMATION, '[SERVER]', 'php_uname()', 'https://www.php.net/php_uname', php_uname(), null,
             null, $this->getTranslation('UnameInfo')
         );

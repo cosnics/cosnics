@@ -47,10 +47,8 @@ class FormValidator extends HTML_QuickForm
 
     public const FORM_METHOD_GET = 'get';
     public const FORM_METHOD_POST = 'post';
-
     public const PARAM_RESET = 'reset';
     public const PARAM_SUBMIT = 'submit';
-
     public const PROPERTY_HTML_EDITORS = 'html_editors';
     public const PROPERTY_TIME_PERIOD_FOREVER = 'forever';
     public const PROPERTY_TIME_PERIOD_FROM_DATE = 'from_date';
@@ -59,7 +57,7 @@ class FormValidator extends HTML_QuickForm
     /**
      * @var string[]
      */
-    private array $html_editors = [];
+    private array $htmlEditors = [];
 
     /**
      * @var \HTML_QuickForm_Renderer_Default
@@ -67,16 +65,6 @@ class FormValidator extends HTML_QuickForm
     private HTML_QuickForm_Renderer_Default $renderer;
 
     /**
-     * Constructor
-     *
-     * @param string $formName Name of the form
-     * @param string $method Method (FormValidator::FORM_METHOD_POST (default) or FormValidator::FORM_METHOD_GET)
-     * @param string $action Action (default is $PHP_SELF)
-     * @param string $target Form's target defaults to '_self'
-     * @param string[] $attributes (optional)Extra attributes for <form> tag
-     * @param bool $trackSubmit (optional)Whether to track if the form was submitted by adding a special hidden field
-     *                             (default = true)
-     *
      * @throws \QuickformException
      */
     public function __construct(
@@ -97,8 +85,7 @@ class FormValidator extends HTML_QuickForm
         )
         );
 
-        foreach ($this->_submitValues as & $value)
-        {
+        foreach ($this->_submitValues as & $value) {
             $value = $this->getSecurity()->removeXSS($value);
         }
 
@@ -108,14 +95,12 @@ class FormValidator extends HTML_QuickForm
     /**
      * @throws \QuickformException
      */
-    public function render(?string $in_data = null): string
+    public function render(): string
     {
         $error = false;
 
-        foreach ($this->_elements as $element)
-        {
-            if ($element->getName() && !is_null(parent::getElementError($element->getName())))
-            {
+        foreach ($this->_elements as $element) {
+            if ($element->getName() && !is_null(parent::getElementError($element->getName()))) {
                 $error = true;
                 break;
             }
@@ -123,8 +108,7 @@ class FormValidator extends HTML_QuickForm
 
         $html = [];
 
-        if ($error)
-        {
+        if ($error) {
             $html[] = $this->getNotificationMessageRenderer()->renderOne(
                 new NotificationMessage(
                     $this->getTranslation('FormHasErrorsPleaseComplete'), NotificationMessage::TYPE_DANGER
@@ -132,7 +116,7 @@ class FormValidator extends HTML_QuickForm
             );
         }
 
-        $html[] = parent::toHtml($in_data);
+        $html[] = parent::toHtml();
 
         return implode(PHP_EOL, $html);
     }
@@ -170,10 +154,8 @@ class FormValidator extends HTML_QuickForm
         string $elementName, array $dropzoneOptions = [], bool $includeLabel = true, bool $markRequired = false
     ): void
     {
-        if (array_key_exists('autoProcessQueue', $dropzoneOptions))
-        {
-            if ($dropzoneOptions['autoProcessQueue'] === false)
-            {
+        if (array_key_exists('autoProcessQueue', $dropzoneOptions)) {
+            if ($dropzoneOptions['autoProcessQueue'] === false) {
                 $dropzoneOptions['autoProcessQueue'] = 'false';
             }
         }
@@ -247,26 +229,21 @@ class FormValidator extends HTML_QuickForm
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
 
-        if ($includeLabel)
-        {
-            if (array_key_exists('maxFiles', $dropzoneOptions) && $dropzoneOptions['maxFiles'] == 1)
-            {
+        if ($includeLabel) {
+            if (array_key_exists('maxFiles', $dropzoneOptions) && $dropzoneOptions['maxFiles'] == 1) {
                 $label = 'File';
             }
-            else
-            {
+            else {
                 $label = 'Files';
             }
 
             $label = $this->getTranslation($label);
         }
-        else
-        {
+        else {
             $label = '';
         }
 
-        if ($markRequired)
-        {
+        if ($markRequired) {
             $glyph = new FontAwesomeGlyph('star', ['text-danger', 'fa-xs'], null, 'fas');
             $label .= '<span class="text-danger">&nbsp;' . $glyph->render() . '</span>';
         }
@@ -278,8 +255,7 @@ class FormValidator extends HTML_QuickForm
 
         $dropzoneOptionsString = [];
 
-        foreach ($dropzoneOptions as $optionKey => $optionValue)
-        {
+        foreach ($dropzoneOptions as $optionKey => $optionValue) {
             $dropzoneOptionsString[] = $optionKey . ': \'' . $optionValue . '\'';
         }
 
@@ -310,21 +286,17 @@ class FormValidator extends HTML_QuickForm
      */
     protected function addFormControlToElementAttributes(array $attributes = []): array
     {
-        if (!array_key_exists('class', $attributes))
-        {
+        if (!array_key_exists('class', $attributes)) {
             $attributes['class'] = 'form-control';
         }
-        else
-        {
+        else {
             $classAttributes = $attributes['class'];
 
-            if (!is_array($classAttributes))
-            {
+            if (!is_array($classAttributes)) {
                 $classAttributes = explode(' ', $classAttributes);
             }
 
-            if (!in_array('form-control', $classAttributes))
-            {
+            if (!in_array('form-control', $classAttributes)) {
                 array_unshift($classAttributes, 'form-control');
             }
 
@@ -398,12 +370,10 @@ class FormValidator extends HTML_QuickForm
 
         $html[] = '<div id="' . $name . '" class="form-row row">';
 
-        if ($noMargin)
-        {
+        if ($noMargin) {
             $html[] = '<div class="col-xs-12">';
         }
-        else
-        {
+        else {
             $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">';
             $html[] = '</div>';
             $html[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
@@ -411,8 +381,7 @@ class FormValidator extends HTML_QuickForm
 
         $html[] = '<div role="alert" class="alert alert-' . $type . '">';
 
-        if ($label)
-        {
+        if ($label) {
             $html[] = '<b>' . $label . '</b><br />';
         }
 
@@ -436,8 +405,7 @@ class FormValidator extends HTML_QuickForm
     {
         $element = $this->addElement($this->createPassword($name, $label, $attributes));
 
-        if ($required)
-        {
+        if ($required) {
             $this->addRule(
                 $name, $this->getTranslation('ThisFieldIsRequired'), HTML_QuickForm_Rule_Required::class
             );
@@ -475,8 +443,7 @@ class FormValidator extends HTML_QuickForm
     {
         $element = $this->addElement($this->createSelect($name, $label, $values, $attributes));
 
-        if ($required)
-        {
+        if ($required) {
             $this->addRule(
                 $name, $this->getTranslation('ThisFieldIsRequired'), HTML_QuickForm_Rule_Required::class
             );
@@ -515,12 +482,11 @@ class FormValidator extends HTML_QuickForm
     public function addTextfield(string $name, string $label, bool $required = true, array $attributes = []
     ): HTML_QuickForm_text
     {
-        $element = $this->addElement($this->create_textfield($name, $label, $attributes));
+        $element = $this->addElement($this->createTextfield($name, $label, $attributes));
 
         $this->applyFilter($name, 'trim');
 
-        if ($required)
-        {
+        if ($required) {
             $this->addRule(
                 $name, $this->getTranslation('ThisFieldIsRequired'), HTML_QuickForm_Rule_Required::class
             );
@@ -538,8 +504,7 @@ class FormValidator extends HTML_QuickForm
         string $foreverElementName = self::PROPERTY_TIME_PERIOD_FOREVER, string $elementNamePrefix = null
     ): void
     {
-        if ($elementNamePrefix)
-        {
+        if ($elementNamePrefix) {
             $foreverElementName = $elementNamePrefix . '[' . $foreverElementName . ']';
             $fromElementName = $elementNamePrefix . '[' . $fromElementName . ']';
             $toElementName = $elementNamePrefix . '[' . $toElementName . ']';
@@ -622,8 +587,7 @@ class FormValidator extends HTML_QuickForm
     {
         static $anonGroups = 1;
 
-        if (0 == strlen($name))
-        {
+        if (0 == strlen($name)) {
             $name = 'qf_group_' . $anonGroups ++;
             $appendName = false;
         }
@@ -677,7 +641,7 @@ class FormValidator extends HTML_QuickForm
      *
      * @throws \QuickformException
      */
-    public function create_textfield(string $name, string $label, array $attributes = []): HTML_QuickForm_text
+    public function createTextfield(string $name, string $label, array $attributes = []): HTML_QuickForm_text
     {
         $attributes = $this->addFormControlToElementAttributes($attributes);
 
@@ -765,7 +729,7 @@ class FormValidator extends HTML_QuickForm
      */
     public function getHtmlEditors(): array
     {
-        return $this->html_editors;
+        return $this->htmlEditors;
     }
 
     public function getRenderer(): HTML_QuickForm_Renderer_Default
@@ -835,7 +799,7 @@ class FormValidator extends HTML_QuickForm
 
     public function registerHtmlEditor(string $name): void
     {
-        $this->html_editors[] = $name;
+        $this->htmlEditors[] = $name;
     }
 
     public function setDefaultTemplates(): void
@@ -856,11 +820,10 @@ class FormValidator extends HTML_QuickForm
 
     public function unregisterHtmlEditor(string $name): void
     {
-        $key = array_search($name, $this->html_editors);
+        $key = array_search($name, $this->htmlEditors);
 
-        if ($key)
-        {
-            unset($this->html_editors[$key]);
+        if ($key) {
+            unset($this->htmlEditors[$key]);
         }
     }
 }

@@ -11,6 +11,7 @@ use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
 
@@ -31,10 +32,10 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
         EventMiniMonthRenderer $eventMiniMonthRenderer, MiniMonthCalendarTableBuilder $miniMonthCalendarTableBuilder,
-        WebPathBuilder $webPathBuilder, ResourceManager $resourceManager
+        WebPathBuilder $webPathBuilder, ResourceManager $resourceManager, ButtonToolBarRenderer $buttonToolBarRenderer
     )
     {
-        parent::__construct($legendRenderer, $urlGenerator, $translator);
+        parent::__construct($legendRenderer, $urlGenerator, $translator, $buttonToolBarRenderer);
 
         $this->eventMiniMonthRenderer = $eventMiniMonthRenderer;
         $this->miniMonthCalendarTableBuilder = $miniMonthCalendarTableBuilder;
@@ -107,19 +108,16 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
         $tableDate = $startTime;
         $eventsToShow = [];
 
-        while ($tableDate <= $endTime)
-        {
+        while ($tableDate <= $endTime) {
             $nextTableDate = strtotime('+1 Day', $tableDate);
 
-            foreach ($events as $event)
-            {
+            foreach ($events as $event) {
                 $startDate = $event->getStartDate();
                 $endDate = $event->getEndDate();
 
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
                     $tableDate < $endDate && $endDate <= $nextTableDate ||
-                    $startDate <= $tableDate && $nextTableDate <= $endDate)
-                {
+                    $startDate <= $tableDate && $nextTableDate <= $endDate) {
                     $this->getLegendRenderer()->addSource($event->getSource());
 
                     $eventsToShow[$tableDate][] = $this->getEventMiniMonthRenderer()->render(

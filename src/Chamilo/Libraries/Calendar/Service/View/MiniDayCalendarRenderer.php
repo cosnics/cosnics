@@ -6,6 +6,7 @@ use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\DayCalendarTableBuilder;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -20,10 +21,10 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
 
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        EventDayRenderer $eventDayRenderer, DayCalendarTableBuilder $dayCalendarTableBuilder
+        EventDayRenderer $eventDayRenderer, DayCalendarTableBuilder $dayCalendarTableBuilder, ButtonToolBarRenderer $buttonToolBarRenderer
     )
     {
-        parent::__construct($legendRenderer, $urlGenerator, $translator);
+        parent::__construct($legendRenderer, $urlGenerator, $translator, $buttonToolBarRenderer);
 
         $this->eventDayRenderer = $eventDayRenderer;
         $this->dayCalendarTableBuilder = $dayCalendarTableBuilder;

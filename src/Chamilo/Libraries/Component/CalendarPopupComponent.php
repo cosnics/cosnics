@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CalendarPopupComponent extends Manager implements NoAuthenticationSupportInterface
 {
-
     public function run(): Response
     {
         $translator = $this->getTranslator();
@@ -43,22 +42,20 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
             $translator->trans('SaturdayLong', [], StringUtilities::LIBRARIES)
         ];
 
-        $start_of_week =
+        $startOfWeek =
             $this->getConfigurationConsulter()->getSetting(['Chamilo\Libraries', 'calendar_first_day_of_week']);
 
-        if ($start_of_week == 'sunday')
-        {
+        if ($startOfWeek == 'sunday') {
             array_unshift($DaysShort, $translator->trans('SundayShort', [], StringUtilities::LIBRARIES));
             array_unshift($DaysLong, $translator->trans('SundayLong', [], StringUtilities::LIBRARIES));
 
-            $start_of_week_identifier = 1;
+            $startOfWeekIdentifier = 1;
         }
-        else
-        {
+        else {
             $DaysShort[] = $translator->trans('SundayShort', [], StringUtilities::LIBRARIES);
             $DaysLong[] = $translator->trans('SundayLong', [], StringUtilities::LIBRARIES);
 
-            $start_of_week_identifier = 0;
+            $startOfWeekIdentifier = 0;
         }
         // Defining the months of the year to allow translation of the months
         $MonthsLong = [
@@ -86,16 +83,14 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
         $html[] = '/* <![CDATA[ */';
         $html[] = 'var month_names = new Array(';
 
-        foreach ($MonthsLong as $month)
-        {
+        foreach ($MonthsLong as $month) {
             $html[] = '"' . $month . '",';
         }
         $html[] = '"");';
 
         $html[] = 'var day_names = new Array(';
 
-        foreach ($DaysShort as $day)
-        {
+        foreach ($DaysShort as $day) {
             $html[] = '"' . $day . '",';
         }
         $html[] = '"");';
@@ -105,7 +100,7 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
         $html[] = '<div id="calendar_data"></div>';
         $html[] = '<div id="clock_data"></div>';
         $html[] = '<script>';
-        $html[] = 'initCalendar(' . $start_of_week_identifier . ');';
+        $html[] = 'initCalendar(' . $startOfWeekIdentifier . ');';
         $html[] = '</script>';
         $html[] = $this->renderFooter();
 

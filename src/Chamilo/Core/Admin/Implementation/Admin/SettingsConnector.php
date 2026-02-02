@@ -16,7 +16,6 @@ use Symfony\Component\Translation\Translator;
  */
 class SettingsConnector implements SettingsConnectorInterface
 {
-
     protected ConfigurationConsulter $configurationConsulter;
 
     protected LanguageConsulter $languageConsulter;
@@ -96,8 +95,7 @@ class SettingsConnector implements SettingsConnectorInterface
         $timezones = [];
         $timezoneIdentifiers = DateTimeZone::listIdentifiers();
 
-        foreach ($timezoneIdentifiers as $timezoneIdentifier)
-        {
+        foreach ($timezoneIdentifiers as $timezoneIdentifier) {
             $timezones[$timezoneIdentifier] = $timezoneIdentifier;
         }
 
@@ -116,14 +114,13 @@ class SettingsConnector implements SettingsConnectorInterface
     {
         $start = 0;
         $end = 24;
-        $working_hours = [];
+        $workingHours = [];
 
-        for ($i = $start; $i <= $end; $i ++)
-        {
-            $working_hours[$i] = $i;
+        for ($i = $start; $i <= $end; $i ++) {
+            $workingHours[$i] = $i;
         }
 
-        return $working_hours;
+        return $workingHours;
     }
 
     public function isAllowedQuickChangePlatformLanguage(): bool

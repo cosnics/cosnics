@@ -84,7 +84,7 @@ class PictureComponent extends ProfileComponent
         else
         {
             return new Response(
-                $this->display_error_page(
+                $this->displayErrorPage(
                     $translator->trans('UserPictureProviderDoesNotSuportUpdates', [], Manager::CONTEXT)
                 )
             );

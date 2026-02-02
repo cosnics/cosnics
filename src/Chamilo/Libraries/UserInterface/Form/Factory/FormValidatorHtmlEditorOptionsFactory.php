@@ -43,42 +43,39 @@ class FormValidatorHtmlEditorOptionsFactory
         $webPath = $this->getWebPathBuilder()->getPluginPath(StringUtilities::LIBRARIES) .
             'HtmlEditor/CkeditorInstanceConfig.js';
 
-        $available_options = $formValidatorHtmlEditorOptions->get_option_names();
+        $availableOptions = $formValidatorHtmlEditorOptions->getOptionNames();
 
-        foreach ($available_options as $available_option)
-        {
-            $value = $formValidatorHtmlEditorOptions->get_option($available_option);
+        foreach ($availableOptions as $availableOption) {
+            $value = $formValidatorHtmlEditorOptions->getOption($availableOption);
 
-            if (!isset($value))
-            {
-                switch ($available_option)
-                {
+            if (!isset($value)) {
+                switch ($availableOption) {
                     case FormValidatorHtmlEditorOptions::OPTION_LANGUAGE :
-                        $formValidatorHtmlEditorOptions->set_option(
-                            $available_option, $this->getTranslator()->getLocale()
+                        $formValidatorHtmlEditorOptions->setOption(
+                            $availableOption, $this->getTranslator()->getLocale()
                         );
                         break;
                     case FormValidatorHtmlEditorOptions::OPTION_TOOLBAR :
-                        $formValidatorHtmlEditorOptions->set_option($available_option, 'Basic');
+                        $formValidatorHtmlEditorOptions->setOption($availableOption, 'Basic');
                         break;
                     case FormValidatorHtmlEditorOptions::OPTION_FULL_PAGE:
                     case FormValidatorHtmlEditorOptions::OPTION_COLLAPSE_TOOLBAR :
-                        $formValidatorHtmlEditorOptions->set_option($available_option, false);
+                        $formValidatorHtmlEditorOptions->setOption($availableOption, false);
                         break;
                     case FormValidatorHtmlEditorOptions::OPTION_WIDTH :
-                        $formValidatorHtmlEditorOptions->set_option($available_option, '100%');
+                        $formValidatorHtmlEditorOptions->setOption($availableOption, '100%');
                         break;
                     case FormValidatorHtmlEditorOptions::OPTION_HEIGHT :
-                        $formValidatorHtmlEditorOptions->set_option($available_option, 200);
+                        $formValidatorHtmlEditorOptions->setOption($availableOption, 200);
                         break;
                     case FormValidatorHtmlEditorOptions::OPTION_RENDER_RESOURCE_INLINE :
-                        $formValidatorHtmlEditorOptions->set_option($available_option, true);
+                        $formValidatorHtmlEditorOptions->setOption($availableOption, true);
                         break;
                     case FormValidatorHtmlEditorOptions::OPTION_SKIN :
-                        $formValidatorHtmlEditorOptions->set_option($available_option, 'moono-lisa');
+                        $formValidatorHtmlEditorOptions->setOption($availableOption, 'moono-lisa');
                         break;
                     case FormValidatorHtmlEditorOptions::OPTION_CONFIGURATION :
-                        $formValidatorHtmlEditorOptions->set_option($available_option, $webPath);
+                        $formValidatorHtmlEditorOptions->setOption($availableOption, $webPath);
                         break;
                 }
             }

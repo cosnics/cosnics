@@ -58,7 +58,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
             )
         );
 
-        $output = $this->get_user_subscribe_html();
+        $output = $this->renderNonSubscribedUserTable();
 
         $html = [];
 
@@ -144,16 +144,16 @@ class BrowseNonSubscribedUsersComponent extends Manager
         $query = $this->getButtonToolBarRenderer()->getSearchForm()->getQuery();
 
         if (isset($query) && $query != '') {
-            $or_conditions[] = new ContainsCondition(
+            $orConditions[] = new ContainsCondition(
                 new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME), $query
             );
-            $or_conditions[] = new ContainsCondition(
+            $orConditions[] = new ContainsCondition(
                 new PropertyConditionVariable(User::class, User::PROPERTY_SURNAME), $query
             );
-            $or_conditions[] = new ContainsCondition(
+            $orConditions[] = new ContainsCondition(
                 new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), $query
             );
-            $conditions[] = new OrCondition($or_conditions);
+            $conditions[] = new OrCondition($orConditions);
         }
 
         return new AndCondition($conditions);
@@ -175,7 +175,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function get_user_subscribe_html(): string
+    public function renderNonSubscribedUserTable(): string
     {
         $totalNumberOfItems = $this->getUserService()->countUsers($this->getNonSubscribedUserCondition());
         $nonSubscribedUserTableRenderer = $this->getNonSubscribedUserTableRenderer();

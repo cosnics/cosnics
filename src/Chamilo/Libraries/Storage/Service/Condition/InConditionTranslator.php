@@ -21,21 +21,19 @@ class InConditionTranslator extends ConditionTranslator
     {
         $values = $inCondition->getValues();
 
-        if (count($values) > 0)
-        {
-            $where_clause = [];
+        if (count($values) > 0) {
+            $whereClause = [];
 
-            $where_clause[] = $this->getConditionPartTranslatorService()->translate(
+            $whereClause[] = $this->getConditionPartTranslatorService()->translate(
                     $querybuilder, $inCondition->getConditionVariable(), $enableAliasing
                 ) . ' IN (';
 
-            $where_clause[] = $querybuilder->createNamedParameter($values, ArrayParameterType::STRING);
-            $where_clause[] = ')';
+            $whereClause[] = $querybuilder->createNamedParameter($values, ArrayParameterType::STRING);
+            $whereClause[] = ')';
 
-            $value = implode('', $where_clause);
+            $value = implode('', $whereClause);
         }
-        else
-        {
+        else {
             $value = '1 = 0';
         }
 

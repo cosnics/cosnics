@@ -18,17 +18,17 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
     /**
      * The return value if the checkbox is not selected
      */
-    private ?string $return_value;
+    private ?string $returnValue;
 
     /**
      * @param string $text (optional)Checkbox display text
      * @param ?array|?string $attributes Associative array of tag attributes or HTML attributes name="value" pairs
      * @param int $value The value for the checkbox
-     * @param ?string $return_value The return value when the checkbox is not selected
+     * @param ?string $returnValue The return value when the checkbox is not selected
      */
     public function __construct(
         ?string $elementName = null, ?string $elementLabel = null, string $text = '',
-        null|array|string $attributes = null, int $value = 1, ?string $return_value = null
+        null|array|string $attributes = null, int $value = 1, ?string $returnValue = null
     )
     {
         parent::__construct($elementName, $elementLabel, $attributes);
@@ -39,7 +39,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
         $this->updateAttributes(['value' => 1]);
         $this->setValue($value);
 
-        $this->return_value = $return_value;
+        $this->returnValue = $returnValue;
     }
 
     public function exportValue(array &$submitValues, bool $assoc = false): mixed
@@ -48,7 +48,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
 
         if (null === $value)
         {
-            $value = $this->getChecked() ? true : $this->return_value;
+            $value = $this->getChecked() ? true : $this->returnValue;
         }
 
         return $this->_prepareValue($value, $assoc);
@@ -66,12 +66,12 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
 
     public function getReturnValue(): ?string
     {
-        return $this->return_value;
+        return $this->returnValue;
     }
 
-    public function setReturnValue(?string $return_value): void
+    public function setReturnValue(?string $returnValue): void
     {
-        $this->return_value = $return_value;
+        $this->returnValue = $returnValue;
     }
 
     public function getText(): string

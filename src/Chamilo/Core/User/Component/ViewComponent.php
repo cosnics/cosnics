@@ -60,7 +60,7 @@ class ViewComponent extends Manager
             $translator = $this->getTranslator();
 
             return new Response(
-                $this->display_error_page(
+                $this->displayErrorPage(
                     htmlentities(
                         $translator->trans(
                             'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],

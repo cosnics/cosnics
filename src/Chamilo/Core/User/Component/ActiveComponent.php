@@ -85,7 +85,7 @@ class ActiveComponent extends Manager
         else
         {
             return new Response(
-                $this->display_error_page(
+                $this->displayErrorPage(
                     htmlentities(
                         $translator->trans(
                             'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],

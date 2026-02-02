@@ -36,7 +36,7 @@ class TableActions
     }
 
     /**
-     * @return \Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableAction[] $form_actions
+     * @return \Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableAction[]
      */
     public function getActions(): array
     {

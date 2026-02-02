@@ -11,7 +11,6 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 class UserSetting extends DataClass
 {
     public const CONTEXT = Manager::CONTEXT;
-
     public const PROPERTY_SETTING_ID = 'setting_id';
     public const PROPERTY_USER_ID = 'user_id';
     public const PROPERTY_VALUE = 'value';
@@ -46,14 +45,14 @@ class UserSetting extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_VALUE);
     }
 
-    public function setSettingIdentifier(string $setting_id): void
+    public function setSettingIdentifier(string $settingIdentifier): void
     {
-        $this->setDefaultProperty(self::PROPERTY_SETTING_ID, $setting_id);
+        $this->setDefaultProperty(self::PROPERTY_SETTING_ID, $settingIdentifier);
     }
 
-    public function setUserIdentifier(string $user_id): void
+    public function setUserIdentifier(string $userIdentifier): void
     {
-        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $userIdentifier);
     }
 
     public function setValue(mixed $value): void

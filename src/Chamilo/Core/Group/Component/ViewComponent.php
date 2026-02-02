@@ -255,16 +255,16 @@ class ViewComponent extends Manager
         $query = $this->buttonToolBarRenderer->getSearchForm()->getQuery();
 
         if (isset($query) && $query != '') {
-            $or_conditions[] = new ContainsCondition(
+            $orConditions[] = new ContainsCondition(
                 new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME), $query
             );
-            $or_conditions[] = new ContainsCondition(
+            $orConditions[] = new ContainsCondition(
                 new PropertyConditionVariable(User::class, User::PROPERTY_SURNAME), $query
             );
-            $or_conditions[] = new ContainsCondition(
+            $orConditions[] = new ContainsCondition(
                 new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), $query
             );
-            $condition = new OrCondition($or_conditions);
+            $condition = new OrCondition($orConditions);
 
             $users = $this->getUserService()->findUsers($condition);
             $userconditions = [];

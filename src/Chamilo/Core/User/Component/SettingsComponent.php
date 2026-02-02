@@ -73,7 +73,7 @@ class SettingsComponent extends ProfileComponent
         foreach ($settingContexts as $settingContext)
         {
 
-            $package_url = $this->getUrlGenerator()->fromParameters(
+            $packageUrl = $this->getUrlGenerator()->fromParameters(
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => self::ACTION_SETTINGS,
@@ -81,12 +81,12 @@ class SettingsComponent extends ProfileComponent
                 ]
             );
 
-            $is_current_tab = ($this->getSelectedContext() === $settingContext);
+            $isCurrentTab = ($this->getSelectedContext() === $settingContext);
 
             $tab = new LinkTab(
                 $settingContext, $translator->trans('TypeName', [], $settingContext), new NamespaceIdentGlyph(
                 $settingContext, true
-            ), $package_url, $is_current_tab
+            ), $packageUrl, $isCurrentTab
             );
 
             $tabs->add($tab);

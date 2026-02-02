@@ -14,44 +14,35 @@ class FormValidatorHtmlEditorOptions
      * Whether the toolbar should be collapse by default
      */
     public const OPTION_COLLAPSE_TOOLBAR = 'toolbarStartupExpanded';
-
     /**
      * Path to the editors configuration file
      */
     public const OPTION_CONFIGURATION = 'customConfig';
-
     /**
      * Whether the content of the editor should be treated as a standalone page
      */
     public const OPTION_FULL_PAGE = 'fullPage';
-
     /**
      * The height of the editor in pixels
      */
     public const OPTION_HEIGHT = 'height';
-
     /**
      * Name of the language to be used for the editor
      */
     public const OPTION_LANGUAGE = 'language';
-
     public const OPTION_RENDER_RESOURCE_INLINE = 'render_resource_inline';
-
     public const OPTION_SKIN = 'skin';
-
     /**
      * Path to available templates for the editor
      */
     public const OPTION_TEMPLATES = 'templates_files';
-
     /**
      * The name of the toolbar set e.g.
      * Basic, Wiki, Assessment
      */
     public const OPTION_TOOLBAR = 'toolbar';
-
     /**
-     * The width of the editor in pixels or percent
+     * The width of the editor in pixels or per cent
      */
     public const OPTION_WIDTH = 'width';
 
@@ -70,34 +61,27 @@ class FormValidatorHtmlEditorOptions
 
     public function formatForJavascript(int|string|array|bool $value): int|string
     {
-        if (is_bool($value))
-        {
-            if ($value === true)
-            {
+        if (is_bool($value)) {
+            if ($value === true) {
                 return 'true';
             }
-            else
-            {
+            else {
                 return 'false';
             }
         }
-        elseif (is_int($value))
-        {
+        elseif (is_int($value)) {
             return $value;
         }
-        elseif (is_array($value))
-        {
+        elseif (is_array($value)) {
             $elements = [];
 
-            foreach ($value as $element)
-            {
+            foreach ($value as $element) {
                 $elements[] = $this->formatForJavascript($element);
             }
 
             return '[' . implode(',', $elements) . ']';
         }
-        else
-        {
+        else {
             return '\'' . $value . '\'';
         }
     }
@@ -105,12 +89,12 @@ class FormValidatorHtmlEditorOptions
     /**
      * @return string[]
      */
-    public function get_mapping(): array
+    public function getMapping(): array
     {
-        return array_combine($this->get_option_names(), $this->get_option_names());
+        return array_combine($this->getOptionNames(), $this->getOptionNames());
     }
 
-    public function get_option(string $variable): ?string
+    public function getOption(string $variable): ?string
     {
         return $this->options[$variable] ?? null;
     }
@@ -118,7 +102,7 @@ class FormValidatorHtmlEditorOptions
     /**
      * @return string[]
      */
-    public function get_option_names(): array
+    public function getOptionNames(): array
     {
         return [
             self::OPTION_COLLAPSE_TOOLBAR,
@@ -137,7 +121,7 @@ class FormValidatorHtmlEditorOptions
     /**
      * @return string[] The options
      */
-    public function get_options(): array
+    public function getOptions(): array
     {
         return $this->options;
     }
@@ -145,7 +129,7 @@ class FormValidatorHtmlEditorOptions
     /**
      * @param string[] $options
      */
-    public function set_options(array $options): void
+    public function setOptions(array $options): void
     {
         $this->options = $options;
     }
@@ -153,25 +137,21 @@ class FormValidatorHtmlEditorOptions
     public function renderOptions(): string
     {
         $javascript = [];
-        $available_options = $this->get_option_names();
-        $mapping = $this->get_mapping();
+        $availableOptions = $this->getOptionNames();
+        $mapping = $this->getMapping();
 
-        foreach ($available_options as $available_option)
-        {
-            if (key_exists($available_option, $mapping))
-            {
-                $value = $this->get_option($available_option);
+        foreach ($availableOptions as $availableOption) {
+            if (key_exists($availableOption, $mapping)) {
+                $value = $this->getOption($availableOption);
 
-                if (isset($value))
-                {
-                    $processing_function = 'process_' . $available_option;
-                    if (method_exists($this, $processing_function))
-                    {
-                        $value = call_user_func([$this, $processing_function], $value);
+                if (isset($value)) {
+                    $processingFunction = 'process_' . $availableOption;
+                    if (method_exists($this, $processingFunction)) {
+                        $value = call_user_func([$this, $processingFunction], $value);
                     }
 
                     $javascript[] =
-                        '			' . $mapping[$available_option] . ' : ' . $this->formatForJavascript($value);
+                        '			' . $mapping[$availableOption] . ' : ' . $this->formatForJavascript($value);
                 }
             }
         }
@@ -179,7 +159,7 @@ class FormValidatorHtmlEditorOptions
         return implode(",\n", $javascript);
     }
 
-    public function set_option(string $variable, mixed $value): void
+    public function setOption(string $variable, mixed $value): void
     {
         $this->options[$variable] = $value;
     }

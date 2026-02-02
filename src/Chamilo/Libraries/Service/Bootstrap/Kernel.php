@@ -91,7 +91,7 @@ class Kernel
         }
 
         $this->setApplication(
-            $this->getApplicationFactory()->getApplication($this->getContext(),  $this->getUser())
+            $this->getApplicationFactory()->getApplication($this->getContext(), $this->getUser())
         );
 
         return $this;
@@ -269,7 +269,7 @@ class Kernel
     {
         $code = $this->getRequest()->query->get(self::PARAM_CODE);
         $state = $this->getRequest()->query->get(self::PARAM_STATE);
-        $session_state = $this->getRequest()->query->get(self::PARAM_SESSION_STATE); // Not provided in OAUTH2 v2.0
+        $sessionState = $this->getRequest()->query->get(self::PARAM_SESSION_STATE); // Not provided in OAUTH2 v2.0
 
         if (!$code || !$state) {
             return null;
@@ -293,8 +293,8 @@ class Kernel
 
         $landingPageParameters[self::PARAM_STATE] = base64_encode(json_encode($stateParameters));
 
-        if ($session_state) {
-            $landingPageParameters[self::PARAM_SESSION_STATE] = $session_state;
+        if ($sessionState) {
+            $landingPageParameters[self::PARAM_SESSION_STATE] = $sessionState;
         }
 
         $response = new RedirectResponse($this->getUrlGenerator()->fromParameters($landingPageParameters));

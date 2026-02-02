@@ -20,7 +20,6 @@ class GroupForm extends FormValidator
 {
     public const RESULT_ERROR = 'GroupUpdateFailed';
     public const RESULT_SUCCESS = 'GroupUpdated';
-
     public const TYPE_CREATE = 'create';
     public const TYPE_EDIT = 'edit';
 
@@ -31,19 +30,17 @@ class GroupForm extends FormValidator
     /**
      * @throws \QuickformException
      */
-    public function __construct(string $form_type, Group $group, string $action)
+    public function __construct(string $formType, Group $group, string $action)
     {
         parent::__construct('groups_settings', self::FORM_METHOD_POST, $action);
 
         $this->group = $group;
-        $this->formType = $form_type;
+        $this->formType = $formType;
 
-        if ($this->formType == self::TYPE_EDIT)
-        {
+        if ($this->formType == self::TYPE_EDIT) {
             $this->buildEditingForm();
         }
-        elseif ($this->formType == self::TYPE_CREATE)
-        {
+        elseif ($this->formType == self::TYPE_CREATE) {
             $this->buildCreationForm();
         }
 
@@ -109,7 +106,7 @@ class GroupForm extends FormValidator
      * @throws \Throwable
      * @throws \QuickformException
      */
-    public function create_group(): bool
+    public function createGroup(): bool
     {
         $group = $this->group;
         $values = $this->exportValues();
@@ -169,15 +166,13 @@ class GroupForm extends FormValidator
         $group->setDescription($values[Group::PROPERTY_DESCRIPTION]);
         $group->setCode($values[Group::PROPERTY_CODE]);
 
-        if (!$this->getGroupService()->updateGroup($group))
-        {
+        if (!$this->getGroupService()->updateGroup($group)) {
             return false;
         }
 
         $newParentGroupIdentifier = $values[NestedSet::PROPERTY_PARENT_ID];
 
-        if ($group->getParentId() != $newParentGroupIdentifier)
-        {
+        if ($group->getParentId() != $newParentGroupIdentifier) {
             return $this->getGroupService()->moveGroup($group, $newParentGroupIdentifier);
         }
 

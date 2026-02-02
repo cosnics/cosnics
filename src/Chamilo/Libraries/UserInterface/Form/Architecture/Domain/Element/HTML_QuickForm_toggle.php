@@ -15,10 +15,10 @@ class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
 
     public function __construct(
         ?string $elementName = null, ?string $elementLabel = null, string $text = '',
-        null|array|string $attributes = null, int $value = 1, ?string $return_value = null
+        null|array|string $attributes = null, int $value = 1, ?string $returnValue = null
     )
     {
-        parent::__construct($elementName, $elementLabel, $text, $attributes, $value, $return_value);
+        parent::__construct($elementName, $elementLabel, $text, $attributes, $value, $returnValue);
         $this->_type = 'toggle';
     }
 

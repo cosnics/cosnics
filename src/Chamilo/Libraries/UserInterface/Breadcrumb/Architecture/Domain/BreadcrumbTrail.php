@@ -56,9 +56,9 @@ class BreadcrumbTrail
     public function getLast(): Breadcrumb
     {
         $breadcrumbtrail = $this->breadcrumbs;
-        $last_key = count($breadcrumbtrail) - 1;
+        $lastKey = count($breadcrumbtrail) - 1;
 
-        return $breadcrumbtrail[$last_key];
+        return $breadcrumbtrail[$lastKey];
     }
 
     public function merge(BreadcrumbTrail $trail): void
@@ -68,8 +68,7 @@ class BreadcrumbTrail
 
     public function remove(int $breadcrumbIndex): void
     {
-        if ($breadcrumbIndex < 0)
-        {
+        if ($breadcrumbIndex < 0) {
             $breadcrumbIndex = count($this->breadcrumbs) + $breadcrumbIndex;
         }
 

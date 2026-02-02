@@ -111,13 +111,13 @@ class SecurityUtilities
         do
         {
             // Remove really unwanted tags, but allow object|embed (for html editor)
-            $old_data = $variable;
+            $oldData = $variable;
             $variable = preg_replace(
                 '#</*(?:applet|b(?:ase|gsound|link)|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|s(?:cript)|xml)[^>]*+>#i',
                 '', $variable
             );
         }
-        while ($old_data !== $variable);
+        while ($oldData !== $variable);
 
         return $variable;
     }

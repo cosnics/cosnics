@@ -61,28 +61,28 @@ abstract class Application
         }
     }
 
-    public function display_error_message(string $message): string
+    public function displayErrorMessage(string $message): string
     {
         return $this->getNotificationMessageRenderer()->renderOne(NotificationMessage::error($message));
     }
 
-    public function display_error_page(string $message): string
+    public function displayErrorPage(string $message): string
     {
         $html = [];
 
         $html[] = $this->renderHeader();
-        $html[] = $this->display_error_message($message);
+        $html[] = $this->displayErrorMessage($message);
         $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function display_message(string $message, string $type = NotificationMessage::TYPE_INFO): string
+    public function displayMessage(string $message, string $type = NotificationMessage::TYPE_INFO): string
     {
         return $this->getNotificationMessageRenderer()->renderOne(new NotificationMessage($message, $type));
     }
 
-    public function display_messages(array $messages, array $types): string
+    public function displayMessages(array $messages, array $types): string
     {
         $notificationMessages = [];
 
@@ -93,17 +93,17 @@ abstract class Application
         return $this->getNotificationMessageRenderer()->render($notificationMessages);
     }
 
-    public function display_warning_message(string $message): string
+    public function displayWarningMessage(string $message): string
     {
         return $this->getNotificationMessageRenderer()->renderOne(NotificationMessage::warning($message));
     }
 
-    public function display_warning_page(string $message): string
+    public function displayWarningPage(string $message): string
     {
         $html = [];
 
         $html[] = $this->renderHeader();
-        $html[] = $this->display_warning_message($message);
+        $html[] = $this->displayWarningMessage($message);
         $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
@@ -122,6 +122,35 @@ abstract class Application
     public function getContext(): string
     {
         return $this->getRequest()->query->get(static::PARAM_CONTEXT, 'Chamilo\Core\Admin');
+    }
+
+    public function getGeneralResult(
+        int $failures, int $count, string $singleObject, string $multipleObject,
+        string $type = Application::RESULT_TYPE_CREATED
+    ): string
+    {
+        if ($count == 1) {
+            $param = ['OBJECT' => $singleObject];
+
+            if ($failures) {
+                $message = 'ObjectNot' . $type;
+            }
+            else {
+                $message = 'Object' . $type;
+            }
+        }
+        else {
+            $param = ['OBJECTS' => $multipleObject];
+
+            if ($failures) {
+                $message = 'ObjectsNot' . $type;
+            }
+            else {
+                $message = 'Objects' . $type;
+            }
+        }
+
+        return $this->getTranslator()->trans($message, $param, static::CONTEXT);
     }
 
     protected function getPageTitle(): string
@@ -158,43 +187,6 @@ abstract class Application
     public function getUser(): ?User
     {
         return $this->user;
-    }
-
-    public function get_general_result(
-        int $failures, int $count, string $singleObject, string $multipleObject,
-        string $type = Application::RESULT_TYPE_CREATED
-    ): string
-    {
-        if ($count == 1) {
-            $param = ['OBJECT' => $singleObject];
-
-            if ($failures) {
-                $message = 'ObjectNot' . $type;
-            }
-            else {
-                $message = 'Object' . $type;
-            }
-        }
-        else {
-            $param = ['OBJECTS' => $multipleObject];
-
-            if ($failures) {
-                $message = 'ObjectsNot' . $type;
-            }
-            else {
-                $message = 'Objects' . $type;
-            }
-        }
-
-        return $this->getTranslator()->trans($message, $param, static::CONTEXT);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     */
-    public function not_allowed(bool $showLoginForm = true)
-    {
-        throw new NotAllowedException($showLoginForm);
     }
 
     public function redirect(array $parameters = []): RedirectResponse
@@ -264,7 +256,7 @@ abstract class Application
 
         $session->remove(self::PARAM_MESSAGES);
         if (is_array($messages)) {
-            $html[] = $this->display_messages($messages[self::PARAM_MESSAGE], $messages[self::PARAM_MESSAGE_TYPE]);
+            $html[] = $this->displayMessages($messages[self::PARAM_MESSAGE], $messages[self::PARAM_MESSAGE_TYPE]);
         }
 
         $html[] = $this->getNotificationMessageManager()->renderMessages();
@@ -275,17 +267,17 @@ abstract class Application
         $type = $request->query->get(self::PARAM_MESSAGE_TYPE);
 
         if ($message) {
-            $html[] = $this->display_message($message, $type);
+            $html[] = $this->displayMessage($message, $type);
         }
 
         $message = $request->query->get(self::PARAM_ERROR_MESSAGE);
         if ($message) {
-            $html[] = $this->display_error_message($message);
+            $html[] = $this->displayErrorMessage($message);
         }
 
         $message = $request->query->get(self::PARAM_WARNING_MESSAGE);
         if ($message) {
-            $html[] = $this->display_warning_message($message);
+            $html[] = $this->displayWarningMessage($message);
         }
 
         return implode(PHP_EOL, $html);

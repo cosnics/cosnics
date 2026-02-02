@@ -11,20 +11,23 @@ use stdClass;
 class Package extends DataClass
 {
     public const CONTEXT = 'Chamilo\Core\Admin';
-
     public const PROPERTY_COMPOSER_JSON_OBJECT = 'extra';
     public const PROPERTY_CONTEXT = 'context';
     public const PROPERTY_NAME = 'name';
     public const PROPERTY_RESOURCES = 'resources';
     public const PROPERTY_TYPE = 'type';
     public const PROPERTY_VERSION = 'version';
-
     public const TYPE_APPLICATION = 'Chamilo\Application';
     public const TYPE_CORE = 'Chamilo\Core';
 
     public function getComposerJsonObject(): stdClass
     {
         return unserialize($this->getDefaultProperty(self::PROPERTY_COMPOSER_JSON_OBJECT));
+    }
+
+    public function getContext(): string
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CONTEXT);
     }
 
     /**
@@ -42,6 +45,11 @@ class Package extends DataClass
         $extendedPropertyNames[] = self::PROPERTY_RESOURCES;
 
         return parent::getDefaultPropertyNames($extendedPropertyNames);
+    }
+
+    public function getName(): string
+    {
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     /**
@@ -65,17 +73,7 @@ class Package extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
-    public function get_context(): string
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CONTEXT);
-    }
-
-    public function get_name(): string
-    {
-        return $this->getDefaultProperty(self::PROPERTY_NAME);
-    }
-
-    public function get_version(): string
+    public function getVersion(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_VERSION);
     }
@@ -88,6 +86,20 @@ class Package extends DataClass
     public function setComposerJsonObject(stdClass $composerJsonObject): Package
     {
         $this->setDefaultProperty(self::PROPERTY_COMPOSER_JSON_OBJECT, serialize($composerJsonObject));
+
+        return $this;
+    }
+
+    public function setContext(string $context): Package
+    {
+        $this->setDefaultProperty(self::PROPERTY_CONTEXT, $context);
+
+        return $this;
+    }
+
+    public function setName(string $name): Package
+    {
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
 
         return $this;
     }
@@ -109,21 +121,7 @@ class Package extends DataClass
         return $this;
     }
 
-    public function set_context(string $context): Package
-    {
-        $this->setDefaultProperty(self::PROPERTY_CONTEXT, $context);
-
-        return $this;
-    }
-
-    public function set_name(string $name): Package
-    {
-        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
-
-        return $this;
-    }
-
-    public function set_version(string $version): Package
+    public function setVersion(string $version): Package
     {
         $this->setDefaultProperty(self::PROPERTY_VERSION, $version);
 

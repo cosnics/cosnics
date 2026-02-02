@@ -38,7 +38,7 @@ class ResourceGenerator
         stdClass $resourceDefinition, array &$resourceFiles, Package $package
     ): void
     {
-        $path = $this->getSystemPathBuilder()->namespaceToFullPath($package->get_context());
+        $path = $this->getSystemPathBuilder()->namespaceToFullPath($package->getContext());
 
         if (is_array($resourceDefinition->input))
         {

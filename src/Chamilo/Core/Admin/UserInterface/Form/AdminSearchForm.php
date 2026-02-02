@@ -16,19 +16,18 @@ use HTML_QuickForm_text;
 class AdminSearchForm extends FormValidator
 {
     public const FORM_NAME = 'search';
-
     public const PARAM_SIMPLE_SEARCH_QUERY = 'query';
 
     /**
      * @param string $url
-     * @param string $form_id
+     * @param string $formIdentifier
      *
      * @throws \QuickformException
      */
-    public function __construct(string $url, string $form_id = '')
+    public function __construct(string $url, string $formIdentifier = '')
     {
-        parent::__construct(self::FORM_NAME . $form_id, self::FORM_METHOD_POST, $url, '', [], false);
-        $this->updateAttributes(['id' => self::FORM_NAME . $form_id]);
+        parent::__construct(self::FORM_NAME . $formIdentifier, self::FORM_METHOD_POST, $url, '', [], false);
+        $this->updateAttributes(['id' => self::FORM_NAME . $formIdentifier]);
         $this->build();
     }
 

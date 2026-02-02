@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class MoveComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectNotExistException
@@ -25,14 +24,13 @@ class MoveComponent extends Manager
      */
     public function run(): Response
     {
-        if (!$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
         $translator = $this->getTranslator();
 
-        $group_id = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
+        $groupIdentifier = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
 
         $group = $this->getGroupService()->findGroupByIdentifier($this->getRequest()->query->get(self::PARAM_GROUP_ID));
 
@@ -41,13 +39,12 @@ class MoveComponent extends Manager
             [
                 self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => self::ACTION_MOVE,
-                self::PARAM_GROUP_ID => $group_id
+                self::PARAM_GROUP_ID => $groupIdentifier
             ]
         )
         );
 
-        if ($form->validate())
-        {
+        if ($form->validate()) {
             $success = $form->moveGroup();
             $parent = $form->getNewParent();
             $message = $translator->trans(
@@ -63,8 +60,7 @@ class MoveComponent extends Manager
                 ]
             );
         }
-        else
-        {
+        else {
             $html = [];
 
             $html[] = $this->renderHeader();

@@ -8,7 +8,6 @@ namespace Chamilo\Libraries\Storage\Factory;
  */
 class DataClassFactory
 {
-
     /**
      * @template tGetDataClass
      *
@@ -21,20 +20,16 @@ class DataClassFactory
     {
         $dataClass = new $dataClassName();
 
-        foreach ($dataClass::getDefaultPropertyNames() as $property)
-        {
-            if (array_key_exists($property, $record))
-            {
+        foreach ($dataClass::getDefaultPropertyNames() as $property) {
+            if (array_key_exists($property, $record)) {
                 $dataClass->setDefaultProperty($property, $record[$property]);
                 unset($record[$property]);
             }
         }
 
-        if (count($record) > 0)
-        {
-            foreach ($record as $optional_property_name => $optional_property_value)
-            {
-                $dataClass->setOptionalProperty($optional_property_name, $optional_property_value);
+        if (count($record) > 0) {
+            foreach ($record as $optionalPropertyName => $optionalPropertyValue) {
+                $dataClass->setOptionalProperty($optionalPropertyName, $optionalPropertyValue);
             }
         }
 

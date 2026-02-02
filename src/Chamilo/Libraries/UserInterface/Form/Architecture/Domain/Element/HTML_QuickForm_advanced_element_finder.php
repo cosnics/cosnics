@@ -39,7 +39,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
     /**
      * List of types of elements on which can be searched
      */
-    private ?AdvancedElementFinderElementTypes $element_types;
+    private ?AdvancedElementFinderElementTypes $elementTypes;
 
     private int $height;
 
@@ -61,13 +61,12 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $this->_persistantFreeze = true;
         $this->_appendName = false;
 
-        $this->element_types = $elementTypes;
+        $this->elementTypes = $elementTypes;
 
         $this->height = self::DEFAULT_HEIGHT;
         $this->width = self::DEFAULT_WIDTH;
 
-        if (!empty($elementTypes))
-        {
+        if (!empty($elementTypes)) {
             $this->build_elements();
         }
 
@@ -90,48 +89,47 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
     {
         $translator = $this->getTranslator();
 
-        $active_hidden_id = 'hidden_active_elements';
-        $activate_button_id = 'activate_button';
-        $deactivate_button_id = 'deactivate_button';
-        $element_types_select_box_id = 'element_types_selector';
+        $activeHiddenId = 'hidden_active_elements';
+        $activateButtonId = 'activate_button';
+        $deactivateButtonId = 'deactivate_button';
+        $elementTypesSelectBoxId = 'element_types_selector';
 
         $this->_elements = [];
 
         $this->_elements[] = new HTML_QuickForm_hidden(
-            'active_hidden_' . $this->getName(), '', ['id' => $active_hidden_id]
+            'active_hidden_' . $this->getName(), '', ['id' => $activeHiddenId]
         );
 
-        $element_types_array = [];
-        $element_types_array[- 1] =
+        $elementTypesArray = [];
+        $elementTypesArray[- 1] =
             '-- ' . $translator->trans('SelectElementType', [], StringUtilities::LIBRARIES) . ' --';
 
-        foreach ($this->element_types->getTypes() as $element_type)
-        {
-            $element_types_array[$element_type->getId()] = $element_type->getName();
+        foreach ($this->elementTypes->getTypes() as $elementType) {
+            $elementTypesArray[$elementType->getId()] = $elementType->getName();
         }
 
         $this->_elements[] = new HTML_QuickForm_select(
-            'element_types_' . $this->getName(), null, $element_types_array,
-            ['id' => $element_types_select_box_id, 'class' => 'form-control']
+            'element_types_' . $this->getName(), null, $elementTypesArray,
+            ['id' => $elementTypesSelectBoxId, 'class' => 'form-control']
         );
 
-        $safe_name = str_replace('[', '_', $this->getName());
-        $safe_name = str_replace(']', '', $safe_name);
+        $safeName = str_replace('[', '_', $this->getName());
+        $safeName = str_replace(']', '', $safeName);
 
         $this->_elements[] = new HTML_QuickForm_text(
             'search_' . $this->getName(), null,
-            ['class' => 'element_query form-control', 'id' => $safe_name . '_search_field']
+            ['class' => 'element_query form-control', 'id' => $safeName . '_search_field']
         );
 
         $this->_elements[] = new HTML_QuickForm_stylebutton(
             'activate_' . $this->getName(), $translator->trans('AddToSelection', [], StringUtilities::LIBRARIES),
-            ['id' => $activate_button_id, 'class' => 'btn-primary activate_elements form-control'], '',
+            ['id' => $activateButtonId, 'class' => 'btn-primary activate_elements form-control'], '',
             new FontAwesomeGlyph('arrow-alt-circle-right', [], null, 'fas')
         );
 
         $this->_elements[] = new HTML_QuickForm_stylebutton(
             'deactivate_' . $this->getName(), $translator->trans('RemoveFromSelection', [], StringUtilities::LIBRARIES),
-            ['id' => $deactivate_button_id, 'class' => 'btn-danger deactivate_elements form-control'], '',
+            ['id' => $deactivateButtonId, 'class' => 'btn-danger deactivate_elements form-control'], '',
             new FontAwesomeGlyph('arrow-alt-circle-left', [], null, 'fas')
         );
     }
@@ -162,12 +160,11 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $results = [];
         $values = json_decode($this->_elements[0]->getValue());
 
-        foreach ($values as $value)
-        {
-            $split_by_underscores = explode('_', $value);
+        foreach ($values as $value) {
+            $splitByUnderscores = explode('_', $value);
 
-            $id = array_pop($split_by_underscores);
-            $type = implode('_', $split_by_underscores);
+            $id = array_pop($splitByUnderscores);
+            $type = implode('_', $splitByUnderscores);
 
             $results[$type][] = $id;
         }
@@ -187,21 +184,19 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 
     public function setDefaultValues(?AdvancedElementFinderElements $defaultValues): void
     {
-        if (!$defaultValues)
-        {
+        if (!$defaultValues) {
             return;
         }
 
         $this->defaultValues = $defaultValues;
 
-        $default_ids = [];
+        $defaultIds = [];
 
-        foreach ($defaultValues->getElements() as $default_value)
-        {
-            $default_ids[] = $default_value->getId();
+        foreach ($defaultValues->getElements() as $defaultValue) {
+            $defaultIds[] = $defaultValue->getId();
         }
 
-        $encoded = json_encode($default_ids);
+        $encoded = json_encode($defaultIds);
         $this->_elements[0]->setValue($encoded);
     }
 
@@ -211,9 +206,9 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $webPathBuilder = $this->getWebPathBuilder();
 
         // Create a safe name for the id (remove array values)
-        $safe_name = str_replace('[', '_', $this->getName());
-        $safe_name = str_replace(']', '', $safe_name);
-        $id = 'tbl_' . $safe_name;
+        $safeName = str_replace('[', '_', $this->getName());
+        $safeName = str_replace(']', '', $safeName);
+        $id = 'tbl_' . $safeName;
 
         $html = [];
 
@@ -297,26 +292,24 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         );
         $html[] = '<script>';
 
-        if ($this->defaultValues)
-        {
+        if ($this->defaultValues) {
             $defaultValuesText = 'defaultValues: ' . json_encode($this->defaultValues->asArray()) . ', ';
         }
-        else
-        {
+        else {
             $defaultValuesText = '';
         }
 
         $configurationJson = '';
 
-        foreach ($this->configuration as $name => $value)
-        {
+        foreach ($this->configuration as $name => $value) {
             $configurationJson .= ' ' . $name . ': ' . $value . ', ';
         }
 
         $configurationJson = substr($configurationJson, 0, strlen($configurationJson) - 2);
 
-        $html[] = '$("#' . $id . '").advelementfinder({ name: "' . $safe_name . '", ' . $defaultValuesText .
-            'elementTypes: ' . json_encode($this->element_types->asArray()) . ',' . $configurationJson . '});';
+        $html[] =
+            '$("#' . $id . '").advelementfinder({ name: "' . $safeName . '", ' . $defaultValuesText . 'elementTypes: ' .
+            json_encode($this->elementTypes->asArray()) . ',' . $configurationJson . '});';
 
         $html[] = '</script>';
 

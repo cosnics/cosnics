@@ -30,38 +30,28 @@ abstract class GroupsFeedComponent extends Manager
     public const PARAM_FILTER = 'filter';
     public const PARAM_OFFSET = 'offset';
     public const PARAM_SEARCH_QUERY = 'query';
-
     public const PROPERTY_ELEMENTS = 'elements';
     public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
     /**
      * @var int
      */
-    protected $user_count = 0;
+    protected $userCount = 0;
 
     public function run(): Response
     {
         $result = new JsonAjaxResult();
 
-        $elements = $this->get_elements();
+        $elements = $this->getElements();
         $elements = $elements->asArray();
 
         $result->setProperty(self::PROPERTY_ELEMENTS, $elements);
 
-        if ($this->user_count > 0)
-        {
-            $result->setProperty(self::PROPERTY_TOTAL_ELEMENTS, $this->user_count);
+        if ($this->userCount > 0) {
+            $result->setProperty(self::PROPERTY_TOTAL_ELEMENTS, $this->userCount);
         }
 
         return $result->getResponse();
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator
-     */
-    protected function getSearchQueryConditionGenerator()
-    {
-        return $this->getService(SearchQueryConditionGenerator::class);
     }
 
     /**
@@ -69,40 +59,36 @@ abstract class GroupsFeedComponent extends Manager
      *
      * @return \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElements
      */
-    private function get_elements()
+    private function getElements()
     {
         $elements = new AdvancedElementFinderElements();
         $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         // Add groups
-        $groups = $this->retrieve_groups();
-        if ($groups && $groups->count() > 0)
-        {
+        $groups = $this->retrieveGroups();
+        if ($groups && $groups->count() > 0) {
             $translator = $this->getTranslator();
             // Add group category
-            $group_category = new AdvancedElementFinderElement(
+            $groupCategory = new AdvancedElementFinderElement(
                 'groups', $glyph->getClassNamesString(), $translator->trans('Groups', [], StringUtilities::LIBRARIES),
                 $translator->trans('Groups', [], StringUtilities::LIBRARIES)
             );
-            $elements->addElement($group_category);
+            $elements->addElement($groupCategory);
 
-            foreach ($groups as $group)
-            {
-                $group_category->addChild($this->get_group_element($group));
+            foreach ($groups as $group) {
+                $groupCategory->addChild($this->getGroupElement($group));
             }
         }
 
         // Add users
         $users = $this->retrieve_users();
-        if ($users && $users->count() > 0)
-        {
+        if ($users && $users->count() > 0) {
             // Add user category
-            $user_category = new AdvancedElementFinderElement('users', $glyph->getClassNamesString(), 'Users', 'Users');
-            $elements->addElement($user_category);
+            $userCategory = new AdvancedElementFinderElement('users', $glyph->getClassNamesString(), 'Users', 'Users');
+            $elements->addElement($userCategory);
 
-            foreach ($users as $user)
-            {
-                $user_category->addChild($this->get_user_element($user));
+            foreach ($users as $user) {
+                $userCategory->addChild($this->getUserElement($user));
             }
         }
 
@@ -114,16 +100,15 @@ abstract class GroupsFeedComponent extends Manager
      *
      * @return \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement
      */
-    abstract public function get_group_element(Group $group): AdvancedElementFinderElement;
+    abstract public function getGroupElement(Group $group): AdvancedElementFinderElement;
 
     /**
      * @return int
      */
-    protected function get_offset()
+    protected function getOffset()
     {
         $offset = $this->getRequest()->request->get(self::PARAM_OFFSET);
-        if (!isset($offset) || is_null($offset))
-        {
+        if (!isset($offset) || is_null($offset)) {
             $offset = 0;
         }
 
@@ -131,21 +116,29 @@ abstract class GroupsFeedComponent extends Manager
     }
 
     /**
+     * @return \Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator
+     */
+    protected function getSearchQueryConditionGenerator()
+    {
+        return $this->getService(SearchQueryConditionGenerator::class);
+    }
+
+    /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement
      */
-    abstract public function get_user_element(User $user): AdvancedElementFinderElement;
+    abstract public function getUserElement(User $user): AdvancedElementFinderElement;
 
     /**
      * @return int[]
      */
-    abstract public function get_user_ids();
+    abstract public function getUserIdentifiers();
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      */
-    abstract public function retrieve_groups();
+    abstract public function retrieveGroups();
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
@@ -154,22 +147,21 @@ abstract class GroupsFeedComponent extends Manager
     {
         $conditions = [];
 
-        $user_ids = $this->get_user_ids();
+        $userIdentifiers = $this->getUserIdentifiers();
 
-        if (count($user_ids) == 0)
-        {
+        if (count($userIdentifiers) == 0) {
             return new ArrayCollection();
         }
 
-        $conditions[] = new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $user_ids);
+        $conditions[] =
+            new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers);
 
-        $search_query = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
+        $searchQuery = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);
 
         // Set the conditions for the search query
-        if ($search_query && $search_query != '')
-        {
+        if ($searchQuery && $searchQuery != '') {
             $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
-                $search_query, [
+                $searchQuery, [
                     new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_SURNAME)
@@ -179,10 +171,10 @@ abstract class GroupsFeedComponent extends Manager
 
         $condition = new AndCondition($conditions);
 
-        $this->user_count = $this->getUserService()->countUsers($condition);
+        $this->userCount = $this->getUserService()->countUsers($condition);
 
         return $this->getUserService()->findUsers(
-            $condition, $this->get_offset(), 100, new OrderBy([
+            $condition, $this->getOffset(), 100, new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_SURNAME)),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME))
             ])

@@ -64,10 +64,10 @@ class PackageFactory
 
         $package = new Package();
 
-        $package->set_context($cosnicsProperties->context);
-        $package->set_name($cosnicsProperties->name);
+        $package->setContext($cosnicsProperties->context);
+        $package->setName($cosnicsProperties->name);
         $package->setType($cosnicsProperties->type);
-        $package->set_version($jsonPackageObject->version);
+        $package->setVersion($jsonPackageObject->version);
         $package->setResources($cosnicsProperties->resources ?? []);
         $package->setComposerJsonObject($jsonPackageObject);
 

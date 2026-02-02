@@ -24,8 +24,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         ?bool $includeTimePicker = true
     )
     {
-        if (!isset($formName))
-        {
+        if (!isset($formName)) {
             return;
         }
 
@@ -49,23 +48,18 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 
     protected function addFormControlToElementAttributes($attributes)
     {
-        if (is_array($attributes))
-        {
-            if (!array_key_exists('class', $attributes))
-            {
+        if (is_array($attributes)) {
+            if (!array_key_exists('class', $attributes)) {
                 $attributes['class'] = 'form-control';
             }
-            else
-            {
+            else {
                 $classAttributes = $attributes['class'];
 
-                if (!is_array($classAttributes))
-                {
+                if (!is_array($classAttributes)) {
                     $classAttributes = explode(' ', $classAttributes);
                 }
 
-                if (!in_array('form-control', $classAttributes))
-                {
+                if (!in_array('form-control', $classAttributes)) {
                     array_unshift($classAttributes, 'form-control');
                 }
 
@@ -96,21 +90,17 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $h = $h < 10 ? '0' . $h : $h;
         $i = $i < 10 ? '0' . $i : $i;
 
-        if ($this->includeTimePicker)
-        {
+        if ($this->includeTimePicker) {
             $datetime = $y . '-' . $m . '-' . $d . ' ' . $h . ':' . $i . ':00';
         }
-        else
-        {
+        else {
             $datetime = $y . '-' . $m . '-' . $d;
         }
 
-        if (str_contains($this->getName(), '['))
-        {
+        if (str_contains($this->getName(), '[')) {
             parse_str($this->getName() . '=' . urlencode($datetime), $result);
         }
-        else
-        {
+        else {
             $result[$this->getName()] = $datetime;
         }
 
@@ -119,25 +109,22 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 
     public function getDateFormat(string $elementName, bool $includeTimePicker): string
     {
-        $js_form_name = $this->formName;
+        $jsFormName = $this->formName;
         $glyph = new FontAwesomeGlyph('calendar-alt');
 
         $popupLink =
-            '<a class="btn btn-default" href="javascript:openCalendar(\'' . $js_form_name . '\',\'' . $elementName .
+            '<a class="btn btn-default" href="javascript:openCalendar(\'' . $jsFormName . '\',\'' . $elementName .
             '\')">' . $glyph->render() . '</a>';
         $specialCharacters = ['D', 'l', 'd', 'M', 'F', 'm', 'y', 'H', 'a', 'A', 's', 'i', 'h', 'g', 'W', '.', ' '];
 
-        foreach ($specialCharacters as $char)
-        {
+        foreach ($specialCharacters as $char) {
             $popupLink = str_replace($char, "\\" . $char, $popupLink);
         }
 
-        if ($includeTimePicker)
-        {
+        if ($includeTimePicker) {
             return 'd F Y   ' . $popupLink . '   H : i';
         }
-        else
-        {
+        else {
             return 'd F Y   ' . $popupLink;
         }
     }
@@ -152,21 +139,17 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
      */
     public function setValue($value): void
     {
-        if (empty($value))
-        {
+        if (empty($value)) {
             $value = [];
         }
-        elseif (is_scalar($value))
-        {
-            if (!is_numeric($value))
-            {
+        elseif (is_scalar($value)) {
+            if (!is_numeric($value)) {
                 $value = strtotime($value);
             }
 
             $year = date('Y', (int) $value);
 
-            if ($year > $this->_options['maxYear'])
-            {
+            if ($year > $this->_options['maxYear']) {
                 $value = mktime(23, 59, 59, 12, 31, $this->_options['maxYear']);
             }
 
@@ -192,8 +175,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
                 'W' => $this->_trimLeadingZeros($arr[10])
             ];
         }
-        else
-        {
+        else {
             $value = array_map([$this, '_trimLeadingZeros'], $value);
         }
 

@@ -74,15 +74,15 @@ class FilesystemTools
 
             while (file_exists($desiredPath . '/' . $newFilename))
             {
-                $file_parts = explode('.', $filename);
+                $fileParts = explode('.', $filename);
 
-                if (count($file_parts) > 1)
+                if (count($fileParts) > 1)
                 {
-                    $newFilename = array_shift($file_parts) . ($index ++) . '.' . implode('.', $file_parts);
+                    $newFilename = array_shift($fileParts) . ($index ++) . '.' . implode('.', $fileParts);
                 }
                 else
                 {
-                    $newFilename = array_shift($file_parts) . ($index ++);
+                    $newFilename = array_shift($fileParts) . ($index ++);
                 }
             }
 
