@@ -19,7 +19,7 @@ abstract class Manager extends Application
     /**
      * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
      */
-    protected function getGraphService()
+    protected function getGraphService(): UserService
     {
         return $this->getService(UserService::class);
     }

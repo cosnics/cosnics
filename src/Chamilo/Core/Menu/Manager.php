@@ -4,8 +4,8 @@ namespace Chamilo\Core\Menu;
 use Chamilo\Core\Menu\Architecture\Domain\ItemRendererCollection;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\ItemService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
-use Chamilo\Libraries\Architecture\Interface\ApplicationConfigurationInterface;
 
 /**
  * @package Chamilo\Core\Menu
@@ -21,10 +21,8 @@ abstract class Manager extends Application
     public const ACTION_EDIT = 'Editor';
     public const ACTION_ITEM_TREE_DATA = 'ItemTreeData';
     public const ACTION_MOVE = 'Mover';
-
     public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
-
     public const PARAM_DIRECTION = 'direction';
     public const PARAM_DIRECTION_DOWN = 'down';
     public const PARAM_DIRECTION_UP = 'up';
@@ -33,13 +31,11 @@ abstract class Manager extends Application
     public const PARAM_TYPE = 'type';
 
     /**
-     * @param \Chamilo\Libraries\Architecture\Interface\ApplicationConfigurationInterface $applicationConfiguration
-     *
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      */
-    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    public function __construct(?User $user = null)
     {
-        parent::__construct($applicationConfiguration);
+        parent::__construct($user);
 
         $this->checkAuthorization(Manager::CONTEXT);
     }

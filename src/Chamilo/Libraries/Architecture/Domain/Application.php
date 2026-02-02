@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Architecture\Domain;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Interface\ApplicationConfigurationInterface;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
@@ -37,11 +36,12 @@ abstract class Application
     public const RESULT_TYPE_MOVED = 'Moved';
     public const RESULT_TYPE_UPDATED = 'Updated';
 
-    protected ApplicationConfigurationInterface $applicationConfiguration;
+    protected ?User $user;
 
-    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    public function __construct(?User $user = null)
     {
-        $this->applicationConfiguration = $applicationConfiguration;
+        $this->user = $user;
+
         $this->getBreadcrumbGenerator()->addDefaultBreadcrumbs();
     }
 
@@ -114,11 +114,6 @@ abstract class Application
         return $this->getRequest()->query->get(static::PARAM_ACTION, static::DEFAULT_ACTION);
     }
 
-    public function getApplicationConfiguration(): ApplicationConfigurationInterface
-    {
-        return $this->applicationConfiguration;
-    }
-
     public function getBreadcrumbGenerator(): BreadcrumbGenerator
     {
         return $this->getService(BreadcrumbGenerator::class);
@@ -162,7 +157,7 @@ abstract class Application
 
     public function getUser(): ?User
     {
-        return $this->getApplicationConfiguration()->getUser();
+        return $this->user;
     }
 
     public function get_general_result(

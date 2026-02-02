@@ -7,7 +7,7 @@ use Chamilo\Libraries\Protocol\Error\Service\ErrorHandler;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * @package Chamilo\Libraries\Architecture\Bootstrap
+ * @package Chamilo\Libraries\Service\Bootstrap
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */

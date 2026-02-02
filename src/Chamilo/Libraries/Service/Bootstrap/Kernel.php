@@ -7,7 +7,6 @@ use Chamilo\Core\Home\Manager as HomeManager;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserEnterPageEvent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
-use Chamilo\Libraries\Architecture\Domain\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exception\PlatformNotAvailableException;
 use Chamilo\Libraries\Architecture\Exception\UserException;
 use Chamilo\Libraries\Architecture\Interface\NoVisitTraceComponentInterface;
@@ -19,7 +18,6 @@ use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
 use Chamilo\Libraries\Protocol\Error\Architecture\Response\ExceptionResponse;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration;
 use Exception;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -27,7 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * @package Chamilo\Libraries\Architecture\Bootstrap
+ * @package Chamilo\Libraries\Service\Bootstrap
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
@@ -55,8 +53,6 @@ class Kernel
 
     private ExceptionLoggerInterface $exceptionLogger;
 
-    private PageConfiguration $pageConfiguration;
-
     private ChamiloRequest $request;
 
     private UrlGenerator $urlGenerator;
@@ -67,7 +63,7 @@ class Kernel
         ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
         SessionInterface $session, ExceptionLoggerInterface $exceptionLogger, OnlineService $whoIsOnlineService,
         AuthenticationValidator $authenticationValidator, UrlGenerator $urlGenerator,
-        PageConfiguration $pageConfiguration, EventDispatcherInterface $eventDispatcher, User $user = null
+        EventDispatcherInterface $eventDispatcher, User $user = null
     )
     {
         $this->request = $request;
@@ -76,7 +72,6 @@ class Kernel
         $this->session = $session;
         $this->exceptionLogger = $exceptionLogger;
         $this->urlGenerator = $urlGenerator;
-        $this->pageConfiguration = $pageConfiguration;
         $this->user = $user;
         $this->authenticationValidator = $authenticationValidator;
         $this->whoIsOnlineService = $whoIsOnlineService;
@@ -96,7 +91,7 @@ class Kernel
         }
 
         $this->setApplication(
-            $this->getApplicationFactory()->getApplication($this->getContext(), $this->getApplicationConfiguration())
+            $this->getApplicationFactory()->getApplication($this->getContext(),  $this->getUser())
         );
 
         return $this;
@@ -185,11 +180,6 @@ class Kernel
         $this->application = $application;
     }
 
-    protected function getApplicationConfiguration(): ApplicationConfiguration
-    {
-        return new ApplicationConfiguration($this->getRequest(), $this->getUser());
-    }
-
     public function getApplicationFactory(): ApplicationFactory
     {
         return $this->applicationFactory;
@@ -233,11 +223,6 @@ class Kernel
     protected function getNotAuthenticatedResponse(): NotAuthenticatedResponse
     {
         return new NotAuthenticatedResponse();
-    }
-
-    public function getPageConfiguration(): PageConfiguration
-    {
-        return $this->pageConfiguration;
     }
 
     protected function getPlatformNotAvailableResponse(): PlatformNotAvailableResponse

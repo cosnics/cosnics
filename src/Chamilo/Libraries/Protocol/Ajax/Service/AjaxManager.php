@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Ajax\Service;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
-use Chamilo\Libraries\Architecture\Interface\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -14,12 +14,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 abstract class AjaxManager extends Application
 {
-    /**
-     * @param \Chamilo\Libraries\Architecture\Interface\ApplicationConfigurationInterface $applicationConfiguration
-     */
-    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    public function __construct(?User $user = null)
     {
-        parent::__construct($applicationConfiguration);
+        parent::__construct($user);
         $this->validateRequest();
     }
 
@@ -45,10 +42,8 @@ abstract class AjaxManager extends Application
      */
     public function validateRequest(): void
     {
-        foreach ($this->getRequiredPostParameters() as $parameter)
-        {
-            if (!$this->getRequest()->hasRequestOrQuery($parameter))
-            {
+        foreach ($this->getRequiredPostParameters() as $parameter) {
+            if (!$this->getRequest()->hasRequestOrQuery($parameter)) {
                 JsonAjaxResult::badRequest('Invalid Post parameters');
             }
         }
