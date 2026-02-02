@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PrinterComponent extends BrowserComponent
 {
-
     public function run(): Response
     {
         $this->checkAuthorization(Manager::CONTEXT);

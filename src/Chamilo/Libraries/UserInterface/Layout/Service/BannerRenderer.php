@@ -57,7 +57,7 @@ class BannerRenderer
     /**
      * @throws \Exception
      */
-    public function render(): string
+    public function render(?User $user = null): string
     {
         $pageConfiguration = $this->getPageConfiguration();
         $session = $this->getSession();
@@ -66,37 +66,29 @@ class BannerRenderer
 
         $html = [];
 
-        if ($pageConfiguration->getApplication() instanceof Application &&
-            $pageConfiguration->getApplication()->getUser() instanceof User)
-        {
-            $user = $pageConfiguration->getApplication()->getUser();
+        if ($user instanceof User) {
             $userFullName = $user->getFullName();
         }
-        else
-        {
-            $user = null;
+        else {
             $userFullName = '';
         }
 
         $showMaintenanceWarning =
             $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'maintenance_warning_show']);
 
-        if ($showMaintenanceWarning)
-        {
+        if ($showMaintenanceWarning) {
             $maintenanceWarning = $configurationConsulter->getSetting(
                 ['Chamilo\Core\Admin', 'maintenance_warning_message']
             );
 
-            if (!empty($maintenanceWarning))
-            {
+            if (!empty($maintenanceWarning)) {
                 $html[] = '<div class="warning-banner bg-warning text-warning">';
                 $html[] = '<strong>' . $maintenanceWarning . '</strong>';
                 $html[] = '</div>';
             }
         }
 
-        if (!is_null($session->get('_as_admin')))
-        {
+        if (!is_null($session->get('_as_admin'))) {
             $link = $this->getUrlGenerator()->fromParameters([
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_LOGIN_AS
@@ -113,13 +105,11 @@ class BannerRenderer
 
         $html[] = $this->getMenuRenderer()->render($pageConfiguration->getContainerMode(), $user);
 
-        if ($pageConfiguration->getViewMode() == PageConfiguration::VIEW_MODE_FULL)
-        {
+        if ($pageConfiguration->getViewMode() == PageConfiguration::VIEW_MODE_FULL) {
             $breadcrumbtrail = $this->getBreadcrumbTrail();
             $breadcrumbtrail->setContainerMode($pageConfiguration->getContainerMode());
 
-            if ($breadcrumbtrail->size() > 0)
-            {
+            if ($breadcrumbtrail->size() > 0) {
                 $html[] = $this->getBreadcrumbTrailRenderer()->render($breadcrumbtrail);
             }
         }

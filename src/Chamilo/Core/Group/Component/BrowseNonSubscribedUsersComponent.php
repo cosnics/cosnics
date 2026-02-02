@@ -14,13 +14,12 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,22 +29,20 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class BrowseNonSubscribedUsersComponent extends Manager
 {
-    private ButtonToolBarRenderer $buttonToolbarRenderer;
-
     private ?Group $group;
 
     /**
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     * @throws \TableException
-     * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
-     * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
+     * @throws \QuickformException
+     * @throws \TableException
      */
     public function run(): Response
     {
-        if (!$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -61,13 +58,12 @@ class BrowseNonSubscribedUsersComponent extends Manager
             )
         );
 
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $output = $this->get_user_subscribe_html();
 
         $html = [];
 
         $html[] = $this->renderHeader();
-        $html[] = $this->buttonToolbarRenderer->render() . '<br />';
+        $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar()) . '<br />';
         $html[] = $output;
         $html[] = $this->renderFooter();
 
@@ -78,41 +74,37 @@ class BrowseNonSubscribedUsersComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
+    public function getButtonToolBar(): ButtonToolBar
     {
         $group = $this->getGroup();
 
-        if (!isset($this->buttonToolbarRenderer))
-        {
-            $buttonToolbar = new ButtonToolBar(
-                $this->getUrlGenerator()->fromParameters(
-                    [
-                        self::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => self::ACTION_BROWSE_NON_SUBSCRIBED_USERS,
-                        self::PARAM_GROUP_ID => $group->getId()
-                    ]
-                )
-            );
-            $commonActions = new ButtonGroup();
+        $buttonToolBar = new ButtonToolBar(
+            $this->getUrlGenerator()->fromParameters(
+                [
+                    self::PARAM_CONTEXT => Manager::CONTEXT,
+                    self::PARAM_ACTION => self::ACTION_BROWSE_NON_SUBSCRIBED_USERS,
+                    self::PARAM_GROUP_ID => $group->getId()
+                ]
+            )
+        );
+        $commonActions = new ButtonGroup();
 
-            $commonActions->addGroupButton(
-                new Button(
-                    $this->getTranslator()->trans('ShowAll', [], StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('folder'), $this->getUrlGenerator()->fromParameters(
-                    [
-                        self::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => self::ACTION_BROWSE_NON_SUBSCRIBED_USERS,
-                        self::PARAM_GROUP_ID => $group->getId()
-                    ]
-                ), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
+        $commonActions->addButton(
+            new Button(
+                $this->getTranslator()->trans('ShowAll', [], StringUtilities::LIBRARIES),
+                new FontAwesomeGlyph('folder'), $this->getUrlGenerator()->fromParameters(
+                [
+                    self::PARAM_CONTEXT => Manager::CONTEXT,
+                    self::PARAM_ACTION => self::ACTION_BROWSE_NON_SUBSCRIBED_USERS,
+                    self::PARAM_GROUP_ID => $group->getId()
+                ]
+            ), ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+            )
+        );
 
-            $buttonToolbar->addButton($commonActions);
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        }
+        $buttonToolBar->addButton($commonActions);
 
-        return $this->buttonToolbarRenderer;
+        return $buttonToolBar;
     }
 
     /**
@@ -121,8 +113,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
      */
     protected function getGroup(): Group
     {
-        if (!isset($this->group))
-        {
+        if (!isset($this->group)) {
             $this->group = $this->getGroupService()->findGroupByIdentifier($this->getGroupIdentifier());
         }
 
@@ -150,10 +141,9 @@ class BrowseNonSubscribedUsersComponent extends Manager
             new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers)
         );
 
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        $query = $this->getButtonToolBarRenderer()->getSearchForm()->getQuery();
 
-        if (isset($query) && $query != '')
-        {
+        if (isset($query) && $query != '') {
             $or_conditions[] = new ContainsCondition(
                 new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME), $query
             );

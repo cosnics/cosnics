@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Layout\Architecture\Interface;
 
+use Chamilo\Core\User\Storage\DataClass\User;
+
 /**
  * @package Chamilo\Libraries\Format\Structure
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -9,5 +11,5 @@ namespace Chamilo\Libraries\UserInterface\Layout\Architecture\Interface;
 interface HeaderRendererInterface
 {
 
-    public function render(): string;
+    public function render(?User $user = null): string;
 }

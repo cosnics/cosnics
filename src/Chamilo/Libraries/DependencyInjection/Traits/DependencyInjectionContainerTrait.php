@@ -20,6 +20,7 @@ use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration;
 use Chamilo\Libraries\UserInterface\Layout\Architecture\Interface\FooterRendererInterface;
 use Chamilo\Libraries\UserInterface\Layout\Architecture\Interface\HeaderRendererInterface;
@@ -44,7 +45,6 @@ use Symfony\Component\Translation\Translator;
  */
 trait DependencyInjectionContainerTrait
 {
-
     protected ContainerInterface $container;
 
     public function getApplicationFactory(): ApplicationFactory
@@ -55,6 +55,11 @@ trait DependencyInjectionContainerTrait
     public function getBreadcrumbTrail(): BreadcrumbTrail
     {
         return $this->getService(BreadcrumbTrail::class);
+    }
+
+    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
+    {
+        return $this->getService(ButtonToolBarRenderer::class);
     }
 
     public function getClassnameUtilities(): ClassnameUtilities
@@ -73,13 +78,11 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ConnectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getContainer(): ContainerInterface
     {
-        if (!isset($this->container))
-        {
+        if (!isset($this->container)) {
             $this->container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
         }
 

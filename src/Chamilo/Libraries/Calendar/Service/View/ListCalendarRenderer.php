@@ -11,10 +11,9 @@ use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageRenderer;
 use Symfony\Component\Translation\Translator;
@@ -64,6 +63,7 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
 
     /**
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function renderNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
@@ -79,9 +79,6 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
             )
         );
 
-        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-
-        return $buttonToolbarRenderer->render();
+        return $this->getButtonToolBarRenderer()->render($buttonToolBar);
     }
-
 }

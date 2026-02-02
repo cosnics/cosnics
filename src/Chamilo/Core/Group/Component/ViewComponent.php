@@ -14,12 +14,12 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondit
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,8 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ViewComponent extends Manager
 {
-
-    protected ButtonToolBarRenderer $buttonToolbarRenderer;
+    protected ButtonToolBarRenderer $buttonToolBarRenderer;
 
     protected ?Group $currentGroup;
 
@@ -45,14 +44,14 @@ class ViewComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      * @throws \TableException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function run(): Response
     {
         $translator = $this->getTranslator();
         $group = $this->getCurrentGroup();
 
-        if (!$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -60,7 +59,7 @@ class ViewComponent extends Manager
 
         $html[] = $this->renderHeader();
 
-        $html[] = $this->getButtonToolbarRenderer()->render() . '<br />';
+        $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar()) . '<br />';
 
         // Details
         $html[] = '<div class="panel panel-default">';
@@ -106,94 +105,88 @@ class ViewComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
+    public function getButtonToolBar(): ButtonToolBar
     {
         $currentGroup = $this->getCurrentGroup();
         $rootGroup = $this->getRootGroup();
         $translator = $this->getTranslator();
 
-        if (!isset($this->buttonToolbarRenderer))
-        {
-            $buttonToolbar = new ButtonToolBar(
+        $buttonToolBar = new ButtonToolBar(
+            $this->getUrlGenerator()->fromParameters(
+                [
+                    self::PARAM_CONTEXT => Manager::CONTEXT,
+                    self::PARAM_ACTION => self::ACTION_VIEW,
+                    self::PARAM_GROUP_ID => $currentGroup->getId()
+                ]
+            )
+        );
+        $commonActions = new ButtonGroup();
+        $toolActions = new ButtonGroup();
+
+        $commonActions->addButton(
+            new Button(
+                $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
                 $this->getUrlGenerator()->fromParameters(
                     [
                         self::PARAM_CONTEXT => Manager::CONTEXT,
                         self::PARAM_ACTION => self::ACTION_VIEW,
                         self::PARAM_GROUP_ID => $currentGroup->getId()
                     ]
-                )
-            );
-            $commonActions = new ButtonGroup();
-            $toolActions = new ButtonGroup();
+                ), ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+            )
+        );
 
-            $commonActions->addGroupButton(
+        $commonActions->addButton(
+            new Button(
+                $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                $this->getGroupUrlGenerator()->getUpdateUrl($currentGroup),
+                ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+            )
+        );
+
+        if ($currentGroup->getId() != $rootGroup->getId()) {
+            $commonActions->addButton(
                 new Button(
-                    $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
-                    $this->getUrlGenerator()->fromParameters(
-                        [
-                            self::PARAM_CONTEXT => Manager::CONTEXT,
-                            self::PARAM_ACTION => self::ACTION_VIEW,
-                            self::PARAM_GROUP_ID => $currentGroup->getId()
-                        ]
-                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
+                    $this->getGroupUrlGenerator()->getDeleteUrl($currentGroup),
+                    ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
                 )
             );
-
-            $commonActions->addGroupButton(
-                new Button(
-                    $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                    $this->getGroupUrlGenerator()->getUpdateUrl($currentGroup), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
-
-            if ($currentGroup->getId() != $rootGroup->getId())
-            {
-                $commonActions->addGroupButton(
-                    new Button(
-                        $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                        $this->getGroupUrlGenerator()->getDeleteUrl($currentGroup), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                    )
-                );
-            }
-
-            $toolActions->addGroupButton(
-                new Button(
-                    $translator->trans('AddUsers', [], \Chamilo\Core\User\Manager::CONTEXT),
-                    new FontAwesomeGlyph('plus-circle'), $this->getGroupUrlGenerator()->getSubscribeUrl($currentGroup),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
-
-            $userCount =
-                $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifier($currentGroup->getId());
-
-            if ($userCount > 0)
-            {
-                $toolActions->addGroupButton(
-                    new Button(
-                        $translator->trans('Truncate', [], Manager::CONTEXT), new FontAwesomeGlyph('trash-alt'),
-                        $this->getGroupUrlGenerator()->getTruncateUrl($currentGroup),
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL
-                    )
-                );
-            }
-            else
-            {
-                $toolActions->addGroupButton(
-                    new Button(
-                        $translator->trans('TruncateNA', [], Manager::CONTEXT),
-                        new FontAwesomeGlyph('trash-alt', ['text-muted']), null, ToolbarItem::DISPLAY_ICON_AND_LABEL
-                    )
-                );
-            }
-
-            $buttonToolbar->addButton($commonActions);
-            $buttonToolbar->addButton($toolActions);
-
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
 
-        return $this->buttonToolbarRenderer;
+        $toolActions->addButton(
+            new Button(
+                $translator->trans('AddUsers', [], \Chamilo\Core\User\Manager::CONTEXT),
+                new FontAwesomeGlyph('plus-circle'), $this->getGroupUrlGenerator()->getSubscribeUrl($currentGroup),
+                ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+            )
+        );
+
+        $userCount = $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifier($currentGroup->getId());
+
+        if ($userCount > 0) {
+            $toolActions->addButton(
+                new Button(
+                    $translator->trans('Truncate', [], Manager::CONTEXT), new FontAwesomeGlyph('trash-alt'),
+                    $this->getGroupUrlGenerator()->getTruncateUrl($currentGroup),
+                    ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+                )
+            );
+        }
+        else {
+            $toolActions->addButton(
+                new Button(
+                    $translator->trans('TruncateNA', [], Manager::CONTEXT),
+                    new FontAwesomeGlyph('trash-alt', ['text-muted']), null,
+                    ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+                )
+            );
+        }
+
+        $buttonToolBar->addButton($commonActions);
+        $buttonToolBar->addButton($toolActions);
+
+        return $buttonToolBar;
     }
 
     /**
@@ -202,8 +195,7 @@ class ViewComponent extends Manager
      */
     public function getCurrentGroup(): Group
     {
-        if (!$this->currentGroup)
-        {
+        if (!$this->currentGroup) {
             $this->currentGroup = $this->getGroupService()->findGroupByIdentifier($this->getCurrentGroupIdentifier());
         }
 
@@ -216,8 +208,7 @@ class ViewComponent extends Manager
      */
     public function getCurrentGroupIdentifier(): string
     {
-        if (!$this->currentGroupIdentifier)
-        {
+        if (!$this->currentGroupIdentifier) {
             $this->currentGroupIdentifier =
                 $this->getRequest()->query->get(self::PARAM_GROUP_ID, $this->getRootGroup()->getId());
         }
@@ -236,8 +227,7 @@ class ViewComponent extends Manager
      */
     public function getRootGroup(): Group
     {
-        if (!$this->rootGroup)
-        {
+        if (!$this->rootGroup) {
             $this->rootGroup = $this->getGroupService()->findRootGroup();
         }
 
@@ -262,10 +252,9 @@ class ViewComponent extends Manager
             new StaticConditionVariable($this->getRequest()->query->get(self::PARAM_GROUP_ID))
         );
 
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        $query = $this->buttonToolBarRenderer->getSearchForm()->getQuery();
 
-        if (isset($query) && $query != '')
-        {
+        if (isset($query) && $query != '') {
             $or_conditions[] = new ContainsCondition(
                 new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME), $query
             );
@@ -280,20 +269,17 @@ class ViewComponent extends Manager
             $users = $this->getUserService()->findUsers($condition);
             $userconditions = [];
 
-            foreach ($users as $user)
-            {
+            foreach ($users as $user) {
                 $userconditions[] = new EqualityCondition(
                     new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
                     new StaticConditionVariable($user->getId())
                 );
             }
 
-            if (count($userconditions))
-            {
+            if (count($userconditions)) {
                 $conditions[] = new OrCondition($userconditions);
             }
-            else
-            {
+            else {
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
                     new StaticConditionVariable(0)
@@ -331,5 +317,4 @@ class ViewComponent extends Manager
 
         return $subscribedUserTableRenderer->render($tableParameterValues, $users);
     }
-
 }

@@ -8,12 +8,12 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ContentTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
@@ -25,41 +25,38 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ViewComponent extends Manager
 {
-
-    protected ButtonToolBarRenderer $buttonToolbarRenderer;
+    protected ButtonToolBarRenderer $buttonToolBarRenderer;
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function run(): Response
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        if (!$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
         $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
         $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
 
-        if ($user instanceof User)
-        {
+        if ($user instanceof User) {
             $html = [];
 
             $html[] = $this->renderHeader();
-            $html[] = $this->getButtonToolbarRenderer($user)->render();
+            $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar($user));
             $html[] = $this->getTabsRenderer()->render('userDetails', $this->getTabsCollection($user));
 
             $html[] = $this->renderFooter();
 
             return new Response(implode(PHP_EOL, $html));
         }
-        else
-        {
+        else {
             $translator = $this->getTranslator();
 
             return new Response(
@@ -75,50 +72,45 @@ class ViewComponent extends Manager
         }
     }
 
-    public function getButtonToolbarRenderer($user): ButtonToolBarRenderer
+    public function getButtonToolBar($user): ButtonToolBar
     {
-        if (!isset($this->buttonToolbarRenderer))
-        {
-            $translator = $this->getTranslator();
+        $translator = $this->getTranslator();
 
-            $buttonToolbar = new ButtonToolBar();
-            $commonActions = new ButtonGroup();
-            $toolActions = new ButtonGroup();
+        $buttonToolBar = new ButtonToolBar();
+        $commonActions = new ButtonGroup();
+        $toolActions = new ButtonGroup();
 
-            $editUrl = $this->getUserUrlGenerator()->getUpdateUrl($user);
+        $editUrl = $this->getUserUrlGenerator()->getUpdateUrl($user);
 
-            $commonActions->addGroupButton(
-                new Button(
-                    $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                    $editUrl, ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
+        $commonActions->addButton(
+            new Button(
+                $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                $editUrl, ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+            )
+        );
 
-            $deleteUrl = $this->getUserUrlGenerator()->getDeleteUrl($user);
+        $deleteUrl = $this->getUserUrlGenerator()->getDeleteUrl($user);
 
-            $commonActions->addGroupButton(
-                new Button(
-                    $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                    $deleteUrl, ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
+        $commonActions->addButton(
+            new Button(
+                $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'), $deleteUrl,
+                ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+            )
+        );
 
-            $changeUserUrl = $this->getUserUrlGenerator()->getChangeUserUrl($user);
+        $changeUserUrl = $this->getUserUrlGenerator()->getChangeUserUrl($user);
 
-            $toolActions->addGroupButton(
-                new Button(
-                    $translator->trans('LoginAsUser', [], Manager::CONTEXT), new FontAwesomeGlyph('mask'),
-                    $changeUserUrl, ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
+        $toolActions->addButton(
+            new Button(
+                $translator->trans('LoginAsUser', [], Manager::CONTEXT), new FontAwesomeGlyph('mask'), $changeUserUrl,
+                ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+            )
+        );
 
-            $buttonToolbar->addButton($commonActions);
-            $buttonToolbar->addButton($toolActions);
+        $buttonToolBar->addButton($commonActions);
+        $buttonToolBar->addButton($toolActions);
 
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        }
-
-        return $this->buttonToolbarRenderer;
+        return $buttonToolBar;
     }
 
     protected function getTabsCollection(User $user): TabsCollection
@@ -135,11 +127,9 @@ class ViewComponent extends Manager
         foreach (
             $this->getUserDetailsRendererCollection()->getUserDetailsRenderers() as $userDetailsRendererClassName =>
             $userDetailsRenderer
-        )
-        {
+        ) {
             if ($userDetailsRendererClassName !== UserDetailsRenderer::class &&
-                $userDetailsRenderer->hasContentForUser($user, $this->getUser()))
-            {
+                $userDetailsRenderer->hasContentForUser($user, $this->getUser())) {
                 $tabsCollection->add(
                     $this->initializeContentTab($userDetailsRendererClassName, $userDetailsRenderer, $user)
                 );

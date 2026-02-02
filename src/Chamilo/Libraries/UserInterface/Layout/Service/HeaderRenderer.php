@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Layout\Service;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration;
 use Chamilo\Libraries\UserInterface\Layout\Architecture\Interface\HeaderRendererInterface;
 use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Format\Structure
@@ -14,6 +16,18 @@ use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
  */
 class HeaderRenderer implements HeaderRendererInterface
 {
+    /**
+     * @var string[]
+     */
+    protected array $institutionConfiguration;
+
+    /**
+     * @var string[]
+     */
+    protected array $siteConfiguration;
+
+    protected Translator $translator;
+
     private BannerRenderer $bannerRenderer;
 
     private PageConfiguration $pageConfiguration;
@@ -24,34 +38,35 @@ class HeaderRenderer implements HeaderRendererInterface
 
     public function __construct(
         PageConfiguration $pageConfiguration, WebPathBuilder $webPathBuilder, ThemePathBuilder $themeWebPathBuilder,
-        BannerRenderer $bannerRenderer
+        BannerRenderer $bannerRenderer, Translator $translator, array $siteConfiguration = [],
+        array $institutionConfiguration = []
     )
     {
         $this->pageConfiguration = $pageConfiguration;
         $this->webPathBuilder = $webPathBuilder;
         $this->themeWebPathBuilder = $themeWebPathBuilder;
         $this->bannerRenderer = $bannerRenderer;
+        $this->translator = $translator;
+        $this->siteConfiguration = $siteConfiguration;
+        $this->institutionConfiguration = $institutionConfiguration;
     }
 
     /**
      * @throws \Exception
      */
-    public function render(): string
+    public function render(?User $user = null): string
     {
         $this->addDefaultHeaders();
         $pageConfiguration = $this->getPageConfiguration();
+        $locale = $this->getTranslator()->getLocale();
 
         $html = [];
 
         $html[] = '<!DOCTYPE html>';
-        $html[] = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $pageConfiguration->getLanguageCode() .
-            '" lang="' . $pageConfiguration->getLanguageCode() . '">';
+        $html[] = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $locale . '" lang="' . $locale . '">';
         $html[] = '<head>';
 
-        $htmlHeaders = $pageConfiguration->getHtmlHeaders();
-
-        foreach ($htmlHeaders as $htmlHeader)
-        {
+        foreach ($pageConfiguration->getHtmlHeaders() as $htmlHeader) {
             $html[] = $htmlHeader;
         }
 
@@ -59,15 +74,13 @@ class HeaderRenderer implements HeaderRendererInterface
 
         $html[] = '<body dir="' . $pageConfiguration->getTextDirection() . '">';
 
-        if ($pageConfiguration->getViewMode() != PageConfiguration::VIEW_MODE_HEADERLESS)
-        {
-            $html[] = $this->getBannerRenderer()->render();
+        if ($pageConfiguration->getViewMode() != PageConfiguration::VIEW_MODE_HEADERLESS) {
+            $html[] = $this->getBannerRenderer()->render($user);
         }
 
         $classes = $pageConfiguration->getContainerMode();
 
-        if ($pageConfiguration->getViewMode() == PageConfiguration::VIEW_MODE_HEADERLESS)
-        {
+        if ($pageConfiguration->getViewMode() == PageConfiguration::VIEW_MODE_HEADERLESS) {
             $classes .= ' container-headerless';
         }
 
@@ -110,7 +123,7 @@ class HeaderRenderer implements HeaderRendererInterface
         $pageConfiguration->addJavascriptFile($javascriptPath . 'cosnics.vendor.min.js');
         $pageConfiguration->addJavascriptFile($javascriptPath . 'cosnics.common.min.js');
 
-        $pageConfiguration->addHtmlHeader('<title>' . $pageConfiguration->getTitle() . '</title>');
+        $pageConfiguration->addHtmlHeader('<title>' . $this->getPageTitle() . '</title>');
     }
 
     public function getBannerRenderer(): BannerRenderer
@@ -118,14 +131,42 @@ class HeaderRenderer implements HeaderRendererInterface
         return $this->bannerRenderer;
     }
 
+    public function getInstitutionConfiguration(?string $variable = null): array|string|null
+    {
+        if (array_key_exists($variable, $this->institutionConfiguration)) {
+            return $this->institutionConfiguration[$variable];
+        }
+
+        return $this->institutionConfiguration;
+    }
+
     public function getPageConfiguration(): PageConfiguration
     {
         return $this->pageConfiguration;
     }
 
+    protected function getPageTitle(): string
+    {
+        return $this->getInstitutionConfiguration('name') . ' - ' . $this->getSiteConfiguration('name');
+    }
+
+    public function getSiteConfiguration(?string $variable = null): array|string|null
+    {
+        if (array_key_exists($variable, $this->siteConfiguration)) {
+            return $this->siteConfiguration[$variable];
+        }
+
+        return $this->siteConfiguration;
+    }
+
     public function getThemeWebPathBuilder(): ThemePathBuilder
     {
         return $this->themeWebPathBuilder;
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
     }
 
     public function getWebPathBuilder(): WebPathBuilder

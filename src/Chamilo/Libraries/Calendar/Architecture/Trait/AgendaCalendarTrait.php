@@ -16,14 +16,12 @@ use Symfony\Component\Translation\Translator;
  */
 trait AgendaCalendarTrait
 {
-
     /**
-     * @return \Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem[]
+     * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button[]
      */
     public function getActions(CalendarRendererProviderInterface $dataProvider, Event $event): array
     {
-        if ($dataProvider instanceof ActionSupport)
-        {
+        if ($dataProvider instanceof ActionSupport) {
             return $dataProvider->getEventActions($event);
         }
 
@@ -40,14 +38,12 @@ trait AgendaCalendarTrait
 
         $structuredEvents = [];
 
-        foreach ($events as $event)
-        {
+        foreach ($events as $event) {
             $startDate = $event->getStartDate();
             $dateKey =
                 mktime(0, 0, 0, (int) date('n', $startDate), (int) date('j', $startDate), (int) date('Y', $startDate));
 
-            if (!isset($structuredEvents[$dateKey]))
-            {
+            if (!isset($structuredEvents[$dateKey])) {
                 $structuredEvents[$dateKey] = [];
             }
 
@@ -56,8 +52,7 @@ trait AgendaCalendarTrait
 
         ksort($structuredEvents);
 
-        foreach ($structuredEvents as &$dateEvents)
-        {
+        foreach ($structuredEvents as &$dateEvents) {
             usort($dateEvents, [$this, 'orderEvents']);
         }
 
@@ -98,18 +93,14 @@ trait AgendaCalendarTrait
 
         $html = [];
 
-        if (count($events) > 0)
-        {
+        if (count($events) > 0) {
             $html[] = '<div class="table-calendar table-calendar-list">';
 
-            foreach ($events as $dateKey => $dateEvents)
-            {
+            foreach ($events as $dateKey => $dateEvents) {
                 $hiddenEvents = 0;
 
-                foreach ($dateEvents as $dateEvent)
-                {
-                    if (!$this->isSourceVisible($dataProvider, $dateEvent->getSource()))
-                    {
+                foreach ($dateEvents as $dateEvent) {
+                    if (!$this->isSourceVisible($dataProvider, $dateEvent->getSource())) {
                         $hiddenEvents ++;
                     }
                 }
@@ -125,8 +116,7 @@ trait AgendaCalendarTrait
                 $html[] = '<div class="col-xs-12 table-calendar-list-events">';
                 $html[] = '<ul class="list-group">';
 
-                foreach ($dateEvents as $dateEvent)
-                {
+                foreach ($dateEvents as $dateEvent) {
                     $html[] = '<li class="list-group-item ">';
                     $html[] = $this->getEventListRenderer()->render(
                         $dateEvent, $this->isEventSourceVisible($dataProvider, $dateEvent),
@@ -143,8 +133,7 @@ trait AgendaCalendarTrait
 
             $html[] = '</div>';
         }
-        else
-        {
+        else {
             $html[] = $this->getNotificationMessageRenderer()->renderOne(
                 new NotificationMessage(
                     $this->getTranslator()->trans('NoUpcomingEvents', [], 'Chamilo\Libraries')

@@ -4,11 +4,10 @@ namespace Chamilo\Libraries\Calendar\Service\View;
 use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 
 /**
@@ -17,13 +16,13 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
  */
 abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
 {
-
     abstract public function getNextDisplayTime(int $displayTime): int;
 
     abstract public function getPreviousDisplayTime(int $displayTime): int;
 
     /**
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function renderNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
@@ -49,21 +48,19 @@ abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
 
         $buttonToolBar->addButton($buttonGroup);
 
-        $buttonGroup->addGroupButton(
+        $buttonGroup->addButton(
             new Button(
                 $translator->trans('Previous', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('caret-left'),
                 $previousUrl, ButtonDisplayInterface::DISPLAY_ICON
             )
         );
-        $buttonGroup->addGroupButton(
+        $buttonGroup->addButton(
             new Button(
                 $translator->trans('Next', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('caret-right'),
                 $nextUrl, ButtonDisplayInterface::DISPLAY_ICON
             )
         );
 
-        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-
-        return $buttonToolbarRenderer->render();
+        return $this->getButtonToolBarRenderer()->render($buttonToolBar);
     }
 }

@@ -6,11 +6,10 @@ use Chamilo\Core\Menu\UserInterface\Table\ItemTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropDownButton;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\UserInterface\Tree\Service\JsTreeRenderer;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,10 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class BrowserComponent extends Manager
 {
-
     protected string $parentIdentifier;
-
-    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
@@ -34,11 +30,11 @@ class BrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      * @throws \TableException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function run(): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -46,7 +42,7 @@ class BrowserComponent extends Manager
 
         $html[] = $this->renderHeader();
 
-        $html[] = $this->getButtonToolbarRenderer()->render();
+        $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar());
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12 col-lg-2">';
@@ -63,41 +59,35 @@ class BrowserComponent extends Manager
         return new Response(implode(PHP_EOL, $html));
     }
 
-    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
+    public function getButtonToolBar(): ButtonToolBar
     {
-        if (!isset($this->buttonToolbarRenderer))
-        {
-            $translator = $this->getTranslator();
+        $translator = $this->getTranslator();
 
-            $buttonToolbar = new ButtonToolBar();
-            $commonActions = new ButtonGroup();
-            $toolActions = new ButtonGroup();
+        $buttonToolBar = new ButtonToolBar();
+        $commonActions = new ButtonGroup();
+        $toolActions = new ButtonGroup();
 
-            $dropDownButton = new DropDownButton($translator->trans('AddMenuItem', [], Manager::CONTEXT));
+        $dropDownButton = new DropDownButtonCollection($translator->trans('AddMenuItem', [], Manager::CONTEXT));
 
-            foreach ($this->getItemRendererFactory()->getItemRenderers() as $itemRenderer)
-            {
-                $dropDownButton->addDropDownButton(
-                    new SubButton(
-                        $itemRenderer->getRendererTypeName(), $itemRenderer->getRendererTypeGlyph(),
-                        $this->getUrlGenerator()->fromParameters([
-                            Application::PARAM_CONTEXT => Manager::CONTEXT,
-                            self::PARAM_ACTION => self::ACTION_CREATE,
-                            self::PARAM_TYPE => $itemRenderer::class
-                        ])
-                    )
-                );
-            }
-
-            $commonActions->addGroupButton($dropDownButton);
-
-            $buttonToolbar->addButton($commonActions);
-            $buttonToolbar->addButton($toolActions);
-
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        foreach ($this->getItemRendererFactory()->getItemRenderers() as $itemRenderer) {
+            $dropDownButton->addButton(
+                new SubButton(
+                    $itemRenderer->getRendererTypeName(), $itemRenderer->getRendererTypeGlyph(),
+                    $this->getUrlGenerator()->fromParameters([
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
+                        self::PARAM_ACTION => self::ACTION_CREATE,
+                        self::PARAM_TYPE => $itemRenderer::class
+                    ])
+                )
+            );
         }
 
-        return $this->buttonToolbarRenderer;
+        $commonActions->addButton($dropDownButton);
+
+        $buttonToolBar->addButton($commonActions);
+        $buttonToolBar->addButton($toolActions);
+
+        return $buttonToolBar;
     }
 
     public function getItemTableRenderer(): ItemTableRenderer
@@ -112,8 +102,7 @@ class BrowserComponent extends Manager
 
     public function getParentIdentifier(): string
     {
-        if (!isset($this->parentIdentifier))
-        {
+        if (!isset($this->parentIdentifier)) {
             $this->parentIdentifier = $this->getRequest()->query->get(self::PARAM_PARENT, '0');
         }
 
@@ -136,8 +125,7 @@ class BrowserComponent extends Manager
 
         $selectedPathIdentifiers = ['0'];
 
-        if ($this->getParentIdentifier() != '0')
-        {
+        if ($this->getParentIdentifier() != '0') {
             $selectedPathIdentifiers = ['0', $this->getParentIdentifier()];
         }
 

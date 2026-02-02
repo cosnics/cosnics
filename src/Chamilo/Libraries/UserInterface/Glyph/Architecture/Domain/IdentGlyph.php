@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain;
 
 /**
- * @package Chamilo\Libraries\Format\Structure\Glyph
+ * @package Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -21,23 +21,19 @@ class IdentGlyph extends FontAwesomeGlyph
     {
         $classes = [];
 
-        if ($isAligned)
-        {
+        if ($isAligned) {
             $classes[] = 'fas-ci-va';
         }
 
-        if ($isNew)
-        {
+        if ($isNew) {
             $classes[] = 'fas-ci-new';
         }
 
-        if ($isDisabled)
-        {
+        if ($isDisabled) {
             $classes[] = 'fas-ci-disabled';
         }
 
-        switch ($size)
-        {
+        switch ($size) {
             case IdentGlyph::SIZE_SMALL;
                 $classes[] = 'fa-lg';
                 break;
@@ -49,8 +45,7 @@ class IdentGlyph extends FontAwesomeGlyph
                 break;
         }
 
-        foreach ($extraClasses as $extraClass)
-        {
+        foreach ($extraClasses as $extraClass) {
             $classes[] = $extraClass;
         }
 

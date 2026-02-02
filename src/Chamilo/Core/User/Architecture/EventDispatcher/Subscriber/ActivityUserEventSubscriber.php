@@ -84,8 +84,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
 
         if (!$this->getWhoIsOnlineService()->updateOnlineForUserIdentifierWithCurrentTime(
             $userIdentifier
-        ))
-        {
+        )) {
             return false;
         }
 
@@ -94,8 +93,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         $userVisit->setEnterDate(time());
         $userVisit->setLocation($afterUserEnterPage->getPageUri());
 
-        if (!$this->getUserTrackingRepository()->createUserVisit($userVisit))
-        {
+        if (!$this->getUserTrackingRepository()->createUserVisit($userVisit)) {
             return false;
         }
 
@@ -195,8 +193,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
             $beforeUserLeavePage->getUserVisitIdentifier()
         );
 
-        if ($userVisit instanceof UserVisit)
-        {
+        if ($userVisit instanceof UserVisit) {
             $userVisit->setLeaveDate(time());
 
             return $this->getUserTrackingRepository()->updateUserVisit($userVisit);

@@ -2,14 +2,13 @@
 namespace Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain;
 
 /**
- * @package Chamilo\Libraries\Format\Structure\Glyph
+ * @package Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class InlineGlyph
 {
-
     /**
      * @var string[]
      */
@@ -50,8 +49,7 @@ abstract class InlineGlyph
     {
         $classes = $this->getBaseClassNames();
 
-        foreach ($this->getExtraClasses() as $extraClass)
-        {
+        foreach ($this->getExtraClasses() as $extraClass) {
             $classes[] = $extraClass;
         }
 

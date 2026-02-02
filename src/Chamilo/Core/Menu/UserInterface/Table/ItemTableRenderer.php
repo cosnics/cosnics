@@ -9,9 +9,11 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\Toolbar;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\StaticTableColumn;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableAction;
@@ -32,21 +34,24 @@ use Symfony\Component\Translation\Translator;
 class ItemTableRenderer extends DataClassListTableRenderer implements TableRowActionsSupport, TableActionsSupport
 {
     public const PROPERTY_TYPE = 'Type';
-
     public const TABLE_IDENTIFIER = Manager::PARAM_ITEM;
 
     protected ItemRendererCollection $itemRendererFactory;
 
     protected ItemService $itemService;
 
+    protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
+
     public function __construct(
         ItemRendererCollection $itemRendererFactory, ItemService $itemService, Translator $translator,
         UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, ClassnameUtilities $classnameUtilities
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
+        ClassnameUtilities $classnameUtilities, MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )
     {
         $this->itemRendererFactory = $itemRendererFactory;
         $this->itemService = $itemService;
+        $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
 
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
@@ -89,6 +94,11 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         return $this->getUrlGenerator()->fromParameters($parameters);
     }
 
+    public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
+    {
+        return $this->miniButtonToolBarRenderer;
+    }
+
     public function getTableActions(): TableActions
     {
         $deleteUrl = $this->getUrlGenerator()->fromParameters(
@@ -129,8 +139,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
     {
         $itemRendererFactory = $this->getItemRendererFactory();
 
-        return match ($column->getName())
-        {
+        return match ($column->getName()) {
             Item::PROPERTY_TITLES => $itemRendererFactory->getItemRendererForItem($result)
                 ->renderTitleForCurrentLanguage($result),
             self::PROPERTY_TYPE => $itemRendererFactory->getItemRendererForItem($result)->getRendererTypeGlyph()
@@ -154,64 +163,68 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         $translator = $this->getTranslator();
 
-        $toolbar = new Toolbar();
+        $buttonToolBar = new MiniButtonToolBar();
 
-        $toolbar->addItem(
-            new ToolbarItem(
-                $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                $this->getItemEditingUrl($result), ToolbarItem::DISPLAY_ICON
+        $buttonToolBar->addButton(
+            new Button(
+                label: $translator->trans('Edit', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
+                'pencil-alt'
+            ), action: $this->getItemEditingUrl($result), display: ButtonDisplayInterface::DISPLAY_ICON,
+                classes: ['btn-link']
             )
         );
 
-        if ($isFirstItem || $isOnlyItem)
-        {
-            $toolbar->addItem(
-                new ToolbarItem(
-                    $translator->trans('MoveUpNA', [], StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('up-long', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
+        if ($isFirstItem || $isOnlyItem) {
+            $buttonToolBar->addButton(
+                new Button(
+                    label: $translator->trans('MoveUpNA', [], StringUtilities::LIBRARIES),
+                    inlineGlyph: new FontAwesomeGlyph('up-long', ['text-muted']),
+                    display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
                 )
             );
         }
-        else
-        {
-            $toolbar->addItem(
-                new ToolbarItem(
-                    $translator->trans('MoveUp', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('up-long'),
-                    $this->getItemMovingUrl($result, ItemService::PARAM_DIRECTION_UP), ToolbarItem::DISPLAY_ICON
-                )
-            );
-        }
-
-        if ($isLastItem || $isOnlyItem)
-        {
-            $toolbar->addItem(
-                new ToolbarItem(
-                    $translator->trans('MoveDownNA', [], StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('down-long', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
-                )
-            );
-        }
-        else
-        {
-            $toolbar->addItem(
-                new ToolbarItem(
-                    $translator->trans('MoveDown', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('down-long'),
-                    $this->getItemMovingUrl($result, ItemService::PARAM_DIRECTION_DOWN), ToolbarItem::DISPLAY_ICON
+        else {
+            $buttonToolBar->addButton(
+                new Button(
+                    label: $translator->trans('MoveUp', [], StringUtilities::LIBRARIES),
+                    inlineGlyph: new FontAwesomeGlyph('up-long'), action: $this->getItemMovingUrl(
+                    $result, ItemService::PARAM_DIRECTION_UP
+                ), display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
                 )
             );
         }
 
-        $toolbar->addItem(
-            new ToolbarItem(
-                label: $translator->trans('Delete', [], StringUtilities::LIBRARIES), image: new FontAwesomeGlyph(
+        if ($isLastItem || $isOnlyItem) {
+            $buttonToolBar->addButton(
+                new Button(
+                    label: $translator->trans('MoveDownNA', [], StringUtilities::LIBRARIES),
+                    inlineGlyph: new FontAwesomeGlyph('down-long', ['text-muted']),
+                    display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+                )
+            );
+        }
+        else {
+            $buttonToolBar->addButton(
+                new Button(
+                    label: $translator->trans('MoveDown', [], StringUtilities::LIBRARIES),
+                    inlineGlyph: new FontAwesomeGlyph('down-long'), action: $this->getItemMovingUrl(
+                    $result, ItemService::PARAM_DIRECTION_DOWN
+                ), display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+                )
+            );
+        }
+
+        $buttonToolBar->addButton(
+            new Button(
+                label: $translator->trans('Delete', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
                 'times'
-            ), href: $this->getItemDeletingUrl($result), display: ToolbarItem::DISPLAY_ICON, confirmation: true,
+            ), action: $this->getItemDeletingUrl($result), display: ButtonDisplayInterface::DISPLAY_ICON,
                 confirmationMessage: $this->getTranslator()->trans(
                     'ConfirmChosenAction', [], StringUtilities::LIBRARIES
-                )
+                ), classes: ['btn-link']
             )
         );
 
-        return $toolbar->render();
+        return $this->getMiniButtonToolBarRenderer()->render($buttonToolBar);
     }
 }

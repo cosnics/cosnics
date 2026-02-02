@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Response;
 
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,10 +14,8 @@ class PlatformNotAvailableResponse extends Response
 {
     use DependencyInjectionContainerTrait;
 
-    public function __construct(string $message, ?Application $application = null)
+    public function __construct(string $message)
     {
-        $this->getPageConfiguration()->setApplication($application);
-
         $html = [];
         $html[] = $this->getHeaderRenderer()->render();
         $html[] = '<br />';

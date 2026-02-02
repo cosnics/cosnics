@@ -6,15 +6,15 @@ use Chamilo\Libraries\Protocol\Security\Service\SecurityUtilities;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropDownButton;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SplitDropdownButton;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButtonDivider;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButtonHeader;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SplitDropdownButtonCollection;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButtonDivider;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButtonHeader;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\AbstractBaseTableParameters;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\AbstractSortableTableColumn;
@@ -33,6 +33,7 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class AbstractHtmlTableRenderer
 {
+    protected ButtonToolBarRenderer $buttonToolBarRenderer;
 
     protected PagerRenderer $pagerRenderer;
 
@@ -48,7 +49,7 @@ abstract class AbstractHtmlTableRenderer
 
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, PagerRenderer $pagerRenderer, SecurityUtilities $security,
-        ResourceManager $resourceManager, WebPathBuilder $webPathBuilder
+        ResourceManager $resourceManager, WebPathBuilder $webPathBuilder, ButtonToolBarRenderer $buttonToolBarRenderer
     )
     {
         $this->urlGenerator = $urlGenerator;
@@ -57,9 +58,10 @@ abstract class AbstractHtmlTableRenderer
         $this->security = $security;
         $this->resourceManager = $resourceManager;
         $this->webPathBuilder = $webPathBuilder;
+        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
     }
 
-    public function getActionsButtonToolbar(TableActions $tableActions): ButtonToolBar
+    public function getActionsButtonToolBar(TableActions $tableActions): ButtonToolBar
     {
         $formActions = $tableActions->getActions();
         $formActionsCount = count($formActions);
@@ -68,16 +70,14 @@ abstract class AbstractHtmlTableRenderer
 
         $buttonToolBar = new ButtonToolBar();
 
-        if ($formActionsCount > 1)
-        {
-            $button = new SplitDropdownButton(
+        if ($formActionsCount > 1) {
+            $button = new SplitDropdownButtonCollection(
                 $firstAction->getTitle(), null, $firstAction->getAction(), ButtonDisplayInterface::DISPLAY_LABEL,
                 $firstAction->getConfirmationMessage(), ['btn-sm btn-table-action'], null, ['btn-table-action']
             );
 
-            foreach ($formActions as $formAction)
-            {
-                $button->addDropDownButton(
+            foreach ($formActions as $formAction) {
+                $button->addButton(
                     new SubButton(
                         $formAction->getTitle(), null, $formAction->getAction(), ButtonDisplayInterface::DISPLAY_LABEL,
                         $formAction->getConfirmationMessage()
@@ -87,8 +87,7 @@ abstract class AbstractHtmlTableRenderer
 
             $buttonToolBar->addButton($button);
         }
-        else
-        {
+        else {
             $buttonToolBar->addButton(
                 new Button(
                     $firstAction->getTitle(), null, $firstAction->getAction(), ButtonDisplayInterface::DISPLAY_LABEL,
@@ -98,6 +97,11 @@ abstract class AbstractHtmlTableRenderer
         }
 
         return $buttonToolBar;
+    }
+
+    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
+    {
+        return $this->buttonToolBarRenderer;
     }
 
     /**
@@ -183,10 +187,8 @@ abstract class AbstractHtmlTableRenderer
      */
     protected function hasSortableColumns(array $tableColumns): bool
     {
-        foreach ($tableColumns as $tableColumn)
-        {
-            if ($tableColumn instanceof AbstractSortableTableColumn && $tableColumn->isSortable())
-            {
+        foreach ($tableColumns as $tableColumn) {
+            if ($tableColumn instanceof AbstractSortableTableColumn && $tableColumn->isSortable()) {
                 return true;
             }
         }
@@ -217,12 +219,10 @@ abstract class AbstractHtmlTableRenderer
     public function processCellAttributes(HTML_Table $htmlTable, array $tableColumns, ?TableActions $tableActions = null
     ): static
     {
-        foreach ($tableColumns as $key => $tableColumn)
-        {
+        foreach ($tableColumns as $key => $tableColumn) {
             $cssClasses = $tableColumn->getCssClasses();
 
-            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT]))
-            {
+            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT])) {
                 $contentAttributes = ['class' => $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]];
 
                 $htmlTable->setColAttributes(
@@ -250,8 +250,7 @@ abstract class AbstractHtmlTableRenderer
      */
     public function processSourceData(HTML_Table $htmlTable, ArrayCollection $tableRows): static
     {
-        foreach ($tableRows as $row)
-        {
+        foreach ($tableRows as $row) {
             $htmlTable->addRow($row);
         }
 
@@ -260,14 +259,13 @@ abstract class AbstractHtmlTableRenderer
 
     /**
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function renderActions(string $tableName, TableActions $tableActions): string
     {
-        $buttonToolBarRenderer = new ButtonToolBarRenderer($this->getActionsButtonToolbar($tableActions));
-
         $html = [];
 
-        $html[] = $buttonToolBarRenderer->render();
+        $html[] = $this->getButtonToolBarRenderer()->render($this->getActionsButtonToolBar($tableActions));
         $html[] =
             '<input type="hidden" name="' . $tableName . '_namespace" value="' . $tableActions->getNamespace() . '"/>';
         $html[] = '<input type="hidden" name="table_name" value="' . $tableName . '"/>';
@@ -289,13 +287,13 @@ abstract class AbstractHtmlTableRenderer
 
     /**
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function renderNumberOfItemsPerPageSelector(
         TableParameterValues $parameterValues, array $parameterNames
     ): string
     {
-        if ($parameterValues->getTotalNumberOfItems() <= Pager::DISPLAY_PER_INCREMENT)
-        {
+        if ($parameterValues->getTotalNumberOfItems() <= Pager::DISPLAY_PER_INCREMENT) {
             return '';
         }
 
@@ -307,18 +305,17 @@ abstract class AbstractHtmlTableRenderer
     /**
      * @param \Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn[] $tableColumns
      *
-     * @return \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton[]
+     * @return ArrayCollection<\Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton>
      */
     public function renderPropertyDirectionSubButtons(
         array $tableColumns, TableParameterValues $parameterValues, array $parameterNames
-    ): array
+    ): ArrayCollection
     {
         $currentFirstOrderDirection = $parameterValues->getOrderColumnDirection();
         $subButtons = [];
         $translator = $this->getTranslator();
 
-        if ($this->hasSortableColumns($tableColumns))
-        {
+        if ($this->hasSortableColumns($tableColumns)) {
             $propertyUrl = $this->getUrlGenerator()->fromRequest(
                 [$parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION] => SORT_ASC]
             );
@@ -340,13 +337,14 @@ abstract class AbstractHtmlTableRenderer
             );
         }
 
-        return $subButtons;
+        return new ArrayCollection($subButtons);
     }
 
     /**
      * @param \Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn[] $tableColumns
      *
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function renderPropertySorting(
         array $tableColumns, TableParameterValues $parameterValues, array $parameterNames
@@ -354,10 +352,9 @@ abstract class AbstractHtmlTableRenderer
     {
         $html = [];
 
-        if ($this->hasSortableColumns($tableColumns))
-        {
+        if ($this->hasSortableColumns($tableColumns)) {
             $buttonToolBar = new ButtonToolBar();
-            $dropDownButton = new DropDownButton();
+            $dropDownButton = new DropDownButtonCollection();
             $translator = $this->getTranslator();
 
             $currentFirstOrderColumn = $parameterValues->getOrderColumnIndex();
@@ -365,20 +362,20 @@ abstract class AbstractHtmlTableRenderer
 
             $orderProperty = $tableColumns[$currentFirstOrderColumn];
 
-            $dropDownButton->addDropDownButton(
+            $dropDownButton->addButton(
                 new SubButtonHeader($translator->trans('SortingProperty', [], StringUtilities::LIBRARIES))
             );
-            $dropDownButton->addDropDownButtons(
+            $dropDownButton->addButtons(
                 $this->renderPropertySubButtons($tableColumns, $parameterValues, $parameterNames)
             );
             $dropDownButton->setClasses(['btn-sm']);
-            $dropDownButton->setDropdownClasses(['dropdown-menu-right']);
+            $dropDownButton->setDropDownClasses(['dropdown-menu-right']);
 
-            $dropDownButton->addDropDownButton(new SubButtonDivider());
-            $dropDownButton->addDropDownButton(
+            $dropDownButton->addButton(new SubButtonDivider());
+            $dropDownButton->addButton(
                 new SubButtonHeader($translator->trans('SortingDirection', [], StringUtilities::LIBRARIES))
             );
-            $dropDownButton->addDropDownButtons(
+            $dropDownButton->addButtons(
                 $this->renderPropertyDirectionSubButtons($tableColumns, $parameterValues, $parameterNames)
             );
 
@@ -396,10 +393,8 @@ abstract class AbstractHtmlTableRenderer
 
             $buttonToolBar->addButton($dropDownButton);
 
-            $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-
             $html[] = '<div class="pull-right table-order-property">';
-            $html[] = $buttonToolBarRenderer->render();
+            $html[] = $this->getButtonToolBarRenderer()->render($buttonToolBar);
             $html[] = '</div>';
         }
 
@@ -409,19 +404,17 @@ abstract class AbstractHtmlTableRenderer
     /**
      * @param \Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn[] $tableColumns
      *
-     * @return \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton[]
+     * @return ArrayCollection<\Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton>
      */
     public function renderPropertySubButtons(
         array $tableColumns, TableParameterValues $parameterValues, array $parameterNames
-    ): array
+    ): ArrayCollection
     {
         $currentOrderColumnIndex = $parameterValues->getOrderColumnIndex();
         $subButtons = [];
 
-        if ($this->hasSortableColumns($tableColumns))
-        {
-            foreach ($tableColumns as $index => $tableColumn)
-            {
+        if ($this->hasSortableColumns($tableColumns)) {
+            foreach ($tableColumns as $index => $tableColumn) {
                 $propertyUrl = $this->getUrlGenerator()->fromRequest(
                     [$parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX] => $index]
                 );
@@ -435,7 +428,7 @@ abstract class AbstractHtmlTableRenderer
             }
         }
 
-        return $subButtons;
+        return new ArrayCollection($subButtons);
     }
 
     /**
@@ -444,6 +437,7 @@ abstract class AbstractHtmlTableRenderer
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \TableException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     protected function renderTable(
         HTML_Table $htmlTable, array $tableColumns, ArrayCollection $tableRows, string $tableName,
@@ -488,6 +482,7 @@ abstract class AbstractHtmlTableRenderer
     /**
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function renderTableFooter(
         string $tableName, TableParameterValues $parameterValues, array $parameterNames,
@@ -500,8 +495,7 @@ abstract class AbstractHtmlTableRenderer
 
         $html[] = '<div class="row">';
 
-        if ($hasFormActions)
-        {
+        if ($hasFormActions) {
             $html[] = '<div class="col-xs-12 col-md-6 table-navigation-actions">';
             $html[] = $this->renderActions($tableName, $tableActions);
             $html[] = '</div>';
@@ -509,8 +503,7 @@ abstract class AbstractHtmlTableRenderer
 
         $classes = 'col-xs-12';
 
-        if ($hasFormActions)
-        {
+        if ($hasFormActions) {
             $classes .= ' col-md-6';
         }
 
@@ -520,8 +513,7 @@ abstract class AbstractHtmlTableRenderer
 
         $html[] = '</div>';
 
-        if ($hasFormActions)
-        {
+        if ($hasFormActions) {
             $html[] = '<input type="submit" name="Submit" value="Submit" style="display:none;" />';
             $html[] = '</form>';
             $html[] = $this->getTableActionsJavascript();
@@ -534,6 +526,7 @@ abstract class AbstractHtmlTableRenderer
      * @param \Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn[] $tableColumns
      *
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     protected function renderTableHeader(
         array $tableColumns, string $tableName, array $parameterNames, TableParameterValues $parameterValues,
@@ -562,6 +555,7 @@ abstract class AbstractHtmlTableRenderer
 
     /**
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     protected function renderTableHeaderStart(string $tableName, ?TableActions $tableActions = null): string
     {
@@ -569,8 +563,7 @@ abstract class AbstractHtmlTableRenderer
 
         $html = [];
 
-        if ($hasFormActions)
-        {
+        if ($hasFormActions) {
             $formActions = $tableActions->getActions();
             $firstFormAction = array_shift($formActions);
 
@@ -582,8 +575,7 @@ abstract class AbstractHtmlTableRenderer
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12 col-md-6 table-navigation-actions">';
 
-        if ($hasFormActions)
-        {
+        if ($hasFormActions) {
             $html[] = $this->renderActions($tableName, $tableActions);
         }
 
@@ -591,8 +583,7 @@ abstract class AbstractHtmlTableRenderer
 
         $classes = 'col-xs-12';
 
-        if ($hasFormActions)
-        {
+        if ($hasFormActions) {
             $classes .= ' col-md-6';
         }
 

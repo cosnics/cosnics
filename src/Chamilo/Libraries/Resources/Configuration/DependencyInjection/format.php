@@ -1,23 +1,24 @@
 <?php
-
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Core\Home\UserInterface\HomeRenderer\TabRenderer;
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonRendererInterface;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonGroupRenderer;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonRenderer;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\DropDownButtonRenderer;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\SplitDropdownButtonRenderer;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\SubButtonDividerRenderer;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\SubButtonHeaderRenderer;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\SubButtonRenderer;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Service\BreadcrumbGenerator;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Service\BreadcrumbTrailRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonRendererCollection;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonGroupRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\DropDownButtonRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\SplitDropdownButtonRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\SubButtonDividerRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\SubButtonHeaderRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\SubButtonRenderer;
 use Chamilo\Libraries\UserInterface\Form\Factory\FormValidatorHtmlEditorOptionsFactory;
 use Chamilo\Libraries\UserInterface\Form\Service\FormValidatorHtmlEditorRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration;
@@ -104,7 +105,11 @@ return static function (ContainerConfigurator $container) {
     $services->set(PageConfiguration::class);
     $services->set(FooterRenderer::class);
     $services->set(HeaderRenderer::class)->args(
-        ['$themeWebPathBuilder' => service('Chamilo\Libraries\UserInterface\Theme\Service\ThemeWebPathBuilder')]
+        [
+            '$themeWebPathBuilder' => service('Chamilo\Libraries\UserInterface\Theme\Service\ThemeWebPathBuilder'),
+            '$siteConfiguration' => '%chamilo.configuration.general.site%',
+            '$institutionConfiguration' => '%chamilo.configuration.general.institution%'
+        ]
     );
 
     $services->set(PanelRenderer::class);
@@ -115,7 +120,9 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(JsTreeRenderer::class);
 
+    $services->set(ButtonRendererCollection::class);
     $services->set(ButtonToolBarRenderer::class);
+    $services->set(MiniButtonToolBarRenderer::class);
     $services->set(ButtonGroupRenderer::class)->tag(ButtonRendererInterface::class);
     $services->set(ButtonRenderer::class)->tag(ButtonRendererInterface::class);
     $services->set(DropDownButtonRenderer::class)->tag(ButtonRendererInterface::class);

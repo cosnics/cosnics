@@ -10,9 +10,11 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\Toolbar;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\StaticTableColumn;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableAction;
@@ -34,7 +36,6 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 {
     public const COLUMN_SUBGROUPS = 'Subgroups';
     public const COLUMN_USERS = 'Users';
-
     public const TABLE_IDENTIFIER = Manager::PARAM_GROUP_ID;
 
     protected GroupMembershipService $groupMembershipService;
@@ -43,6 +44,8 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
     protected GroupsTreeTraverser $groupsTreeTraverser;
 
+    protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
+
     protected StringUtilities $stringUtilities;
 
     public function __construct(
@@ -50,13 +53,14 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         StringUtilities $stringUtilities, Translator $translator, UrlGenerator $urlGenerator,
         ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
         DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, GroupUrlGenerator $groupUrlGenerator,
-        ClassnameUtilities $classnameUtilities
+        ClassnameUtilities $classnameUtilities, MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )
     {
         $this->stringUtilities = $stringUtilities;
         $this->groupsTreeTraverser = $groupsTreeTraverser;
         $this->groupMembershipService = $groupMembershipService;
         $this->groupUrlGenerator = $groupUrlGenerator;
+        $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
 
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
@@ -77,6 +81,11 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
     public function getGroupsTreeTraverser(): GroupsTreeTraverser
     {
         return $this->groupsTreeTraverser;
+    }
+
+    public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
+    {
+        return $this->miniButtonToolBarRenderer;
     }
 
     public function getStringUtilities(): StringUtilities
@@ -153,14 +162,12 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         $stringUtilities = $this->getStringUtilities();
         $groupsTreeTraverser = $this->getGroupsTreeTraverser();
 
-        switch ($column->getName())
-        {
+        switch ($column->getName()) {
             case Group::PROPERTY_NAME :
                 $title = parent::renderCell($column, $resultPosition, $result);
                 $title_short = $title;
 
-                if (strlen($title_short) > 53)
-                {
+                if (strlen($title_short) > 53) {
                     $title_short = mb_substr($title_short, 0, 50) . '&hellip;';
                 }
 
@@ -176,8 +183,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
             case Group::PROPERTY_DESCRIPTION :
                 $description = strip_tags(parent::renderCell($column, $resultPosition, $result));
 
-                if (strlen($description) > 175)
-                {
+                if (strlen($description) > 175) {
                     $description = mb_substr($description, 0, 170) . '&hellip;';
                 }
 
@@ -202,77 +208,77 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         $groupMembershipService = $this->getGroupMembershipService();
         $groupUrlGenerator = $this->getGroupUrlGenerator();
 
-        $toolbar = new Toolbar();
+        $buttonToolBar = new MiniButtonToolBar();
 
         $editUrl = $groupUrlGenerator->getUpdateUrl($result);
 
-        $toolbar->addItem(
-            new ToolbarItem(
-                $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                $editUrl, ToolbarItem::DISPLAY_ICON
+        $buttonToolBar->addButton(
+            new Button(
+                label: $translator->trans('Edit', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
+                'pencil-alt'
+            ), action: $editUrl, display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
             )
         );
 
         $subscribeUrl = $groupUrlGenerator->getSubscribeUrl($result);
 
-        $toolbar->addItem(
-            new ToolbarItem(
-                $translator->trans('AddUsers', [], 'Chamilo\Core\Group'), new FontAwesomeGlyph('plus-circle'),
-                $subscribeUrl, ToolbarItem::DISPLAY_ICON
+        $buttonToolBar->addButton(
+            new Button(
+                label: $translator->trans('AddUsers', [], 'Chamilo\Core\Group'), inlineGlyph: new FontAwesomeGlyph(
+                'plus-circle'
+            ), action: $subscribeUrl, display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
             )
         );
 
         $visible = ($groupMembershipService->countSubscribedUsersForGroupIdentifier($result->getId()) > 0);
 
-        if ($visible)
-        {
+        if ($visible) {
             $truncateUrl = $groupUrlGenerator->getTruncateUrl($result);
 
-            $toolbar->addItem(
-                new ToolbarItem(
-                    label: $translator->trans('Truncate', [], 'Chamilo\Core\Group'), image: new FontAwesomeGlyph(
+            $buttonToolBar->addButton(
+                new Button(
+                    label: $translator->trans('Truncate', [], 'Chamilo\Core\Group'), inlineGlyph: new FontAwesomeGlyph(
                     'trash-alt'
-                ), href: $truncateUrl, display: ToolbarItem::DISPLAY_ICON, confirmation: true,
+                ), action: $truncateUrl, display: ButtonDisplayInterface::DISPLAY_ICON,
                     confirmationMessage: $this->getTranslator()->trans(
                         'ConfirmChosenAction', [], StringUtilities::LIBRARIES
-                    )
+                    ), classes: ['btn-link']
                 )
             );
         }
-        else
-        {
-
-            $toolbar->addItem(
-                new ToolbarItem(
-                    $translator->trans('TruncateNA', [], 'Chamilo\Core\Group'),
-                    new FontAwesomeGlyph('trash-alt', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
+        else {
+            $buttonToolBar->addButton(
+                new Button(
+                    label: $translator->trans('TruncateNA', [], 'Chamilo\Core\Group'),
+                    inlineGlyph: new FontAwesomeGlyph('trash-alt', ['text-muted']),
+                    display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
                 )
             );
         }
 
         $deleteUrl = $groupUrlGenerator->getDeleteUrl($result);
 
-        $toolbar->addItem(
-            new ToolbarItem(
-                label: $translator->trans('Delete', [], StringUtilities::LIBRARIES), image: new FontAwesomeGlyph(
+        $buttonToolBar->addButton(
+            new Button(
+                label: $translator->trans('Delete', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
                 'times'
-            ), href: $deleteUrl, display: ToolbarItem::DISPLAY_ICON, confirmation: true,
+            ), action: $deleteUrl, display: ButtonDisplayInterface::DISPLAY_ICON,
                 confirmationMessage: $this->getTranslator()->trans(
                     'ConfirmChosenAction', [], StringUtilities::LIBRARIES
-                )
+                ), classes: ['btn-link']
             )
         );
 
         $moveUrl = $groupUrlGenerator->getMoveUrl($result);
 
-        $toolbar->addItem(
-            new ToolbarItem(
-                $translator->trans('Move', [], StringUtilities::LIBRARIES),
-                new FontAwesomeGlyph('window-restore', ['fa-flip-horizontal'], null, 'fas'), $moveUrl,
-                ToolbarItem::DISPLAY_ICON
+        $buttonToolBar->addButton(
+            new Button(
+                label: $translator->trans('Move', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
+                'window-restore', ['fa-flip-horizontal'], null, 'fas'
+            ), action: $moveUrl, display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
             )
         );
 
-        return $toolbar->render();
+        return $this->getMiniButtonToolBarRenderer()->render($buttonToolBar);
     }
 }

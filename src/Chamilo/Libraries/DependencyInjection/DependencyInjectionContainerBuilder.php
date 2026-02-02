@@ -101,7 +101,6 @@ class DependencyInjectionContainerBuilder
      * Creates and returns the default dependency injection container for Chamilo
      *
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ConnectionException
      */
     public function createContainer(): ContainerInterface
     {
@@ -342,7 +341,6 @@ class DependencyInjectionContainerBuilder
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ConnectionException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function rebuildContainer(

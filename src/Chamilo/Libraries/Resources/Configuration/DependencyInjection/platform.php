@@ -1,5 +1,4 @@
 <?php
-
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Libraries\Protocol\Security\Factory\PasswordGeneratorFactory;

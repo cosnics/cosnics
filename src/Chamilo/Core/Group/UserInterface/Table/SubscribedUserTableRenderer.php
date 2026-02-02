@@ -8,9 +8,11 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\Toolbar;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableAction;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableActions;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableResultPosition;
@@ -33,13 +35,16 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
 
     protected GroupUrlGenerator $groupUrlGenerator;
 
+    protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
+
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
         DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, GroupUrlGenerator $groupUrlGenerator,
-        ClassnameUtilities $classnameUtilities
+        ClassnameUtilities $classnameUtilities, MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )
     {
         $this->groupUrlGenerator = $groupUrlGenerator;
+        $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
 
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
@@ -50,6 +55,11 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
     public function getGroupUrlGenerator(): GroupUrlGenerator
     {
         return $this->groupUrlGenerator;
+    }
+
+    public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
+    {
+        return $this->miniButtonToolBarRenderer;
     }
 
     public function getTableActions(): TableActions
@@ -85,22 +95,26 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
 
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\SubscribedUser $result
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \QuickformException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
     {
         $translator = $this->getTranslator();
 
-        $toolbar = new Toolbar();
+        $buttonToolBar = new MiniButtonToolBar();
 
         $unsubscribeUrl = $this->getGroupUrlGenerator()->getUnsubscribeUserUrl($result);
 
-        $toolbar->addItem(
-            new ToolbarItem(
-                $translator->trans('UnsubscribeSelected', [], Manager::CONTEXT), new FontAwesomeGlyph('times'),
-                $unsubscribeUrl, ToolbarItem::DISPLAY_ICON
+        $buttonToolBar->addButton(
+            new Button(
+                label: $translator->trans('UnsubscribeSelected', [], Manager::CONTEXT),
+                inlineGlyph: new FontAwesomeGlyph('times'), action: $unsubscribeUrl,
+                display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
             )
         );
 
-        return $toolbar->render();
+        return $this->getMiniButtonToolBarRenderer()->render($buttonToolBar);
     }
 }

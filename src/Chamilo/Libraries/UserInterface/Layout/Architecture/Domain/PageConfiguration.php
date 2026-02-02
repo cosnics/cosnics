@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Layout\Architecture\Domain;
 
-use Chamilo\Libraries\Architecture\Domain\Application;
-
 /**
  * @package Chamilo\Libraries\Format\Structure
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -14,32 +12,26 @@ class PageConfiguration
     public const VIEW_MODE_FULL = 1;
     public const VIEW_MODE_HEADERLESS = 2;
 
-    private ?Application $application;
+    /**
+     * @var string[]
+     */
+    protected array $htmlHeaders = [];
 
     private string $containerMode;
 
-    private array $htmlHeaders;
-
-    private string $languageCode;
-
     private string $textDirection;
-
-    private ?string $title;
 
     private int $viewMode;
 
     public function __construct(
         int $viewMode = self::VIEW_MODE_FULL, string $containerMode = 'container-fluid', string $textDirection = 'ltr',
-        string $languageCode = 'en', ?string $title = null, array $htmlHeaders = [], ?Application $application = null
+        array $htmlHeaders = []
     )
     {
         $this->viewMode = $viewMode;
         $this->containerMode = $containerMode;
         $this->textDirection = $textDirection;
-        $this->languageCode = $languageCode;
-        $this->title = $title;
         $this->htmlHeaders = $htmlHeaders;
-        $this->application = $application;
     }
 
     public function addCssFile(string $file, string $media = 'screen'): static
@@ -76,18 +68,6 @@ class PageConfiguration
         return $this;
     }
 
-    public function getApplication(): ?Application
-    {
-        return $this->application;
-    }
-
-    public function setApplication(?Application $application): static
-    {
-        $this->application = $application;
-
-        return $this;
-    }
-
     public function getContainerMode(): string
     {
         return $this->containerMode;
@@ -105,25 +85,6 @@ class PageConfiguration
         return $this->htmlHeaders;
     }
 
-    public function setHtmlHeaders(array $htmlHeaders): PageConfiguration
-    {
-        $this->htmlHeaders = $htmlHeaders;
-
-        return $this;
-    }
-
-    public function getLanguageCode(): string
-    {
-        return $this->languageCode;
-    }
-
-    public function setLanguageCode(string $languageCode): PageConfiguration
-    {
-        $this->languageCode = $languageCode;
-
-        return $this;
-    }
-
     public function getTextDirection(): string
     {
         return $this->textDirection;
@@ -136,26 +97,16 @@ class PageConfiguration
         return $this;
     }
 
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(?string $title): PageConfiguration
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     public function getViewMode(): int
     {
         return $this->viewMode;
     }
 
-    public function setViewMode(int $viewMode)
+    public function setViewMode(int $viewMode): PageConfiguration
     {
         $this->viewMode = $viewMode;
+
+        return $this;
     }
 
     public function isFullPage(): bool

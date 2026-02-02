@@ -7,7 +7,7 @@ use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTra
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
 /**
- * @package Chamilo\Libraries\Format\Structure
+ * @package Chamilo\Libraries\UserInterface\Breadcrumb\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class BreadcrumbTrailRenderer

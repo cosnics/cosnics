@@ -4,7 +4,8 @@ namespace Chamilo\Libraries\Calendar\Service\Event;
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\Toolbar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use IntlDateFormatter;
 use Symfony\Component\Translation\Translator;
 
@@ -17,20 +18,24 @@ class EventListRenderer extends EventRenderer
 {
     protected DatetimeUtilities $datetimeUtilities;
 
+    protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
+
     protected Translator $translator;
 
     public function __construct(
-        LegendRenderer $legendRenderer, Translator $translator, DatetimeUtilities $datetimeUtilities
+        LegendRenderer $legendRenderer, Translator $translator, DatetimeUtilities $datetimeUtilities,
+        MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )
     {
         parent::__construct($legendRenderer);
 
         $this->translator = $translator;
         $this->datetimeUtilities = $datetimeUtilities;
+        $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
     }
 
     /**
-     * @param \Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem[] $eventActions
+     * @param \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button[] $eventActions
      *
      * @throws \Exception
      */
@@ -43,12 +48,10 @@ class EventListRenderer extends EventRenderer
 
         $html = [];
 
-        if (!$isEventSourceVisible)
-        {
+        if (!$isEventSourceVisible) {
             $rowClasses = ' event-container-hidden';
         }
-        else
-        {
+        else {
             $rowClasses = '';
         }
 
@@ -65,15 +68,13 @@ class EventListRenderer extends EventRenderer
 
         $html[] = '<div class="col-xs-7 list-event-item-data">';
 
-        if ($event->getUrl())
-        {
+        if ($event->getUrl()) {
             $html[] = '<a href="' . $event->getUrl() . '">';
         }
 
         $html[] = htmlspecialchars($event->getTitle());
 
-        if ($event->getUrl())
-        {
+        if ($event->getUrl()) {
             $html[] = '</a>';
         }
 
@@ -93,6 +94,11 @@ class EventListRenderer extends EventRenderer
         return $this->datetimeUtilities;
     }
 
+    public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
+    {
+        return $this->miniButtonToolBarRenderer;
+    }
+
     public function getRange(Event $event): string
     {
         $datetimeUtilities = $this->getDatetimeUtilities();
@@ -102,10 +108,8 @@ class EventListRenderer extends EventRenderer
         $dateFormat = IntlDateFormatter::SHORT;
         $timeFormat = IntlDateFormatter::SHORT;
 
-        if ($event->getEndDate() != '')
-        {
-            if (date('Y m d', $event->getStartDate()) == date('Y m d', $event->getEndDate()))
-            {
+        if ($event->getEndDate() != '') {
+            if (date('Y m d', $event->getStartDate()) == date('Y m d', $event->getEndDate())) {
                 $dateFormat = IntlDateFormatter::NONE;
             }
 
@@ -114,8 +118,7 @@ class EventListRenderer extends EventRenderer
                     $datetimeUtilities->formatLocaleDate($event->getEndDate(), $dateFormat, $timeFormat)
                 ) . '</div>';
         }
-        else
-        {
+        else {
             $html[] = '<div class="calendar-event-range">' . $datetimeUtilities->formatLocaleDate(
                     $event->getStartDate(), $dateFormat, $timeFormat
                 ) . '</div>';
@@ -129,21 +132,23 @@ class EventListRenderer extends EventRenderer
         return $this->translator;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \QuickformException
+     */
     public function renderActions(array $eventActions = []): string
     {
         $html = [];
 
-        if (count($eventActions))
-        {
-            $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
+        if (count($eventActions)) {
+            $buttonToolBar = new MiniButtonToolBar();
 
-            foreach ($eventActions as $action)
-            {
-                $toolbar->addItem($action);
+            foreach ($eventActions as $action) {
+                $buttonToolBar->addButton($action);
             }
 
             $html[] = '<div style="float: right; margin-top: 2px;">';
-            $html[] = $toolbar->render();
+            $html[] = $this->getMiniButtonToolBarRenderer()->render($buttonToolBar);
             $html[] = '</div>';
         }
 

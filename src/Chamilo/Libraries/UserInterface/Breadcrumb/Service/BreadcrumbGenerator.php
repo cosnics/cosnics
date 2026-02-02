@@ -18,7 +18,7 @@ use Symfony\Component\Translation\Translator;
  * Generates a breadcrumb based on the package and component name. Includes the
  * possibility to add additional breadcrumbs between the package breadcrumb and the component breadcrumb
  *
- * @package Chamilo\Libraries\Format\Structure
+ * @package Chamilo\Libraries\UserInterface\Breadcrumb\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */

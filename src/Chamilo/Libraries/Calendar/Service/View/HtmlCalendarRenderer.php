@@ -7,11 +7,11 @@ use Chamilo\Libraries\Calendar\Architecture\Interface\VisibilitySupport;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropDownButton;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
 
@@ -25,11 +25,12 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
 {
     public const PARAM_TIME = 'time';
     public const PARAM_TYPE = 'type';
-
     public const TYPE_DAY = 'Day';
     public const TYPE_LIST = 'List';
     public const TYPE_MONTH = 'Month';
     public const TYPE_WEEK = 'Week';
+
+    protected ButtonToolBarRenderer $buttonToolBarRenderer;
 
     protected LegendRenderer $legendRenderer;
 
@@ -37,11 +38,15 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
 
     protected UrlGenerator $urlGenerator;
 
-    public function __construct(LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator)
+    public function __construct(
+        LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
+        ButtonToolBarRenderer $buttonToolBarRenderer
+    )
     {
         $this->legendRenderer = $legendRenderer;
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
+        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
     }
 
     abstract public function render(
@@ -56,6 +61,11 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
         return $this->getUrlGenerator()->fromParameters($parameters);
     }
 
+    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
+    {
+        return $this->buttonToolBarRenderer;
+    }
+
     /**
      * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      */
@@ -65,16 +75,13 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
 
         usort(
             $events, function (Event $eventLeft, Event $eventRight) {
-            if ($eventLeft->getStartDate() < $eventRight->getStartDate())
-            {
+            if ($eventLeft->getStartDate() < $eventRight->getStartDate()) {
                 return - 1;
             }
-            elseif ($eventLeft->getStartDate() > $eventRight->getStartDate())
-            {
+            elseif ($eventLeft->getStartDate() > $eventRight->getStartDate()) {
                 return 1;
             }
-            else
-            {
+            else {
                 return 0;
             }
         }
@@ -113,15 +120,14 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
         CalendarRendererProviderInterface $dataProvider, string $source, ?int $userIdentifier = null
     ): bool
     {
-        if ($dataProvider instanceof VisibilitySupport)
-        {
+        if ($dataProvider instanceof VisibilitySupport) {
             return $dataProvider->isSourceVisible($source, $userIdentifier);
         }
 
         return true;
     }
 
-    public function renderTypeButton(CalendarRendererProviderInterface $dataProvider): DropDownButton
+    public function renderTypeButton(CalendarRendererProviderInterface $dataProvider): DropDownButtonCollection
     {
         $rendererTypes = [
             HtmlCalendarRenderer::TYPE_MONTH,
@@ -134,17 +140,16 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
         $currentRendererType = $displayParameters[self::PARAM_TYPE];
         $translator = $this->getTranslator();
 
-        $button = new DropDownButton(
+        $button = new DropDownButtonCollection(
             $translator->trans($currentRendererType . 'View', [], 'Chamilo\Libraries'),
             new FontAwesomeGlyph('calendar-alt'), ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, [],
             ['dropdown-menu-right']
         );
 
-        foreach ($rendererTypes as $rendererType)
-        {
+        foreach ($rendererTypes as $rendererType) {
             $displayParameters[self::PARAM_TYPE] = $rendererType;
 
-            $button->addDropDownButton(
+            $button->addButton(
                 new SubButton(
                     $translator->trans($rendererType . 'View', [], 'Chamilo\Libraries'), null,
                     $this->getUrlGenerator()->fromParameters($displayParameters), ButtonDisplayInterface::DISPLAY_LABEL,
@@ -158,20 +163,18 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
 
     /**
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function renderViewActions(CalendarRendererProviderInterface $dataProvider, array $viewActions = []): string
     {
         $buttonToolBar = new ButtonToolBar();
 
-        foreach ($viewActions as $viewAction)
-        {
+        foreach ($viewActions as $viewAction) {
             $buttonToolBar->addButton($viewAction);
         }
 
         $buttonToolBar->addButton($this->renderTypeButton($dataProvider));
 
-        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-
-        return $buttonToolbarRenderer->render();
+        return $this->getButtonToolBarRenderer()->render($buttonToolBar);
     }
 }

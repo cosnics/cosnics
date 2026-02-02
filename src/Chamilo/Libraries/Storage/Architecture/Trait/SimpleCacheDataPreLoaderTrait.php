@@ -11,7 +11,6 @@ trait SimpleCacheDataPreLoaderTrait
 
     /**
      * @return mixed
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function preLoadCacheData(): mixed
     {

@@ -3,13 +3,13 @@ namespace Chamilo\Libraries\Calendar\Service;
 
 use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropDownButton;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use QuickformException;
 use Symfony\Component\Translation\Translator;
 
@@ -20,41 +20,43 @@ use Symfony\Component\Translation\Translator;
  */
 class JumpBarRenderer
 {
+    protected ButtonToolBarRenderer $buttonToolBarRenderer;
 
     private Translator $translator;
 
-    public function __construct(Translator $translator)
+    public function __construct(Translator $translator, ButtonToolBarRenderer $buttonToolBarRenderer)
     {
         $this->translator = $translator;
+        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     */
     public function render(string $navigationUrl, int $currentTime): string
     {
-        try
-        {
-            return $this->getButtonToolBarRenderer($navigationUrl, $currentTime)->render();
+        try {
+            return $this->getButtonToolBarRenderer()->render($this->getButtonToolBar($navigationUrl, $currentTime));
         }
-        catch (QuickformException)
-        {
+        catch (QuickformException) {
             return '';
         }
     }
 
-    private function getButtonToolBarRenderer(string $navigationUrl, int $currentTime): ButtonToolBarRenderer
+    private function getButtonToolBar(string $navigationUrl, int $currentTime): ButtonToolBar
     {
-        $buttonToolbar = new ButtonToolBar();
+        $buttonToolBar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();
 
-        $buttonToolbar->addButton(
+        $buttonToolBar->addButton(
             new Button($this->getTranslator()->trans('JumpTo', [], StringUtilities::LIBRARIES), null, null,
                 ButtonDisplayInterface::DISPLAY_LABEL, null, ['btn-link'])
         );
-        $buttonToolbar->addButton($buttonGroup);
+        $buttonToolBar->addButton($buttonGroup);
 
-        $dateButton = new DropDownButton(date('j', $currentTime));
+        $dateButton = new DropDownButtonCollection(date('j', $currentTime));
 
-        foreach ($this->getDays($currentTime) as $day)
-        {
+        foreach ($this->getDays($currentTime) as $day) {
             $dayUrl = str_replace(
                 CalendarTableBuilder::TIME_PLACEHOLDER,
                 (string) mktime(0, 0, 0, (int) date('n', $currentTime), $day, (int) date('Y', $currentTime)),
@@ -62,17 +64,16 @@ class JumpBarRenderer
             );
 
             $isActive = date('j', $currentTime) == $day;
-            $dateButton->addDropDownButton(
+            $dateButton->addButton(
                 new SubButton((string) $day, null, $dayUrl, ButtonDisplayInterface::DISPLAY_LABEL, null, [], null,
                     $isActive)
             );
         }
 
         $months = $this->getMonths();
-        $monthButton = new DropDownButton($months[date('n', $currentTime)]);
+        $monthButton = new DropDownButtonCollection($months[date('n', $currentTime)]);
 
-        foreach ($this->getMonths() as $month => $monthLabel)
-        {
+        foreach ($this->getMonths() as $month => $monthLabel) {
             $monthUrl = str_replace(
                 CalendarTableBuilder::TIME_PLACEHOLDER, (string) mktime(
                 0, 0, 0, $month, (int) date('j', $currentTime), (int) date('Y', $currentTime)
@@ -80,16 +81,15 @@ class JumpBarRenderer
             );
 
             $isActive = date('n', $currentTime) == $month;
-            $monthButton->addDropDownButton(
+            $monthButton->addButton(
                 new SubButton($monthLabel, null, $monthUrl, ButtonDisplayInterface::DISPLAY_LABEL, null, [], null,
                     $isActive)
             );
         }
 
-        $yearButton = new DropDownButton(date('Y', $currentTime));
+        $yearButton = new DropDownButtonCollection(date('Y', $currentTime));
 
-        foreach ($this->getYears($currentTime) as $year)
-        {
+        foreach ($this->getYears($currentTime) as $year) {
             $yearUrl = str_replace(
                 CalendarTableBuilder::TIME_PLACEHOLDER,
                 (string) mktime(0, 0, 0, (int) date('n', $currentTime), (int) date('j', $currentTime), $year),
@@ -97,17 +97,22 @@ class JumpBarRenderer
             );
 
             $isActive = date('Y', $currentTime) == $year;
-            $yearButton->addDropDownButton(
+            $yearButton->addButton(
                 new SubButton((string) $year, null, $yearUrl, ButtonDisplayInterface::DISPLAY_LABEL, null, [], null,
                     $isActive)
             );
         }
 
-        $buttonGroup->addGroupButton($dateButton);
-        $buttonGroup->addGroupButton($monthButton);
-        $buttonGroup->addGroupButton($yearButton);
+        $buttonGroup->addButton($dateButton);
+        $buttonGroup->addButton($monthButton);
+        $buttonGroup->addButton($yearButton);
 
-        return new ButtonToolBarRenderer($buttonToolbar);
+        return $buttonToolBar;
+    }
+
+    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
+    {
+        return $this->buttonToolBarRenderer;
     }
 
     /**
@@ -118,8 +123,7 @@ class JumpBarRenderer
         $numberDays = date('t', $currentTime);
         $days = [];
 
-        for ($i = 1; $i <= $numberDays; $i ++)
-        {
+        for ($i = 1; $i <= $numberDays; $i ++) {
             $days[$i] = $i;
         }
 
@@ -150,8 +154,7 @@ class JumpBarRenderer
 
         $months = [];
 
-        foreach ($monthNames as $key => $month)
-        {
+        foreach ($monthNames as $key => $month) {
             $months[$key + 1] = $month;
         }
 
@@ -171,8 +174,7 @@ class JumpBarRenderer
         $year = (int) date('Y', $currentTime);
         $years = [];
 
-        for ($i = $year - 5; $i <= $year + 5; $i ++)
-        {
+        for ($i = $year - 5; $i <= $year + 5; $i ++) {
             $years[$i] = $i;
         }
 

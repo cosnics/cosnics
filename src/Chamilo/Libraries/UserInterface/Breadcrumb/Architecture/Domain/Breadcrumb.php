@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
 /**
- * @package Chamilo\Libraries\Format\Structure
+ * @package Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Breadcrumb

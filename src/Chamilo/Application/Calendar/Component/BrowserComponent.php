@@ -11,11 +11,11 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Calendar\Service\HtmlCalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SplitDropdownButton;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SplitDropdownButtonCollection;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use DateTime;
 use Detection\MobileDetect;
@@ -30,7 +30,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class BrowserComponent extends Manager
 {
-
     protected CalendarRendererProvider $calendarRendererProvider;
 
     private int $currentTime;
@@ -71,11 +70,9 @@ class BrowserComponent extends Manager
     {
         $asAdmin = $this->getSession()->get('_as_admin');
 
-        if ($asAdmin && $asAdmin > 0)
-        {
+        if ($asAdmin && $asAdmin > 0) {
             $user = $this->getUserService()->findUserByIdentifier($asAdmin);
-            if (!$user instanceof User || !$user->isPlatformAdministrator())
-            {
+            if (!$user instanceof User || !$user->isPlatformAdministrator()) {
                 throw new NotAllowedException();
             }
         }
@@ -98,8 +95,7 @@ class BrowserComponent extends Manager
 
     protected function getCalendarRendererProvider(): CalendarRendererProvider
     {
-        if (!isset($this->calendarRendererProvider))
-        {
+        if (!isset($this->calendarRendererProvider)) {
             $displayParameters = [
                 self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => self::ACTION_BROWSE,
@@ -117,8 +113,7 @@ class BrowserComponent extends Manager
 
     public function getCurrentRendererTime(): int
     {
-        if (!isset($this->currentTime))
-        {
+        if (!isset($this->currentTime)) {
             $defaultRenderDate = new DateTime();
             $defaultRenderDate->setTime(0, 0);
 
@@ -134,26 +129,20 @@ class BrowserComponent extends Manager
     {
         $rendererType = $this->getRequest()->query->get(HtmlCalendarRenderer::PARAM_TYPE);
 
-        if (!$rendererType)
-        {
+        if (!$rendererType) {
             $rendererType = $this->getUserSettingService()->getSettingForUser(
                 $this->getUser(), 'Chamilo\Libraries', 'calendar_default_view'
             );
 
-            if ($rendererType == HtmlCalendarRenderer::TYPE_MONTH)
-            {
+            if ($rendererType == HtmlCalendarRenderer::TYPE_MONTH) {
                 $detect = new MobileDetect();
 
-                try
-                {
-                    if ($detect->isMobile() && !$detect->isTablet())
-                    {
+                try {
+                    if ($detect->isMobile() && !$detect->isTablet()) {
                         $rendererType = HtmlCalendarRenderer::TYPE_LIST;
                     }
                 }
-                catch (Exception)
-                {
-
+                catch (Exception) {
                 }
             }
         }
@@ -175,7 +164,7 @@ class BrowserComponent extends Manager
             ]
         );
 
-        $buttonGroup->addGroupButton(
+        $buttonGroup->addButton(
             new Button(
                 $translator->trans('PrinterComponent', [], Manager::CONTEXT), new FontAwesomeGlyph('print'), $printUrl
             )
@@ -185,7 +174,7 @@ class BrowserComponent extends Manager
             [Application::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => Manager::ACTION_ICAL]
         );
 
-        $buttonGroup->addGroupButton(
+        $buttonGroup->addButton(
             new Button(
                 $translator->trans('ICalExternal', [], Manager::CONTEXT), new FontAwesomeGlyph('globe'), $iCalUrl
             )
@@ -199,7 +188,7 @@ class BrowserComponent extends Manager
             ]
         );
 
-        $splitDropdownButton = new SplitDropdownButton(
+        $splitDropdownButton = new SplitDropdownButtonCollection(
             $translator->trans('ConfigComponent', [], Manager::CONTEXT), new FontAwesomeGlyph('cog'), $settingsUrl,
             ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, null, [], null, ['dropdown-menu-right']
         );
@@ -208,20 +197,20 @@ class BrowserComponent extends Manager
             [Application::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => Manager::ACTION_AVAILABILITY]
         );
 
-        $splitDropdownButton->addDropDownButton(
+        $splitDropdownButton->addButton(
             new SubButton(
                 $translator->trans('AvailabilityComponent', [], Manager::CONTEXT), new FontAwesomeGlyph('check-circle'),
                 $availabilityUrl
             )
         );
 
-        $buttonGroup->addGroupButton($splitDropdownButton);
+        $buttonGroup->addButton($splitDropdownButton);
 
         return $buttonGroup;
     }
 
     /**
-     * @return \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonInterface[]
+     * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface[]
      */
     protected function getViewActions(): array
     {
@@ -265,5 +254,4 @@ class BrowserComponent extends Manager
 
         return $this;
     }
-
 }

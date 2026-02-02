@@ -9,9 +9,11 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\Toolbar;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableAction;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableActions;
@@ -34,6 +36,8 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     protected ConfigurationConsulter $configurationConsulter;
 
+    protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
+
     protected User $user;
 
     protected UserUrlGenerator $userUrlGenerator;
@@ -42,12 +46,13 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
         ConfigurationConsulter $configurationConsulter, User $user, Translator $translator, UrlGenerator $urlGenerator,
         ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
         DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, UserUrlGenerator $userUrlGenerator,
-        ClassnameUtilities $classnameUtilities
+        ClassnameUtilities $classnameUtilities, MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )
     {
         $this->configurationConsulter = $configurationConsulter;
         $this->user = $user;
         $this->userUrlGenerator = $userUrlGenerator;
+        $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
 
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
@@ -58,6 +63,11 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
+    }
+
+    public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
+    {
+        return $this->miniButtonToolBarRenderer;
     }
 
     public function getTableActions(): TableActions
@@ -150,7 +160,9 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
             $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_STATUS)
         );
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_PLATFORM_ADMINISTRATOR)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                User::class, User::PROPERTY_PLATFORM_ADMINISTRATOR
+            )
         );
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_ACTIVE)
@@ -168,16 +180,13 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
         $falseGlyph = new FontAwesomeGlyph('circle', ['text-danger']);
 
         // Add special features here
-        switch ($column->getName())
-        {
+        switch ($column->getName()) {
             // Exceptions that need post-processing go here ...
             case User::PROPERTY_STATUS :
-                if ($result->getStatus() == '1')
-                {
+                if ($result->getStatus() == '1') {
                     return $translator->trans('CourseAdmin', [], Manager::CONTEXT);
                 }
-                else
-                {
+                else {
                     return $translator->trans('Student', [], Manager::CONTEXT);
                 }
             case User::PROPERTY_PLATFORM_ADMINISTRATOR :
@@ -191,82 +200,85 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $result
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \QuickformException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
     {
         $translator = $this->getTranslator();
 
-        $toolbar = new Toolbar();
+        $buttonToolBar = new MiniButtonToolBar();
 
-        if ($this->getUser()->isPlatformAdministrator())
-        {
+        if ($this->getUser()->isPlatformAdministrator()) {
             $editUrl = $this->getUserUrlGenerator()->getUpdateUrl($result);
 
-            $toolbar->addItem(
-                new ToolbarItem(
-                    $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                    $editUrl, ToolbarItem::DISPLAY_ICON
+            $buttonToolBar->addButton(
+                new Button(
+                    label: $translator->trans('Edit', [], StringUtilities::LIBRARIES),
+                    inlineGlyph: new FontAwesomeGlyph('pencil-alt'), action: $editUrl,
+                    display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
                 )
             );
 
             $detailUrl = $this->getUserUrlGenerator()->getDetailUrl($result);
 
-            $toolbar->addItem(
-                new ToolBarItem(
-                    $translator->trans('Detail', [], Manager::CONTEXT), new FontAwesomeGlyph('info-circle'), $detailUrl,
-                    ToolbarItem::DISPLAY_ICON
+            $buttonToolBar->addButton(
+                new Button(
+                    label: $translator->trans('Detail', [], Manager::CONTEXT), inlineGlyph: new FontAwesomeGlyph(
+                    'info-circle'
+                ), action: $detailUrl, display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
                 )
             );
         }
 
-        if ($result->getId() != $this->getUser()->getId())
-        {
-            if ($this->getUser()->isPlatformAdministrator())
-            {
+        if ($result->getId() != $this->getUser()->getId()) {
+            if ($this->getUser()->isPlatformAdministrator()) {
                 $deleteUrl = $this->getUserUrlGenerator()->getDeleteUrl($result);
 
-                $toolbar->addItem(
-                    new ToolBarItem(
+                $buttonToolBar->addButton(
+                    new Button(
                         label: $translator->trans('Delete', [], StringUtilities::LIBRARIES),
-                        image: new FontAwesomeGlyph('times'), href: $deleteUrl, display: ToolbarItem::DISPLAY_ICON,
-                        confirmation: true, confirmationMessage: $this->getTranslator()->trans(
-                        'ConfirmChosenAction', [], StringUtilities::LIBRARIES
-                    )
+                        inlineGlyph: new FontAwesomeGlyph('times'), action: $deleteUrl,
+                        display: ButtonDisplayInterface::DISPLAY_ICON, confirmationMessage: $this->getTranslator()
+                        ->trans(
+                            'ConfirmChosenAction', [], StringUtilities::LIBRARIES
+                        ), classes: ['btn-link']
                     )
                 );
             }
-            else
-            {
-                $toolbar->addItem(
-                    new ToolBarItem(
-                        $translator->trans('DeleteNA', [], StringUtilities::LIBRARIES),
-                        new FontAwesomeGlyph('times', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
+            else {
+                $buttonToolBar->addButton(
+                    new Button(
+                        label: $translator->trans('DeleteNA', [], StringUtilities::LIBRARIES),
+                        inlineGlyph: new FontAwesomeGlyph('times', ['text-muted']),
+                        display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
                     )
                 );
             }
 
-            if ($this->getUser()->isPlatformAdministrator())
-            {
+            if ($this->getUser()->isPlatformAdministrator()) {
                 $changeUserUrl = $this->getUserUrlGenerator()->getChangeUserUrl($result);
 
-                $toolbar->addItem(
-                    new ToolBarItem(
-                        $translator->trans('LoginAsUser', [], Manager::CONTEXT), new FontAwesomeGlyph('mask'),
-                        $changeUserUrl, ToolbarItem::DISPLAY_ICON
+                $buttonToolBar->addButton(
+                    new Button(
+                        label: $translator->trans('LoginAsUser', [], Manager::CONTEXT),
+                        inlineGlyph: new FontAwesomeGlyph('mask'), action: $changeUserUrl,
+                        display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
                     )
                 );
             }
         }
-        else
-        {
-            $toolbar->addItem(
-                new ToolBarItem(
-                    $translator->trans('DeleteNA', [], StringUtilities::LIBRARIES),
-                    new FontAwesomeGlyph('times', ['text-muted']), null, ToolbarItem::DISPLAY_ICON
+        else {
+            $buttonToolBar->addButton(
+                new Button(
+                    label: $translator->trans('DeleteNA', [], StringUtilities::LIBRARIES),
+                    inlineGlyph: new FontAwesomeGlyph('times', ['text-muted']),
+                    display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
                 )
             );
         }
 
-        return $toolbar->render();
+        return $this->getMiniButtonToolBarRenderer()->render($buttonToolBar);
     }
 }

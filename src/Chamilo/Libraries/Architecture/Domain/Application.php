@@ -25,7 +25,6 @@ abstract class Application
     public const ACTION_CREATOR = 'Creator';
     public const ACTION_DELETER = 'Deleter';
     public const ACTION_UPDATER = 'Updater';
-
     public const PARAM_ACTION = 'go';
     public const PARAM_CONTEXT = 'application';
     public const PARAM_ERROR_MESSAGE = 'error_message';
@@ -33,7 +32,6 @@ abstract class Application
     public const PARAM_MESSAGES = 'messages';
     public const PARAM_MESSAGE_TYPE = 'message_type';
     public const PARAM_WARNING_MESSAGE = 'warning_message';
-
     public const RESULT_TYPE_CREATED = 'Created';
     public const RESULT_TYPE_DELETED = 'Deleted';
     public const RESULT_TYPE_MOVED = 'Moved';
@@ -56,10 +54,8 @@ abstract class Application
      */
     public function checkAuthorization(string $context, ?string $action = null): void
     {
-        if (!$this instanceof NoAuthenticationSupportInterface)
-        {
-            if (!$this->getUser() instanceof User)
-            {
+        if (!$this instanceof NoAuthenticationSupportInterface) {
+            if (!$this->getUser() instanceof User) {
                 throw new NotAllowedException();
             }
         }
@@ -90,8 +86,7 @@ abstract class Application
     {
         $notificationMessages = [];
 
-        foreach ($types as $key => $type)
-        {
+        foreach ($types as $key => $type) {
             $notificationMessages[] = new NotificationMessage($messages[$key], $type);
         }
 
@@ -147,23 +142,18 @@ abstract class Application
         string $succesMessageMultiple, ?string $context = null
     ): string
     {
-        if ($failures)
-        {
-            if ($count == 1)
-            {
+        if ($failures) {
+            if ($count == 1) {
                 $message = $failMessageSingle;
             }
-            else
-            {
+            else {
                 $message = $failMessageMultiple;
             }
         }
-        elseif ($count == 1)
-        {
+        elseif ($count == 1) {
             $message = $succesMessageSingle;
         }
-        else
-        {
+        else {
             $message = $succesMessageMultiple;
         }
 
@@ -180,29 +170,23 @@ abstract class Application
         string $type = Application::RESULT_TYPE_CREATED
     ): string
     {
-        if ($count == 1)
-        {
+        if ($count == 1) {
             $param = ['OBJECT' => $singleObject];
 
-            if ($failures)
-            {
+            if ($failures) {
                 $message = 'ObjectNot' . $type;
             }
-            else
-            {
+            else {
                 $message = 'Object' . $type;
             }
         }
-        else
-        {
+        else {
             $param = ['OBJECTS' => $multipleObject];
 
-            if ($failures)
-            {
+            if ($failures) {
                 $message = 'ObjectsNot' . $type;
             }
-            else
-            {
+            else {
                 $message = 'Objects' . $type;
             }
         }
@@ -229,8 +213,7 @@ abstract class Application
     public function redirectWithMessage(?string $message = null, bool $errorMessage = false, array $parameters = []
     ): RedirectResponse
     {
-        if ($message)
-        {
+        if ($message) {
             $messageType = (!$errorMessage) ? NotificationMessage::TYPE_INFO : NotificationMessage::TYPE_DANGER;
             $this->getNotificationMessageManager()->addMessage(new NotificationMessage($message, $messageType));
         }
@@ -242,8 +225,7 @@ abstract class Application
     {
         $html = [];
 
-        if ($this->getPageConfiguration()->isFullPage())
-        {
+        if ($this->getPageConfiguration()->isFullPage()) {
             $html[] = '<div class="clearfix"></div>';
             $html[] = '</div>';
 
@@ -258,26 +240,21 @@ abstract class Application
 
     public function renderHeader(string $pageTitle = ''): string
     {
-        if ($this->getAction() != static::DEFAULT_ACTION)
-        {
+        if ($this->getAction() != static::DEFAULT_ACTION) {
             $this->getBreadcrumbGenerator()->addComponentBreadcrumb($this);
         }
 
-        if (!$pageTitle)
-        {
+        if (!$pageTitle) {
             $pageTitle = $this->renderPageTitle();
         }
 
         $pageConfiguration = $this->getPageConfiguration();
-        $pageConfiguration->setApplication($this);
-        $pageConfiguration->setTitle($this->getPageTitle());
 
         $html = [];
 
-        $html[] = $this->getHeaderRenderer()->render();
+        $html[] = $this->getHeaderRenderer()->render($this->getUser());
 
-        if ($pageConfiguration->isFullPage())
-        {
+        if ($pageConfiguration->isFullPage()) {
             $html[] = '<div class="row">';
             $html[] = '<div class="col-xs-12">';
             $html[] = $pageTitle;
@@ -291,8 +268,7 @@ abstract class Application
         $messages = $session->get(self::PARAM_MESSAGES);
 
         $session->remove(self::PARAM_MESSAGES);
-        if (is_array($messages))
-        {
+        if (is_array($messages)) {
             $html[] = $this->display_messages($messages[self::PARAM_MESSAGE], $messages[self::PARAM_MESSAGE_TYPE]);
         }
 
@@ -303,20 +279,17 @@ abstract class Application
         $message = $request->query->get(self::PARAM_MESSAGE);
         $type = $request->query->get(self::PARAM_MESSAGE_TYPE);
 
-        if ($message)
-        {
+        if ($message) {
             $html[] = $this->display_message($message, $type);
         }
 
         $message = $request->query->get(self::PARAM_ERROR_MESSAGE);
-        if ($message)
-        {
+        if ($message) {
             $html[] = $this->display_error_message($message);
         }
 
         $message = $request->query->get(self::PARAM_WARNING_MESSAGE);
-        if ($message)
-        {
+        if ($message) {
             $html[] = $this->display_warning_message($message);
         }
 
@@ -327,8 +300,7 @@ abstract class Application
     {
         $breadcrumbTrail = $this->getBreadcrumbTrail();
 
-        if ($breadcrumbTrail->size() > 0)
-        {
+        if ($breadcrumbTrail->size() > 0) {
             $pageTitle = $breadcrumbTrail->getLast()->getName();
 
             return '<h3 id="page-title" title="' . htmlentities(strip_tags($pageTitle)) . '">' . $pageTitle . '</h3>';

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Error\Architecture\Response;
 
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use Exception;
@@ -20,10 +19,8 @@ class ExceptionResponse extends Response
     /**
      * @throws \Exception
      */
-    public function __construct(Exception $exception, ?Application $application = null)
+    public function __construct(Exception $exception)
     {
-        $this->getPageConfiguration()->setApplication($application);
-
         $html = [];
 
         $html[] = $this->getHeaderRenderer()->render();

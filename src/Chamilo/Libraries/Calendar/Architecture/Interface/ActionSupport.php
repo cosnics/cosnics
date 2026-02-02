@@ -12,9 +12,8 @@ use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
  */
 interface ActionSupport
 {
-
     /**
-     * @return \Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem[]
+     * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button[]
      */
     public function getEventActions(Event $event): array;
 }

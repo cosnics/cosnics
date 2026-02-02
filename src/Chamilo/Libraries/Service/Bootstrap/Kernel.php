@@ -91,8 +91,7 @@ class Kernel
     {
         $context = $this->getContext();
 
-        if (!isset($context))
-        {
+        if (!isset($context)) {
             throw new Exception('Must call configureContext before buildApplication');
         }
 
@@ -117,10 +116,8 @@ class Kernel
             'Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface'
         );
 
-        if ($applicationRequiresAuthentication)
-        {
-            if (!$this->getAuthenticationValidator()->validate())
-            {
+        if ($applicationRequiresAuthentication) {
+            if (!$this->getAuthenticationValidator()->validate()) {
                 throw new NotAuthenticatedException(true);
             }
         }
@@ -133,12 +130,10 @@ class Kernel
      */
     protected function checkPlatformAvailability(): Kernel
     {
-        if ($this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'maintenance_block_access']))
-        {
+        if ($this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'maintenance_block_access'])) {
             $asAdmin = $this->getSession()->get('_as_admin');
 
-            if ($this->getUser() instanceof User && !$this->getUser()->isPlatformAdministrator() && !$asAdmin)
-            {
+            if ($this->getUser() instanceof User && !$this->getUser()->isPlatformAdministrator() && !$asAdmin) {
                 throw new PlatformNotAvailableException('Platform temporarily unavailable due to maintenance.');
             }
         }
@@ -150,23 +145,19 @@ class Kernel
     {
         $getContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
 
-        if (!$getContext)
-        {
+        if (!$getContext) {
             $postContext = $this->getRequest()->request->get(Application::PARAM_CONTEXT);
 
-            if (!$postContext)
-            {
+            if (!$postContext) {
                 $this->getRequest()->query->set(Application::PARAM_CONTEXT, 'Chamilo\Core\Home');
 
                 $context = 'Chamilo\Core\Home';
             }
-            else
-            {
+            else {
                 $context = $postContext;
             }
         }
-        else
-        {
+        else {
             $context = $getContext;
         }
 
@@ -216,8 +207,7 @@ class Kernel
 
     public function getContext(): ?string
     {
-        if (!isset($this->context))
-        {
+        if (!isset($this->context)) {
             $this->context =
                 $this->getRequest()->getFromRequestOrQuery(Application::PARAM_CONTEXT, HomeManager::CONTEXT);
         }
@@ -255,7 +245,7 @@ class Kernel
         return new PlatformNotAvailableResponse(
             $this->configurationConsulter->getSetting(
                 ['Chamilo\Core\Admin', 'maintenance_warning_message']
-            ), $this->getApplication()
+            )
         );
     }
 
@@ -296,21 +286,18 @@ class Kernel
         $state = $this->getRequest()->query->get(self::PARAM_STATE);
         $session_state = $this->getRequest()->query->get(self::PARAM_SESSION_STATE); // Not provided in OAUTH2 v2.0
 
-        if (!$code || !$state)
-        {
+        if (!$code || !$state) {
             return null;
         }
         $decodedState = base64_decode($state);
 
-        if (!$decodedState)
-        {
+        if (!$decodedState) {
             return null;
         }
 
         $stateParameters = json_decode($decodedState, true);
 
-        if (!is_array($stateParameters) || !array_key_exists('landingPageParameters', $stateParameters))
-        {
+        if (!is_array($stateParameters) || !array_key_exists('landingPageParameters', $stateParameters)) {
             return null;
         }
 
@@ -321,8 +308,7 @@ class Kernel
 
         $landingPageParameters[self::PARAM_STATE] = base64_encode(json_encode($stateParameters));
 
-        if ($session_state)
-        {
+        if ($session_state) {
             $landingPageParameters[self::PARAM_SESSION_STATE] = $session_state;
         }
 
@@ -336,25 +322,21 @@ class Kernel
      */
     public function launch(): void
     {
-        try
-        {
+        try {
             $this->configureTimezone()->configureContext()->handleOAuth2();
             $response = $this->checkAuthentication()->checkPlatformAvailability()->buildApplication()->traceVisit()
                 ->runApplication();
         }
-        catch (NotAuthenticatedException)
-        {
+        catch (NotAuthenticatedException) {
             $response = $this->getNotAuthenticatedResponse();
         }
-        catch (PlatformNotAvailableException)
-        {
+        catch (PlatformNotAvailableException) {
             $response = $this->getPlatformNotAvailableResponse();
         }
-        catch (UserException $exception)
-        {
+        catch (UserException $exception) {
             $this->getExceptionLogger()->logException($exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING);
 
-            $response = new ExceptionResponse($exception, $this->getApplication());
+            $response = new ExceptionResponse($exception);
         }
 
         $this->sendResponse($response);
@@ -367,8 +349,7 @@ class Kernel
     {
         $application = $this->getApplication();
 
-        if (!isset($application))
-        {
+        if (!isset($application)) {
             throw new Exception('Must call buildApplication before runApplication');
         }
 
@@ -391,8 +372,7 @@ class Kernel
             $applicationClassName, NoVisitTraceComponentInterface::class
         );
 
-        if ($applicationRequiresTracing && $this->getUser() instanceof User)
-        {
+        if ($applicationRequiresTracing && $this->getUser() instanceof User) {
             $this->getEventDispatcher()->dispatch(
                 new AfterUserEnterPageEvent($this->getUser(), $this->getRequest()->getRequestUri())
             );

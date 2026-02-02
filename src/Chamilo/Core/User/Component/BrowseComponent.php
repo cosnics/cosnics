@@ -8,13 +8,12 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedE
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Form\ButtonSearchForm;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Form\ButtonSearchForm;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,29 +23,26 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class BrowseComponent extends Manager
 {
-
-    private ButtonToolBarRenderer $buttonToolbarRenderer;
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \TableException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function run(): Response
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        if (!$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
         $html = [];
 
         $html[] = $this->renderHeader();
-        $html[] = $this->getButtonToolbarRenderer()->render() . '<br />';
+        $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar()) . '<br />';
         $html[] = $this->renderTable();
         $html[] = $this->renderFooter();
 
@@ -58,38 +54,31 @@ class BrowseComponent extends Manager
         return $this->getService(UserTableRenderer::class);
     }
 
-    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
+    public function getButtonToolBar(): ButtonToolBar
     {
-        if (!isset($this->buttonToolbarRenderer))
-        {
+        $buttonToolBar = new ButtonToolBar(
+            $this->getUrlGenerator()->fromParameters(
+                [self::PARAM_CONTEXT => self::CONTEXT, self::PARAM_ACTION => self::ACTION_BROWSE]
+            )
+        );
 
-            $buttonToolbar = new ButtonToolBar(
-                $this->getUrlGenerator()->fromParameters(
-                    [self::PARAM_CONTEXT => self::CONTEXT, self::PARAM_ACTION => self::ACTION_BROWSE]
+        $commonActions = new ButtonGroup();
+        $translator = $this->getTranslator();
+
+        if ($this->getUser()->isPlatformAdministrator()) {
+            $commonActions->addButton(
+                new Button(
+                    $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
+                    $this->getUrlGenerator()->fromParameters(
+                        [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_CREATE]
+                    ), ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
                 )
             );
-
-            $commonActions = new ButtonGroup();
-            $translator = $this->getTranslator();
-
-            if ($this->getUser()->isPlatformAdministrator())
-            {
-                $commonActions->addGroupButton(
-                    new Button(
-                        $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
-                        $this->getUrlGenerator()->fromParameters(
-                            [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_CREATE]
-                        ), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                    )
-                );
-            }
-
-            $buttonToolbar->addButton($commonActions);
-
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
 
-        return $this->buttonToolbarRenderer;
+        $buttonToolBar->addButton($commonActions);
+
+        return $buttonToolBar;
     }
 
     public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
@@ -106,7 +95,7 @@ class BrowseComponent extends Manager
         $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE);
         $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL);
 
-        return $this->getButtonToolbarRenderer()->getConditions($search_properties);
+        return $this->getButtonToolBarRenderer()->getConditions($search_properties);
     }
 
     /**
@@ -118,7 +107,7 @@ class BrowseComponent extends Manager
     protected function renderTable(): string
     {
         $this->getRequest()->query->set(
-            ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, $this->getButtonToolbarRenderer()->getSearchForm()->getQuery()
+            ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, $this->getButtonToolBarRenderer()->getSearchForm()->getQuery()
         );
 
         $totalNumberOfItems = $this->getUserService()->countUsers($this->getUserTableCondition());

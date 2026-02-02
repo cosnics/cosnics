@@ -7,9 +7,11 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\Toolbar;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableAction;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableActions;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableResultPosition;
@@ -32,13 +34,17 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
 
     protected ConfigurationConsulter $configurationConsulter;
 
+    protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
+
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, UrlGenerator $urlGenerator,
         ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, ClassnameUtilities $classnameUtilities
+        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
+        ClassnameUtilities $classnameUtilities, MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )
     {
         $this->configurationConsulter = $configurationConsulter;
+        $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
 
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
@@ -49,6 +55,11 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
     public function getConfigurationConsulter(): ConfigurationConsulter
     {
         return $this->configurationConsulter;
+    }
+
+    public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
+    {
+        return $this->miniButtonToolBarRenderer;
     }
 
     public function getTableActions(): TableActions
@@ -86,8 +97,7 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
 
         $showEmail = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'show_email_addresses']);
 
-        if ($showEmail)
-        {
+        if ($showEmail) {
             $this->addColumn(
                 $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_EMAIL)
             );
@@ -97,19 +107,24 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
             $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_STATUS)
         );
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_PLATFORM_ADMINISTRATOR)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+                User::class, User::PROPERTY_PLATFORM_ADMINISTRATOR
+            )
         );
     }
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $result
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \QuickformException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
     {
         $urlGenerator = $this->getUrlGenerator();
         $translator = $this->getTranslator();
 
-        $toolbar = new Toolbar();
+        $buttonToolBar = new MiniButtonToolBar();
 
         $subscribeUrl = $urlGenerator->fromRequest([
             Application::PARAM_ACTION => Manager::ACTION_SUBSCRIBE,
@@ -117,13 +132,13 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
 
         ]);
 
-        $toolbar->addItem(
-            new ToolbarItem(
+        $buttonToolBar->addButton(
+            new Button(
                 $translator->trans('UnsubscribeSelected', [], Manager::CONTEXT), new FontAwesomeGlyph('plus-circle'),
-                $subscribeUrl, ToolbarItem::DISPLAY_ICON
+                $subscribeUrl, ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
             )
         );
 
-        return $toolbar->render();
+        return $this->getMiniButtonToolBarRenderer()->render($buttonToolBar);
     }
 }

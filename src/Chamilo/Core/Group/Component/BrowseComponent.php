@@ -18,14 +18,14 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\Button;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Trait\ButtonToolBarSearchFormTrait;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait\ButtonToolBarSearchFormTrait;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\Toolbar;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\ToolbarItem;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ContentTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
@@ -45,8 +45,6 @@ class BrowseComponent extends Manager
     public const TAB_SUBGROUPS = 0;
     public const TAB_USERS = 1;
 
-    private ButtonToolBarRenderer $buttonToolbarRenderer;
-
     private ?Group $group;
 
     private ?string $groupIdentifier = null;
@@ -54,17 +52,17 @@ class BrowseComponent extends Manager
     private ?Group $rootGroup;
 
     /**
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function run(): Response
     {
-        if (!$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -73,25 +71,75 @@ class BrowseComponent extends Manager
         $html = [];
 
         $html[] = $this->renderHeader();
-        $html[] = $this->getButtonToolbarRenderer()->render() . '<br />';
+        $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar()) . '<br />';
         $html[] = $this->renderTabs();
         $html[] = $this->renderFooter();
 
         return new Response(implode(PHP_EOL, $html));
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
+    public function getButtonToolBar(): ButtonToolBar
+    {
+        $translator = $this->getTranslator();
+
+        $buttonToolBar = new ButtonToolBar(
+            $this->getUrlGenerator()->fromParameters(
+                [
+                    self::PARAM_CONTEXT => Manager::CONTEXT,
+                    self::PARAM_ACTION => self::ACTION_BROWSER,
+                    self::PARAM_GROUP_ID => $this->getGroupIdentifier()
+                ]
+            )
+        );
+        $commonActions = new ButtonGroup();
+
+        $commonActions->addButton(
+            new Button(
+                $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
+                $this->getGroupUrlGenerator()->getCreateUrl($this->getGroup()),
+                ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+            )
+        );
+
+        $commonActions->addButton(
+            new Button(
+                $translator->trans('Root', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'),
+                $this->getGroupUrlGenerator()->getViewUrl($this->getRootGroup()),
+                ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+            )
+        );
+
+        $commonActions->addButton(
+            new Button(
+                $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
+                $this->getUrlGenerator()->fromParameters(
+                    [
+                        self::PARAM_CONTEXT => Manager::CONTEXT,
+                        self::PARAM_ACTION => self::ACTION_BROWSER,
+                        self::PARAM_GROUP_ID => $this->getGroupIdentifier()
+                    ]
+                ), ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+            )
+        );
+        $buttonToolBar->addButton($commonActions);
+
+        return $buttonToolBar;
+    }
+
     public function getButtonToolBarSearchProperties(?string $type = null): array
     {
         $searchProperties = [];
 
-        if ($type === Group::class)
-        {
+        if ($type === Group::class) {
             $searchProperties[] = new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME);
             $searchProperties[] = new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION);
             $searchProperties[] = new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE);
         }
-        elseif ($type === SubscribedUser::class)
-        {
+        elseif ($type === SubscribedUser::class) {
             $searchProperties[] = new PropertyConditionVariable(SubscribedUser::class, User::PROPERTY_GIVEN_NAME);
             $searchProperties[] = new PropertyConditionVariable(SubscribedUser::class, User::PROPERTY_SURNAME);
             $searchProperties[] = new PropertyConditionVariable(SubscribedUser::class, User::PROPERTY_USERNAME);
@@ -104,65 +152,9 @@ class BrowseComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function getButtonToolbarRenderer(): ButtonToolBarRenderer
-    {
-        if (!isset($this->buttonToolbarRenderer))
-        {
-            $translator = $this->getTranslator();
-
-            $buttonToolbar = new ButtonToolBar(
-                $this->getUrlGenerator()->fromParameters(
-                    [
-                        self::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => self::ACTION_BROWSER,
-                        self::PARAM_GROUP_ID => $this->getGroupIdentifier()
-                    ]
-                )
-            );
-            $commonActions = new ButtonGroup();
-
-            $commonActions->addGroupButton(
-                new Button(
-                    $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
-                    $this->getGroupUrlGenerator()->getCreateUrl($this->getGroup()), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
-
-            $commonActions->addGroupButton(
-                new Button(
-                    $translator->trans('Root', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'),
-                    $this->getGroupUrlGenerator()->getViewUrl($this->getRootGroup()),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
-
-            $commonActions->addGroupButton(
-                new Button(
-                    $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
-                    $this->getUrlGenerator()->fromParameters(
-                        [
-                            self::PARAM_CONTEXT => Manager::CONTEXT,
-                            self::PARAM_ACTION => self::ACTION_BROWSER,
-                            self::PARAM_GROUP_ID => $this->getGroupIdentifier()
-                        ]
-                    ), ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
-            $buttonToolbar->addButton($commonActions);
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
-        }
-
-        return $this->buttonToolbarRenderer;
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     */
     public function getGroup(): Group
     {
-        if (!isset($this->group))
-        {
+        if (!isset($this->group)) {
             $this->group = $this->getGroupService()->findGroupByIdentifier($this->getGroupIdentifier());
         }
 
@@ -170,8 +162,10 @@ class BrowseComponent extends Manager
     }
 
     /**
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \QuickformException
      */
     public function getGroupDetails(): string
     {
@@ -180,29 +174,33 @@ class BrowseComponent extends Manager
 
         $html = [];
 
-        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
+        $buttonToolBar = new MiniButtonToolBar();
 
-        $toolbar->addItem(
-            new ToolbarItem(
-                $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                $this->getGroupUrlGenerator()->getUpdateUrl($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
+        $buttonToolBar->addButton(
+            new Button(
+                label: $translator->trans('Edit', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
+                'pencil-alt'
+            ), action: $this->getGroupUrlGenerator()->getUpdateUrl($group),
+                display: ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, classes: ['btn-link']
             )
         );
 
-        if ($this->getGroup()->getId() != $this->getRootGroup()->getId())
-        {
-            $toolbar->addItem(
-                new ToolbarItem(
-                    $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                    $this->getGroupUrlGenerator()->getDeleteUrl($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
+        if ($this->getGroup()->getId() != $this->getRootGroup()->getId()) {
+            $buttonToolBar->addButton(
+                new Button(
+                    label: $translator->trans('Delete', [], StringUtilities::LIBRARIES),
+                    inlineGlyph: new FontAwesomeGlyph('times'), action: $this->getGroupUrlGenerator()->getDeleteUrl(
+                    $group
+                ), display: ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, classes: ['btn-link']
                 )
             );
         }
 
-        $toolbar->addItem(
-            new ToolbarItem(
-                $translator->trans('AddUsers'), new FontAwesomeGlyph('plus-circle'),
-                $this->getGroupUrlGenerator()->getSubscribeUrl($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
+        $buttonToolBar->addButton(
+            new Button(
+                label: $translator->trans('AddUsers'), inlineGlyph: new FontAwesomeGlyph('plus-circle'),
+                action: $this->getGroupUrlGenerator()->getSubscribeUrl($group),
+                display: ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, classes: ['btn-link']
             )
         );
 
@@ -211,21 +209,21 @@ class BrowseComponent extends Manager
 
         $visible = ($subscribedUserCount > 0);
 
-        if ($visible)
-        {
-            $toolbar->addItem(
-                new ToolbarItem(
-                    $translator->trans('Truncate'), new FontAwesomeGlyph('trash-alt'),
-                    $this->getGroupUrlGenerator()->getTruncateUrl($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
+        if ($visible) {
+            $buttonToolBar->addButton(
+                new Button(
+                    label: $translator->trans('Truncate'), inlineGlyph: new FontAwesomeGlyph('trash-alt'),
+                    action: $this->getGroupUrlGenerator()->getTruncateUrl($group),
+                    display: ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, classes: ['btn-link']
                 )
             );
         }
-        else
-        {
-            $toolbar->addItem(
-                new ToolbarItem(
-                    $translator->trans('TruncateNA'), new FontAwesomeGlyph('trash-alt', ['text-muted']), null,
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+        else {
+            $buttonToolBar->addButton(
+                new Button(
+                    label: $translator->trans('TruncateNA'), inlineGlyph: new FontAwesomeGlyph(
+                    'trash-alt', ['text-muted']
+                ), display: ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, classes: ['btn-link']
                 )
             );
         }
@@ -234,15 +232,14 @@ class BrowseComponent extends Manager
 
         $description = $group->getDescription();
 
-        if ($description)
-        {
+        if ($description) {
             $html[] =
                 '<b>' . $translator->trans('Description', [], StringUtilities::LIBRARIES) . '</b>: ' . $description .
                 '<br />';
         }
 
         $html[] = '<br />';
-        $html[] = $toolbar->render();
+        $html[] = $this->getMiniButtonToolBarRenderer()->render($buttonToolBar);
 
         return implode(PHP_EOL, $html);
     }
@@ -253,8 +250,7 @@ class BrowseComponent extends Manager
      */
     public function getGroupIdentifier(): string
     {
-        if (!isset($this->groupIdentifier))
-        {
+        if (!isset($this->groupIdentifier)) {
             $this->groupIdentifier =
                 $this->getRequest()->query->get(self::PARAM_GROUP_ID, $this->getRootGroup()->getId());
         }
@@ -272,8 +268,7 @@ class BrowseComponent extends Manager
 
         $searchCondition = $this->getButtonToolBarSearchCondition(Group::class);
 
-        if ($searchCondition instanceof Condition)
-        {
+        if ($searchCondition instanceof Condition) {
             $conditions[] = $searchCondition;
         }
 
@@ -305,6 +300,11 @@ class BrowseComponent extends Manager
         return $this->getService(JsTreeRenderer::class);
     }
 
+    public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
+    {
+        return $this->getService(MiniButtonToolBarRenderer::class);
+    }
+
     public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
         return $this->getService(RequestTableParameterValuesCompiler::class);
@@ -316,8 +316,7 @@ class BrowseComponent extends Manager
      */
     public function getRootGroup(): Group
     {
-        if (!isset($this->rootGroup))
-        {
+        if (!isset($this->rootGroup)) {
             $this->rootGroup = $this->getGroupService()->findRootGroup();
         }
 
@@ -455,6 +454,7 @@ class BrowseComponent extends Manager
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function renderTabs(): string
     {

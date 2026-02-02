@@ -4,12 +4,12 @@ namespace Chamilo\Libraries\UserInterface\Table\Service;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonGroup;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropDownButton;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
-use Chamilo\Libraries\UserInterface\ActionBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableParameterValues;
@@ -27,17 +27,27 @@ class PagerRenderer
     public const PAGE_SELECTOR_TRANSLATION_TITLE = 'title';
     public const PAGE_SELECTOR_TRANSLATION_TITLE_ALL = 'title_all';
 
+    protected ButtonToolBarRenderer $buttonToolBarRenderer;
+
     protected Pager $pager;
 
     protected Translator $translator;
 
     protected UrlGenerator $urlGenerator;
 
-    public function __construct(Translator $translator, Pager $pager, UrlGenerator $urlGenerator)
+    public function __construct(
+        Translator $translator, Pager $pager, UrlGenerator $urlGenerator, ButtonToolBarRenderer $buttonToolBarRenderer
+    )
     {
         $this->translator = $translator;
         $this->pager = $pager;
         $this->urlGenerator = $urlGenerator;
+        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
+    }
+
+    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
+    {
+        return $this->buttonToolBarRenderer;
     }
 
     public function getPager(): Pager
@@ -86,12 +96,10 @@ class PagerRenderer
         $html[] = '<li' . ($isDisabled ? ' class="disabled"' : '') . '>';
         $symbolHtml = '<span aria-hidden="true">' . $inlineGlyph->render() . '</span>';
 
-        if ($isDisabled)
-        {
+        if ($isDisabled) {
             $html[] = $symbolHtml;
         }
-        else
-        {
+        else {
             $html[] = '<a href="' . $this->getUrlGenerator()->fromRequest([$pageNumberParameterName => $targetPage]) .
                 '" aria-label="' . $translation . '">' . $symbolHtml . '</a>';
         }
@@ -105,12 +113,12 @@ class PagerRenderer
      * @param string[] $translationVariables
      *
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function renderItemsPerPageSelector(
         TableParameterValues $parameterValues, string $itemsPerPageParameterName, array $translationVariables = []
     ): string
     {
-
         $buttonToolBar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();
         $buttonToolBar->addButton($buttonGroup);
@@ -125,15 +133,13 @@ class PagerRenderer
 
         $numberOfItemsPerPage = $parameterValues->getNumberOfItemsPerPage();
 
-        if ($numberOfItemsPerPage >= $parameterValues->getTotalNumberOfItems())
-        {
+        if ($numberOfItemsPerPage >= $parameterValues->getTotalNumberOfItems()) {
             $dropDownButtonLabel = $translator->trans(
                 $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL], [],
                 $translationVariables[Application::PARAM_CONTEXT]
             );
         }
-        else
-        {
+        else {
             $dropDownButtonLabel = $translator->trans(
                 $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE], ['{NUMBER}' => $numberOfItemsPerPage],
                 $translationVariables[Application::PARAM_CONTEXT]
@@ -141,18 +147,17 @@ class PagerRenderer
         }
 
         $dropDownButton =
-            new DropDownButton($dropDownButtonLabel, null, ButtonDisplayInterface::DISPLAY_LABEL, ['btn-sm'],
+            new DropDownButtonCollection($dropDownButtonLabel, null, ButtonDisplayInterface::DISPLAY_LABEL, ['btn-sm'],
                 ['dropdown-menu-right']);
-        $buttonGroup->addGroupButton($dropDownButton);
+        $buttonGroup->addButton($dropDownButton);
 
         for (
             $nr = Pager::DISPLAY_PER_INCREMENT; $nr <= $parameterValues->getTotalNumberOfItems() && $nr <= 100;
             $nr += Pager::DISPLAY_PER_INCREMENT
-        )
-        {
+        ) {
             $numberrOfRowsOption = ($nr / $parameterValues->getNumberOfColumnsPerPage());
 
-            $dropDownButton->addDropDownButton(
+            $dropDownButton->addButton(
                 new SubButton(
                     $translator->trans(
                         $translationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW], ['{NUMBER}' => $nr],
@@ -165,9 +170,8 @@ class PagerRenderer
             );
         }
 
-        if ($parameterValues->getTotalNumberOfItems() < Pager::DISPLAY_PER_PAGE_LIMIT)
-        {
-            $dropDownButton->addDropDownButton(
+        if ($parameterValues->getTotalNumberOfItems() < Pager::DISPLAY_PER_PAGE_LIMIT) {
+            $dropDownButton->addButton(
                 new SubButton(
                     $translator->trans(
                         $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL], [],
@@ -180,12 +184,10 @@ class PagerRenderer
             );
         }
 
-        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-
         $html = [];
 
         $html[] = '<div class="pull-right">';
-        $html[] = $buttonToolBarRenderer->render();
+        $html[] = $this->getButtonToolBarRenderer()->render($buttonToolBar);
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -219,8 +221,7 @@ class PagerRenderer
         $html[] = '<nav class="pull-right">';
         $html[] = '<ul class="pagination">';
 
-        if ($numberOfPages > 1)
-        {
+        if ($numberOfPages > 1) {
             $currentPageNumber = $parameterValues->getPageNumber();
 
             $isDisabled = ($currentPageNumber == 1);
@@ -235,8 +236,7 @@ class PagerRenderer
                 $translator->trans('Previous', [], StringUtilities::LIBRARIES), $currentPageNumber - 1
             );
 
-            for ($i = $start; $i <= $end; $i ++)
-            {
+            for ($i = $start; $i <= $end; $i ++) {
                 $html[] = '<li' . ($currentPageNumber == $i ? ' class="active"' : '') . '><a href="' .
                     $this->getUrlGenerator()->fromRequest([$pageNumberParameterName => $i]) . '">' . $i . '</a></li>';
             }
@@ -254,8 +254,7 @@ class PagerRenderer
             );
         }
 
-        if ($includeRange)
-        {
+        if ($includeRange) {
             $html[] = '<li class="disabled">';
             $html[] = '<span>';
             $html[] = $this->renderCurrentRange($parameterValues);
@@ -281,47 +280,39 @@ class PagerRenderer
             $parameterValues->getNumberOfItemsPerPage(), $parameterValues->getTotalNumberOfItems()
         );
 
-        if ($pageLimit % 2 == 0)
-        {
+        if ($pageLimit % 2 == 0) {
             $itemsBefore = ceil($pageLimit / 2);
             $itemsAfter = $pageLimit - 1 - $itemsBefore;
         }
-        else
-        {
+        else {
             $itemsBefore = $itemsAfter = ($pageLimit - 1) / 2;
         }
 
         $calculatedStartPage = $parameterValues->getPageNumber() - $itemsBefore;
         $calculatedEndPage = $parameterValues->getPageNumber() + $itemsAfter;
 
-        if ($calculatedStartPage < 1 && $calculatedEndPage > $numberOfPages)
-        {
+        if ($calculatedStartPage < 1 && $calculatedEndPage > $numberOfPages) {
             $startPage = 1;
             $endPage = $numberOfPages;
         }
-        elseif ($calculatedStartPage < 1 && $calculatedEndPage <= $numberOfPages)
-        {
+        elseif ($calculatedStartPage < 1 && $calculatedEndPage <= $numberOfPages) {
             $startPage = 1;
             $calculatedEndPage = $startPage + $pageLimit - 1;
 
             $endPage = min($calculatedEndPage, $numberOfPages);
         }
-        elseif ($calculatedStartPage >= 1 && $calculatedEndPage > $numberOfPages)
-        {
+        elseif ($calculatedStartPage >= 1 && $calculatedEndPage > $numberOfPages) {
             $endPage = $numberOfPages;
             $calculatedStartPage = $endPage - $pageLimit + 1;
 
-            if ($calculatedStartPage < 1)
-            {
+            if ($calculatedStartPage < 1) {
                 $startPage = 1;
             }
-            else
-            {
+            else {
                 $startPage = $calculatedStartPage;
             }
         }
-        else
-        {
+        else {
             $startPage = $calculatedStartPage;
             $endPage = $calculatedEndPage;
         }

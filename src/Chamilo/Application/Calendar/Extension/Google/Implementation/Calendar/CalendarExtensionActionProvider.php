@@ -7,9 +7,9 @@ use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\DropDownButton;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\SubButton;
-use Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonDisplayInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
 
@@ -41,7 +41,7 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
     }
 
     /**
-     * @return \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonInterface[]
+     * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface[]
      */
     public function getAdditional(Application $application): array
     {
@@ -52,7 +52,7 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
 
         $translator = $this->getTranslator();
 
-        $dropdownButton = new DropDownButton(
+        $dropdownButton = new DropDownButtonCollection(
             $translator->trans('TypeName', [], Manager::CONTEXT), new FontAwesomeGlyph('google', [], null, 'fab'),
             ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, [], ['dropdown-menu-right']
         );
@@ -66,7 +66,7 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
                 [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_LOGIN]
             );
 
-            $dropdownButton->addDropDownButton(
+            $dropdownButton->addButton(
                 new SubButton(
                     $translator->trans('GoogleCalendarLogin', [], Manager::CONTEXT),
                     new FontAwesomeGlyph('sign-in-alt'), $link
@@ -79,7 +79,7 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
                 [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_LOGOUT]
             );
 
-            $dropdownButton->addDropDownButton(
+            $dropdownButton->addButton(
                 new SubButton(
                     $translator->trans('GoogleCalendarLogout', [], Manager::CONTEXT),
                     new FontAwesomeGlyph('sign-out-alt'), $link
@@ -96,7 +96,7 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
     }
 
     /**
-     * @return \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Interface\ButtonInterface[]
+     * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface[]
      */
     public function getPrimary(Application $application): array
     {
