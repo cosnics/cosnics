@@ -16,7 +16,6 @@ use Microsoft\Graph\GraphServiceClient;
  */
 class CalendarRepository
 {
-
     private GraphServiceClient $graphServiceClient;
 
     public function __construct(GraphServiceClient $graphServiceClient)
@@ -31,8 +30,7 @@ class CalendarRepository
         string $userIdentifier, string $calendarIdentifier, int $fromDate, int $toDate
     ): array
     {
-        try
-        {
+        try {
             $configuration = new CalendarViewRequestBuilderGetRequestConfiguration(
                 queryParameters: new CalendarViewRequestBuilderGetQueryParameters(
                     count: true, endDateTime: date('c', $toDate), startDateTime: date('c', $fromDate), top: 600
@@ -43,8 +41,7 @@ class CalendarRepository
                 $calendarIdentifier
             )->calendarView()->get($configuration)->wait()->getValue();
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             return [];
         }
     }
@@ -54,21 +51,18 @@ class CalendarRepository
      */
     public function getCalendarByIdentifier(string $userIdentifier, string $calendarIdentifier): Calendar
     {
-        try
-        {
+        try {
             $calendar = $this->getGraphServiceClient()->users()->byUserId($userIdentifier)->calendars()->byCalendarId(
                 $calendarIdentifier
             )->get()->wait();
 
-            if (!$calendar instanceof Calendar)
-            {
+            if (!$calendar instanceof Calendar) {
                 throw new CalendarNotFoundException($userIdentifier, $calendarIdentifier);
             }
 
             return $calendar;
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             throw new CalendarNotFoundException($userIdentifier, $calendarIdentifier);
         }
     }
@@ -83,13 +77,11 @@ class CalendarRepository
      */
     public function listOwnedCalendars(string $azureUserIdentifier): array
     {
-        try
-        {
+        try {
             return $this->getGraphServiceClient()->users()->byUserId($azureUserIdentifier)->calendars()->get()->wait()
                 ->getValue();
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             return [];
         }
     }

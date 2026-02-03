@@ -10,7 +10,6 @@ use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
  */
 class Sha1HashingAlgorithm extends HashingAlgorithm
 {
-
     public function hashFile(string $filePath): string
     {
         return sha1_file($filePath);

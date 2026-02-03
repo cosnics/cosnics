@@ -4,9 +4,12 @@ namespace Chamilo\Libraries\Protocol\Security\Factory;
 use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
 use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
 
+/**
+ * @package Chamilo\Libraries\Protocol\Security\Factory
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 class HashingAlgorithmFactory
 {
-
     /**
      * @var \Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm[]
      */
@@ -31,8 +34,7 @@ class HashingAlgorithmFactory
     {
         $className = $this->getConfiguredHashingAlgorithm();
 
-        if (!isset($this->hashingAlgorithms[$className]))
-        {
+        if (!isset($this->hashingAlgorithms[$className])) {
             throw new ClassNotExistException($className);
         }
 

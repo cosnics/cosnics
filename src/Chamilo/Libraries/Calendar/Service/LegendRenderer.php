@@ -16,7 +16,6 @@ use Symfony\Component\Translation\Translator;
  */
 class LegendRenderer
 {
-
     protected NotificationMessageManager $notificationMessageManager;
 
     protected ResourceManager $resourceManager;
@@ -42,7 +41,7 @@ class LegendRenderer
     }
 
     /**
-     * Builds a color-based legend for the calendar to help users to see the origin of the the published events
+     * Builds a colour-based legend for the calendar to help users to see the origin of the the published events
      *
      * @throws \Exception
      */
@@ -52,8 +51,7 @@ class LegendRenderer
 
         $result = [];
 
-        if ($this->hasSources())
-        {
+        if ($this->hasSources()) {
             $visibleSources = 0;
 
             $result[] = '<div class="panel panel-default table-calendar-legend">';
@@ -67,23 +65,18 @@ class LegendRenderer
 
             sort($sources);
 
-            foreach ($sources as $source)
-            {
+            foreach ($sources as $source) {
                 $sourceClasses = $this->getSourceClasses($source);
 
-                if ($dataProvider instanceof VisibilitySupport)
-                {
+                if ($dataProvider instanceof VisibilitySupport) {
                     $isSourceVisible = $dataProvider->isSourceVisible($source);
                     $eventClasses = !$isSourceVisible ? ' event-container-source-faded' : '';
 
-                    if ($isSourceVisible)
-                    {
+                    if ($isSourceVisible) {
                         $visibleSources ++;
                     }
                 }
-                else
-                {
-
+                else {
                     $eventClasses = '';
                 }
 
@@ -100,8 +93,7 @@ class LegendRenderer
             $result[] = '</ul>';
             $result[] = '</div>';
 
-            if ($dataProvider instanceof VisibilitySupport)
-            {
+            if ($dataProvider instanceof VisibilitySupport) {
                 $result[] = '<script>';
                 $result[] =
                     'var calendarVisibilityContext = ' . json_encode($dataProvider->getVisibilityContext()) . ';';
@@ -111,8 +103,7 @@ class LegendRenderer
                     $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'Calendar/Highlight.js'
                 );
 
-                if ($visibleSources == 0)
-                {
+                if ($visibleSources == 0) {
                     $this->getNotificationMessageManager()->addMessage(
                         new NotificationMessage(
                             $translator->trans('AllEventSourcesHidden', [], 'Chamilo\Libraries\Calendar'),
@@ -131,8 +122,7 @@ class LegendRenderer
      */
     public function addSource(string $source): int
     {
-        if (!in_array($source, $this->getSources()))
-        {
+        if (!in_array($source, $this->getSources())) {
             $this->sources[] = $source;
         }
 
@@ -156,8 +146,7 @@ class LegendRenderer
     {
         $classes = 'event-container-source event-container-source-' . $this->addSource($source);
 
-        if ($fade)
-        {
+        if ($fade) {
             $classes .= ' event-container-source-faded';
         }
 
@@ -171,12 +160,10 @@ class LegendRenderer
     {
         $sourceKey = array_search($source, $this->getSources());
 
-        if ($sourceKey === false)
-        {
+        if ($sourceKey === false) {
             throw new Exception($this->getTranslator()->trans('InvalidLegendSource', [], 'Chamilo\Libraries\Calendar'));
         }
-        else
-        {
+        else {
             return $sourceKey;
         }
     }

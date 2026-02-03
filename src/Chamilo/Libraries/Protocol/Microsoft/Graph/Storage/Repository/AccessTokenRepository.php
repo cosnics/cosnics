@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 class AccessTokenRepository implements AccessTokenRepositoryInterface
 {
-
     protected SessionInterface $session;
 
     protected User $user;
@@ -38,8 +37,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
             $this->getUser(), 'Chamilo\Libraries', 'microsoft_graph_access_token'
         );
 
-        if (empty($accessTokenData))
-        {
+        if (empty($accessTokenData)) {
             return null;
         }
 
@@ -50,8 +48,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     {
         $accessTokenData = $this->getSession()->get('graph_delegated_access_token');
 
-        if (empty($accessTokenData))
-        {
+        if (empty($accessTokenData)) {
             return null;
         }
 
@@ -73,7 +70,10 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
         return $this->userSettingService;
     }
 
-    public function storeApplicationAccessToken(AccessToken $accessToken)
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     */
+    public function storeApplicationAccessToken(AccessToken $accessToken): void
     {
         $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
             'Chamilo\Libraries', 'microsoft_graph_access_token', $this->getUser(),
@@ -86,7 +86,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
      *
      * @param \League\OAuth2\Client\Token\AccessToken $accessToken
      */
-    public function storeDelegatedAccessToken(AccessToken $accessToken)
+    public function storeDelegatedAccessToken(AccessToken $accessToken): void
     {
         $this->session->set('graph_delegated_access_token', json_encode($accessToken->jsonSerialize()));
     }

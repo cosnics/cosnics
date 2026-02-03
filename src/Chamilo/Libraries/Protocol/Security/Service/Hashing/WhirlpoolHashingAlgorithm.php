@@ -10,7 +10,6 @@ use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
  */
 class WhirlpoolHashingAlgorithm extends HashingAlgorithm
 {
-
     public function hashFile(string $filePath): string
     {
         return hash_file('whirlpool', $filePath);

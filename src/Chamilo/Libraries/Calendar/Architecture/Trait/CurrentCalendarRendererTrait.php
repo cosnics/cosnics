@@ -8,6 +8,10 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Detection\MobileDetect;
 use Exception;
 
+/**
+ * @package Chamilo\Libraries\Calendar\Architecture\Trait
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
 trait CurrentCalendarRendererTrait
 {
     protected int $currentCalendarTime;
@@ -16,25 +20,19 @@ trait CurrentCalendarRendererTrait
     {
         $rendererType = $this->getRequest()->query->get(HtmlCalendarRenderer::PARAM_TYPE);
 
-        if (!$rendererType)
-        {
+        if (!$rendererType) {
             $rendererType = $this->getUserSettingService()->getSettingForUser(
                 $this->getUser(), 'Chamilo\Libraries', 'calendar_default_view'
             );
 
-            if ($rendererType == HtmlCalendarRenderer::TYPE_MONTH)
-            {
+            if ($rendererType == HtmlCalendarRenderer::TYPE_MONTH) {
                 $detect = new MobileDetect();
-                try
-                {
-                    if ($detect->isMobile() && !$detect->isTablet())
-                    {
+                try {
+                    if ($detect->isMobile() && !$detect->isTablet()) {
                         $rendererType = HtmlCalendarRenderer::TYPE_LIST;
                     }
                 }
-                catch (Exception)
-                {
-
+                catch (Exception) {
                 }
             }
         }
@@ -44,8 +42,7 @@ trait CurrentCalendarRendererTrait
 
     public function getCurrentCalendartRendererTime(): int
     {
-        if (!isset($this->currentCalendarTime))
-        {
+        if (!isset($this->currentCalendarTime)) {
             $this->currentCalendarTime = $this->getRequest()->query->get(HtmlCalendarRenderer::PARAM_TIME, time());
         }
 

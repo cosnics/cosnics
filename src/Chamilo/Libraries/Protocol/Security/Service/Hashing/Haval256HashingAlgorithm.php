@@ -10,7 +10,6 @@ use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
  */
 class Haval256HashingAlgorithm extends HashingAlgorithm
 {
-
     public function hashFile(string $filePath): string
     {
         return hash_file('haval256,5', $$filePath);

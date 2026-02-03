@@ -9,14 +9,13 @@ use Microsoft\Graph\Model\User;
 use Symfony\Component\Uid\Uuid;
 
 /**
- *
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @TODO Fix class
  */
 class GroupRepository
 {
-
     /**
      * @var string
      */
@@ -123,16 +122,13 @@ class GroupRepository
      */
     public function getGroupMember($groupId, $azureUserIdentifier)
     {
-        try
-        {
+        try {
             return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
                 '/groups/' . $groupId . '/members/' . $azureUserIdentifier, User::class
             );
         }
-        catch (ClientException $exception)
-        {
-            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
-            {
+        catch (ClientException $exception) {
+            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND) {
                 return null;
             }
 
@@ -149,16 +145,13 @@ class GroupRepository
      */
     public function getGroupOwner($groupId, $azureUserIdentifier)
     {
-        try
-        {
+        try {
             return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
                 '/groups/' . $groupId . '/owners/' . $azureUserIdentifier, User::class
             );
         }
-        catch (ClientException $exception)
-        {
-            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
-            {
+        catch (ClientException $exception) {
+            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND) {
                 return null;
             }
 

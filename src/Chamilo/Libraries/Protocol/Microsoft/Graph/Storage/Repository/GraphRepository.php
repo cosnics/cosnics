@@ -10,16 +10,15 @@ use Microsoft\Graph\GraphServiceClient;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- *
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @TODO Fix class
  */
 class GraphRepository
 {
     public const API_VERSION_BETA = 'beta';
     public const API_VERSION_V1 = 'V1.0';
-
     public const RESPONSE_CODE_ACCESS_TOKEN_EXPIRED = '401';
     public const RESPONSE_CODE_RESOURCE_NOT_FOUND = '404';
 
@@ -54,12 +53,10 @@ class GraphRepository
     {
         $delegatedAccessToken = $this->getDelegatedAccessToken();
 
-        if (empty($delegatedAccessToken) || !$delegatedAccessToken instanceof AccessToken)
-        {
+        if (empty($delegatedAccessToken) || !$delegatedAccessToken instanceof AccessToken) {
             $this->requestNewDelegatedAccessToken();
         }
-        elseif ($delegatedAccessToken->hasExpired())
-        {
+        elseif ($delegatedAccessToken->hasExpired()) {
             $this->setDelegatedAccessToken(
                 $this->getOauthProvider()->getAccessToken(
                     'refresh_token', ['refresh_token' => $delegatedAccessToken->getRefreshToken()]
@@ -135,18 +132,15 @@ class GraphRepository
     {
         $this->getGraphServiceClient()->setApiVersion($apiVersion);
 
-        if (!$isCollectionRequest)
-        {
+        if (!$isCollectionRequest) {
             $request =
                 $this->getGraphServiceClient()->createRequest($requestType, $endpoint)->setReturnType($returnClass);
         }
-        else
-        {
+        else {
             $request = $this->getGraphServiceClient()->createCollectionRequest($requestType, $endpoint);
         }
 
-        if (!empty($requestBody))
-        {
+        if (!empty($requestBody)) {
             $request->attachBody($requestBody);
         }
 
@@ -207,8 +201,7 @@ class GraphRepository
             'GET', $endpoint, [], $returnClass, $isCollectionRequest, $apiVersion
         );
 
-        if ($isCollectionRequest)
-        {
+        if ($isCollectionRequest) {
             return $this->parseCollectionResponse($response, $returnClass);
         }
 
@@ -235,8 +228,7 @@ class GraphRepository
             'GET', $endpoint, [], $returnClass, $isCollectionRequest, $apiVersion
         );
 
-        if ($isCollectionRequest)
-        {
+        if ($isCollectionRequest) {
             return $this->parseCollectionResponse($response, $returnClass);
         }
 
@@ -352,14 +344,11 @@ class GraphRepository
      */
     protected function executeRequestWithAccessTokenExpirationRetry(GraphRequest $graphRequest)
     {
-        try
-        {
+        try {
             return $graphRequest->execute();
         }
-        catch (ClientException $exception)
-        {
-            if ($exception->getCode() == self::RESPONSE_CODE_ACCESS_TOKEN_EXPIRED)
-            {
+        catch (ClientException $exception) {
+            if ($exception->getCode() == self::RESPONSE_CODE_ACCESS_TOKEN_EXPIRED) {
                 $accessToken = $this->requestNewApplicationAccessToken();
                 $this->getGraphServiceClient()->setAccessToken($accessToken);
                 $graphRequest->addHeaders(['Authorization' => 'Bearer ' . $accessToken]);
@@ -383,8 +372,7 @@ class GraphRepository
     {
         $this->activateDelegatedAccessToken();
 
-        if (!$this->delegatedAccessToken instanceof AccessToken)
-        {
+        if (!$this->delegatedAccessToken instanceof AccessToken) {
             throw new Exception('The delegated access token could not be activated');
         }
 
@@ -466,8 +454,7 @@ class GraphRepository
     {
         $accessToken = $this->getAccessTokenRepository()->getApplicationAccessToken();
 
-        if (!$accessToken instanceof AccessToken || $accessToken->hasExpired())
-        {
+        if (!$accessToken instanceof AccessToken || $accessToken->hasExpired()) {
             $accessToken = $this->requestNewApplicationAccessToken();
         }
 
@@ -491,12 +478,10 @@ class GraphRepository
 
         $count = 0;
 
-        if (array_key_exists('@odata.count', $body))
-        {
+        if (array_key_exists('@odata.count', $body)) {
             $count = $body['@odata.count'];
         }
-        elseif (array_key_exists('value', $body))
-        {
+        elseif (array_key_exists('value', $body)) {
             $count = count($body['value']);
         }
 

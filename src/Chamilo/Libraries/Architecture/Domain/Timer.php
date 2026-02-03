@@ -4,13 +4,11 @@ namespace Chamilo\Libraries\Architecture\Domain;
 /**
  * Class to time a script
  *
- * @package Chamilo\Libraries\Utilities
- *
+ * @package Chamilo\Libraries\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Timer
 {
-
     private float $startTime;
 
     private float $stopTime;
@@ -33,18 +31,15 @@ class Timer
      */
     public function getHumanReadableDuration(): string
     {
-        if ($this->getDurationInSeconds() / 3600 < 1 && $this->getDurationInSeconds() / 60 < 1)
-        {
+        if ($this->getDurationInSeconds() / 3600 < 1 && $this->getDurationInSeconds() / 60 < 1) {
             $convertedTime = number_format($this->getDurationInSeconds(), 3) . 's';
         }
-        elseif ($this->getDurationInSeconds() / 3600 < 1)
-        {
+        elseif ($this->getDurationInSeconds() / 3600 < 1) {
             $minutes = (int) ($this->getDurationInSeconds() / 60);
             $seconds = $this->getDurationInSeconds() % 60;
             $convertedTime = $minutes . 'm ' . number_format($seconds, 3) . 's';
         }
-        else
-        {
+        else {
             $hours = (int) ($this->getDurationInSeconds() / 3600);
             $rest = $this->getDurationInSeconds() % 3600;
             $minutes = (int) ($rest / 60);

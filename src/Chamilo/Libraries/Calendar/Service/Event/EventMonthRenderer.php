@@ -5,12 +5,10 @@ use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\Event
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class EventMonthRenderer extends TableEventRenderer
 {
-
     public function getPostfixSymbol(): string
     {
         return $this->getSymbol('chevron-right');

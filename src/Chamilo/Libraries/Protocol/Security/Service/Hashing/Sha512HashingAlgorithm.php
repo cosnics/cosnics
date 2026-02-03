@@ -10,7 +10,6 @@ use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
  */
 class Sha512HashingAlgorithm extends HashingAlgorithm
 {
-
     public function hashFile(string $filePath): string
     {
         return hash_file('sha512', $filePath);

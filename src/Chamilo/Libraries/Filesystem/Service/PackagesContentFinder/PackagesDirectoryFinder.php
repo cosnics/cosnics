@@ -5,12 +5,11 @@ namespace Chamilo\Libraries\Filesystem\Service\PackagesContentFinder;
  * Finds directories in a package based on a given directory name.
  * Uses a PHP-based caching system.
  *
- * @package Chamilo\Libraries\File\PackagesContentFinder
+ * @package Chamilo\Libraries\Filesystem\Service\PackagesContentFinder
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class PackagesDirectoryFinder extends PackagesContentFinder
 {
-
     private string $relativeFilePath;
 
     /**
@@ -39,8 +38,7 @@ class PackagesDirectoryFinder extends PackagesContentFinder
         $directories = [];
 
         $path = $this->getPackagePath($package) . $this->relativeFilePath;
-        if (file_exists($path))
-        {
+        if (file_exists($path)) {
             $directories[$package] = $path;
         }
 

@@ -5,7 +5,6 @@ use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\Event
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class EventMiniMonthRenderer extends EventMonthRenderer
@@ -15,8 +14,6 @@ class EventMiniMonthRenderer extends EventMonthRenderer
         bool $isFadedEvent = false
     ): string
     {
-
-
         $eventClasses = $this->determineEventClasses($event, $isFadedEvent, $isEventSourceVisible);
 
         //$title = $this->renderFullTitle($event, $cellStartDate, $cellEndDate);
@@ -35,8 +32,7 @@ class EventMiniMonthRenderer extends EventMonthRenderer
     {
         $postfix = parent::renderPostfix($event, $cellStartDate, $cellEndDate);
 
-        if ($postfix)
-        {
+        if ($postfix) {
             $postfix = '<span class="tooltip-event-postfix">' . $postfix . '</span> ';
         }
 
@@ -47,8 +43,7 @@ class EventMiniMonthRenderer extends EventMonthRenderer
     {
         $prefix = parent::renderPrefix($event, $cellStartDate, $cellEndDate);
 
-        if ($prefix)
-        {
+        if ($prefix) {
             $prefix = '<span class="tooltip-event-prefix">' . $prefix . '</span> ';
         }
 

@@ -5,12 +5,11 @@ namespace Chamilo\Libraries\Filesystem\Service\PackagesContentFinder;
  * Finds classes in packages based on a filename and classname.
  * Uses a PHP-based caching system.
  *
- * @package Chamilo\Libraries\File\PackagesContentFinder
+ * @package Chamilo\Libraries\Filesystem\Service\PackagesContentFinder
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class PackagesClassFinder extends PackagesContentFinder
 {
-
     private string $className;
 
     private string $relativeFilePath;
@@ -38,11 +37,9 @@ class PackagesClassFinder extends PackagesContentFinder
         $classes = [];
 
         $path = $this->getPackagePath($package) . $this->relativeFilePath;
-        if (file_exists($path))
-        {
+        if (file_exists($path)) {
             $class = $package . '\\' . $this->className;
-            if (class_exists($class))
-            {
+            if (class_exists($class)) {
                 $classes[$package] = $class;
             }
         }

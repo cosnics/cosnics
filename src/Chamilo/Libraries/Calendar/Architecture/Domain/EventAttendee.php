@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Architecture\Domain;
 
 /**
- * @package Chamilo\Libraries\Calendar\Event
+ * @package Chamilo\Libraries\Calendar\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class EventAttendee
@@ -12,7 +12,6 @@ class EventAttendee
     public const RESPONSE_STATUS_NONE = 5;
     public const RESPONSE_STATUS_ORGANIZER = 4;
     public const RESPONSE_STATUS_TENTATIVE = 3;
-
     public const TYPE_OPTIONAL = 2;
     public const TYPE_ORGANIZER = 4;
     public const TYPE_REQUIRED = 1;
@@ -51,8 +50,7 @@ class EventAttendee
 
     public function getICalResponseStatus(): ?string
     {
-        return match ($this->getResponseStatus())
-        {
+        return match ($this->getResponseStatus()) {
             self::RESPONSE_STATUS_ACCEPTED => 'ACCEPTED',
             self::RESPONSE_STATUS_DECLINED => 'DECLINED',
             self::RESPONSE_STATUS_TENTATIVE => 'TENTATIVE',
@@ -62,8 +60,7 @@ class EventAttendee
 
     public function getICalType(): ?string
     {
-        return match ($this->getType())
-        {
+        return match ($this->getType()) {
             self::TYPE_OPTIONAL => 'OPT-PARTICIPANT',
             self::TYPE_ORGANIZER => 'CHAIR',
             self::TYPE_REQUIRED => 'REQ-PARTICIPANT',
@@ -118,5 +115,4 @@ class EventAttendee
 
         return $this;
     }
-
 }

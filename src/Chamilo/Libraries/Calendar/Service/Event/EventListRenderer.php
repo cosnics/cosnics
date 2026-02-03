@@ -11,7 +11,6 @@ use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\Event
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class EventListRenderer extends EventRenderer

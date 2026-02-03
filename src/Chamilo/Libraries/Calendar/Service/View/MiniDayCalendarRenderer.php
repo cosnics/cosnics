@@ -21,7 +21,8 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
 
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        EventDayRenderer $eventDayRenderer, DayCalendarTableBuilder $dayCalendarTableBuilder, ButtonToolBarRenderer $buttonToolBarRenderer
+        EventDayRenderer $eventDayRenderer, DayCalendarTableBuilder $dayCalendarTableBuilder,
+        ButtonToolBarRenderer $buttonToolBarRenderer
     )
     {
         parent::__construct($legendRenderer, $urlGenerator, $translator, $buttonToolBarRenderer);
@@ -65,19 +66,16 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
         $tableDate = $startTime;
         $eventsToShow = [];
 
-        while ($tableDate <= $endTime)
-        {
+        while ($tableDate <= $endTime) {
             $nextTableDate = strtotime('+' . $calendarTableBuilder->getHourStep() . ' Hours', $tableDate);
 
-            foreach ($events as $event)
-            {
+            foreach ($events as $event) {
                 $startDate = $event->getStartDate();
                 $endDate = $event->getEndDate();
 
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
                     $tableDate < $endDate && $endDate < $nextTableDate ||
-                    $startDate <= $tableDate && $nextTableDate <= $endDate)
-                {
+                    $startDate <= $tableDate && $nextTableDate <= $endDate) {
                     $eventsToShow[$tableDate][] = $this->getEventDayRenderer()->render(
                         $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($dataProvider, $event)
 

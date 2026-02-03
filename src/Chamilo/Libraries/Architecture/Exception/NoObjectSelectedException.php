@@ -8,11 +8,10 @@ use Chamilo\Libraries\Service\Utilities\StringUtilities;
  * Throw this if you retrieved an object from the request
  * parameter that is not valid
  *
- * @package Chamilo\Libraries\Architecture\Exceptions
+ * @package Chamilo\Libraries\Architecture\Exception
  */
 class NoObjectSelectedException extends UserException
 {
-
     public function __construct(string $objectTranslation)
     {
         parent::__construct(

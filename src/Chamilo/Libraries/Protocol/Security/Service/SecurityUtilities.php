@@ -34,18 +34,15 @@ class SecurityUtilities
         $sessionToken = $session->get('sec_token');
         $tokenTypeValue = $tokenType;
 
-        if ($tokenType == 'get')
-        {
+        if ($tokenType == 'get') {
             $tokenTypeValue = $request->query->get('sec_token');
         }
 
-        if ($tokenType == 'post')
-        {
+        if ($tokenType == 'post') {
             $tokenTypeValue = $request->request->get('sec_token');
         }
 
-        if (isset($sessionToken) && isset($tokenTypeValue) && $sessionToken === $tokenTypeValue)
-        {
+        if (isset($sessionToken) && isset($tokenTypeValue) && $sessionToken === $tokenTypeValue) {
             return true;
         }
 
@@ -69,8 +66,7 @@ class SecurityUtilities
      */
     public function removeXSS(string|array|null $variable): string|array|null
     {
-        if (is_array($variable))
-        {
+        if (is_array($variable)) {
             return $this->removeXSSRecursive($variable);
         }
 
@@ -108,8 +104,7 @@ class SecurityUtilities
         // Remove namespaced elements (we do not need them)
         $variable = preg_replace('#</*\w+:\w[^>]*+>#i', '', $variable);
 
-        do
-        {
+        do {
             // Remove really unwanted tags, but allow object|embed (for html editor)
             $oldData = $variable;
             $variable = preg_replace(
@@ -129,8 +124,7 @@ class SecurityUtilities
      */
     public function removeXSSRecursive(array $array): array
     {
-        foreach ($array as $key => $value)
-        {
+        foreach ($array as $key => $value) {
             $key2 = $this->removeXSS($key);
             $value2 = (is_array($value)) ? $this->removeXSSRecursive($value) : $this->removeXSS(
                 $value

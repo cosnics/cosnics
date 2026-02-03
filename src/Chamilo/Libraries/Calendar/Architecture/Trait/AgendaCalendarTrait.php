@@ -10,8 +10,7 @@ use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMess
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Calendar\Architecture\Traits
- *
+ * @package Chamilo\Libraries\Calendar\Architecture\Trait
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 trait AgendaCalendarTrait

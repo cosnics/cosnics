@@ -5,7 +5,7 @@ use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTra
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @package Chamilo\Libraries\Format\Response
+ * @package Chamilo\Libraries\Architecture\Response
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>

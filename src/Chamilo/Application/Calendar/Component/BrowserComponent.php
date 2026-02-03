@@ -8,7 +8,7 @@ use Chamilo\Application\Calendar\Manager;
 use Chamilo\Core\User\Component\SettingsComponent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
-use Chamilo\Libraries\Calendar\Service\HtmlCalendarRendererFactory;
+use Chamilo\Libraries\Calendar\Factory\HtmlCalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;

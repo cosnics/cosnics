@@ -5,26 +5,25 @@ use Chamilo\Libraries\Calendar\Architecture\Interface\VisibilityServiceInterface
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Calendar\Event\Ajax\Component
+ * @package Chamilo\Libraries\Calendar\Architecture\Trait
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 trait VisibilityComponentTrait
 {
     public const PARAM_SOURCE = 'source';
 
-    public function run()
+    public function run(): Response
     {
         $source = $this->getRequest()->getFromQueryOrRequest(self::PARAM_SOURCE);
 
-        if ($this->getVisibilityService()->changeVisibility($this->getUser()->getId(), $source))
-        {
+        if ($this->getVisibilityService()->changeVisibility($this->getUser()->getId(), $source)) {
             return JsonAjaxResult::success();
         }
-        else
-        {
+        else {
             return JsonAjaxResult::error(
                 500, $this->getTranslator()->trans(
                 'VisibilityNotChanged', [], StringUtilities::LIBRARIES

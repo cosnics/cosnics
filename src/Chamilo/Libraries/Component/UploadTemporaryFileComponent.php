@@ -5,18 +5,18 @@ use Chamilo\Libraries\Manager;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Exception;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * @package Chamilo\Libraries\Ajax\Component
+ * @package Chamilo\Libraries\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class UploadTemporaryFileComponent extends Manager
 {
-
     /**
      * @throws \Exception
      */
@@ -24,8 +24,7 @@ class UploadTemporaryFileComponent extends Manager
     {
         $file = $this->getFile();
 
-        if (!$file->isValid())
-        {
+        if (!$file->isValid()) {
             return JsonAjaxResult::badRequest(
                 $this->getTranslator()->trans('NoValidFileUploaded', [], StringUtilities::LIBRARIES)
             );
@@ -40,14 +39,12 @@ class UploadTemporaryFileComponent extends Manager
 
         $result = move_uploaded_file($file->getRealPath(), $temporaryFilePath);
 
-        if (!$result)
-        {
+        if (!$result) {
             return JsonAjaxResult::generalError(
                 $this->getTranslator()->trans('FileNotUploaded', [], StringUtilities::LIBRARIES)
             );
         }
-        else
-        {
+        else {
             $jsonAjaxResult = new JsonAjaxResult();
             $jsonAjaxResult->setProperties(['temporaryFileName' => $fileName]);
 
@@ -56,25 +53,21 @@ class UploadTemporaryFileComponent extends Manager
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\File\UploadedFile
      * @throws \Exception
      */
-    public function getFile()
+    public function getFile(): UploadedFile
     {
         $filePropertyName = $this->getRequest()->request->get('filePropertyName');
-        if (empty($filePropertyName))
-        {
+        if (empty($filePropertyName)) {
             throw new Exception('filePropertyName parameter not available in request');
         }
 
         $file = $this->getRequest()->files->get($filePropertyName);
-        if (empty($file))
-        {
+        if (empty($file)) {
             $errorMessage = 'File with key ' . $filePropertyName . 'not found in request.';
 
             $availableKeys = $this->getRequest()->files->keys();
-            if (!empty($availableKeys))
-            {
+            if (!empty($availableKeys)) {
                 $errorMessage .= ' Available file keys: ' . implode(', ', $availableKeys) . '.';
             }
 

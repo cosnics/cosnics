@@ -5,7 +5,7 @@ use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 
 /**
- * @package Chamilo\Libraries\File
+ * @package Chamilo\Libraries\Filesystem\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
@@ -27,7 +27,6 @@ abstract class AbstractPathBuilder
     public const PROFILE_PICTURE = 10;
     public const PUBLIC_STORAGE = 17;
     public const RELATIVE = 3;
-    public const REPOSITORY = 9;
     public const RESOURCE = 13;
     public const ROOT = 21;
     public const STORAGE = 4;

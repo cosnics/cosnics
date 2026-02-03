@@ -6,13 +6,12 @@ use Chamilo\Libraries\Protocol\Mail\Architecture\Domain\Mail;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
 
 /**
- * @package Chamilo\Libraries\Mail\Mailer
+ * @package Chamilo\Libraries\Protocol\Mail\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class AbstractMailer implements MailerInterface
 {
-
     protected ConfigurationConsulter $configurationConsulter;
 
     public function __construct(ConfigurationConsulter $configurationConsulter)
@@ -27,8 +26,7 @@ abstract class AbstractMailer implements MailerInterface
     {
         $noReplyEmail = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'no_reply_email']);
 
-        if (!empty($noReplyEmail))
-        {
+        if (!empty($noReplyEmail)) {
             return $noReplyEmail;
         }
 
@@ -40,8 +38,7 @@ abstract class AbstractMailer implements MailerInterface
      */
     protected function determineFromEmail(Mail $mail): string
     {
-        if (!is_null($mail->getFromEmail()))
-        {
+        if (!is_null($mail->getFromEmail())) {
             return $mail->getFromEmail();
         }
 
@@ -53,8 +50,7 @@ abstract class AbstractMailer implements MailerInterface
      */
     protected function determineFromName(Mail $mail): string
     {
-        if (!is_null($mail->getFromName()))
-        {
+        if (!is_null($mail->getFromName())) {
             return $mail->getFromName();
         }
 
@@ -66,8 +62,7 @@ abstract class AbstractMailer implements MailerInterface
      */
     protected function determineReplyEmail(Mail $mail): string
     {
-        if (!is_null($mail->getReplyEmail()))
-        {
+        if (!is_null($mail->getReplyEmail())) {
             return $mail->getReplyEmail();
         }
 
@@ -76,8 +71,7 @@ abstract class AbstractMailer implements MailerInterface
 
     protected function determineReplyName(Mail $mail): string
     {
-        if (!is_null($mail->getReplyName()))
-        {
+        if (!is_null($mail->getReplyName())) {
             return $mail->getReplyName();
         }
 
@@ -99,8 +93,7 @@ abstract class AbstractMailer implements MailerInterface
      */
     public function sendMails(array $mails = []): void
     {
-        foreach ($mails as $mail)
-        {
+        foreach ($mails as $mail) {
             $this->sendMail($mail);
         }
     }

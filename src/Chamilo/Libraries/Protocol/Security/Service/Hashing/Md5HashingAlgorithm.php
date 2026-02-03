@@ -10,7 +10,6 @@ use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
  */
 class Md5HashingAlgorithm extends HashingAlgorithm
 {
-
     public function hashFile(string $filePath): string
     {
         return md5_file($$filePath);

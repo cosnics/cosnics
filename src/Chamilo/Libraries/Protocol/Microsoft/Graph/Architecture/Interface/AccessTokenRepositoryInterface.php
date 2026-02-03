@@ -6,38 +6,17 @@ use League\OAuth2\Client\Token\AccessToken;
 /**
  * Storage solution for the Microsoft Graph access token
  *
- * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
+ * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Interface
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 interface AccessTokenRepositoryInterface
 {
+    public function getApplicationAccessToken(): ?AccessToken;
 
-    /**
-     * Returns the application access token
-     *
-     * @return AccessToken
-     */
-    public function getApplicationAccessToken();
+    public function getDelegatedAccessToken(): ?AccessToken;
 
-    /**
-     * Returns the delegated access token
-     *
-     * @return AccessToken
-     */
-    public function getDelegatedAccessToken();
-
-    /**
-     * Stores the application access token
-     *
-     * @param \League\OAuth2\Client\Token\AccessToken $accessToken
-     */
     public function storeApplicationAccessToken(AccessToken $accessToken);
 
-    /**
-     * Stores the delegated access token
-     *
-     * @param \League\OAuth2\Client\Token\AccessToken $accessToken
-     */
     public function storeDelegatedAccessToken(AccessToken $accessToken);
 }

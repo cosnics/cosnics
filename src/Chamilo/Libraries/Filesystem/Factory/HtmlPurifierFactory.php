@@ -7,7 +7,7 @@ use HTMLPurifier;
 use HTMLPurifier_Config;
 
 /**
- * @package Chamilo\Libraries\File
+ * @package Chamilo\Libraries\Filesystem\Factory
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class HtmlPurifierFactory

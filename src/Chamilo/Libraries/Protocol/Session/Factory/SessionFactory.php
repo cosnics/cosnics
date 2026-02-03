@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
 
 /**
- * @package Chamilo\Core\User\Factory
+ * @package Chamilo\Libraries\Protocol\Session\Factory
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
@@ -32,8 +32,7 @@ class SessionFactory
 
         $sessionKey = $this->getSecurityKey();
 
-        if (is_null($sessionKey))
-        {
+        if (is_null($sessionKey)) {
             $sessionKey = 'cosnics_sid';
         }
 

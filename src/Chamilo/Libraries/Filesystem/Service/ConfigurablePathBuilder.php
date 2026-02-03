@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Filesystem\Service;
 
 /**
- * @package Chamilo\Libraries\File
+ * @package Chamilo\Libraries\Filesystem\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
@@ -82,8 +82,7 @@ class ConfigurablePathBuilder
 
     public function getConfiguredArchivePath(): string
     {
-        if (!isset($this->configuredArchivePath))
-        {
+        if (!isset($this->configuredArchivePath)) {
             $configuredPaths = $this->getConfiguredPaths();
             $this->configuredArchivePath = $configuredPaths['archive_path'];
         }
@@ -93,8 +92,7 @@ class ConfigurablePathBuilder
 
     public function getConfiguredCachePath(): string
     {
-        if (!isset($this->configuredCachePath))
-        {
+        if (!isset($this->configuredCachePath)) {
             $configuredPaths = $this->getConfiguredPaths();
             $this->configuredCachePath = $configuredPaths['cache_path'];
         }
@@ -104,8 +102,7 @@ class ConfigurablePathBuilder
 
     public function getConfiguredGarbagePath(): string
     {
-        if (!isset($this->configuredGarbagePath))
-        {
+        if (!isset($this->configuredGarbagePath)) {
             $configuredPaths = $this->getConfiguredPaths();
             $this->configuredGarbagePath = $configuredPaths['garbage_path'];
         }
@@ -115,8 +112,7 @@ class ConfigurablePathBuilder
 
     public function getConfiguredLogsPath(): string
     {
-        if (!isset($this->configuredLogsPath))
-        {
+        if (!isset($this->configuredLogsPath)) {
             $configuredPaths = $this->getConfiguredPaths();
             $this->configuredLogsPath = $configuredPaths['logs_path'];
         }
@@ -134,8 +130,7 @@ class ConfigurablePathBuilder
 
     public function getConfiguredTempPath(): string
     {
-        if (!isset($this->configuredTempPath))
-        {
+        if (!isset($this->configuredTempPath)) {
             $configuredPaths = $this->getConfiguredPaths();
             $this->configuredTempPath = $configuredPaths['temp_path'];
         }
@@ -145,8 +140,7 @@ class ConfigurablePathBuilder
 
     public function getConfiguredUserPicturesPath(): string
     {
-        if (!isset($this->configuredUserPicturesPath))
-        {
+        if (!isset($this->configuredUserPicturesPath)) {
             $configuredPaths = $this->getConfiguredPaths();
             $this->configuredUserPicturesPath = $configuredPaths['userpictures_path'];
         }

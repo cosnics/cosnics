@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
- * @package Chamilo\Libraries\File\Compression\ArchiveCreator
+ * @package Chamilo\Libraries\Filesystem\Service\Compression
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -87,12 +87,10 @@ class ArchiveCreator
         $filePath = $temporaryPath . DIRECTORY_SEPARATOR . $fileName;
         $originalPath = $archiveFile->getOriginalPath();
 
-        if (is_dir($originalPath))
-        {
+        if (is_dir($originalPath)) {
             $this->filesystem->mirror($originalPath, $filePath);
         }
-        else
-        {
+        else {
             $this->filesystem->copy($originalPath, $filePath);
         }
 
@@ -105,8 +103,7 @@ class ArchiveCreator
         $folderPath = $temporaryPath . DIRECTORY_SEPARATOR . $folderName;
         $this->filesystem->mkdir($folderPath);
 
-        foreach ($archiveFolder->getArchiveItems() as $archiveItem)
-        {
+        foreach ($archiveFolder->getArchiveItems() as $archiveItem) {
             $this->handleArchiveItem($archiveItem, $folderPath);
         }
 
@@ -115,8 +112,7 @@ class ArchiveCreator
 
     protected function handleArchiveItem(ArchiveItem $archiveItem, string $temporaryPath): static
     {
-        if ($archiveItem instanceof ArchiveFolder)
-        {
+        if ($archiveItem instanceof ArchiveFolder) {
             $this->handleArchiveFolder($archiveItem, $temporaryPath);
 
             return $this;
@@ -133,8 +129,7 @@ class ArchiveCreator
      */
     protected function handleArchiveItems(array $archiveItems, string $temporaryFolder): static
     {
-        foreach ($archiveItems as $archiveItem)
-        {
+        foreach ($archiveItems as $archiveItem) {
             $this->handleArchiveItem($archiveItem, $temporaryFolder);
         }
 

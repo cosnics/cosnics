@@ -6,12 +6,11 @@ use Microsoft\Graph\GraphServiceClient;
 use Microsoft\Kiota\Authentication\Oauth\ClientCredentialContext;
 
 /**
- * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
+ * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Factory
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GraphServiceClientFactory
 {
-
     protected ConfigurationConsulter $configurationConsulter;
 
     public function __construct(ConfigurationConsulter $configurationConsulter)

@@ -6,17 +6,15 @@ use Chamilo\Libraries\Protocol\Mail\Service\AbstractMailer;
 use RuntimeException;
 
 /**
- * @package Chamilo\Libraries\Mail\Mailer\Platform
+ * @package Chamilo\Libraries\Protocol\Mail\Service\Platform
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Mailer extends AbstractMailer
 {
-
     protected function send(Mail $mail, string $recipients, string $headers): void
     {
-        if (!mail($recipients, $mail->getSubject(), $mail->getMessage(), $headers))
-        {
+        if (!mail($recipients, $mail->getSubject(), $mail->getMessage(), $headers)) {
             throw new RuntimeException('Could not send e-mail');
         }
     }
@@ -26,14 +24,12 @@ class Mailer extends AbstractMailer
         $headers = [];
 
         $cc = $mail->getCc();
-        if (!empty($cc))
-        {
+        if (!empty($cc)) {
             $headers[] = 'Cc: ' . implode(', ', $cc);
         }
 
         $bcc = $mail->getBcc();
-        if (!empty($bcc))
-        {
+        if (!empty($bcc)) {
             $headers[] = 'Bcc: ' . implode(', ', $bcc);
         }
 
@@ -43,15 +39,12 @@ class Mailer extends AbstractMailer
 
         $headers = implode(PHP_EOL, $headers);
 
-        if ($mail->getSendIndividually())
-        {
-            foreach ($mail->getTo() as $recipient)
-            {
+        if ($mail->getSendIndividually()) {
+            foreach ($mail->getTo() as $recipient) {
                 $this->send($mail, $recipient, $headers);
             }
         }
-        else
-        {
+        else {
             $this->send($mail, implode(',', $mail->getTo()), $headers);
         }
     }

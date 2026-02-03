@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Calendar\Architecture\Domain;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 
 /**
- * @package Chamilo\Libraries\Calendar\Event
+ * @package Chamilo\Libraries\Calendar\Architecture\Domain
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -12,7 +12,6 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 abstract class Visibility extends DataClass
 {
     public const CONTEXT = 'Chamilo\Libraries\Calendar';
-
     public const PROPERTY_SOURCE = 'source';
     public const PROPERTY_USER_ID = 'user_id';
 

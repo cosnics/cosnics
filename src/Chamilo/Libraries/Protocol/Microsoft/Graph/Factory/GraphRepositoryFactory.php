@@ -7,45 +7,25 @@ use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Interface\AccessToke
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use League\OAuth2\Client\Provider\GenericProvider;
-use Microsoft\Graph\Graph;
 use Microsoft\Graph\GraphServiceClient;
 use Microsoft\Kiota\Authentication\Oauth\ClientCredentialContext;
 use stdClass;
 
 /**
- * Factory class for Microsoft Graph
- *
- * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
+ * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Factory
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GraphRepositoryFactory
 {
+    protected AccessTokenRepositoryInterface $accessTokenRepository;
 
-    /**
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Interface\AccessTokenRepositoryInterface
-     */
-    protected $accessTokenRepository;
+    protected ChamiloRequest $chamiloRequest;
 
-    /**
-     * @var \Chamilo\Libraries\Platform\ChamiloRequest
-     */
-    protected $chamiloRequest;
-
-    /**
-     * @var \Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter
-     */
-    protected $configurationConsulter;
+    protected ConfigurationConsulter $configurationConsulter;
 
     protected UrlGenerator $urlGenerator;
 
-    /**
-     * MicrosoftGraphRepositoryFactory constructor.
-     *
-     * @param \Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter $configurationConsulter
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Interface\AccessTokenRepositoryInterface $accessTokenRepository
-     * @param \Chamilo\Libraries\Platform\ChamiloRequest $request
-     */
     public function __construct(
         ConfigurationConsulter $configurationConsulter, AccessTokenRepositoryInterface $accessTokenRepository,
         ChamiloRequest $request, UrlGenerator $urlGenerator
@@ -57,12 +37,7 @@ class GraphRepositoryFactory
         $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * Builds the Graph repository
-     *
-     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository
-     */
-    public function buildGraphRepository()
+    public function buildGraphRepository(): GraphRepository
     {
         $clientId = $this->configurationConsulter->getSetting(
             ['Chamilo\Libraries', 'microsoft_graph_client_id']
@@ -76,8 +51,7 @@ class GraphRepositoryFactory
             ['Chamilo\Libraries', 'microsoft_graph_tenant_id']
         );
 
-        if (empty($tenantId))
-        {
+        if (empty($tenantId)) {
             $tenantId = 'common';
         }
 

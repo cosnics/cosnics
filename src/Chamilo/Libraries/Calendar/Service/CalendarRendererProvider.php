@@ -6,13 +6,11 @@ use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderIn
 use Chamilo\Libraries\Calendar\Service\Recurrence\RecurrenceCalculator;
 
 /**
- *
- * @package Chamilo\Libraries\Calendar\Renderer\Service
+ * @package Chamilo\Libraries\Calendar\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class CalendarRendererProvider implements CalendarRendererProviderInterface
 {
-
     private User $dataUser;
 
     /**
@@ -77,17 +75,14 @@ abstract class CalendarRendererProvider implements CalendarRendererProviderInter
     {
         $cacheIdentifier = md5(serialize([$startTime, $endTime, $calculateRecurrence]));
 
-        if (!isset($this->events[$cacheIdentifier]))
-        {
+        if (!isset($this->events[$cacheIdentifier])) {
             $events = $this->aggregateEvents($startTime, $endTime);
 
-            if ($startTime && $endTime && $calculateRecurrence)
-            {
+            if ($startTime && $endTime && $calculateRecurrence) {
                 $recurrenceCalculator = new RecurrenceCalculator($events, $startTime, $endTime);
                 $this->events[$cacheIdentifier] = $recurrenceCalculator->expandEvents();
             }
-            else
-            {
+            else {
                 $this->events[$cacheIdentifier] = $events;
             }
         }

@@ -10,12 +10,11 @@ use Exception;
  * These conditions must be defined in the extensions of this class. Uses a PHP based cache.
  * For example: scan for directories with a given path, scan for files with a given path, scan for classes
  *
- * @package Chamilo\Libraries\File\PackagesContentFinder
+ * @package Chamilo\Libraries\Filesystem\Service\PackagesContentFinder
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class PackagesContentFinder
 {
-
     private ?string $cacheFilePath;
 
     /**
@@ -51,28 +50,23 @@ abstract class PackagesContentFinder
     {
         $cacheFilePath = $this->getCacheFilePath();
 
-        if (isset($cacheFilePath) && file_exists($cacheFilePath))
-        {
+        if (isset($cacheFilePath) && file_exists($cacheFilePath)) {
             $content = require($cacheFilePath);
 
-            if (!empty($content) && !is_array($content))
-            {
+            if (!empty($content) && !is_array($content)) {
                 throw new Exception(
                     'The given cache file ' . $cacheFilePath . ' contains invalid data, should be an array'
                 );
             }
         }
-        else
-        {
+        else {
             $content = [];
 
-            foreach ($this->getPackages() as $package)
-            {
+            foreach ($this->getPackages() as $package) {
                 $content = array_merge($content, $this->handlePackage($package));
             }
 
-            if (isset($cacheFilePath))
-            {
+            if (isset($cacheFilePath)) {
                 file_put_contents($cacheFilePath, sprintf('<?php return %s;', var_export($content, true)));
             }
         }

@@ -6,14 +6,13 @@ use Chamilo\Libraries\UserInterface\Form\Service\FormValidatorHtmlEditorRenderer
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @package Chamilo\Libraries\Ajax\Component
+ * @package Chamilo\Libraries\Component
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class HtmlEditorInstanceComponent extends Manager
 {
-
     /**
      * @throws \QuickformException
      */

@@ -8,8 +8,7 @@ use Exception;
 use HTML_Table;
 
 /**
- * @package Chamilo\Libraries\Calendar\Service\View\Table
- *
+ * @package Chamilo\Libraries\Calendar\Service\TableBuilder
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WeekCalendarTableBuilder extends CalendarTableBuilder
@@ -26,38 +25,31 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
         $start = 0;
         $end = 24;
 
-        if ($hide)
-        {
+        if ($hide) {
             $start = $workingStart;
             $end = $workingEnd;
         }
 
-        foreach ($events as $time => $items)
-        {
+        foreach ($events as $time => $items) {
             $row = (date('H', $time) / $this->hourStep) - $start;
 
-            if ($row > $end - $start - 1)
-            {
+            if ($row > $end - $start - 1) {
                 continue;
             }
 
             $column = date('w', $time);
 
-            if ($column == 0)
-            {
+            if ($column == 0) {
                 $column = 7;
             }
 
-            foreach ($items as $item)
-            {
-                try
-                {
+            foreach ($items as $item) {
+                try {
                     $cellContent = $table->getCellContents($row, $column);
                     $cellContent .= $item;
                     $table->setCellContents($row, $column, $cellContent);
                 }
-                catch (Exception)
-                {
+                catch (Exception) {
                 }
             }
         }
@@ -82,14 +74,12 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
         $start = 0;
         $end = 24;
 
-        if ($hide)
-        {
+        if ($hide) {
             $start = $workingStart;
             $end = $workingEnd;
         }
 
-        for ($hour = $start; $hour < $end; $hour += $this->getHourStep())
-        {
+        for ($hour = $start; $hour < $end; $hour += $this->getHourStep()) {
             $rowId = ($hour / $this->getHourStep()) - $start;
             $cellContent = str_pad((string) $hour, 2, '0', STR_PAD_LEFT);
             $table->setCellContents($rowId, 0, $cellContent);
@@ -98,8 +88,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
 
             $classes[] = 'table-calendar-week-hours';
 
-            if ($hour % 2 == 0)
-            {
+            if ($hour % 2 == 0) {
                 $classes[] = 'table-calendar-alternate';
             }
 
@@ -108,19 +97,16 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
 
         $today = date('Y-m-d');
 
-        for ($day = 0; $day < 7; $day ++)
-        {
+        for ($day = 0; $day < 7; $day ++) {
             $weekDayTime = strtotime('+' . $day . ' days', $firstDay);
             $header->setHeaderContents(0, $day + 1, $this->getHeaderContent($weekDayTime, $dayUrlTemplate));
 
-            for ($hour = $start; $hour < $end; $hour += $this->getHourStep())
-            {
+            for ($hour = $start; $hour < $end; $hour += $this->getHourStep()) {
                 $row = ($hour / $this->getHourStep()) - $start;
 
                 $classes = $this->determineCellClasses($today, $weekDayTime, $hour, $workingStart, $workingEnd);
 
-                if (count($classes) > 0)
-                {
+                if (count($classes) > 0) {
                     $table->setCellAttributes($row, $day + 1, ['class' => $classes]);
                 }
 
@@ -139,26 +125,21 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
     {
         $classes = [];
 
-        if ($today == date('Y-m-d', $weekDay))
-        {
-            if (date('H') >= $hour && date('H') < $hour + $this->getHourStep())
-            {
+        if ($today == date('Y-m-d', $weekDay)) {
+            if (date('H') >= $hour && date('H') < $hour + $this->getHourStep()) {
                 $classes[] = 'table-calendar-highlight';
             }
         }
 
         // If day of week number is 0 (Sunday) or 6 (Saturday) -> it's a weekend
-        if (date('w', $weekDay) % 6 == 0)
-        {
+        if (date('w', $weekDay) % 6 == 0) {
             $classes[] = 'table-calendar-weekend';
         }
-        elseif ($hour % 2 == 0)
-        {
+        elseif ($hour % 2 == 0) {
             $classes[] = 'table-calendar-alternate';
         }
 
-        if ($hour < $workingStart || $hour >= $workingEnd)
-        {
+        if ($hour < $workingStart || $hour >= $workingEnd) {
             $classes[] = 'table-calendar-disabled';
         }
 
@@ -172,15 +153,12 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
 
     protected function getFirstDayOfWeek(): ?string
     {
-        if ($this->getUser() instanceof User)
-        {
-
+        if ($this->getUser() instanceof User) {
             return $this->getUserSettingService()->getSettingForUser(
                 $this->getUser(), 'Chamilo\Libraries', 'calendar_first_day_of_week'
             );
         }
-        else
-        {
+        else {
             return $this->getConfigurationConsulter()->getSetting(['Chamilo\Libraries', 'calendar_first_day_of_week']);
         }
     }
@@ -191,20 +169,17 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
             $this->getTranslator()->trans(date('l', $weekDayTime) . 'Short', [], StringUtilities::LIBRARIES) . ' ' .
             date('d/m', $weekDayTime);
 
-        if (is_null($dayUrlTemplate))
-        {
+        if (is_null($dayUrlTemplate)) {
             return $dayLabel;
         }
-        else
-        {
+        else {
             return '<a href="' . $this->getDayUrl($weekDayTime, $dayUrlTemplate) . '">' . $dayLabel . '</a>';
         }
     }
 
     public function getTableEndTime(int $displayTime): int
     {
-        if ($this->getFirstDayOfWeek() == 'sunday')
-        {
+        if ($this->getFirstDayOfWeek() == 'sunday') {
             return strtotime('Next Saterday', strtotime('-1 Week', $displayTime));
         }
 
@@ -213,8 +188,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
 
     public function getTableStartTime(int $displayTime): int
     {
-        if ($this->getFirstDayOfWeek() == 'sunday')
-        {
+        if ($this->getFirstDayOfWeek() == 'sunday') {
             return strtotime('Next Sunday', strtotime('-1 Week', $displayTime));
         }
 

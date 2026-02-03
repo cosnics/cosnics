@@ -8,7 +8,7 @@ use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @package Chamilo\Libraries\Ajax\Component
+ * @package Chamilo\Libraries\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -32,29 +32,16 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
             $translator->trans('SaturdayShort', [], StringUtilities::LIBRARIES)
         ];
 
-        // Defining the days of the week to allow translation of the days
-        $DaysLong = [
-            $translator->trans('MondayLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('TuesdayLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('WednesdayLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('ThursdayLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('FridayLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('SaturdayLong', [], StringUtilities::LIBRARIES)
-        ];
-
         $startOfWeek =
             $this->getConfigurationConsulter()->getSetting(['Chamilo\Libraries', 'calendar_first_day_of_week']);
 
         if ($startOfWeek == 'sunday') {
             array_unshift($DaysShort, $translator->trans('SundayShort', [], StringUtilities::LIBRARIES));
-            array_unshift($DaysLong, $translator->trans('SundayLong', [], StringUtilities::LIBRARIES));
 
             $startOfWeekIdentifier = 1;
         }
         else {
             $DaysShort[] = $translator->trans('SundayShort', [], StringUtilities::LIBRARIES);
-            $DaysLong[] = $translator->trans('SundayLong', [], StringUtilities::LIBRARIES);
-
             $startOfWeekIdentifier = 0;
         }
         // Defining the months of the year to allow translation of the months

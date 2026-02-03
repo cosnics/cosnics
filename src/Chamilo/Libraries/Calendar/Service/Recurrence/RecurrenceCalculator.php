@@ -7,13 +7,11 @@ use DateTime;
 use Sabre\VObject;
 
 /**
- *
- * @package Chamilo\Libraries\Calendar\Event\RecurrenceRules
+ * @package Chamilo\Libraries\Calendar\Service\Recurrence
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RecurrenceCalculator
 {
-
     private int $endTime;
 
     /**
@@ -46,25 +44,20 @@ class RecurrenceCalculator
         $expandedEvents = [];
         $recurringEvents = [];
 
-        foreach ($events as $key => $event)
-        {
-            if (!$event->getRecurrenceRules()->hasRecurrence())
-            {
+        foreach ($events as $key => $event) {
+            if (!$event->getRecurrenceRules()->hasRecurrence()) {
                 $expandedEvents[] = $event;
             }
-            else
-            {
+            else {
                 $recurringEvents[$key] = $event;
             }
         }
 
-        if (count($expandedEvents) == count($events))
-        {
+        if (count($expandedEvents) == count($events)) {
             return $expandedEvents;
         }
 
-        foreach ($recurringEvents as $key => $event)
-        {
+        foreach ($recurringEvents as $key => $event) {
             $startDateTime = new DateTime('@' . $event->getStartDate());
             $endDateTime = new DateTime('@' . $event->getEndDate());
 
@@ -91,16 +84,14 @@ class RecurrenceCalculator
         $vCalendar = $vCalendar->expand($fromDateTime, $toDateTime);
         $calculatedEvents = $vCalendar->VEVENT;
 
-        foreach ($calculatedEvents as $calculatedEvent)
-        {
+        foreach ($calculatedEvents as $calculatedEvent) {
             $repeatEvent = clone $recurringEvents[$calculatedEvent->EVENTID->getValue()];
 
             $repeatEvent->setRecurrenceRules(new RecurrenceRules());
             $repeatEvent->setStartDate($calculatedEvent->DTSTART->getDateTime()->getTimeStamp());
             $repeatEvent->setEndDate($calculatedEvent->DTEND->getDateTime()->getTimeStamp());
 
-            if ($this->isVisible($repeatEvent, $this->getStartTime(), $this->getEndTime()))
-            {
+            if ($this->isVisible($repeatEvent, $this->getStartTime(), $this->getEndTime())) {
                 $expandedEvents[] = $repeatEvent;
             }
         }

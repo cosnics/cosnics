@@ -12,7 +12,6 @@ use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
 abstract class Manager extends Application
 {
     public const ACTION_AUTHENTICATE = 'Authentication';
-
     public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_AUTHENTICATE;
 

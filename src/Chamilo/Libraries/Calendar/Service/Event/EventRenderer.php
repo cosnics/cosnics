@@ -22,8 +22,7 @@ abstract class EventRenderer
     {
         $eventClasses = 'event-container';
 
-        if (!$isEventSourceVisible)
-        {
+        if (!$isEventSourceVisible) {
             $eventClasses .= ' event-container-hidden';
         }
 

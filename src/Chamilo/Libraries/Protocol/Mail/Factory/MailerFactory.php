@@ -8,13 +8,12 @@ use Chamilo\Libraries\Protocol\Mail\Service\Platform;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Mail\Mailer
+ * @package Chamilo\Libraries\Protocol\Mail\Factory
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MailerFactory
 {
-
     protected ConfigurationConsulter $configurationConsulter;
 
     protected string $configuredMailerClass;
@@ -44,12 +43,10 @@ class MailerFactory
 
     public function getActiveMailer(): MailerInterface
     {
-        try
-        {
+        try {
             return $this->getMailer($this->getConfiguredMailerClass());
         }
-        catch (ClassNotExistException)
-        {
+        catch (ClassNotExistException) {
             return $this->getDefaultMailer();
         }
     }
@@ -74,8 +71,7 @@ class MailerFactory
      */
     public function getMailer(string $mailerClass): MailerInterface
     {
-        if (!isset($this->mailers[$mailerClass]))
-        {
+        if (!isset($this->mailers[$mailerClass])) {
             throw new ClassNotExistException($mailerClass);
         }
 

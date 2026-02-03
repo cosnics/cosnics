@@ -4,12 +4,11 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception;
 use Exception;
 
 /**
- * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Exception
+ * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class CalendarNotFoundException extends Exception
 {
-
     public function __construct(string $userIdentifier, string $calendarIdentifier)
     {
         parent::__construct(

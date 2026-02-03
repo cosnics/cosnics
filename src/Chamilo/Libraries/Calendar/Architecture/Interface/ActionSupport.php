@@ -4,8 +4,7 @@ namespace Chamilo\Libraries\Calendar\Architecture\Interface;
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
 
 /**
- *
- * @package Chamilo\Libraries\Calendar\Event\Interfaces
+ * @package Chamilo\Libraries\Calendar\Architecture\Interface
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>

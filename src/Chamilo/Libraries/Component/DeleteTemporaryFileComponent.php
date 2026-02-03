@@ -8,7 +8,7 @@ use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @package Chamilo\Libraries\Ajax\Component
+ * @package Chamilo\Libraries\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -18,9 +18,6 @@ class DeleteTemporaryFileComponent extends Manager
     // Input parameters
     public const PARAM_FILE = 'file';
 
-    /**
-     * @see \Chamilo\Libraries\Architecture\Domain\Application::run()
-     */
     public function run(): Response
     {
         $temporaryFileName = $this->getRequest()->getFromQueryOrRequest(self::PARAM_FILE);
@@ -29,14 +26,12 @@ class DeleteTemporaryFileComponent extends Manager
 
         $translator = $this->getTranslator();
 
-        try
-        {
+        try {
             $this->getFilesystem()->remove($temporaryFilePath);
 
             return JsonAjaxResult::success($translator->trans('FileRemoved', [], StringUtilities::LIBRARIES));
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             return JsonAjaxResult::generalError($translator->trans('FileNotRemoved', [], StringUtilities::LIBRARIES));
         }
     }

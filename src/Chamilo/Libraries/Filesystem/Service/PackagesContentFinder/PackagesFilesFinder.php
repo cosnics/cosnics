@@ -10,12 +10,11 @@ use Symfony\Component\Finder\Finder;
  * Uses a PHP-based caching system.
  * Class PackagesFilesFinder
  *
- * @package Chamilo\Libraries\File\PackagesContentFinder
+ * @package Chamilo\Libraries\Filesystem\Service\PackagesContentFinder
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class PackagesFilesFinder extends PackagesContentFinder
 {
-
     private string $filenamePattern;
 
     private string $relativeFilePath;
@@ -50,21 +49,18 @@ class PackagesFilesFinder extends PackagesContentFinder
         $files = [];
         $path = $this->getPackagePath($package) . $this->relativeFilePath;
 
-        if (!file_exists($path))
-        {
+        if (!file_exists($path)) {
             return $files;
         }
 
         $finder = new Finder();
         $finder->files()->depth(' == 0')->in($path);
 
-        if ($this->filenamePattern)
-        {
+        if ($this->filenamePattern) {
             $finder->name($this->filenamePattern);
         }
 
-        foreach ($finder as $file)
-        {
+        foreach ($finder as $file) {
             $files[$package][] = $file->getRealPath();
         }
 

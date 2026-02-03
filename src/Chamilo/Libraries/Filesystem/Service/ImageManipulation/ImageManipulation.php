@@ -2,23 +2,21 @@
 namespace Chamilo\Libraries\Filesystem\Service\ImageManipulation;
 
 /**
- * @package Chamilo\Libraries\File\ImageManipulation
+ * @package Chamilo\Libraries\Filesystem\Service\ImageManipulation
  */
 abstract class ImageManipulation
 {
     /**
-     * When cropping an image, use this offset value to get the exacte center of the image
+     * When cropping an image, use this offset value to get the exacte centre of the image
      */
     public const CROP_CENTER = - 1;
     public const DIMENSION_HEIGHT = 1;
     public const DIMENSION_WIDTH = 0;
-
     /**
      * Final dimensions will be less than or equal to the entered width and height. Useful for ensuring a maximum
      * height and/or width.
      */
     public const SCALE_INSIDE = 0;
-
     /**
      * Final dimensions will be greater than or equal to the entered width and height. Ideal for cropping the result to
      * a square.
@@ -41,12 +39,10 @@ abstract class ImageManipulation
 
     public function createThumbnail(int $width, ?int $height = null): bool
     {
-        if (is_null($height))
-        {
+        if (is_null($height)) {
             $height = $width;
         }
-        if ($this->scale($width, $height, self::SCALE_OUTSIDE))
-        {
+        if ($this->scale($width, $height, self::SCALE_OUTSIDE)) {
             return $this->crop($width, $height);
         }
 
@@ -83,28 +79,24 @@ abstract class ImageManipulation
     {
         $aspect = $originalHeight / $originalWidth;
 
-        if ($type == self::SCALE_OUTSIDE)
-        {
+        if ($type == self::SCALE_OUTSIDE) {
             $newAspect = $height / $width;
             $width = ($aspect < $newAspect ? 9999999 : $width);
             $height = ($aspect > $newAspect ? 9999999 : $height);
         }
 
         // don't scale up
-        if ($width >= $originalWidth && $height >= $originalHeight)
-        {
+        if ($width >= $originalWidth && $height >= $originalHeight) {
             return false;
         }
 
         $newAspect = $height / $width;
 
-        if ($aspect < $newAspect)
-        {
+        if ($aspect < $newAspect) {
             $width = (int) min($width, $originalWidth);
             $height = (int) round($width * $aspect);
         }
-        else
-        {
+        else {
             $height = (int) min($height, $originalHeight);
             $width = (int) round($height / $aspect);
         }

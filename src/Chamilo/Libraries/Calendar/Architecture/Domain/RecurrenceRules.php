@@ -2,8 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Architecture\Domain;
 
 /**
- * @package Chamilo\Libraries\Calendar\Event\RecurrenceRules
- *
+ * @package Chamilo\Libraries\Calendar\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RecurrenceRules

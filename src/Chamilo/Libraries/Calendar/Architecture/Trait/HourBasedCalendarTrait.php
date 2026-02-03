@@ -5,8 +5,7 @@ use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
- * @package Chamilo\Libraries\Calendar\Architecture\Traits
- *
+ * @package Chamilo\Libraries\Calendar\Architecture\Trait
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 trait HourBasedCalendarTrait

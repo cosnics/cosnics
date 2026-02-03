@@ -4,22 +4,19 @@ namespace Chamilo\Libraries\Calendar\Service\Recurrence;
 use Chamilo\Libraries\Calendar\Architecture\Domain\RecurrenceRules;
 
 /**
- *
- * @package Chamilo\Libraries\Calendar\Event\RecurrenceRules
+ * @package Chamilo\Libraries\Calendar\Service\Recurrence
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class IcalRecurrenceRulesFormatter
 {
-
     /**
-     * @return string[][]
+     * @return string[][][]
      */
     public function format(RecurrenceRules $recurrenceRules): array
     {
         $iCalRules = [];
 
-        switch ($recurrenceRules->getFrequency())
-        {
+        switch ($recurrenceRules->getFrequency()) {
             case RecurrenceRules::FREQUENCY_DAILY :
                 $iCalRules['FREQ'] = 'DAILY';
                 break;
@@ -48,38 +45,31 @@ class IcalRecurrenceRulesFormatter
                 break;
         }
 
-        if (!$recurrenceRules->isIndefinite())
-        {
+        if (!$recurrenceRules->isIndefinite()) {
             $iCalRules['UNTIL'] = $this->getDateInIcalFormat($recurrenceRules->getUntil());
         }
 
-        if ($recurrenceRules->getCount() > 0)
-        {
+        if ($recurrenceRules->getCount() > 0) {
             $iCalRules['COUNT'] = $recurrenceRules->getCount();
         }
 
-        if ($recurrenceRules->getInterval() > 0)
-        {
+        if ($recurrenceRules->getInterval() > 0) {
             $iCalRules['INTERVAL'] = $recurrenceRules->getInterval();
         }
 
-        if ($recurrenceRules->getByDay())
-        {
+        if ($recurrenceRules->getByDay()) {
             $iCalRules['BYDAY'] = $this->getByDayParts($recurrenceRules->getByDay());
         }
 
-        if ($recurrenceRules->getByMonthDay())
-        {
+        if ($recurrenceRules->getByMonthDay()) {
             $iCalRules['BYMONTHDAY'] = implode(',', $recurrenceRules->getByMonthDay());
         }
 
-        if ($recurrenceRules->getByMonth())
-        {
+        if ($recurrenceRules->getByMonth()) {
             $iCalRules['BYMONTH'] = implode(',', $recurrenceRules->getByMonth());
         }
 
-        if ($recurrenceRules->getByWeekNumber())
-        {
+        if ($recurrenceRules->getByWeekNumber()) {
             $iCalRules['BYWEEKNO'] = implode(',', $recurrenceRules->getByWeekNumber());
         }
 
@@ -95,8 +85,7 @@ class IcalRecurrenceRulesFormatter
     {
         $parts = [];
 
-        foreach ($byDays as $byDay)
-        {
+        foreach ($byDays as $byDay) {
             preg_match_all('/(-?[1-5]?)([A-Z]+)/', $byDay, $byDayParts);
             $parts[] = [$byDayParts[1] == 0 ? 0 : $byDayParts[1][0], $byDayParts[2][0]];
         }

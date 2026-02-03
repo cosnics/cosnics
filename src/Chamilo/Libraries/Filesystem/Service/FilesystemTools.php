@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
- * @package Chamilo\Libraries\File
+ * @package Chamilo\Libraries\Filesystem\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class FilesystemTools
@@ -42,20 +42,16 @@ class FilesystemTools
         // next elements in the array
         $list->reverseSorting();
 
-        foreach ($list as $entry)
-        {
-            if (basename($entry) != $this->createSafeName(basename($entry)))
-            {
-                if (is_file($entry))
-                {
+        foreach ($list as $entry) {
+            if (basename($entry) != $this->createSafeName(basename($entry))) {
+                if (is_file($entry)) {
                     $safeName = $this->createUniqueName(dirname($entry), basename($entry));
                     $destination = dirname($entry) . '/' . $safeName;
 
                     $filesystem->copy($entry, $destination);
                     $filesystem->remove($entry);
                 }
-                elseif (is_dir($entry))
-                {
+                elseif (is_dir($entry)) {
                     $safeName = $this->createUniqueName($entry);
                     $filesystem->rename($entry, $safeName);
                 }
@@ -67,21 +63,17 @@ class FilesystemTools
     {
         $index = 0;
 
-        if (!is_null($desiredFilename))
-        {
+        if (!is_null($desiredFilename)) {
             $filename = $this->createSafeName($desiredFilename);
             $newFilename = $filename;
 
-            while (file_exists($desiredPath . '/' . $newFilename))
-            {
+            while (file_exists($desiredPath . '/' . $newFilename)) {
                 $fileParts = explode('.', $filename);
 
-                if (count($fileParts) > 1)
-                {
+                if (count($fileParts) > 1) {
                     $newFilename = array_shift($fileParts) . ($index ++) . '.' . implode('.', $fileParts);
                 }
-                else
-                {
+                else {
                     $newFilename = array_shift($fileParts) . ($index ++);
                 }
             }
@@ -91,8 +83,7 @@ class FilesystemTools
 
         $uniquePath = dirname($desiredPath) . '/' . $this->createSafeName(basename($desiredPath));
 
-        while (is_dir($uniquePath))
-        {
+        while (is_dir($uniquePath)) {
             $uniquePath = $desiredPath . ($index ++);
         }
 
@@ -101,25 +92,20 @@ class FilesystemTools
 
     public function formatFileSize(int $fileSize, bool $postfix = true): string
     {
-        // Todo: Megabyte vs Mebibyte...
         $kilobyte = 1024;
         $megabyte = pow($kilobyte, 2);
         $gigabyte = pow($kilobyte, 3);
 
-        if ($fileSize >= $gigabyte)
-        {
+        if ($fileSize >= $gigabyte) {
             $fileSize = round($fileSize / $gigabyte * 100) / 100 . ($postfix ? ' GB' : '');
         }
-        elseif ($fileSize >= $megabyte)
-        {
+        elseif ($fileSize >= $megabyte) {
             $fileSize = round($fileSize / $megabyte * 100) / 100 . ($postfix ? ' MB' : '');
         }
-        elseif ($fileSize >= $kilobyte)
-        {
+        elseif ($fileSize >= $kilobyte) {
             $fileSize = round($fileSize / $kilobyte * 100) / 100 . ($postfix ? ' kB' : '');
         }
-        else
-        {
+        else {
             $fileSize = $fileSize . ($postfix ? ' B' : '');
         }
 
@@ -132,17 +118,14 @@ class FilesystemTools
     {
         $finder = new Finder();
 
-        if (!$recursive)
-        {
+        if (!$recursive) {
             $finder->depth('== 0');
         }
 
-        if ($type == FileTypeFilterIterator::ONLY_FILES)
-        {
+        if ($type == FileTypeFilterIterator::ONLY_FILES) {
             $finder->files();
         }
-        elseif ($type == FileTypeFilterIterator::ONLY_DIRECTORIES)
-        {
+        elseif ($type == FileTypeFilterIterator::ONLY_DIRECTORIES) {
             $finder->directories();
         }
 
@@ -154,18 +137,15 @@ class FilesystemTools
      */
     public function getDiskSpace(string $path): int
     {
-        if (is_file($path))
-        {
+        if (is_file($path)) {
             return filesize($path);
         }
 
-        if (is_dir($path))
-        {
+        if (is_dir($path)) {
             $totalDiskSpace = 0;
             $files = $this->getDirectoryContent($path, FileTypeFilterIterator::ONLY_FILES);
 
-            foreach ($files as $file)
-            {
+            foreach ($files as $file) {
                 $totalDiskSpace += filesize($file);
             }
 
@@ -233,8 +213,7 @@ class FilesystemTools
 
         $bytes = floatval($fileSize);
 
-        if (preg_match('#([KMGTP]?B?)$#i', $fileSize, $matches) && !empty($bytesArray[$matches[1]]))
-        {
+        if (preg_match('#([KMGTP]?B?)$#i', $fileSize, $matches) && !empty($bytesArray[$matches[1]])) {
             $bytes *= $bytesArray[$matches[1]];
         }
 

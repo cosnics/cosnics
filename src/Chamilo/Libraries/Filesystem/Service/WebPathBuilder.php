@@ -5,7 +5,7 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 
 /**
- * @package Chamilo\Libraries\File
+ * @package Chamilo\Libraries\Filesystem\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class WebPathBuilder extends AbstractPathBuilder
@@ -21,8 +21,7 @@ class WebPathBuilder extends AbstractPathBuilder
 
     public function getBasePath(): string
     {
-        if (!isset($this->cache[self::BASE]))
-        {
+        if (!isset($this->cache[self::BASE])) {
             $request = $this->getRequest();
             $this->cache[self::BASE] =
                 $request->getSchemeAndHttpHost() . $request->getBasePath() . $request->getPathInfo();

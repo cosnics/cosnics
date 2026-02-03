@@ -4,16 +4,11 @@ namespace Chamilo\Libraries\Protocol\Security\Factory;
 use Hackzilla\PasswordGenerator\Generator\ComputerPasswordGenerator;
 
 /**
- * @package Chamilo\Libraries\Platform
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @package Chamilo\Libraries\Protocol\Security\Factory
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PasswordGeneratorFactory
 {
-
-    public function __construct()
-    {
-    }
-
     public function createPasswordGenerator(): ComputerPasswordGenerator
     {
         $passwordGenerator = new ComputerPasswordGenerator();

@@ -7,14 +7,13 @@ use Exception;
 use Microsoft\Graph\GraphServiceClient;
 
 /**
- *
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @TODO Fix class
  */
 class UserRepository
 {
-
     private GraphServiceClient $graphServiceClient;
 
     public function __construct(GraphServiceClient $graphServiceClient)
@@ -32,21 +31,17 @@ class UserRepository
      */
     public function getUser(User $user): ?\Microsoft\Graph\Generated\Models\User
     {
-        try
-        {
+        try {
             $graphUser = $this->getGraphServiceClient()->users()->byUserId($user->getEmail())->get()->wait();
 
-            if ($graphUser instanceof \Microsoft\Graph\Generated\Models\User)
-            {
+            if ($graphUser instanceof \Microsoft\Graph\Generated\Models\User) {
                 return $graphUser;
             }
 
             throw new UserNotFoundException($user);
         }
-        catch (Exception $exception)
-        {
-            if ($exception->getCode() == 404)
-            {
+        catch (Exception $exception) {
+            if ($exception->getCode() == 404) {
                 throw new UserNotFoundException($user);
             }
 

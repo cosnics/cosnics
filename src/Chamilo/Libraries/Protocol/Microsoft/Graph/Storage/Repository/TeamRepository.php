@@ -4,11 +4,11 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Model\Team;
 
 /**
- * Class TeamRepository
+ * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
+ * @TODO Fix class
  */
 class TeamRepository
 {
-
     /**
      *
      * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository
@@ -34,10 +34,10 @@ class TeamRepository
     {
         return $this->graphRepository->executePutWithAccessTokenExpirationRetry(
             '/groups/' . $groupId . '/team', [
-                "memberSettings" => [
-                    "allowCreateUpdateChannels" => true
-                ]
-            ], Team::class
+            'memberSettings' => [
+                'allowCreateUpdateChannels' => true
+            ]
+        ], Team::class
         );
     }
 
@@ -62,5 +62,4 @@ class TeamRepository
 
         return $team->getProperties()['webUrl'];
     }
-
 }

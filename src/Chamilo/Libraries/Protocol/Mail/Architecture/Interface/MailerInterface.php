@@ -4,13 +4,12 @@ namespace Chamilo\Libraries\Protocol\Mail\Architecture\Interface;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Domain\Mail;
 
 /**
- * @package Chamilo\Libraries\Mail\Mailer
+ * @package Chamilo\Libraries\Protocol\Mail\Architecture\Interface
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 interface MailerInterface
 {
-
     public function sendMail(Mail $mail): void;
 
     /**

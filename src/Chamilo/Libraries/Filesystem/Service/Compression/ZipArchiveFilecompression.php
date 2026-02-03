@@ -9,7 +9,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use ZipArchive;
 
 /**
- * @package Chamilo\Libraries\File\Compression\ZipArchive
+ * @package Chamilo\Libraries\Filesystem\Service\Compression
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ZipArchiveFilecompression
@@ -36,8 +36,7 @@ class ZipArchiveFilecompression
         $pathToBeZipped = realpath($path);
         $temporaryPath = $this->createTemporaryDirectory();
 
-        if (!isset($fileName))
-        {
+        if (!isset($fileName)) {
             $fileName = $filesystemTools->createUniqueName($temporaryPath, uniqid());
         }
 
@@ -56,11 +55,9 @@ class ZipArchiveFilecompression
             new RecursiveDirectoryIterator($pathToBeZipped), RecursiveIteratorIterator::LEAVES_ONLY
         );
 
-        foreach ($files as $file)
-        {
+        foreach ($files as $file) {
             // Skip directories (they would be added automatically)
-            if (!$file->isDir())
-            {
+            if (!$file->isDir()) {
                 // Get real and relative path for current file
                 $filePath = $file->getRealPath();
                 $relativePath = substr($filePath, strlen($pathToBeZipped) + 1);
@@ -101,13 +98,11 @@ class ZipArchiveFilecompression
 
         $filesInfo = $this->getFilesInfo($zipArchive);
 
-        foreach ($filesInfo as $fileInfo)
-        {
+        foreach ($filesInfo as $fileInfo) {
             $zipArchive->extractTo($extractedFilesDirectory, $fileInfo['name']);
         }
 
-        if ($withSafeNames)
-        {
+        if ($withSafeNames) {
             $this->getFilesystemTools()->createSafeNames($extractedFilesDirectory);
         }
 
@@ -126,12 +121,10 @@ class ZipArchiveFilecompression
     {
         $filesInfo = [];
 
-        for ($i = 0; $i < $zipArchive->numFiles; $i ++)
-        {
+        for ($i = 0; $i < $zipArchive->numFiles; $i ++) {
             $fileInfo = $zipArchive->statIndex($i);
 
-            if (!str_contains($fileInfo['name'], '.') || str_contains($fileInfo['name'], '__MACOSX'))
-            {
+            if (!str_contains($fileInfo['name'], '.') || str_contains($fileInfo['name'], '__MACOSX')) {
                 continue;
             }
 

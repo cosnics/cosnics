@@ -9,16 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ChamiloRequest extends Request
 {
-
     public function getArrayFromQueryOrRequest(string $key, $default = []): array
     {
-        if ($this->query->has($key))
-        {
+        if ($this->query->has($key)) {
             return $this->query->all($key);
         }
 
-        if ($this->request->has($key))
-        {
+        if ($this->request->has($key)) {
             return $this->request->all($key);
         }
 
@@ -27,13 +24,11 @@ class ChamiloRequest extends Request
 
     public function getArrayFromRequestOrQuery(string $key, $default = []): array
     {
-        if ($this->request->has($key))
-        {
+        if ($this->request->has($key)) {
             return $this->request->all($key);
         }
 
-        if ($this->query->has($key))
-        {
+        if ($this->query->has($key)) {
             return $this->query->all($key);
         }
 
@@ -47,13 +42,11 @@ class ChamiloRequest extends Request
 
     public function getFromQueryOrRequest(string $key, $default = null): string|int|float|bool|null
     {
-        if ($this->query->has($key))
-        {
+        if ($this->query->has($key)) {
             return $this->query->get($key);
         }
 
-        if ($this->request->has($key))
-        {
+        if ($this->request->has($key)) {
             return $this->request->get($key);
         }
 
@@ -65,13 +58,11 @@ class ChamiloRequest extends Request
      */
     public function getFromRequestOrQuery(string $key, $default = null): string|int|float|bool|null
     {
-        if ($this->request->has($key))
-        {
+        if ($this->request->has($key)) {
             return $this->request->get($key);
         }
 
-        if ($this->query->has($key))
-        {
+        if ($this->query->has($key)) {
             return $this->query->get($key);
         }
 
@@ -82,5 +73,4 @@ class ChamiloRequest extends Request
     {
         return $this->request->has($key) || $this->query->has($key);
     }
-
 }

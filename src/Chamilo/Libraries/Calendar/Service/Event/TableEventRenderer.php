@@ -6,12 +6,13 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\Event
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class TableEventRenderer extends EventRenderer
 {
-
+    /**
+     * @throws \Exception
+     */
     public function render(
         Event $event, int $cellStartDate, int $cellEndDate, bool $isEventSourceVisible = true,
         bool $isFadedEvent = false
@@ -67,16 +68,14 @@ abstract class TableEventRenderer extends EventRenderer
         $fullTitle = '';
 
         $prefix = $this->renderPrefix($event, $cellStartDate, $cellEndDate);
-        if ($prefix)
-        {
+        if ($prefix) {
             $fullTitle .= $prefix . ' ';
         }
 
         $fullTitle .= htmlentities($event->getTitle());
 
         $postfix = $this->renderPostfix($event, $cellStartDate, $cellEndDate);
-        if ($postfix)
-        {
+        if ($postfix) {
             $fullTitle .= ' ' . $postfix;
         }
 
@@ -103,23 +102,19 @@ abstract class TableEventRenderer extends EventRenderer
 
         $fullTitle = $this->renderFullTitle($event, $cellStartDate, $cellEndDate);
 
-        if ($event->getUrl())
-        {
+        if ($event->getUrl()) {
             $html[] = '<a href="' . $event->getUrl() . '" title="' . htmlentities(strip_tags($fullTitle)) . '">';
         }
-        else
-        {
+        else {
             $html[] = '<span title="' . htmlentities(strip_tags($fullTitle)) . '">';
         }
 
         $html[] = $fullTitle;
 
-        if ($event->getUrl())
-        {
+        if ($event->getUrl()) {
             $html[] = '</a>';
         }
-        else
-        {
+        else {
             $html[] = '</span>';
         }
 
@@ -128,12 +123,10 @@ abstract class TableEventRenderer extends EventRenderer
 
     public function renderPostfix(Event $event, int $cellStartDate, int $cellEndDate): string
     {
-        if ($this->showPostfixDate($event, $cellStartDate, $cellEndDate))
-        {
+        if ($this->showPostfixDate($event, $cellStartDate, $cellEndDate)) {
             return $this->renderTime($event->getEndDate());
         }
-        elseif ($this->showPostfixSymbol($event, $cellStartDate))
-        {
+        elseif ($this->showPostfixSymbol($event, $cellStartDate)) {
             return $this->getPostfixSymbol();
         }
 
@@ -142,12 +135,10 @@ abstract class TableEventRenderer extends EventRenderer
 
     public function renderPrefix(Event $event, int $cellStartDate, int $cellEndDate): string
     {
-        if ($this->showPrefixDate($event, $cellStartDate, $cellEndDate))
-        {
+        if ($this->showPrefixDate($event, $cellStartDate, $cellEndDate)) {
             return $this->renderTime($event->getStartDate());
         }
-        elseif ($this->showPrefixSymbol($event, $cellStartDate))
-        {
+        elseif ($this->showPrefixSymbol($event, $cellStartDate)) {
             return $this->getPrefixSymbol();
         }
 

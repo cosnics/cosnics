@@ -4,16 +4,11 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception;
 use Exception;
 
 /**
- * Class GroupNotExistsException
+ * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GroupNotExistsException extends Exception
 {
-
-    /**
-     * AzureUserNotExistsException constructor.
-     *
-     * @param string $groupId
-     */
     public function __construct(string $groupId)
     {
         parent::__construct(

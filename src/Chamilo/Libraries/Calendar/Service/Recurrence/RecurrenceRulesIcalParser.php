@@ -4,8 +4,7 @@ namespace Chamilo\Libraries\Calendar\Service\Recurrence;
 use Chamilo\Libraries\Calendar\Architecture\Domain\RecurrenceRules;
 
 /**
- *
- * @package Chamilo\Libraries\Calendar\Event\RecurrenceRules
+ * @package Chamilo\Libraries\Calendar\Service\Recurrence
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RecurrenceRulesIcalParser
@@ -26,17 +25,14 @@ class RecurrenceRulesIcalParser
 
         $parts = [];
 
-        foreach ($icalRecurrenceRules as $rulePart)
-        {
+        foreach ($icalRecurrenceRules as $rulePart) {
             // Split the part name and value
             [$rulePartName, $rulePartValue] = explode('=', $rulePart);
 
-            if (in_array($rulePartName, ['FREQ', 'UNTIL', 'COUNT', 'INTERVAL']))
-            {
+            if (in_array($rulePartName, ['FREQ', 'UNTIL', 'COUNT', 'INTERVAL'])) {
                 $parts[$rulePartName] = $rulePartValue;
             }
-            else
-            {
+            else {
                 $parts[$rulePartName] = explode(',', $rulePartValue);
             }
         }
@@ -50,10 +46,8 @@ class RecurrenceRulesIcalParser
 
         $recurrenceRules = new RecurrenceRules();
 
-        if ($icalRecurrenceRules['FREQ'])
-        {
-            switch ($icalRecurrenceRules['FREQ'])
-            {
+        if ($icalRecurrenceRules['FREQ']) {
+            switch ($icalRecurrenceRules['FREQ']) {
                 case 'DAILY' :
                     $recurrenceRules->setFrequency(RecurrenceRules::FREQUENCY_DAILY);
                     break;
@@ -68,33 +62,27 @@ class RecurrenceRulesIcalParser
                     break;
             }
 
-            if ($icalRecurrenceRules['COUNT'])
-            {
+            if ($icalRecurrenceRules['COUNT']) {
                 $recurrenceRules->setCount((int) $icalRecurrenceRules['COUNT']);
             }
 
-            if ($icalRecurrenceRules['INTERVAL'])
-            {
+            if ($icalRecurrenceRules['INTERVAL']) {
                 $recurrenceRules->setCount((int) $icalRecurrenceRules['INTERVAL']);
             }
 
-            if ($icalRecurrenceRules['BYDAY'])
-            {
+            if ($icalRecurrenceRules['BYDAY']) {
                 $recurrenceRules->setByDay($icalRecurrenceRules['BYDAY']);
             }
 
-            if ($icalRecurrenceRules['BYMONTHDAY'])
-            {
+            if ($icalRecurrenceRules['BYMONTHDAY']) {
                 $recurrenceRules->setByMonthDay($icalRecurrenceRules['BYMONTHDAY']);
             }
 
-            if ($icalRecurrenceRules['BYMONTH'])
-            {
+            if ($icalRecurrenceRules['BYMONTH']) {
                 $recurrenceRules->setByMonth($icalRecurrenceRules['BYMONTH']);
             }
 
-            if ($icalRecurrenceRules['BYWEEKNO'])
-            {
+            if ($icalRecurrenceRules['BYWEEKNO']) {
                 $recurrenceRules->setByWeekNumber($icalRecurrenceRules['BYWEEKNO']);
             }
         }

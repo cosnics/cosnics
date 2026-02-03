@@ -10,9 +10,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use RuntimeException;
 
 /**
- * PHPMailer mailer service
- *
- * @package Chamilo\Libraries\Mail\Mailer\PhpMailer
+ * @package Chamilo\Libraries\Protocol\Mail\Service\PhpMailer
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class Mailer extends AbstractMailer
@@ -37,8 +35,7 @@ class Mailer extends AbstractMailer
      */
     protected function addAttachments(Mail $mail): void
     {
-        foreach ($mail->getAttachments() as $mailFile)
-        {
+        foreach ($mail->getAttachments() as $mailFile) {
             $this->phpMailer->addAttachment($mailFile->getPath(), $mailFile->getFilename());
         }
     }
@@ -54,8 +51,7 @@ class Mailer extends AbstractMailer
      */
     protected function addEmbeddedImages(Mail $mail): void
     {
-        foreach ($mail->getEmbeddedImages() as $index => $mailFile)
-        {
+        foreach ($mail->getEmbeddedImages() as $index => $mailFile) {
             $this->phpMailer->addEmbeddedImage(
                 $mailFile->getPath(), $index, $mailFile->getFilename(), 'base64', $mailFile->getMimeType()
             );
@@ -67,18 +63,15 @@ class Mailer extends AbstractMailer
      */
     protected function addRecipients(Mail $mail): void
     {
-        foreach ($mail->getTo() as $recipient)
-        {
+        foreach ($mail->getTo() as $recipient) {
             $this->phpMailer->addAddress($recipient, $recipient);
         }
 
-        foreach ($mail->getCc() as $recipient)
-        {
+        foreach ($mail->getCc() as $recipient) {
             $this->phpMailer->addCC($recipient, $recipient);
         }
 
-        foreach ($mail->getBcc() as $recipient)
-        {
+        foreach ($mail->getBcc() as $recipient) {
             $this->phpMailer->addBCC($recipient, $recipient);
         }
     }
@@ -88,13 +81,11 @@ class Mailer extends AbstractMailer
      */
     protected function addReplyInformation(Mail $mail): void
     {
-        if (!is_null($mail->getReplyEmail()))
-        {
+        if (!is_null($mail->getReplyEmail())) {
             $this->phpMailer->addReplyTo($this->determineReplyEmail($mail), $this->determineReplyName($mail));
             $this->phpMailer->addCustomHeader('Return-Path: <' . $this->determineReplyEmail($mail) . '>');
         }
-        else
-        {
+        else {
             $this->phpMailer->addCustomHeader('Return-Path: <' . $this->phpMailer->From . '>');
         }
     }
@@ -121,8 +112,7 @@ class Mailer extends AbstractMailer
      */
     protected function initializePhpMailer(): void
     {
-        if (!isset($this->phpMailer))
-        {
+        if (!isset($this->phpMailer)) {
             global $phpMailerConfiguration;
             require_once($this->getSystemPathBuilder()->getStoragePath() . 'configuration/phpmailer.conf.php');
 
@@ -134,13 +124,11 @@ class Mailer extends AbstractMailer
             $this->phpMailer->Host = $phpMailerConfiguration['SMTP_HOST'];
             $this->phpMailer->Port = $phpMailerConfiguration['SMTP_PORT'];
 
-            if ($phpMailerConfiguration['SMTP_SECURE'])
-            {
+            if ($phpMailerConfiguration['SMTP_SECURE']) {
                 $this->phpMailer->SMTPSecure = $phpMailerConfiguration['SMTP_SECURE'];
             }
 
-            if ($phpMailerConfiguration['SMTP_AUTH'])
-            {
+            if ($phpMailerConfiguration['SMTP_AUTH']) {
                 $this->phpMailer->SMTPAuth = 1;
                 $this->phpMailer->Username = $phpMailerConfiguration['SMTP_USER'];
                 $this->phpMailer->Password = $phpMailerConfiguration['SMTP_PASS'];
@@ -166,8 +154,7 @@ class Mailer extends AbstractMailer
      */
     protected function send(Mail $mail): void
     {
-        if (!$this->phpMailer->send())
-        {
+        if (!$this->phpMailer->send()) {
             throw new RuntimeException('Could not send e-mail:' . $mail->getSubject());
         }
     }
@@ -180,24 +167,20 @@ class Mailer extends AbstractMailer
     {
         $recipientsFailed = [];
 
-        foreach ($mail->getTo() as $recipient)
-        {
+        foreach ($mail->getTo() as $recipient) {
             $this->phpMailer->addAddress($recipient, $recipient);
 
-            try
-            {
+            try {
                 $this->send($mail);
             }
-            catch (Exception)
-            {
+            catch (Exception) {
                 $recipientsFailed[] = $recipient;
             }
 
             $this->phpMailer->clearAllRecipients();
         }
 
-        if (count($recipientsFailed) > 0)
-        {
+        if (count($recipientsFailed) > 0) {
             throw new Exception('Some mails could not be send (' . implode(', ', $recipientsFailed) . ')');
         }
     }
@@ -213,13 +196,11 @@ class Mailer extends AbstractMailer
         $this->addAttachments($mail);
         $this->addContent($mail);
 
-        if (!$mail->getSendIndividually())
-        {
+        if (!$mail->getSendIndividually()) {
             $this->addRecipients($mail);
             $this->send($mail);
         }
-        else
-        {
+        else {
             $this->sendIndividually($mail);
         }
 

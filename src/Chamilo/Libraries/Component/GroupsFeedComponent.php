@@ -20,10 +20,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Feed to return the course groups of this course
- *
  * @author  Sven Vanpoucke
- * @package Chamilo\Libraries\Ajax\Component
+ * @package Chamilo\Libraries\Component
  */
 abstract class GroupsFeedComponent extends Manager
 {
@@ -33,11 +31,11 @@ abstract class GroupsFeedComponent extends Manager
     public const PROPERTY_ELEMENTS = 'elements';
     public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
-    /**
-     * @var int
-     */
-    protected $userCount = 0;
+    protected int $userCount = 0;
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function run(): Response
     {
         $result = new JsonAjaxResult();
@@ -55,18 +53,17 @@ abstract class GroupsFeedComponent extends Manager
     }
 
     /**
-     * Returns all the elements for this feed
-     *
-     * @return \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElements
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Exception
      */
-    private function getElements()
+    private function getElements(): AdvancedElementFinderElements
     {
         $elements = new AdvancedElementFinderElements();
         $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         // Add groups
         $groups = $this->retrieveGroups();
-        if ($groups && $groups->count() > 0) {
+        if ($groups->count() > 0) {
             $translator = $this->getTranslator();
             // Add group category
             $groupCategory = new AdvancedElementFinderElement(
@@ -81,8 +78,8 @@ abstract class GroupsFeedComponent extends Manager
         }
 
         // Add users
-        $users = $this->retrieve_users();
-        if ($users && $users->count() > 0) {
+        $users = $this->retrieveUsers();
+        if ($users->count() > 0) {
             // Add user category
             $userCategory = new AdvancedElementFinderElement('users', $glyph->getClassNamesString(), 'Users', 'Users');
             $elements->addElement($userCategory);
@@ -102,48 +99,38 @@ abstract class GroupsFeedComponent extends Manager
      */
     abstract public function getGroupElement(Group $group): AdvancedElementFinderElement;
 
-    /**
-     * @return int
-     */
-    protected function getOffset()
+    protected function getOffset(): int
     {
         $offset = $this->getRequest()->request->get(self::PARAM_OFFSET);
-        if (!isset($offset) || is_null($offset)) {
+        if (!isset($offset)) {
             $offset = 0;
         }
 
         return $offset;
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator
-     */
-    protected function getSearchQueryConditionGenerator()
+    protected function getSearchQueryConditionGenerator(): SearchQueryConditionGenerator
     {
         return $this->getService(SearchQueryConditionGenerator::class);
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement
-     */
     abstract public function getUserElement(User $user): AdvancedElementFinderElement;
 
     /**
      * @return int[]
      */
-    abstract public function getUserIdentifiers();
+    abstract public function getUserIdentifiers(): array;
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      */
-    abstract public function retrieveGroups();
+    abstract public function retrieveGroups(): ArrayCollection;
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    private function retrieve_users()
+    private function retrieveUsers(): ArrayCollection
     {
         $conditions = [];
 

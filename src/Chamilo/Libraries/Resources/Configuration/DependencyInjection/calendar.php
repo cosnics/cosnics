@@ -1,11 +1,11 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Chamilo\Libraries\Calendar\Factory\HtmlCalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
 use Chamilo\Libraries\Calendar\Service\Event\EventListRenderer;
 use Chamilo\Libraries\Calendar\Service\Event\EventMiniMonthRenderer;
 use Chamilo\Libraries\Calendar\Service\Event\EventMonthRenderer;
-use Chamilo\Libraries\Calendar\Service\HtmlCalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Service\JumpBarRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\DayCalendarTableBuilder;

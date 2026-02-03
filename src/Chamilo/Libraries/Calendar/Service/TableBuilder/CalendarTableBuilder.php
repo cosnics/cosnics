@@ -8,8 +8,7 @@ use HTML_Table;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Calendar\Service\View\Table
- *
+ * @package Chamilo\Libraries\Calendar\Service\TableBuilder
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class CalendarTableBuilder

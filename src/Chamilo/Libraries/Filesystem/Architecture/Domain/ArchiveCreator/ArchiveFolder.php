@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Filesystem\Architecture\Domain\ArchiveCreator;
 
 /**
- * @package Chamilo\Libraries\File\Compression\ArchiveCreator
+ * @package Chamilo\Libraries\Filesystem\Architecture\Domain\ArchiveCreator
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ArchiveFolder extends ArchiveItem

@@ -7,8 +7,7 @@ use Exception;
 use HTML_Table;
 
 /**
- * @package Chamilo\Libraries\Calendar\Service\View\TableBuilder
- *
+ * @package Chamilo\Libraries\Calendar\Service\TableBuilder
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class MonthCalendarTableBuilder extends CalendarTableBuilder
@@ -17,31 +16,26 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
 
     protected function addEventItems(HTML_Table $table, $time, $row, $column, $items): void
     {
-        foreach ($items as $item)
-        {
-            try
-            {
+        foreach ($items as $item) {
+            try {
                 $cellContent = $table->getCellContents($row, $column);
                 $cellContent .= $item;
                 $table->setCellContents($row, $column, $cellContent);
             }
-            catch (Exception)
-            {
+            catch (Exception) {
             }
         }
     }
 
     protected function addEvents(int $displayTime, HTML_Table $table, array $cellMapping, array $events): void
     {
-        foreach ($events as $time => $items)
-        {
+        foreach ($events as $time => $items) {
             $cellMappingKey = date('Ymd', $time);
 
             $row = $cellMapping[$cellMappingKey][0];
             $column = $cellMapping[$cellMappingKey][1];
 
-            if (is_null($row) || is_null($column))
-            {
+            if (is_null($row) || is_null($column)) {
                 continue;
             }
 
@@ -58,10 +52,8 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
         $cell = 0;
         $cellMapping = [];
 
-        while (date('Ym', $tableDate) <= date('Ym', $displayTime))
-        {
-            do
-            {
+        while (date('Ym', $tableDate) <= date('Ym', $displayTime)) {
+            do {
                 $row = intval($cell / 7);
                 $column = $cell % 7;
 
@@ -69,8 +61,7 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
 
                 $classes = $this->determineCellClasses($tableDate, $displayTime);
 
-                if (count($classes) > 0)
-                {
+                if (count($classes) > 0) {
                     $table->setCellAttributes($row, $column, ['class' => $classes]);
                 }
 
@@ -95,20 +86,17 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
         $classes = [];
 
         // Is current table date today?
-        if (date('Ymd', $tableDate) == date('Ymd'))
-        {
+        if (date('Ymd', $tableDate) == date('Ymd')) {
             $classes[] = 'table-calendar-highlight';
         }
 
         // If day of week number is 0 (Sunday) or 6 (Saturday) -> it's a weekend
-        if (date('w', $tableDate) % 6 == 0)
-        {
+        if (date('w', $tableDate) % 6 == 0) {
             $classes[] = 'table-calendar-weekend';
         }
 
         // Is current table date in this month or another one?
-        if (date('Ym', $tableDate) != date('Ym', $displayTime))
-        {
+        if (date('Ym', $tableDate) != date('Ym', $displayTime)) {
             $classes[] = 'table-calendar-disabled';
         }
 
@@ -119,12 +107,10 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
     {
         $dayLabel = date('j', $tableDate);
 
-        if (is_null($dayUrlTemplate))
-        {
+        if (is_null($dayUrlTemplate)) {
             return $dayLabel;
         }
-        else
-        {
+        else {
             return '<a href="' . $this->getDayUrl($tableDate, $dayUrlTemplate) . '">' . $dayLabel . '</a>';
         }
     }
@@ -136,15 +122,12 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
 
     protected function getFirstDayOfWeek(): ?string
     {
-        if ($this->getUser() instanceof User)
-        {
-
+        if ($this->getUser() instanceof User) {
             return $this->getUserSettingService()->getSettingForUser(
                 $this->getUser(), 'Chamilo\Libraries', 'calendar_first_day_of_week'
             );
         }
-        else
-        {
+        else {
             return $this->getConfigurationConsulter()->getSetting(['Chamilo\Libraries', 'calendar_first_day_of_week']);
         }
     }
@@ -153,8 +136,7 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
     {
         $endTime = $this->getTableStartTime($displayTime);
 
-        while (date('Ym', $endTime) <= date('Ym', $displayTime))
-        {
+        while (date('Ym', $endTime) <= date('Ym', $displayTime)) {
             $endTime = strtotime('+1 Week', $endTime);
         }
 
@@ -165,8 +147,7 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
     {
         $firstDay = mktime(0, 0, 0, (int) date('m', $displayTime), 1, (int) date('Y', $displayTime));
 
-        if ($this->getFirstDayOfWeek() == 'sunday')
-        {
+        if ($this->getFirstDayOfWeek() == 'sunday') {
             return strtotime('Next Sunday', strtotime('-1 Week', $firstDay));
         }
 
@@ -183,8 +164,7 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
 
         $setting = $this->getFirstDayOfWeek();
 
-        if ($setting == 'sunday')
-        {
+        if ($setting == 'sunday') {
             $header->addRow(
                 [
                     $translator->trans('SundayShort', [], StringUtilities::LIBRARIES),
@@ -197,8 +177,7 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
                 ]
             );
         }
-        else
-        {
+        else {
             $header->addRow(
                 [
                     $translator->trans('MondayShort', [], StringUtilities::LIBRARIES),
@@ -214,5 +193,4 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
 
         $header->setRowType(0, 'th');
     }
-
 }

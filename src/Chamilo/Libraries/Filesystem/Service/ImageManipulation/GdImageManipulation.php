@@ -5,11 +5,10 @@ use Exception;
 use GdImage;
 
 /**
- * @package Chamilo\Libraries\File\ImageManipulation\Gd
+ * @package Chamilo\Libraries\Filesystem\Service\ImageManipulation
  */
 class GdImageManipulation extends ImageManipulation
 {
-
     private GdImage|null|false $gdImage = null;
 
     /**
@@ -24,25 +23,21 @@ class GdImageManipulation extends ImageManipulation
     public function crop(int $width, int $height, int $offsetX = self::CROP_CENTER, int $offsetY = self::CROP_CENTER
     ): bool
     {
-        if (!function_exists('imagecopy'))
-        {
+        if (!function_exists('imagecopy')) {
             return false;
         }
 
-        if ($offsetX == ImageManipulation::CROP_CENTER)
-        {
+        if ($offsetX == ImageManipulation::CROP_CENTER) {
             $offsetX = ($this->width - $width) / 2;
         }
 
-        if ($offsetY == ImageManipulation::CROP_CENTER)
-        {
+        if ($offsetY == ImageManipulation::CROP_CENTER) {
             $offsetY = ($this->height - $height) / 2;
         }
 
         $result = imagecreatetruecolor($width, $height);
 
-        if (imagecopy($result, $this->gdImage, 0, 0, $offsetX, $offsetY, $width, $height))
-        {
+        if (imagecopy($result, $this->gdImage, 0, 0, $offsetX, $offsetY, $width, $height)) {
             $this->gdImage = $result;
             $this->width = $width;
             $this->height = $height;
@@ -62,8 +57,7 @@ class GdImageManipulation extends ImageManipulation
         $extension = str_replace('jpg', 'jpeg', $extension);
         $createFunction = 'imagecreatefrom' . $extension;
 
-        if (!function_exists($createFunction))
-        {
+        if (!function_exists($createFunction)) {
             throw new Exception($createFunction . ' not found');
         }
 
@@ -75,15 +69,13 @@ class GdImageManipulation extends ImageManipulation
      */
     public function resize(int $width, int $height): bool
     {
-        if (!function_exists('imagecopyresampled'))
-        {
+        if (!function_exists('imagecopyresampled')) {
             throw new Exception('imagecopyresampled not found');
         }
 
         $result = imagecreatetruecolor($width, $height);
 
-        if (imagecopyresampled($result, $this->gdImage, 0, 0, 0, 0, $width, $height, $this->width, $this->height))
-        {
+        if (imagecopyresampled($result, $this->gdImage, 0, 0, 0, 0, $width, $height, $this->width, $this->height)) {
             $this->gdImage = $result;
             $this->width = $width;
             $this->height = $height;
@@ -99,8 +91,7 @@ class GdImageManipulation extends ImageManipulation
      */
     public function writeToFile(?string $sourceFile = null): bool
     {
-        if (is_null($sourceFile))
-        {
+        if (is_null($sourceFile)) {
             $sourceFile = $this->sourceFile;
         }
 
@@ -108,8 +99,7 @@ class GdImageManipulation extends ImageManipulation
         $extension = str_replace('jpg', 'jpeg', $extension);
         $createFunction = 'image' . $extension;
 
-        if (!function_exists($createFunction))
-        {
+        if (!function_exists($createFunction)) {
             throw new Exception($createFunction . ' not found');
         }
 

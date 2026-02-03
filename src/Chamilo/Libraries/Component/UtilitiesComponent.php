@@ -8,7 +8,7 @@ use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @package Chamilo\Libraries\Ajax\Component
+ * @package Chamilo\Libraries\Component
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -23,7 +23,6 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
     public const PARAM_TYPE = 'type';
     public const PARAM_VALUE = 'value';
     public const PARAM_VARIABLE = 'variable';
-
     public const PROPERTY_RESULT = 'result';
 
     /**
@@ -31,18 +30,15 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
      */
     public function run(): Response
     {
-
         $request = $this->getRequest();
         $type = $request->getFromQueryOrRequest(self::PARAM_TYPE);
 
         $properties = [];
 
-        switch ($type)
-        {
+        switch ($type) {
             // Retrieve platform paths
             case 'path' :
-                if ($request->request->get(self::PARAM_PATH) != 'WEB_PATH')
-                {
+                if ($request->request->get(self::PARAM_PATH) != 'WEB_PATH') {
                     throw new Exception('Invalid Path parameter: ' . $request->request->get(self::PARAM_PATH));
                 }
 
@@ -69,8 +65,7 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
                 $action = $request->request->get(self::PARAM_ACTION);
                 $session = $this->getSession();
 
-                switch ($action)
-                {
+                switch ($action) {
                     case 'set' :
                         $session->set(
                             $request->request->get(self::PARAM_VARIABLE), $request->request->get(self::PARAM_VALUE)

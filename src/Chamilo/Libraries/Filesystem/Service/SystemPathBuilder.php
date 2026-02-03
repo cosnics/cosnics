@@ -2,16 +2,14 @@
 namespace Chamilo\Libraries\Filesystem\Service;
 
 /**
- * @package Chamilo\Libraries\File
+ * @package Chamilo\Libraries\Filesystem\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class SystemPathBuilder extends AbstractPathBuilder
 {
-
     public function getBasePath(): string
     {
-        if (!isset($this->cache[self::BASE]))
-        {
+        if (!isset($this->cache[self::BASE])) {
             $directorySeparator = $this->getDirectorySeparator();
 
             $this->cache[self::BASE] = realpath(
