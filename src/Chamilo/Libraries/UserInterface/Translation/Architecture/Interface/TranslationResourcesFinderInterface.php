@@ -5,13 +5,12 @@ namespace Chamilo\Libraries\UserInterface\Translation\Architecture\Interface;
  * An interface to describe a TranslationResourcesFinder to scan the project for translation resources
  * Interface TranslationResourcesFinder
  *
- * @package Chamilo\Libraries\Translation
+ * @package Chamilo\Libraries\UserInterface\Translation\Architecture\Interface
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 interface TranslationResourcesFinderInterface
 {
-
     /**
      * Locates the translation resources and returns them per locale, per resource type and per domain
      *

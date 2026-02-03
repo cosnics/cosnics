@@ -7,7 +7,7 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use HTML_QuickForm_file;
 
 /**
- * @package Chamilo\Libraries\Format\Form\Element
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -18,12 +18,10 @@ class HTML_QuickForm_stylefile extends HTML_QuickForm_file
 
     public function toHtml(): string
     {
-        if ($this->_flagFrozen)
-        {
+        if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         }
-        else
-        {
+        else {
             $glyph = new FontAwesomeGlyph('upload', [], null, 'fas');
 
             $html = [];

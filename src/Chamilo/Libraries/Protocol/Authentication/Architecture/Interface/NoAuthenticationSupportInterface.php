@@ -5,7 +5,7 @@ namespace Chamilo\Libraries\Protocol\Authentication\Architecture\Interface;
  * A class implements the <code>NoAuthenticationSupport</code> interface to
  * indicate that it does not require authentication
  *
- * @package Chamilo\Libraries\Architecture\Interfaces
+ * @package Chamilo\Libraries\Protocol\Authentication\Architecture\Interface
  * @author Hans De Bisschop
  * @author Magali Gillard
  */

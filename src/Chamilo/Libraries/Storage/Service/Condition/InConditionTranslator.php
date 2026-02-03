@@ -2,41 +2,44 @@
 namespace Chamilo\Libraries\Storage\Service\Condition;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionTranslator;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
- * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition
+ * @package Chamilo\Libraries\Storage\Service\Condition
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class InConditionTranslator extends ConditionTranslator
+class InConditionTranslator extends ConditionTranslator implements ConditionTranslatorInterface
 {
-    public const CONDITION_CLASS = InCondition::class;
+    public function getConditionClassName(): string
+    {
+        return InCondition::class;
+    }
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     */
     public function translate(
         QueryBuilder $querybuilder, InCondition $inCondition, ?bool $enableAliasing = true
     ): string
     {
+        $string = [];
         $values = $inCondition->getValues();
 
         if (count($values) > 0) {
-            $whereClause = [];
-
-            $whereClause[] = $this->getConditionPartTranslatorService()->translate(
-                    $querybuilder, $inCondition->getConditionVariable(), $enableAliasing
-                ) . ' IN (';
-
-            $whereClause[] = $querybuilder->createNamedParameter($values, ArrayParameterType::STRING);
-            $whereClause[] = ')';
-
-            $value = implode('', $whereClause);
+            $string[] = $this->getConditionVariableTranslatorCollection()->translate(
+                $querybuilder, $inCondition->getConditionVariable(), $enableAliasing
+            );
+            $string[] = 'IN';
+            $string[] = '(' . $querybuilder->createNamedParameter($values, ArrayParameterType::STRING) . ')';
         }
         else {
-            $value = '1 = 0';
+            $string[] = '1 = 0';
         }
 
-        return $value;
+        return implode(' ', $string);
     }
 }

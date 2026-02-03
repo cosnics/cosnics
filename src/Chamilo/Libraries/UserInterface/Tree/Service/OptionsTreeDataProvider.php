@@ -7,20 +7,17 @@ use Closure;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @package Chamilo\Libraries\Format\Tree\Options
+ * @package Chamilo\Libraries\UserInterface\Tree\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class OptionsTreeDataProvider
 {
-
     protected function __getData(Closure $getIdentifier, Closure $getText, ?string $identifier): TreeNode
     {
-        if (!$identifier)
-        {
+        if (!$identifier) {
             $dataClass = $this->getRootDataClass();
         }
-        else
-        {
+        else {
             $dataClass = $this->getDataClassByIdentifier($identifier);
         }
 
@@ -52,8 +49,7 @@ abstract class OptionsTreeDataProvider
         $childDataClasses = $this->getChildDataClasses($parentIdentifier);
         $childTreeNodes = [];
 
-        foreach ($childDataClasses as $childDataClass)
-        {
+        foreach ($childDataClasses as $childDataClass) {
             $childIdentifier = $getIdentifier($childDataClass);
 
             $childTreeNodes[] = $this->getTreeNode(

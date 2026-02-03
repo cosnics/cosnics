@@ -6,9 +6,7 @@ use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * Builds the FileExceptionLogger class
- *
- * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
+ * @package Chamilo\Libraries\Protocol\Error\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface

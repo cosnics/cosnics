@@ -4,16 +4,16 @@ namespace Chamilo\Libraries\Storage\Architecture\Domain;
 use Chamilo\Libraries\Protocol\Security\Architecture\Interface\HashableInterface;
 use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\GroupBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Join;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Joins;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 
 /**
- * @package Chamilo\Libraries\Storage\Parameters
+ * @package Chamilo\Libraries\Storage\Architecture\Domain
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -22,13 +22,13 @@ class StorageParameters implements HashableInterface
 {
     use HashableTrait;
 
-    private ?Condition $condition;
+    private ?ConditionInterface $condition;
 
     private ?int $count;
 
     private GroupBy $groupBy;
 
-    private ?Condition $havingCondition;
+    private ?ConditionInterface $havingCondition;
 
     private Joins $joins;
 
@@ -39,9 +39,10 @@ class StorageParameters implements HashableInterface
     private RetrieveProperties $retrieveProperties;
 
     public function __construct(
-        ?Condition $condition = null, Joins $joins = new Joins(),
+        ?ConditionInterface $condition = null, Joins $joins = new Joins(),
         RetrieveProperties $retrieveProperties = new RetrieveProperties(), OrderBy $orderBy = new OrderBy(),
-        GroupBy $groupBy = new GroupBy(), ?Condition $havingCondition = null, ?int $count = null, ?int $offset = null
+        GroupBy $groupBy = new GroupBy(), ?ConditionInterface $havingCondition = null, ?int $count = null,
+        ?int $offset = null
     )
     {
         $this->setCondition($condition);
@@ -54,16 +55,13 @@ class StorageParameters implements HashableInterface
         $this->setOffset($offset);
     }
 
-    public function addConditionUsingAnd(?Condition $condition = null): static
+    public function addConditionUsingAnd(?ConditionInterface $condition = null): static
     {
-        if ($condition instanceof Condition)
-        {
-            if ($this->getCondition() instanceof Condition)
-            {
+        if ($condition instanceof ConditionInterface) {
+            if ($this->getCondition() instanceof ConditionInterface) {
                 $this->setCondition(new AndCondition([$this->getCondition(), $condition]));
             }
-            else
-            {
+            else {
                 $this->setCondition($condition);
             }
         }
@@ -71,16 +69,13 @@ class StorageParameters implements HashableInterface
         return $this;
     }
 
-    public function addConditionUsingOr(?Condition $condition = null): static
+    public function addConditionUsingOr(?ConditionInterface $condition = null): static
     {
-        if ($condition instanceof Condition)
-        {
-            if ($this->getCondition() instanceof Condition)
-            {
+        if ($condition instanceof ConditionInterface) {
+            if ($this->getCondition() instanceof ConditionInterface) {
                 $this->setCondition(new OrCondition([$this->getCondition(), $condition]));
             }
-            else
-            {
+            else {
                 $this->setCondition($condition);
             }
         }
@@ -90,85 +85,28 @@ class StorageParameters implements HashableInterface
 
     public function addJoin(?Join $join = null): static
     {
-        if ($join instanceof Join)
-        {
+        if ($join instanceof Join) {
             $this->getJoins()->add($join);
         }
 
         return $this;
     }
 
-    public function getCondition(): ?Condition
+    public function getCondition(): ?ConditionInterface
     {
         return $this->condition;
+    }
+
+    public function setCondition(?ConditionInterface $condition = null): static
+    {
+        $this->condition = $condition;
+
+        return $this;
     }
 
     public function getCount(): ?int
     {
         return $this->count;
-    }
-
-    public function getGroupBy(): ?GroupBy
-    {
-        return $this->groupBy;
-    }
-
-    public function getHashParts(): array
-    {
-        $hashParts = [];
-
-        $hashParts[] = static::class;
-        $hashParts[] = ($this->getCondition() instanceof Condition ? $this->getCondition()->getHashParts() : null);
-        $hashParts[] = $this->getJoins()->getHashParts();
-        $hashParts[] = $this->getRetrieveProperties()->getHashParts();
-        $hashParts[] = $this->getOrderBy()->getHashParts();
-        $hashParts[] = $this->getGroupBy()->getHashParts();
-        $hashParts[] =
-            ($this->getHavingCondition() instanceof Condition ? $this->getHavingCondition()->getHashParts() : null);
-        $hashParts[] = $this->getCount();
-        $hashParts[] = $this->getOffset();
-
-        return $hashParts;
-    }
-
-    public function getHavingCondition(): ?Condition
-    {
-        return $this->havingCondition;
-    }
-
-    public function getJoins(): Joins
-    {
-        return $this->joins;
-    }
-
-    public function getOffset(): ?int
-    {
-        return $this->offset;
-    }
-
-    public function getOrderBy(): OrderBy
-    {
-        return $this->orderBy;
-    }
-
-    public function getRetrieveProperties(): RetrieveProperties
-    {
-        return $this->retrieveProperties;
-    }
-
-    public function returnSingleResult(): static
-    {
-        $this->setCount(1);
-        $this->setOffset(0);
-
-        return $this;
-    }
-
-    public function setCondition(?Condition $condition = null): static
-    {
-        $this->condition = $condition;
-
-        return $this;
     }
 
     public function setCount(?int $count): static
@@ -178,6 +116,11 @@ class StorageParameters implements HashableInterface
         return $this;
     }
 
+    public function getGroupBy(): ?GroupBy
+    {
+        return $this->groupBy;
+    }
+
     public function setGroupBy(?GroupBy $groupBy = null): static
     {
         $this->groupBy = $groupBy;
@@ -185,11 +128,41 @@ class StorageParameters implements HashableInterface
         return $this;
     }
 
-    public function setHavingCondition(?Condition $havingCondition = null): static
+    public function getHashParts(): array
+    {
+        $hashParts = [];
+
+        $hashParts[] = static::class;
+        $hashParts[] =
+            ($this->getCondition() instanceof ConditionInterface ? $this->getCondition()->getHashParts() : null);
+        $hashParts[] = $this->getJoins()->getHashParts();
+        $hashParts[] = $this->getRetrieveProperties()->getHashParts();
+        $hashParts[] = $this->getOrderBy()->getHashParts();
+        $hashParts[] = $this->getGroupBy()->getHashParts();
+        $hashParts[] =
+            ($this->getHavingCondition() instanceof ConditionInterface ? $this->getHavingCondition()->getHashParts() :
+                null);
+        $hashParts[] = $this->getCount();
+        $hashParts[] = $this->getOffset();
+
+        return $hashParts;
+    }
+
+    public function getHavingCondition(): ?ConditionInterface
+    {
+        return $this->havingCondition;
+    }
+
+    public function setHavingCondition(?ConditionInterface $havingCondition = null): static
     {
         $this->havingCondition = $havingCondition;
 
         return $this;
+    }
+
+    public function getJoins(): Joins
+    {
+        return $this->joins;
     }
 
     public function setJoins(Joins $joins = new Joins()): static
@@ -199,11 +172,21 @@ class StorageParameters implements HashableInterface
         return $this;
     }
 
+    public function getOffset(): ?int
+    {
+        return $this->offset;
+    }
+
     public function setOffset(?int $offset): static
     {
         $this->offset = $offset;
 
         return $this;
+    }
+
+    public function getOrderBy(): OrderBy
+    {
+        return $this->orderBy;
     }
 
     public function setOrderBy(OrderBy $orderBy = new OrderBy()): static
@@ -213,9 +196,22 @@ class StorageParameters implements HashableInterface
         return $this;
     }
 
+    public function getRetrieveProperties(): RetrieveProperties
+    {
+        return $this->retrieveProperties;
+    }
+
     public function setRetrieveProperties(RetrieveProperties $retrieveProperties = new RetrieveProperties()): static
     {
         $this->retrieveProperties = $retrieveProperties;
+
+        return $this;
+    }
+
+    public function returnSingleResult(): static
+    {
+        $this->setCount(1);
+        $this->setOffset(0);
 
         return $this;
     }

@@ -5,7 +5,7 @@ namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\Advan
  * Defines an element for an advanced element finder
  * When the element has children it becomes a category
  *
- * @package Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder
  * @author Sven Vanpoucke
  */
 class AdvancedElementFinderElement
@@ -16,7 +16,6 @@ class AdvancedElementFinderElement
     public const PROPERTY_ID = 'id';
     public const PROPERTY_TITLE = 'title';
     public const PROPERTY_TYPE = 'type';
-
     public const TYPE_FILTER = 3;
     public const TYPE_SELECTABLE = 1;
     public const TYPE_SELECTABLE_AND_FILTER = 2;
@@ -56,8 +55,7 @@ class AdvancedElementFinderElement
 
         $children = $this->getChildren();
 
-        foreach ($children as $child)
-        {
+        foreach ($children as $child) {
             $array[self::PROPERTY_CHILDREN][] = $child->asArray();
         }
 
@@ -65,7 +63,7 @@ class AdvancedElementFinderElement
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement[]
+     * @return \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement[]
      */
     public function getChildren(): array
     {
@@ -87,15 +85,8 @@ class AdvancedElementFinderElement
         return count($this->getChildren()) > 0;
     }
 
-    public function setType(int $type): static
-    {
-        $this->setProperty(self::PROPERTY_TYPE, $type);
-
-        return $this;
-    }
-
     /**
-     * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement[] $children
+     * @param \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement[] $children
      */
     public function setChildren(array $children): static
     {
@@ -135,6 +126,13 @@ class AdvancedElementFinderElement
     public function setTitle(string $title): static
     {
         $this->setProperty(self::PROPERTY_TITLE, $title);
+
+        return $this;
+    }
+
+    public function setType(int $type): static
+    {
+        $this->setProperty(self::PROPERTY_TYPE, $type);
 
         return $this;
     }

@@ -17,7 +17,6 @@ use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDisplayOrderSuppor
 
 /**
  * @package Chamilo\Libraries\Storage\Repository
- *
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DisplayOrderRepository

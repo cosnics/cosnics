@@ -7,7 +7,7 @@ use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * @package Chamilo\Libraries\Architecture
+ * @package Chamilo\Libraries\Protocol\Ajax\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>

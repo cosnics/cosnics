@@ -2,24 +2,37 @@
 namespace Chamilo\Libraries\Storage\Service\Condition;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\RegularExpressionCondition;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionTranslator;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
- * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition
+ * @package Chamilo\Libraries\Storage\Service\Condition
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class RegularExpressionConditionTranslator extends ConditionTranslator
+class RegularExpressionConditionTranslator extends ConditionTranslator implements ConditionTranslatorInterface
 {
-    public const CONDITION_CLASS = RegularExpressionCondition::class;
+    public function getConditionClassName(): string
+    {
+        return RegularExpressionCondition::class;
+    }
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     */
     public function translate(
         QueryBuilder $querybuilder, RegularExpressionCondition $regularExpressionCondition, ?bool $enableAliasing = true
     ): string
     {
-        return $this->getConditionPartTranslatorService()->translate(
-                $querybuilder, $regularExpressionCondition->getConditionVariable(), $enableAliasing
-            ) . ' REGEXP ' . $querybuilder->createNamedParameter($regularExpressionCondition->getRegularExpression());
+        $string = [];
+
+        $string[] = $this->getConditionVariableTranslatorCollection()->translate(
+            $querybuilder, $regularExpressionCondition->getConditionVariable(), $enableAliasing
+        );
+        $string[] = 'REGEXP';
+        $string[] = $querybuilder->createNamedParameter($regularExpressionCondition->getRegularExpression());
+
+        return implode(' ', $string);
     }
 }

@@ -2,12 +2,11 @@
 namespace Chamilo\Libraries\Storage\Architecture\Trait;
 
 /**
- * @package Chamilo\Libraries\Storage\DataClass\Trait
+ * @package Chamilo\Libraries\Storage\Architecture\Trait
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 trait DataClassSerializedPropertyTrait
 {
-
     abstract public function getDefaultProperty(string $name): mixed;
 
     public function getSerializedProperty(string $propertyName): array

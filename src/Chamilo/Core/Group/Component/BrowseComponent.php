@@ -14,10 +14,10 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedE
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
@@ -262,13 +262,13 @@ class BrowseComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    protected function getGroupTableCondition(): ?Condition
+    protected function getGroupTableCondition(): ?ConditionInterface
     {
         $conditions = [];
 
         $searchCondition = $this->getButtonToolBarSearchCondition(Group::class);
 
-        if ($searchCondition instanceof Condition) {
+        if ($searchCondition instanceof ConditionInterface) {
             $conditions[] = $searchCondition;
         }
 

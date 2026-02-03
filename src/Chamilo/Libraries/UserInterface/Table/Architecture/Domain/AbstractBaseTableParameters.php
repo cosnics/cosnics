@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\UserInterface\Table\Architecture\Domain;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
- * @package Chamilo\Libraries\Format\Table
+ * @package Chamilo\Libraries\UserInterface\Table\Architecture\Domain
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class AbstractBaseTableParameters extends ParameterBag
@@ -74,5 +74,4 @@ abstract class AbstractBaseTableParameters extends ParameterBag
 
         return $this;
     }
-
 }

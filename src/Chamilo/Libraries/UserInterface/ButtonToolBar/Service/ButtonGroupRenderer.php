@@ -25,7 +25,7 @@ class ButtonGroupRenderer extends AbstractButtonCollectionButtonRenderer impleme
         return implode(PHP_EOL, $html);
     }
 
-    public function getButtonClass(): string
+    public function getButtonClassName(): string
     {
         return ButtonGroup::class;
     }

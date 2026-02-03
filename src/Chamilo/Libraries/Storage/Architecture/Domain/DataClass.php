@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\Architecture\Domain;
 use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
 
 /**
- * @package Chamilo\Libraries\Storage\DataClass
+ * @package Chamilo\Libraries\Storage\Architecture\Domain
  * @author  Hans De Bisschop - Erasmus Hogeschool Brussel
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
@@ -14,7 +14,6 @@ abstract class DataClass
 
     public const PROPERTIES_DEFAULT = 'default_properties';
     public const PROPERTIES_OPTIONAL = 'optional_properties';
-
     public const PROPERTY_ID = 'id';
 
     /**

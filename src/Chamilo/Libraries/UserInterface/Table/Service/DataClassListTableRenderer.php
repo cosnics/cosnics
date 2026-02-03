@@ -5,7 +5,7 @@ use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableResultPosition;
 
 /**
- * @package Chamilo\Libraries\Format\Table\Extension
+ * @package Chamilo\Libraries\UserInterface\Table\Service
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  * @author  Hans De Bisschop <hans.de.bisschop>
  */

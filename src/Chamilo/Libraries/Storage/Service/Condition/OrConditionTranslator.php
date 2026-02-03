@@ -2,12 +2,16 @@
 namespace Chamilo\Libraries\Storage\Service\Condition;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionTranslatorInterface;
 
 /**
- * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition
+ * @package Chamilo\Libraries\Storage\Service\Condition
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class OrConditionTranslator extends MultipleAggregateConditionTranslator
+class OrConditionTranslator extends MultipleAggregateConditionTranslator implements ConditionTranslatorInterface
 {
-    public const CONDITION_CLASS = OrCondition::class;
+    public function getConditionClassName(): string
+    {
+        return OrCondition::class;
+    }
 }

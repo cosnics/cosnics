@@ -7,10 +7,7 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\Proper
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
 
 /**
- * Describes the order by functionality of a query.
- * Uses ConditionVariable to define the property
- *
- * @package Chamilo\Libraries\Storage\Query
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>

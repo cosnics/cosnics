@@ -6,7 +6,7 @@ use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use HTML_QuickForm_html;
 
 /**
- * @package Chamilo\Libraries\Format\Tabs
+ * @package Chamilo\Libraries\UserInterface\Tab\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class FormTabsGenerator
@@ -28,25 +28,20 @@ class FormTabsGenerator
      */
     public function generate(string $name, FormValidator $form, TabsCollection $tabs): void
     {
-        if ($tabs->hasMultipleTabs())
-        {
+        if ($tabs->hasMultipleTabs()) {
             $form->addElement(HTML_QuickForm_html::class, $this->renderHeader($name, $tabs));
         }
 
-        foreach ($tabs as $tab)
-        {
-            if ($tabs->hasOnlyOneTab())
-            {
+        foreach ($tabs as $tab) {
+            if ($tabs->hasOnlyOneTab()) {
                 $this->getFormTabGenerator()->renderContentSingleTab($form, $tab);
             }
-            else
-            {
+            else {
                 $this->getFormTabGenerator()->renderContent($name, $form, $tab);
             }
         }
 
-        if ($tabs->hasMultipleTabs())
-        {
+        if ($tabs->hasMultipleTabs()) {
             $form->addElement(HTML_QuickForm_html::class, $this->getGenericTabsRenderer()->renderFooter($name, $tabs));
         }
     }
@@ -70,8 +65,7 @@ class FormTabsGenerator
 
         $html[] = $this->getGenericTabsRenderer()->renderHeaderTop($name);
 
-        foreach ($tabs as $tab)
-        {
+        foreach ($tabs as $tab) {
             $html[] = $this->getFormTabGenerator()->renderNavigation($name, $tab);
         }
 

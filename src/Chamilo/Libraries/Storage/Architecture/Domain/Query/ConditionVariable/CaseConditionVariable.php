@@ -1,17 +1,20 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable;
 
+use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
+use Chamilo\Libraries\Storage\Service\ConditionVariable\CaseConditionVariableTranslator;
+
 /**
- * A case condition variable that describes a case in a select query
- *
- * @package Chamilo\Libraries\Storage\Query\Variable
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CaseConditionVariable extends ConditionVariable
+class CaseConditionVariable implements ConditionVariableInterface
 {
+    use HashableTrait;
 
     private ?string $alias;
 
@@ -57,14 +60,23 @@ class CaseConditionVariable extends ConditionVariable
     }
 
     /**
+     * @return class-string<\Chamilo\Libraries\Storage\Service\ConditionVariable\CaseConditionVariableTranslator>
+     */
+    public function getConditionVariableTranslatorClass(): string
+    {
+        return CaseConditionVariableTranslator::class;
+    }
+
+    /**
      * @return string[]
      */
     public function getHashParts(): array
     {
-        $hashParts = parent::getHashParts();
+        $hashParts = [];
 
-        foreach ($this->get() as $caseElementConditionVariable)
-        {
+        $hashParts[] = static::class;
+
+        foreach ($this->get() as $caseElementConditionVariable) {
             $hashParts[] = $caseElementConditionVariable->getHashParts();
         }
 

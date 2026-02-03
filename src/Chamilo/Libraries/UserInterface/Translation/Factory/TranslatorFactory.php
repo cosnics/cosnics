@@ -13,7 +13,7 @@ use Symfony\Component\Translation\Loader\IniFileLoader;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Translation
+ * @package Chamilo\Libraries\UserInterface\Translation\Factory
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -48,8 +48,7 @@ class TranslatorFactory
 
         $translationCachePath = $this->getTranslationCachePath();
 
-        if (!is_dir($translationCachePath))
-        {
+        if (!is_dir($translationCachePath)) {
             $this->getFilesystem()->mkdir($translationCachePath);
         }
 
@@ -63,8 +62,7 @@ class TranslatorFactory
 
         $resources = $translationResourcesOptimizer->getOptimizedTranslationResources();
 
-        foreach ($resources as $locale => $resource)
-        {
+        foreach ($resources as $locale => $resource) {
             $translator->addResource('optimized', $resource, $locale);
         }
     }

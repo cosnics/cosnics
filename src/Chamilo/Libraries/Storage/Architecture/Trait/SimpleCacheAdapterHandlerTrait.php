@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\Architecture\Trait;
 
 /**
- * @package Chamilo\Libraries\Cache\Traits
+ * @package Chamilo\Libraries\Storage\Architecture\Trait
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 trait SimpleCacheAdapterHandlerTrait
@@ -33,7 +33,7 @@ trait SimpleCacheAdapterHandlerTrait
      * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function loadCacheData()
+    public function loadCacheData(): mixed
     {
         return $this->loadCacheDataForKey($this->getCacheKey(), [$this, 'getDataForCache']);
     }
@@ -42,7 +42,7 @@ trait SimpleCacheAdapterHandlerTrait
      * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function readCacheData()
+    public function readCacheData(): mixed
     {
         return $this->readCacheDataForKey($this->getCacheKey());
     }
@@ -51,7 +51,7 @@ trait SimpleCacheAdapterHandlerTrait
      * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function reloadCacheData()
+    public function reloadCacheData(): mixed
     {
         return $this->reloadCacheDataForKey($this->getCacheKey(), [$this, 'getDataForCache']);
     }

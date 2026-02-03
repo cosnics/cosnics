@@ -6,7 +6,7 @@ use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ContentTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 
 /**
- * @package Chamilo\Libraries\Format\Tabs
+ * @package Chamilo\Libraries\UserInterface\Tab\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TabsRenderer
@@ -34,14 +34,11 @@ class TabsRenderer
     {
         $html = [];
 
-        if (!$tabs->isEmpty())
-        {
+        if (!$tabs->isEmpty()) {
             $html[] = $this->renderHeader($name, $tabs);
 
-            foreach ($tabs as $tab)
-            {
-                switch (get_class($tab))
-                {
+            foreach ($tabs as $tab) {
+                switch (get_class($tab)) {
                     case ContentTab::class:
                         $html[] = $this->getContentTabRenderer()->renderContent($name, $tab);
                         break;
@@ -81,10 +78,8 @@ class TabsRenderer
 
         $html[] = $this->getGenericTabsRenderer()->renderHeaderTop($name);
 
-        foreach ($tabs as $tab)
-        {
-            switch (get_class($tab))
-            {
+        foreach ($tabs as $tab) {
+            switch (get_class($tab)) {
                 case ContentTab::class:
                     $html[] = $this->getContentTabRenderer()->renderNavigation($name, $tab);
                     break;
@@ -98,5 +93,4 @@ class TabsRenderer
 
         return implode(PHP_EOL, $html);
     }
-
 }

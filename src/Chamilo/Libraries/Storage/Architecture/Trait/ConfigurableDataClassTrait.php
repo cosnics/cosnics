@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\Architecture\Trait;
 
 /**
- * @package Chamilo\Libraries\Storage\DataClass\Trait
+ * @package Chamilo\Libraries\Storage\Architecture\Trait
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 trait ConfigurableDataClassTrait

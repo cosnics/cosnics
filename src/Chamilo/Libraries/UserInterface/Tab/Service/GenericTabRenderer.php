@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\UserInterface\Tab\Service;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\GenericTab;
 
 /**
- * @package Chamilo\Libraries\Format\Tabs
+ * @package Chamilo\Libraries\UserInterface\Tab\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GenericTabRenderer
@@ -59,13 +59,11 @@ class GenericTabRenderer
             $tab->getIdentifier() . '">';
         $html[] = '<span class="category">';
 
-        if ($tab->getInlineGlyph() && $tab->isIconVisible())
-        {
+        if ($tab->getInlineGlyph() && $tab->isIconVisible()) {
             $html[] = $tab->getInlineGlyph()->render();
         }
 
-        if ($tab->getLabel() && $tab->isTextVisible())
-        {
+        if ($tab->getLabel() && $tab->isTextVisible()) {
             $html[] = '<span class="title">' . $tab->getLabel() . '</span>';
         }
 

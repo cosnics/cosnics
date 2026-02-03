@@ -14,14 +14,13 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Authentication\Cas
+ * @package Chamilo\Libraries\Protocol\Authentication\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class AbstractCasAuthentication extends Authentication implements AuthenticationInterface
 {
-
     protected SessionInterface $session;
 
     /**
@@ -47,8 +46,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
      */
     protected function getConfiguration(): array
     {
-        if (!isset($this->settings))
-        {
+        if (!isset($this->settings)) {
             $this->settings = [];
             $this->settings['host'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'cas_host']);
             $this->settings['port'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'cas_port']);
@@ -84,19 +82,15 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
      */
     protected function initializeClient(): void
     {
-
-        if (!$this->isConfigured())
-        {
+        if (!$this->isConfigured()) {
             throw new Exception($this->getTranslator()->trans('CheckCASConfiguration'));
         }
-        elseif (!phpCAS::isInitialized())
-        {
+        elseif (!phpCAS::isInitialized()) {
             $settings = $this->getConfiguration();
             $request = $this->getRequest();
 
             // initialize phpCAS
-            if ($settings['enable_log'])
-            {
+            if ($settings['enable_log']) {
                 phpCAS::setDebug($settings['log']);
             }
 
@@ -104,15 +98,13 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
             $casVersion = $configurationConsulter->getSetting(['Libraries', 'cas_version']);
 
-            if ($casVersion == 'SAML_VERSION_1_1')
-            {
+            if ($casVersion == 'SAML_VERSION_1_1') {
                 phpCAS::client(
                     SAML_VERSION_1_1, $settings['host'], (int) $settings['port'], $settings['uri'],
                     $request->getSchemeAndHttpHost(), false
                 );
             }
-            else
-            {
+            else {
                 phpCAS::client(
                     CAS_VERSION_2_0, $settings['host'], (int) $settings['port'], $settings['uri'],
                     $request->getSchemeAndHttpHost(), false
@@ -124,12 +116,10 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
             );
 
             // SSL validation for the CAS server
-            if ($casCheckCertificate == '1')
-            {
+            if ($casCheckCertificate == '1') {
                 phpCAS::setCasServerCACert($settings['certificate']);
             }
-            else
-            {
+            else {
                 phpCAS::setNoCasServerValidation();
             }
         }
@@ -139,12 +129,10 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
     {
         $settings = $this->getConfiguration();
 
-        foreach ($settings as $setting => $value)
-        {
+        foreach ($settings as $setting => $value) {
             if (empty($value) && !in_array(
                     $setting, ['uri', 'certificate', 'log', 'enable_log']
-                ))
-            {
+                )) {
                 return false;
             }
         }
@@ -158,8 +146,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
      */
     public function login(): ?User
     {
-        if (!$this->isAuthSourceActive())
-        {
+        if (!$this->isAuthSourceActive()) {
             return null;
         }
 
@@ -172,8 +159,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
         $bypassExternalAuthentication = (boolean) $this->getRequest()->query->get('noExtAuth', false);
 
-        if (!$externalAuthenticationEnabled || $bypassExternalAuthentication)
-        {
+        if (!$externalAuthenticationEnabled || $bypassExternalAuthentication) {
             return null;
         }
 
@@ -187,24 +173,20 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
             )
         );
 
-        try
-        {
+        try {
             phpCAS::forceAuthentication();
 
             $userAttributes = phpCAS::getAttributes();
             $userIdentifier = $this->getCasUserIdentifierFromAttributes(phpCAS::getUser(), $userAttributes);
 
-            if ($userIdentifier)
-            {
+            if ($userIdentifier) {
                 $user = $this->getUserByCasUserIdentifier($userIdentifier);
 
-                if (!$user instanceof User)
-                {
+                if (!$user instanceof User) {
                     $user = $this->registerUser(phpCAS::getUser(), $userAttributes);
                 }
 
-                if ($userAttributes && isset($userAttributes['surrogatePrincipal']))
-                {
+                if ($userAttributes && isset($userAttributes['surrogatePrincipal'])) {
                     $surrogateUserName = array_pop($userAttributes['surrogatePrincipal']);
                     $surrogateUser = $this->getUserService()->findUserByUsername($surrogateUserName);
                     $this->getSession()->set(AuthenticationValidator::PARAM_AS_ADMIN, $surrogateUser->getId());
@@ -212,13 +194,11 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
                 return $user;
             }
-            else
-            {
+            else {
                 throw $authenticationException;
             }
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             throw $authenticationException;
         }
     }

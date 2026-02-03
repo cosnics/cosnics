@@ -39,7 +39,7 @@ use HTML_QuickForm_textarea;
 /**
  * Objects of this class can be used to create/manipulate/validate user input.
  *
- * @package Chamilo\Libraries\Format\Form
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain
  */
 class FormValidator extends HTML_QuickForm
 {

@@ -2,12 +2,11 @@
 namespace Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Interface;
 
 /**
- * @package Chamilo\Libraries\Format\NotificationMessage
+ * @package Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Interface
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface NotificationMessageStorageInterface
 {
-
     public function clear(): void;
 
     /**

@@ -43,7 +43,10 @@ class ButtonToolBarRenderer extends AbstractButtonCollectionButtonRenderer imple
         $html[] = 'class="' . $this->renderClasses($buttonToolBar, ['btn-toolbar', 'btn-action-toolbar']) . '">';
 
         foreach ($buttonToolBar->getButtons() as $button) {
-            $html[] = $this->getButtonRendererCollection()->getButtonRendererForButton($button)->render($button);
+            $html[] =
+                $this->getButtonRendererCollection()->getButtonRenderer($button->getButtonRendererClassName())->render(
+                    $button
+                );
         }
 
         if ($buttonToolBar->getSearchUrl()) {
@@ -55,7 +58,7 @@ class ButtonToolBarRenderer extends AbstractButtonCollectionButtonRenderer imple
         return implode(PHP_EOL, $html);
     }
 
-    public function getButtonClass(): string
+    public function getButtonClassName(): string
     {
         return ButtonToolBar::class;
     }

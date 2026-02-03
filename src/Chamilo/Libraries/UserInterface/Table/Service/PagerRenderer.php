@@ -16,7 +16,7 @@ use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableParameterValu
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Format\Table
+ * @package Chamilo\Libraries\UserInterface\Table\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>

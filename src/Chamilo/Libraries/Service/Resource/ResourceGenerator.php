@@ -8,7 +8,7 @@ use stdClass;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * @package Chamilo\Libraries\Architecture\Resource
+ * @package Chamilo\Libraries\Service\Resource
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ResourceGenerator
@@ -40,16 +40,13 @@ class ResourceGenerator
     {
         $path = $this->getSystemPathBuilder()->namespaceToFullPath($package->getContext());
 
-        if (is_array($resourceDefinition->input))
-        {
-            foreach ($resourceDefinition->input as $resourceDefinitionFile)
-            {
+        if (is_array($resourceDefinition->input)) {
+            foreach ($resourceDefinition->input as $resourceDefinitionFile) {
                 $resourceFiles[$resourceDefinition->output][] =
                     $path . $this->parseResourcePath($resourceDefinitionFile);
             }
         }
-        else
-        {
+        else {
             $resourceFiles[$resourceDefinition->output][] =
                 $path . $this->parseResourcePath($resourceDefinition->input);
         }
@@ -67,8 +64,7 @@ class ResourceGenerator
 
         $resourceFiles = [];
 
-        foreach ($packages as $package)
-        {
+        foreach ($packages as $package) {
             $this->processPackageResourceDefiniton($resourceFiles, $package);
         }
 
@@ -82,8 +78,7 @@ class ResourceGenerator
     {
         $aggregatedResourceFiles = $this->aggregateResources();
 
-        foreach ($aggregatedResourceFiles as $outputPath => $inputPaths)
-        {
+        foreach ($aggregatedResourceFiles as $outputPath => $inputPaths) {
             $this->writeResource($outputPath, $inputPaths);
         }
     }
@@ -118,8 +113,7 @@ class ResourceGenerator
      */
     protected function processPackageResourceDefiniton(array &$resourceFiles, Package $package): void
     {
-        foreach ($package->getResources() as $resourceDefinition)
-        {
+        foreach ($package->getResources() as $resourceDefinition) {
             $this->addResourceDefinitiontoResourceFiles($resourceDefinition, $resourceFiles, $package);
         }
     }
@@ -135,12 +129,10 @@ class ResourceGenerator
         $fullOutputSourcePath = $basePath . $this->parseResourcePath($outputPath);
         $fullOutputWebPath = str_replace($basePath, $baseWebPath, $fullOutputSourcePath);
 
-        if ($this->isOutputPathDirectory($fullOutputWebPath))
-        {
+        if ($this->isOutputPathDirectory($fullOutputWebPath)) {
             $this->writeResourcesFolder($fullOutputWebPath, $inputPaths);
         }
-        else
-        {
+        else {
             $this->writeResourcesFile($fullOutputWebPath, $inputPaths);
         }
     }
@@ -150,16 +142,13 @@ class ResourceGenerator
      */
     protected function writeResourcesFile(string $outputPath, array $inputPaths): void
     {
-        if (count($inputPaths) == 1)
-        {
+        if (count($inputPaths) == 1) {
             $this->getFilesystem()->copy($inputPaths[0], $outputPath, true);
         }
-        else
-        {
+        else {
             $resourceContent = [];
 
-            foreach ($inputPaths as $inputPath)
-            {
+            foreach ($inputPaths as $inputPath) {
                 $resourceContent[] = file_get_contents($inputPath);
             }
 
@@ -172,10 +161,8 @@ class ResourceGenerator
      */
     protected function writeResourcesFolder(string $outputPath, array $inputPaths): void
     {
-        foreach ($inputPaths as $inputPath)
-        {
+        foreach ($inputPaths as $inputPath) {
             $this->getFilesystem()->mirror($inputPath, $outputPath);
         }
     }
-
 }

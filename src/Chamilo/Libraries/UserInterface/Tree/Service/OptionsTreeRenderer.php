@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\UserInterface\Tree\Service;
 
 /**
- * @package Chamilo\Libraries\Format\Tree\Options
+ * @package Chamilo\Libraries\UserInterface\Tree\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class OptionsTreeRenderer
@@ -34,14 +34,11 @@ class OptionsTreeRenderer
      */
     public function processTreeNodes(array &$options, array $treeNodes, int $level = 0): void
     {
-        foreach ($treeNodes as $treeNode)
-        {
-            if ($level > 0)
-            {
+        foreach ($treeNodes as $treeNode) {
+            if ($level > 0) {
                 $prefix = str_repeat('&nbsp;&nbsp;&nbsp;', $level - 1) . '&mdash; ';
             }
-            else
-            {
+            else {
                 $prefix = '';
             }
 

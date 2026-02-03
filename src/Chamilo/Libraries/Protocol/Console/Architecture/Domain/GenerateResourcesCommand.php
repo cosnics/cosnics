@@ -8,12 +8,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Console\Command
+ * @package Chamilo\Libraries\Protocol\Console\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GenerateResourcesCommand extends ChamiloCommand
 {
-
     protected ResourceGenerator $resourceGenerator;
 
     public function __construct(Translator $translator, ResourceGenerator $resourceGenerator)
@@ -22,7 +21,7 @@ class GenerateResourcesCommand extends ChamiloCommand
         parent::__construct($translator);
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('chamilo:generate_resources')->setDescription(
             $this->translator->trans('GenerateResourcesCommandDescription', [], StringUtilities::LIBRARIES)

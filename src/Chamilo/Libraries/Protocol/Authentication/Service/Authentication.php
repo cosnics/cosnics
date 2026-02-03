@@ -11,7 +11,7 @@ use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Authentication
+ * @package Chamilo\Libraries\Protocol\Authentication\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 abstract class Authentication implements AuthenticationInterface
@@ -60,28 +60,24 @@ abstract class Authentication implements AuthenticationInterface
     {
         $username = $this->getRequest()->request->get(self::PARAM_LOGIN);
 
-        if (empty($username))
-        {
+        if (empty($username)) {
             return null;
         }
 
         $user = $this->getUserService()->getUserByUsernameOrEmail($username);
         $translator = $this->getTranslator();
 
-        if (!$user instanceof User)
-        {
+        if (!$user instanceof User) {
             throw new AuthenticationException(
                 $translator->trans('InvalidUsername', [], StringUtilities::LIBRARIES)
             );
         }
 
-        if ($user->getAuthenticationSource() != static::class)
-        {
+        if ($user->getAuthenticationSource() != static::class) {
             return null;
         }
 
-        if (!$this->isAuthSourceActive())
-        {
+        if (!$this->isAuthSourceActive()) {
             throw new AuthenticationException(
                 $translator->trans('AuthSourceNotActive', [], StringUtilities::LIBRARIES)
             );
@@ -101,5 +97,4 @@ abstract class Authentication implements AuthenticationInterface
             ['Chamilo\Libraries', 'enable' . str_replace('\\', '', static::class)]
         );
     }
-
 }

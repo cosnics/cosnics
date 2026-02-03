@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\Advan
 /**
  * class that describes a type for the advanced element finder
  *
- * @package Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder
  */
 class AdvancedElementFinderElementType
 {

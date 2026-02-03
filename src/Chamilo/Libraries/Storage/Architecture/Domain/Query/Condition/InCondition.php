@@ -1,40 +1,47 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition;
 
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\ConditionVariable;
+use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
+use Chamilo\Libraries\Storage\Service\Condition\InConditionTranslator;
 
 /**
- * This class represents a selection condition that requires a value to be present in a list of values.
- * An example of an
- * instance would be a condition that requires that the id of a DataClass object be contained in the list {4,10,12}.
- *
  * @author Bart Mollet
  * @author Hans De Bisschop
- * @package Chamilo\Libraries\Storage\Query\Condition
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition
  */
-class InCondition extends Condition
+class InCondition implements ConditionInterface
 {
-    private ConditionVariable $conditionVariable;
+    use HashableTrait;
+
+    private ConditionVariableInterface $conditionVariable;
 
     private array $values;
 
     public function __construct(
-        ConditionVariable $conditionVariable, array $values
+        ConditionVariableInterface $conditionVariable, array $values
     )
     {
         $this->conditionVariable = $conditionVariable;
         $this->values = $values;
     }
 
-    public function getConditionVariable(): ConditionVariable
+    public function getConditionTranslatorClass(): string
+    {
+        return InConditionTranslator::class;
+    }
+
+    public function getConditionVariable(): ConditionVariableInterface
     {
         return $this->conditionVariable;
     }
 
     public function getHashParts(): array
     {
-        $hashParts = parent::getHashParts();
+        $hashParts = [];
 
+        $hashParts[] = static::class;
         $hashParts[] = $this->getConditionVariable()->getHashParts();
 
         $values = $this->getValues();

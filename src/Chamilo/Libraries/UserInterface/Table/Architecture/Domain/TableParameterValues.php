@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\UserInterface\Table\Architecture\Domain;
 
 /**
- * @package Chamilo\Libraries\Format\Table
+ * @package Chamilo\Libraries\UserInterface\Table\Architecture\Domain
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TableParameterValues extends AbstractBaseTableParameters

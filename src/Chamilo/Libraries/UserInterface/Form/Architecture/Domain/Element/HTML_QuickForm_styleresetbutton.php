@@ -5,22 +5,20 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
 /**
- * @package Chamilo\Libraries\Format\Form\Element
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class HTML_QuickForm_styleresetbutton extends HTML_QuickForm_stylebutton
 {
-
     public function __construct(
         ?string $elementName = null, ?string $elementLabel = null, null|array|string $attributes = null,
         ?string $value = null, ?InlineGlyph $glyph = null
     )
     {
         // Quickform forces all arguments to "null", so the defaults in the constructor are not triggered
-        if (!isset($glyph))
-        {
+        if (!isset($glyph)) {
             $glyph = new FontAwesomeGlyph('trash-alt');
         }
 

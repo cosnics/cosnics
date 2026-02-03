@@ -5,7 +5,7 @@ use Chamilo\Libraries\Architecture\Domain\ActionResult;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Architecture
+ * @package Chamilo\Libraries\Service\Utilities
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -27,37 +27,30 @@ class ActionResultRenderer
         $parameters['ACTION'] =
             $translator->trans('ActionResultAction' . $actionResult->getActionType(), [], $actionResult->getContext());
 
-        if ($actionResult->isSingleAction())
-        {
+        if ($actionResult->isSingleAction()) {
             $parameters['OBJECT'] = $translator->trans(
                 'ActionResultSingleEntity' . $actionResult->getEntityType(), [], $actionResult->getContext()
             );
 
-            if ($actionResult->hasFailed())
-            {
+            if ($actionResult->hasFailed()) {
                 return $translator->trans('ActionResultSingleFailureMessage', $parameters);
             }
-            else
-            {
+            else {
                 return $translator->trans('ActionResultSingleSuccessMessage', $parameters);
             }
         }
-        else
-        {
+        else {
             $parameters['OBJECT'] = $translator->trans(
                 'ActionResultMultipleEntity' . $actionResult->getEntityType(), [], $actionResult->getContext()
             );
 
-            if ($actionResult->hasSucceeded())
-            {
+            if ($actionResult->hasSucceeded()) {
                 return $translator->trans('ActionResultMultipleSuccessMessage', $parameters);
             }
-            elseif ($actionResult->hasFailedCompletely())
-            {
+            elseif ($actionResult->hasFailedCompletely()) {
                 return $translator->trans('ActionResultMultipleFailureMessage', $parameters);
             }
-            else
-            {
+            else {
                 return $translator->trans('ActionResultSomeFailureMessage', $parameters);
             }
         }

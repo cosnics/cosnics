@@ -6,9 +6,7 @@ use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Interface\N
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * Stores user notification messages into the session
- *
- * @package Chamilo\Libraries\Format\NotificationMessage
+ * @package Chamilo\Libraries\UserInterface\NotificationMessage\Storage\Repository
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class NotificationMessageSessionStorage implements NotificationMessageStorageInterface
@@ -44,8 +42,7 @@ class NotificationMessageSessionStorage implements NotificationMessageStorageInt
 
         $notificationMessages = [];
 
-        foreach ($notificationMessagesAsArray as $notificationMessageArray)
-        {
+        foreach ($notificationMessagesAsArray as $notificationMessageArray) {
             $notificationMessages[] = new NotificationMessage(
                 $notificationMessageArray[self::PARAM_MESSAGE], $notificationMessageArray[self::PARAM_TYPE],
                 $notificationMessageArray[self::PARAM_CATEGORY]
@@ -62,8 +59,7 @@ class NotificationMessageSessionStorage implements NotificationMessageStorageInt
     {
         $notificationMessagesAsArray = [];
 
-        foreach ($notificationMessages as $notificationMessage)
-        {
+        foreach ($notificationMessages as $notificationMessage) {
             $notificationMessagesAsArray[] = [
                 self::PARAM_TYPE => $notificationMessage->getType(),
                 self::PARAM_MESSAGE => $notificationMessage->getMessage(),

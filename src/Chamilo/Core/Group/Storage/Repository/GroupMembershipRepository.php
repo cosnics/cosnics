@@ -6,7 +6,6 @@ use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertiesConditionVariable;
@@ -17,6 +16,7 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\Joins;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -37,7 +37,9 @@ class GroupMembershipRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countSubscribedUsersForGroupIdentifier(string $groupIdentifier, ?Condition $condition = null): int
+    public function countSubscribedUsersForGroupIdentifier(
+        string $groupIdentifier, ?ConditionInterface $condition = null
+    ): int
     {
         return $this->countSubscribedUsersForGroupIdentifiers([$groupIdentifier], $condition);
     }
@@ -47,18 +49,18 @@ class GroupMembershipRepository
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers, ?Condition $condition = null): int
+    public function countSubscribedUsersForGroupIdentifiers(
+        array $groupIdentifiers, ?ConditionInterface $condition = null
+    ): int
     {
         $groupCondition = new InCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID), $groupIdentifiers
         );
 
-        if ($condition instanceof Condition)
-        {
+        if ($condition instanceof ConditionInterface) {
             $condition = new AndCondition([$condition, $groupCondition]);
         }
-        else
-        {
+        else {
             $condition = $groupCondition;
         }
 
@@ -236,7 +238,7 @@ class GroupMembershipRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findSubscribedUsersForGroupIdentifiers(
-        array $groupIdentifiers, ?Condition $condition = null, ?int $offset = null, ?int $count = null,
+        array $groupIdentifiers, ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null,
         OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
@@ -244,12 +246,10 @@ class GroupMembershipRepository
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID), $groupIdentifiers
         );
 
-        if ($condition instanceof Condition)
-        {
+        if ($condition instanceof ConditionInterface) {
             $condition = new AndCondition([$condition, $groupCondition]);
         }
-        else
-        {
+        else {
             $condition = $groupCondition;
         }
 

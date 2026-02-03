@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * This class represents a default Json response as provided and used by the various AJAX calls throughout Chamilo
  *
- * @package Chamilo\Libraries\Architecture
+ * @package Chamilo\Libraries\Protocol\Ajax\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class JsonAjaxResult

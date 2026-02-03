@@ -10,13 +10,12 @@ use Exception;
 
 /**
  *
- * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service
+ * @package Chamilo\Libraries\Storage\Factory
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
 class ConnectionFactory
 {
-
     private DataSourceName $dataSourceName;
 
     public function __construct(DataSourceName $dataSourceName)
@@ -40,12 +39,10 @@ class ConnectionFactory
             'charset' => 'UTF8'
         ];
 
-        try
-        {
+        try {
             return DriverManager::getConnection($connectionParameters, new Configuration());
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             throw new ConnectionException(
                 'Could not connect to the database. Please contact your system administrator.'
             );

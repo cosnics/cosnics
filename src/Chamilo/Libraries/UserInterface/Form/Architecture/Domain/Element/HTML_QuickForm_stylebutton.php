@@ -6,14 +6,13 @@ use HTML_QuickForm;
 use HTML_QuickForm_element;
 
 /**
- * @package Chamilo\Libraries\Format\Form\Element
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
 {
-
     private ?InlineGlyph $glyph;
 
     private ?string $styleButtonLabel;
@@ -35,12 +34,10 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
         $this->styleButtonLabel = $elementLabel;
         $this->glyph = $glyph;
 
-        if (isset($value))
-        {
+        if (isset($value)) {
             $this->setValue($value);
         }
-        else
-        {
+        else {
             $this->setValue($elementLabel);
         }
     }
@@ -49,12 +46,10 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
     {
         $type = $this->getType();
 
-        if ('reset' == $type || 'button' == $type)
-        {
+        if ('reset' == $type || 'button' == $type) {
             return null;
         }
-        else
-        {
+        else {
             return parent::exportValue($submitValues, $assoc);
         }
     }
@@ -96,21 +91,17 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
         // do not use submit values for button-type elements
         $type = $this->getType();
 
-        if (('updateValue' != $event) || ('submit' != $type && 'reset' != $type && 'button' != $type))
-        {
+        if (('updateValue' != $event) || ('submit' != $type && 'reset' != $type && 'button' != $type)) {
             parent::onQuickFormEvent($event, $arg, $caller);
         }
-        else
-        {
+        else {
             $value = $this->_findValue($caller->getConstantValues());
 
-            if (null === $value)
-            {
+            if (null === $value) {
                 $value = $this->_findValue($caller->getDefaultValues());
             }
 
-            if (null !== $value)
-            {
+            if (null !== $value) {
                 $this->setValue($value);
             }
         }
@@ -139,24 +130,20 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      */
     public function toHtml(): string
     {
-        if ($this->_flagFrozen)
-        {
+        if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         }
-        else
-        {
+        else {
             $html = [];
 
             $html[] = $this->_getTabs() . '<button' . $this->_getAttrString($this->_attributes) . ' >';
 
-            if ($this->getGlyph())
-            {
+            if ($this->getGlyph()) {
                 $html[] =
                     $this->_getTabs() . $this->getGlyph()->render() . ($this->getStyleButtonLabel() ? '&nbsp;' : '');
             }
 
-            if ($this->getStyleButtonLabel())
-            {
+            if ($this->getStyleButtonLabel()) {
                 $html[] = $this->_getTabs() . $this->getStyleButtonLabel();
             }
 

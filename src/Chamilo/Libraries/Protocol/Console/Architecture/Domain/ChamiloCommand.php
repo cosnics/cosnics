@@ -6,11 +6,10 @@ use Symfony\Component\Translation\Translator;
 
 /**
  * @author Sven Vanpoucke - Hogeschool Gent
- * @package Chamilo\Libraries\Console\Command
+ * @package Chamilo\Libraries\Protocol\Console\Architecture\Domain
  */
 abstract class ChamiloCommand extends Command
 {
-
     protected Translator $translator;
 
     public function __construct(Translator $translator)

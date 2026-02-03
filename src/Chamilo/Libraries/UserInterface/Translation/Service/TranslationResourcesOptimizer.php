@@ -9,13 +9,12 @@ use Symfony\Component\Translation\MessageCatalogue;
 /**
  * Optimizes the translation resources
  *
- * @package Chamilo\Libraries\Translation
+ * @package Chamilo\Libraries\UserInterface\Translation\Service
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TranslationResourcesOptimizer
 {
-
     private string $optimizedTranslationsCachePath;
 
     private LoaderInterface $translationLoader;
@@ -42,12 +41,10 @@ class TranslationResourcesOptimizer
         $cachePath = $this->optimizedTranslationsCachePath;
         $optimizedTranslationsCache = $cachePath . '/locale.php';
 
-        if (!file_exists($optimizedTranslationsCache))
-        {
+        if (!file_exists($optimizedTranslationsCache)) {
             return $this->optimizeResources($cachePath, $optimizedTranslationsCache);
         }
-        else
-        {
+        else {
             return $this->retrieveOptimizedResources($cachePath, $optimizedTranslationsCache);
         }
     }
@@ -62,8 +59,7 @@ class TranslationResourcesOptimizer
      */
     public function setOptimizedTranslationsCachePath(string $optimizedTranslationsCachePath): void
     {
-        if (empty($optimizedTranslationsCachePath))
-        {
+        if (empty($optimizedTranslationsCachePath)) {
             throw new InvalidArgumentException('You must provide a valid cache path');
         }
 
@@ -98,14 +94,12 @@ class TranslationResourcesOptimizer
         $resources = [];
 
         $foundResources = $this->translationResourcesFinder->findTranslationResources();
-        foreach ($foundResources as $locale => $localeFoundResources)
-        {
+        foreach ($foundResources as $locale => $localeFoundResources) {
             $messageCatalogue = new MessageCatalogue($locale);
 
             $translationLoader = $this->getTranslationLoader();
 
-            foreach ($localeFoundResources as $domain => $resource)
-            {
+            foreach ($localeFoundResources as $domain => $resource) {
                 $messageCatalogue->addCatalogue($translationLoader->load($resource, $locale, $domain));
             }
 
@@ -130,8 +124,7 @@ class TranslationResourcesOptimizer
         $resources = [];
 
         $locales = require($optimizedTranslationsCache);
-        foreach ($locales as $locale)
-        {
+        foreach ($locales as $locale) {
             $resources[$locale] = $cachePath . '/' . $locale . '.php';
         }
 

@@ -7,14 +7,13 @@ use Chamilo\Core\User\Storage\DataClass\User;
  * An authentication class implements the <code>ChangeablePassword</code>
  * interface to indicate that it supports changing of passwords
  *
- * @package Chamilo\Libraries\Architecture\Interfaces
+ * @package Chamilo\Libraries\Protocol\Authentication\Architecture\Interface
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 interface ChangeablePasswordInterface
 {
-    
     public function changePassword(User $user, string $oldPassword, string $newPassword): bool;
 
     /**

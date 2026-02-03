@@ -55,12 +55,10 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
         $user->setGivenName($casUserAttributes['first_name']);
         $user->setOfficialCode($casUserAttributes['person_number']);
 
-        if (!$this->getUserService()->createUser($user))
-        {
+        if (!$this->getUserService()->createUser($user)) {
             throw new AuthenticationException('CasUserRegistrationFailed');
         }
-        else
-        {
+        else {
             return $user;
         }
     }

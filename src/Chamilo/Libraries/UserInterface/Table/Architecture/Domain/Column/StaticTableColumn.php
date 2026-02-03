@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column;
 
 /**
- * @package Chamilo\Libraries\Format\Table\Column
+ * @package Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */

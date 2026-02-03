@@ -31,7 +31,7 @@ class SubButtonRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function getButtonClass(): string
+    public function getButtonClassName(): string
     {
         return SubButton::class;
     }

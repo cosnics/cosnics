@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Interface;
 
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 
@@ -12,7 +11,6 @@ use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
  */
 interface DataClassDatabaseInterface
 {
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -32,7 +30,7 @@ interface DataClassDatabaseInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function delete(string $dataClassStorageUnitName, ?Condition $condition = null): bool;
+    public function delete(string $dataClassStorageUnitName, ?ConditionInterface $condition = null): bool;
 
     /**
      * @return string[]
@@ -77,5 +75,6 @@ interface DataClassDatabaseInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function update(string $dataClassStorageUnitName, UpdateProperties $properties, Condition $condition): bool;
+    public function update(string $dataClassStorageUnitName, UpdateProperties $properties, ConditionInterface $condition
+    ): bool;
 }

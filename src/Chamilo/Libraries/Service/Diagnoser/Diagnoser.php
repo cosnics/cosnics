@@ -17,7 +17,7 @@ use Doctrine\DBAL\Connection;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Support
+ * @package Chamilo\Libraries\Service\Diagnoser
  * @author  spou595 Class that is responsible for generating diagnostic information about the system
  */
 class Diagnoser

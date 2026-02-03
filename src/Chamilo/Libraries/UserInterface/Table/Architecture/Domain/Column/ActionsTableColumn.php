@@ -5,7 +5,7 @@ namespace Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column;
  * You can add this column automatically to your table by implementing the
  * TableRowActionsSupport interface in your table.
  *
- * @package Chamilo\Libraries\Format\Table\Column
+ * @package Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column
  * @author  Sven Vanpoucke
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */

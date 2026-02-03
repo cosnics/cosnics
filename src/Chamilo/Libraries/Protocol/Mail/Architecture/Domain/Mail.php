@@ -6,115 +6,69 @@ use InvalidArgumentException;
 /**
  * Describes the content and metadata for an e-mail
  *
- * @package Chamilo\Libraries\Mail\ValueObject
+ * @package Chamilo\Libraries\Protocol\Mail\Architecture\Domain
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Mail
 {
-
     /**
      * The attachments
      *
      * @var MailFile[]
      */
-    protected $attachments;
+    protected array $attachments;
 
     /**
      * Array of receiver email addresses in the BCC field of the mail
      *
      * @var string[]
      */
-    protected $bcc;
+    protected array $bcc;
 
     /**
      * Array of receiver email addresses in the CC field of the mail
      *
      * @var string[]
      */
-    protected $cc;
+    protected array $cc;
 
     /**
      * The embedded images
      *
      * @var \Chamilo\Libraries\Protocol\Mail\Architecture\Domain\MailFile[]
      */
-    protected $embeddedImages;
+    protected array $embeddedImages;
 
-    /**
-     * The email address of the sender of the mail
-     *
-     * @var string
-     */
-    protected $fromEmail;
+    protected ?string $fromEmail;
 
-    /**
-     * The name of sender of the mail
-     *
-     * @var string
-     */
-    protected $fromName;
+    protected ?string $fromName;
 
-    /**
-     * The message of the mail
-     *
-     * @var string
-     */
-    protected $message;
+    protected string $message;
 
-    /**
-     * The name to which a receiver of the mail can reply to
-     *
-     * @var string
-     */
-    protected $replyEmail;
+    protected ?string $replyEmail;
 
-    /**
-     * The name to which a receiver of the mail can reply to
-     *
-     * @var string
-     */
-    protected $replyName;
+    protected ?string $replyName;
 
     /**
      * Whether this mail should be sent individually to the target users or not
-     *
-     * @var string[]
      */
-    protected $sendIndividually;
+    protected bool $sendIndividually;
+
+    protected string $subject;
+
+    protected array $to;
 
     /**
-     * The subject of the mail
-     *
-     * @var string[]
-     */
-    protected $subject;
-
-    /**
-     * Array of receiver email addresses in the TO field of the mail
-     *
-     * @var string[]
-     */
-    protected $to;
-
-    /**
-     * Constructor
-     *
-     * @param string $subject
-     * @param string $message
      * @param string[] $to
-     * @param bool $sendIndividually
      * @param string[] $cc
      * @param string[] $bcc
-     * @param string $fromName
-     * @param string $fromEmail
-     * @param string $replyName
-     * @param string $replyEmail
      * @param \Chamilo\Libraries\Protocol\Mail\Architecture\Domain\MailFile[] $embeddedImages
      * @param \Chamilo\Libraries\Protocol\Mail\Architecture\Domain\MailFile[] $attachments
      */
     public function __construct(
-        $subject, $message, $to = [], $sendIndividually = true, $cc = [], $bcc = [], $fromName = null,
-        $fromEmail = null, $replyName = null, $replyEmail = null, $embeddedImages = [], $attachments = []
+        string $subject, string $message, array $to = [], bool $sendIndividually = true, array $cc = [],
+        array $bcc = [], ?string $fromName = null, ?string $fromEmail = null, ?string $replyName = null,
+        ?string $replyEmail = null, array $embeddedImages = [], array $attachments = []
     )
     {
         $this->subject = $subject;
@@ -131,125 +85,89 @@ class Mail
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Protocol\Mail\Architecture\Domain\MailFile[]
      */
-    public function getAttachments()
+    public function getAttachments(): array
     {
         return $this->attachments;
     }
 
     /**
-     *
      * @return \string[]
      */
-    public function getBcc()
+    public function getBcc(): array
     {
         return $this->bcc;
     }
 
     /**
-     *
      * @return \string[]
      */
-    public function getCc()
+    public function getCc(): array
     {
         return $this->cc;
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Protocol\Mail\Architecture\Domain\MailFile[]
      */
-    public function getEmbeddedImages()
+    public function getEmbeddedImages(): array
     {
         return $this->embeddedImages;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getFromEmail()
+    public function getFromEmail(): ?string
     {
         return $this->fromEmail;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getFromName()
+    public function getFromName(): ?string
     {
         return $this->fromName;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getReplyEmail()
+    public function getReplyEmail(): ?string
     {
         return $this->replyEmail;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getReplyName()
+    public function getReplyName(): ?string
     {
         return $this->replyName;
     }
 
-    /**
-     *
-     * @return \string[]
-     */
-    public function getSendIndividually()
+    public function getSendIndividually(): bool
     {
         return $this->sendIndividually;
     }
 
-    /**
-     *
-     * @return \string[]
-     */
-    public function getSubject()
+    public function getSubject(): string
     {
         return $this->subject;
     }
 
     /**
-     *
-     * @return \string[]
+     * @return string[]
      */
-    public function getTo()
+    public function getTo(): array
     {
         return $this->to;
     }
 
     /**
-     * Validates and sets the recipients
-     *
-     * @param bool $sendIndividually
      * @param string[] $to
      * @param string[] $cc
      * @param string[] $bcc
      */
-    protected function setRecipients($sendIndividually = false, $to = [], $cc = [], $bcc = [])
+    protected function setRecipients(bool $sendIndividually = false, array $to = [], array $cc = [], array $bcc = []
+    ): void
     {
-        if ($sendIndividually && (!empty($cc) || !empty($bcc)))
-        {
+        if ($sendIndividually && (!empty($cc) || !empty($bcc))) {
             throw new InvalidArgumentException(
                 'A mail that is set to send individually to the target users should not include cc or bcc recipients'
             );

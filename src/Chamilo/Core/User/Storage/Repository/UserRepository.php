@@ -7,7 +7,6 @@ use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
@@ -21,6 +20,7 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -32,7 +32,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class UserRepository
 {
-
     private DataClassRepository $dataClassRepository;
 
     private SearchQueryConditionGenerator $searchQueryConditionGenerator;
@@ -48,7 +47,7 @@ class UserRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countUsers(?Condition $condition = null): int
+    public function countUsers(?ConditionInterface $condition = null): int
     {
         return $this->getDataClassRepository()->count(User::class, new StorageParameters(condition: $condition));
     }
@@ -131,13 +130,12 @@ class UserRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findActiveUsers(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
+        ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $conditions = [];
 
-        if ($condition)
-        {
+        if ($condition) {
             $conditions[] = $condition;
         }
 
@@ -202,7 +200,8 @@ class UserRepository
         $conditions = [];
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class, User::PROPERTY_PLATFORM_ADMINISTRATOR), new StaticConditionVariable(1)
+            new PropertyConditionVariable(User::class, User::PROPERTY_PLATFORM_ADMINISTRATOR),
+            new StaticConditionVariable(1)
         );
 
         $conditions[] = new EqualityCondition(
@@ -397,13 +396,13 @@ class UserRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\ConditionVariable[] $retrieveProperties
+     * @param \Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface[] $retrieveProperties
      *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findUserProperties(
-        array $retrieveProperties, ?Condition $condition = null, OrderBy $orderBy = new OrderBy()
+        array $retrieveProperties, ?ConditionInterface $condition = null, OrderBy $orderBy = new OrderBy()
     ): array
     {
         return $this->getDataClassRepository()->distinct(
@@ -440,7 +439,7 @@ class UserRepository
     }
 
     /**
-     * @param ?\Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition $condition
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface $condition
      * @param ?int $count
      * @param ?int $offset
      * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy $orderBy
@@ -449,7 +448,7 @@ class UserRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findUsers(
-        ?Condition $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
+        ?ConditionInterface $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $parameters = new StorageParameters(condition: $condition, orderBy: $orderBy, count: $count, offset: $offset);
@@ -562,8 +561,7 @@ class UserRepository
         $conditions = [];
 
         // Set the conditions for the search query
-        if ($searchQuery && $searchQuery != '')
-        {
+        if ($searchQuery && $searchQuery != '') {
             $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
                 $searchQuery, [
                     new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),

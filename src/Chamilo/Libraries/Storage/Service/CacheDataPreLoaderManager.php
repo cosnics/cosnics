@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\Service;
 use Chamilo\Libraries\Storage\Architecture\Interface\CacheDataPreLoaderInterface;
 
 /**
- * @package Chamilo\Libraries\Cache\CacheManagement
+ * @package Chamilo\Libraries\Storage\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -20,9 +20,12 @@ class CacheDataPreLoaderManager
         $this->cacheDataPreLoaderServices = [];
     }
 
-    public function addCacheDataPreLoaderService(string $alias, CacheDataPreLoaderInterface $cacheDataPreLoaderService)
+    public function addCacheDataPreLoaderService(string $alias, CacheDataPreLoaderInterface $cacheDataPreLoaderService
+    ): static
     {
         $this->cacheDataPreLoaderServices[$alias] = $cacheDataPreLoaderService;
+
+        return $this;
     }
 
     /**
@@ -50,34 +53,16 @@ class CacheDataPreLoaderManager
     {
         $cacheDataPreLoaderServices = $this->getCacheDataPreLoaderServices();
 
-        if (empty($cacheDataPreLoaderServiceAliases))
-        {
+        if (empty($cacheDataPreLoaderServiceAliases)) {
             return $cacheDataPreLoaderServices;
         }
 
         return array_filter(
             $cacheDataPreLoaderServices,
             function ($cacheDataPreLoaderServiceAlias) use ($cacheDataPreLoaderServiceAliases) {
-                return array_key_exists($cacheDataPreLoaderServiceAlias, $cacheDataPreLoaderServiceAliases);
+                return array_key_exists(get_class($cacheDataPreLoaderServiceAlias), $cacheDataPreLoaderServiceAliases);
             }, ARRAY_FILTER_USE_KEY
         );
-
-        //        $cacheDataPreLoaderServices = [];
-        //
-        //        foreach ($cacheDataPreLoaderServiceAliases as $cacheDataPreLoaderServiceAlias)
-        //        {
-        //            if (!array_key_exists($cacheDataPreLoaderServiceAlias, $this->cacheDataPreLoaderServices))
-        //            {
-        //                throw new InvalidArgumentException(
-        //                    sprintf('The given cache service alias %s does not exist', $cacheDataPreLoaderServiceAlias)
-        //                );
-        //            }
-        //
-        //            $cacheDataPreLoaderServices[$cacheDataPreLoaderServiceAlias] =
-        //                $this->cacheDataPreLoaderServices[$cacheDataPreLoaderServiceAlias];
-        //        }
-        //
-        //        return $cacheDataPreLoaderServices;
     }
 
     /**
@@ -85,13 +70,14 @@ class CacheDataPreLoaderManager
      *
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function preLoad(array $cacheDataPreLoaderServiceAliases = [])
+    public function preLoad(array $cacheDataPreLoaderServiceAliases = []): static
     {
         $cacheDataPreLoaderServices = $this->getCacheDataPreLoaderServicesByAliases($cacheDataPreLoaderServiceAliases);
 
-        foreach ($cacheDataPreLoaderServices as $cacheService)
-        {
+        foreach ($cacheDataPreLoaderServices as $cacheService) {
             $cacheService->preLoadCacheData();
         }
+
+        return $this;
     }
 }

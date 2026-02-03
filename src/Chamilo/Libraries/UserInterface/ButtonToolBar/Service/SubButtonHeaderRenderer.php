@@ -29,7 +29,7 @@ class SubButtonHeaderRenderer implements ButtonRendererInterface, ButtonRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function getButtonClass(): string
+    public function getButtonClassName(): string
     {
         return SubButtonHeader::class;
     }

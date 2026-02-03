@@ -10,17 +10,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Console\Command
+ * @package Chamilo\Libraries\Protocol\Console\Architecture\Domain
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PreLoadCacheCommand extends ChamiloCommand
 {
     public const ARG_CACHE_DATA_PRELOADER_SERVICES = 'cache_data_preloader_services';
-
     public const OPT_LIST = 'list';
     public const OPT_LIST_SHORT = 'l';
-
     public const OPT_PRELOAD = 'preload';
     public const OPT_PRELOAD_SHORT = 'p';
 
@@ -32,7 +30,7 @@ class PreLoadCacheCommand extends ChamiloCommand
         parent::__construct($translator);
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('chamilo:cache:preload')->addOption(
             self::OPT_PRELOAD, self::OPT_PRELOAD_SHORT, InputOption::VALUE_NONE,
@@ -55,13 +53,11 @@ class PreLoadCacheCommand extends ChamiloCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($this->listCacheDataPreLoaderServices($input, $output))
-        {
+        if ($this->listCacheDataPreLoaderServices($input, $output)) {
             return 0;
         }
 
-        if ($input->getOption(self::OPT_PRELOAD))
-        {
+        if ($input->getOption(self::OPT_PRELOAD)) {
             $this->preLoad($input, $output);
         }
 
@@ -78,8 +74,7 @@ class PreLoadCacheCommand extends ChamiloCommand
 
     protected function listCacheDataPreLoaderServices(InputInterface $input, OutputInterface $output): bool
     {
-        if ($input->getOption(self::OPT_LIST))
-        {
+        if ($input->getOption(self::OPT_LIST)) {
             $output->writeln(
                 '<comment>' .
                 $this->translator->trans('AvailableCacheDataPreLoaderServices', [], StringUtilities::LIBRARIES) .
@@ -87,8 +82,7 @@ class PreLoadCacheCommand extends ChamiloCommand
             );
             $output->writeln('');
 
-            foreach ($this->cacheDataPreLoaderManager->getCacheDataPreLoaderServiceAliases() as $serviceAlias)
-            {
+            foreach ($this->cacheDataPreLoaderManager->getCacheDataPreLoaderServiceAliases() as $serviceAlias) {
                 $output->writeln('<info>' . $serviceAlias . '</info>');
             }
 

@@ -40,7 +40,7 @@ class Button implements ButtonInterface, ButtonDisplayInterface, ButtonActionInt
     /**
      * @return class-string<\Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonRenderer>
      */
-    public function getButtonRendererClass(): string
+    public function getButtonRendererClassName(): string
     {
         return ButtonRenderer::class;
     }

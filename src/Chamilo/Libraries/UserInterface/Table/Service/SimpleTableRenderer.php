@@ -8,7 +8,7 @@ use HTML_Table;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Format\Table
+ * @package Chamilo\Libraries\UserInterface\Table\Service
  * @author  Sven Vanpoucke
  */
 class SimpleTableRenderer
@@ -50,27 +50,22 @@ class SimpleTableRenderer
     {
         $cellRenderer = $this->getCellRenderer();
 
-        if (count($dataArray) > 0)
-        {
-            foreach ($dataArray as $data)
-            {
+        if (count($dataArray) > 0) {
+            foreach ($dataArray as $data) {
                 $contents = [];
 
-                foreach ($defaultProperties as $index => $defaultproperty)
-                {
+                foreach ($defaultProperties as $index => $defaultproperty) {
                     $contents[] = $cellRenderer->renderCell($index, $data);
                 }
 
-                if ($cellRenderer instanceof SimpleTableCellRendererModificationInterface)
-                {
+                if ($cellRenderer instanceof SimpleTableCellRendererModificationInterface) {
                     $contents[] = $cellRenderer->getModificationLinks($data);
                 }
 
                 $htmlTable->addRow($contents);
             }
         }
-        else
-        {
+        else {
             $rownumber =
                 $htmlTable->addRow([$this->getTranslator()->trans('NoResults', [], StringUtilities::LIBRARIES)]);
 
@@ -91,24 +86,20 @@ class SimpleTableRenderer
         $namespace = $cellrenderer->getNamespace();
         $counter = 0;
 
-        foreach ($defaultProperties as $defaultproperty)
-        {
-            if ($defaultproperty)
-            {
+        foreach ($defaultProperties as $defaultproperty) {
+            if ($defaultproperty) {
                 $htmlTable->setHeaderContents(
                     0, $counter, $this->getTranslator()->trans($prefix . $defaultproperty, [], $namespace)
                 );
             }
-            else
-            {
+            else {
                 $htmlTable->setHeaderContents(0, $counter, '');
             }
 
             $counter ++;
         }
 
-        if ($cellrenderer instanceof SimpleTableCellRendererModificationInterface)
-        {
+        if ($cellrenderer instanceof SimpleTableCellRendererModificationInterface) {
             $htmlTable->setHeaderContents(0, $counter, '');
         }
     }

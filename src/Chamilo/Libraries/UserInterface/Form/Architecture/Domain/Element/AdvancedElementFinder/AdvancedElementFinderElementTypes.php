@@ -4,12 +4,11 @@ namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\Advan
 /**
  * Class to determine the types for an advanced element finder
  *
- * @package Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder
  * @author Sven Vanpoucke
  */
 class AdvancedElementFinderElementTypes
 {
-
     /**
      * @var \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElementType[]
      */
@@ -39,8 +38,7 @@ class AdvancedElementFinderElementTypes
 
         $types = $this->getTypes();
 
-        foreach ($types as $type)
-        {
+        foreach ($types as $type) {
             $array[] = $type->asArray();
         }
 

@@ -2,13 +2,12 @@
 namespace Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction;
 
 /**
- * @package Chamilo\Libraries\Format\Table\FormAction
+ * @package Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TableAction
 {
-
     private string $action;
 
     private bool $confirm;

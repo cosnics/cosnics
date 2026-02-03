@@ -1,34 +1,41 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition;
 
+use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
+use Chamilo\Libraries\Storage\Service\Condition\NotConditionTranslator;
+
 /**
- * This type of aggregate condition negates a single condition, thus requiring that that condition not be met.
- *
  * @author Tim De Pauw
  * @author Hans De Bisschop
- * @package Chamilo\Libraries\Storage\Query\Condition
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition
  */
-class NotCondition extends AggregateCondition
+class NotCondition implements ConditionInterface
 {
+    use HashableTrait;
 
-    private Condition $condition;
+    private ConditionInterface $condition;
 
-    public function __construct(Condition $condition)
+    public function __construct(ConditionInterface $condition)
     {
         $this->condition = $condition;
     }
 
-    public function getCondition(): Condition
+    public function getCondition(): ConditionInterface
     {
         return $this->condition;
     }
 
+    public function getConditionTranslatorClass(): string
+    {
+        return NotConditionTranslator::class;
+    }
+
     public function getHashParts(): array
     {
-        $hashParts = parent::getHashParts();
-
-        $hashParts[] = $this->getCondition()->getHashParts();
-
-        return $hashParts;
+        return [
+            static::class,
+            $this->getCondition()->getHashParts()
+        ];
     }
 }

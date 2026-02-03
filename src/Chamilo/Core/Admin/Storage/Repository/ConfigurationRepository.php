@@ -3,13 +3,13 @@ namespace Chamilo\Core\Admin\Storage\Repository;
 
 use Chamilo\Core\Admin\Storage\DataClass\Setting;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -20,7 +20,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class ConfigurationRepository
 {
-
     private DataClassRepository $dataClassRepository;
 
     public function __construct(DataClassRepository $dataClassRepository)
@@ -71,7 +70,7 @@ class ConfigurationRepository
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function findSettingContextsForCondition(?Condition $condition = null): array
+    public function findSettingContextsForCondition(?ConditionInterface $condition = null): array
     {
         return $this->getDataClassRepository()->distinct(
             Setting::class, new StorageParameters(

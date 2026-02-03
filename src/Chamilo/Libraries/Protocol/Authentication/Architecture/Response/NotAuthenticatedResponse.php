@@ -13,7 +13,7 @@ use HTML_QuickForm_text;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @package Chamilo\Libraries\Format\Response
+ * @package Chamilo\Libraries\Protocol\Authentication\Architecture\Response
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>

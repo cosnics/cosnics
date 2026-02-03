@@ -35,7 +35,7 @@ class ButtonToolBar implements ButtonInterface, ButtonCollectionInterface
         $this->searchUrl = $searchUrl;
     }
 
-    public function getButtonRendererClass(): string
+    public function getButtonRendererClassName(): string
     {
         return ButtonToolBarRenderer::class;
     }

@@ -16,11 +16,10 @@ use HTML_QuickForm_text;
  * Throw this if you expected an URL parameter that is not
  * there
  *
- * @package Chamilo\Libraries\Architecture\Exceptions
+ * @package Chamilo\Libraries\Protocol\Authentication\Architecture\Exception
  */
 class NotAllowedException extends UserException
 {
-
     public function __construct(bool $showLoginForm = false)
     {
         $this->getSession()->set('request_uri', $_SERVER['REQUEST_URI']);

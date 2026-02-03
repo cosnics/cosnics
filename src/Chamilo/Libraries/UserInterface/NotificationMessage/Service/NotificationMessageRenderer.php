@@ -6,7 +6,7 @@ use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\Noti
 /**
  * Renders notification messages
  *
- * @package Chamilo\Libraries\Format\NotificationMessage
+ * @package Chamilo\Libraries\UserInterface\NotificationMessage\Service
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class NotificationMessageRenderer
@@ -21,25 +21,21 @@ class NotificationMessageRenderer
      */
     public function render(array $notificationMessages = [], bool $addcontainer = true): string
     {
-        if (empty($notificationMessages))
-        {
+        if (empty($notificationMessages)) {
             return '';
         }
 
         $html = [];
 
-        if ($addcontainer)
-        {
+        if ($addcontainer) {
             $html[] = '<div class="notifications">';
         }
 
-        foreach ($notificationMessages as $notificationMessage)
-        {
+        foreach ($notificationMessages as $notificationMessage) {
             $html[] = $this->renderNotificationMessage($notificationMessage);
         }
 
-        if ($addcontainer)
-        {
+        if ($addcontainer) {
             $html[] = '</div>';
         }
 

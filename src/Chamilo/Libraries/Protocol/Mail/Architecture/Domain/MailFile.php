@@ -4,71 +4,35 @@ namespace Chamilo\Libraries\Protocol\Mail\Architecture\Domain;
 /**
  * Describes a file that can be embedded inline or attached to an e-mail.
  *
- * @package Chamilo\Libraries\Mail\ValueObject
- *
+ * @package Chamilo\Libraries\Protocol\Mail\Architecture\Domain
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class MailFile
 {
+    private string $filename;
 
-    /**
-     * The filename of the embedded object
-     *
-     * @var string
-     */
-    private $filename;
+    private ?string $mimeType;
 
-    /**
-     * The system path of the embedded object
-     *
-     * @var string
-     */
-    private $path;
+    private string $path;
 
-    /**
-     * The mime type of the embedded object
-     *
-     * @var string
-     */
-    private $mimeType;
-
-    /**
-     * Constructor
-     *
-     * @param string $filename
-     * @param string $mimeType
-     * @param string $path
-     */
-    function __construct($filename, $path, $mimeType = null)
+    public function __construct(string $filename, string $path, ?string $mimeType = null)
     {
         $this->filename = $filename;
         $this->path = $path;
         $this->mimeType = $mimeType;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getFilename()
+    public function getFilename(): string
     {
         return $this->filename;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getMimeType()
+    public function getMimeType(): ?string
     {
         return $this->mimeType;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }

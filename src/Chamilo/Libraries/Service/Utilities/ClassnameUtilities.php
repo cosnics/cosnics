@@ -2,14 +2,13 @@
 namespace Chamilo\Libraries\Service\Utilities;
 
 /**
- * @package Chamilo\Libraries\Architecture
+ * @package Chamilo\Libraries\Service\Utilities
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ClassnameUtilities
 {
-
     protected static ?ClassnameUtilities $instance = null;
 
     /**
@@ -60,12 +59,10 @@ class ClassnameUtilities
         $convertToUnderscores = (int) $convertToUnderscores;
 
         if (!isset($this->classnameMap[$fullyQualifiedClassname]) ||
-            !isset($this->classnameMap[$fullyQualifiedClassname][$convertToUnderscores]))
-        {
+            !isset($this->classnameMap[$fullyQualifiedClassname][$convertToUnderscores])) {
             $classname = $this->stringUtilities->createString($fullyQualifiedClassname)->afterLast('\\');
 
-            if ($convertToUnderscores)
-            {
+            if ($convertToUnderscores) {
                 $classname = $classname->underscored();
             }
 
@@ -82,8 +79,7 @@ class ClassnameUtilities
 
     public static function getInstance(): ClassnameUtilities
     {
-        if (is_null(static::$instance))
-        {
+        if (is_null(static::$instance)) {
             self::$instance = new static(new StringUtilities('UTF-8'));
         }
 
@@ -95,8 +91,7 @@ class ClassnameUtilities
      */
     public function getNamespaceChild(string $namespace, $levels = 1): string
     {
-        if (!isset($this->namespaceChildMap[$namespace]) || !isset($this->namespaceChildMap[$namespace][$levels]))
-        {
+        if (!isset($this->namespaceChildMap[$namespace]) || !isset($this->namespaceChildMap[$namespace][$levels])) {
             $namespaceParts = explode('\\', $namespace);
             $namespaceParts = array_slice($namespaceParts, $levels);
             $this->namespaceChildMap[$namespace][$levels] = implode('\\', $namespaceParts);
@@ -107,8 +102,7 @@ class ClassnameUtilities
 
     public function getNamespaceFromClassname(string $fullyQualifiedClassname): string
     {
-        if (!isset($this->namespaceMap[$fullyQualifiedClassname]))
-        {
+        if (!isset($this->namespaceMap[$fullyQualifiedClassname])) {
             $this->namespaceMap[$fullyQualifiedClassname] =
                 $this->stringUtilities->createString($fullyQualifiedClassname)->beforeLast('\\');
         }
@@ -136,8 +130,7 @@ class ClassnameUtilities
      */
     public function getNamespaceParent(string $namespace, $levels = 1): string
     {
-        if (!isset($this->namespaceParentMap[$namespace]) || !isset($this->namespaceParentMap[$namespace][$levels]))
-        {
+        if (!isset($this->namespaceParentMap[$namespace]) || !isset($this->namespaceParentMap[$namespace][$levels])) {
             $namespaceParts = explode('\\', $namespace);
             $namespaceParts = array_slice($namespaceParts, 0, - $levels);
             $this->namespaceParentMap[$namespace][$levels] = implode('\\', $namespaceParts);
@@ -154,13 +147,11 @@ class ClassnameUtilities
         $namespacePath = [];
         $namespaceParts = explode('\\', $namespace);
 
-        if ($includeSelf)
-        {
+        if ($includeSelf) {
             $namespacePath[] = $namespace;
         }
 
-        while (count($namespaceParts) > 1)
-        {
+        while (count($namespaceParts) > 1) {
             array_pop($namespaceParts);
             $namespacePath[] = implode('\\', $namespaceParts);
         }
@@ -175,13 +166,11 @@ class ClassnameUtilities
         $convertToCamelCase = (int) $convertToCamelCase;
 
         if (!isset($this->packageNamespaceMap[$namespace]) ||
-            !isset($this->packageNamespaceMap[$namespace][$convertToCamelCase]))
-        {
+            !isset($this->packageNamespaceMap[$namespace][$convertToCamelCase])) {
             $packageName = explode('\\', $namespace);
             $packageName = array_pop($packageName);
 
-            if ($convertToCamelCase)
-            {
+            if ($convertToCamelCase) {
                 $packageName = $this->stringUtilities->createString($packageName)->camelize()->__toString();
             }
 

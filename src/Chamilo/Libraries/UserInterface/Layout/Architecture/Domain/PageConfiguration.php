@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\UserInterface\Layout\Architecture\Domain;
 
 /**
- * @package Chamilo\Libraries\Format\Structure
+ * @package Chamilo\Libraries\UserInterface\Layout\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>

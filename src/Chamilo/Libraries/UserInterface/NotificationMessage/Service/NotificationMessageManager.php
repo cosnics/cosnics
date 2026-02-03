@@ -5,12 +5,11 @@ use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\Noti
 use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Interface\NotificationMessageStorageInterface;
 
 /**
- * @package Chamilo\Libraries\Format\NotificationMessage
+ * @package Chamilo\Libraries\UserInterface\NotificationMessage\Service
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class NotificationMessageManager
 {
-
     protected NotificationMessageRenderer $notificationMessageRenderer;
 
     protected NotificationMessageStorageInterface $notificationMessageStorage;
@@ -31,8 +30,7 @@ class NotificationMessageManager
     {
         $notificationMessages = $this->getNotificationMessageStorage()->retrieve();
 
-        if ($this->canAddMessage($notificationMessage, $notificationMessages, $limitByCategory))
-        {
+        if ($this->canAddMessage($notificationMessage, $notificationMessages, $limitByCategory)) {
             $notificationMessages[] = $notificationMessage;
         }
 
@@ -48,20 +46,16 @@ class NotificationMessageManager
         NotificationMessage $notificationMessageToBeAdded, array $notificationMessages = [], int $limitByCategory = 0
     ): bool
     {
-        if ($limitByCategory > 0 && !is_null($notificationMessageToBeAdded->getCategory()))
-        {
+        if ($limitByCategory > 0 && !is_null($notificationMessageToBeAdded->getCategory())) {
             $numberOfMessagesFromSameCategory = 0;
 
-            foreach ($notificationMessages as $notificationMessage)
-            {
-                if ($notificationMessage->getCategory() == $notificationMessageToBeAdded->getCategory())
-                {
+            foreach ($notificationMessages as $notificationMessage) {
+                if ($notificationMessage->getCategory() == $notificationMessageToBeAdded->getCategory()) {
                     $numberOfMessagesFromSameCategory ++;
                 }
             }
 
-            if ($numberOfMessagesFromSameCategory >= $limitByCategory)
-            {
+            if ($numberOfMessagesFromSameCategory >= $limitByCategory) {
                 return false;
             }
         }

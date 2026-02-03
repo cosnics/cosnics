@@ -9,12 +9,11 @@ use Throwable;
 /**
  * Exception Logger that chains other exception loggers
  *
- * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
+ * @package Chamilo\Libraries\Protocol\Error\Service
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ExceptionLoggerChain implements ExceptionLoggerInterface
 {
-
     /**
      * @var \Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface[]
      */
@@ -27,17 +26,14 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
      */
     public function __construct(array $exceptionLoggers)
     {
-        if (empty($exceptionLoggers))
-        {
+        if (empty($exceptionLoggers)) {
             throw new Exception(
                 'You must provide at least one exception logger that implements ExceptionLoggerInterface'
             );
         }
 
-        foreach ($exceptionLoggers as $exceptionLogger)
-        {
-            if (!$exceptionLogger instanceof ExceptionLoggerInterface)
-            {
+        foreach ($exceptionLoggers as $exceptionLogger) {
+            if (!$exceptionLogger instanceof ExceptionLoggerInterface) {
                 throw new Exception(
                     sprintf(
                         'The given exception logger does not implement ExceptionLoggerInterface (%s)',
@@ -50,20 +46,18 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
         $this->exceptionLoggers = $exceptionLoggers;
     }
 
-    public function addJavascriptExceptionLogger(PageConfiguration $pageConfiguration)
+    public function addJavascriptExceptionLogger(PageConfiguration $pageConfiguration): void
     {
-        foreach ($this->exceptionLoggers as $exceptionLogger)
-        {
+        foreach ($this->exceptionLoggers as $exceptionLogger) {
             $exceptionLogger->addJavascriptExceptionLogger($pageConfiguration);
         }
     }
 
     public function logException(
         Throwable $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
-    )
+    ): void
     {
-        foreach ($this->exceptionLoggers as $exceptionLogger)
-        {
+        foreach ($this->exceptionLoggers as $exceptionLogger) {
             $exceptionLogger->logException($exception, $exceptionLevel, $file, $line);
         }
     }

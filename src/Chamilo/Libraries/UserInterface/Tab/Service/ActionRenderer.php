@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\UserInterface\Tab\Service;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\Action;
 
 /**
- * @package Chamilo\Libraries\Format\Tabs
+ * @package Chamilo\Libraries\UserInterface\Tab\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ActionRenderer
@@ -13,12 +13,10 @@ class ActionRenderer
     {
         $html = [];
 
-        if ($action->hasConfirmationMessage())
-        {
+        if ($action->hasConfirmationMessage()) {
             $onclick = 'onclick = "return confirm(\'' . $action->getConfirmationMessage() . '\')"';
         }
-        else
-        {
+        else {
             $onclick = '';
         }
 
@@ -34,8 +32,7 @@ class ActionRenderer
 
         $html[] = '<div class="pull-left">';
 
-        if ($action->getTitle())
-        {
+        if ($action->getTitle()) {
             $html[] = '<h5 class="list-group-item-heading"><a href="' . $action->getUrl() . '" ' . $onclick . '>' .
                 $action->getTitle() . '</a></h5>';
         }

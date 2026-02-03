@@ -8,11 +8,11 @@ use Chamilo\Core\User\Implementation\User\UserDetailsRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class OnlineComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
@@ -32,8 +31,7 @@ class OnlineComponent extends Manager
      */
     public function run(): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -43,12 +41,10 @@ class OnlineComponent extends Manager
 
         $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
 
-        if (isset($userIdentifier))
-        {
+        if (isset($userIdentifier)) {
             $html[] = $this->renderUserInformation($userIdentifier);
         }
-        else
-        {
+        else {
             $html[] = $this->renderOnlineTable();
         }
 
@@ -65,18 +61,16 @@ class OnlineComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function getOnlineTableCondition(): Condition
+    public function getOnlineTableCondition(): ConditionInterface
     {
         $userIdentifiers = $this->getOnlineService()->findDistinctOnlineUserIdentifiers();
 
-        if (!empty($userIdentifiers))
-        {
+        if (!empty($userIdentifiers)) {
             return new InCondition(
                 new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers
             );
         }
-        else
-        {
+        else {
             return new EqualityCondition(
                 new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), new StaticConditionVariable(- 1)
             );

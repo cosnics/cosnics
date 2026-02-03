@@ -7,7 +7,7 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\Authenticat
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 
 /**
- * @package Chamilo\Libraries\Authentication\SecurityToken
+ * @package Chamilo\Libraries\Protocol\Authentication\Service
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -35,19 +35,16 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
      */
     public function login(): ?User
     {
-        if (!$this->disableAuthSourceCheck && !$this->isAuthSourceActive())
-        {
+        if (!$this->disableAuthSourceCheck && !$this->isAuthSourceActive()) {
             return null;
         }
 
         $securityToken = $this->getRequest()->query->get(User::PROPERTY_SECURITY_TOKEN);
 
-        if ($securityToken)
-        {
+        if ($securityToken) {
             $user = $this->getUserService()->getUserBySecurityToken($securityToken);
 
-            if (!$user instanceof User)
-            {
+            if (!$user instanceof User) {
                 throw new AuthenticationException(
                     $this->getTranslator()->trans('InvalidSecurityToken', [], StringUtilities::LIBRARIES)
                 );
@@ -61,6 +58,5 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
 
     public function logout(User $user): void
     {
-
     }
 }

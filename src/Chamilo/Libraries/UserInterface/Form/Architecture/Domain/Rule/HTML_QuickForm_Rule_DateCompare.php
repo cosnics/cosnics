@@ -6,11 +6,10 @@ use HTML_QuickForm_Rule_Compare;
 /**
  * QuickForm rule to compare 2 dates
  *
- * @package Chamilo\Libraries\Format\Form\Rule
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule
  */
 class HTML_QuickForm_Rule_DateCompare extends HTML_QuickForm_Rule_Compare
 {
-
     /**
      * Validate 2 dates
      *

@@ -16,7 +16,7 @@ use HTML_QuickForm_text;
  * Advanced ajax based element finder.
  * Includes multiple entities, advanced filtering, multiple selects
  *
- * @package Chamilo\Libraries\Format\Form\Element
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element
  * @author  Sven Vanpoucke
  */
 class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group

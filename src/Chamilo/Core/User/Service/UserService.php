@@ -21,9 +21,9 @@ use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
 use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Architecture\Trait\CacheAdapterHandlerTrait;
 use Chamilo\Libraries\Storage\Service\PropertyMapper;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -96,7 +96,7 @@ class UserService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countUsers(?Condition $condition = null): int
+    public function countUsers(?ConditionInterface $condition = null): int
     {
         return $this->getUserRepository()->countUsers($condition);
     }
@@ -133,15 +133,13 @@ class UserService
 
         $user->setPassword($this->getHashingUtilities()->hashString($newPassword));
 
-        if (!$this->updateUser($user))
-        {
+        if (!$this->updateUser($user)) {
             return false;
         }
 
         $this->getEventDispatcher()->dispatch(new AfterUserPasswordResetEvent($user));
 
-        try
-        {
+        try {
             $mailSubject = $translator->trans('LoginRequest', [], Manager::CONTEXT);
 
             $mailBody = [];
@@ -175,8 +173,7 @@ class UserService
 
             return true;
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             return false;
         }
     }
@@ -190,8 +187,7 @@ class UserService
         $user->setRegistrationDate(time());
         $user->setSecurityToken(sha1(time() . uniqid()));
 
-        if (!$this->getUserRepository()->createUser($user))
-        {
+        if (!$this->getUserRepository()->createUser($user)) {
             return false;
         }
 
@@ -217,16 +213,13 @@ class UserService
             'password' => $password
         ];
 
-        foreach ($requiredParameters as $parameterName => $parameterValue)
-        {
-            if (empty($parameterValue))
-            {
+        foreach ($requiredParameters as $parameterName => $parameterValue) {
+            if (empty($parameterValue)) {
                 throw new InvalidArgumentException('The ' . $parameterName . ' can not be empty');
             }
         }
 
-        if (!$this->isUsernameAvailable($username))
-        {
+        if (!$this->isUsernameAvailable($username)) {
             throw new RuntimeException('The given username is already taken');
         }
 
@@ -245,13 +238,11 @@ class UserService
         $password = $generatePassword ? $this->getPasswordGenerator()->generatePassword() : $password;
         $user->setPassword($this->getHashingUtilities()->hashString($password));
 
-        if (!$this->createUser($user))
-        {
+        if (!$this->createUser($user)) {
             throw new RuntimeException('Could not create the user');
         }
 
-        if ($sendEmail && !$this->sendRegistrationEmailToUser($user, $password))
-        {
+        if ($sendEmail && !$this->sendRegistrationEmailToUser($user, $password)) {
             throw new RuntimeException('Could not send an email to the new user');
         }
 
@@ -265,15 +256,13 @@ class UserService
      */
     public function createUserSetting(UserSetting $userSetting): bool
     {
-        if (!$this->getUserRepository()->createUserSetting($userSetting))
-        {
+        if (!$this->getUserRepository()->createUserSetting($userSetting)) {
             return false;
         }
 
         if (!$this->clearCacheDataForAdapterAndKeyParts(
             $this->getUserSettingsCacheAdapter(), [User::class, $userSetting->getUserIdentifier()]
-        ))
-        {
+        )) {
             return false;
         }
 
@@ -356,7 +345,7 @@ class UserService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findActiveUsers(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
+        ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getUserRepository()->findActiveUsers($condition, $offset, $count, $orderBy);
@@ -403,8 +392,7 @@ class UserService
 
         $mappedUserSettings = [];
 
-        foreach ($userSettings as $userSetting)
-        {
+        foreach ($userSettings as $userSetting) {
             $mappedUserSettings[$userSetting[Setting::PROPERTY_CONTEXT]][$userSetting[Setting::PROPERTY_VARIABLE]] =
                 $userSetting[UserSetting::PROPERTY_VALUE];
         }
@@ -490,7 +478,7 @@ class UserService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findUserProperties(
-        array $retrieveProperties, ?Condition $condition = null, OrderBy $orderBy = new OrderBy()
+        array $retrieveProperties, ?ConditionInterface $condition = null, OrderBy $orderBy = new OrderBy()
     ): array
     {
         return $this->getUserRepository()->findUserProperties($retrieveProperties, $condition, $orderBy);
@@ -510,7 +498,7 @@ class UserService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findUsers(
-        ?Condition $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
+        ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getUserRepository()->findUsers($condition, $count, $offset, $orderBy);
@@ -568,7 +556,7 @@ class UserService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findUsersMappedByOfficialCode(
-        ?Condition $condition = null, ?int $offset = 0, ?int $count = - 1, OrderBy $orderBy = new OrderBy()
+        ?ConditionInterface $condition = null, ?int $offset = 0, ?int $count = - 1, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getPropertyMapper()->mapDataClassByProperty(
@@ -661,8 +649,7 @@ class UserService
     {
         $user = $this->findUserByIdentifier($identifier);
 
-        if (!$user instanceof User)
-        {
+        if (!$user instanceof User) {
             return $unknownUserTranslation ?: $this->getTranslator()->trans('UserUnknown', [], 'Chamilo\Core\User');
         }
 
@@ -689,14 +676,12 @@ class UserService
      */
     public function isUsernameAvailable(string $username): bool
     {
-        try
-        {
+        try {
             $this->findUserByUsername($username);
 
             return false;
         }
-        catch (StorageNoResultException)
-        {
+        catch (StorageNoResultException) {
             return true;
         }
     }
@@ -717,12 +702,10 @@ class UserService
     {
         $configurationConsulter = $this->getConfigurationConsulter();
 
-        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_registration']) == 0)
-        {
+        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_registration']) == 0) {
             $active = false;
         }
-        else
-        {
+        else {
             $active = true;
         }
 
@@ -743,8 +726,7 @@ class UserService
     {
         $translator = $this->getTranslator();
 
-        if (!$user->getActive())
-        {
+        if (!$user->getActive()) {
             throw new UserException(
                 $translator->trans(
                     'ResetPasswordNotPossibleForInactiveUser',
@@ -756,8 +738,7 @@ class UserService
         $authentication =
             $this->getAuthenticationValidator()->getAuthenticationByType($user->getAuthenticationSource());
 
-        if (!$authentication instanceof ChangeablePasswordInterface)
-        {
+        if (!$authentication instanceof ChangeablePasswordInterface) {
             throw new UserException(
                 $translator->trans(
                     'ResetPasswordNotPossibleForThisUser',
@@ -766,8 +747,7 @@ class UserService
             );
         }
 
-        try
-        {
+        try {
             $configurationConsulter = $this->getConfigurationConsulter();
 
             $resetLink = $this->getUrlGenerator()->fromParameters(
@@ -808,8 +788,7 @@ class UserService
 
             return true;
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             throw new UserException(
                 $translator->trans(
                     'SendingPasswordResetLinkNotPossibleForThisUser',
@@ -841,8 +820,7 @@ class UserService
             $this->getTranslator()->trans('YourRegistrationOn', [], Manager::CONTEXT) . ' ' . $options['site_name'];
 
         $body = $configurationConsulter->getSetting([Manager::CONTEXT, 'email_template']);
-        foreach ($options as $option => $value)
-        {
+        foreach ($options as $option => $value) {
             $body = str_replace('[' . $option . ']', $value, $body);
         }
 
@@ -850,12 +828,10 @@ class UserService
             $subject, $body, $user->getEmail(), true, [], [], $options['admin_name'], $options['admin_email']
         );
 
-        try
-        {
+        try {
             $this->getActiveMailer()->sendMail($mail);
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             return false;
         }
 
@@ -877,17 +853,14 @@ class UserService
         $user->setOfficialCode($officialCode);
         $user->setEmail($emailAddress);
 
-        if ($user->getUsername() != $username && !$this->isUsernameAvailable($username))
-        {
+        if ($user->getUsername() != $username && !$this->isUsernameAvailable($username)) {
             throw new RuntimeException('The given username is already taken');
         }
 
         $user->setUsername($username);
 
-        if (strlen($currentPassword) && $authentication instanceof ChangeablePasswordInterface)
-        {
-            if (!$authentication->changePassword($user, $currentPassword, $newPassword))
-            {
+        if (strlen($currentPassword) && $authentication instanceof ChangeablePasswordInterface) {
+            if (!$authentication->changePassword($user, $currentPassword, $newPassword)) {
                 return false;
             }
         }
@@ -900,8 +873,7 @@ class UserService
      */
     public function updateUser(User $user): bool
     {
-        if (!$this->getUserRepository()->updateUser($user))
-        {
+        if (!$this->getUserRepository()->updateUser($user)) {
             return false;
         }
 
@@ -919,60 +891,49 @@ class UserService
         ?bool $active, bool $sendEmail = false
     ): bool
     {
-        if (!is_null($firstName))
-        {
+        if (!is_null($firstName)) {
             $user->setGivenName($firstName);
         }
 
-        if (!is_null($lastName))
-        {
+        if (!is_null($lastName)) {
             $user->setSurname($lastName);
         }
 
-        if (!is_null($officialCode))
-        {
+        if (!is_null($officialCode)) {
             $user->setOfficialCode($officialCode);
         }
 
-        if (!is_null($emailAddress))
-        {
+        if (!is_null($emailAddress)) {
             $user->setEmail($emailAddress);
         }
 
-        if (!is_null($username) && $user->getUsername() != $username && $this->isUsernameAvailable($username))
-        {
+        if (!is_null($username) && $user->getUsername() != $username && $this->isUsernameAvailable($username)) {
             $user->setUsername($username);
         }
 
-        if (!is_null($status))
-        {
+        if (!is_null($status)) {
             $user->setStatus($status);
         }
 
-        if (!is_null($isPlatformAdmin))
-        {
+        if (!is_null($isPlatformAdmin)) {
             $user->setPlatformAdministrator($isPlatformAdmin);
         }
 
-        if (!is_null($active))
-        {
+        if (!is_null($active)) {
             $user->setActive($active);
         }
 
         $password = $generatePassword ? $this->getPasswordGenerator()->generatePassword() : $password;
 
-        if (!is_null($password))
-        {
+        if (!is_null($password)) {
             $user->setPassword($this->getHashingUtilities()->hashString($password));
         }
 
-        if (!$this->updateUser($user))
-        {
+        if (!$this->updateUser($user)) {
             throw new RuntimeException('Could not update the user');
         }
 
-        if ($sendEmail && !$this->sendRegistrationEmailToUser($user, $password))
-        {
+        if ($sendEmail && !$this->sendRegistrationEmailToUser($user, $password)) {
             throw new RuntimeException('Could not send an email to the updated user');
         }
 
@@ -996,6 +957,5 @@ class UserService
 
         return $this->updateUserSetting($userSetting);
     }
-
 }
 

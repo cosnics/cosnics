@@ -47,7 +47,7 @@ class SplitDropdownButtonCollection
     /**
      * @return class-string<\Chamilo\Libraries\UserInterface\ButtonToolBar\Service\SplitDropdownButtonRenderer>
      */
-    public function getButtonRendererClass(): string
+    public function getButtonRendererClassName(): string
     {
         return SplitDropdownButtonRenderer::class;
     }

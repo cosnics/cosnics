@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition;
 
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\ConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
+use Chamilo\Libraries\Storage\Service\Condition\EqualityConditionTranslator;
 
 /**
  * This class represents a selection condition that requires an equality.
@@ -10,12 +12,19 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\Condit
  *
  * @author Tim De Pauw
  * @author Hans De Bisschop
- * @package Chamilo\Libraries\Storage\Query\Condition
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition
  */
-class EqualityCondition extends ComparisonCondition
+class EqualityCondition extends ComparisonCondition implements ConditionInterface
 {
-    public function __construct(ConditionVariable $leftConditionVariable, ?ConditionVariable $rightConditionVariable)
+    public function __construct(
+        ConditionVariableInterface $leftConditionVariable, ?ConditionVariableInterface $rightConditionVariable
+    )
     {
         parent::__construct($leftConditionVariable, self::EQUAL, $rightConditionVariable);
+    }
+
+    public function getConditionTranslatorClass(): string
+    {
+        return EqualityConditionTranslator::class;
     }
 }

@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Format\Table
+ * @package Chamilo\Libraries\UserInterface\Table\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -34,18 +34,15 @@ abstract class ListTableRenderer extends AbstractTableRenderer
             $classnameUtilities
         );
 
-        if ($this instanceof TableRowActionsSupport)
-        {
+        if ($this instanceof TableRowActionsSupport) {
             $this->addActionColumn();
         }
     }
 
     protected function addActionColumn(): static
     {
-        foreach ($this->getColumns() as $column)
-        {
-            if ($column instanceof ActionsTableColumn)
-            {
+        foreach ($this->getColumns() as $column) {
+            if ($column instanceof ActionsTableColumn) {
                 return $this;
             }
         }
@@ -61,16 +58,13 @@ abstract class ListTableRenderer extends AbstractTableRenderer
 
         $tableData = [];
 
-        foreach ($results as $result)
-        {
+        foreach ($results as $result) {
             $rowData = [];
 
-            if ($tableActions instanceof TableActions && $tableActions->hasActions())
-            {
+            if ($tableActions instanceof TableActions && $tableActions->hasActions()) {
                 $identifierCellContent = $this->renderIdentifierCell($result);
 
-                if (strlen($identifierCellContent) > 0)
-                {
+                if (strlen($identifierCellContent) > 0) {
                     $identifierCellContent =
                         $this->getCheckboxHtml($tableActions, $parameterValues, $identifierCellContent);
                 }
@@ -80,14 +74,11 @@ abstract class ListTableRenderer extends AbstractTableRenderer
 
             $tableResultPosition = $this->getTableResultPosition($results->indexOf($result), $parameterValues);
 
-            foreach ($this->getColumns() as $column)
-            {
-                if ($this instanceof TableRowActionsSupport && $column instanceof ActionsTableColumn)
-                {
+            foreach ($this->getColumns() as $column) {
+                if ($this instanceof TableRowActionsSupport && $column instanceof ActionsTableColumn) {
                     $rowData[] = $this->renderTableRowActions($tableResultPosition, $result);
                 }
-                else
-                {
+                else {
                     $rowData[] = $this->renderCell($column, $tableResultPosition, $result);
                 }
             }

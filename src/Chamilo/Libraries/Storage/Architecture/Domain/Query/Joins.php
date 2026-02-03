@@ -8,8 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Selectable;
 
 /**
- *
- * @package Chamilo\Libraries\Storage\Query
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -27,8 +26,7 @@ class Joins extends ArrayCollection implements HashableInterface
     {
         $hashes = [];
 
-        foreach ($this as $join)
-        {
+        foreach ($this as $join) {
             $hashes[] = $join->getHashParts();
         }
 
@@ -39,8 +37,7 @@ class Joins extends ArrayCollection implements HashableInterface
 
     public function merge(Joins $joinsToMerge): static
     {
-        foreach ($joinsToMerge as $join)
-        {
+        foreach ($joinsToMerge as $join) {
             $this->add($join);
         }
 

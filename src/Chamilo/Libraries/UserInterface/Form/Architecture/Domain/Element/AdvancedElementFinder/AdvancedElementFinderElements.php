@@ -6,12 +6,11 @@ use Exception;
 /**
  * Class to determine the elements for an advanced element finder
  *
- * @package Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder
  * @author Sven Vanpoucke
  */
 class AdvancedElementFinderElements
 {
-
     /**
      * @var \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement[]
      */
@@ -30,8 +29,7 @@ class AdvancedElementFinderElements
      */
     public function addElement(AdvancedElementFinderElement $element = null): void
     {
-        if (!$element instanceof AdvancedElementFinderElement)
-        {
+        if (!$element instanceof AdvancedElementFinderElement) {
             throw new Exception('The element should be of type AdvancedElementFinderElement');
         }
 
@@ -47,8 +45,7 @@ class AdvancedElementFinderElements
 
         $elements = $this->getElements();
 
-        foreach ($elements as $element)
-        {
+        foreach ($elements as $element) {
             $array[] = $element->asArray();
         }
 

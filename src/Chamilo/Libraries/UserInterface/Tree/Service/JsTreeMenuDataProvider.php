@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\UserInterface\Tree\Service;
 use stdClass;
 
 /**
- * @package Chamilo\Libraries\Format\Tree\Menu
+ * @package Chamilo\Libraries\UserInterface\Tree\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class JsTreeMenuDataProvider
@@ -23,19 +23,16 @@ class JsTreeMenuDataProvider
     {
         $jsonNodes = [];
 
-        foreach ($treeNodes as $treeNode)
-        {
+        foreach ($treeNodes as $treeNode) {
             $jsonNode = new stdClass();
             $jsonNode->id = $treeNode->getIdentifier();
             $jsonNode->text = $treeNode->getText();
             $jsonNode->a_attr = $treeNode->getAnchorAttributes();
 
-            if (count($treeNode->getChildNodes()) > 0)
-            {
+            if (count($treeNode->getChildNodes()) > 0) {
                 $jsonNode->children = $this->convertTreeNodes($treeNode->getChildNodes());
             }
-            elseif ($treeNode->getHasChildNodes())
-            {
+            elseif ($treeNode->getHasChildNodes()) {
                 $jsonNode->children = $treeNode->getHasChildNodes();
             }
 

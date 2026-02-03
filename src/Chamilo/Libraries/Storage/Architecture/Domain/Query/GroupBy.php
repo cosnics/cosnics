@@ -8,18 +8,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Selectable;
 
 /**
- * Describes the group by functionality of a query.
- * Uses ConditionVariable to define the group_by's
- *
- * @package Chamilo\Libraries\Storage\Query
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  *
  * @psalm-template TKey of array-key
- * @template-implements Collection<TKey,\Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\ConditionVariable>
- * @template-implements Selectable<TKey,\Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\ConditionVariable>
+ * @template-implements Collection<TKey,\Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface>
+ * @template-implements Selectable<TKey,\Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface>
  * @psalm-consistent-constructor
  */
 class GroupBy extends ArrayCollection implements HashableInterface
@@ -33,8 +30,7 @@ class GroupBy extends ArrayCollection implements HashableInterface
     {
         $hashes = [];
 
-        foreach ($this as $conditionVariable)
-        {
+        foreach ($this as $conditionVariable) {
             $hashes[] = $conditionVariable->getHashParts();
         }
 

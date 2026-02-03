@@ -1,19 +1,19 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition;
 
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\ConditionVariable;
+use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
+use Chamilo\Libraries\Storage\Service\Condition\ComparisonConditionTranslator;
 
 /**
- * This class represents a condition that requires an inequality.
- * An example would be requiring that a number be greater
- * than 4.
- *
  * @author Tim De Pauw
  * @author Hans De Bisschop
- * @package Chamilo\Libraries\Storage\Query\Condition
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition
  */
-class ComparisonCondition extends Condition
+class ComparisonCondition implements ConditionInterface
 {
+    use HashableTrait;
 
     public const EQUAL = 5;
     public const GREATER_THAN = 3;
@@ -21,14 +21,15 @@ class ComparisonCondition extends Condition
     public const LESS_THAN = 1;
     public const LESS_THAN_OR_EQUAL = 2;
 
-    private ConditionVariable $leftConditionVariable;
+    private ConditionVariableInterface $leftConditionVariable;
 
     private int $operator;
 
-    private ?ConditionVariable $rightConditionVariable;
+    private ?ConditionVariableInterface $rightConditionVariable;
 
     public function __construct(
-        ConditionVariable $leftConditionVariable, int $operator, ?ConditionVariable $rightConditionVariable
+        ConditionVariableInterface $leftConditionVariable, int $operator,
+        ?ConditionVariableInterface $rightConditionVariable
     )
     {
         $this->leftConditionVariable = $leftConditionVariable;
@@ -36,45 +37,49 @@ class ComparisonCondition extends Condition
         $this->rightConditionVariable = $rightConditionVariable;
     }
 
+    public function getConditionTranslatorClass(): string
+    {
+        return ComparisonConditionTranslator::class;
+    }
+
     public function getHashParts(): array
     {
-        $hashParts = parent::getHashParts();
+        $hashParts = [];
 
+        $hashParts[] = static::class;
         $hashParts[] = $this->getOperator();
 
-        switch ($this->getOperator())
-        {
+        switch ($this->getOperator()) {
             case self::LESS_THAN :
             case self::LESS_THAN_OR_EQUAL :
-                $hashParts[] = $this->getRightConditionVariable() instanceof ConditionVariable ?
-                    $this->getRightConditionVariable()->getHashParts() : $this->getRightConditionVariable();
+                $hashParts[] = $this->getRightConditionVariable() instanceof ConditionVariableInterface ?
+                    $this->getRightConditionVariable()->getHashParts() : null;
                 $hashParts[] = $this->getLeftConditionVariable()->getHashParts();
                 break;
             case self::EQUAL :
                 $parts = [];
-                $hashParts[] = $this->getLeftConditionVariable()->getHashParts();
-                $hashParts[] = $this->getRightConditionVariable() instanceof ConditionVariable ?
-                    $this->getRightConditionVariable()->getHashParts() : $this->getRightConditionVariable();
+                $parts[] = $this->getLeftConditionVariable()->getHashParts();
+                $parts[] = $this->getRightConditionVariable() instanceof ConditionVariableInterface ?
+                    $this->getRightConditionVariable()->getHashParts() : null;
 
                 sort($parts);
 
-                foreach ($parts as $part)
-                {
+                foreach ($parts as $part) {
                     $hashParts[] = $part;
                 }
 
                 break;
             default :
                 $hashParts[] = $this->getLeftConditionVariable()->getHashParts();
-                $hashParts[] = $this->getRightConditionVariable() instanceof ConditionVariable ?
-                    $this->getRightConditionVariable()->getHashParts() : $this->getRightConditionVariable();
+                $hashParts[] = $this->getRightConditionVariable() instanceof ConditionVariableInterface ?
+                    $this->getRightConditionVariable()->getHashParts() : null;
                 break;
         }
 
         return $hashParts;
     }
 
-    public function getLeftConditionVariable(): ConditionVariable
+    public function getLeftConditionVariable(): ConditionVariableInterface
     {
         return $this->leftConditionVariable;
     }
@@ -84,9 +89,8 @@ class ComparisonCondition extends Condition
         return $this->operator;
     }
 
-    public function getRightConditionVariable(): ?ConditionVariable
+    public function getRightConditionVariable(): ?ConditionVariableInterface
     {
         return $this->rightConditionVariable;
     }
-
 }

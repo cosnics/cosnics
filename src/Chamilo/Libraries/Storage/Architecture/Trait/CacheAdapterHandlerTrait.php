@@ -6,12 +6,11 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Exception\CacheException;
 
 /**
- * @package Chamilo\Libraries\Cache\Traits
+ * @package Chamilo\Libraries\Storage\Architecture\Trait
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 trait CacheAdapterHandlerTrait
 {
-
     public function clearAllCacheDataForAdapter(AdapterInterface $cacheAdapter): bool
     {
         return $cacheAdapter->clear();
@@ -22,12 +21,10 @@ trait CacheAdapterHandlerTrait
      */
     public function clearCacheDataForAdapterAndKey(AdapterInterface $cacheAdapter, string $cacheKey): bool
     {
-        try
-        {
+        try {
             return $cacheAdapter->deleteItem($cacheKey);
         }
-        catch (InvalidArgumentException)
-        {
+        catch (InvalidArgumentException) {
             throw new CacheException('Could not clear cache in ' . static::class . 'for key ' . $cacheKey);
         }
     }
@@ -49,12 +46,10 @@ trait CacheAdapterHandlerTrait
 
     public function hasCacheDataForAdapterAndKey(AdapterInterface $cacheAdapter, string $cacheKey): bool
     {
-        try
-        {
+        try {
             return $cacheAdapter->getItem($cacheKey)->isHit();
         }
-        catch (InvalidArgumentException)
-        {
+        catch (InvalidArgumentException) {
             return false;
         }
     }
@@ -68,6 +63,7 @@ trait CacheAdapterHandlerTrait
     }
 
     /**
+     * @param \Symfony\Component\Cache\Adapter\AdapterInterface $cacheAdapter
      * @param string $cacheKey
      * @param callable $dataSource
      *
@@ -75,24 +71,22 @@ trait CacheAdapterHandlerTrait
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function loadCacheDataForAdapterAndKey(AdapterInterface $cacheAdapter, string $cacheKey, callable $dataSource
-    )
+    ): mixed
     {
-        try
-        {
-            if (!$this->hasCacheDataForAdapterAndKey($cacheAdapter, $cacheKey))
-            {
+        try {
+            if (!$this->hasCacheDataForAdapterAndKey($cacheAdapter, $cacheKey)) {
                 $this->saveCacheDataForAdapterAndKey($cacheAdapter, $cacheKey, call_user_func($dataSource));
             }
 
             return $this->readCacheDataForAdapterAndKey($cacheAdapter, $cacheKey);
         }
-        catch (CacheException)
-        {
+        catch (CacheException) {
             throw new CacheException('Could not load cache in ' . static::class . 'for key ' . $cacheKey);
         }
     }
 
     /**
+     * @param \Symfony\Component\Cache\Adapter\AdapterInterface $cacheAdapter
      * @param string[] $cacheKeyParts
      * @param callable $dataSource
      *
@@ -101,7 +95,7 @@ trait CacheAdapterHandlerTrait
      */
     public function loadCacheDataForAdapterAndKeyParts(
         AdapterInterface $cacheAdapter, array $cacheKeyParts, callable $dataSource
-    )
+    ): mixed
     {
         return $this->loadCacheDataForAdapterAndKey(
             $cacheAdapter, $this->getCacheKeyForParts($cacheKeyParts), $dataSource
@@ -109,59 +103,67 @@ trait CacheAdapterHandlerTrait
     }
 
     /**
+     * @param \Symfony\Component\Cache\Adapter\AdapterInterface $cacheAdapter
+     * @param string $cacheKey
+     *
      * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function readCacheDataForAdapterAndKey(AdapterInterface $cacheAdapter, string $cacheKey)
+    public function readCacheDataForAdapterAndKey(AdapterInterface $cacheAdapter, string $cacheKey): mixed
     {
-        try
-        {
+        try {
             return $cacheAdapter->getItem($cacheKey)->get();
         }
-        catch (InvalidArgumentException)
-        {
+        catch (InvalidArgumentException) {
             throw new CacheException('Could not load cache in ' . static::class . 'for key ' . $cacheKey);
         }
     }
 
     /**
+     * @param \Symfony\Component\Cache\Adapter\AdapterInterface $cacheAdapter
+     * @param array $cacheKeyParts
+     *
      * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function readCacheDataForAdapterAndKeyParts(AdapterInterface $cacheAdapter, array $cacheKeyParts)
+    public function readCacheDataForAdapterAndKeyParts(AdapterInterface $cacheAdapter, array $cacheKeyParts): mixed
     {
         return $this->readCacheDataForAdapterAndKey($cacheAdapter, $this->getCacheKeyForParts($cacheKeyParts));
     }
 
     /**
+     * @param \Symfony\Component\Cache\Adapter\AdapterInterface $cacheAdapter
+     * @param string $cacheKey
+     * @param callable $dataSource
+     *
      * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function reloadCacheDataForAdapterAndKey(
         AdapterInterface $cacheAdapter, string $cacheKey, callable $dataSource
-    )
+    ): mixed
     {
-        try
-        {
+        try {
             $this->clearCacheDataForAdapterAndKey($cacheAdapter, $cacheKey);
 
             return $this->loadCacheDataForAdapterAndKey($cacheAdapter, $cacheKey, $dataSource);
         }
-        catch (CacheException)
-        {
+        catch (CacheException) {
             throw new CacheException('Could not reload cache in ' . static::class . 'for key ' . $cacheKey);
         }
     }
 
     /**
+     * @param \Symfony\Component\Cache\Adapter\AdapterInterface $cacheAdapter
      * @param string[] $cacheKeyParts
+     * @param callable $dataSource
      *
      * @return mixed
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function reloadCacheDataForAdapterAndKeyParts(
         AdapterInterface $cacheAdapter, array $cacheKeyParts, callable $dataSource
-    )
+    ): mixed
     {
         return $this->reloadCacheDataForAdapterAndKey(
             $cacheAdapter, $this->getCacheKeyForParts($cacheKeyParts), $dataSource
@@ -175,8 +177,7 @@ trait CacheAdapterHandlerTrait
         AdapterInterface $cacheAdapter, string $cacheKey, $cacheData, ?int $lifetime = null
     ): bool
     {
-        try
-        {
+        try {
             $cacheItem = $cacheAdapter->getItem($cacheKey);
             // TODO: Make sure null being passed on here is not a problem
             $cacheItem->expiresAfter($lifetime);
@@ -184,8 +185,7 @@ trait CacheAdapterHandlerTrait
 
             return $cacheAdapter->save($cacheItem);
         }
-        catch (InvalidArgumentException)
-        {
+        catch (InvalidArgumentException) {
             throw new CacheException('Could not save cache in ' . static::class . 'for key ' . $cacheKey);
         }
     }

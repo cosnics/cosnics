@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\Architecture\Exception;
 use Chamilo\Libraries\Architecture\Exception\UserException;
 
 /**
- * @package Chamilo\Libraries\Storage\Exception\Database
+ * @package Chamilo\Libraries\Storage\Architecture\Exception
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class StorageMethodException extends UserException
@@ -25,8 +25,7 @@ class StorageMethodException extends UserException
 
         $message = $method . ' for ' . $dataClassStorageUnitName;
 
-        if ($query)
-        {
+        if ($query) {
             $message .= '[' . $query . ']';
         }
 

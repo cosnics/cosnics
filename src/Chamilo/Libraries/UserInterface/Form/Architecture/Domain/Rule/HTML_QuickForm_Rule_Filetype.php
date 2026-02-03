@@ -6,11 +6,10 @@ use HTML_QuickForm_Rule;
 /**
  * QuickForm rule to check if a filetype
  *
- * @package Chamilo\Libraries\Format\Form\Rule
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule
  */
 class HTML_QuickForm_Rule_Filetype extends HTML_QuickForm_Rule
 {
-
     /**
      * Function to check if a filetype is allowed
      *
@@ -23,8 +22,7 @@ class HTML_QuickForm_Rule_Filetype extends HTML_QuickForm_Rule
     {
         $parts = explode('.', $value['name']);
 
-        if (count($parts) < 2)
-        {
+        if (count($parts) < 2) {
             return false;
         }
 

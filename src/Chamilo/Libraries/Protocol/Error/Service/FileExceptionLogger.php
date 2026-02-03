@@ -7,9 +7,7 @@ use Exception;
 use Throwable;
 
 /**
- * Logs errors to a file
- *
- * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
+ * @package Chamilo\Libraries\Protocol\Error\Service
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class FileExceptionLogger implements ExceptionLoggerInterface
@@ -21,13 +19,11 @@ class FileExceptionLogger implements ExceptionLoggerInterface
      */
     public function __construct(string $logPath)
     {
-        if (empty($logPath))
-        {
+        if (empty($logPath)) {
             throw new Exception('The given log path can not be empty');
         }
 
-        if (!file_exists($logPath) || !is_dir($logPath) || !is_writable($logPath))
-        {
+        if (!file_exists($logPath) || !is_dir($logPath) || !is_writable($logPath)) {
             throw new Exception(
                 sprintf('The given log path either does not exist or is not a valid directory. (%s)', $logPath)
             );
@@ -42,8 +38,7 @@ class FileExceptionLogger implements ExceptionLoggerInterface
 
     protected function determineExceptionLevelString(int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR): string
     {
-        switch ($exceptionLevel)
-        {
+        switch ($exceptionLevel) {
             case self::EXCEPTION_LEVEL_WARNING :
                 return 'WARNING';
             case self::EXCEPTION_LEVEL_ERROR :
@@ -57,10 +52,9 @@ class FileExceptionLogger implements ExceptionLoggerInterface
 
     public function logException(
         Throwable $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
-    )
+    ): void
     {
-        if ($exceptionLevel == self::EXCEPTION_LEVEL_WARNING)
-        {
+        if ($exceptionLevel == self::EXCEPTION_LEVEL_WARNING) {
             return;
         }
 
@@ -71,19 +65,16 @@ class FileExceptionLogger implements ExceptionLoggerInterface
 
         $message = date('[d/m/Y - H:i:s] ', time()) . ' - [' . $type . '] ' . $exception->getMessage();
 
-        if (!is_null($file))
-        {
+        if (!is_null($file)) {
             $message .= ' - FILE: ' . $file . ' - LINE: ' . $line;
         }
-        elseif ($exception->getFile())
-        {
+        elseif ($exception->getFile()) {
             $message .= ' - FILE: ' . $exception->getFile() . ' - LINE: ' . $exception->getLine();
         }
 
         $traceString = $exception->getTraceAsString();
 
-        if ($traceString)
-        {
+        if ($traceString) {
             $message .= PHP_EOL . $traceString;
         }
 

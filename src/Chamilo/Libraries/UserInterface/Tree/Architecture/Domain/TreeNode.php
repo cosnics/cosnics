@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\UserInterface\Tree\Architecture\Domain;
 
 /**
- * @package Chamilo\Libraries\Format\Tree
+ * @package Chamilo\Libraries\UserInterface\Tree\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TreeNode
@@ -13,7 +13,7 @@ class TreeNode
     public array $anchorAttributes = [];
 
     /**
-     * @var \Chamilo\Libraries\Format\Tree\TreeNode[]
+     * @var \Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\TreeNode[]
      */
     public array $childNodes = [];
 
@@ -72,7 +72,7 @@ class TreeNode
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Tree\TreeNode[]
+     * @return \Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\TreeNode[]
      */
     public function getChildNodes(): array
     {
@@ -80,14 +80,13 @@ class TreeNode
     }
 
     /**
-     * @param \Chamilo\Libraries\Format\Tree\TreeNode[] $childNodes
+     * @param \Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\TreeNode[] $childNodes
      */
     public function setChildNodes(array $childNodes): TreeNode
     {
         $this->childNodes = $childNodes;
 
-        if (count($childNodes) > 0)
-        {
+        if (count($childNodes) > 0) {
             $this->hasChildNodes = true;
         }
 
@@ -101,20 +100,16 @@ class TreeNode
 
     public function setHasChildNodes(bool $hasChildNodes): TreeNode
     {
-        if (!$hasChildNodes)
-        {
-            if (count($this->getChildNodes()) > 0)
-            {
+        if (!$hasChildNodes) {
+            if (count($this->getChildNodes()) > 0) {
                 $this->hasChildNodes = true;
             }
-            else
-            {
+            else {
                 $this->hasChildNodes = false;
                 $this->childNodes = [];
             }
         }
-        else
-        {
+        else {
             $this->hasChildNodes = true;
         }
 

@@ -7,7 +7,7 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 
 /**
- * @package Chamilo\Libraries\Cache
+ * @package Chamilo\Libraries\Storage\Factory
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class SymfonyCacheAdapterFactory
@@ -45,5 +45,4 @@ class SymfonyCacheAdapterFactory
     {
         return $this->configurablePathBuilder;
     }
-
 }

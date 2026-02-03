@@ -3,12 +3,10 @@ namespace Chamilo\Libraries\Storage\Architecture\Domain\Query;
 
 use Chamilo\Libraries\Protocol\Security\Architecture\Interface\HashableInterface;
 use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\ConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
 
 /**
- * A single property for a data class with the name and the value This class can be used in queries
- *
- * @package Chamilo\Libraries\Storage\Query
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -16,14 +14,15 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\Condit
  */
 class UpdateProperty implements HashableInterface
 {
-
     use HashableTrait;
 
-    private ConditionVariable $propertyConditionVariable;
+    private ConditionVariableInterface $propertyConditionVariable;
 
-    private ConditionVariable $valueConditionVariable;
+    private ConditionVariableInterface $valueConditionVariable;
 
-    public function __construct(ConditionVariable $propertyConditionVariable, ConditionVariable $valueConditionVariable)
+    public function __construct(
+        ConditionVariableInterface $propertyConditionVariable, ConditionVariableInterface $valueConditionVariable
+    )
     {
         $this->propertyConditionVariable = $propertyConditionVariable;
         $this->valueConditionVariable = $valueConditionVariable;
@@ -34,24 +33,24 @@ class UpdateProperty implements HashableInterface
         return [__CLASS__, $this->getPropertyConditionVariable(), $this->getValueConditionVariable()];
     }
 
-    public function getPropertyConditionVariable(): ConditionVariable
+    public function getPropertyConditionVariable(): ConditionVariableInterface
     {
         return $this->propertyConditionVariable;
     }
 
-    public function setPropertyConditionVariable(ConditionVariable $propertyConditionVariable): UpdateProperty
+    public function setPropertyConditionVariable(ConditionVariableInterface $propertyConditionVariable): UpdateProperty
     {
         $this->propertyConditionVariable = $propertyConditionVariable;
 
         return $this;
     }
 
-    public function getValueConditionVariable(): ConditionVariable
+    public function getValueConditionVariable(): ConditionVariableInterface
     {
         return $this->valueConditionVariable;
     }
 
-    public function setValueConditionVariable(ConditionVariable $valueConditionVariable): UpdateProperty
+    public function setValueConditionVariable(ConditionVariableInterface $valueConditionVariable): UpdateProperty
     {
         $this->valueConditionVariable = $valueConditionVariable;
 

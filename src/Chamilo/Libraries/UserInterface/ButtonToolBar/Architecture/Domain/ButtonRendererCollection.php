@@ -19,18 +19,18 @@ class ButtonRendererCollection extends ArrayCollection
 
     /**
      * @template tGetButtonRenderer
-     * @param class-string<tGetButtonRenderer> $buttonRendererClass
+     * @param class-string<tGetButtonRenderer> $buttonRendererClassName
      *
      * @return tGetButtonRenderer|ButtonRendererInterface
      * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
-    public function getButtonRenderer(string $buttonRendererClass): ButtonRendererInterface
+    public function getButtonRenderer(string $buttonRendererClassName): ButtonRendererInterface
     {
-        if (!$this->hasButtonRenderer($buttonRendererClass)) {
-            throw new ClassNotExistException($buttonRendererClass);
+        if (!$this->hasButtonRenderer($buttonRendererClassName)) {
+            throw new ClassNotExistException($buttonRendererClassName);
         }
 
-        return $this->get($buttonRendererClass);
+        return $this->get($buttonRendererClassName);
     }
 
     /**
@@ -38,7 +38,7 @@ class ButtonRendererCollection extends ArrayCollection
      */
     public function getButtonRendererForButton(ButtonInterface $button): ButtonRendererInterface
     {
-        return $this->getButtonRenderer($button->getButtonRendererClass());
+        return $this->getButtonRenderer($button->getButtonRendererClassName());
     }
 
     /**

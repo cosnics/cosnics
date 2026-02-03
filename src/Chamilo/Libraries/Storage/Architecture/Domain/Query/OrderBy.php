@@ -9,8 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Selectable;
 
 /**
- *
- * @package Chamilo\Libraries\Storage\Query
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  *
  * @psalm-template TKey of array-key
@@ -30,8 +29,7 @@ class OrderBy extends ArrayCollection implements HashableInterface
 
     public function getFirst(?OrderProperty $defaultOrderProperty = null): ?OrderProperty
     {
-        if (!$this->isEmpty())
-        {
+        if (!$this->isEmpty()) {
             $this->first();
 
             return $this->current();
@@ -44,8 +42,7 @@ class OrderBy extends ArrayCollection implements HashableInterface
     {
         $hashes = [];
 
-        foreach ($this as $orderProperty)
-        {
+        foreach ($this as $orderProperty) {
             $hashes[] = $orderProperty->getHashParts();
         }
 
@@ -56,8 +53,7 @@ class OrderBy extends ArrayCollection implements HashableInterface
 
     public function merge(OrderBy $orderByToMerge): OrderBy
     {
-        foreach ($orderByToMerge as $orderProperty)
-        {
+        foreach ($orderByToMerge as $orderProperty) {
             $this->add($orderProperty);
         }
 

@@ -14,7 +14,7 @@ use HTML_QuickForm_textarea;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Format\Form
+ * @package Chamilo\Libraries\UserInterface\Form\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class FormValidatorHtmlEditorRenderer
@@ -69,8 +69,7 @@ class FormValidatorHtmlEditorRenderer
         $formValidator->addElement($element);
         $formValidator->applyFilter($name, 'trim');
 
-        if ($required)
-        {
+        if ($required) {
             $formValidator->addRule(
                 $name, $this->getTranslator()->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
                 HTML_QuickForm_Rule_Required::class
@@ -193,8 +192,7 @@ class FormValidatorHtmlEditorRenderer
         string $name, string $label, array $options = [], array $attributes = []
     ): string
     {
-        if (!array_key_exists('class', $attributes))
-        {
+        if (!array_key_exists('class', $attributes)) {
             $attributes['class'] = 'html_editor';
         }
 

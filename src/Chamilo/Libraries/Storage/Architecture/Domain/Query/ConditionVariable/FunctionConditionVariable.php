@@ -1,16 +1,20 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable;
 
+use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
+use Chamilo\Libraries\Storage\Service\ConditionVariable\FunctionConditionVariableTranslator;
+
 /**
- * A ConditionVariable that describes a function on another ConditionVariable
- *
- * @package Chamilo\Libraries\Storage\Query\Variable
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class FunctionConditionVariable extends ConditionVariable
+class FunctionConditionVariable implements ConditionVariableInterface
 {
+    use HashableTrait;
+
     public const AVERAGE = 6;
     public const COUNT = 2;
     public const DISTINCT = 5;
@@ -20,11 +24,11 @@ class FunctionConditionVariable extends ConditionVariable
 
     private ?string $alias;
 
-    private ConditionVariable $conditionVariable;
+    private ConditionVariableInterface $conditionVariable;
 
     private int $function;
 
-    public function __construct(int $function, ConditionVariable $conditionVariable, ?string $alias = null)
+    public function __construct(int $function, ConditionVariableInterface $conditionVariable, ?string $alias = null)
     {
         $this->conditionVariable = $conditionVariable;
         $this->function = $function;
@@ -43,16 +47,24 @@ class FunctionConditionVariable extends ConditionVariable
         return $this;
     }
 
-    public function getConditionVariable(): ConditionVariable
+    public function getConditionVariable(): ConditionVariableInterface
     {
         return $this->conditionVariable;
     }
 
-    public function setConditionVariable(ConditionVariable $conditionVariable): FunctionConditionVariable
+    public function setConditionVariable(ConditionVariableInterface $conditionVariable): FunctionConditionVariable
     {
         $this->conditionVariable = $conditionVariable;
 
         return $this;
+    }
+
+    /**
+     * @return class-string<\Chamilo\Libraries\Storage\Service\ConditionVariable\FunctionConditionVariableTranslator>
+     */
+    public function getConditionVariableTranslatorClass(): string
+    {
+        return FunctionConditionVariableTranslator::class;
     }
 
     public function getFunction(): int
@@ -67,18 +79,13 @@ class FunctionConditionVariable extends ConditionVariable
         return $this;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionPart::getHashParts()
-     */
     public function getHashParts(): array
     {
-        $hashParts = ConditionVariable::getHashParts();
-
-        $hashParts[] = $this->getConditionVariable()->getHashParts();
-        $hashParts[] = $this->getFunction();
-        $hashParts[] = $this->getAlias();
-
-        return $hashParts;
+        return [
+            static::class,
+            $this->getConditionVariable()->getHashParts(),
+            $this->getFunction(),
+            $this->getAlias()
+        ];
     }
 }

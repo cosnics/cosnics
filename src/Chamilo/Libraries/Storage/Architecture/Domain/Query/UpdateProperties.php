@@ -8,8 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Selectable;
 
 /**
- *
- * @package Chamilo\Libraries\Storage\DataClass\Property
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -25,8 +24,7 @@ class UpdateProperties extends ArrayCollection implements HashableInterface
 
     public function getFirst(?UpdateProperty $defaultUpdateProperty = null): ?UpdateProperty
     {
-        if (!$this->isEmpty())
-        {
+        if (!$this->isEmpty()) {
             $this->first();
 
             return $this->current();
@@ -44,8 +42,7 @@ class UpdateProperties extends ArrayCollection implements HashableInterface
 
         $hashParts[] = __CLASS__;
 
-        foreach ($this as $updateProperty)
-        {
+        foreach ($this as $updateProperty) {
             $hashParts[] = $updateProperty->getHashParts();
         }
 
@@ -56,8 +53,7 @@ class UpdateProperties extends ArrayCollection implements HashableInterface
 
     public function merge(UpdateProperties $updatePropertiesToMerge): UpdateProperties
     {
-        foreach ($updatePropertiesToMerge as $updateProperty)
-        {
+        foreach ($updatePropertiesToMerge as $updateProperty) {
             $this->add($updateProperty);
         }
 

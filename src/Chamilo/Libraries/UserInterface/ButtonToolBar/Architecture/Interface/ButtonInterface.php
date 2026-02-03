@@ -10,7 +10,7 @@ interface ButtonInterface
     /**
      * @return class-string<\Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererInterface>
      */
-    public function getButtonRendererClass(): string;
+    public function getButtonRendererClassName(): string;
 
     public function getClasses(): array;
 

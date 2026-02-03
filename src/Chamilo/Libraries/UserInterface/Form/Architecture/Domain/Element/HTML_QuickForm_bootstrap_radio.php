@@ -15,7 +15,7 @@ use HTML_QuickForm_radio;
  * send a note to license@php.net so we can mail you a copy immediately.
  *
  * @category HTML
- * @package  Chamilo\Libraries\Format\Form\Element
+ * @package  Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element
  * @author   Adam Daniel <adaniel1@eesus.jnj.com>
  * @author   Bertrand Mansion <bmansion@mamasam.com>
  */

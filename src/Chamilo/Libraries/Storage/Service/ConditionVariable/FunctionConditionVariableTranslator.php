@@ -2,26 +2,33 @@
 namespace Chamilo\Libraries\Storage\Service\ConditionVariable;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\FunctionConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionVariableTranslator;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
- * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable
+ * @package Chamilo\Libraries\Storage\Service\ConditionVariable
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class FunctionConditionVariableTranslator extends ConditionVariableTranslator
+    implements ConditionVariableTranslatorInterface
 {
-    public const CONDITION_CLASS = FunctionConditionVariable::class;
+    public function getConditionVariableClassName(): string
+    {
+        return FunctionConditionVariable::class;
+    }
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     */
     public function translate(
         QueryBuilder $querybuilder, FunctionConditionVariable $functionConditionVariable, ?bool $enableAliasing = true
     ): string
     {
         $strings = [];
-        switch ($functionConditionVariable->getFunction())
-        {
+        switch ($functionConditionVariable->getFunction()) {
             case FunctionConditionVariable::SUM :
                 $strings[] = 'SUM';
                 break;
@@ -42,30 +49,25 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
                 break;
         }
 
-        if ($functionConditionVariable->getFunction() !== FunctionConditionVariable::DISTINCT)
-        {
+        if ($functionConditionVariable->getFunction() !== FunctionConditionVariable::DISTINCT) {
             $strings[] = '(';
         }
-        else
-        {
+        else {
             $strings[] = ' ';
         }
 
-        $strings[] = $this->getConditionPartTranslatorService()->translate(
+        $strings[] = $this->getConditionVariableTranslatorCollection()->translate(
             $querybuilder, $functionConditionVariable->getConditionVariable(), $enableAliasing
         );
 
-        if ($functionConditionVariable->getFunction() !== FunctionConditionVariable::DISTINCT)
-        {
+        if ($functionConditionVariable->getFunction() !== FunctionConditionVariable::DISTINCT) {
             $strings[] = ')';
         }
 
-        if ($functionConditionVariable->getAlias())
-        {
+        if ($functionConditionVariable->getAlias()) {
             $value = implode('', $strings) . ' AS ' . $functionConditionVariable->getAlias();
         }
-        else
-        {
+        else {
             $value = implode('', $strings);
         }
 

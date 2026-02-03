@@ -6,11 +6,10 @@ use HTML_QuickForm_Rule;
 /**
  * QuickForm rule to check a date
  *
- * @package Chamilo\Libraries\Format\Form\Rule
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule
  */
 class HTML_QuickForm_Rule_Date extends HTML_QuickForm_Rule
 {
-
     /**
      * Function to check a date
      *

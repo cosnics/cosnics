@@ -9,7 +9,7 @@ use HTML_QuickForm_Renderer_Default;
 /**
  * Form element to select a date and hour (with popup datepicker)
  *
- * @package Chamilo\Libraries\Format\Form\Element
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element
  */
 class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 {

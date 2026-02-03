@@ -7,7 +7,7 @@ use Throwable;
 /**
  * Interface for services that can handle errors
  *
- * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
+ * @package Chamilo\Libraries\Protocol\Error\Architecture\Interface
  */
 interface ExceptionLoggerInterface
 {

@@ -9,13 +9,12 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 /**
  * This service will be used to generate urls using the current url as a base
  *
- * @package Chamilo\Libraries\Architecture\Application\Routing
+ * @package Chamilo\Libraries\Service\Routing
  * @author  Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UrlGenerator
 {
-
     private ChamiloRequest $request;
 
     private WebPathBuilder $webPathBuilder;
@@ -33,13 +32,11 @@ class UrlGenerator
         string $context, string $component, array $parameters = [], array $filters = [], ?string $anchor = null
     ): string
     {
-        if ($context)
-        {
+        if ($context) {
             $parameters[Application::PARAM_CONTEXT] = $context;
         }
 
-        if ($component)
-        {
+        if ($component) {
             $parameters[Application::PARAM_ACTION] = $component;
         }
 
@@ -65,8 +62,7 @@ class UrlGenerator
     {
         $parameterBag->add($parameters);
 
-        foreach ($filters as $filter)
-        {
+        foreach ($filters as $filter) {
             $parameterBag->remove($filter);
         }
 
@@ -74,13 +70,11 @@ class UrlGenerator
 
         $urlParts[] = $this->getWebPathBuilder()->getBasePath();
 
-        if ($parameterBag->count())
-        {
+        if ($parameterBag->count()) {
             $urlParts[] = '?' . urldecode(http_build_query($parameterBag->all()));
         }
 
-        if ($anchor)
-        {
+        if ($anchor) {
             $urlParts[] = '#' . $anchor;
         }
 

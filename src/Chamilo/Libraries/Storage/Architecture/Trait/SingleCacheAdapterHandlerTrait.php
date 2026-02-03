@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\Architecture\Trait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
- * @package Chamilo\Libraries\Cache\Traits
+ * @package Chamilo\Libraries\Storage\Architecture\Trait
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 trait SingleCacheAdapterHandlerTrait

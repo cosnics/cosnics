@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\Architecture\Domain;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @package Chamilo\Libraries\Storage\Cache
+ * @package Chamilo\Libraries\Storage\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -31,8 +31,7 @@ class DataClassRepositoryCache
 
     private function add(string $className, int $type, ?StorageParameters $parameters, callable $value): mixed
     {
-        if (!$this->existsForType($type, $className, $parameters))
-        {
+        if (!$this->existsForType($type, $className, $parameters)) {
             $this->setForType($type, $className, $parameters->hash(), $value());
         }
 
@@ -93,25 +92,20 @@ class DataClassRepositoryCache
     {
         $hash = $parameters->hash();
 
-        if (isset($this->cache[$class][$type][$hash]))
-        {
+        if (isset($this->cache[$class][$type][$hash])) {
             return true;
         }
-        else
-        {
+        else {
             return false;
         }
     }
 
     public function getForType(int $type, string $class, StorageParameters $parameters)
     {
-        if ($this->existsForType($type, $class, $parameters))
-        {
+        if ($this->existsForType($type, $class, $parameters)) {
             return $this->cache[$class][$type][$parameters->hash()];
         }
-        else
-
-        {
+        else {
             return null;
         }
     }
@@ -128,8 +122,7 @@ class DataClassRepositoryCache
 
     public function truncateClass(string $class): bool
     {
-        if (isset($this->cache[$class]))
-        {
+        if (isset($this->cache[$class])) {
             unset($this->cache[$class]);
         }
 
@@ -141,10 +134,8 @@ class DataClassRepositoryCache
      */
     public function truncateClasses(array $classes = []): bool
     {
-        foreach ($classes as $class)
-        {
-            if (!$this->truncateClass($class))
-            {
+        foreach ($classes as $class) {
+            if (!$this->truncateClass($class)) {
                 return false;
             }
         }

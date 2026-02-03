@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Authentication\Platform
+ * @package Chamilo\Libraries\Protocol\Authentication\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -25,7 +25,6 @@ use Symfony\Component\Translation\Translator;
 class PlatformAuthentication extends Authentication
     implements AuthenticationInterface, ChangeablePasswordInterface, ChangeableUsernameInterface
 {
-
     /**
      * @var \Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm
      */
@@ -49,8 +48,7 @@ class PlatformAuthentication extends Authentication
     public function changePassword(User $user, string $oldPassword, string $newPassword): bool
     {
         // Check whether the current password is different from the new password
-        if ($oldPassword == $newPassword)
-        {
+        if ($oldPassword == $newPassword) {
             return false;
         }
 
@@ -59,8 +57,7 @@ class PlatformAuthentication extends Authentication
         $oldPasswordHash = $hashingUtilities->hashString($oldPassword);
 
         // Verify that the entered old password matches the stored password
-        if ($oldPasswordHash != $user->getPassword())
-        {
+        if ($oldPasswordHash != $user->getPassword()) {
             return false;
         }
 
@@ -96,8 +93,7 @@ class PlatformAuthentication extends Authentication
     public function login(): ?User
     {
         $user = $this->getUserFromCredentialsRequest();
-        if (!$user instanceof User)
-        {
+        if (!$user instanceof User) {
             return null;
         }
 
@@ -105,8 +101,7 @@ class PlatformAuthentication extends Authentication
 
         $passwordHash = $this->getHashingUtilities()->hashString($password);
 
-        if ($user->getPassword() == $passwordHash)
-        {
+        if ($user->getPassword() == $passwordHash) {
             return $user;
         }
 

@@ -5,7 +5,6 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
@@ -18,6 +17,7 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperty;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 
@@ -45,7 +45,8 @@ class NestedSetDataClassRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countAncestors(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null): int
+    public function countAncestors(NestedSet $nestedSet, bool $includeSelf = true, ?ConditionInterface $condition = null
+    ): int
     {
         return $this->getDataClassRepository()->count(
             get_class($nestedSet),
@@ -56,7 +57,8 @@ class NestedSetDataClassRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countDescendants(NestedSet $nestedSet, bool $recursive = true, ?Condition $condition = null): int
+    public function countDescendants(NestedSet $nestedSet, bool $recursive = true, ?ConditionInterface $condition = null
+    ): int
     {
         return $this->getDataClassRepository()->count(
             get_class($nestedSet), new StorageParameters(
@@ -70,7 +72,8 @@ class NestedSetDataClassRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countSiblings(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null): int
+    public function countSiblings(NestedSet $nestedSet, bool $includeSelf = true, ?ConditionInterface $condition = null
+    ): int
     {
         return $this->getDataClassRepository()->count(
             get_class($nestedSet),
@@ -83,13 +86,11 @@ class NestedSetDataClassRepository
      */
     public function create(NestedSet $nestedSet, string $previousNestedSetIdentifier = '0'): bool
     {
-        if ($previousNestedSetIdentifier)
-        {
+        if ($previousNestedSetIdentifier) {
             $position = NestedSet::AS_NEXT_SIBLING_OF;
             $referenceNode = $this->findRelatedNestedSetByIdentifier($nestedSet, $previousNestedSetIdentifier);
         }
-        else
-        {
+        else {
             $position = NestedSet::AS_LAST_CHILD_OF;
             $referenceNode = $this->getParent($nestedSet);
         }
@@ -99,17 +100,15 @@ class NestedSetDataClassRepository
         // which would create the node as the root of a nested set.
         $insertAfter = 0;
 
-        if (!($position == NestedSet::AS_LAST_CHILD_OF && $referenceNode == 0))
-        { // Not creating the root node of a hierarchy
+        if (!($position == NestedSet::AS_LAST_CHILD_OF &&
+            $referenceNode == 0)) { // Not creating the root node of a hierarchy
 
             // Identify the reference node (except when creating the root node, there must be one).
-            if ($this->validatePosition($nestedSet, $position, $referenceNode) === null)
-            {
+            if ($this->validatePosition($nestedSet, $position, $referenceNode) === null) {
                 return false;
             }
 
-            switch ($position)
-            {
+            switch ($position) {
                 case NestedSet::AS_FIRST_CHILD_OF :
                     $insertAfter = $referenceNode->getLeftValue();
                     break;
@@ -135,8 +134,7 @@ class NestedSetDataClassRepository
 
         return $this->getDataClassRepository()->transactional(
             function () use ($nestedSet, $insertAfter) { // Correct the left and right values wherever necessary.
-                if (!$this->preInsert($nestedSet, $insertAfter))
-                {
+                if (!$this->preInsert($nestedSet, $insertAfter)) {
                     return false;
                 }
 
@@ -153,12 +151,12 @@ class NestedSetDataClassRepository
 
     /**
      * @param \Chamilo\Libraries\Storage\Architecture\Domain\NestedSet $nestedSet
-     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition|null $condition
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface $condition
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\Architecture\Domain\NestedSet>
      * @throws \Throwable
      */
-    public function delete(NestedSet $nestedSet, ?Condition $condition = null): ArrayCollection
+    public function delete(NestedSet $nestedSet, ?ConditionInterface $condition = null): ArrayCollection
     {
         // Deleting a node from a nested set requires multiple updates which have to be performed atomically and
         // consistently. Use a transaction to guarantee this.
@@ -174,14 +172,12 @@ class NestedSetDataClassRepository
                 $deleteCondition = $this->getDescendantsCondition($nestedSet, true, true, $condition);
 
                 // Delete this node as well as its offspring
-                if (!$this->getDataClassRepository()->deletes(get_class($nestedSet), $deleteCondition))
-                {
+                if (!$this->getDataClassRepository()->deletes(get_class($nestedSet), $deleteCondition)) {
                     throw new Exception('Nested Set delete failed');
                 }
 
                 // Shift the remaining nodes left to fill the gap created by deleting this node and its offspring.
-                if (!$this->postDelete($nestedSet, $condition))
-                {
+                if (!$this->postDelete($nestedSet, $condition)) {
                     throw new Exception('Nested Set delete failed');
                 }
 
@@ -203,7 +199,8 @@ class NestedSetDataClassRepository
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function findAncestorIdentifiers(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null
+    public function findAncestorIdentifiers(
+        NestedSet $nestedSet, bool $includeSelf = true, ?ConditionInterface $condition = null
     ): array
     {
         return $this->getDataClassRepository()->distinct(
@@ -219,12 +216,12 @@ class NestedSetDataClassRepository
     /**
      * @param \Chamilo\Libraries\Storage\Architecture\Domain\NestedSet $nestedSet
      * @param bool $includeSelf
-     * @param ?\Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition $condition
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface $condition
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\Architecture\Domain\NestedSet>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function findAncestors(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null
+    public function findAncestors(NestedSet $nestedSet, bool $includeSelf = true, ?ConditionInterface $condition = null
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
@@ -238,12 +235,12 @@ class NestedSetDataClassRepository
     /**
      * @param \Chamilo\Libraries\Storage\Architecture\Domain\NestedSet $nestedSet
      * @param bool $recursive
-     * @param ?\Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition $condition
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface $condition
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\Architecture\Domain\NestedSet>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function findDescendants(NestedSet $nestedSet, bool $recursive = true, ?Condition $condition = null
+    public function findDescendants(NestedSet $nestedSet, bool $recursive = true, ?ConditionInterface $condition = null
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
@@ -270,12 +267,12 @@ class NestedSetDataClassRepository
     /**
      * @param \Chamilo\Libraries\Storage\Architecture\Domain\NestedSet $nestedSet
      * @param bool $includeSelf
-     * @param ?\Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition $condition
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface $condition
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\Architecture\Domain\NestedSet>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function findSiblings(NestedSet $nestedSet, bool $includeSelf = true, ?Condition $condition = null
+    public function findSiblings(NestedSet $nestedSet, bool $includeSelf = true, ?ConditionInterface $condition = null
     ): ArrayCollection
     {
         return $this->getDataClassRepository()->retrieves(
@@ -290,20 +287,18 @@ class NestedSetDataClassRepository
      * Build the conditions for the get / count _ ancestors methods
      */
     protected function getAncestorsCondition(
-        NestedSet $nestedSet, bool $includeSelf = false, ?Condition $condition = null
+        NestedSet $nestedSet, bool $includeSelf = false, ?ConditionInterface $condition = null
     ): AndCondition
     {
         $conditions = [];
 
         $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
-        if ($subtreeCondition instanceof Condition)
-        {
+        if ($subtreeCondition instanceof ConditionInterface) {
             $conditions[] = $subtreeCondition;
         }
 
-        if ($includeSelf)
-        {
+        if ($includeSelf) {
             $conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE),
                 ComparisonCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable($nestedSet->getLeftValue())
@@ -313,8 +308,7 @@ class NestedSetDataClassRepository
                 ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($nestedSet->getRightValue())
             );
         }
-        else
-        {
+        else {
             $conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE),
                 ComparisonCondition::LESS_THAN, new StaticConditionVariable($nestedSet->getLeftValue())
@@ -325,8 +319,7 @@ class NestedSetDataClassRepository
             );
         }
 
-        if ($condition)
-        {
+        if ($condition) {
             $conditions[] = $condition;
         }
 
@@ -342,20 +335,18 @@ class NestedSetDataClassRepository
      * Build the conditions for the get / count _ children / descendants methods
      */
     protected function getDescendantsCondition(
-        NestedSet $nestedSet, bool $recursive = false, bool $includeSelf = false, ?Condition $condition = null
+        NestedSet $nestedSet, bool $recursive = false, bool $includeSelf = false, ?ConditionInterface $condition = null
     ): AndCondition
     {
         $conditions = [];
 
         $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
-        if ($subtreeCondition instanceof Condition)
-        {
+        if ($subtreeCondition instanceof ConditionInterface) {
             $conditions[] = $subtreeCondition;
         }
 
-        if ($recursive)
-        {
+        if ($recursive) {
             $conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE),
                 $includeSelf ? ComparisonCondition::GREATER_THAN_OR_EQUAL : ComparisonCondition::GREATER_THAN,
@@ -368,8 +359,7 @@ class NestedSetDataClassRepository
                 new StaticConditionVariable($nestedSet->getRightValue())
             );
         }
-        elseif ($includeSelf)
-        {
+        elseif ($includeSelf) {
             $conditions[] = new OrCondition(
                 [
                     new EqualityCondition(
@@ -383,16 +373,14 @@ class NestedSetDataClassRepository
                 ]
             );
         }
-        else
-        {
+        else {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_PARENT_ID),
                 new StaticConditionVariable($nestedSet->getId())
             );
         }
 
-        if ($condition)
-        {
+        if ($condition) {
             $conditions[] = $condition;
         }
 
@@ -446,15 +434,14 @@ class NestedSetDataClassRepository
      * Build the conditions for the get / count _ siblings methods
      */
     protected function getSiblingsCondition(
-        NestedSet $nestedSet, bool $includeSelf = false, ?Condition $condition = null
+        NestedSet $nestedSet, bool $includeSelf = false, ?ConditionInterface $condition = null
     ): AndCondition
     {
         $conditions = [];
 
         $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
-        if ($subtreeCondition instanceof Condition)
-        {
+        if ($subtreeCondition instanceof ConditionInterface) {
             $conditions[] = $subtreeCondition;
         }
 
@@ -463,8 +450,7 @@ class NestedSetDataClassRepository
             new StaticConditionVariable($nestedSet->getParentId())
         );
 
-        if (!$includeSelf)
-        {
+        if (!$includeSelf) {
             $conditions[] = new NotCondition(
                 new EqualityCondition(
                     new PropertyConditionVariable(get_class($nestedSet), DataClass::PROPERTY_ID),
@@ -473,8 +459,7 @@ class NestedSetDataClassRepository
             );
         }
 
-        if ($condition)
-        {
+        if ($condition) {
             $conditions[] = $condition;
         }
 
@@ -485,12 +470,10 @@ class NestedSetDataClassRepository
     {
         $subTreePropertyNames = $nestedSet->getSubTreePropertyNames();
 
-        if (count($subTreePropertyNames) > 0)
-        {
+        if (count($subTreePropertyNames) > 0) {
             $conditions = [];
 
-            foreach ($subTreePropertyNames as $subTreePropertyName)
-            {
+            foreach ($subTreePropertyNames as $subTreePropertyName) {
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(get_class($nestedSet), $subTreePropertyName),
                     new StaticConditionVariable($nestedSet->getDefaultProperty($subTreePropertyName))
@@ -499,8 +482,7 @@ class NestedSetDataClassRepository
 
             return new AndCondition($conditions);
         }
-        else
-        {
+        else {
             return null;
         }
     }
@@ -508,7 +490,7 @@ class NestedSetDataClassRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function hasSiblings(NestedSet $nestedSet, ?Condition $condition = null): bool
+    public function hasSiblings(NestedSet $nestedSet, ?ConditionInterface $condition = null): bool
     {
         return ($this->countSiblings($nestedSet, false, $condition) > 0);
     }
@@ -519,30 +501,26 @@ class NestedSetDataClassRepository
      * @throws \Throwable
      */
     public function move(
-        NestedSet $nestedSet, string $newParentId = '0', string $newPreviousId = '0', ?Condition $condition = null
+        NestedSet $nestedSet, string $newParentId = '0', string $newPreviousId = '0',
+        ?ConditionInterface $condition = null
     ): bool
     {
-        if ($newPreviousId != 0)
-        {
+        if ($newPreviousId != 0) {
             $position = NestedSet::AS_NEXT_SIBLING_OF;
             $referenceNode = $this->findRelatedNestedSetByIdentifier($nestedSet, $newPreviousId);
         }
-        else
-        {
-            if ($newParentId == 0)
-            {
+        else {
+            if ($newParentId == 0) {
                 $referenceNode = $this->getParent($nestedSet);
             }
-            else
-            {
+            else {
                 $referenceNode = $this->findRelatedNestedSetByIdentifier($nestedSet, $newParentId);
             }
 
             $position = NestedSet::AS_LAST_CHILD_OF;
         }
 
-        if ($this->validatePosition($nestedSet, $position, $referenceNode) === null)
-        {
+        if ($this->validatePosition($nestedSet, $position, $referenceNode) === null) {
             return false;
         }
 
@@ -551,8 +529,7 @@ class NestedSetDataClassRepository
         // which would create the node as the root of a nested set.
         $insertAfter = 0;
 
-        switch ($position)
-        {
+        switch ($position) {
             case NestedSet::AS_FIRST_CHILD_OF :
                 $insertAfter = $referenceNode->getLeftValue();
                 break;
@@ -609,8 +586,7 @@ class NestedSetDataClassRepository
                 // Step 1: Create a gap where the node can be moved into.
                 $res = $this->preInsert($nestedSet, $insertAfter, $delta / 2, $condition);
 
-                if (!$res)
-                {
+                if (!$res) {
                     return false;
                 }
 
@@ -619,8 +595,7 @@ class NestedSetDataClassRepository
 
                 $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
-                if ($subtreeCondition instanceof Condition)
-                {
+                if ($subtreeCondition instanceof ConditionInterface) {
                     $conditions[] = $subtreeCondition;
                 }
 
@@ -633,8 +608,7 @@ class NestedSetDataClassRepository
                     ComparisonCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable($afterPreInsertRight)
                 );
 
-                if ($condition)
-                {
+                if ($condition) {
                     $conditions[] = $condition;
                 }
 
@@ -661,8 +635,7 @@ class NestedSetDataClassRepository
 
                 if (!$this->getDataClassRepository()->updates(
                     get_class($nestedSet), new UpdateProperties($properties), $updateCondition
-                ))
-                {
+                )) {
                     return false;
                 }
 
@@ -675,8 +648,7 @@ class NestedSetDataClassRepository
                 $nestedSet->setLeftValue($afterPreInsertLeft);
                 $nestedSet->setRightValue($afterPreInsertRight);
 
-                if (!$this->postDelete($nestedSet, $condition))
-                {
+                if (!$this->postDelete($nestedSet, $condition)) {
                     return false;
                 }
 
@@ -687,8 +659,7 @@ class NestedSetDataClassRepository
                 $nestedSet->setLeftValue($finalLeft);
                 $nestedSet->setRightValue($finalRight);
 
-                if (!$this->getDataClassRepository()->update($nestedSet))
-                {
+                if (!$this->getDataClassRepository()->update($nestedSet)) {
                     return false;
                 }
 
@@ -702,7 +673,7 @@ class NestedSetDataClassRepository
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    protected function postDelete(NestedSet $nestedSet, ?Condition $condition = null): bool
+    protected function postDelete(NestedSet $nestedSet, ?ConditionInterface $condition = null): bool
     {
         // This private function is only ever called from within a transaction.
         //
@@ -718,8 +689,7 @@ class NestedSetDataClassRepository
 
         $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
-        if ($subtreeCondition instanceof Condition)
-        {
+        if ($subtreeCondition instanceof ConditionInterface) {
             $conditions[] = $subtreeCondition;
         }
 
@@ -728,8 +698,7 @@ class NestedSetDataClassRepository
             ComparisonCondition::GREATER_THAN, new StaticConditionVariable($nestedSet->getLeftValue())
         );
 
-        if ($condition)
-        {
+        if ($condition) {
             $conditions[] = $condition;
         }
 
@@ -754,8 +723,7 @@ class NestedSetDataClassRepository
 
         if (!$this->getDataClassRepository()->updates(
             get_class($nestedSet), new UpdateProperties($properties), $updateCondition
-        ))
-        {
+        )) {
             return false;
         }
 
@@ -767,8 +735,7 @@ class NestedSetDataClassRepository
 
         $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
-        if ($subtreeCondition instanceof Condition)
-        {
+        if ($subtreeCondition instanceof ConditionInterface) {
             $conditions[] = $subtreeCondition;
         }
 
@@ -782,8 +749,7 @@ class NestedSetDataClassRepository
             ComparisonCondition::GREATER_THAN, new StaticConditionVariable($nestedSet->getRightValue())
         );
 
-        if ($condition)
-        {
+        if ($condition) {
             $conditions[] = $condition;
         }
 
@@ -794,8 +760,7 @@ class NestedSetDataClassRepository
 
         if (!$this->getDataClassRepository()->updates(
             get_class($nestedSet), new UpdateProperties($properties), $updateCondition
-        ))
-        {
+        )) {
             return false;
         }
 
@@ -809,7 +774,7 @@ class NestedSetDataClassRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     protected function preInsert(
-        NestedSet $nestedSet, int $insertAfter, int $numberOfElements = 1, ?Condition $condition = null
+        NestedSet $nestedSet, int $insertAfter, int $numberOfElements = 1, ?ConditionInterface $condition = null
     ): bool
     {
         // This private function is only ever called from within a transaction.
@@ -823,8 +788,7 @@ class NestedSetDataClassRepository
 
         $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
-        if ($subtreeCondition instanceof Condition)
-        {
+        if ($subtreeCondition instanceof ConditionInterface) {
             $conditions[] = $subtreeCondition;
         }
 
@@ -833,8 +797,7 @@ class NestedSetDataClassRepository
             ComparisonCondition::GREATER_THAN, new StaticConditionVariable($insertAfter)
         );
 
-        if ($condition)
-        {
+        if ($condition) {
             $conditions[] = $condition;
         }
 
@@ -852,8 +815,7 @@ class NestedSetDataClassRepository
 
         if (!$this->getDataClassRepository()->updates(
             get_class($nestedSet), new UpdateProperties($properties), $updateCondition
-        ))
-        {
+        )) {
             return false;
         }
 
@@ -862,8 +824,7 @@ class NestedSetDataClassRepository
 
         $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
-        if ($subtreeCondition instanceof Condition)
-        {
+        if ($subtreeCondition instanceof ConditionInterface) {
             $conditions[] = $subtreeCondition;
         }
 
@@ -872,8 +833,7 @@ class NestedSetDataClassRepository
             ComparisonCondition::GREATER_THAN, new StaticConditionVariable($insertAfter)
         );
 
-        if ($condition)
-        {
+        if ($condition) {
             $conditions[] = $condition;
         }
 
@@ -891,8 +851,7 @@ class NestedSetDataClassRepository
 
         if (!$this->getDataClassRepository()->updates(
             get_class($nestedSet), new UpdateProperties($properties), $updateCondition
-        ))
-        {
+        )) {
             return false;
         }
 
@@ -977,43 +936,35 @@ class NestedSetDataClassRepository
         NestedSet $nestedSet, int $position = NestedSet::AS_LAST_CHILD_OF, ?NestedSet $referenceNode = null
     ): ?NestedSet
     {
-        if ($position == NestedSet::AS_PREVIOUS_SIBLING_OF || $position == NestedSet::AS_NEXT_SIBLING_OF)
-        {
-            if ($referenceNode === null)
-            {
+        if ($position == NestedSet::AS_PREVIOUS_SIBLING_OF || $position == NestedSet::AS_NEXT_SIBLING_OF) {
+            if ($referenceNode === null) {
                 // TODO Report an error: must provide a relative position, when create a node as a sibling to another.
                 return null;
             }
 
-            if ($nestedSet->getId() === $referenceNode->getId())
-            {
+            if ($nestedSet->getId() === $referenceNode->getId()) {
                 // TODO Report an error when attempting to create a node as its own sibling
                 return null;
             }
 
-            if ($nestedSet->getParentId() == 0 || $nestedSet->getParentId() != $referenceNode->getParentId())
-            {
+            if ($nestedSet->getParentId() == 0 || $nestedSet->getParentId() != $referenceNode->getParentId()) {
                 // To be a sibling of the reference node, the parent should be the same
                 $nestedSet->setParentId($referenceNode->getParentId());
             }
         }
 
-        if ($position == NestedSet::AS_FIRST_CHILD_OF || $position == NestedSet::AS_LAST_CHILD_OF)
-        {
-            if ($referenceNode === null)
-            {
+        if ($position == NestedSet::AS_FIRST_CHILD_OF || $position == NestedSet::AS_LAST_CHILD_OF) {
+            if ($referenceNode === null) {
                 // Use the parent of the node as a reference
                 $referenceNode = $this->getParent($nestedSet);
             }
 
-            if ($nestedSet->getId() === $referenceNode->getId())
-            {
+            if ($nestedSet->getId() === $referenceNode->getId()) {
                 // TODO Report an error when attempting to create a node as its own child
                 return null;
             }
 
-            if ($nestedSet->getParentId() == 0 || $nestedSet->getParentId() != $referenceNode->getId())
-            {
+            if ($nestedSet->getParentId() == 0 || $nestedSet->getParentId() != $referenceNode->getId()) {
                 // To be a child of the reference node, the parent should be set correctly
                 $nestedSet->setParentId($referenceNode->getId());
             }

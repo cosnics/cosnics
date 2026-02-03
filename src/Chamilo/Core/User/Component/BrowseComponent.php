@@ -6,8 +6,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Table\UserTableRenderer;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
@@ -86,7 +86,7 @@ class BrowseComponent extends Manager
         return $this->getService(RequestTableParameterValuesCompiler::class);
     }
 
-    public function getUserTableCondition(): ?Condition
+    public function getUserTableCondition(): ?ConditionInterface
     {
         $searchProperties = [];
         $searchProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME);

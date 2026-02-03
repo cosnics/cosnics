@@ -10,13 +10,12 @@ use Throwable;
 /**
  * Manages the error handler, the exception handler and the shutdown function
  *
- * @package Chamilo\Libraries\Architecture\ErrorHandler
+ * @package Chamilo\Libraries\Protocol\Error\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ErrorHandler
 {
-
     protected ExceptionLoggerInterface $exceptionLogger;
 
     protected ThemePathBuilder $themeSystemPathBuilder;
@@ -32,7 +31,7 @@ class ErrorHandler
         $this->themeSystemPathBuilder = $themeSystemPathBuilder;
     }
 
-    protected function displayGeneralErrorPage()
+    protected function displayGeneralErrorPage(): void
     {
         $path = $this->getThemeSystemPathBuilder()->getTemplatePath('Chamilo\Core\Admin', false) . 'Error.html.tpl';
 
@@ -45,8 +44,7 @@ class ErrorHandler
             'return_button_content' => $this->getTranslation('ReturnToPreviousPage')
         ];
 
-        foreach ($variables as $variable => $value)
-        {
+        foreach ($variables as $variable => $value) {
             $template = str_replace('{ ' . $variable . ' }', $value, $template);
         }
 
@@ -84,8 +82,7 @@ class ErrorHandler
             E_RECOVERABLE_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR
         ];
 
-        if (!array_key_exists($errorNumber, $exceptionTypes))
-        {
+        if (!array_key_exists($errorNumber, $exceptionTypes)) {
             return true;
         }
 
@@ -96,20 +93,19 @@ class ErrorHandler
         return true;
     }
 
-    public function handleException(Throwable $exception)
+    public function handleException(Throwable $exception): void
     {
         $this->getExceptionLogger()->logException($exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
         $this->displayGeneralErrorPage();
     }
 
-    public function handleShutdown()
+    public function handleShutdown(): void
     {
         $error = error_get_last();
 
         $allowedErrors = [E_ERROR, E_COMPILE_ERROR];
 
-        if (!is_null($error) && in_array($error['type'], $allowedErrors))
-        {
+        if (!is_null($error) && in_array($error['type'], $allowedErrors)) {
             $this->getExceptionLogger()->logException(
                 new Exception($error['message'] . '. File: ' . $error['file'] . '. Line: ' . $error['line'] . '.'),
                 ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR, $error['file'], $error['line']
@@ -122,7 +118,7 @@ class ErrorHandler
     /**
      * Registers the error handler, the exception handler and the shutdown function
      */
-    public function registerErrorHandlers()
+    public function registerErrorHandlers(): void
     {
         set_exception_handler([$this, 'handleException']);
         set_error_handler([$this, 'handleError']);

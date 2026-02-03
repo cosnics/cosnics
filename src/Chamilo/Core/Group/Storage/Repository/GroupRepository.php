@@ -7,7 +7,6 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
@@ -19,6 +18,7 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Repository\NestedSetDataClassRepository;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -46,7 +46,7 @@ class GroupRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countGroups(?Condition $condition = null): int
+    public function countGroups(?ConditionInterface $condition = null): int
     {
         return $this->getNestedSetDataClassRepository()->count(
             Group::class, new StorageParameters(condition: $condition)
@@ -210,7 +210,7 @@ class GroupRepository
     }
 
     /**
-     * @param ?\Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition $condition
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface $condition
      * @param ?int $count
      * @param ?int $offset
      * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy $orderBy
@@ -219,7 +219,7 @@ class GroupRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findGroups(
-        ?Condition $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
+        ?ConditionInterface $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $parameters = new StorageParameters(condition: $condition, orderBy: $orderBy, count: $count, offset: $offset);
@@ -299,8 +299,7 @@ class GroupRepository
     {
         $conditions = [];
 
-        if ($searchQuery && $searchQuery != '')
-        {
+        if ($searchQuery && $searchQuery != '') {
             $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
                 $searchQuery, [
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME),
@@ -368,8 +367,7 @@ class GroupRepository
      */
     public function findSubGroupIdentifiersForGroup(Group $group, bool $recursiveSubgroups = false): array
     {
-        if ($recursiveSubgroups)
-        {
+        if ($recursiveSubgroups) {
             $childrenCondition = [];
 
             $childrenCondition[] = new ComparisonCondition(
@@ -384,8 +382,7 @@ class GroupRepository
 
             $childrenCondition = new AndCondition($childrenCondition);
         }
-        else
-        {
+        else {
             $childrenCondition = new EqualityCondition(
                 new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
                 new StaticConditionVariable($group->getId())
@@ -426,11 +423,8 @@ class GroupRepository
         $alreadyIncludedParents = [];
         $directGroupIds = [];
 
-        foreach ($directlySubscribedGroupNestingValues as $descendent)
-        {
-            if (!in_array($descendent[NestedSet::PROPERTY_PARENT_ID], $alreadyIncludedParents))
-            {
-
+        foreach ($directlySubscribedGroupNestingValues as $descendent) {
+            if (!in_array($descendent[NestedSet::PROPERTY_PARENT_ID], $alreadyIncludedParents)) {
                 $treeConditions[] = new AndCondition(
                     [
                         new ComparisonCondition(

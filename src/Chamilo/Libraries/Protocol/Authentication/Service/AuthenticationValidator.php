@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Authentication
+ * @package Chamilo\Libraries\Protocol\Authentication\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -25,9 +25,7 @@ use Symfony\Component\Translation\Translator;
 class AuthenticationValidator
 {
     public const PARAM_AS_ADMIN = '_as_admin';
-
     public const PARAM_AUTHENTICATION_ERROR = 'authentication_error';
-
     public const SESSION_USER_ID = '_uid';
 
     /**
@@ -70,10 +68,8 @@ class AuthenticationValidator
 
     public function getAuthenticationByType(string $authenticationType): ?AuthenticationInterface
     {
-        foreach ($this->authentications as $authentication)
-        {
-            if ($authenticationType == get_class($authentication))
-            {
+        foreach ($this->authentications as $authentication) {
+            if ($authenticationType == get_class($authentication)) {
                 return $authentication;
             }
         }
@@ -99,10 +95,8 @@ class AuthenticationValidator
 
         $this->session->invalidate();
 
-        foreach ($this->authentications as $authentication)
-        {
-            if (get_class($authentication) == $user->getAuthenticationSource())
-            {
+        foreach ($this->authentications as $authentication) {
+            if (get_class($authentication) == $user->getAuthenticationSource()) {
                 $authentication->logout($user);
             }
         }
@@ -112,12 +106,10 @@ class AuthenticationValidator
     {
         $context = $this->request->query->get(Application::PARAM_CONTEXT);
 
-        if ($this->request->query->count() > 0 && $context != 'Chamilo\Core\Home')
-        {
+        if ($this->request->query->count() > 0 && $context != 'Chamilo\Core\Home') {
             $parameters = $this->request->query->all();
         }
-        else
-        {
+        else {
             $parameters = [
                 Application::PARAM_CONTEXT => 'Chamilo\Core\Home'
             ];
@@ -141,13 +133,11 @@ class AuthenticationValidator
      */
     public function validate(): bool
     {
-        if ($this->isAuthenticated())
-        {
+        if ($this->isAuthenticated()) {
             return true;
         }
 
-        foreach ($this->authentications as $authentication)
-        {
+        foreach ($this->authentications as $authentication) {
             $this->validateForAuthentication($authentication);
         }
 
@@ -161,8 +151,7 @@ class AuthenticationValidator
     {
         $user = $authentication->login();
 
-        if (!$user instanceof User)
-        {
+        if (!$user instanceof User) {
             return false;
         }
 
@@ -170,8 +159,7 @@ class AuthenticationValidator
         $this->setAuthenticatedUser($user);
         $this->getEventDispatcher()->dispatch(new AfterUserLoginEvent($user, $this->request->getClientIp()));
 
-        if ($redirectAfterLogin)
-        {
+        if ($redirectAfterLogin) {
             $this->redirectAfterLogin();
         }
 
@@ -183,8 +171,7 @@ class AuthenticationValidator
      */
     protected function validateUser(User $user): void
     {
-        if (!$user->getActive() && !$user->isPlatformAdministrator())
-        {
+        if (!$user->getActive() && !$user->isPlatformAdministrator()) {
             throw new AuthenticationException(
                 $this->translator->trans('AccountNotActive', [], StringUtilities::LIBRARIES)
             );

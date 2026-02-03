@@ -1,23 +1,27 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable;
 
+use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
+use Chamilo\Libraries\Storage\Service\ConditionVariable\DateFormatConditionVariableTranslator;
+
 /**
- * A ConditionVariable that describes a function on another ConditionVariable
- *
- * @package Chamilo\Libraries\Storage\Query\Variable
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DateFormatConditionVariable extends ConditionVariable
+class DateFormatConditionVariable implements ConditionVariableInterface
 {
+    use HashableTrait;
+
     private ?string $alias;
 
-    private ConditionVariable $conditionVariable;
+    private ConditionVariableInterface $conditionVariable;
 
     private string $format;
 
-    public function __construct(string $format, ConditionVariable $conditionVariable, ?string $alias = null)
+    public function __construct(string $format, ConditionVariableInterface $conditionVariable, ?string $alias = null)
     {
         $this->conditionVariable = $conditionVariable;
         $this->format = $format;
@@ -36,16 +40,24 @@ class DateFormatConditionVariable extends ConditionVariable
         return $this;
     }
 
-    public function getConditionVariable(): ConditionVariable
+    public function getConditionVariable(): ConditionVariableInterface
     {
         return $this->conditionVariable;
     }
 
-    public function setConditionVariable(ConditionVariable $conditionVariable): static
+    public function setConditionVariable(ConditionVariableInterface $conditionVariable): static
     {
         $this->conditionVariable = $conditionVariable;
 
         return $this;
+    }
+
+    /**
+     * @return class-string<\Chamilo\Libraries\Storage\Service\ConditionVariable\DateFormatConditionVariableTranslator>
+     */
+    public function getConditionVariableTranslatorClass(): string
+    {
+        return DateFormatConditionVariableTranslator::class;
     }
 
     public function getFormat(): string
@@ -62,12 +74,11 @@ class DateFormatConditionVariable extends ConditionVariable
 
     public function getHashParts(): array
     {
-        $hashParts = ConditionVariable::getHashParts();
-
-        $hashParts[] = $this->getConditionVariable()->getHashParts();
-        $hashParts[] = $this->getFormat();
-        $hashParts[] = $this->getAlias();
-
-        return $hashParts;
+        return [
+            static::class,
+            $this->getConditionVariable()->getHashParts(),
+            $this->getFormat(),
+            $this->getAlias()
+        ];
     }
 }

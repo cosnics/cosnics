@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Service\Utilities;
 use Stringy\Stringy;
 
 /**
- * @package Chamilo\Libraries\Utilities
+ * @package Chamilo\Libraries\Service\Utilities
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>

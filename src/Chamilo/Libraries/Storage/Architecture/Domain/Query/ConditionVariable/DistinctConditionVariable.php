@@ -1,28 +1,32 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable;
 
+use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
+use Chamilo\Libraries\Storage\Service\ConditionVariable\DistinctConditionVariableTranslator;
+
 /**
- *
- * @package Chamilo\Libraries\Storage\Query\Variable
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DistinctConditionVariable extends ConditionVariable
+class DistinctConditionVariable implements ConditionVariableInterface
 {
+    use HashableTrait;
 
     /**
-     * @var \Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\ConditionVariable[]
+     * @var \Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface[]
      */
     private array $conditionVariables;
 
     /**
-     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\ConditionVariable[] $conditionVariables
+     * @param \Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface[] $conditionVariables
      */
     public function __construct(array $conditionVariables = [])
     {
         $this->conditionVariables = $conditionVariables;
     }
 
-    public function add(ConditionVariable $conditionVariable): static
+    public function add(ConditionVariableInterface $conditionVariable): static
     {
         $this->conditionVariables[] = $conditionVariable;
 
@@ -31,21 +35,30 @@ class DistinctConditionVariable extends ConditionVariable
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\ConditionVariable[]
+     * @return \Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface[]
      */
     public function get(): array
     {
         return $this->conditionVariables;
     }
 
+    /**
+     * @return class-string<\Chamilo\Libraries\Storage\Service\ConditionVariable\DistinctConditionVariableTranslator>
+     */
+    public function getConditionVariableTranslatorClass(): string
+    {
+        return DistinctConditionVariableTranslator::class;
+    }
+
     public function getHashParts(): array
     {
-        $hashParts = ConditionVariable::getHashParts();
+        $hashParts = [];
+
+        $hashParts[] = static::class;
 
         $variableParts = [];
 
-        foreach ($this->get() as $conditionVariable)
-        {
+        foreach ($this->get() as $conditionVariable) {
             $variableParts[] = $conditionVariable->getHashParts();
         }
 
@@ -61,7 +74,7 @@ class DistinctConditionVariable extends ConditionVariable
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\ConditionVariable[] $conditionVariables
+     * @param \Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface[] $conditionVariables
      */
     public function set(array $conditionVariables): static
     {

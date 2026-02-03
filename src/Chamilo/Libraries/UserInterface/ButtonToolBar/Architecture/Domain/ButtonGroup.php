@@ -32,7 +32,7 @@ class ButtonGroup implements ButtonInterface, ButtonGroupCollectionInterface
     /**
      * @return class-string<\Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonGroupRenderer>
      */
-    public function getButtonRendererClass(): string
+    public function getButtonRendererClassName(): string
     {
         return ButtonGroupRenderer::class;
     }

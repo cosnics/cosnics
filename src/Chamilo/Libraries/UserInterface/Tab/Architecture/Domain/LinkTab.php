@@ -4,14 +4,13 @@ namespace Chamilo\Libraries\UserInterface\Tab\Architecture\Domain;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
 /**
- * @package Chamilo\Libraries\Format\Tabs\Link
+ * @package Chamilo\Libraries\UserInterface\Tab\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LinkTab extends AbstractTab
 {
     public const POSITION_LEFT = 'left';
     public const POSITION_RIGHT = 'right';
-
     public const TARGET_POPUP = 2;
     public const TARGET_WINDOW = 1;
 
@@ -89,8 +88,7 @@ class LinkTab extends AbstractTab
 
     public function hasConfirmationMessage(): bool
     {
-        if ($this->getConfirmationMessage())
-        {
+        if ($this->getConfirmationMessage()) {
             return true;
         }
 

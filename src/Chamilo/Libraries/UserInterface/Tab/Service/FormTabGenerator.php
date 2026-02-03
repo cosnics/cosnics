@@ -6,7 +6,7 @@ use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\FormTab;
 use HTML_QuickForm_html;
 
 /**
- * @package Chamilo\Libraries\Format\Tabs
+ * @package Chamilo\Libraries\UserInterface\Tab\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class FormTabGenerator
@@ -40,8 +40,7 @@ class FormTabGenerator
     {
         $method = $tab->getMethod();
 
-        if (!is_array($method))
-        {
+        if (!is_array($method)) {
             $method = [$form, $method];
         }
 

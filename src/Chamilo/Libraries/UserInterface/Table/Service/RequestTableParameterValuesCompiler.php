@@ -7,7 +7,7 @@ use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableParameterValu
 use Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException;
 
 /**
- * @package Chamilo\Libraries\Format\Table
+ * @package Chamilo\Libraries\UserInterface\Table\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class RequestTableParameterValuesCompiler
@@ -36,14 +36,12 @@ class RequestTableParameterValuesCompiler
 
     protected function determineOffset(int $pageNumber, int $numberOfItemsPerPage, int $totalNumberOfItems): int
     {
-        try
-        {
+        try {
             return $this->getPager()->getCurrentRangeOffset(
                 $pageNumber, $numberOfItemsPerPage, $totalNumberOfItems
             );
         }
-        catch (InvalidPageNumberException)
-        {
+        catch (InvalidPageNumberException) {
             return 0;
         }
     }
@@ -93,13 +91,11 @@ class RequestTableParameterValuesCompiler
         $numberOfColumnsPerPage = $defaultParameterValues[TableParameterValues::PARAM_NUMBER_OF_COLUMNS_PER_PAGE];
         $numberOfRowsPerPage = $this->determineNumberOfRowsPerPage($parameterNames, $defaultParameterValues);
 
-        if ($numberOfRowsPerPage == Pager::DISPLAY_ALL)
-        {
+        if ($numberOfRowsPerPage == Pager::DISPLAY_ALL) {
             $numberOfRowsPerPage = $totalNumberOfItems;
             $numberOfItemsPerPage = $totalNumberOfItems;
         }
-        else
-        {
+        else {
             $numberOfItemsPerPage = $numberOfRowsPerPage * $numberOfColumnsPerPage;
         }
 

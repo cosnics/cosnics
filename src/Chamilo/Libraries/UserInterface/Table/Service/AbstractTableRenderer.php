@@ -19,7 +19,7 @@ use Exception;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Format\Table
+ * @package Chamilo\Libraries\UserInterface\Table\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -27,7 +27,6 @@ abstract class AbstractTableRenderer
 {
     public const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_ASC;
     public const DEFAULT_ORDER_COLUMN_INDEX = 0;
-
     public const TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
 
     protected ClassnameUtilities $classnameUtilities;
@@ -82,12 +81,10 @@ abstract class AbstractTableRenderer
 
     protected function addColumn(TableColumn $column, ?int $index = null): static
     {
-        if (is_null($index))
-        {
+        if (is_null($index)) {
             $this->columns[] = $column;
         }
-        else
-        {
+        else {
             array_splice($this->columns, $index, 0, [$column]);
         }
 
@@ -102,8 +99,7 @@ abstract class AbstractTableRenderer
 
         $orderProperties = [];
 
-        if ($orderProperty)
-        {
+        if ($orderProperty) {
             $orderProperties[] = $orderProperty;
         }
 
@@ -112,12 +108,10 @@ abstract class AbstractTableRenderer
 
     protected function determineTableName(): string
     {
-        try
-        {
+        try {
             return $this->getClassnameUtilities()->getClassnameFromNamespace(static::class, true);
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             return 'table';
         }
     }
@@ -132,8 +126,7 @@ abstract class AbstractTableRenderer
         $html[] = '<input class="styled styled-primary" type="checkbox" name="' . $tableActions->getIdentifierName() .
             '[]" value="' . $value . '"';
 
-        if ($parameterValues->getSelectAll())
-        {
+        if ($parameterValues->getSelectAll()) {
             $html[] = ' checked="checked"';
         }
 
@@ -199,8 +192,7 @@ abstract class AbstractTableRenderer
     {
         $column = $this->getSortableColumn($columnNumber);
 
-        if ($column instanceof AbstractSortableTableColumn)
-        {
+        if ($column instanceof AbstractSortableTableColumn) {
             return new OrderProperty($column->getConditionVariable(), $orderDirection);
         }
 
@@ -217,8 +209,7 @@ abstract class AbstractTableRenderer
      */
     public function getParameterNames(?string $tableName = null): array
     {
-        if (is_null($tableName))
-        {
+        if (is_null($tableName)) {
             $tableName = $this->determineTableName();
         }
 
@@ -239,15 +230,12 @@ abstract class AbstractTableRenderer
     {
         $column = $this->getColumn($columnNumber);
 
-        if (!$column instanceof AbstractSortableTableColumn || (!$column->isSortable()))
-        {
-            if ($columnNumber != static::DEFAULT_ORDER_COLUMN_INDEX)
-            {
+        if (!$column instanceof AbstractSortableTableColumn || (!$column->isSortable())) {
+            if ($columnNumber != static::DEFAULT_ORDER_COLUMN_INDEX) {
                 return $this->getSortableColumn(static::DEFAULT_ORDER_COLUMN_INDEX);
             }
         }
-        else
-        {
+        else {
             return $column;
         }
 
@@ -298,5 +286,5 @@ abstract class AbstractTableRenderer
     /**
      * @param \Chamilo\Libraries\Storage\Architecture\Domain\DataClass|array $result
      */
-    abstract protected function renderIdentifierCell($result): string;
+    abstract protected function renderIdentifierCell(mixed $result): string;
 }

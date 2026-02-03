@@ -6,7 +6,7 @@ use HTML_Table;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Format\Table
+ * @package Chamilo\Libraries\UserInterface\Table\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PropertiesTableRenderer
@@ -25,23 +25,18 @@ class PropertiesTableRenderer
     {
         $htmlTable = new HTML_Table(['class' => 'table table-striped table-bordered table-hover table-responsive']);
 
-        if (count($properties) > 0)
-        {
-            foreach ($properties as $property => $values)
-            {
+        if (count($properties) > 0) {
+            foreach ($properties as $property => $values) {
                 $contents = [];
 
                 $contents[] = $property;
 
-                if (!is_array($values))
-                {
+                if (!is_array($values)) {
                     $values = [$values];
                 }
 
-                if (count($values) > 0)
-                {
-                    foreach ($values as $value)
-                    {
+                if (count($values) > 0) {
+                    foreach ($values as $value) {
                         $contents[] = $value;
                     }
                 }
@@ -51,8 +46,7 @@ class PropertiesTableRenderer
 
             $htmlTable->setColAttributes(0, ['class' => 'header', 'style' => 'vertical-align: middle;']);
         }
-        else
-        {
+        else {
             $rowNumber =
                 $htmlTable->addRow([$this->getTranslator()->trans('NoResults', [], StringUtilities::LIBRARIES)]);
             $htmlTable->setCellAttributes($rowNumber, 0, 'style="font-style: italic;text-align:center;" colspan=2');

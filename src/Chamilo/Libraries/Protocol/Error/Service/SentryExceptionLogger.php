@@ -17,12 +17,11 @@ use function Sentry\init;
 /**
  * Logs Exceptions to Sentry (sentry.io)
  *
- * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
+ * @package Chamilo\Libraries\Protocol\Error\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class SentryExceptionLogger implements ExceptionLoggerInterface
 {
-
     protected string $sentryConnectionString;
 
     protected SessionInterface $session;
@@ -36,13 +35,11 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         SessionInterface $session, UrlGenerator $urlGenerator, string $sentryConnectionString
     )
     {
-        if (!class_exists('\Sentry\SentrySdk'))
-        {
+        if (!class_exists('\Sentry\SentrySdk')) {
             throw new Exception('Can not use the SentryExceptionLogger when sentry is not included');
         }
 
-        if (empty($sentryConnectionString))
-        {
+        if (empty($sentryConnectionString)) {
             throw new Exception('The given connection string for sentry can not be empty');
         }
 
@@ -57,8 +54,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
                 'before_send' => function (Event $event) use ($session, $urlGenerator): ?Event {
                     $userId = $session->get(AuthenticationValidator::SESSION_USER_ID);
 
-                    if ($userId)
-                    {
+                    if ($userId) {
                         $profilePageUrl = $urlGenerator->fromParameters(
                             [
                                 Application::PARAM_CONTEXT => Manager::CONTEXT,
@@ -79,7 +75,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
     /**
      * Adds an exception logger for javascript to the header
      */
-    public function addJavascriptExceptionLogger(PageConfiguration $pageConfiguration)
+    public function addJavascriptExceptionLogger(PageConfiguration $pageConfiguration): void
     {
         $matches = [];
         preg_match('/https:\/\/(.*)@/', $this->getSentryConnectionString(), $matches);
@@ -129,10 +125,9 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
 
     public function logException(
         Throwable $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
-    )
+    ): void
     {
-        if ($exceptionLevel != self::EXCEPTION_LEVEL_FATAL_ERROR)
-        {
+        if ($exceptionLevel != self::EXCEPTION_LEVEL_FATAL_ERROR) {
             return;
         }
 

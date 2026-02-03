@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\UserInterface\Tab\Service;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ActionsTab;
 
 /**
- * @package Chamilo\Libraries\Format\Tabs
+ * @package Chamilo\Libraries\UserInterface\Tab\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ActionsTabRenderer
@@ -35,8 +35,7 @@ class ActionsTabRenderer
 
         $html[] = $this->getTabRenderer()->renderContentHeaderForList($tabsRendererName, $tab);
 
-        foreach ($tab->getActions() as $action)
-        {
+        foreach ($tab->getActions() as $action) {
             $html[] = $this->getActionRenderer()->render($action);
         }
 

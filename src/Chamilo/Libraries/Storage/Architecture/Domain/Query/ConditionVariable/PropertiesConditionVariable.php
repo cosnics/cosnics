@@ -1,17 +1,20 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable;
 
+use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
+use Chamilo\Libraries\Storage\Service\ConditionVariable\PropertiesConditionVariableTranslator;
+
 /**
- * A ConditionVariable that describes all the properties of a DataClass
- *
- * @package Chamilo\Libraries\Storage\Query\Variable
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PropertiesConditionVariable extends ConditionVariable
+class PropertiesConditionVariable implements ConditionVariableInterface
 {
+    use HashableTrait;
 
     private string $dataClassName;
 
@@ -20,6 +23,17 @@ class PropertiesConditionVariable extends ConditionVariable
         $this->dataClassName = $dataClassName;
     }
 
+    /**
+     * @return class-string<\Chamilo\Libraries\Storage\Service\ConditionVariable\PropertiesConditionVariableTranslator>
+     */
+    public function getConditionVariableTranslatorClass(): string
+    {
+        return PropertiesConditionVariableTranslator::class;
+    }
+
+    /**
+     * @return class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass>
+     */
     public function getDataClassName(): string
     {
         return $this->dataClassName;
@@ -34,10 +48,9 @@ class PropertiesConditionVariable extends ConditionVariable
 
     public function getHashParts(): array
     {
-        $hashParts = ConditionVariable::getHashParts();
-
-        $hashParts[] = $this->getDataClassName();
-
-        return $hashParts;
+        return [
+            static::class,
+            $this->getDataClassName()
+        ];
     }
 }

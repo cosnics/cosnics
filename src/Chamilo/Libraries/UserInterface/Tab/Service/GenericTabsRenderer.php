@@ -6,7 +6,7 @@ use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 /**
- * @package Chamilo\Libraries\Format\Tabs
+ * @package Chamilo\Libraries\UserInterface\Tab\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GenericTabsRenderer
@@ -30,20 +30,17 @@ class GenericTabsRenderer
      */
     protected function getSelectedTab(string $name, TabsCollection $tabs): ?string
     {
-        try
-        {
+        try {
             $selectedTabs = $this->getRequest()->query->all(self::PARAM_SELECTED_TAB);
             $selectedTab = $selectedTabs[$name];
 
-            if (!is_null($selectedTab) && $tabs->isValidIdentifier($selectedTab))
-            {
+            if (!is_null($selectedTab) && $tabs->isValidIdentifier($selectedTab)) {
                 return $selectedTab;
             }
 
             return null;
         }
-        catch (BadRequestException)
-        {
+        catch (BadRequestException) {
             return null;
         }
     }
@@ -65,12 +62,10 @@ class GenericTabsRenderer
 
         $selectedTab = $this->getSelectedTab($name, $tabs);
 
-        if (isset($selectedTab))
-        {
+        if (isset($selectedTab)) {
             $html[] = '$(\'#' . $name . 'Tabs a[href="#' . $name . '-' . $selectedTab . '"]\').tab(\'show\');';
         }
-        else
-        {
+        else {
             $html[] = '$(\'#' . $name . 'Tabs a:first\').tab(\'show\')';
         }
 

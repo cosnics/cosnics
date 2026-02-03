@@ -9,7 +9,7 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidatorHtmlEd
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Format\Form
+ * @package Chamilo\Libraries\UserInterface\Form\Factory
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class FormValidatorHtmlEditorOptionsFactory

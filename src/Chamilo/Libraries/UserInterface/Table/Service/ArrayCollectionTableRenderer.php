@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Sortable table which can be used for data available in an array
  *
- * @package Chamilo\Libraries\Format\Table
+ * @package Chamilo\Libraries\UserInterface\Table\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ArrayCollectionTableRenderer
@@ -60,12 +60,10 @@ class ArrayCollectionTableRenderer
 
     protected function determineOffset(int $pageNumber, int $numberOfItemsPerPage, int $totalNumberOfItems): int
     {
-        try
-        {
+        try {
             return $this->getPager()->getCurrentRangeOffset($pageNumber, $numberOfItemsPerPage, $totalNumberOfItems);
         }
-        catch (InvalidPageNumberException)
-        {
+        catch (InvalidPageNumberException) {
             return 0;
         }
     }
@@ -124,12 +122,10 @@ class ArrayCollectionTableRenderer
         $numberOfRowsPerPage = $this->determineNumberOfRowsPerPage($tableName, $defaultNumberOfRowsPerPage);
         $totalNumberOfItems = $tableData->count();
 
-        if ($numberOfRowsPerPage == Pager::DISPLAY_ALL)
-        {
+        if ($numberOfRowsPerPage == Pager::DISPLAY_ALL) {
             $numberOfItemsPerPage = $totalNumberOfItems;
         }
-        else
-        {
+        else {
             $numberOfItemsPerPage = $numberOfRowsPerPage;
         }
 
@@ -162,8 +158,7 @@ class ArrayCollectionTableRenderer
         TableParameterValues $parameterValues, array $tableColumns, ArrayCollection $tableData
     ): ArrayCollection
     {
-        if ($this->isSortable($tableColumns, $parameterValues->getOrderColumnIndex()))
-        {
+        if ($this->isSortable($tableColumns, $parameterValues->getOrderColumnIndex())) {
             $tableData = $this->sortData(
                 $tableData, $parameterValues->getOrderColumnIndex(), $parameterValues->getOrderColumnDirection()
             );
@@ -193,22 +188,18 @@ class ArrayCollectionTableRenderer
     {
         $isDate = true;
 
-        foreach ($data as $row)
-        {
-            if (strlen(strip_tags($row[$column])) != 0)
-            {
+        foreach ($data as $row) {
+            if (strlen(strip_tags($row[$column])) != 0) {
                 $checkDate = strtotime(strip_tags($row[$column]));
                 // strtotime Returns a timestamp on success, FALSE otherwise.
                 // Previous to PHP 5.1.0, this function would return -1 on failure.
                 $isDate &= ($checkDate != - 1 && $checkDate != false);
             }
-            else
-            {
+            else {
                 $isDate &= false;
             }
 
-            if (!$isDate)
-            {
+            if (!$isDate) {
                 break;
             }
         }
@@ -220,13 +211,11 @@ class ArrayCollectionTableRenderer
     {
         $isImage = true;
 
-        foreach ($data as $row)
-        {
+        foreach ($data as $row) {
             $isImage &= strlen(trim(strip_tags($row[$column], '<img>'))) > 0; // at least one img-tag
             $isImage &= strlen(trim(strip_tags($row[$column]))) == 0; // and no text outside attribute-values
 
-            if (!$isImage)
-            {
+            if (!$isImage) {
                 break;
             }
         }
@@ -238,12 +227,10 @@ class ArrayCollectionTableRenderer
     {
         $isNumeric = true;
 
-        foreach ($data as $row)
-        {
+        foreach ($data as $row) {
             $isNumeric &= is_numeric(strip_tags($row[$column]));
 
-            if (!$isNumeric)
-            {
+            if (!$isNumeric) {
                 break;
             }
         }
@@ -258,8 +245,7 @@ class ArrayCollectionTableRenderer
     {
         $tableColumn = $tableColumns[$orderColumnIndex];
 
-        if (isset($tableColumn) && $tableColumn instanceof AbstractSortableTableColumn && $tableColumn->isSortable())
-        {
+        if (isset($tableColumn) && $tableColumn instanceof AbstractSortableTableColumn && $tableColumn->isSortable()) {
             return true;
         }
 
@@ -272,13 +258,11 @@ class ArrayCollectionTableRenderer
     protected function sortData(ArrayCollection $data, int $ordercolumnIndex, int $orderColumnDirection
     ): ArrayCollection
     {
-        if ($data->isEmpty() || !in_array($orderColumnDirection, [SORT_ASC, SORT_DESC]))
-        {
+        if ($data->isEmpty() || !in_array($orderColumnDirection, [SORT_ASC, SORT_DESC])) {
             return $data;
         }
 
-        if ($this->isImageColumn($data, $ordercolumnIndex))
-        {
+        if ($this->isImageColumn($data, $ordercolumnIndex)) {
             $compareFunction = function ($a, $b) use ($ordercolumnIndex, $orderColumnDirection) {
                 $compareResult = strnatcmp(
                     strip_tags($a[$ordercolumnIndex], '<img>'), strip_tags($b[$ordercolumnIndex], '<img>')
@@ -287,8 +271,7 @@ class ArrayCollectionTableRenderer
                 return $orderColumnDirection == SORT_ASC ? $compareResult > 0 : $compareResult <= 0;
             };
         }
-        elseif ($this->isDateColumn($data, $ordercolumnIndex))
-        {
+        elseif ($this->isDateColumn($data, $ordercolumnIndex)) {
             $compareFunction = function ($a, $b) use ($ordercolumnIndex, $orderColumnDirection) {
                 $aTime = strtotime(strip_tags($a[$ordercolumnIndex]));
                 $bTime = strtotime(strip_tags($b[$ordercolumnIndex]));
@@ -296,8 +279,7 @@ class ArrayCollectionTableRenderer
                 return $orderColumnDirection == SORT_ASC ? $aTime > $bTime : $aTime <= $bTime;
             };
         }
-        elseif ($this->isNumericColumn($data, $ordercolumnIndex))
-        {
+        elseif ($this->isNumericColumn($data, $ordercolumnIndex)) {
             $compareFunction = function ($a, $b) use ($ordercolumnIndex, $orderColumnDirection) {
                 $aNumber = strip_tags($a[$ordercolumnIndex]);
                 $bNumber = strip_tags($b[$ordercolumnIndex]);
@@ -305,8 +287,7 @@ class ArrayCollectionTableRenderer
                 return $orderColumnDirection == SORT_ASC ? $aNumber > $bNumber : $aNumber <= $bNumber;
             };
         }
-        else
-        {
+        else {
             $compareFunction = function ($a, $b) use ($ordercolumnIndex, $orderColumnDirection) {
                 $compareResult = strnatcmp(
                     strip_tags($a[$ordercolumnIndex]), strip_tags($b[$ordercolumnIndex])

@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\UserInterface\Tree\Service;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
 
 /**
- * @package Chamilo\Libraries\Format\Tree\Menu
+ * @package Chamilo\Libraries\UserInterface\Tree\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class JsTreeRenderer

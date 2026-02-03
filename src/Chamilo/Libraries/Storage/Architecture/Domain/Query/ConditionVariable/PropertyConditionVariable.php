@@ -1,18 +1,18 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable;
 
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
+use Chamilo\Libraries\Storage\Service\ConditionVariable\PropertyConditionVariableTranslator;
+
 /**
- * A ConditionVariable that describes a regular DataClass property
- *
- * @package Chamilo\Libraries\Storage\Query\Variable
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be> - Refactoring to extension of PropertiesConditionVariable
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PropertyConditionVariable extends PropertiesConditionVariable
+class PropertyConditionVariable extends PropertiesConditionVariable implements ConditionVariableInterface
 {
-
     private ?string $alias;
 
     private string $propertyName;
@@ -38,18 +38,25 @@ class PropertyConditionVariable extends PropertiesConditionVariable
     }
 
     /**
+     * @return class-string<\Chamilo\Libraries\Storage\Service\ConditionVariable\PropertyConditionVariableTranslator>
+     */
+    public function getConditionVariableTranslatorClass(): string
+    {
+        return PropertyConditionVariableTranslator::class;
+    }
+
+    /**
      *
      * @see \Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertiesConditionVariable::getHashParts()
      */
     public function getHashParts(): array
     {
-        $hashParts = ConditionVariable::getHashParts();
-
-        $hashParts[] = $this->getDataClassName();
-        $hashParts[] = $this->getPropertyName();
-        $hashParts[] = $this->getAlias();
-
-        return $hashParts;
+        return [
+            static::class,
+            $this->getDataClassName(),
+            $this->getPropertyName(),
+            $this->getAlias()
+        ];
     }
 
     public function getPropertyName(): string

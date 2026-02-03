@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\Factory;
 
 /**
- * @package Chamilo\Libraries\Storage\DataClass
+ * @package Chamilo\Libraries\Storage\Factory
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillarexd@ehb.be>
  */

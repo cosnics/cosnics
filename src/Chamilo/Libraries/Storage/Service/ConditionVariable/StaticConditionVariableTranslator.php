@@ -2,18 +2,23 @@
 namespace Chamilo\Libraries\Storage\Service\ConditionVariable;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionVariableTranslator;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
- * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable
+ * @package Chamilo\Libraries\Storage\Service\ConditionVariable
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class StaticConditionVariableTranslator extends ConditionVariableTranslator
+    implements ConditionVariableTranslatorInterface
 {
-    public const CONDITION_CLASS = StaticConditionVariable::class;
+    public function getConditionVariableClassName(): string
+    {
+        return StaticConditionVariable::class;
+    }
 
     public function translate(
         QueryBuilder $querybuilder, StaticConditionVariable $staticConditionVariable

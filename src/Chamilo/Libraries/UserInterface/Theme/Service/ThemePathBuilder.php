@@ -8,7 +8,7 @@ use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
 /**
- * @package Chamilo\Libraries\Format\Theme
+ * @package Chamilo\Libraries\UserInterface\Theme\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ThemePathBuilder
@@ -51,10 +51,8 @@ class ThemePathBuilder
         $directories =
             $this->getFilesystemTools()->getDirectoryContent($path, FileTypeFilterIterator::ONLY_FILES, false);
 
-        foreach ($directories as $directory)
-        {
-            if (!str_starts_with($directory, '.'))
-            {
+        foreach ($directories as $directory) {
+            if (!str_starts_with($directory, '.')) {
                 $availableThemes[$directory] =
                     (string) $this->getStringUtilities()->createString($directory)->upperCamelize();
             }
@@ -72,8 +70,7 @@ class ThemePathBuilder
     {
         $cssPath = $this->getPathBuilder()->getCssPath($namespace);
 
-        if ($includeTheme)
-        {
+        if ($includeTheme) {
             $cssPath .= $this->getTheme() . $this->getDirectorySeparator();
         }
 
@@ -124,8 +121,7 @@ class ThemePathBuilder
     {
         $cssPath = $this->getPathBuilder()->getTemplatesPath($namespace);
 
-        if ($includeTheme)
-        {
+        if ($includeTheme) {
             $cssPath .= $this->getTheme() . $this->getDirectorySeparator();
         }
 

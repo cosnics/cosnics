@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\Architecture\Trait;
 
 /**
- * @package Chamilo\Libraries\Cache\Traits
+ * @package Chamilo\Libraries\Storage\Architecture\Trait
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 trait SimpleCacheDataPreLoaderTrait
@@ -11,6 +11,7 @@ trait SimpleCacheDataPreLoaderTrait
 
     /**
      * @return mixed
+     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function preLoadCacheData(): mixed
     {

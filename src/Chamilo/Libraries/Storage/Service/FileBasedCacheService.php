@@ -10,7 +10,7 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Abstract service class to manage caches that are file based
  *
- * @package Chamilo\Libraries\Cache
+ * @package Chamilo\Libraries\Storage\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -49,22 +49,18 @@ abstract class FileBasedCacheService implements CacheDataPreLoaderInterface
 
     public function preLoadCacheData(): void
     {
-        if ($this->clearCacheData())
-        {
+        if ($this->clearCacheData()) {
             $this->initializeCache();
         }
     }
 
     protected function removeCachePath(string $cachePath): bool
     {
-        if (file_exists($cachePath))
-        {
-            try
-            {
+        if (file_exists($cachePath)) {
+            try {
                 $this->getFilesystem()->remove($cachePath);
             }
-            catch (Exception)
-            {
+            catch (Exception) {
                 throw new RuntimeException(sprintf('Unable to remove the cache path "%s".', $cachePath));
             }
         }

@@ -9,12 +9,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 /**
  * Builds the SentryExceptionLogger class
  *
- * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
+ * @package Chamilo\Libraries\Protocol\Error\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 {
-
     protected array $errorHandlingConfiguration;
 
     protected SessionInterface $session;
@@ -39,8 +38,7 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 
         $clientDSNKey = $errorHandlingConfiguration['DSN'];
 
-        if (empty($clientDSNKey))
-        {
+        if (empty($clientDSNKey)) {
             throw new Exception(
                 'The DSN key should be configured when using the sentry exception logger. ' .
                 'The configuration should be put in ' .
@@ -65,5 +63,4 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
     {
         return $this->urlGenerator;
     }
-
 }

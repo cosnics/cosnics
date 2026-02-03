@@ -9,8 +9,8 @@ use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -42,7 +42,9 @@ class GroupMembershipService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countSubscribedUsersForGroupIdentifier(string $groupIdentifier, ?Condition $condition = null): int
+    public function countSubscribedUsersForGroupIdentifier(
+        string $groupIdentifier, ?ConditionInterface $condition = null
+    ): int
     {
         return $this->getGroupMembershipRepository()->countSubscribedUsersForGroupIdentifier(
             $groupIdentifier, $condition
@@ -54,7 +56,9 @@ class GroupMembershipService
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countSubscribedUsersForGroupIdentifiers(array $groupIdentifiers, ?Condition $condition = null): int
+    public function countSubscribedUsersForGroupIdentifiers(
+        array $groupIdentifiers, ?ConditionInterface $condition = null
+    ): int
     {
         return $this->getGroupMembershipRepository()->countSubscribedUsersForGroupIdentifiers(
             $groupIdentifiers, $condition
@@ -70,8 +74,7 @@ class GroupMembershipService
 
         $success = $this->getGroupMembershipRepository()->emptyGroup($group);
 
-        if (!$success)
-        {
+        if (!$success) {
             throw new RuntimeException('Could not empty the group with id ' . $group->getId());
         }
 
@@ -113,7 +116,7 @@ class GroupMembershipService
 
     /**
      * @param string $groupIdentifier
-     * @param ?\Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition $condition
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface $condition
      * @param ?int $offset
      * @param ?int $count
      * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy $orderBy
@@ -122,7 +125,7 @@ class GroupMembershipService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findSubscribedUsersForGroupIdentifier(
-        string $groupIdentifier, ?Condition $condition = null, ?int $offset = null, ?int $count = null,
+        string $groupIdentifier, ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null,
         OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
@@ -131,7 +134,7 @@ class GroupMembershipService
 
     /**
      * @param string[] $groupIdentifiers
-     * @param ?\Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition $condition
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface $condition
      * @param ?int $offset
      * @param ?int $count
      * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy $orderBy
@@ -140,7 +143,7 @@ class GroupMembershipService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findSubscribedUsersForGroupIdentifiers(
-        array $groupIdentifiers, ?Condition $condition = null, ?int $offset = null, ?int $count = null,
+        array $groupIdentifiers, ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null,
         OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
@@ -235,15 +238,13 @@ class GroupMembershipService
         $groupRelation =
             $this->getGroupMembershipRepository()->findGroupRelUserByGroupAndUserId($group->getId(), $user->getId());
 
-        if (!$groupRelation instanceof GroupRelUser)
-        {
+        if (!$groupRelation instanceof GroupRelUser) {
             $groupRelation = new GroupRelUser();
 
             $groupRelation->setUserId($user->getId());
             $groupRelation->setGroupId($group->getId());
 
-            if (!$this->getGroupMembershipRepository()->createGroupUserRelation($groupRelation))
-            {
+            if (!$this->getGroupMembershipRepository()->createGroupUserRelation($groupRelation)) {
                 throw new RuntimeException(
                     sprintf('Could not subscribe user %s to group %s', $user->getId(), $group->getId())
                 );
@@ -271,15 +272,13 @@ class GroupMembershipService
 
         $newUsers = $this->getUserService()->findUsersByIdentifiers($newUserIdentifiers);
 
-        foreach ($newUsers as $newUser)
-        {
+        foreach ($newUsers as $newUser) {
             $this->subscribeUserToGroup($group, $newUser);
         }
 
         $oldUsers = $this->getUserService()->findUsersByIdentifiers($oldUserIdentifiers);
 
-        foreach ($oldUsers as $oldUser)
-        {
+        foreach ($oldUsers as $oldUser) {
             $this->unsubscribeUserFromGroup($group, $oldUser);
         }
 
@@ -295,10 +294,8 @@ class GroupMembershipService
         $groupUserRelations =
             $this->getGroupMembershipRepository()->getGroupUserRelationsByGroupIdentifier($group->getId());
 
-        foreach ($groupUserRelations as $groupUserRelation)
-        {
-            if (!$this->getGroupMembershipRepository()->deleteGroupUserRelation($groupUserRelation))
-            {
+        foreach ($groupUserRelations as $groupUserRelation) {
+            if (!$this->getGroupMembershipRepository()->deleteGroupUserRelation($groupUserRelation)) {
                 throw new RuntimeException(
                     sprintf(
                         'Could not unsubscribe user %s from group %s', $groupUserRelation->getUserId(),
@@ -325,8 +322,7 @@ class GroupMembershipService
     {
         $groups = $this->groupsTreeTraverser->findDirectlySubscribedGroupsForUserIdentifier($user->getId());
 
-        foreach ($groups as $group)
-        {
+        foreach ($groups as $group) {
             $this->unsubscribeUserFromGroup($group, $user);
         }
 
@@ -342,8 +338,7 @@ class GroupMembershipService
         $groupRelation =
             $this->getGroupMembershipRepository()->findGroupRelUserByGroupAndUserId($group->getId(), $user->getId());
 
-        if (!$groupRelation instanceof GroupRelUser)
-        {
+        if (!$groupRelation instanceof GroupRelUser) {
             throw new RuntimeException(
                 sprintf(
                     'Could not unsubscribe user %s from group %s because there is no active subscription',
@@ -352,8 +347,7 @@ class GroupMembershipService
             );
         }
 
-        if (!$this->getGroupMembershipRepository()->deleteGroupUserRelation($groupRelation))
-        {
+        if (!$this->getGroupMembershipRepository()->deleteGroupUserRelation($groupRelation)) {
             throw new RuntimeException(
                 sprintf('Could not unsubscribe user %s from group %s', $user->getId(), $group->getId())
             );

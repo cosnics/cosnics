@@ -7,13 +7,12 @@ use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 /**
  * Manages resources, ensuring that they are only loaded when necessary.
  *
- * @package Chamilo\Libraries\Format\Utilities
+ * @package Chamilo\Libraries\Service\Resource
  * @author  Tim De Pauw
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ResourceManager
 {
-
     /**
      * @var string[]
      */
@@ -43,8 +42,7 @@ class ResourceManager
 
     public function getResourceHtml(string $path): string
     {
-        if ($this->hasResourceAlreadyBeenLoaded($path))
-        {
+        if ($this->hasResourceAlreadyBeenLoaded($path)) {
             return '';
         }
 
@@ -78,8 +76,7 @@ class ResourceManager
         preg_match('/[^.]*$/', $path, $matches);
         $extension = $matches[0];
 
-        switch (strtolower($extension))
-        {
+        switch (strtolower($extension)) {
             case 'css' :
                 return '<link rel="stylesheet" type="text/css" href="' . htmlspecialchars($path) . '?' .
                     $modificationTime . '"/>';

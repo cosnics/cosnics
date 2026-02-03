@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Protocol\Authentication\Architecture\Interface;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
- * @package Chamilo\Libraries\Authentication
+ * @package Chamilo\Libraries\Protocol\Authentication\Architecture\Interface
  */
 interface AuthenticationInterface
 {

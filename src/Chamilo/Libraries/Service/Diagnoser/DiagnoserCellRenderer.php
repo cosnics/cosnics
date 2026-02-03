@@ -5,11 +5,10 @@ use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Interface\SimpleTableCellRendererInterface;
 
 /**
- * @package Chamilo\Libraries\Support
+ * @package Chamilo\Libraries\Service\Diagnoser
  */
 class DiagnoserCellRenderer implements SimpleTableCellRendererInterface
 {
-
     public function getNamespace(): string
     {
         return StringUtilities::LIBRARIES;
@@ -35,8 +34,7 @@ class DiagnoserCellRenderer implements SimpleTableCellRendererInterface
     {
         $data = $data[$defaultProperty];
 
-        if (is_null($data))
-        {
+        if (is_null($data)) {
             $data = '-';
         }
 

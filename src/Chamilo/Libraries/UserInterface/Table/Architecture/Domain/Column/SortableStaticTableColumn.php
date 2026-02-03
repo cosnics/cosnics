@@ -1,17 +1,15 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column;
 
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\ConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
 
 /**
- * @package Chamilo\Libraries\Format\Table\Column
+ * @package Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class SortableStaticTableColumn extends AbstractSortableTableColumn
 {
-
     /**
      * @param string[] $headerCssClasses
      * @param string[] $contentCssClasses
@@ -23,7 +21,7 @@ class SortableStaticTableColumn extends AbstractSortableTableColumn
         parent::__construct($name, $title, true, $headerCssClasses, $contentCssClasses);
     }
 
-    public function getConditionVariable(): ConditionVariable
+    public function getConditionVariable(): StaticConditionVariable
     {
         return new StaticConditionVariable($this->getName(), false);
     }

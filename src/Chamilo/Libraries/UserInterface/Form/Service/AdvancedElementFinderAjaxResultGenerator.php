@@ -10,7 +10,7 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Interface\AdvancedElementF
 /**
  * Helper class to build an ajax result for an advanced element finder ajax feed
  *
- * @package Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax
+ * @package Chamilo\Libraries\UserInterface\Form\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class AdvancedElementFinderAjaxResultGenerator
@@ -25,7 +25,8 @@ class AdvancedElementFinderAjaxResultGenerator
     protected ?string $searchQuery;
 
     public function __construct(
-        AdvancedElementFinderAjaxResultDataProviderInterface $ajaxResultDataProvider, ?string $searchQuery = null, int $offset = 0
+        AdvancedElementFinderAjaxResultDataProviderInterface $ajaxResultDataProvider, ?string $searchQuery = null,
+        int $offset = 0
     )
     {
         $this->setSearchQuery($searchQuery)->setOffset($offset)->setAjaxResultDataProvider($ajaxResultDataProvider);
@@ -52,7 +53,8 @@ class AdvancedElementFinderAjaxResultGenerator
         return $this->ajaxResultDataProvider;
     }
 
-    public function setAjaxResultDataProvider(AdvancedElementFinderAjaxResultDataProviderInterface $ajaxResultDataProvider
+    public function setAjaxResultDataProvider(
+        AdvancedElementFinderAjaxResultDataProviderInterface $ajaxResultDataProvider
     ): AdvancedElementFinderAjaxResultGenerator
     {
         $this->ajaxResultDataProvider = $ajaxResultDataProvider;
@@ -67,8 +69,7 @@ class AdvancedElementFinderAjaxResultGenerator
 
     public function setOffset(int $offset = 0): AdvancedElementFinderAjaxResultGenerator
     {
-        if (empty($offset))
-        {
+        if (empty($offset)) {
             $offset = 0;
         }
 
@@ -84,8 +85,7 @@ class AdvancedElementFinderAjaxResultGenerator
     {
         $condition = null;
 
-        if (!empty($this->searchQuery))
-        {
+        if (!empty($this->searchQuery)) {
             $searchQueryConditionGenerator = new SearchQueryConditionGenerator();
             $condition = $searchQueryConditionGenerator->getSearchConditions($this->searchQuery, $searchProperties);
         }

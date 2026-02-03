@@ -7,7 +7,7 @@ use Chamilo\Libraries\Service\Utilities\StringUtilities;
  * This class extends Dataclass to provide auxiliary methods which allows using its subclasses as tree-structured data.
  * It is aimed to replace nested_tree_node and all ad hoc implementations.
  *
- * @package Chamilo\Libraries\Storage\DataClass
+ * @package Chamilo\Libraries\Storage\Architecture\Domain
  */
 abstract class NestedSet extends DataClass
 {
@@ -15,9 +15,7 @@ abstract class NestedSet extends DataClass
     public const AS_LAST_CHILD_OF = 2;
     public const AS_NEXT_SIBLING_OF = 4;
     public const AS_PREVIOUS_SIBLING_OF = 3;
-
     public const CONTEXT = StringUtilities::LIBRARIES;
-
     public const PROPERTY_LEFT_VALUE = 'left_value';
     public const PROPERTY_PARENT_ID = 'parent_id';
     public const PROPERTY_RIGHT_VALUE = 'right_value';
@@ -66,8 +64,8 @@ abstract class NestedSet extends DataClass
 
     public function isAncestorOf(NestedSet $nestedSet): bool
     {
-        if ($this->getLeftValue() < $nestedSet->getLeftValue() && $nestedSet->getRightValue() < $this->getRightValue())
-        {
+        if ($this->getLeftValue() < $nestedSet->getLeftValue() &&
+            $nestedSet->getRightValue() < $this->getRightValue()) {
             return true;
         }
 
@@ -76,8 +74,8 @@ abstract class NestedSet extends DataClass
 
     public function isDescendantOf(NestedSet $nestedSet): bool
     {
-        if ($this->getLeftValue() > $nestedSet->getLeftValue() && $nestedSet->getRightValue() > $this->getRightValue())
-        {
+        if ($this->getLeftValue() > $nestedSet->getLeftValue() &&
+            $nestedSet->getRightValue() > $this->getRightValue()) {
             return true;
         }
 

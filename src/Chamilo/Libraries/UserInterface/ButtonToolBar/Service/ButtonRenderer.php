@@ -24,7 +24,7 @@ class ButtonRenderer implements ButtonRendererInterface, ButtonRendererDisplayIn
         return $this->renderLink($button, $this->getDefaultButtonClasses());
     }
 
-    public function getButtonClass(): string
+    public function getButtonClassName(): string
     {
         return Button::class;
     }

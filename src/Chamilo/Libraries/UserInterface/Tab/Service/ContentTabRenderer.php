@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\UserInterface\Tab\Service;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ContentTab;
 
 /**
- * @package Chamilo\Libraries\Format\Tabs
+ * @package Chamilo\Libraries\UserInterface\Tab\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ContentTabRenderer

@@ -10,14 +10,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Console\Command
+ * @package Chamilo\Libraries\Protocol\Console\Architecture\Domain
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ClearCacheCommand extends ChamiloCommand
 {
     public const ARG_CACHE_ADAPTERS = 'cache_adapters';
-
     public const OPT_CLEAR = 'clear';
     public const OPT_CLEAR_SHORT = 'c';
     public const OPT_LIST = 'list';
@@ -31,13 +30,13 @@ class ClearCacheCommand extends ChamiloCommand
         parent::__construct($translator);
     }
 
-    protected function clear(InputInterface $input, OutputInterface $output)
+    protected function clear(InputInterface $input, OutputInterface $output): void
     {
         $this->symfonyCacheAdapterManager->clear($this->getSelectedCacheDataPreLoadServices($input));
         $output->writeln($this->translator->trans('CacheCleared', [], StringUtilities::LIBRARIES));
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('chamilo:cache:clear')->addOption(
             self::OPT_CLEAR, self::OPT_CLEAR_SHORT, InputOption::VALUE_NONE,
@@ -57,13 +56,11 @@ class ClearCacheCommand extends ChamiloCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($this->listCacheAdapters($input, $output))
-        {
+        if ($this->listCacheAdapters($input, $output)) {
             return 0;
         }
 
-        if ($input->getOption(self::OPT_CLEAR))
-        {
+        if ($input->getOption(self::OPT_CLEAR)) {
             $this->clear($input, $output);
         }
 
@@ -80,16 +77,14 @@ class ClearCacheCommand extends ChamiloCommand
 
     protected function listCacheAdapters(InputInterface $input, OutputInterface $output): bool
     {
-        if ($input->getOption(self::OPT_LIST))
-        {
+        if ($input->getOption(self::OPT_LIST)) {
             $output->writeln(
                 '<comment>' . $this->translator->trans('AvailableCacheAdapters', [], StringUtilities::LIBRARIES) .
                 '</comment>'
             );
             $output->writeln('');
 
-            foreach ($this->symfonyCacheAdapterManager->getCacheAdapterAliases() as $adapterAlias)
-            {
+            foreach ($this->symfonyCacheAdapterManager->getCacheAdapterAliases() as $adapterAlias) {
                 $output->writeln('<info>' . $adapterAlias . '</info>');
             }
 

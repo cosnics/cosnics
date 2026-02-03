@@ -7,11 +7,10 @@ use Stringy\Stringy;
 /**
  * QuickForm rule to check if a username is of the correct format
  *
- * @package Chamilo\Libraries\Format\Form\Rule
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule
  */
 class HTML_QuickForm_Rule_Username extends HTML_QuickForm_Rule
 {
-
     /**
      * Function to check if a username is of the correct format
      *

@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column;
 
 /**
- * @package Chamilo\Libraries\Format\Table\Column
+ * @package Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -31,13 +31,11 @@ abstract class TableColumn
         $this->name = $name;
         $this->title = $title;
 
-        if ($headerCssClasses)
-        {
+        if ($headerCssClasses) {
             $this->cssClasses[self::CSS_CLASSES_COLUMN_HEADER] = $headerCssClasses;
         }
 
-        if ($contentCssClasses)
-        {
+        if ($contentCssClasses) {
             $this->cssClasses[self::CSS_CLASSES_COLUMN_CONTENT] = $contentCssClasses;
         }
     }

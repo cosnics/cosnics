@@ -6,8 +6,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Selectable;
 
 /**
- * @package Chamilo\Libraries\Format\Tabs
- *
+ * @package Chamilo\Libraries\UserInterface\Tab\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  *
  * @psalm-template TKey of array-key
@@ -30,10 +29,8 @@ class TabsCollection extends ArrayCollection
 
     public function isValidIdentifier(string $tabIdentifierToValidate): bool
     {
-        foreach ($this->toArray() as $tab)
-        {
-            if ($tab->getIdentifier() == $tabIdentifierToValidate)
-            {
+        foreach ($this->toArray() as $tab) {
+            if ($tab->getIdentifier() == $tabIdentifierToValidate) {
                 return true;
             }
         }
@@ -53,8 +50,7 @@ class TabsCollection extends ArrayCollection
 
         $this->clear();
 
-        foreach ($tabs as $tab)
-        {
+        foreach ($tabs as $tab) {
             $this->add($tab);
         }
 

@@ -37,7 +37,7 @@ class MiniButtonToolBarRenderer extends AbstractButtonCollectionButtonRenderer i
         return implode(PHP_EOL, $html);
     }
 
-    public function getButtonClass(): string
+    public function getButtonClassName(): string
     {
         return MiniButtonToolBar::class;
     }

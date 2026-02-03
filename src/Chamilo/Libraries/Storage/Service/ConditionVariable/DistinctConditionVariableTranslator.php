@@ -2,17 +2,25 @@
 namespace Chamilo\Libraries\Storage\Service\ConditionVariable;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\DistinctConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionVariableTranslator;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
- * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable
+ * @package Chamilo\Libraries\Storage\Service\ConditionVariable
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DistinctConditionVariableTranslator extends ConditionVariableTranslator
+    implements ConditionVariableTranslatorInterface
 {
-    public const CONDITION_CLASS = DistinctConditionVariable::class;
+    public function getConditionVariableClassName(): string
+    {
+        return DistinctConditionVariable::class;
+    }
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     */
     public function translate(
         QueryBuilder $querybuilder, DistinctConditionVariable $distinctConditionVariable, ?bool $enableAliasing = true
     ): string
@@ -23,17 +31,14 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
 
         $distinctStrings = [];
 
-        if ($distinctConditionVariable->hasConditionVariables())
-        {
-            foreach ($distinctConditionVariable->get() as $conditionVariable)
-            {
-                $distinctStrings[] = $this->getConditionPartTranslatorService()->translate(
+        if ($distinctConditionVariable->hasConditionVariables()) {
+            foreach ($distinctConditionVariable->get() as $conditionVariable) {
+                $distinctStrings[] = $this->getConditionVariableTranslatorCollection()->translate(
                     $querybuilder, $conditionVariable, $enableAliasing
                 );
             }
         }
-        else
-        {
+        else {
             $strings[] = '*';
         }
 

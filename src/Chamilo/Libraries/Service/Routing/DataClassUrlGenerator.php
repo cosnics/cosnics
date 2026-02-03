@@ -5,7 +5,7 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 
 /**
- * @package Chamilo\Libraries\Architecture\Application\Routing
+ * @package Chamilo\Libraries\Service\Routing
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DataClassUrlGenerator
@@ -84,5 +84,4 @@ class DataClassUrlGenerator
     {
         return $this->urlGenerator;
     }
-
 }

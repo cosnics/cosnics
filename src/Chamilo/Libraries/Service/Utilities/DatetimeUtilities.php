@@ -9,12 +9,11 @@ use IntlDateFormatter;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Utilities
+ * @package Chamilo\Libraries\Service\Utilities
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DatetimeUtilities
 {
-
     private Translator $translator;
 
     public function __construct(Translator $translator)
@@ -27,13 +26,11 @@ class DatetimeUtilities
         ?string $locale = null, ?string $timezone = null
     ): string
     {
-        if (!$locale)
-        {
+        if (!$locale) {
             $locale = $this->getTranslator()->getLocale();
         }
 
-        if (!$timezone)
-        {
+        if (!$timezone) {
             $timezone = date_default_timezone_get();
         }
 
@@ -41,15 +38,13 @@ class DatetimeUtilities
             $locale, $dateFormat, $timeFormat, $timezone, IntlDateFormatter::GREGORIAN
         );
 
-        try
-        {
+        try {
             $dateTime = new DateTime('@' . $timeStamp);
             $dateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));
 
             return $formatter->format($dateTime);
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             return '';
         }
     }
@@ -62,13 +57,11 @@ class DatetimeUtilities
         $minutes = floor($rest / 60);
         $seconds = $rest % 60;
 
-        if ($minutes < 10)
-        {
+        if ($minutes < 10) {
             $minutes = '0' . $minutes;
         }
 
-        if ($seconds < 10)
-        {
+        if ($seconds < 10) {
             $seconds = '0' . $seconds;
         }
 
@@ -80,13 +73,11 @@ class DatetimeUtilities
         $minutes = floor($seconds / 60);
         $seconds = $seconds % 60;
 
-        if ($minutes < 10)
-        {
+        if ($minutes < 10) {
             $minutes = '0' . $minutes;
         }
 
-        if ($seconds < 10)
-        {
+        if ($seconds < 10) {
             $seconds = '0' . $seconds;
         }
 
@@ -95,19 +86,16 @@ class DatetimeUtilities
 
     public function getFormattedCurrentTimestamp(string $format = 'Y-m-d H:i:s.000', ?string $timezone = null): string
     {
-        if (!$timezone)
-        {
+        if (!$timezone) {
             $timezone = date_default_timezone_get();
         }
 
         $dateTime = new DateTime();
 
-        try
-        {
+        try {
             $dateTime = $dateTime->setTimezone(new DateTimeZone($timezone));
         }
-        catch (DateInvalidTimeZoneException)
-        {
+        catch (DateInvalidTimeZoneException) {
         }
 
         return $dateTime->format($format);

@@ -9,7 +9,7 @@ use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableResultPositio
  * This class represents an html table for an \ArrayIterator with the use of a column model, a data provider and a
  * cell renderer
  *
- * @package Chamilo\Libraries\Format\Table\Extension
+ * @package Chamilo\Libraries\UserInterface\Table\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop>
  */

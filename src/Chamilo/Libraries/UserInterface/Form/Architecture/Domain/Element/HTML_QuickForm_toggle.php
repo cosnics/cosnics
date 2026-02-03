@@ -5,7 +5,7 @@ use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTra
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 
 /**
- * @package Chamilo\Libraries\Format\Form\Element
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */

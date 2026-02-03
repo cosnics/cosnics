@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\UserInterface\Table\Service;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException;
 
 /**
- * @package Chamilo\Libraries\Format\Table
+ * @package Chamilo\Libraries\UserInterface\Table\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -23,8 +23,7 @@ class Pager
         $currentRangeStart = $this->getCurrentRangeStart($pageNumber, $numberOfItemsPerPage, $totalNumberOfItems);
         $calculatedRangeEnd = $currentRangeStart + $numberOfItemsPerPage - 1;
 
-        if ($calculatedRangeEnd > $totalNumberOfItems)
-        {
+        if ($calculatedRangeEnd > $totalNumberOfItems) {
             return $totalNumberOfItems;
         }
 
@@ -44,18 +43,15 @@ class Pager
      */
     public function getCurrentRangeStart(int $pageNumber, int $numberOfItemsPerPage, int $totalNumberOfItems): int
     {
-        try
-        {
+        try {
             $calculatedRangeStart =
                 $this->getPreviousRangeEnd($pageNumber, $numberOfItemsPerPage, $totalNumberOfItems) + 1;
         }
-        catch (InvalidPageNumberException)
-        {
+        catch (InvalidPageNumberException) {
             $calculatedRangeStart = 0;
         }
 
-        if ($calculatedRangeStart > $totalNumberOfItems)
-        {
+        if ($calculatedRangeStart > $totalNumberOfItems) {
             throw new InvalidPageNumberException();
         }
 
@@ -64,12 +60,10 @@ class Pager
 
     public function getNumberOfPages(int $numberOfItemsPerPage, int $totalNumberOfItems): int
     {
-        if ($numberOfItemsPerPage == Pager::DISPLAY_ALL)
-        {
+        if ($numberOfItemsPerPage == Pager::DISPLAY_ALL) {
             return 1;
         }
-        else
-        {
+        else {
             return (int) ceil(
                 $totalNumberOfItems / $numberOfItemsPerPage
             );
@@ -83,8 +77,7 @@ class Pager
     {
         $calculatedRangeEnd = ($pageNumber - 1) * $numberOfItemsPerPage;
 
-        if ($calculatedRangeEnd > $totalNumberOfItems)
-        {
+        if ($calculatedRangeEnd > $totalNumberOfItems) {
             throw new InvalidPageNumberException();
         }
 

@@ -29,7 +29,7 @@ class MiniButtonToolBar implements ButtonInterface, MiniButtonCollectionInterfac
         $this->setClasses($classes);
     }
 
-    public function getButtonRendererClass(): string
+    public function getButtonRendererClassName(): string
     {
         return MiniButtonToolBarRenderer::class;
     }

@@ -3,12 +3,10 @@ namespace Chamilo\Libraries\Storage\Architecture\Domain\Query;
 
 use Chamilo\Libraries\Protocol\Security\Architecture\Interface\HashableInterface;
 use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 
 /**
- * This class describes a storage unit you want to join with
- *
- * @package Chamilo\Libraries\Storage\Query
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -22,25 +20,27 @@ class Join implements HashableInterface
     public const TYPE_NORMAL = 1;
     public const TYPE_RIGHT = 3;
 
-    private ?Condition $condition;
+    private ?ConditionInterface $condition;
 
     private string $dataClassName;
 
     private int $type;
 
-    public function __construct(string $dataClassName, ?Condition $condition = null, ?int $type = self::TYPE_NORMAL)
+    public function __construct(
+        string $dataClassName, ?ConditionInterface $condition = null, ?int $type = self::TYPE_NORMAL
+    )
     {
         $this->dataClassName = $dataClassName;
         $this->condition = $condition;
         $this->type = $type;
     }
 
-    public function getCondition(): Condition
+    public function getCondition(): ConditionInterface
     {
         return $this->condition;
     }
 
-    public function setCondition(?Condition $condition = null): static
+    public function setCondition(?ConditionInterface $condition = null): static
     {
         $this->condition = $condition;
 

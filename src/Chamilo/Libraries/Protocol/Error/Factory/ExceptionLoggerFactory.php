@@ -13,12 +13,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 /**
  * Builds the exception logger(s) based on the given configuration file
  *
- * @package Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger
+ * @package Chamilo\Libraries\Protocol\Error\Factory
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class ExceptionLoggerFactory
 {
-
     protected array $errorHandlingConfiguration;
 
     protected SessionInterface $session;
@@ -57,8 +56,7 @@ class ExceptionLoggerFactory
     public function createExceptionLogger(): ExceptionLoggerInterface
     {
         $exceptionLoggerConfiguration = $this->errorHandlingConfiguration['exception_logger'];
-        if (count($exceptionLoggerConfiguration) == 0)
-        {
+        if (count($exceptionLoggerConfiguration) == 0) {
             return $this->createDefaultExceptionLogger();
         }
 
@@ -78,23 +76,19 @@ class ExceptionLoggerFactory
     {
         $exceptionLoggers = [];
 
-        foreach ($errorHandlingConfiguration['exception_logger'] as $exceptionLoggerAlias => $exceptionLoggerClass)
-        {
-            if (!class_exists($exceptionLoggerClass))
-            {
+        foreach ($errorHandlingConfiguration['exception_logger'] as $exceptionLoggerAlias => $exceptionLoggerClass) {
+            if (!class_exists($exceptionLoggerClass)) {
                 throw new Exception(
                     sprintf('The given exception logger class does not exist (%s)', $exceptionLoggerClass)
                 );
             }
 
             if (array_key_exists('exception_logger_builder', $errorHandlingConfiguration) &&
-                array_key_exists($exceptionLoggerAlias, $errorHandlingConfiguration['exception_logger_builder']))
-            {
+                array_key_exists($exceptionLoggerAlias, $errorHandlingConfiguration['exception_logger_builder'])) {
                 $exceptionLoggerBuilderClass =
                     $errorHandlingConfiguration['exception_logger_builder'][$exceptionLoggerAlias];
 
-                if (!class_exists($exceptionLoggerBuilderClass))
-                {
+                if (!class_exists($exceptionLoggerBuilderClass)) {
                     throw new Exception(
                         sprintf(
                             'The given exception logger builder class does not exist (%s)', $exceptionLoggerBuilderClass
@@ -107,8 +101,7 @@ class ExceptionLoggerFactory
                     $errorHandlingConfiguration['instances'][$exceptionLoggerBuilderClass]
                 );
 
-                if (!$exceptionLoggerBuilder instanceof ExceptionLoggerBuilderInterface)
-                {
+                if (!$exceptionLoggerBuilder instanceof ExceptionLoggerBuilderInterface) {
                     throw new Exception(
                         sprintf(
                             'The given exception logger builder must implement the ExceptionLoggerBuilderInterface (%s)',
@@ -119,13 +112,11 @@ class ExceptionLoggerFactory
 
                 $exceptionLogger = $exceptionLoggerBuilder->createExceptionLogger();
             }
-            else
-            {
+            else {
                 $exceptionLogger = new $exceptionLoggerClass();
             }
 
-            if (!$exceptionLogger instanceof ExceptionLoggerInterface)
-            {
+            if (!$exceptionLogger instanceof ExceptionLoggerInterface) {
                 throw new Exception(
                     sprintf(
                         'The given exception logger must implement the ExceptionLoggerInterface (%s)',
@@ -137,8 +128,7 @@ class ExceptionLoggerFactory
             $exceptionLoggers[] = $exceptionLogger;
         }
 
-        if (count($exceptionLoggers) == 1)
-        {
+        if (count($exceptionLoggers) == 1) {
             return $exceptionLoggers[0];
         }
 

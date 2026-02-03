@@ -6,12 +6,11 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedEle
 /**
  * Helper class to build an ajax result for an advanced element finder ajax feed
  *
- * @package Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Interface
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface AdvancedElementFinderAjaxResultDataProviderInterface
 {
-
     /**
      * @param \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElements $advancedElementFinderElements
      */

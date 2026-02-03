@@ -1,10 +1,11 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column;
 
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\ConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
 
 /**
- * @package Chamilo\Libraries\Format\Table\Column
+ * @package Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class AbstractSortableTableColumn extends TableColumn
@@ -25,7 +26,7 @@ abstract class AbstractSortableTableColumn extends TableColumn
         $this->sortable = $sortable;
     }
 
-    abstract public function getConditionVariable(): ConditionVariable;
+    abstract public function getConditionVariable(): StaticConditionVariable|PropertyConditionVariable;
 
     public function isSortable(): bool
     {

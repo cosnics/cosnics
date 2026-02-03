@@ -5,7 +5,7 @@ namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain;
  * The combination of options available for the FormValidatorHtmlEditor Should be implemented for each specific editor
  * to translate the generic option values
  *
- * @package Chamilo\Libraries\Format\Form
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain
  * @author  Scaramanga
  */
 class FormValidatorHtmlEditorOptions

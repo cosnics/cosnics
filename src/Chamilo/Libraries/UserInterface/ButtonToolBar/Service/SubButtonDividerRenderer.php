@@ -25,7 +25,7 @@ class SubButtonDividerRenderer implements ButtonRendererInterface
         return implode(PHP_EOL, $html);
     }
 
-    public function getButtonClass(): string
+    public function getButtonClassName(): string
     {
         return SubButtonDivider::class;
     }

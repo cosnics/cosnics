@@ -5,7 +5,7 @@ use Chamilo\Core\Admin\Service\DataLoader\StorageConfigurationCacheDataPreLoader
 use Chamilo\Core\Admin\Storage\DataClass\Setting;
 use Chamilo\Core\Admin\Storage\Repository\ConfigurationRepository;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Architecture\Trait\CacheAdapterHandlerTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
@@ -44,8 +44,7 @@ class ConfigurationService
     {
         if (!$this->clearCacheDataForAdapterAndKeyParts(
             $this->getStorageConfigurationCacheAdapter(), [StorageConfigurationCacheDataPreLoader::class]
-        ))
-        {
+        )) {
             return false;
         }
 
@@ -59,8 +58,7 @@ class ConfigurationService
      */
     public function createSetting(Setting $setting): bool
     {
-        if (!$this->getConfigurationRepository()->createSetting($setting))
-        {
+        if (!$this->getConfigurationRepository()->createSetting($setting)) {
             return false;
         }
 
@@ -94,24 +92,19 @@ class ConfigurationService
      */
     public function deleteSetting(Setting $setting): bool
     {
-        if (!$this->getConfigurationRepository()->deleteSetting($setting))
-        {
+        if (!$this->getConfigurationRepository()->deleteSetting($setting)) {
             return false;
         }
 
-        if (!$this->clearCache())
-        {
+        if (!$this->clearCache()) {
             return false;
         }
 
-        if ($setting->getUserSetting())
-        {
-            if (!$this->getUserService()->deleteUserSettingsForSettingIdentifier($setting->getId()))
-            {
+        if ($setting->getUserSetting()) {
+            if (!$this->getUserService()->deleteUserSettingsForSettingIdentifier($setting->getId())) {
                 return false;
             }
-            else
-            {
+            else {
                 return $this->clearAllCacheDataForAdapter($this->getUserSettingsCacheAdapter());
             }
         }
@@ -128,12 +121,10 @@ class ConfigurationService
     {
         $setting = $this->findSettingByContextAndVariableName($context, $variableName);
 
-        if (!$setting instanceof Setting)
-        {
+        if (!$setting instanceof Setting) {
             return false;
         }
-        else
-        {
+        else {
             return $this->deleteSetting($setting);
         }
     }
@@ -151,7 +142,7 @@ class ConfigurationService
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function findSettingContextsForCondition(?Condition $condition = null): array
+    public function findSettingContextsForCondition(?ConditionInterface $condition = null): array
     {
         return $this->getConfigurationRepository()->findSettingContextsForCondition($condition);
     }
@@ -182,8 +173,7 @@ class ConfigurationService
      */
     public function updateSetting(Setting $setting): bool
     {
-        if (!$this->getConfigurationRepository()->updateSetting($setting))
-        {
+        if (!$this->getConfigurationRepository()->updateSetting($setting)) {
             return false;
         }
 
@@ -203,18 +193,15 @@ class ConfigurationService
     {
         $setting = $this->findSettingByContextAndVariableName($context, $variable);
 
-        if (!$setting instanceof Setting)
-        {
+        if (!$setting instanceof Setting) {
             return false;
         }
 
-        if (!is_null($value))
-        {
+        if (!is_null($value)) {
             $setting->setValue($value);
         }
 
-        if (!is_null($isUserSetting))
-        {
+        if (!is_null($isUserSetting)) {
             $setting->setUserSetting((int) $isUserSetting);
         }
 

@@ -12,20 +12,20 @@ use Doctrine\Common\Collections\ArrayCollection;
 use HTML_Table;
 
 /**
- * @package Chamilo\Libraries\Format\Table
+ * @package Chamilo\Libraries\UserInterface\Table\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
 {
-
     /**
      * @param \Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn[] $tableColumns
      *
      * @throws \TableException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function render(
         array $tableColumns, ArrayCollection $tableRows, string $tableName, array $parameterNames,
@@ -34,8 +34,7 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
     {
         $htmlTable = new HTML_Table(['class' => $this->getTableClasses()], 0, true);
 
-        if ($parameterValues->getTotalNumberOfItems() == 0)
-        {
+        if ($parameterValues->getTotalNumberOfItems() == 0) {
             return $this->getEmptyTable($htmlTable);
         }
 
@@ -95,21 +94,18 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
         ?TableActions $tableActions = null
     ): static
     {
-        if ($tableActions instanceof TableActions && $tableActions->hasActions())
-        {
+        if ($tableActions instanceof TableActions && $tableActions->hasActions()) {
             $columnHeaderHtml =
                 '<div class="checkbox checkbox-primary"><input class="styled styled-primary sortableTableSelectToggle" type="checkbox" name="sortableTableSelectToggle" /><label></label></div>';
             $this->setColumnHeader($htmlTable, $parameterNames, $parameterValues, 0, 0, $columnHeaderHtml, false);
         }
 
-        foreach ($tableColumns as $key => $tableColumn)
-        {
+        foreach ($tableColumns as $key => $tableColumn) {
             $headerAttributes = [];
 
             $cssClasses = $tableColumn->getCssClasses();
 
-            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
-            {
+            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER])) {
                 $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
             }
 
@@ -137,26 +133,21 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
     {
         $header = $htmlTable->getHeader();
 
-        if ($isSortable)
-        {
+        if ($isSortable) {
             $currentOrderColumnIndex = $parameterValues->getOrderColumnIndex();
             $currentOrderColumnDirection = $parameterValues->getOrderColumnDirection();
 
-            if ($tableColumnIndex != $currentOrderColumnIndex)
-            {
+            if ($tableColumnIndex != $currentOrderColumnIndex) {
                 $currentOrderColumnIndex = $tableColumnIndex;
                 $currentOrderColumnDirection = SORT_ASC;
                 $glyph = '';
             }
-            else
-            {
-                if ($currentOrderColumnDirection == SORT_ASC)
-                {
+            else {
+                if ($currentOrderColumnDirection == SORT_ASC) {
                     $currentOrderColumnDirection = SORT_DESC;
                     $glyphType = 'chevron-down';
                 }
-                else
-                {
+                else {
                     $currentOrderColumnDirection = SORT_ASC;
                     $glyphType = 'chevron-up';
                 }
@@ -176,8 +167,7 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
             $content = '<a href="' . $this->getUrlGenerator()->fromRequest($queryParameters) . '">' . $label . '</a> ' .
                 $glyph;
         }
-        else
-        {
+        else {
             $content = $label;
         }
 

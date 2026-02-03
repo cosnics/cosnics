@@ -4,12 +4,11 @@ namespace Chamilo\Libraries\UserInterface\Tab\Architecture\Domain;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
 /**
- * @package Chamilo\Libraries\Format\Tabs
+ * @package Chamilo\Libraries\UserInterface\Tab\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ActionsTab extends GenericTab
 {
-
     /**
      * @var \Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\Action[]
      */

@@ -39,7 +39,7 @@ class DropDownButtonCollection implements ButtonInterface, ButtonDisplayInterfac
     /**
      * @return class-string<\Chamilo\Libraries\UserInterface\ButtonToolBar\Service\DropDownButtonRenderer>
      */
-    public function getButtonRendererClass(): string
+    public function getButtonRendererClassName(): string
     {
         return DropDownButtonRenderer::class;
     }

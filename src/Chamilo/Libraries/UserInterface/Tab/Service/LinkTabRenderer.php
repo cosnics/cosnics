@@ -6,7 +6,7 @@ use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Format\Tabs\Link
+ * @package Chamilo\Libraries\UserInterface\Tab\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LinkTabRenderer
@@ -27,8 +27,7 @@ class LinkTabRenderer
     {
         $classes = [];
 
-        if ($tab->isSelected())
-        {
+        if ($tab->isSelected()) {
             $classes[] = 'active';
         }
 
@@ -40,12 +39,10 @@ class LinkTabRenderer
         $link = [];
         $link[] = '<a';
 
-        if ($tab->getLink() && $tab->opensInWindow())
-        {
+        if ($tab->getLink() && $tab->opensInWindow()) {
             $link[] = 'href="' . $tab->getLink() . '"';
 
-            if ($tab->hasConfirmationMessage())
-            {
+            if ($tab->hasConfirmationMessage()) {
                 $link[] = 'onclick="return confirm(\'' . addslashes(
                         htmlentities(
                             $tab->getConfirmationMessage() === true ? $this->getTranslator()->trans(
@@ -55,12 +52,10 @@ class LinkTabRenderer
                     ) . '\');"';
             }
         }
-        elseif ($tab->getLink() && $tab->opensInPopup())
-        {
+        elseif ($tab->getLink() && $tab->opensInPopup()) {
             $link[] = 'href="" onclick="javascript:openPopup(\'' . $tab->getLink() . '\'); return false"';
         }
-        else
-        {
+        else {
             $link[] = 'style="cursor: default;"';
         }
 
@@ -68,13 +63,11 @@ class LinkTabRenderer
 
         $html[] = implode(' ', $link);
 
-        if ($tab->getInlineGlyph() && $tab->isIconVisible())
-        {
+        if ($tab->getInlineGlyph() && $tab->isIconVisible()) {
             $html[] = $tab->getInlineGlyph()->render();
         }
 
-        if ($tab->getLabel() && $tab->isTextVisible())
-        {
+        if ($tab->getLabel() && $tab->isTextVisible()) {
             $html[] = '<span class="title">' . $tab->getLabel() . '</span>';
         }
 

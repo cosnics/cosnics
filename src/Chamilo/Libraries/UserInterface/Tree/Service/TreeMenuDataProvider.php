@@ -7,7 +7,7 @@ use Closure;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @package Chamilo\Libraries\Format\Tree\Menu
+ * @package Chamilo\Libraries\UserInterface\Tree\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 abstract class TreeMenuDataProvider
@@ -16,8 +16,7 @@ abstract class TreeMenuDataProvider
         string $uriFormat, ?string $identifier, Closure $getIdentifier, Closure $getText, Closure $hasChildNodes
     ): array
     {
-        if (!$identifier)
-        {
+        if (!$identifier) {
             $rootDataClass = $this->getRootDataClass();
             $identifier = $getIdentifier($rootDataClass);
 
@@ -30,8 +29,7 @@ abstract class TreeMenuDataProvider
                 )
             ];
         }
-        else
-        {
+        else {
             return $this->processChildren($uriFormat, $identifier, $getIdentifier, $getText, $hasChildNodes);
         }
     }
@@ -68,8 +66,7 @@ abstract class TreeMenuDataProvider
         $childDataClasses = $this->getChildDataClasses($parentIdentifier);
         $childTreeNodes = [];
 
-        foreach ($childDataClasses as $childDataClass)
-        {
+        foreach ($childDataClasses as $childDataClass) {
             $childTreeNodes[] = $this->getTreeNode(
                 uriFormat: $uriFormat, identifier: $getIdentifier($childDataClass), text: $getText($childDataClass),
                 hasChildNodes: $hasChildNodes($childDataClass)

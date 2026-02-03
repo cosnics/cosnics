@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\Architecture\Domain;
 
 /**
- * @package Chamilo\Libraries\Storage\Implementations\Doctrine
+ * @package Chamilo\Libraries\Storage\Architecture\Domain
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -146,28 +146,23 @@ class DataSourceName
 
     public function isValid(): bool
     {
-        if (!$this->getDriver())
-        {
+        if (!$this->getDriver()) {
             return false;
         }
 
-        if (!$this->getUsername())
-        {
+        if (!$this->getUsername()) {
             return false;
         }
 
-        if (!$this->getHost())
-        {
+        if (!$this->getHost()) {
             return false;
         }
 
-        if (!$this->getDatabase())
-        {
+        if (!$this->getDatabase()) {
             return false;
         }
 
-        if (!$this->getCharset())
-        {
+        if (!$this->getCharset()) {
             return false;
         }
 

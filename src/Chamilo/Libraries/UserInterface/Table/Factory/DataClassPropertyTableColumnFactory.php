@@ -6,7 +6,7 @@ use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\DataClassPr
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Format\Table\Column
+ * @package Chamilo\Libraries\UserInterface\Table\Factory
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -27,8 +27,7 @@ class DataClassPropertyTableColumnFactory
         ?array $headerCssClasses = null, ?array $contentCssClasses = null
     ): DataClassPropertyTableColumn
     {
-        if (!$title)
-        {
+        if (!$title) {
             $title = $this->getTranslator()->trans(
                 $this->getStringUtilities()->createString($property)->upperCamelize()->__toString(), [],
                 $className::CONTEXT

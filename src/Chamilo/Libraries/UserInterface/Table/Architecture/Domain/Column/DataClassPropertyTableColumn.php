@@ -1,17 +1,15 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column;
 
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\ConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 
 /**
- * @package Chamilo\Libraries\Format\Table\Column
+ * @package Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DataClassPropertyTableColumn extends AbstractSortableTableColumn
 {
-
     private string $className;
 
     /**
@@ -40,7 +38,7 @@ class DataClassPropertyTableColumn extends AbstractSortableTableColumn
         return $this;
     }
 
-    public function getConditionVariable(): ConditionVariable
+    public function getConditionVariable(): PropertyConditionVariable
     {
         return new PropertyConditionVariable($this->getClassName(), $this->getName());
     }

@@ -22,22 +22,25 @@ class SymfonyCacheAdapterManager
         $this->cacheAdapters = [];
     }
 
-    public function addCacheAdapter(string $alias, AdapterInterface $cacheAdapter)
+    public function addCacheAdapter(string $alias, AdapterInterface $cacheAdapter): static
     {
         $this->cacheAdapters[$alias] = $cacheAdapter;
+
+        return $this;
     }
 
     /**
      * @param string[] $cacheAdapterAliases
      */
-    public function clear(array $cacheAdapterAliases = [])
+    public function clear(array $cacheAdapterAliases = []): static
     {
         $cacheAdapters = $this->getCacheAdaptersByAliases($cacheAdapterAliases);
 
-        foreach ($cacheAdapters as $cacheAdapter)
-        {
+        foreach ($cacheAdapters as $cacheAdapter) {
             $cacheAdapter->clear();
         }
+
+        return $this;
     }
 
     /**
@@ -65,29 +68,12 @@ class SymfonyCacheAdapterManager
     {
         $cacheAdapters = $this->getCacheAdapters();
 
-        if (empty($cacheAdapterAliases))
-        {
+        if (empty($cacheAdapterAliases)) {
             return $cacheAdapters;
         }
 
         return array_filter($cacheAdapters, function ($cacheAdapterAlias) use ($cacheAdapterAliases) {
-            return array_key_exists($cacheAdapterAlias, $cacheAdapterAliases);
+            return array_key_exists(get_class($cacheAdapterAlias), $cacheAdapterAliases);
         }, ARRAY_FILTER_USE_KEY);
-
-        //        $filteredCacheAdapters = [];
-        //
-        //        foreach ($cacheAdapterAliases as $cacheAdapterAlias)
-        //        {
-        //            if (!array_key_exists($cacheAdapterAlias, $cacheAdapters))
-        //            {
-        //                throw new InvalidArgumentException(
-        //                    sprintf('The given cache adapter alias %s does not exist', $cacheAdapterAlias)
-        //                );
-        //            }
-        //
-        //            $filteredCacheAdapters[$cacheAdapterAlias] = $cacheAdapters[$cacheAdapterAlias];
-        //        }
-        //
-        //        return $filteredCacheAdapters;
     }
 }

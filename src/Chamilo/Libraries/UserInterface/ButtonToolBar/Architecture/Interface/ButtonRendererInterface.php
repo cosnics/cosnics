@@ -7,5 +7,5 @@ namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface;
  */
 interface ButtonRendererInterface
 {
-    public function getButtonClass(): string;
+    public function getButtonClassName(): string;
 }

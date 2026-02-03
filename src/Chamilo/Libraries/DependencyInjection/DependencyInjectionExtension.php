@@ -6,7 +6,7 @@ use Chamilo\Libraries\DependencyInjection\CompilerPass\ButtonRendererCompilerPas
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheAdapterCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheDataPreLoaderCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
-use Chamilo\Libraries\DependencyInjection\CompilerPass\DoctrineConditionPartTranslatorCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\ConditionTranslatorCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\EventDispatcherCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\HashingCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\MailerCompilerPass;
@@ -23,8 +23,7 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     implements ExtensionInterface, ICompilerPassExtension
 {
-    use ExtensionTrait
-    {
+    use ExtensionTrait {
         load as public extentensionLoad;
     }
 
@@ -48,7 +47,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'platform.php',
                 'protocol.microsoft.php',
                 'storage.php',
-                'storage.doctrine.php',
                 'support.php',
                 'translation.php',
                 'utilities.php',
@@ -77,7 +75,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         $container->addCompilerPass(new CacheDataPreLoaderCompilerPass());
         $container->addCompilerPass(new CacheAdapterCompilerPass());
         $container->addCompilerPass(new AuthenticationCompilerPass());
-        $container->addCompilerPass(new DoctrineConditionPartTranslatorCompilerPass());
+        $container->addCompilerPass(new ConditionTranslatorCompilerPass());
         $container->addCompilerPass(new EventDispatcherCompilerPass());
         $container->addCompilerPass(new ButtonRendererCompilerPass());
     }

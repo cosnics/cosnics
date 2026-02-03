@@ -8,7 +8,7 @@ use ReflectionClass;
 /**
  * Extension on the HTML Quickform Checkbox element to support returnable values if the checkbox is not selected
  *
- * @package Chamilo\Libraries\Format\Form\Element
+ * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
@@ -46,8 +46,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
     {
         $value = $this->_findValue($submitValues);
 
-        if (null === $value)
-        {
+        if (null === $value) {
             $value = $this->getChecked() ? true : $this->returnValue;
         }
 
@@ -98,27 +97,22 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
      */
     public function onQuickFormEvent(string $event, mixed $arg, ?HTML_QuickForm $caller = null): bool
     {
-        switch ($event)
-        {
+        switch ($event) {
             case 'updateValue' :
                 // constant values override both default and submitted ones
                 // default values are overriden by submitted
                 $value = $this->_findValue($caller->getConstantValues());
-                if (null === $value)
-                {
+                if (null === $value) {
                     // if no boxes were checked, then there is no value in the array
                     // yet we don't want to display default value in this case
-                    if ($caller->isSubmitted())
-                    {
+                    if ($caller->isSubmitted()) {
                         $value = $this->_findValue($caller->getSubmitValues());
                     }
-                    else
-                    {
+                    else {
                         $value = $this->_findValue($caller->getDefaultValues());
                     }
                 }
-                if (null !== $value || $caller->isSubmitted())
-                {
+                if (null !== $value || $caller->isSubmitted()) {
                     $this->setChecked($value);
                 }
                 break;
@@ -129,16 +123,13 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
                 // do not use submit values for button-type elements
                 $type = $this->getType();
 
-                if ('submit' != $type && 'reset' != $type && 'image' != $type && 'button' != $type)
-                {
-                    switch ($event)
-                    {
+                if ('submit' != $type && 'reset' != $type && 'image' != $type && 'button' != $type) {
+                    switch ($event) {
                         case 'createElement' :
                             $class = new ReflectionClass($this);
                             $parameters = $class->getConstructor()->getParameters();
 
-                            foreach ($parameters as $key => $parameter)
-                            {
+                            foreach ($parameters as $key => $parameter) {
                                 $arg[$key] = is_null($arg[$key]) ?
                                     ($parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null) :
                                     $arg[$key];
@@ -154,15 +145,12 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
 
                     return true;
                 }
-                else
-                {
+                else {
                     $value = $this->_findValue($caller->getConstantValues());
-                    if (null === $value)
-                    {
+                    if (null === $value) {
                         $value = $this->_findValue($caller->getDefaultValues());
                     }
-                    if (null !== $value)
-                    {
+                    if (null !== $value) {
                         $this->setValue($value);
                     }
                 }
@@ -175,12 +163,10 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
 
     public function setChecked(?bool $checked): void
     {
-        if (!$checked)
-        {
+        if (!$checked) {
             $this->removeAttribute('checked');
         }
-        else
-        {
+        else {
             $this->updateAttributes(['checked' => 'checked']);
         }
     }
@@ -192,8 +178,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
 
     public function toHtml(): string
     {
-        if (!$this->isFrozen())
-        {
+        if (!$this->isFrozen()) {
             $html = [];
 
             $html[] = '<div class="' . $this->getCheckboxClasses() . '">';
@@ -208,16 +193,13 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
 
         $this->_generateId(); // Seems to be necessary when this is used in a group.
 
-        if (0 == strlen($this->_text))
-        {
+        if (0 == strlen($this->_text)) {
             $label = '';
         }
-        elseif ($this->_flagFrozen)
-        {
+        elseif ($this->_flagFrozen) {
             $label = $this->_text;
         }
-        else
-        {
+        else {
             $label = '<label for="' . $this->getAttribute('id') . '">' . $this->_text . '</label>';
         }
 

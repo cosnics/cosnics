@@ -1,16 +1,19 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable;
 
+use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
+use Chamilo\Libraries\Storage\Service\ConditionVariable\OperationConditionVariableTranslator;
+
 /**
- * A ConditionVariable that describes an operation on two other ConditionVariables
- *
- * @package Chamilo\Libraries\Storage\Query\Variable
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class OperationConditionVariable extends ConditionVariable
+class OperationConditionVariable implements ConditionVariableInterface
 {
+    use HashableTrait;
 
     public const ADDITION = 1;
     public const BITWISE_AND = 5;
@@ -19,14 +22,15 @@ class OperationConditionVariable extends ConditionVariable
     public const MINUS = 2;
     public const MULTIPLICATION = 3;
 
-    private ConditionVariable $leftConditionVariable;
+    private ConditionVariableInterface $leftConditionVariable;
 
     private int $operator;
 
-    private ConditionVariable $rightConditionVariable;
+    private ConditionVariableInterface $rightConditionVariable;
 
     public function __construct(
-        ConditionVariable $leftConditionVariable, int $operator, ConditionVariable $rightConditionVariable
+        ConditionVariableInterface $leftConditionVariable, int $operator,
+        ConditionVariableInterface $rightConditionVariable
     )
     {
         $this->leftConditionVariable = $leftConditionVariable;
@@ -34,21 +38,29 @@ class OperationConditionVariable extends ConditionVariable
         $this->rightConditionVariable = $rightConditionVariable;
     }
 
+    /**
+     * @return class-string<\Chamilo\Libraries\Storage\Service\ConditionVariable\OperationConditionVariableTranslator>
+     */
+    public function getConditionVariableTranslatorClass(): string
+    {
+        return OperationConditionVariableTranslator::class;
+    }
+
     public function getHashParts(): array
     {
-        $hashParts = ConditionVariable::getHashParts();
+        $hashParts = [];
+
+        $hashParts[] = static::class;
 
         $parts = [];
         $parts[] = $this->getLeftConditionVariable()->getHashParts();
         $parts[] = $this->getRightConditionVariable()->getHashParts();
 
-        if ($this->getOperator() != self::DIVISION)
-        {
+        if ($this->getOperator() != self::DIVISION) {
             sort($parts);
         }
 
-        foreach ($parts as $part)
-        {
+        foreach ($parts as $part) {
             $hashParts[] = $part;
         }
 
@@ -57,12 +69,12 @@ class OperationConditionVariable extends ConditionVariable
         return $hashParts;
     }
 
-    public function getLeftConditionVariable(): ConditionVariable
+    public function getLeftConditionVariable(): ConditionVariableInterface
     {
         return $this->leftConditionVariable;
     }
 
-    public function setLeftConditionVariable(ConditionVariable $leftConditionVariable): static
+    public function setLeftConditionVariable(ConditionVariableInterface $leftConditionVariable): static
     {
         $this->leftConditionVariable = $leftConditionVariable;
 
@@ -81,12 +93,12 @@ class OperationConditionVariable extends ConditionVariable
         return $this;
     }
 
-    public function getRightConditionVariable(): ConditionVariable
+    public function getRightConditionVariable(): ConditionVariableInterface
     {
         return $this->rightConditionVariable;
     }
 
-    public function setRightConditionVariable(ConditionVariable $rightConditionVariable): static
+    public function setRightConditionVariable(ConditionVariableInterface $rightConditionVariable): static
     {
         $this->rightConditionVariable = $rightConditionVariable;
 

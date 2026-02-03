@@ -10,9 +10,9 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Service\PropertyMapper;
 use Doctrine\Common\Collections\ArrayCollection;
 use InvalidArgumentException;
@@ -84,7 +84,7 @@ class GroupService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countGroups(?Condition $condition = null): int
+    public function countGroups(?ConditionInterface $condition = null): int
     {
         return $this->getGroupRepository()->countGroups($condition);
     }
@@ -94,8 +94,7 @@ class GroupService
      */
     public function createGroup(Group $group): bool
     {
-        if (!$this->getGroupRepository()->createGroup($group))
-        {
+        if (!$this->getGroupRepository()->createGroup($group)) {
             return false;
         }
 
@@ -114,13 +113,11 @@ class GroupService
 
         $deletedGroups = $this->getGroupRepository()->deleteGroup($group);
 
-        foreach ($deletedGroups as $deletedGroup)
-        {
+        foreach ($deletedGroups as $deletedGroup) {
             $subGroupIds[] = $deletedGroup->getId();
         }
 
-        if (!$this->getGroupMembershipService()->removeUsersFromGroupsByIdsAfterRemoval($subGroupIds))
-        {
+        if (!$this->getGroupMembershipService()->removeUsersFromGroupsByIdsAfterRemoval($subGroupIds)) {
             return false;
         }
 
@@ -135,15 +132,13 @@ class GroupService
      */
     public function findGroupByCode(string $groupCode): Group
     {
-        if (empty($groupCode))
-        {
+        if (empty($groupCode)) {
             throw new InvalidArgumentException('The given groupcode can not be empty');
         }
 
         $group = $this->groupRepository->findGroupByCode($groupCode);
 
-        if (!$group instanceof Group)
-        {
+        if (!$group instanceof Group) {
             throw new RuntimeException('Could not find the group with groupcode ' . $groupCode);
         }
 
@@ -155,24 +150,20 @@ class GroupService
      */
     public function findGroupByCodeAndParentIdentifier(string $groupCode, string $parentIdentifier): Group
     {
-        if (empty($groupCode))
-        {
+        if (empty($groupCode)) {
             throw new InvalidArgumentException('The given $groupCode can not be empty for group code ' . $groupCode);
         }
 
-        if (empty($parentIdentifier))
-        {
+        if (empty($parentIdentifier)) {
             throw new InvalidArgumentException(
                 'The given $parentIdentifier can not be empty for group code ' . $groupCode
             );
         }
 
-        try
-        {
+        try {
             return $this->groupRepository->findGroupByCodeAndParentIdentifier($groupCode, $parentIdentifier);
         }
-        catch (StorageNoResultException)
-        {
+        catch (StorageNoResultException) {
             throw new GroupNotFoundException(code: $groupCode, parentIdentifier: $parentIdentifier);
         }
     }
@@ -185,8 +176,7 @@ class GroupService
     {
         $group = $this->groupRepository->findGroupByIdentifier($groupIdentifier);
 
-        if (!$group instanceof Group)
-        {
+        if (!$group instanceof Group) {
             throw new RuntimeException('Could not find the group with identifier ' . $groupIdentifier);
         }
 
@@ -194,7 +184,7 @@ class GroupService
     }
 
     /**
-     * @param ?\Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\Condition $condition
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface $condition
      * @param ?int $offset
      * @param ?int $count
      * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy $orderBy
@@ -203,7 +193,7 @@ class GroupService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findGroups(
-        ?Condition $condition = null, ?int $offset = 0, ?int $count = - 1, OrderBy $orderBy = new OrderBy()
+        ?ConditionInterface $condition = null, ?int $offset = 0, ?int $count = - 1, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         return $this->getGroupRepository()->findGroups($condition, $count, $offset, $orderBy);
@@ -220,16 +210,14 @@ class GroupService
     {
         $groups = new ArrayCollection();
 
-        foreach ($groupIdentifiers as $groupIdentifier)
-        {
+        foreach ($groupIdentifiers as $groupIdentifier) {
             $group = $this->findGroupByIdentifier($groupIdentifier);
 
             $groups->add($group);
 
             $subgroups = $this->groupsTreeTraverser->findSubGroupsForGroup($group);
 
-            foreach ($subgroups as $subgroup)
-            {
+            foreach ($subgroups as $subgroup) {
                 $groups->add($subgroup);
             }
         }
@@ -245,8 +233,7 @@ class GroupService
      */
     public function findGroupsByIdentifiers(array $groupIdentifiers): ArrayCollection
     {
-        if (empty($groupIdentifiers))
-        {
+        if (empty($groupIdentifiers)) {
             return new ArrayCollection([]);
         }
 
@@ -288,8 +275,7 @@ class GroupService
     {
         $group = $this->groupRepository->findRootGroup();
 
-        if (!$group instanceof Group)
-        {
+        if (!$group instanceof Group) {
             throw new RuntimeException('Could not find the root group');
         }
 
@@ -326,8 +312,7 @@ class GroupService
         $oldParentGroup = $this->findGroupByIdentifier($group->getParentId());
         $newParentGroup = $this->findGroupByIdentifier($parentGroupIdentifier);
 
-        if (!$this->getGroupRepository()->moveGroup($group, $parentGroupIdentifier))
-        {
+        if (!$this->getGroupRepository()->moveGroup($group, $parentGroupIdentifier)) {
             return false;
         }
 
@@ -364,8 +349,7 @@ class GroupService
      */
     public function updateGroup(Group $group): bool
     {
-        if (!$this->getGroupRepository()->updateGroup($group))
-        {
+        if (!$this->getGroupRepository()->updateGroup($group)) {
             return false;
         }
 

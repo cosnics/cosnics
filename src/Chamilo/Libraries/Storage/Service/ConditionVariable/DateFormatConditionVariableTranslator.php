@@ -2,19 +2,27 @@
 namespace Chamilo\Libraries\Storage\Service\ConditionVariable;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\DateFormatConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionVariableTranslator;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
- * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Variable
+ * @package Chamilo\Libraries\Storage\Service\ConditionVariable
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
 class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
+    implements ConditionVariableTranslatorInterface
 {
-    public const CONDITION_CLASS = DateFormatConditionVariable::class;
+    public function getConditionVariableClassName(): string
+    {
+        return DateFormatConditionVariable::class;
+    }
 
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     */
     public function translate(
         QueryBuilder $querybuilder, DateFormatConditionVariable $dateFormatConditionVariable,
         ?bool $enableAliasing = true
@@ -26,19 +34,17 @@ class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
 
         $strings[] = '(';
 
-        $strings[] = $this->getConditionPartTranslatorService()->translate(
+        $strings[] = $this->getConditionVariableTranslatorCollection()->translate(
             $querybuilder, $dateFormatConditionVariable->getConditionVariable(), $enableAliasing
         );
         $strings[] = ', ';
         $strings[] = "'" . $dateFormatConditionVariable->getFormat() . "'";
         $strings[] = ')';
 
-        if ($dateFormatConditionVariable->getAlias())
-        {
+        if ($dateFormatConditionVariable->getAlias()) {
             return implode('', $strings) . ' AS ' . $dateFormatConditionVariable->getAlias();
         }
-        else
-        {
+        else {
             return implode('', $strings);
         }
     }

@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\UserInterface\Tab\Service;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 
 /**
- * @package Chamilo\Libraries\Format\Tabs\Link
+ * @package Chamilo\Libraries\UserInterface\Tab\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class LinkTabsRenderer
@@ -28,8 +28,7 @@ class LinkTabsRenderer
 
         $html[] = $this->renderHeader($tabs);
 
-        if ($content)
-        {
+        if ($content) {
             $html[] = $content;
         }
 
@@ -65,8 +64,7 @@ class LinkTabsRenderer
 
         $html[] = '<ul class="nav nav-tabs dynamic-visual-tabs">';
 
-        foreach ($tabs as $tab)
-        {
+        foreach ($tabs as $tab) {
             $html[] = $this->getLinkTabRenderer()->renderNavigation($tab);
         }
 

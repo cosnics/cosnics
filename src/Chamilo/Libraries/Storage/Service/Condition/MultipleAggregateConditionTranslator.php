@@ -6,38 +6,36 @@ use Chamilo\Libraries\Storage\Service\ConditionTranslator;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
- * @package Chamilo\Libraries\Storage\Implementations\Doctrine\Service\Query\Condition
+ * @package Chamilo\Libraries\Storage\Service\Condition
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
 abstract class MultipleAggregateConditionTranslator extends ConditionTranslator
 {
-
+    /**
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     */
     public function translate(
         QueryBuilder $querybuilder, MultipleAggregateCondition $multipleAggregateCondition, ?bool $enableAliasing = true
     ): string
     {
-        $string = '';
+        if (!empty($multipleAggregateCondition->getConditions())) {
+            $string = [];
 
-        $conditionTranslations = [];
+            foreach ($multipleAggregateCondition->getConditions() as $condition) {
+                $translation =
+                    $this->getConditionTranslatorCollection()->translate($querybuilder, $condition, $enableAliasing);
 
-        foreach ($multipleAggregateCondition->getConditions() as $condition)
-        {
-            $translation = $this->getConditionPartTranslatorService()->translate(
-                $querybuilder, $condition, $enableAliasing
-            );
+                if (!empty($translation)) {
+                    $string[] = $translation;
+                }
+            }
 
-            if (!empty($translation))
-            {
-                $conditionTranslations[] = $translation;
+            if (count($string) > 0) {
+                return '(' . implode($multipleAggregateCondition->getOperator(), $string) . ')';
             }
         }
 
-        if (count($conditionTranslations) > 0)
-        {
-            $string = '(' . implode($multipleAggregateCondition->getOperator(), $conditionTranslations) . ')';
-        }
-
-        return $string;
+        return '';
     }
 }

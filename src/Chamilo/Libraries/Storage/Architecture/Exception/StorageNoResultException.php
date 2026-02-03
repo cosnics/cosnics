@@ -5,7 +5,7 @@ use Chamilo\Libraries\Architecture\Exception\UserException;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 
 /**
- * @package Chamilo\Libraries\Storage\Exception
+ * @package Chamilo\Libraries\Storage\Architecture\Exception
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class StorageNoResultException extends UserException

@@ -1,16 +1,19 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable;
 
+use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
+use Chamilo\Libraries\Storage\Service\ConditionVariable\StaticConditionVariableTranslator;
+
 /**
- * A ConditionVariable that describes a static value
- *
- * @package Chamilo\Libraries\Storage\Query\Variable
+ * @package Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class StaticConditionVariable extends ConditionVariable
+class StaticConditionVariable implements ConditionVariableInterface
 {
+    use HashableTrait;
 
     private bool $quote;
 
@@ -22,14 +25,21 @@ class StaticConditionVariable extends ConditionVariable
         $this->quote = $quote;
     }
 
+    /**
+     * @return class-string<\Chamilo\Libraries\Storage\Service\ConditionVariable\StaticConditionVariableTranslator>
+     */
+    public function getConditionVariableTranslatorClass(): string
+    {
+        return StaticConditionVariableTranslator::class;
+    }
+
     public function getHashParts(): array
     {
-        $hashParts = ConditionVariable::getHashParts();
-
-        $hashParts[] = $this->getValue();
-        $hashParts[] = $this->getQuote();
-
-        return $hashParts;
+        return [
+            static::class,
+            $this->getValue(),
+            $this->getQuote()
+        ];
     }
 
     public function getQuote(): bool
