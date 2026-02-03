@@ -5,9 +5,6 @@ use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository;
-use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
-use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
-use Symfony\Component\Cache\Exception\CacheException;
 
 /**
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Service
@@ -16,7 +13,6 @@ use Symfony\Component\Cache\Exception\CacheException;
  */
 class UserService
 {
-
     protected UserRepository $userRepository;
 
     protected UserSettingService $userSettingService;
@@ -31,6 +27,7 @@ class UserService
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function getAndSaveUserIdentifier(User $user): ?string
     {
@@ -38,19 +35,12 @@ class UserService
             $user, 'Chamilo\Libraries', 'microsoft_graph_external_user_id'
         );
 
-        if (empty($userIdentifier))
-        {
+        if (empty($userIdentifier)) {
             $userIdentifier = $this->getUserIdentifier($user);
 
-            try
-            {
-                $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
-                    'Chamilo\Libraries', 'microsoft_graph_external_user_id', $user, $userIdentifier
-                );
-            }
-            catch (StorageMethodException|StorageNoResultException|CacheException)
-            {
-            }
+            $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
+                'Chamilo\Libraries', 'microsoft_graph_external_user_id', $user, $userIdentifier
+            );
         }
 
         return $userIdentifier;
@@ -71,8 +61,7 @@ class UserService
     {
         $graphUser = $this->getUser($user);
 
-        if (!$graphUser->getId())
-        {
+        if (!$graphUser->getId()) {
             throw new UserNotFoundException($user);
         }
 
@@ -88,5 +77,4 @@ class UserService
     {
         return $this->userSettingService;
     }
-
 }

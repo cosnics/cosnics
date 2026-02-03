@@ -55,6 +55,8 @@ abstract class Authentication implements AuthenticationInterface
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     protected function getUserFromCredentialsRequest(): ?User
     {

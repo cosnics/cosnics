@@ -65,6 +65,7 @@ abstract class AbstractTableRenderer
      * @throws \TableException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function render(
         TableParameterValues $parameterValues, ArrayCollection $tableData, ?string $tableName = null

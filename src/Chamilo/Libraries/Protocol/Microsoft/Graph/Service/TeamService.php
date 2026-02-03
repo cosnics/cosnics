@@ -71,8 +71,9 @@ class TeamService
      *
      * @return string
      * @throws UserNotFoundException
+     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      */
-    public function createTeamByName(User $owner, string $teamName)
+    public function createTeamByName(User $owner, string $teamName): string
     {
         $groupId = $this->groupService->createGroupByName($owner, $teamName);
 

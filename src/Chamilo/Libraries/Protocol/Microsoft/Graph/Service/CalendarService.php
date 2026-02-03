@@ -13,7 +13,6 @@ use Microsoft\Graph\Generated\Models\Calendar;
  */
 class CalendarService
 {
-
     protected CalendarRepository $calendarRepository;
 
     protected UserService $userService;
@@ -26,19 +25,18 @@ class CalendarService
 
     /**
      * @return \Microsoft\Graph\Generated\Models\Event[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function findEventsForCalendarIdentifierAndBetweenDates(
         User $user, string $calendarIdentifier, int $fromDate, int $toDate
     ): array
     {
-        try
-        {
+        try {
             return $this->getCalendarRepository()->findEventsForCalendarIdentifierAndBetweenDates(
                 $this->getUserIdentifier($user), $calendarIdentifier, $fromDate, $toDate
             );
         }
-        catch (UserNotFoundException)
-        {
+        catch (UserNotFoundException) {
             return [];
         }
     }
@@ -46,6 +44,7 @@ class CalendarService
     /**
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\CalendarNotFoundException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function getCalendarByIdentifier(string $calendarIdentifier, User $user): Calendar
     {
@@ -61,6 +60,7 @@ class CalendarService
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     protected function getUserIdentifier(User $user): ?string
     {
@@ -78,15 +78,14 @@ class CalendarService
 
     /**
      * @return \Microsoft\Graph\Generated\Models\Calendar[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function listOwnedCalendars(User $user): array
     {
-        try
-        {
+        try {
             return $this->getCalendarRepository()->listOwnedCalendars($this->getUserIdentifier($user));
         }
-        catch (UserNotFoundException)
-        {
+        catch (UserNotFoundException) {
             return [];
         }
     }

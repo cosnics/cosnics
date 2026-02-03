@@ -110,7 +110,7 @@ class QueryBuilderConfigurator
     ): void
     {
         foreach ($groupBy as $groupByVariable) {
-            $queryBuilder->addGroupBy($this->translateCondition($queryBuilder, $groupByVariable));
+            $queryBuilder->addGroupBy($this->translateConditionVariable($queryBuilder, $groupByVariable));
         }
     }
 
@@ -122,7 +122,7 @@ class QueryBuilderConfigurator
     ): void
     {
         if ($condition instanceof ConditionInterface) {
-            $queryBuilder->having($this->translateCondition($queryBuilder, $condition));
+            $queryBuilder->having($this->translateConditionVariable($queryBuilder, $condition));
         }
     }
 
@@ -195,7 +195,7 @@ class QueryBuilderConfigurator
     ): void
     {
         foreach ($properties as $conditionVariable) {
-            $queryBuilder->addSelect($this->translateCondition($queryBuilder, $conditionVariable));
+            $queryBuilder->addSelect($this->translateConditionVariable($queryBuilder, $conditionVariable));
         }
     }
 

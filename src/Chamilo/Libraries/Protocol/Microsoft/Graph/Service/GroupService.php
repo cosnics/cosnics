@@ -17,12 +17,10 @@ use RuntimeException;
  */
 class GroupService
 {
-
     /**
-     *
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
+     * @var ConfigurationConsulter
      */
-    protected $userService;
+    protected $configurationConsulter;
 
     /**
      *
@@ -31,9 +29,10 @@ class GroupService
     protected $groupRepository;
 
     /**
-     * @var ConfigurationConsulter
+     *
+     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
      */
-    protected $configurationConsulter;
+    protected $userService;
 
     /**
      * GroupService constructor
@@ -63,12 +62,10 @@ class GroupService
      */
     public function addMemberToGroup($groupId, User $user)
     {
-        if (!$this->isMemberOfGroup($groupId, $user))
-        {
+        if (!$this->isMemberOfGroup($groupId, $user)) {
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
 
-            if (empty($azureUserIdentifier))
-            {
+            if (empty($azureUserIdentifier)) {
                 throw new UserNotFoundException($user);
             }
 
@@ -88,12 +85,10 @@ class GroupService
      */
     public function addOwnerToGroup($groupId, User $user)
     {
-        if (!$this->isOwnerOfGroup($groupId, $user))
-        {
+        if (!$this->isOwnerOfGroup($groupId, $user)) {
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
 
-            if (empty($azureUserIdentifier))
-            {
+            if (empty($azureUserIdentifier)) {
                 throw new UserNotFoundException($user);
             }
 
@@ -115,8 +110,7 @@ class GroupService
     {
         $azureUserIdentifier = $this->getAzureUserIdentifier($owner);
 
-        if (empty($azureUserIdentifier))
-        {
+        if (empty($azureUserIdentifier)) {
             throw new UserNotFoundException($owner);
         }
 
@@ -136,8 +130,7 @@ class GroupService
      */
     public function createPlanForGroup($groupId, $planName = null)
     {
-        if (empty($planName))
-        {
+        if (empty($planName)) {
             $group = $this->groupRepository->getGroup($groupId);
             $planName = $group->getDisplayName();
         }
@@ -171,8 +164,7 @@ class GroupService
     {
         $groupPlans = $this->getGroupRepository()->listGroupPlans($groupId);
 
-        if (empty($groupPlans))
-        {
+        if (empty($groupPlans)) {
             return null;
         }
 
@@ -188,8 +180,7 @@ class GroupService
     public function getGroup(string $groupId): Group
     {
         $group = $this->groupRepository->getGroup($groupId);
-        if (!$group instanceof Group)
-        {
+        if (!$group instanceof Group) {
             throw new GroupNotExistsException($groupId);
         }
 
@@ -208,8 +199,7 @@ class GroupService
         $userIdentifiers = [];
 
         $groupMembers = $this->getGroupRepository()->listGroupMembers($groupId);
-        foreach ($groupMembers as $groupMember)
-        {
+        foreach ($groupMembers as $groupMember) {
             $userIdentifiers[] = $groupMember->getId();
         }
 
@@ -228,8 +218,7 @@ class GroupService
         $userIdentifiers = [];
 
         $groupOwners = $this->getGroupRepository()->listGroupOwners($groupId);
-        foreach ($groupOwners as $groupOwner)
-        {
+        foreach ($groupOwners as $groupOwner) {
             $userIdentifiers[] = $groupOwner->getId();
         }
 
@@ -247,8 +236,7 @@ class GroupService
     {
         $groupPlanIds = [];
 
-        foreach ($this->getGroupRepository()->listGroupPlans($groupId) as $groupPlan)
-        {
+        foreach ($this->getGroupRepository()->listGroupPlans($groupId) as $groupPlan) {
             $groupPlanIds[] = $groupPlan->getId();
         }
 
@@ -287,8 +275,7 @@ class GroupService
         );
 
         $group = $this->groupRepository->getGroup($groupId);
-        if (!$group instanceof Group)
-        {
+        if (!$group instanceof Group) {
             throw new RuntimeException(
                 'The group with identifier ' . $groupId . ' could not be found'
             );
@@ -308,8 +295,7 @@ class GroupService
     {
         $planId = $this->getDefaultGroupPlanId($groupId);
 
-        if (empty($planId))
-        {
+        if (empty($planId)) {
             $planId = $this->createPlanForGroup($groupId);
         }
 
@@ -337,17 +323,16 @@ class GroupService
     /**
      * Returns whether or not the given user is subscribed to the given group
      *
-     * @param integer $groupId
+     * @param int $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      */
     public function isMemberOfGroup($groupId, User $user)
     {
         $azureUserIdentifier = $this->getAzureUserIdentifier($user);
-        if (empty($azureUserIdentifier))
-        {
+        if (empty($azureUserIdentifier)) {
             return false;
         }
 
@@ -359,18 +344,17 @@ class GroupService
     /**
      * Returns whether or not the given user is subscribed to the given group
      *
-     * @param integer $groupId
+     * @param int $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return boolean
+     * @return bool
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      */
     public function isOwnerOfGroup($groupId, User $user)
     {
         $azureUserIdentifier = $this->getAzureUserIdentifier($user);
 
-        if (empty($azureUserIdentifier))
-        {
+        if (empty($azureUserIdentifier)) {
             return false;
         }
 
@@ -387,8 +371,7 @@ class GroupService
     public function removeAllMembersFromGroup($groupId)
     {
         $groupMembers = $this->getGroupMembers($groupId);
-        foreach ($groupMembers as $groupMember)
-        {
+        foreach ($groupMembers as $groupMember) {
             $this->getGroupRepository()->removeMemberFromGroup($groupId, $groupMember);
         }
     }
@@ -402,8 +385,7 @@ class GroupService
     {
         $groupOwners = $this->getGroupOwners($groupId);
 
-        foreach ($groupOwners as $groupOwner)
-        {
+        foreach ($groupOwners as $groupOwner) {
             $this->getGroupRepository()->removeOwnerFromGroup($groupId, $groupOwner);
         }
     }
@@ -419,8 +401,7 @@ class GroupService
      */
     public function removeMemberFromGroup($groupId, User $user)
     {
-        if ($this->isMemberOfGroup($groupId, $user))
-        {
+        if ($this->isMemberOfGroup($groupId, $user)) {
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
             $this->getGroupRepository()->removeMemberFromGroup($groupId, $azureUserIdentifier);
         }
@@ -437,8 +418,7 @@ class GroupService
      */
     public function removeOwnerFromGroup($groupId, User $user)
     {
-        if ($this->isOwnerOfGroup($groupId, $user))
-        {
+        if ($this->isOwnerOfGroup($groupId, $user)) {
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
             $this->getGroupRepository()->removeOwnerFromGroup($groupId, $azureUserIdentifier);
         }
@@ -455,7 +435,7 @@ class GroupService
     /**
      * Syncs the given users to the given groups. Optionally excluding some users from being removed
      *
-     * @param integer $groupId
+     * @param int $groupId
      * @param User[] $users
      * @param User[] | null $excludedUsersForRemoval
      *
@@ -464,8 +444,7 @@ class GroupService
     public function syncUsersToGroup($groupId, $users = [], $excludedUsersForRemoval = [])
     {
         $group = $this->groupRepository->getGroup($groupId);
-        if (!$group instanceof Group)
-        {
+        if (!$group instanceof Group) {
             throw new RuntimeException(
                 'The group with identifier ' . $groupId . ' could not be found'
             );
@@ -473,21 +452,17 @@ class GroupService
 
         $currentAzureUserIdentifiers = [];
 
-        foreach ($users as $user)
-        {
+        foreach ($users as $user) {
             $azureUserIdentifier = $this->userService->getAzureUserIdentifier($user);
-            if (!empty($azureUserIdentifier))
-            {
+            if (!empty($azureUserIdentifier)) {
                 $currentAzureUserIdentifiers[] = $azureUserIdentifier;
             }
         }
 
         $excludedUsersForRemovalIdentifiers = [];
-        foreach ($excludedUsersForRemoval as $user)
-        {
+        foreach ($excludedUsersForRemoval as $user) {
             $azureUserIdentifier = $this->userService->getAzureUserIdentifier($user);
-            if (!empty($azureUserIdentifier))
-            {
+            if (!empty($azureUserIdentifier)) {
                 $excludedUsersForRemovalIdentifiers[] = $azureUserIdentifier;
             }
         }
@@ -495,19 +470,16 @@ class GroupService
         $office365GroupMemberIdentifiers = $this->getGroupMembers($groupId);
 
         $usersToAdd = array_diff($currentAzureUserIdentifiers, $office365GroupMemberIdentifiers);
-        foreach ($usersToAdd as $userToAdd)
-        {
+        foreach ($usersToAdd as $userToAdd) {
             $this->groupRepository->subscribeMemberInGroup($groupId, $userToAdd);
         }
 
         $usersToRemove = array_diff($office365GroupMemberIdentifiers, $currentAzureUserIdentifiers);
-        if (!empty($excludedUsersForRemovalIdentifiers))
-        {
+        if (!empty($excludedUsersForRemovalIdentifiers)) {
             $usersToRemove = array_diff($usersToRemove, $excludedUsersForRemovalIdentifiers);
         }
 
-        foreach ($usersToRemove as $userToRemove)
-        {
+        foreach ($usersToRemove as $userToRemove) {
             $this->groupRepository->removeMemberFromGroup($groupId, $userToRemove);
         }
     }

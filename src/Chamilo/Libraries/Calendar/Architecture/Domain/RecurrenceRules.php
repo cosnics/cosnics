@@ -75,7 +75,7 @@ class RecurrenceRules
     /**
      * @param string[] $byDay
      */
-    public function setByDay(array $byDay)
+    public function setByDay(array $byDay): void
     {
         $this->byDay = $byDay;
     }
@@ -91,7 +91,7 @@ class RecurrenceRules
     /**
      * @param int[] $byMonth
      */
-    public function setByMonth(array $byMonth)
+    public function setByMonth(array $byMonth): void
     {
         $this->byMonth = $byMonth;
     }
@@ -107,7 +107,7 @@ class RecurrenceRules
     /**
      * @param int[] $byMonthDay
      */
-    public function setByMonthDay(array $byMonthDay)
+    public function setByMonthDay(array $byMonthDay): void
     {
         $this->byMonthDay = $byMonthDay;
     }
@@ -123,7 +123,7 @@ class RecurrenceRules
     /**
      * @param int[] $byWeekNumber
      */
-    public function setByWeekNumber(array $byWeekNumber)
+    public function setByWeekNumber(array $byWeekNumber): void
     {
         $this->byWeekNumber = $byWeekNumber;
     }
@@ -133,7 +133,7 @@ class RecurrenceRules
         return $this->count;
     }
 
-    public function setCount(?int $count)
+    public function setCount(?int $count): void
     {
         $this->count = $count;
     }
@@ -143,7 +143,7 @@ class RecurrenceRules
         return $this->frequency;
     }
 
-    public function setFrequency(?int $frequency)
+    public function setFrequency(?int $frequency): void
     {
         $this->frequency = $frequency;
     }
@@ -153,7 +153,7 @@ class RecurrenceRules
         return $this->interval;
     }
 
-    public function setInterval(?int $interval)
+    public function setInterval(?int $interval): void
     {
         $this->interval = $interval;
     }
@@ -163,7 +163,7 @@ class RecurrenceRules
         return $this->until;
     }
 
-    public function setUntil(?int $until)
+    public function setUntil(?int $until): void
     {
         $this->until = $until;
     }

@@ -54,6 +54,11 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
         return $this->eventDayRenderer;
     }
 
+    /**
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Exception
+     */
     public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
     {
         $calendarTableBuilder = $this->getDayCalendarTableBuilder();

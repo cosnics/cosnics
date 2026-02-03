@@ -44,8 +44,11 @@ class ICalCalendarRenderer extends CalendarRenderer
     /**
      * @throws \Exception
      */
-    private function addEvent(Event $providedEvent)
+    private function addEvent(Event $providedEvent): void
     {
+        /**
+         * @var \Sabre\VObject\Component\VEvent $event
+         */
         $event = $this->getCalendar()->add('VEVENT');
 
         $event->add(
@@ -122,7 +125,7 @@ class ICalCalendarRenderer extends CalendarRenderer
     /**
      * @throws \Exception
      */
-    private function addEvents(CalendarRendererProviderInterface $dataProvider)
+    private function addEvents(CalendarRendererProviderInterface $dataProvider): void
     {
         $providedEvents = $dataProvider->getEvents(
             strtotime('first day of 2 months ago midnight'), strtotime('last day of +6 months midnight')
@@ -139,7 +142,7 @@ class ICalCalendarRenderer extends CalendarRenderer
      * @author MicroEducate
      * @url https://microeducate.tech/generating-an-icalender-vtimezone-component-from-phps-timezone-value/
      */
-    private function addTimeZone()
+    private function addTimeZone(): void
     {
         $from = time();
         $to = $from;
@@ -216,7 +219,7 @@ class ICalCalendarRenderer extends CalendarRenderer
         return $this->calendar;
     }
 
-    public function setCalendar(VCalendar $calendar)
+    public function setCalendar(VCalendar $calendar): void
     {
         $this->calendar = $calendar;
     }

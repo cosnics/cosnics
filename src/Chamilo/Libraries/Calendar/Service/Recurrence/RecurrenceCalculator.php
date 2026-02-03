@@ -34,6 +34,7 @@ class RecurrenceCalculator
     /**
      * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      * @throws \Sabre\VObject\InvalidDataException
+     * @throws \Exception
      */
     public function expandEvents(): array
     {
@@ -104,7 +105,7 @@ class RecurrenceCalculator
         return $this->endTime;
     }
 
-    public function setEndTime(int $endTime)
+    public function setEndTime(int $endTime): void
     {
         $this->endTime = $endTime;
     }
@@ -122,7 +123,7 @@ class RecurrenceCalculator
         return $this->startTime;
     }
 
-    public function setStartTime(int $startTime)
+    public function setStartTime(int $startTime): void
     {
         $this->startTime = $startTime;
     }
@@ -137,7 +138,7 @@ class RecurrenceCalculator
     /**
      * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
      */
-    public function setEvent(array $events)
+    public function setEvent(array $events): void
     {
         $this->events = $events;
     }
