@@ -296,6 +296,7 @@ class ViewComponent extends Manager
      * @throws \QuickformException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     protected function renderTable(): string
     {

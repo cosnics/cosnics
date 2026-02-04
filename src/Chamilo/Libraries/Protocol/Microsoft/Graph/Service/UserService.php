@@ -8,8 +8,8 @@ use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository
 
 /**
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Service
- * @author  Sven Vanpoucke - Hogeschool Gent
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class UserService
 {
@@ -44,6 +44,26 @@ class UserService
         }
 
         return $userIdentifier;
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User[] $users
+     *
+     * @return string[]
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     */
+    public function getAzureUserIdentifiers(array $users): array
+    {
+        $azureIds = [];
+        foreach ($users as $user) {
+            $azureUserId = $this->getUserIdentifier($user);
+
+            if (!empty($azureUserId)) {
+                $azureIds[] = $azureUserId;
+            }
+        }
+
+        return $azureIds;
     }
 
     /**

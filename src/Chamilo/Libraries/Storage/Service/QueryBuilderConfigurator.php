@@ -122,7 +122,7 @@ class QueryBuilderConfigurator
     ): void
     {
         if ($condition instanceof ConditionInterface) {
-            $queryBuilder->having($this->translateConditionVariable($queryBuilder, $condition));
+            $queryBuilder->having($this->translateCondition($queryBuilder, $condition));
         }
     }
 

@@ -96,7 +96,7 @@ class ViewLogsComponent extends Manager
         );
         $form->addElement(
             HTML_QuickForm_html::class, $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Core\Admin') . 'LogViewer.js'
+            $this->getWebPathBuilder()->getJavascriptPath() . 'LogViewer.js'
         )
         );
 

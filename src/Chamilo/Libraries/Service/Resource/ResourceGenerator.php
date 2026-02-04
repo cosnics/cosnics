@@ -54,7 +54,6 @@ class ResourceGenerator
 
     /**
      * @return string[][]
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Exception
      */
     protected function aggregateResources(): array

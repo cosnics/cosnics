@@ -33,7 +33,6 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class DependencyInjectionContainerBuilder
 {
-
     private static ?ContainerInterface $container = null;
 
     private static ?DependencyInjectionContainerBuilder $instance = null;
@@ -71,8 +70,7 @@ class DependencyInjectionContainerBuilder
     {
         $this->setBuilder($builder);
 
-        if (is_null($cacheFile))
-        {
+        if (is_null($cacheFile)) {
             $cacheFile = $this->getDefaultCacheFilePath();
         }
 
@@ -83,8 +81,7 @@ class DependencyInjectionContainerBuilder
 
     protected function cacheContainer(ContainerBuilder $container, string $cacheFile): void
     {
-        if (!is_dir(dirname($cacheFile)))
-        {
+        if (!is_dir(dirname($cacheFile))) {
             $this->getFilesystem()->mkdir(dirname($cacheFile));
         }
 
@@ -99,23 +96,18 @@ class DependencyInjectionContainerBuilder
 
     /**
      * Creates and returns the default dependency injection container for Chamilo
-     *
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function createContainer(): ContainerInterface
     {
-        if (self::$container instanceof ContainerInterface)
-        {
+        if (self::$container instanceof ContainerInterface) {
             return self::$container;
         }
 
-        if (file_exists($this->cacheFile))
-        {
+        if (file_exists($this->cacheFile)) {
             require_once $this->cacheFile;
             $container = new $this->cacheClass();
         }
-        else
-        {
+        else {
             $container = $this->builder ?: new ContainerBuilder();
             $this->loadContainerExtensions($container);
             $container->compile();
@@ -130,8 +122,7 @@ class DependencyInjectionContainerBuilder
 
     protected function getClassnameUtilities(): ClassnameUtilities
     {
-        if (!isset($this->classnameUtilities))
-        {
+        if (!isset($this->classnameUtilities)) {
             $this->classnameUtilities = new ClassnameUtilities($this->getStringUtilities());
         }
 
@@ -140,8 +131,7 @@ class DependencyInjectionContainerBuilder
 
     protected function getConnectionFactory(): ConnectionFactory
     {
-        if (!isset($this->connectionFactory))
-        {
+        if (!isset($this->connectionFactory)) {
             $this->connectionFactory = new ConnectionFactory(
                 new DataSourceName(
                     $this->getFileConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'database'])
@@ -152,13 +142,9 @@ class DependencyInjectionContainerBuilder
         return $this->connectionFactory;
     }
 
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
     public function getContainerExtensionFinder(): ContainerExtensionFinderInterface
     {
-        if (!isset($this->containerExtensionFinder))
-        {
+        if (!isset($this->containerExtensionFinder)) {
             $packageNamespaces = $this->getPackageNamespaces();
 
             $this->containerExtensionFinder = new PackagesContainerExtensionFinder(
@@ -194,8 +180,7 @@ class DependencyInjectionContainerBuilder
 
     protected function getFileConfigurationConsulter(): ConfigurationConsulter
     {
-        if (!isset($this->fileConfigurationConsulter))
-        {
+        if (!isset($this->fileConfigurationConsulter)) {
             $this->fileConfigurationConsulter = new ConfigurationConsulter(
                 new FileConfigurationCacheDataPreLoader(new ArrayAdapter(), $this->getFileConfigurationLocator())
             );
@@ -206,8 +191,7 @@ class DependencyInjectionContainerBuilder
 
     protected function getFileConfigurationLocator(): FileConfigurationLocator
     {
-        if (!isset($this->fileConfigurationLocator))
-        {
+        if (!isset($this->fileConfigurationLocator)) {
             $this->fileConfigurationLocator = new FileConfigurationLocator($this->getSystemPathBuilder());
         }
 
@@ -216,8 +200,7 @@ class DependencyInjectionContainerBuilder
 
     protected function getFilesystem(): Filesystem
     {
-        if (!isset($this->filesystem))
-        {
+        if (!isset($this->filesystem)) {
             $this->filesystem = new Filesystem();
         }
 
@@ -226,8 +209,7 @@ class DependencyInjectionContainerBuilder
 
     public static function getInstance(): DependencyInjectionContainerBuilder
     {
-        if (!isset(self::$instance))
-        {
+        if (!isset(self::$instance)) {
             self::$instance = new static();
         }
 
@@ -247,7 +229,6 @@ class DependencyInjectionContainerBuilder
 
     /**
      * @return string[]
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function getPackageNamespaces(): array
     {
@@ -256,7 +237,6 @@ class DependencyInjectionContainerBuilder
 
     /**
      * @return string[]
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function getPackageNamespacesFromFilesystem(): array
     {
@@ -265,8 +245,7 @@ class DependencyInjectionContainerBuilder
 
     protected function getRequest(): ChamiloRequest
     {
-        if (!isset($this->request))
-        {
+        if (!isset($this->request)) {
             $this->request = ChamiloRequest::createFromGlobals();
         }
 
@@ -275,8 +254,7 @@ class DependencyInjectionContainerBuilder
 
     protected function getStringUtilities(): StringUtilities
     {
-        if (!isset($this->stringUtilities))
-        {
+        if (!isset($this->stringUtilities)) {
             $this->stringUtilities = new StringUtilities();
         }
 
@@ -285,8 +263,7 @@ class DependencyInjectionContainerBuilder
 
     protected function getSystemPathBuilder(): SystemPathBuilder
     {
-        if (!isset($this->systemPathBuilder))
-        {
+        if (!isset($this->systemPathBuilder)) {
             $this->systemPathBuilder = new SystemPathBuilder(
                 new ClassnameUtilities($this->getStringUtilities())
             );
@@ -297,8 +274,7 @@ class DependencyInjectionContainerBuilder
 
     protected function getWebPathBuilder(): WebPathBuilder
     {
-        if (!isset($this->webPathBuilder))
-        {
+        if (!isset($this->webPathBuilder)) {
             $this->webPathBuilder = new WebPathBuilder(
                 new ClassnameUtilities($this->getStringUtilities()), $this->getRequest()
             );
@@ -311,16 +287,13 @@ class DependencyInjectionContainerBuilder
      * Loads the extensions for the container
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function loadContainerExtensions(ContainerBuilder $container): void
     {
         $extensionClasses = $this->getContainerExtensionFinder()->findContainerExtensions();
         $extensions = [];
 
-        foreach ($extensionClasses as $extensionClass)
-        {
+        foreach ($extensionClasses as $extensionClass) {
             /** @var \Symfony\Component\DependencyInjection\Extension\ExtensionInterface $extension */
             $extension = new $extensionClass();
 
@@ -330,19 +303,14 @@ class DependencyInjectionContainerBuilder
             $extensions[] = $extension;
         }
 
-        foreach ($extensions as $extension)
-        {
-            if ($extension instanceof ICompilerPassExtension)
-            {
+        foreach ($extensions as $extension) {
+            if ($extension instanceof ICompilerPassExtension) {
                 /** @var ICompilerPassExtension $extension */
                 $extension->registerCompilerPasses($container);
             }
         }
     }
 
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
     public function rebuildContainer(
         ?ContainerBuilder $builder = null, ?ContainerExtensionFinderInterface $containerExtensionFinder = null,
         ?string $cacheFile = null, string $cacheClass = 'ChamiloContainer'
@@ -359,12 +327,10 @@ class DependencyInjectionContainerBuilder
 
     public function removeContainerCache(): void
     {
-        if (file_exists($this->cacheFile))
-        {
+        if (file_exists($this->cacheFile)) {
             $this->getFilesystem()->remove($this->cacheFile);
 
-            if (function_exists('opcache_invalidate'))
-            {
+            if (function_exists('opcache_invalidate')) {
                 opcache_invalidate($this->cacheFile);
             }
         }

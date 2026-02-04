@@ -56,6 +56,10 @@ class DayBlockRenderer extends BlockRenderer
         $this->calendarRendererProviderRepository = $calendarRendererProviderRepository;
     }
 
+    /**
+     * @throws \TableException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function displayContent(Element $block, ?User $user = null): string
     {
         $dataProvider = new CalendarRendererProvider(

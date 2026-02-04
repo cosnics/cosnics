@@ -6,6 +6,7 @@ use Chamilo\Libraries\Storage\Architecture\Interface\CacheDataPreLoaderInterface
 use Chamilo\Libraries\Storage\Architecture\Trait\SimpleCacheAdapterHandlerTrait;
 use Chamilo\Libraries\Storage\Architecture\Trait\SimpleCacheDataPreLoaderTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Cache\Exception\CacheException;
 
 /**
  * @package Chamilo\Core\Admin\Service
@@ -41,10 +42,14 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
 
     /**
      * @return \Chamilo\Core\Admin\Storage\DataClass\Package[]
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getPackages(): array
     {
-        return $this->loadCacheData();
+        try {
+            return $this->loadCacheData();
+        }
+        catch (CacheException) {
+            return $this->getDataForCache();
+        }
     }
 }

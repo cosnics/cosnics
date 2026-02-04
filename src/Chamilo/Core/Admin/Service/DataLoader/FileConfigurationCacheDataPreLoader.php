@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Architecture\Trait\SimpleCacheDataPreLoaderTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * @package Chamilo\Core\Admin\Service\DataLoader
@@ -34,12 +34,10 @@ class FileConfigurationCacheDataPreLoader implements CacheDataPreLoaderInterface
      */
     public function getDataForCache(): array
     {
-        if ($this->getFileConfigurationLocator()->isAvailable())
-        {
+        if ($this->getFileConfigurationLocator()->isAvailable()) {
             return $this->getFileSettings();
         }
-        else
-        {
+        else {
             return $this->getDefaultSettings();
         }
     }
@@ -51,7 +49,7 @@ class FileConfigurationCacheDataPreLoader implements CacheDataPreLoaderInterface
     protected function getDefaultSettings(): array
     {
         $fileContainer = new ContainerBuilder();
-        $xmlFileLoader = new XmlFileLoader(
+        $xmlFileLoader = new YamlFileLoader(
             $fileContainer, new FileLocator($this->getFileConfigurationLocator()->getDefaultFilePath())
         );
         $xmlFileLoader->load($this->getFileConfigurationLocator()->getDefaultFileName());
@@ -71,7 +69,7 @@ class FileConfigurationCacheDataPreLoader implements CacheDataPreLoaderInterface
     protected function getFileSettings(): array
     {
         $fileContainer = new ContainerBuilder();
-        $xmlFileLoader = new XmlFileLoader(
+        $xmlFileLoader = new YamlFileLoader(
             $fileContainer, new FileLocator($this->getFileConfigurationLocator()->getFilePath())
         );
         $xmlFileLoader->load($this->getFileConfigurationLocator()->getFileName());
@@ -111,8 +109,7 @@ class FileConfigurationCacheDataPreLoader implements CacheDataPreLoaderInterface
             ]
         ];
 
-        if ($fileContainer->hasParameter('chamilo.configuration.error_handling'))
-        {
+        if ($fileContainer->hasParameter('chamilo.configuration.error_handling')) {
             $settings[$this->getSettingsContext()]['error_handling'] = $fileContainer->getParameter(
                 'chamilo.configuration.error_handling'
             );

@@ -9,6 +9,7 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\Authenticat
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Exception;
+use Monolog\Logger;
 use phpCAS;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
@@ -21,6 +22,8 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class AbstractCasAuthentication extends Authentication implements AuthenticationInterface
 {
+    protected Logger $logger;
+
     protected SessionInterface $session;
 
     /**
@@ -30,12 +33,13 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
     public function __construct(
         ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
-        UserService $userService, SessionInterface $session
+        UserService $userService, SessionInterface $session, Logger $logger
     )
     {
         parent::__construct($configurationConsulter, $translator, $request, $userService);
 
         $this->session = $session;
+        $this->logger = $logger;
     }
 
     abstract protected function getCasUserIdentifierFromAttributes(string $casUser, array $casUserAttributes = []
@@ -91,7 +95,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
             // initialize phpCAS
             if ($settings['enable_log']) {
-                phpCAS::setDebug($settings['log']);
+                phpCAS::setLogger($this->logger);
             }
 
             $configurationConsulter = $this->getConfigurationConsulter();

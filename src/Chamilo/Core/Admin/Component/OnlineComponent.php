@@ -97,6 +97,7 @@ class OnlineComponent extends Manager
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     private function renderOnlineTable(): string
     {

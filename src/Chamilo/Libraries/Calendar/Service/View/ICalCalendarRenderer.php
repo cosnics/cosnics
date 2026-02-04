@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUndefinedFieldInspection */
 namespace Chamilo\Libraries\Calendar\Service\View;
 
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
@@ -144,71 +144,60 @@ class ICalCalendarRenderer extends CalendarRenderer
      */
     private function addTimeZone(): void
     {
-        $from = time();
-        $to = $from;
-
         try {
             $tz = new DateTimeZone(date_default_timezone_get());
 
-            // get all transitions for one year back/ahead
-            $year = 86400 * 360;
-            $transitions = $tz->getTransitions($from - $year, $to + $year);
+            $currentYear = (int) date('Y');
+            $startYear = $currentYear - 1;
+            $endYear = $currentYear + 10;
 
-            $vt = new Component($this->getCalendar(), 'VTIMEZONE');
-            $vt->TZID = $tz->getName();
+            // Create VTIMEZONE
+            /**
+             * @var \Sabre\VObject\Component\VTimezone $vtimezone
+             */
+            $vtimezone = new Component($this->getCalendar(), 'VTIMEZONE');
+            $vtimezone->TZID = date_default_timezone_get();
 
-            $std = null;
-            $dst = null;
+            // Collect transitions
+            $transitions = [];
+            for ($year = $startYear; $year <= $endYear; $year ++) {
+                $yearStart = new DateTime("$year-01-01", $tz);
+                $yearEnd = new DateTime(($year + 1) . '-01-01', $tz);
 
-            foreach ($transitions as $i => $trans) {
-                $cmp = null;
-
-                // skip the first entry...
-                if ($i == 0) {
-                    // ... but remember the offset for the next TZOFFSETFROM value
-                    $tzfrom = $trans['offset'] / 3600;
-                    continue;
-                }
-
-                // daylight saving time definition
-                if ($trans['isdst']) {
-                    $tDst = $trans['ts'];
-                    $dst = new Component($this->getCalendar(), 'DAYLIGHT');
-                    $cmp = $dst;
-                }
-                // standard time definition
-                else {
-                    $tStd = $trans['ts'];
-                    $std = new Component($this->getCalendar(), 'STANDARD');
-                    $cmp = $std;
-                }
-
-                if ($cmp) {
-                    $dt = new DateTime($trans['time']);
-                    $offset = $trans['offset'] / 3600;
-
-                    $cmp->DTSTART = $dt->format('Ymd\THis');
-                    $cmp->TZOFFSETFROM =
-                        sprintf('%s%02d%02d', $tzfrom >= 0 ? '+' : '', floor($tzfrom), ($tzfrom - floor($tzfrom)) * 60);
-                    $cmp->TZOFFSETTO =
-                        sprintf('%s%02d%02d', $offset >= 0 ? '+' : '', floor($offset), ($offset - floor($offset)) * 60);
-
-                    // add abbreviated timezone name if available
-                    if (!empty($trans['abbr'])) {
-                        $cmp->TZNAME = $trans['abbr'];
-                    }
-
-                    $tzfrom = $offset;
-                    $vt->add($cmp);
-                }
-
-                // we covered the entire date range
-                if ($std && $dst && min($tStd, $tDst) < $from && max($tStd, $tDst) > $to) {
-                    break;
+                foreach ($tz->getTransitions($yearStart->getTimestamp(), $yearEnd->getTimestamp()) as $t) {
+                    $transitions[] = $t;
                 }
             }
 
-            $this->getCalendar()->add($vt);
+            // Keep track of last offsets to properly set TZOFFSETFROM/TZOFFSETTO
+            $lastOffsets = [];
+
+            foreach ($transitions as $t) {
+                $dt = new DateTime($t['time'], $tz);
+                $isDST = $t['isdst'];
+                $name = $t['abbr'];
+
+                $offsetSeconds = $t['offset'];
+                $hours = floor(abs($offsetSeconds) / 3600);
+                $minutes = floor((abs($offsetSeconds) % 3600) / 60);
+                $sign = ($offsetSeconds >= 0 ? '+' : '-');
+                $tzoffset = sprintf('%s%02d%02d', $sign, $hours, $minutes);
+
+                // Determine previous offset
+                $previousOffset = end($lastOffsets) ?: $tzoffset;
+                $lastOffsets[] = $tzoffset;
+
+                $type = $isDST ? 'DAYLIGHT' : 'STANDARD';
+                $comp = new Component($this->getCalendar(), $type);
+                $comp->DTSTART = $dt->format('Ymd\THis');
+                $comp->TZOFFSETFROM = $previousOffset;
+                $comp->TZOFFSETTO = $tzoffset;
+                $comp->TZNAME = $name;
+
+                $vtimezone->add($comp);
+            }
+
+            $this->getCalendar()->add($vtimezone);
         }
         catch (Exception) {
         }

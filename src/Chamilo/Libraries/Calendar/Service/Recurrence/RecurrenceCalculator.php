@@ -83,7 +83,7 @@ class RecurrenceCalculator
         $toDateTime = new DateTime('@' . $this->getEndTime());
 
         $vCalendar = $vCalendar->expand($fromDateTime, $toDateTime);
-        $calculatedEvents = $vCalendar->VEVENT;
+        $calculatedEvents = $vCalendar->select('VEVENT');
 
         foreach ($calculatedEvents as $calculatedEvent) {
             $repeatEvent = clone $recurringEvents[$calculatedEvent->EVENTID->getValue()];

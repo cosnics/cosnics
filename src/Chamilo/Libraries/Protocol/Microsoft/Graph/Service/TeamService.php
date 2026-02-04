@@ -6,30 +6,19 @@ use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFou
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\TeamRepository;
 use Exception;
 use GuzzleHttp\Exception\ClientException;
-use Microsoft\Graph\Model\Group;
+use Microsoft\Graph\Generated\Models\Team;
 
 /**
- * Class TeamService
+ * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Service
+ * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TeamService
 {
-    /**
-     *
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService
-     */
-    protected $groupService;
+    protected GroupService $groupService;
 
-    /**
-     * @var TeamRepository
-     */
-    protected $teamRepository;
+    protected TeamRepository $teamRepository;
 
-    /**
-     * TeamService constructor.
-     *
-     * @param GroupService $groupService
-     * @param TeamRepository $teamRepository
-     */
     public function __construct(
         GroupService $groupService, TeamRepository $teamRepository
     )
@@ -38,69 +27,59 @@ class TeamService
         $this->teamRepository = $teamRepository;
     }
 
-    /**
-     * @param string $groupId
-     * @param int $retryCounter
-     */
-    public function addTeamToGroup(string $groupId, int $retryCounter = 0)
+    public function addTeamToGroup(string $groupId, int $retryCounter = 0): void
     {
-        // TODO queue implementation
-        try
-        {
-            $this->teamRepository->createTeam($groupId);
+        try {
+            $this->getTeamRepository()->createTeam($groupId);
         }
-        catch (ClientException $exception)
-        {
-            if ($exception->getCode() == 404 && $retryCounter < 3)
-            {
-                //group maybe not created due to replication delay
+        catch (Exception|ClientException $exception) {
+            if ($exception->getCode() == 404 && $retryCounter < 3) {
                 $retryCounter ++;
                 sleep(10);
                 $this->addTeamToGroup($groupId, $retryCounter);
             }
-            else
-            {
+            else {
                 throw $exception;
             }
         }
     }
 
     /**
-     * @param User $owner
-     * @param string $teamName
-     *
-     * @return string
      * @throws UserNotFoundException
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      */
     public function createTeamByName(User $owner, string $teamName): string
     {
-        $groupId = $this->groupService->createGroupByName($owner, $teamName);
+        $groupId = $this->getGroupService()->createGroupByName($owner, $teamName);
 
         $this->addTeamToGroup($groupId);
 
         return $groupId;
     }
 
-    public function getTeam(string $groupId)
+    public function getGroupService(): GroupService
     {
-        try
-        {
-            return $this->teamRepository->getTeam($groupId);
-        }
-        catch (Exception)
-        {
-            return null;
-        }
+        return $this->groupService;
     }
 
     /**
-     * @param Group $group
-     *
-     * @return string
+     * @throws \Exception
      */
-    public function getTeamUrl(Group $group)
+    public function getTeam(string $groupId): Team
     {
-        return $this->teamRepository->getUrl($group->getId());
+        return $this->getTeamRepository()->getTeam($groupId);
+    }
+
+    public function getTeamRepository(): TeamRepository
+    {
+        return $this->teamRepository;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function getTeamUrl(string $groupId): string
+    {
+        return $this->teamRepository->getUrl($groupId);
     }
 }

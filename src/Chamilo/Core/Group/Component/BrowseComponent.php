@@ -328,10 +328,6 @@ class BrowseComponent extends Manager
         return $this->getService(SubscribedUserTableRenderer::class);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     */
     public function getSubscribedUsersCondition(): ?AndCondition
     {
         return $this->getButtonToolBarSearchCondition(SubscribedUser::class);
@@ -358,6 +354,7 @@ class BrowseComponent extends Manager
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     protected function renderGroupTable(): string
     {
@@ -424,6 +421,7 @@ class BrowseComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     protected function renderSubscribedUsertable(): string
     {

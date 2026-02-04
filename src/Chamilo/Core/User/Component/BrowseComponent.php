@@ -103,6 +103,7 @@ class BrowseComponent extends Manager
      * @throws \QuickformException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     protected function renderTable(): string
     {

@@ -190,9 +190,9 @@ function openPopup(url, width, height) {
     }
 
     var settings = {
-        centerBrowser: 1, // center window over browser window? {1 (YES) or 0
+        centerBrowser: 1, // centre window over browser window? {1 (YES) or 0
         // (NO)}. overrides top and left
-        centerScreen: 0, // center window over entire screen? {1 (YES) or 0
+        centerScreen: 0, // centre window over entire screen? {1 (YES) or 0
         // (NO)}. overrides top and left
         height: height, // sets the height in pixels of the window.
         left: 0, // left position when the window appears.
@@ -299,13 +299,13 @@ function asort(inputArr, sort_flags) {
     // caching
     // % note 3: of property position; you can set the ini of
     // "phpjs.strictForIn" to true to
-    // % note 3: get the PHP behavior, but use this only if you are in an
+    // % note 3: get the PHP behaviour, but use this only if you are in an
     // environment
     // % note 3: such as Firefox extensions where for-in iteration order is
     // fixed and true
     // % note 3: property deletion is supported. Note that we intend to
     // implement the PHP
-    // % note 3: behavior by default if IE ever does allow it; only gives
+    // % note 3: behaviour by default if IE ever does allow it; only gives
     // shallow copy since
     // % note 3: is by reference in PHP anyways
     // % note 4: Since JS objects' keys are always strings, and (the
@@ -482,8 +482,8 @@ function str_replace(search, replace, subject, count) {
     // * example 1: str_replace(' ', '.', 'Kevin van Zonneveld');
     // * returns 1: 'Kevin.van.Zonneveld'
     // * example 2: str_replace(['{name}', 'l'], ['hello', 'm'], '{name},
-    // lars');
-    // * returns 2: 'hemmo, mars'
+    // lamp');
+    // * returns 2: 'hemmo, mamp'
     var i = 0, j = 0, temp = '', repl = '', sl = 0, fl = 0, f = [].concat(search), r = [].concat(replace), s = subject,
         ra = Object.prototype.toString
             .call(r) === '[object Array]', sa = Object.prototype.toString.call(s) === '[object Array]';

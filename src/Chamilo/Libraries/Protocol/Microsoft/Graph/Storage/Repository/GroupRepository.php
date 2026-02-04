@@ -1,11 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
-use GuzzleHttp\Exception\ClientException;
-use Microsoft\Graph\Model\Event;
-use Microsoft\Graph\Model\Group;
-use Microsoft\Graph\Model\PlannerPlan;
-use Microsoft\Graph\Model\User;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\GroupNotExistsException;
+use Exception;
+use Microsoft\Graph\Generated\Models\Group;
+use Microsoft\Graph\Generated\Models\PlannerPlan;
+use Microsoft\Graph\Generated\Models\ReferenceCreate;
+use Microsoft\Graph\Generated\Models\User;
+use Microsoft\Graph\GraphServiceClient;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -16,266 +18,285 @@ use Symfony\Component\Uid\Uuid;
  */
 class GroupRepository
 {
-    /**
-     * @var string
-     */
-    protected $cosnicsPrefix;
+    protected GraphServiceClient $graphServiceClient;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository
-     */
-    private $graphRepository;
+    protected string $platformPrefix;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository $graphRepository
-     * @param string $cosnicsPrefix
-     */
-    public function __construct(GraphRepository $graphRepository, $cosnicsPrefix = '')
+    public function __construct(GraphServiceClient $graphServiceClient, string $platformPrefix = '')
     {
-        $this->setGraphRepository($graphRepository);
-        $this->cosnicsPrefix = $cosnicsPrefix;
+        $this->platformPrefix = $platformPrefix;
+        $this->graphServiceClient = $graphServiceClient;
     }
 
     /**
-     * Creates a new group by a given name
-     *
-     * @param string $groupName
-     *
-     * @return \Microsoft\Graph\Model\Group | \Microsoft\Graph\Model\Entity
+     * @throws \Exception
      */
-    public function createGroup($groupName)
-    {
-        $groupData = [
-            'description' => $groupName,
-            'displayName' => $groupName,
-            'mailEnabled' => false,
-            'mailNickname' => str_replace(
-                '-', '_', $this->cosnicsPrefix . Uuid::v4()
-            ),
-            'groupTypes' => [
-                'Unified',
-            ],
-            'securityEnabled' => false,
-            'visibility' => 'private'
-        ];
-
-        return $this->getGraphRepository()->executePostWithAccessTokenExpirationRetry(
-            '/groups', $groupData, Group::class
-        );
-    }
-
-    /**
-     * Creates a new plan for a given group
-     *
-     * @param string $groupIdentifier
-     * @param string $planName
-     *
-     * @return \Microsoft\Graph\Model\Entity | \Microsoft\Graph\Model\PlannerPlan
-     */
-    public function createPlanForGroup($groupIdentifier, $planName)
-    {
-        return $this->getGraphRepository()->executePostWithDelegatedAccess(
-            '/planner/plans', ['owner' => $groupIdentifier, 'title' => $planName], PlannerPlan::class
-        );
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository
-     */
-    protected function getGraphRepository()
-    {
-        return $this->graphRepository;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository $graphRepository
-     */
-    protected function setGraphRepository(GraphRepository $graphRepository)
-    {
-        $this->graphRepository = $graphRepository;
-    }
-
-    /**
-     * Returns a group by a given identifier
-     *
-     * @param string $groupIdentifier
-     *
-     * @return \Microsoft\Graph\Model\Group | \Microsoft\Graph\Model\Entity
-     */
-    public function getGroup($groupIdentifier)
-    {
-        return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier, Group::class
-        );
-    }
-
-    /**
-     *
-     * @param string $groupId
-     * @param string $azureUserIdentifier
-     *
-     * @return \Microsoft\Graph\Model\User | \Microsoft\Graph\Model\Entity
-     */
-    public function getGroupMember($groupId, $azureUserIdentifier)
+    public function createGroup(string $groupName): Group
     {
         try {
-            return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-                '/groups/' . $groupId . '/members/' . $azureUserIdentifier, User::class
+            $group = new Group();
+            $group->setDescription($groupName);
+            $group->setDisplayName($groupName);
+            $group->setMailEnabled(false);
+            $group->setMailNickname(
+                str_replace('-', '_', $this->platformPrefix . Uuid::v4())
             );
-        }
-        catch (ClientException $exception) {
-            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND) {
-                return null;
+            $group->setGroupTypes(['Unified']);
+            $group->setSecurityEnabled(false);
+            $group->setVisibility('Private');
+
+            $createdGroup = $this->getGraphServiceClient()->groups()->post($group)->wait();
+
+            if (!$createdGroup instanceof Group) {
+                throw new Exception('Group (' . $groupName . ') not created');
             }
 
-            throw $exception;
+            return $createdGroup;
+        }
+        catch (Exception) {
+            throw new Exception('Group (' . $groupName . ') not created');
         }
     }
 
     /**
-     *
-     * @param string $groupId
-     * @param string $azureUserIdentifier
-     *
-     * @return \Microsoft\Graph\Model\User | \Microsoft\Graph\Model\Entity
+     * @throws \Exception
      */
-    public function getGroupOwner($groupId, $azureUserIdentifier)
+    public function createPlanForGroup(string $groupIdentifier, string $planName): ?PlannerPlan
     {
         try {
-            return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-                '/groups/' . $groupId . '/owners/' . $azureUserIdentifier, User::class
-            );
-        }
-        catch (ClientException $exception) {
-            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND) {
-                return null;
+            $plan = new PlannerPlan();
+            $plan->setOwner($groupIdentifier);
+            $plan->setTitle($planName);
+
+            $plannerPlan = $this->getGraphServiceClient()->planner()->plans()->post($plan)->wait();
+
+            if (!$plannerPlan instanceof PlannerPlan) {
+                throw new Exception('Plan (' . $planName . ') not be created for group (' . $groupIdentifier . ')');
             }
 
-            throw $exception;
+            return $plannerPlan;
+        }
+        catch (Exception) {
+            throw new Exception('Plan (' . $planName . ') not be created for group (' . $groupIdentifier . ')');
+        }
+    }
+
+    public function getGraphServiceClient(): GraphServiceClient
+    {
+        return $this->graphServiceClient;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\GroupNotExistsException
+     */
+    public function getGroup(string $groupIdentifier): Group
+    {
+        try {
+            $group = $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->get()->wait();
+
+            if (!$group instanceof Group) {
+                throw new GroupNotExistsException('Group not found: ' . $groupIdentifier);
+            }
+
+            return $group;
+        }
+        catch (Exception) {
+            throw new GroupNotExistsException('Group not found: ' . $groupIdentifier);
         }
     }
 
     /**
-     * Lists the owners of a given group
-     *
-     * @param string $groupIdentifier
-     *
-     * @return \Microsoft\Graph\Model\User[] | \Microsoft\Graph\Model\Entity
+     * @throws \Exception
      */
-    public function listGroupMembers($groupIdentifier)
+    public function getGroupMember(string $groupIdentifier, string $azureUserIdentifier): User
     {
-        return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier . '/members', User::class, true
-        );
+        try {
+            $user =
+                $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->members()->byDirectoryObjectId(
+                    $azureUserIdentifier
+                )->graphUser()->get()->wait();
+
+            if (!$user instanceof User) {
+                throw new Exception('Group member not found: ' . $groupIdentifier);
+            }
+
+            return $user;
+        }
+        catch (Exception) {
+            throw new Exception('Group member not found: ' . $groupIdentifier);
+        }
     }
 
     /**
-     * Lists the owners of a given group
-     *
-     * @param string $groupIdentifier
-     *
-     * @return \Microsoft\Graph\Model\User[] | \Microsoft\Graph\Model\Entity
+     * @throws \Exception
      */
-    public function listGroupOwners($groupIdentifier)
+    public function getGroupOwner(string $groupIdentifier, string $azureUserIdentifier): User
     {
-        return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier . '/owners', User::class, true
-        );
+        try {
+            $user =
+                $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->owners()->byDirectoryObjectId(
+                    $azureUserIdentifier
+                )->graphUser()->get()->wait();
+
+            if (!$user instanceof User) {
+                throw new Exception('Group owner not found: ' . $groupIdentifier);
+            }
+
+            return $user;
+        }
+        catch (Exception) {
+            throw new Exception('Group owner not found: ' . $groupIdentifier);
+        }
+    }
+
+    public function getPlatformPrefix(): string
+    {
+        return $this->platformPrefix;
     }
 
     /**
-     * Lists the plans for a given group
-     *
-     * @param string $groupIdentifier
-     *
-     * @return \Microsoft\Graph\Model\PlannerPlan[] | \Microsoft\Graph\Model\Entity
+     * @return array<\Microsoft\Graph\Generated\Models\User>
+     * @throws \Exception
      */
-    public function listGroupPlans($groupIdentifier)
+    public function listGroupMembers(string $groupIdentifier): array
     {
-        return $this->getGraphRepository()->executeGetWithDelegatedAccess(
-            '/groups/' . $groupIdentifier . '/planner/plans', PlannerPlan::class, true
-        );
+        try {
+            $groupMembers =
+                $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->members()->graphUser()->get()
+                    ->wait()->getValue();
+
+            if (!is_array($groupMembers)) {
+                throw new Exception('Group members not found: ' . $groupIdentifier);
+            }
+
+            return $groupMembers;
+        }
+        catch (Exception) {
+            throw new Exception('Group members not found: ' . $groupIdentifier);
+        }
     }
 
     /**
-     * Removes an owner from a given group
-     *
-     * @param string $groupIdentifier
-     * @param string $azureUserIdentifier
-     *
-     * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
+     * @return array<\Microsoft\Graph\Generated\Models\User>
+     * @throws \Exception
      */
-    public function removeMemberFromGroup($groupIdentifier, $azureUserIdentifier)
+    public function listGroupOwners(string $groupIdentifier): array
     {
-        return $this->getGraphRepository()->executeDeleteWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier . '/members/' . $azureUserIdentifier . '/$ref', Event::class
-        );
+        try {
+            $groupOwners =
+                $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->owners()->graphUser()->get()
+                    ->wait()->getValue();
+
+            if (!is_array($groupOwners)) {
+                throw new Exception('Group owners not found: ' . $groupIdentifier);
+            }
+
+            return $groupOwners;
+        }
+        catch (Exception) {
+            throw new Exception('Group owners not found: ' . $groupIdentifier);
+        }
     }
 
     /**
-     * Removes an owner from a given group
-     *
-     * @param string $groupIdentifier
-     * @param string $azureUserIdentifier
-     *
-     * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
+     * @return array<\Microsoft\Graph\Generated\Models\PlannerPlan>
+     * @throws \Exception
      */
-    public function removeOwnerFromGroup($groupIdentifier, $azureUserIdentifier)
+    public function listGroupPlans(string $groupIdentifier): array
     {
-        return $this->getGraphRepository()->executeDeleteWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier . '/owners/' . $azureUserIdentifier . '/$ref', Event::class
-        );
+        try {
+            $plannerPlans =
+                $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->planner()->plans()->get()->wait()
+                    ->getValue();
+
+            if (!is_array($plannerPlans)) {
+                throw new Exception('Group plans not found: ' . $groupIdentifier);
+            }
+
+            return $plannerPlans;
+        }
+        catch (Exception) {
+            throw new Exception('Group plans not found: ' . $groupIdentifier);
+        }
     }
 
-    /**
-     *
-     * @param string $groupIdentifier
-     * @param string $azureUserIdentifier
-     *
-     * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
-     */
-    public function subscribeMemberInGroup($groupIdentifier, $azureUserIdentifier)
+    public function removeMemberFromGroup(string $groupIdentifier, string $azureUserIdentifier): bool
     {
-        return $this->getGraphRepository()->executePostWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier . '/members/$ref',
-            ['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $azureUserIdentifier], Event::class
-        );
+        try {
+            $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->members()->byDirectoryObjectId(
+                $azureUserIdentifier
+            )->ref()->delete();
+
+            return true;
+        }
+        catch (Exception) {
+            return false;
+        }
     }
 
-    /**
-     * Subscribes an owner to a group
-     *
-     * @param string $groupIdentifier
-     * @param string $azureUserIdentifier
-     *
-     * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
-     */
-    public function subscribeOwnerInGroup($groupIdentifier, $azureUserIdentifier)
+    public function removeOwnerFromGroup(string $groupIdentifier, string $azureUserIdentifier): bool
     {
-        return $this->getGraphRepository()->executePostWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier . '/owners/$ref',
-            ['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $azureUserIdentifier], Event::class
-        );
+        try {
+            $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->owners()->byDirectoryObjectId(
+                $azureUserIdentifier
+            )->ref()->delete();
+
+            return true;
+        }
+        catch (Exception) {
+            return false;
+        }
     }
 
-    /**
-     * Updates a group name by a given identifier
-     *
-     * @param string $groupIdentifier
-     * @param string $groupName
-     *
-     * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
-     */
-    public function updateGroup($groupIdentifier, $groupName)
+    public function subscribeMemberInGroup(string $groupIdentifier, string $azureUserIdentifier): bool
     {
-        $groupData = ['description' => $groupName, 'displayName' => $groupName];
+        try {
+            $reference = new ReferenceCreate();
+            $reference->setOdataId(
+                'https://graph.microsoft.com/v1.0/users/' . $azureUserIdentifier
+            );
 
-        return $this->getGraphRepository()->executePatchWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier, $groupData, Event::class
-        );
+            $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->members()->ref()->post($reference)
+                ->wait();
+
+            return true;
+        }
+        catch (Exception) {
+            return false;
+        }
+    }
+
+    public function subscribeOwnerInGroup(string $groupIdentifier, string $azureUserIdentifier): bool
+    {
+        try {
+            $reference = new ReferenceCreate();
+            $reference->setOdataId(
+                'https://graph.microsoft.com/v1.0/users/' . $azureUserIdentifier
+            );
+
+            $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->owners()->ref()->post($reference)
+                ->wait();
+
+            return true;
+        }
+        catch (Exception) {
+            return false;
+        }
+    }
+
+    public function updateGroup(string $groupIdentifier, string $groupName): bool
+    {
+        try {
+            $group = new Group();
+            $group->setDescription($groupName);
+            $group->setDisplayName($groupName);
+
+            $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->patch($group);
+
+            return true;
+        }
+        catch (Exception) {
+            return false;
+        }
     }
 }

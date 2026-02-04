@@ -6,61 +6,37 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\GroupNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
-use Microsoft\Graph\Model\Group;
+use Exception;
+use Microsoft\Graph\Generated\Models\Group;
 use RuntimeException;
 
 /**
- *
- * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
+ * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Service
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class GroupService
 {
-    /**
-     * @var ConfigurationConsulter
-     */
-    protected $configurationConsulter;
+    protected ConfigurationConsulter $configurationConsulter;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository
-     */
-    protected $groupRepository;
+    protected GroupRepository $groupRepository;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
-     */
-    protected $userService;
+    protected UserService $userService;
 
-    /**
-     * GroupService constructor
-     *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService $userService
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository $groupRepository
-     * @param \Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter $configurationConsulter
-     */
     public function __construct(
         UserService $userService, GroupRepository $groupRepository, ConfigurationConsulter $configurationConsulter
     )
     {
-        $this->setUserService($userService);
-        $this->setGroupRepository($groupRepository);
-        $this->setConfigurationConsulter($configurationConsulter);
+        $this->userService = $userService;
+        $this->groupRepository = $groupRepository;
+        $this->configurationConsulter = $configurationConsulter;
     }
 
     /**
-     * Adds a member to a group.
-     * Checking if the user is already subscribed or not.
-     *
-     * @param string $groupId
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
      */
-    public function addMemberToGroup($groupId, User $user)
+    public function addMemberToGroup(string $groupId, User $user): bool
     {
         if (!$this->isMemberOfGroup($groupId, $user)) {
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
@@ -69,21 +45,17 @@ class GroupService
                 throw new UserNotFoundException($user);
             }
 
-            $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
+            return $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
         }
+
+        return true;
     }
 
     /**
-     * Adds a owner to a group.
-     * Checking if the user is already subscribed or not.
-     *
-     * @param string $groupId
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
      */
-    public function addOwnerToGroup($groupId, User $user)
+    public function addOwnerToGroup(string $groupId, User $user): bool
     {
         if (!$this->isOwnerOfGroup($groupId, $user)) {
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
@@ -92,21 +64,18 @@ class GroupService
                 throw new UserNotFoundException($user);
             }
 
-            $this->getGroupRepository()->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
+            return $this->getGroupRepository()->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
         }
+
+        return true;
     }
 
     /**
-     * Creates a group by a given name
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $owner
-     * @param string $groupName
-     *
-     * @return string
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Exception
      */
-    public function createGroupByName(User $owner, $groupName)
+    public function createGroupByName(User $owner, string $groupName): ?string
     {
         $azureUserIdentifier = $this->getAzureUserIdentifier($owner);
 
@@ -121,14 +90,9 @@ class GroupService
     }
 
     /**
-     * Creates a new plan for a given group
-     *
-     * @param string $groupId
-     * @param string $planName
-     *
-     * @return string
+     * @throws \Exception
      */
-    public function createPlanForGroup($groupId, $planName = null)
+    public function createPlanForGroup(string $groupId, ?string $planName = null): string
     {
         if (empty($planName)) {
             $group = $this->groupRepository->getGroup($groupId);
@@ -141,26 +105,23 @@ class GroupService
     }
 
     /**
-     * Returns the identifier in azure active directory for a given user
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return string
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
      */
-    protected function getAzureUserIdentifier(User $user)
+    protected function getAzureUserIdentifier(User $user): ?string
     {
-        return $this->getUserService()->getAzureUserIdentifier($user);
+        return $this->getUserService()->getAndSaveUserIdentifier($user);
+    }
+
+    public function getConfigurationConsulter(): ConfigurationConsulter
+    {
+        return $this->configurationConsulter;
     }
 
     /**
-     * Returns the first plan identifier of a given group
-     *
-     * @param string $groupId
-     *
-     * @return string
+     * @throws \Exception
      */
-    public function getDefaultGroupPlanId($groupId)
+    public function getDefaultGroupPlanId(string $groupId): ?string
     {
         $groupPlans = $this->getGroupRepository()->listGroupPlans($groupId);
 
@@ -172,29 +133,19 @@ class GroupService
     }
 
     /**
-     * @param string $groupId
-     *
-     * @return Group
-     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\GroupNotExistsException
+     * @throws \Exception
      */
     public function getGroup(string $groupId): Group
     {
-        $group = $this->groupRepository->getGroup($groupId);
-        if (!$group instanceof Group) {
-            throw new GroupNotExistsException($groupId);
-        }
-
-        return $group;
+        return $this->groupRepository->getGroup($groupId);
     }
 
     /**
-     * Returns a list of external user identifiers that are subscribed as member in an Azure AD group
-     *
-     * @param string $groupId
-     *
      * @return string[]
+     * @throws \Exception
      */
-    public function getGroupMembers($groupId)
+    public function getGroupMembers(string $groupId): array
     {
         $userIdentifiers = [];
 
@@ -207,13 +158,10 @@ class GroupService
     }
 
     /**
-     * Returns a list of external user identifiers that are subscribed as owner in an Azure AD group
-     *
-     * @param string $groupId
-     *
      * @return string[]
+     * @throws \Exception
      */
-    public function getGroupOwners($groupId)
+    public function getGroupOwners(string $groupId): array
     {
         $userIdentifiers = [];
 
@@ -226,13 +174,10 @@ class GroupService
     }
 
     /**
-     * Returns a list of all the plan identifiers of a given group
-     *
-     * @param string $groupId
-     *
      * @return string[]
+     * @throws \Exception
      */
-    public function getGroupPlanIds($groupId)
+    public function getGroupPlanIds(string $groupId): array
     {
         $groupPlanIds = [];
 
@@ -243,55 +188,29 @@ class GroupService
         return $groupPlanIds;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository
-     */
-    protected function getGroupRepository()
+    protected function getGroupRepository(): GroupRepository
     {
         return $this->groupRepository;
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository $groupRepository
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\GroupNotExistsException
      */
-    protected function setGroupRepository(GroupRepository $groupRepository)
-    {
-        $this->groupRepository = $groupRepository;
-    }
-
-    /**
-     * Returns the URI for the given group
-     *
-     * @param string $groupId
-     *
-     * @return string
-     */
-    public function getGroupUrl($groupId)
+    public function getGroupUrl(string $groupId): string
     {
         $groupUrl = $this->configurationConsulter->getSetting(
             ['Chamilo\Libraries', 'microsoft_graph_group_base_uri']
         );
 
         $group = $this->groupRepository->getGroup($groupId);
-        if (!$group instanceof Group) {
-            throw new RuntimeException(
-                'The group with identifier ' . $groupId . ' could not be found'
-            );
-        }
 
         return str_replace('{GROUP_ID}', $group->getMailNickname(), $groupUrl);
     }
 
     /**
-     * Returns or creates a new plan based on a given group
-     *
-     * @param string $groupId
-     *
-     * @return string
+     * @throws \Exception
      */
-    public function getOrCreatePlanIdForGroup($groupId)
+    public function getOrCreatePlanIdForGroup(string $groupId): string
     {
         $planId = $this->getDefaultGroupPlanId($groupId);
 
@@ -302,196 +221,167 @@ class GroupService
         return $planId;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
-     */
-    protected function getUserService()
+    protected function getUserService(): UserService
     {
         return $this->userService;
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService $userService
-     */
-    protected function setUserService(UserService $userService)
-    {
-        $this->userService = $userService;
-    }
-
-    /**
-     * Returns whether or not the given user is subscribed to the given group
-     *
-     * @param int $groupId
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
+     * @throws \Exception
      */
-    public function isMemberOfGroup($groupId, User $user)
+    public function isMemberOfGroup(string $groupId, User $user): bool
     {
         $azureUserIdentifier = $this->getAzureUserIdentifier($user);
         if (empty($azureUserIdentifier)) {
             return false;
         }
 
-        $groupMember = $this->getGroupRepository()->getGroupMember($groupId, $azureUserIdentifier);
+        try {
+            $this->getGroupRepository()->getGroupMember($groupId, $azureUserIdentifier);
 
-        return $groupMember instanceof \Microsoft\Graph\Model\User;
-    }
-
-    /**
-     * Returns whether or not the given user is subscribed to the given group
-     *
-     * @param int $groupId
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return bool
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
-     */
-    public function isOwnerOfGroup($groupId, User $user)
-    {
-        $azureUserIdentifier = $this->getAzureUserIdentifier($user);
-
-        if (empty($azureUserIdentifier)) {
+            return true;
+        }
+        catch (Exception) {
             return false;
         }
+    }
 
-        $groupOwner = $this->getGroupRepository()->getGroupOwner($groupId, $azureUserIdentifier);
+    public function isOwnerOfGroup(string $groupId, User $user): bool
+    {
+        try {
+            $azureUserIdentifier = $this->getAzureUserIdentifier($user);
 
-        return $groupOwner instanceof \Microsoft\Graph\Model\User;
+            if (empty($azureUserIdentifier)) {
+                return false;
+            }
+
+            $this->getGroupRepository()->getGroupOwner($groupId, $azureUserIdentifier);
+
+            return true;
+        }
+        catch (Exception) {
+            return false;
+        }
     }
 
     /**
-     * Removes all the members from a given group
-     *
-     * @param string $groupId
+     * @throws \Exception
      */
-    public function removeAllMembersFromGroup($groupId)
+    public function removeAllMembersFromGroup($groupId): bool
     {
         $groupMembers = $this->getGroupMembers($groupId);
         foreach ($groupMembers as $groupMember) {
-            $this->getGroupRepository()->removeMemberFromGroup($groupId, $groupMember);
+            if (!$this->getGroupRepository()->removeMemberFromGroup($groupId, $groupMember)) {
+                return false;
+            }
         }
+
+        return true;
     }
 
     /**
-     * Removes all the owners from a given group
-     *
-     * @param string $groupId
+     * @throws \Exception
      */
-    public function removeAllOwnersFromGroup($groupId)
+    public function removeAllOwnersFromGroup(string $groupId): bool
     {
         $groupOwners = $this->getGroupOwners($groupId);
 
         foreach ($groupOwners as $groupOwner) {
-            $this->getGroupRepository()->removeOwnerFromGroup($groupId, $groupOwner);
+            if (!$this->getGroupRepository()->removeOwnerFromGroup($groupId, $groupOwner)) {
+                return false;
+            }
         }
+
+        return true;
     }
 
     /**
-     * Removes a member from a group.
-     * Checking if the user is subscribed or not.
-     *
-     * @param string $groupId
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      */
-    public function removeMemberFromGroup($groupId, User $user)
+    public function removeMemberFromGroup(string $groupId, User $user): bool
     {
         if ($this->isMemberOfGroup($groupId, $user)) {
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
-            $this->getGroupRepository()->removeMemberFromGroup($groupId, $azureUserIdentifier);
+
+            return $this->getGroupRepository()->removeMemberFromGroup($groupId, $azureUserIdentifier);
         }
+
+        return false;
     }
 
     /**
-     * Removes a owner from a group.
-     * Checking if the user is subscribed or not.
-     *
-     * @param string $groupId
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      */
-    public function removeOwnerFromGroup($groupId, User $user)
+    public function removeOwnerFromGroup(string $groupId, User $user): bool
     {
         if ($this->isOwnerOfGroup($groupId, $user)) {
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
-            $this->getGroupRepository()->removeOwnerFromGroup($groupId, $azureUserIdentifier);
+
+            return $this->getGroupRepository()->removeOwnerFromGroup($groupId, $azureUserIdentifier);
         }
+
+        return false;
     }
 
     /**
-     * @param ConfigurationConsulter $configurationConsulter
+     * @param string $groupId
+     * @param array<\Chamilo\Core\User\Storage\DataClass\User> $users
+     * @param ?array<\Chamilo\Core\User\Storage\DataClass\User> $excludedUsersForRemoval
+     *
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Exception
      */
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter)
+    public function syncUsersToGroup(string $groupId, array $users = [], ?array $excludedUsersForRemoval = []): void
     {
-        $this->configurationConsulter = $configurationConsulter;
-    }
+        try {
+            $this->getGroupRepository()->getGroup($groupId);
 
-    /**
-     * Syncs the given users to the given groups. Optionally excluding some users from being removed
-     *
-     * @param int $groupId
-     * @param User[] $users
-     * @param User[] | null $excludedUsersForRemoval
-     *
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
-     */
-    public function syncUsersToGroup($groupId, $users = [], $excludedUsersForRemoval = [])
-    {
-        $group = $this->groupRepository->getGroup($groupId);
-        if (!$group instanceof Group) {
+            $currentAzureUserIdentifiers = [];
+
+            foreach ($users as $user) {
+                $azureUserIdentifier = $this->getUserService()->getUserIdentifier($user);
+                if (!empty($azureUserIdentifier)) {
+                    $currentAzureUserIdentifiers[] = $azureUserIdentifier;
+                }
+            }
+
+            $excludedUsersForRemovalIdentifiers = [];
+            foreach ($excludedUsersForRemoval as $user) {
+                $azureUserIdentifier = $this->getUserService()->getUserIdentifier($user);
+                if (!empty($azureUserIdentifier)) {
+                    $excludedUsersForRemovalIdentifiers[] = $azureUserIdentifier;
+                }
+            }
+
+            $office365GroupMemberIdentifiers = $this->getGroupMembers($groupId);
+
+            $usersToAdd = array_diff($currentAzureUserIdentifiers, $office365GroupMemberIdentifiers);
+            foreach ($usersToAdd as $userToAdd) {
+                $this->groupRepository->subscribeMemberInGroup($groupId, $userToAdd);
+            }
+
+            $usersToRemove = array_diff($office365GroupMemberIdentifiers, $currentAzureUserIdentifiers);
+            if (!empty($excludedUsersForRemovalIdentifiers)) {
+                $usersToRemove = array_diff($usersToRemove, $excludedUsersForRemovalIdentifiers);
+            }
+
+            foreach ($usersToRemove as $userToRemove) {
+                $this->groupRepository->removeMemberFromGroup($groupId, $userToRemove);
+            }
+        }
+        catch (GroupNotExistsException) {
             throw new RuntimeException(
                 'The group with identifier ' . $groupId . ' could not be found'
             );
         }
-
-        $currentAzureUserIdentifiers = [];
-
-        foreach ($users as $user) {
-            $azureUserIdentifier = $this->userService->getAzureUserIdentifier($user);
-            if (!empty($azureUserIdentifier)) {
-                $currentAzureUserIdentifiers[] = $azureUserIdentifier;
-            }
-        }
-
-        $excludedUsersForRemovalIdentifiers = [];
-        foreach ($excludedUsersForRemoval as $user) {
-            $azureUserIdentifier = $this->userService->getAzureUserIdentifier($user);
-            if (!empty($azureUserIdentifier)) {
-                $excludedUsersForRemovalIdentifiers[] = $azureUserIdentifier;
-            }
-        }
-
-        $office365GroupMemberIdentifiers = $this->getGroupMembers($groupId);
-
-        $usersToAdd = array_diff($currentAzureUserIdentifiers, $office365GroupMemberIdentifiers);
-        foreach ($usersToAdd as $userToAdd) {
-            $this->groupRepository->subscribeMemberInGroup($groupId, $userToAdd);
-        }
-
-        $usersToRemove = array_diff($office365GroupMemberIdentifiers, $currentAzureUserIdentifiers);
-        if (!empty($excludedUsersForRemovalIdentifiers)) {
-            $usersToRemove = array_diff($usersToRemove, $excludedUsersForRemovalIdentifiers);
-        }
-
-        foreach ($usersToRemove as $userToRemove) {
-            $this->groupRepository->removeMemberFromGroup($groupId, $userToRemove);
-        }
     }
 
-    /**
-     * Updates the name of a group
-     *
-     * @param string $groupId
-     * @param string $groupName
-     */
-    public function updateGroupName($groupId, $groupName)
+    public function updateGroupName(string $groupId, string $groupName): bool
     {
-        $this->getGroupRepository()->updateGroup($groupId, $groupName);
+        return $this->getGroupRepository()->updateGroup($groupId, $groupName);
     }
 }

@@ -13,12 +13,12 @@ interface CalendarExtensionActionProviderInterface
 {
 
     /**
-     * @return \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButtonToolBarItem[]
+     * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface[]
      */
     public function getAdditional(Application $application): array;
 
     /**
-     * @return \Chamilo\Libraries\UserInterface\ActionBar\Architecture\Domain\AbstractButtonToolBarItem[]
+     * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface[]
      */
     public function getPrimary(Application $application): array;
 }

@@ -10,7 +10,6 @@ use Microsoft\Graph\GraphServiceClient;
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @TODO Fix class
  */
 class UserRepository
 {

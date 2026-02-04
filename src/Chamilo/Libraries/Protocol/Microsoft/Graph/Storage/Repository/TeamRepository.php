@@ -1,7 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Model\Team;
+use Exception;
+use Microsoft\Graph\Generated\Models\Team;
+use Microsoft\Graph\Generated\Models\TeamMemberSettings;
+use Microsoft\Graph\GraphServiceClient;
 
 /**
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository
@@ -9,57 +12,56 @@ use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Model\Team;
  */
 class TeamRepository
 {
-    /**
-     *
-     * @var \Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GraphRepository
-     */
-    private $graphRepository;
+    protected GraphServiceClient $graphServiceClient;
 
-    /**
-     * GroupRepository constructor.
-     *
-     * @param GraphRepository $graphRepository
-     */
-    public function __construct(GraphRepository $graphRepository)
+    public function __construct(GraphServiceClient $graphServiceClient)
     {
-        $this->graphRepository = $graphRepository;
+        $this->graphServiceClient = $graphServiceClient;
     }
 
     /**
-     * @param $groupId
-     *
-     * @return \Microsoft\Graph\Model\Entity
+     * @throws \Exception
      */
-    public function createTeam($groupId)
+    public function createTeam($groupId): ?Team
     {
-        return $this->graphRepository->executePutWithAccessTokenExpirationRetry(
-            '/groups/' . $groupId . '/team', [
-            'memberSettings' => [
-                'allowCreateUpdateChannels' => true
-            ]
-        ], Team::class
-        );
+        $memberSettings = new TeamMemberSettings();
+        $memberSettings->setAllowCreateUpdateChannels(true);
+
+        $team = new Team();
+        $team->setMemberSettings($memberSettings);
+
+        return $this->getGraphServiceClient()->groups()->byGroupId($groupId)->team()->put($team)->wait();
+    }
+
+    public function getGraphServiceClient(): GraphServiceClient
+    {
+        return $this->graphServiceClient;
     }
 
     /**
-     *
+     * @throws \Exception
      */
-    public function getTeam(string $groupId)
+    public function getTeam(string $groupId): Team
     {
-        return $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
-            '/teams/' . $groupId, Team::class
-        );
+        try {
+            $team = $this->getGraphServiceClient()->teams()->byTeamId($groupId)->get()->wait();
+
+            if (!$team instanceof Team) {
+                throw new Exception('Team not found: ' . $groupId);
+            }
+
+            return $team;
+        }
+        catch (Exception) {
+            throw new Exception('Team not found: ' . $groupId);
+        }
     }
 
     /**
-     * @param string $groupId
-     *
-     * @return \Microsoft\Graph\Model\Entity|\Microsoft\Graph\Model\Entity[]
+     * @throws \Exception
      */
-    public function getUrl(string $groupId)
+    public function getUrl(string $groupId): string
     {
-        $team = $this->getTeam($groupId);
-
-        return $team->getProperties()['webUrl'];
+        return $this->getTeam($groupId)->getWebUrl();
     }
 }

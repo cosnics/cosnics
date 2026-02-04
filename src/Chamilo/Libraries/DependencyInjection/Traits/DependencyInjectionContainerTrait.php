@@ -77,9 +77,6 @@ trait DependencyInjectionContainerTrait
         return $this->getService(ConfigurationConsulter::class);
     }
 
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
     public function getContainer(): ContainerInterface
     {
         if (!isset($this->container)) {

@@ -57,8 +57,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
 
         $parsedEvents = [];
 
-        foreach ($events as $event)
-        {
+        foreach ($events as $event) {
             $parsedEvents = array_merge(
                 $parsedEvents, $this->getEventParser()->getEvents($events->getCalendarProperties(), $event)
             );
@@ -80,21 +79,16 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
 
         $calendarIdentifiers = [];
 
-        if ($availabilities->count() == 0)
-        {
+        if ($availabilities->count() == 0) {
             $availableCalendars = $this->getCalendars();
 
-            foreach ($availableCalendars as $availableCalendar)
-            {
+            foreach ($availableCalendars as $availableCalendar) {
                 $calendarIdentifiers[] = $availableCalendar->getIdentifier();
             }
         }
-        else
-        {
-            foreach ($availabilities as $availability)
-            {
-                if ($availability->isActive())
-                {
+        else {
+            foreach ($availabilities as $availability) {
+                if ($availability->isActive()) {
                     $calendarIdentifiers[] = $availability->getCalendarId();
                 }
             }
@@ -116,8 +110,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
     {
         $calendarService = $this->getCalendarService();
 
-        if (!$calendarService->isConfigured() || !$calendarService->isAuthenticated($user))
-        {
+        if (!$calendarService->isConfigured() || !$calendarService->isAuthenticated($user)) {
             return [];
         }
 
@@ -133,7 +126,6 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
      * @return array|\Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \DateInvalidTimeZoneException
-     * @throws \DateMalformedStringException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function getEvents(CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate): array
@@ -141,15 +133,13 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
         $calendarService = $this->getCalendarService();
 
         if (!$calendarService->isConfigured() ||
-            !$calendarService->isAuthenticated($calendarRendererProvider->getDataUser()))
-        {
+            !$calendarService->isAuthenticated($calendarRendererProvider->getDataUser())) {
             return [];
         }
 
         $events = [];
 
-        foreach ($this->getCalendarIdentifiers($calendarRendererProvider) as $calendarIdentifier)
-        {
+        foreach ($this->getCalendarIdentifiers($calendarRendererProvider) as $calendarIdentifier) {
             $events = array_merge(
                 $events, $this->getCalendarEvents(
                 $calendarRendererProvider->getDataUser(), $calendarIdentifier, $fromDate, $toDate

@@ -106,7 +106,7 @@ class GroupForm extends FormValidator
      * @throws \Throwable
      * @throws \QuickformException
      */
-    public function createGroup(): bool
+    public function createGroupFromForm(): bool
     {
         $group = $this->group;
         $values = $this->exportValues();

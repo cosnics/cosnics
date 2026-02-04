@@ -56,6 +56,9 @@ class CalendarRepository
         $this->currentUser = $currentUser;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     */
     public function clearAccessToken(User $user): bool
     {
         return $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
@@ -63,6 +66,9 @@ class CalendarRepository
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     */
     public function findEventsForCalendarIdentifierAndBetweenDates(
         User $user, string $calendarIdentifier, int $fromDate, int $toDate
     ): Google_Service_Calendar_Events
@@ -95,6 +101,7 @@ class CalendarRepository
 
     /**
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function findOwnedCalendars(User $user): array
     {
@@ -144,6 +151,7 @@ class CalendarRepository
 
     /**
      * @throws \Chamilo\Application\Calendar\Extension\Google\Architecture\Exception\NotConfiguredException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function getCalendarClient(User $user): Google_Service_Calendar
     {
@@ -191,6 +199,7 @@ class CalendarRepository
 
     /**
      * @throws \Chamilo\Application\Calendar\Extension\Google\Architecture\Exception\NotConfiguredException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function getGoogleClient(User $user): Google_Client
     {
@@ -279,6 +288,9 @@ class CalendarRepository
         }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     */
     public function login(User $user, $authenticationCode = null)
     {
         try
@@ -326,6 +338,7 @@ class CalendarRepository
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function logout(User $user): bool
     {

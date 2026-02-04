@@ -169,7 +169,8 @@ class UserService
                 ) . '</p>';
             $mailBody[] = '</div>';
 
-            $this->getActiveMailer()->sendMail(new Mail($mailSubject, implode(PHP_EOL, $mailBody), $user->getEmail()));
+            $this->getActiveMailer()->sendMail(new Mail($mailSubject, implode(PHP_EOL, $mailBody), [$user->getEmail()])
+            );
 
             return true;
         }
@@ -783,7 +784,7 @@ class UserService
             $mailBody[] = '</div>';
 
             $this->getActiveMailer()->sendMail(
-                new Mail($mailSubject, implode(PHP_EOL, $mailBody), $user->getEmail())
+                new Mail($mailSubject, implode(PHP_EOL, $mailBody), [$user->getEmail()])
             );
 
             return true;
@@ -825,7 +826,7 @@ class UserService
         }
 
         $mail = new Mail(
-            $subject, $body, $user->getEmail(), true, [], [], $options['admin_name'], $options['admin_email']
+            $subject, $body, [$user->getEmail()], true, [], [], $options['admin_name'], $options['admin_email']
         );
 
         try {

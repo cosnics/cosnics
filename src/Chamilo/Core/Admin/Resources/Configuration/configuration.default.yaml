@@ -23,6 +23,7 @@ parameters:
       file: 'Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\FileExceptionLogger'
     exception_logger_builder:
       file: 'Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\FileExceptionLoggerBuilder'
+  chamilo.configuration.authentication.cas.log: './../files/logs/auth.cas.log'
 
   # User interface
   chamilo.configuration.general.language: 'en'
