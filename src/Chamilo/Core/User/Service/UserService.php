@@ -2,14 +2,12 @@
 namespace Chamilo\Core\User\Service;
 
 use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\Admin\Storage\DataClass\Setting;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserCreateEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserPasswordResetEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserRegistrationEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserUpdateEvent;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Exception\UserException;
@@ -24,14 +22,12 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
-use Chamilo\Libraries\Storage\Architecture\Trait\CacheAdapterHandlerTrait;
 use Chamilo\Libraries\Storage\Service\PropertyMapper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 use InvalidArgumentException;
 use RuntimeException;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\Translator;
 
@@ -42,8 +38,6 @@ use Symfony\Component\Translation\Translator;
  */
 class UserService
 {
-    use CacheAdapterHandlerTrait;
-
     protected MailerInterface $activeMailer;
 
     protected AuthenticationValidator $authenticationValidator;
@@ -58,8 +52,6 @@ class UserService
 
     protected UrlGenerator $urlGenerator;
 
-    protected FilesystemAdapter $userSettingsCacheAdapter;
-
     protected WebPathBuilder $webPathBuilder;
 
     private HashingAlgorithm $hashingUtilities;
@@ -72,17 +64,16 @@ class UserService
 
     public function __construct(
         UserRepository $userRepository, HashingAlgorithm $hashingUtilities, PropertyMapper $propertyMapper,
-        Translator $translator, FilesystemAdapter $userSettingsCacheAdapter,
-        ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder, MailerInterface $activeMailer,
-        PasswordGeneratorInterface $passwordGenerator, AuthenticationValidator $authenticationValidator,
-        UrlGenerator $urlGenerator, EventDispatcherInterface $eventDispatcher, string $securityKey
+        Translator $translator, ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder,
+        MailerInterface $activeMailer, PasswordGeneratorInterface $passwordGenerator,
+        AuthenticationValidator $authenticationValidator, UrlGenerator $urlGenerator,
+        EventDispatcherInterface $eventDispatcher, string $securityKey
     )
     {
         $this->userRepository = $userRepository;
         $this->hashingUtilities = $hashingUtilities;
         $this->propertyMapper = $propertyMapper;
         $this->translator = $translator;
-        $this->userSettingsCacheAdapter = $userSettingsCacheAdapter;
         $this->configurationConsulter = $configurationConsulter;
         $this->webPathBuilder = $webPathBuilder;
         $this->activeMailer = $activeMailer;
@@ -204,7 +195,7 @@ class UserService
     public function createUserFromParameters(
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
         bool $generatePassword, ?string $password, ?string $authSource = 'Chamilo\Libraries\Authentication\Platform',
-        bool $isPlatformAdmin = false, int $status = User::STATUS_STUDENT, bool $active = true, bool $sendEmail = false
+        bool $isPlatformAdmin = false, bool $active = true, bool $sendEmail = false
     ): User
     {
         $requiredParameters = [
@@ -232,7 +223,6 @@ class UserService
         $user->setOfficialCode($officialCode);
         $user->setEmail($emailAddress);
         $user->setAuthenticationSource($authSource);
-        $user->setStatus($status);
         $user->setPlatformAdministrator($isPlatformAdmin);
         $user->setActive($active);
 
@@ -248,44 +238,6 @@ class UserService
         }
 
         return $user;
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
-    public function createUserSetting(UserSetting $userSetting): bool
-    {
-        if (!$this->getUserRepository()->createUserSetting($userSetting)) {
-            return false;
-        }
-
-        if (!$this->clearCacheDataForAdapterAndKeyParts(
-            $this->getUserSettingsCacheAdapter(), [User::class, $userSetting->getUserIdentifier()]
-        )) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
-    public function createUserSettingFromParameters(
-        string $settingIdentifier, string $userIdentifier, ?string $value = null
-    ): bool
-    {
-        $userSetting = new UserSetting();
-
-        $userSetting->setSettingIdentifier($settingIdentifier);
-        $userSetting->setUserIdentifier($userIdentifier);
-        $userSetting->setValue($value);
-
-        return $this->createUserSetting($userSetting);
     }
 
     public function deleteUser(User $user): bool
@@ -310,35 +262,14 @@ class UserService
         //        return true;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function deleteUserSettingsForSettingIdentifier(string $settingIdentifier): bool
-    {
-        return $this->getUserRepository()->deleteUserSettingsForSettingIdentifier($settingIdentifier);
-    }
-
     public function determineUserKey(User $user): string
     {
         return $this->getHashingUtilities()->hashString($this->getSecurityKey() . $user->getEmail());
     }
 
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findActiveStudents(): ArrayCollection
+    protected function determineUserSettingVariableName(string $context, string $variable): string
     {
-        return $this->findActiveUsersByStatus(User::STATUS_STUDENT);
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findActiveTeachers(): ArrayCollection
-    {
-        return $this->findActiveUsersByStatus(User::STATUS_TEACHER);
+        return $context . '\\' . $variable;
     }
 
     /**
@@ -350,17 +281,6 @@ class UserService
     ): ArrayCollection
     {
         return $this->getUserRepository()->findActiveUsers($condition, $offset, $count, $orderBy);
-    }
-
-    /**
-     * @param int $status
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findActiveUsersByStatus(int $status): ArrayCollection
-    {
-        return $this->getUserRepository()->findActiveUsersByStatus($status);
     }
 
     /**
@@ -381,24 +301,6 @@ class UserService
     public function findPlatformAdministrators(): ArrayCollection
     {
         return $this->getUserRepository()->findPlatformAdministrators();
-    }
-
-    /**
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findSettingsForUser(User $user): array
-    {
-        $userSettings = $this->getUserRepository()->findSettingsForUser($user);
-
-        $mappedUserSettings = [];
-
-        foreach ($userSettings as $userSetting) {
-            $mappedUserSettings[$userSetting[Setting::PROPERTY_CONTEXT]][$userSetting[Setting::PROPERTY_VARIABLE]] =
-                $userSetting[UserSetting::PROPERTY_VALUE];
-        }
-
-        return $mappedUserSettings;
     }
 
     /**
@@ -485,13 +387,9 @@ class UserService
         return $this->getUserRepository()->findUserProperties($retrieveProperties, $condition, $orderBy);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     */
-    public function findUserSettingForSettingAndUser(Setting $setting, User $user): ?UserSetting
+    public function findUserSetting(User $user, string $context, string $variable)
     {
-        return $this->getUserRepository()->findUserSettingForSettingAndUser($setting, $user);
+        return $user->getSetting($this->determineUserSettingVariableName($context, $variable));
     }
 
     /**
@@ -662,11 +560,6 @@ class UserService
         return $this->userRepository;
     }
 
-    public function getUserSettingsCacheAdapter(): FilesystemAdapter
-    {
-        return $this->userSettingsCacheAdapter;
-    }
-
     public function getWebPathBuilder(): WebPathBuilder
     {
         return $this->webPathBuilder;
@@ -697,8 +590,7 @@ class UserService
      */
     public function registerUserFromParameters(
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
-        bool $generatePassword, ?string $password = null, ?string $authSource = 'Platform',
-        ?int $status = User::STATUS_STUDENT, bool $sendEmail = false
+        bool $generatePassword, ?string $password = null, ?string $authSource = 'Platform', bool $sendEmail = false
     ): User
     {
         $configurationConsulter = $this->getConfigurationConsulter();
@@ -712,7 +604,7 @@ class UserService
 
         $user = $this->createUserFromParameters(
             $firstName, $lastName, $username, $officialCode, $emailAddress, $generatePassword, $password, $authSource,
-            false, $status, $active, $sendEmail
+            false, $active, $sendEmail
         );
 
         $this->getEventDispatcher()->dispatch(new AfterUserRegistrationEvent($user));
@@ -820,10 +712,7 @@ class UserService
         $subject =
             $this->getTranslator()->trans('YourRegistrationOn', [], Manager::CONTEXT) . ' ' . $options['site_name'];
 
-        $body = $configurationConsulter->getSetting([Manager::CONTEXT, 'email_template']);
-        foreach ($options as $option => $value) {
-            $body = str_replace('[' . $option . ']', $value, $body);
-        }
+        $body = $this->getTranslator()->trans('EmailTemplate', $options);
 
         $mail = new Mail(
             $subject, $body, [$user->getEmail()], true, [], [], $options['admin_name'], $options['admin_email']
@@ -888,8 +777,8 @@ class UserService
      */
     public function updateUserFromParameters(
         User $user, ?string $firstName, ?string $lastName, ?string $username, ?string $officialCode,
-        ?string $emailAddress, bool $generatePassword, ?string $password, ?bool $isPlatformAdmin, ?int $status,
-        ?bool $active, bool $sendEmail = false
+        ?string $emailAddress, bool $generatePassword, ?string $password, ?bool $isPlatformAdmin, ?bool $active,
+        bool $sendEmail = false
     ): bool
     {
         if (!is_null($firstName)) {
@@ -910,10 +799,6 @@ class UserService
 
         if (!is_null($username) && $user->getUsername() != $username && $this->isUsernameAvailable($username)) {
             $user->setUsername($username);
-        }
-
-        if (!is_null($status)) {
-            $user->setStatus($status);
         }
 
         if (!is_null($isPlatformAdmin)) {
@@ -944,19 +829,11 @@ class UserService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updateUserSetting(UserSetting $userSetting): bool
+    public function updateUserSetting(User $user, string $context, string $variable, mixed $value = null): bool
     {
-        return $this->getUserRepository()->updateUserSetting($userSetting);
-    }
+        $user->setSetting($this->determineUserSettingVariableName($context, $variable), $value);
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function updateUserSettingValue(UserSetting $userSetting, ?string $value = null): bool
-    {
-        $userSetting->setValue($value);
-
-        return $this->updateUserSetting($userSetting);
+        return $this->updateUser($user);
     }
 }
 

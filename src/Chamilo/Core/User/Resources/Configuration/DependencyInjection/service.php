@@ -3,11 +3,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Core\User\Service\UserFactory;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
-use Chamilo\Libraries\Storage\Factory\SymfonyCacheAdapterFactory;
-use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
@@ -23,16 +19,8 @@ return static function (ContainerConfigurator $container) {
     $services->set(UserService::class)->args([
         '$userSettingsCacheAdapter' => service('Chamilo\Core\User\Service\Cache\UserSettingCacheService'),
         '$activeMailer' => service('Chamilo\Libraries\Protocol\Mail\ActiveMailer'),
-        '$securityKey' => '%chamilo.configuration.general.security_key%',
+        '$securityKey' => '%chamilo.configuration.general.securityKey%',
     ]);
-
-    $services->set(UserSettingService::class)->args(
-        ['$userSettingsCacheAdapter' => service('Chamilo\Core\User\Service\Cache\UserSettingCacheService')]
-    );
-
-    $services->set('Chamilo\Core\User\Service\Cache\UserSettingCacheService', FilesystemAdapter::class)->args(
-        ['$namespace' => 'Chamilo\Core\User\UserSetting']
-    )->tag(AdapterInterface::class)->factory([service(SymfonyCacheAdapterFactory::class), 'createFilesystemAdapter']);
 
     $services->set(UserUrlGenerator::class);
 };

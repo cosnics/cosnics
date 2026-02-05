@@ -73,7 +73,7 @@ class FooterRenderer extends AbstractFooterRenderer
         $translator = $this->getTranslator();
         $stringUtilities = $this->getStringUtilities();
 
-        $institutionUrl = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'institution_url']);
+        $institutionUrl = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'institutionUrl']);
         $institution = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'institution']);
 
         $administratorEmail = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'administrator_email']);

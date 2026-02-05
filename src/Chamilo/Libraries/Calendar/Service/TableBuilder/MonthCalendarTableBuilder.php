@@ -123,8 +123,8 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
     protected function getFirstDayOfWeek(): ?string
     {
         if ($this->getUser() instanceof User) {
-            return $this->getUserSettingService()->getSettingForUser(
-                $this->getUser(), 'Chamilo\Libraries', 'calendar_first_day_of_week'
+            return $this->getUserService()->findUserSetting(
+                $this->getUser(), 'Chamilo\Libraries\Calendar', 'FirstDayOfWeek'
             );
         }
         else {

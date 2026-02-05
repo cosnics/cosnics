@@ -36,7 +36,6 @@ class UserCreationForm extends UserForm
     {
         $defaultValues[User::PROPERTY_PLATFORM_ADMINISTRATOR] = 0;
         $defaultValues[User::PROPERTY_ACTIVE] = 1;
-        $defaultValues[User::PROPERTY_STATUS] = User::STATUS_STUDENT;
         $defaultValues[self::PROPERTY_SEND_MAIL] = 0;
         $defaultValues[self::PROPERTY_GENERATE_PASSWORD] = 1;
 

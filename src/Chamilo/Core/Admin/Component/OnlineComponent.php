@@ -28,6 +28,7 @@ class OnlineComponent extends Manager
      * @throws \QuickformException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
     public function run(): Response
     {

@@ -68,14 +68,6 @@
                             value="1"/>
                 </options>
             </setting>
-            <setting name="restrict_picture_height"
-                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
-                     default="1">
-                <options type="static">
-                    <option name="restrict_picture_height"
-                            value="1"/>
-                </options>
-            </setting>
             <setting name="allow_change_placeholder_data"
                      field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
                      default="1">
@@ -84,17 +76,6 @@
                             value="1"/>
                 </options>
             </setting>
-            <setting name="show_personal_token"
-                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
-                     default="1">
-                <options type="static">
-                    <option name="show_personal_token"
-                            value="1"/>
-                </options>
-            </setting>
-            <setting name="personal_data_placeholder"
-                     field="HTML_QuickForm_text"
-                     default="???"/>
             <setting name="user_picture_provider"
                      field="HTML_QuickForm_select"
                      default="Chamilo\Core\User\Picture\Provider\Platform\UserPictureProvider">
@@ -116,14 +97,6 @@
                      default="1">
                 <options type="static">
                     <option name="allow_user_change_platform_language"
-                            value="1"/>
-                </options>
-            </setting>
-            <setting name="allow_user_theme_selection"
-                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
-                     default="1">
-                <options type="static">
-                    <option name="allow_user_theme_selection"
                             value="1"/>
                 </options>
             </setting>
@@ -186,40 +159,10 @@
                             value="1"/>
                 </options>
             </setting>
-            <setting name="require_language"
-                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
-                     default="1">
-                <options type="static">
-                    <option name="require_language"
-                            value="1"/>
-                </options>
-            </setting>
-            <setting name="show_email_addresses"
-                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
-                     default="1">
-                <options type="static">
-                    <option name="show_email_addresses"
-                            value="1"/>
-                </options>
-            </setting>
             <setting name="email_template"
                      field="HTML_QuickForm_html_editor"
                      default="[username] - [password]"/>
 
         </category>
-        <category name="session">
-            <setting name="prevent_double_login"
-                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
-                     default="0">
-                <options type="static">
-                    <option name="prevent_double_login"
-                            value="0"/>
-                </options>
-            </setting>
-            <setting name="double_login_exceptions"
-                     field="HTML_QuickForm_text"
-                     default=""/>
-        </category>
-
     </settings>
 </package>

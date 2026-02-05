@@ -60,8 +60,7 @@ class AccountForm extends UserForm
 
         $this->buildSecurityTokenForm();
 
-        if ($this->canUserChangeAnything())
-        {
+        if ($this->canUserChangeAnything()) {
             $this->addSaveResetButtons();
         }
     }
@@ -71,18 +70,14 @@ class AccountForm extends UserForm
      */
     public function buildSecurityTokenForm(bool $includeCategoryTitle = true): void
     {
-        if ($this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'show_personal_token']))
-        {
-            $translator = $this->getTranslator();
+        $translator = $this->getTranslator();
 
-            if ($includeCategoryTitle)
-            {
-                $this->addElement(HTML_QuickForm_category::class, $translator->trans('Other'));
-            }
-            $this->addElement(
-                HTML_QuickForm_static::class, User::PROPERTY_SECURITY_TOKEN, $translator->trans('SecurityToken')
-            );
+        if ($includeCategoryTitle) {
+            $this->addElement(HTML_QuickForm_category::class, $translator->trans('Other'));
         }
+        $this->addElement(
+            HTML_QuickForm_static::class, User::PROPERTY_SECURITY_TOKEN, $translator->trans('SecurityToken')
+        );
     }
 
     protected function canUserChangeAnything(): bool
@@ -99,10 +94,8 @@ class AccountForm extends UserForm
             'allow_change_password'
         ];
 
-        foreach ($settings as $setting)
-        {
-            if ($configurationConsulter->getSetting([Manager::CONTEXT, $setting]))
-            {
+        foreach ($settings as $setting) {
+            if ($configurationConsulter->getSetting([Manager::CONTEXT, $setting])) {
                 return true;
             }
         }
@@ -117,13 +110,11 @@ class AccountForm extends UserForm
     {
         $newPassword = $exportValues[User::PROPERTY_PASSWORD];
 
-        if (empty($newPassword))
-        {
+        if (empty($newPassword)) {
             return true;
         }
 
-        if (empty($this->exportValue(self::PROPERTY_CURRENT_PASSWORD)))
-        {
+        if (empty($this->exportValue(self::PROPERTY_CURRENT_PASSWORD))) {
             return [
                 User::PROPERTY_PASSWORD => $this->getTranslator()->trans('EnterCurrentPassword', [], Manager::CONTEXT)
             ];

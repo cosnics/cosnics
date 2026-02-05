@@ -1,21 +1,15 @@
 <?php
 namespace Chamilo\Core\User\Storage\Repository;
 
-use Chamilo\Core\Admin\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\CaseConditionVariable;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\CaseElementConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Join;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Joins;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
@@ -88,41 +82,11 @@ class UserRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function createUserSetting(UserSetting $userSetting): bool
-    {
-        return $this->getDataClassRepository()->create($userSetting);
-    }
-
-    /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function deleteUser(User $user): bool
     {
         return $this->getDataClassRepository()->delete($user);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function deleteUserSetting(UserSetting $userSetting): bool
-    {
-        return $this->getDataClassRepository()->delete($userSetting);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function deleteUserSettingsForSettingIdentifier(string $settingIdentifier): bool
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID),
-            new StaticConditionVariable($settingIdentifier)
-        );
-
-        return $this->getDataClassRepository()->deletes(UserSetting::class, $condition);
     }
 
     /**
@@ -148,29 +112,6 @@ class UserRepository
             User::class, new StorageParameters(
                 condition: new AndCondition($conditions), orderBy: $orderBy, count: $count, offset: $offset
             )
-        );
-    }
-
-    /**
-     * @param int $status
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findActiveUsersByStatus(int $status): ArrayCollection
-    {
-        $conditions = [];
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(User::class, User::PROPERTY_STATUS), ComparisonCondition::EQUAL,
-            new StaticConditionVariable($status)
-        );
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(User::class, User::PROPERTY_ACTIVE), ComparisonCondition::EQUAL,
-            new StaticConditionVariable(1)
-        );
-
-        return $this->getDataClassRepository()->retrieves(
-            User::class, new StorageParameters(condition: new AndCondition($conditions))
         );
     }
 
@@ -210,65 +151,6 @@ class UserRepository
 
         return $this->getDataClassRepository()->retrieves(
             User::class, new StorageParameters(condition: new AndCondition($conditions))
-        );
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findSettingsForUser(User $user): ArrayCollection
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_USER_SETTING),
-            new StaticConditionVariable(1)
-        );
-
-        $joinConditions = [];
-        $joinConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_USER_ID),
-            new StaticConditionVariable($user->getId())
-        );
-        $joinConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting::class, DataClass::PROPERTY_ID),
-            new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID)
-        );
-
-        $join = new Join(UserSetting::class, new AndCondition($joinConditions), Join::TYPE_LEFT);
-
-        $retrieveProperties = [];
-        $retrieveProperties[] = new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID);
-        $retrieveProperties[] = new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT);
-        $retrieveProperties[] = new PropertyConditionVariable(Setting::class, Setting::PROPERTY_VARIABLE);
-
-        $caseElements = [];
-        $caseElements[] = new CaseElementConditionVariable(
-            new PropertyConditionVariable(Setting::class, Setting::PROPERTY_VALUE), new OrCondition(
-                [
-                    new EqualityCondition(
-                        new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_VALUE), null
-                    ),
-                    new EqualityCondition(
-                        new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_VALUE),
-                        new StaticConditionVariable('')
-                    )
-                ]
-            )
-        );
-        $caseElements[] = new CaseElementConditionVariable(
-            new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_VALUE)
-        );
-
-        $retrieveProperties[] = new CaseConditionVariable($caseElements, UserSetting::PROPERTY_VALUE);
-
-        return $this->getDataClassRepository()->records(
-            Setting::class, new StorageParameters(
-                condition: $condition, joins: new Joins([$join]), retrieveProperties: new RetrieveProperties(
-                $retrieveProperties
-            )
-            )
         );
     }
 
@@ -410,31 +292,6 @@ class UserRepository
                 condition: $condition, retrieveProperties: new RetrieveProperties($retrieveProperties),
                 orderBy: $orderBy
             )
-        );
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findUserSettingForSettingAndUser(Setting $setting, User $user): ?UserSetting
-    {
-        $conditions = [];
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_USER_ID),
-            new StaticConditionVariable($user->getId())
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID),
-            new StaticConditionVariable($setting->getId())
-        );
-
-        $condition = new AndCondition($conditions);
-
-        return $this->getDataClassRepository()->retrieve(
-            UserSetting::class, new StorageParameters(condition: $condition)
         );
     }
 
@@ -601,13 +458,5 @@ class UserRepository
     public function updateUser(User $user): bool
     {
         return $this->getDataClassRepository()->update($user);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function updateUserSetting(UserSetting $userSetting): bool
-    {
-        return $this->getDataClassRepository()->update($userSetting);
     }
 }

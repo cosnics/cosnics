@@ -62,18 +62,6 @@ class OnlineTableRenderer extends DataClassListTableRenderer
             $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_GIVEN_NAME)
         );
 
-        $showEmail = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'show_email_addresses']);
-
-        if ($showEmail)
-        {
-            $this->addColumn(
-                $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_EMAIL)
-            );
-        }
-
-        $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_STATUS)
-        );
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_PICTURE_URI)
         );
@@ -87,33 +75,16 @@ class OnlineTableRenderer extends DataClassListTableRenderer
         $translator = $this->getTranslator();
         $urlGenerator = $this->getUrlGenerator();
 
-        switch ($column->getName())
-        {
-            case User::PROPERTY_STATUS :
-                if ($result->getPlatformAdmin() == '1')
-                {
-                    return $translator->trans('PlatformAdministrator', [], Manager::CONTEXT);
-                }
-                if ($result->getStatus() == '1')
-                {
-                    return $translator->trans('CourseAdmin', [], Manager::CONTEXT);
-                }
-                else
-                {
-                    return $translator->trans('Student', [], Manager::CONTEXT);
-                }
+        switch ($column->getName()) {
             case User::PROPERTY_PLATFORM_ADMINISTRATOR :
-                if ($result->getPlatformAdmin() == '1')
-                {
+                if ($result->getPlatformAdmin() == '1') {
                     return $translator->trans('PlatformAdministrator', [], Manager::CONTEXT);
                 }
-                else
-                {
+                else {
                     return '';
                 }
             case User::PROPERTY_PICTURE_URI :
-                if ($this->getUser()->isPlatformAdministrator())
-                {
+                if ($this->getUser()->isPlatformAdministrator()) {
                     $profilePhotoUrl = $urlGenerator->fromParameters(
                         [
                             Application::PARAM_CONTEXT => Manager::CONTEXT,

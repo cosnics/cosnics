@@ -17,7 +17,7 @@ return static function (ContainerConfigurator $container) {
     $services = $container->services();
     $services->defaults()->public()->autowire()->autoconfigure();
 
-    $services->set(Bootstrap::class)->args(['$showErrors' => '%chamilo.configuration.debug.show_errors%']);
+    $services->set(Bootstrap::class)->args(['$showErrors' => '%chamilo.configuration.debug.showErrors%']);
     $services->set(Kernel::class)->args(['$user' => service('Chamilo\Core\User\CurrentUser')]);
     $services->set(ApplicationFactory::class);
 
@@ -32,7 +32,7 @@ return static function (ContainerConfigurator $container) {
     $services->alias(ExceptionLoggerInterface::class, 'Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger');
 
     $services->set(ExceptionLoggerFactory::class)->args(
-        ['$errorHandlingConfiguration' => '%chamilo.configuration.error_handling%']
+        ['$errorHandlingConfiguration' => '%chamilo.configuration.errorHandling%']
     );
 
     $services->set(ClassnameUtilities::class);

@@ -37,11 +37,6 @@ class Setting extends DataClass
         return 'configuration_setting';
     }
 
-    public function getUserSetting(): int
-    {
-        return $this->getDefaultProperty(self::PROPERTY_USER_SETTING);
-    }
-
     public function getValue(): mixed
     {
         return $this->getDefaultProperty(self::PROPERTY_VALUE);
@@ -55,13 +50,6 @@ class Setting extends DataClass
     public function setContext(string $context): static
     {
         $this->setDefaultProperty(self::PROPERTY_CONTEXT, $context);
-
-        return $this;
-    }
-
-    public function setUserSetting(int $userSetting): static
-    {
-        $this->setDefaultProperty(self::PROPERTY_USER_SETTING, $userSetting);
 
         return $this;
     }

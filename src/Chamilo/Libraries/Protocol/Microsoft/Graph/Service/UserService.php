@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
-use Chamilo\Core\User\Service\UserSettingService;
+use Chamilo\Core\User\Service\UserService as PlatformUserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository;
@@ -15,31 +15,31 @@ class UserService
 {
     protected UserRepository $userRepository;
 
-    protected UserSettingService $userSettingService;
+    protected PlatformUserService $userService;
 
     public function __construct(
-        UserRepository $userRepository, UserSettingService $userSettingService
+        UserRepository $userRepository, PlatformUserService $userService
     )
     {
         $this->userRepository = $userRepository;
-        $this->userSettingService = $userSettingService;
+        $this->userService = $userService;
     }
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getAndSaveUserIdentifier(User $user): ?string
     {
-        $userIdentifier = $this->getUserSettingService()->getSettingForUser(
-            $user, 'Chamilo\Libraries', 'microsoft_graph_external_user_id'
+        $userIdentifier = $this->getUserService()->findUserSetting(
+            $user, 'Chamilo\Libraries\Protocol\Microsoft\Graph', 'ExternalUserIdentifier'
         );
 
         if (empty($userIdentifier)) {
             $userIdentifier = $this->getUserIdentifier($user);
 
-            $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
-                'Chamilo\Libraries', 'microsoft_graph_external_user_id', $user, $userIdentifier
+            $this->getUserService()->updateUserSetting(
+                $user, 'Chamilo\Libraries\Protocol\Microsoft\Graph', 'ExternalUserIdentifier', $userIdentifier
             );
         }
 
@@ -93,8 +93,8 @@ class UserService
         return $this->userRepository;
     }
 
-    public function getUserSettingService(): UserSettingService
+    public function getUserService(): PlatformUserService
     {
-        return $this->userSettingService;
+        return $this->userService;
     }
 }

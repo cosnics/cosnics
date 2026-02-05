@@ -76,7 +76,6 @@ class UserUpdateForm extends UserForm
         $defaultValues[User::PROPERTY_USERNAME] = $user->getUsername();
         $defaultValues[User::PROPERTY_OFFICIAL_CODE] = $user->getOfficialCode();
         $defaultValues[User::PROPERTY_PICTURE_URI] = $user->getPictureUri();
-        $defaultValues[User::PROPERTY_STATUS] = $user->getStatus();
         $defaultValues[User::PROPERTY_ACTIVE] = $user->getActive() ? 1 : 0;
 
         parent::setDefaults($defaultValues);

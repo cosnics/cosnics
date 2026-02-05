@@ -36,13 +36,13 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
     {
         $errorHandlingConfiguration = $this->getErrorHandlingConfiguration();
 
-        $clientDSNKey = $errorHandlingConfiguration['DSN'];
+        $clientDSNKey = $errorHandlingConfiguration['dsn'];
 
         if (empty($clientDSNKey)) {
             throw new Exception(
                 'The DSN key should be configured when using the sentry exception logger. ' .
                 'The configuration should be put in ' .
-                'chamilo.configuration.error_handling["configuration"]["Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\SentryExceptionLoggerBuilder"]["DSN"]'
+                'chamilo.configuration.errorHandling["configuration"]["Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\SentryExceptionLoggerBuilder"]["dsn"]'
             );
         }
 

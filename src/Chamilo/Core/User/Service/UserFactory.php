@@ -29,12 +29,9 @@ class UserFactory
 
     private UserService $userService;
 
-    private UserSettingService $userSettingService;
-
     public function __construct(
         SessionInterface $session, UserService $userService, ConfigurationConsulter $configurationConsulter,
-        ThemePathBuilder $themeWebPathBuilder, ThemePathBuilder $themeSystemPathBuilder, Translator $translator,
-        UserSettingService $userSettingService
+        ThemePathBuilder $themeWebPathBuilder, ThemePathBuilder $themeSystemPathBuilder, Translator $translator
     )
     {
         $this->session = $session;
@@ -43,7 +40,6 @@ class UserFactory
         $this->themeWebPathBuilder = $themeWebPathBuilder;
         $this->themeSystemPathBuilder = $themeSystemPathBuilder;
         $this->translator = $translator;
-        $this->userSettingService = $userSettingService;
     }
 
     public function getConfigurationConsulter(): ConfigurationConsulter
@@ -83,19 +79,6 @@ class UserFactory
 
                 if ($user instanceof User)
                 {
-                    $themeSelectionAllowed = $this->getConfigurationConsulter()->getSetting(
-                        ['Chamilo\Core\User', 'allow_user_theme_selection']
-                    );
-
-                    if ($themeSelectionAllowed)
-                    {
-                        $theme =
-                            $this->getUserSettingService()->getSettingForUser($user, 'Chamilo\Core\Admin', 'theme');
-
-                        $this->getThemeSystemPathBuilder()->setTheme($theme);
-                        $this->getThemeWebPathBuilder()->setTheme($theme);
-                    }
-
                     $languageSelectionAllowed = $this->getConfigurationConsulter()->getSetting(
                         ['Chamilo\Core\User', 'allow_user_change_platform_language']
                     );
@@ -103,14 +86,14 @@ class UserFactory
                     if ($languageSelectionAllowed)
                     {
                         $this->getTranslator()->setLocale(
-                            $this->getUserSettingService()->getSettingForUser(
-                                $user, 'Chamilo\Core\Admin', 'platform_language'
+                            $this->getUserService()->findUserSetting(
+                                $user, 'Chamilo\Core\Admin', 'PlatformLanguage'
                             )
                         );
 
                         date_default_timezone_set(
-                            $this->getUserSettingService()->getSettingForUser(
-                                $user, 'Chamilo\Core\Admin', 'platform_timezone'
+                            $this->getUserService()->findUserSetting(
+                                $user, 'Chamilo\Core\Admin', 'PlatformTimezone'
                             )
                         );
                     }
@@ -130,11 +113,6 @@ class UserFactory
     public function getUserService(): UserService
     {
         return $this->userService;
-    }
-
-    public function getUserSettingService(): UserSettingService
-    {
-        return $this->userSettingService;
     }
 }
 

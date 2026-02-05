@@ -37,7 +37,7 @@ class UserPictureProviderCollection extends ArrayCollection
     public function getActivePictureProvider(): UserPictureProviderInterface
     {
         $configuredPictureProvider =
-            $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'user_picture_provider']);
+            $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'userPictureProvider']);
 
         if (!$this->containsKey($configuredPictureProvider))
         {

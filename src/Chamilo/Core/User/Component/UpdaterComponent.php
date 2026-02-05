@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UpdaterComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -33,8 +32,7 @@ class UpdaterComponent extends Manager
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        if (!$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -43,8 +41,7 @@ class UpdaterComponent extends Manager
 
         $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
 
-        if ($userIdentifier)
-        {
+        if ($userIdentifier) {
             $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
             $isLockoutRisk = $this->getUser()->getId() == $user->getId() && $user->isPlatformAdministrator();
 
@@ -56,10 +53,8 @@ class UpdaterComponent extends Manager
 
             $form = new UserUpdateForm($user, $isLockoutRisk, $updateUrl);
 
-            if ($form->validate())
-            {
-                try
-                {
+            if ($form->validate()) {
+                try {
                     $formValues = $form->exportValues();
 
                     $this->getUserService()->updateUserFromParameters(
@@ -67,22 +62,18 @@ class UpdaterComponent extends Manager
                         $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
                         $formValues[User::PROPERTY_EMAIL], (bool) $formValues[UserForm::PROPERTY_GENERATE_PASSWORD],
                         $formValues[User::PROPERTY_PASSWORD], (bool) $formValues[User::PROPERTY_PLATFORM_ADMINISTRATOR],
-                        $formValues[User::PROPERTY_STATUS], (bool) $formValues[User::PROPERTY_ACTIVE],
-                        (bool) $formValues[UserForm::PROPERTY_SEND_MAIL]
+                        (bool) $formValues[User::PROPERTY_ACTIVE], (bool) $formValues[UserForm::PROPERTY_SEND_MAIL]
                     );
 
                     $userPictureProvider = $this->getUserPictureProvider();
 
-                    if ($userPictureProvider instanceof UserPictureUpdateProviderInterface)
-                    {
+                    if ($userPictureProvider instanceof UserPictureUpdateProviderInterface) {
                         $pictureInformation = $this->getRequest()->files->get(User::PROPERTY_PICTURE_URI);
 
-                        if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid())
-                        {
+                        if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid()) {
                             if (!$userPictureProvider->updateUserPictureFromParameters(
                                 $user, $this->getUser(), $pictureInformation
-                            ))
-                            {
+                            )) {
                                 $this->getNotificationMessageManager()->addMessage(
                                     new NotificationMessage(
                                         $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
@@ -108,8 +99,7 @@ class UpdaterComponent extends Manager
                         )
                     );
                 }
-                catch (Exception $exception)
-                {
+                catch (Exception $exception) {
                     $this->getNotificationMessageManager()->addMessage(
                         new NotificationMessage($exception->getMessage(), NotificationMessage::TYPE_DANGER)
                     );
@@ -124,8 +114,7 @@ class UpdaterComponent extends Manager
 
             return new Response(implode(PHP_EOL, $html));
         }
-        else
-        {
+        else {
             return new Response(
                 $this->displayErrorPage(
                     htmlentities(

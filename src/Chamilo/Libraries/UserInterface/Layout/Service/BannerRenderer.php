@@ -73,21 +73,6 @@ class BannerRenderer
             $userFullName = '';
         }
 
-        $showMaintenanceWarning =
-            $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'maintenance_warning_show']);
-
-        if ($showMaintenanceWarning) {
-            $maintenanceWarning = $configurationConsulter->getSetting(
-                ['Chamilo\Core\Admin', 'maintenance_warning_message']
-            );
-
-            if (!empty($maintenanceWarning)) {
-                $html[] = '<div class="warning-banner bg-warning text-warning">';
-                $html[] = '<strong>' . $maintenanceWarning . '</strong>';
-                $html[] = '</div>';
-            }
-        }
-
         if (!is_null($session->get('_as_admin'))) {
             $link = $this->getUrlGenerator()->fromParameters([
                 Application::PARAM_CONTEXT => Manager::CONTEXT,

@@ -14,13 +14,13 @@ class PlatformNotAvailableResponse extends Response
 {
     use DependencyInjectionContainerTrait;
 
-    public function __construct(string $message)
+    public function __construct()
     {
         $html = [];
         $html[] = $this->getHeaderRenderer()->render();
         $html[] = '<br />';
         $html[] = '<div class="alert alert-danger text-center">';
-        $html[] = $message;
+        $html[] = $this->getTranslator()->trans('PlatformNotAvailableMessage');
         $html[] = '</div>';
         $html[] = $this->getFooterRenderer()->render();
 

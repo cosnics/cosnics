@@ -84,7 +84,7 @@ class ConfigurablePathBuilder
     {
         if (!isset($this->configuredArchivePath)) {
             $configuredPaths = $this->getConfiguredPaths();
-            $this->configuredArchivePath = $configuredPaths['archive_path'];
+            $this->configuredArchivePath = $configuredPaths['archive'];
         }
 
         return $this->configuredArchivePath;
@@ -94,7 +94,7 @@ class ConfigurablePathBuilder
     {
         if (!isset($this->configuredCachePath)) {
             $configuredPaths = $this->getConfiguredPaths();
-            $this->configuredCachePath = $configuredPaths['cache_path'];
+            $this->configuredCachePath = $configuredPaths['cache'];
         }
 
         return $this->configuredCachePath;
@@ -104,7 +104,7 @@ class ConfigurablePathBuilder
     {
         if (!isset($this->configuredGarbagePath)) {
             $configuredPaths = $this->getConfiguredPaths();
-            $this->configuredGarbagePath = $configuredPaths['garbage_path'];
+            $this->configuredGarbagePath = $configuredPaths['garbage'];
         }
 
         return $this->configuredGarbagePath;
@@ -114,7 +114,7 @@ class ConfigurablePathBuilder
     {
         if (!isset($this->configuredLogsPath)) {
             $configuredPaths = $this->getConfiguredPaths();
-            $this->configuredLogsPath = $configuredPaths['logs_path'];
+            $this->configuredLogsPath = $configuredPaths['logs'];
         }
 
         return $this->configuredLogsPath;
@@ -132,7 +132,7 @@ class ConfigurablePathBuilder
     {
         if (!isset($this->configuredTempPath)) {
             $configuredPaths = $this->getConfiguredPaths();
-            $this->configuredTempPath = $configuredPaths['temp_path'];
+            $this->configuredTempPath = $configuredPaths['temp'];
         }
 
         return $this->configuredTempPath;
@@ -142,7 +142,7 @@ class ConfigurablePathBuilder
     {
         if (!isset($this->configuredUserPicturesPath)) {
             $configuredPaths = $this->getConfiguredPaths();
-            $this->configuredUserPicturesPath = $configuredPaths['userpictures_path'];
+            $this->configuredUserPicturesPath = $configuredPaths['userPictures'];
         }
 
         return $this->configuredUserPicturesPath;

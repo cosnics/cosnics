@@ -55,7 +55,7 @@ class ExceptionLoggerFactory
      */
     public function createExceptionLogger(): ExceptionLoggerInterface
     {
-        $exceptionLoggerConfiguration = $this->errorHandlingConfiguration['exception_logger'];
+        $exceptionLoggerConfiguration = $this->errorHandlingConfiguration['exceptionLogger'];
         if (count($exceptionLoggerConfiguration) == 0) {
             return $this->createDefaultExceptionLogger();
         }
@@ -76,17 +76,17 @@ class ExceptionLoggerFactory
     {
         $exceptionLoggers = [];
 
-        foreach ($errorHandlingConfiguration['exception_logger'] as $exceptionLoggerAlias => $exceptionLoggerClass) {
+        foreach ($errorHandlingConfiguration['exceptionLogger'] as $exceptionLoggerAlias => $exceptionLoggerClass) {
             if (!class_exists($exceptionLoggerClass)) {
                 throw new Exception(
                     sprintf('The given exception logger class does not exist (%s)', $exceptionLoggerClass)
                 );
             }
 
-            if (array_key_exists('exception_logger_builder', $errorHandlingConfiguration) &&
-                array_key_exists($exceptionLoggerAlias, $errorHandlingConfiguration['exception_logger_builder'])) {
+            if (array_key_exists('exceptionLoggerBuilder', $errorHandlingConfiguration) &&
+                array_key_exists($exceptionLoggerAlias, $errorHandlingConfiguration['exceptionLoggerBuilder'])) {
                 $exceptionLoggerBuilderClass =
-                    $errorHandlingConfiguration['exception_logger_builder'][$exceptionLoggerAlias];
+                    $errorHandlingConfiguration['exceptionLoggerBuilder'][$exceptionLoggerAlias];
 
                 if (!class_exists($exceptionLoggerBuilderClass)) {
                     throw new Exception(

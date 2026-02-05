@@ -90,28 +90,28 @@ class FileConfigurationCacheDataPreLoader implements CacheDataPreLoaderInterface
         $settings = [
             $this->getSettingsContext() => [
                 'general' => [
-                    'security_key' => $fileContainer->getParameter('chamilo.configuration.general.security_key'),
-                    'hashing_algorithm' => $fileContainer->getParameter(
-                        'chamilo.configuration.general.hashing_algorithm'
+                    'securityKey' => $fileContainer->getParameter('chamilo.configuration.general.securityKey'),
+                    'hashingAlgorithm' => $fileContainer->getParameter(
+                        'chamilo.configuration.general.hashingAlgorithm'
                     ),
-                    'install_date' => $fileContainer->getParameter('chamilo.configuration.general.install_date'),
+                    'installDate' => $fileContainer->getParameter('chamilo.configuration.general.installDate'),
                     'language' => $fileContainer->getParameter('chamilo.configuration.general.language'),
                     'theme' => $fileContainer->getParameter('chamilo.configuration.general.theme')
                 ],
                 'database' => $fileContainer->getParameter('chamilo.configuration.database'),
                 'debug' => [
-                    'show_errors' => $fileContainer->getParameter('chamilo.configuration.debug.show_errors'),
-                    'enable_query_cache' => $fileContainer->getParameter(
-                        'chamilo.configuration.debug.enable_query_cache'
+                    'showErrors' => $fileContainer->getParameter('chamilo.configuration.debug.showErrors'),
+                    'enableQueryCache' => $fileContainer->getParameter(
+                        'chamilo.configuration.debug.enableQueryCache'
                     )
                 ],
                 'storage' => $fileContainer->getParameter('chamilo.configuration.storage')
             ]
         ];
 
-        if ($fileContainer->hasParameter('chamilo.configuration.error_handling')) {
-            $settings[$this->getSettingsContext()]['error_handling'] = $fileContainer->getParameter(
-                'chamilo.configuration.error_handling'
+        if ($fileContainer->hasParameter('chamilo.configuration.errorHandling')) {
+            $settings[$this->getSettingsContext()]['errorHandling'] = $fileContainer->getParameter(
+                'chamilo.configuration.errorHandling'
             );
         }
 

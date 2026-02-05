@@ -47,7 +47,6 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
 
         $user->setUsername($casUser);
         $user->setPassword('PLACEHOLDER');
-        $user->setStatus(User::STATUS_STUDENT);
         $user->setAuthenticationSource(static::class);
         $user->setPlatformAdministrator(false);
         $user->setEmail($casUserAttributes['email']);

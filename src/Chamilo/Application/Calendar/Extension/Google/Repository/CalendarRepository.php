@@ -6,7 +6,7 @@ use Chamilo\Application\Calendar\Extension\Google\Implementation\Calendar\Calend
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\User\Service\UserSettingService;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
@@ -29,7 +29,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class CalendarRepository
 {
-
     protected ConfigurablePathBuilder $configurablePathBuilder;
 
     protected ConfigurationConsulter $configurationConsulter;
@@ -38,7 +37,7 @@ class CalendarRepository
 
     protected UrlGenerator $urlGenerator;
 
-    protected UserSettingService $userSettingService;
+    protected UserService $userService;
 
     private ?Google_Service_Calendar $calendarClient = null;
 
@@ -46,35 +45,32 @@ class CalendarRepository
 
     public function __construct(
         ConfigurablePathBuilder $configurablePathBuilder, UrlGenerator $urlGenerator,
-        ConfigurationConsulter $configurationConsulter, UserSettingService $userSettingService, User $currentUser
+        ConfigurationConsulter $configurationConsulter, UserService $userService, User $currentUser
     )
     {
         $this->urlGenerator = $urlGenerator;
         $this->configurablePathBuilder = $configurablePathBuilder;
         $this->configurationConsulter = $configurationConsulter;
-        $this->userSettingService = $userSettingService;
+        $this->userService = $userService;
         $this->currentUser = $currentUser;
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function clearAccessToken(User $user): bool
     {
-        return $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
-            Manager::CONTEXT, 'token', $user
-        );
+        return $this->getUserService()->updateUserSetting($user, Manager::CONTEXT, 'Token');
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findEventsForCalendarIdentifierAndBetweenDates(
         User $user, string $calendarIdentifier, int $fromDate, int $toDate
     ): Google_Service_Calendar_Events
     {
-        try
-        {
+        try {
             $timeMin = new DateTime('@' . $fromDate);
             $timeMax = new DateTime('@' . $toDate);
 
@@ -87,12 +83,10 @@ class CalendarRepository
                 ]
             );
         }
-        catch (NotConfiguredException)
-        {
+        catch (NotConfiguredException) {
             return new Google_Service_Calendar_Events();
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             $this->clearAccessToken($user);
 
             return new Google_Service_Calendar_Events();
@@ -101,20 +95,18 @@ class CalendarRepository
 
     /**
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findOwnedCalendars(User $user): array
     {
-        try
-        {
+        try {
             $calendarItems =
                 $this->getCalendarClient($user)->calendarList->listCalendarList(['minAccessRole' => 'owner'])->getItems(
                 );
 
             $availableCalendars = [];
 
-            foreach ($calendarItems as $calendarItem)
-            {
+            foreach ($calendarItems as $calendarItem) {
                 $availableCalendar = new AvailableCalendar();
 
                 $availableCalendar->setType(CalendarExtensionDataProvider::CONTEXT);
@@ -127,15 +119,14 @@ class CalendarRepository
 
             return $availableCalendars;
         }
-        catch (NotConfiguredException)
-        {
+        catch (NotConfiguredException) {
             return [];
         }
     }
 
     public function getAccessToken(User $user): ?string
     {
-        return $this->getUserSettingService()->getSettingForUser($user, Manager::CONTEXT, 'token');
+        return $this->getUserService()->findUserSetting($user, Manager::CONTEXT, 'Token');
     }
 
     public function getCacheIdentifier($userToken, $method, $additionalIdentifiers = []): string
@@ -151,12 +142,11 @@ class CalendarRepository
 
     /**
      * @throws \Chamilo\Application\Calendar\Extension\Google\Architecture\Exception\NotConfiguredException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getCalendarClient(User $user): Google_Service_Calendar
     {
-        if (!isset($this->calendarClient))
-        {
+        if (!isset($this->calendarClient)) {
             $this->calendarClient = new Google_Service_Calendar($this->getGoogleClient($user));
         }
 
@@ -199,12 +189,11 @@ class CalendarRepository
 
     /**
      * @throws \Chamilo\Application\Calendar\Extension\Google\Architecture\Exception\NotConfiguredException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getGoogleClient(User $user): Google_Client
     {
-        if (!isset($this->googleClient))
-        {
+        if (!isset($this->googleClient)) {
             $this->googleClient = new Google_Client();
             $this->googleClient->setDeveloperKey($this->getDeveloperKey());
 
@@ -214,8 +203,7 @@ class CalendarRepository
             $this->googleClient->setAccessType('offline');
             $this->googleClient->setApprovalPrompt('force');
 
-            if ($this->hasAccessToken($user))
-            {
+            if ($this->hasAccessToken($user)) {
                 $this->googleClient->setAccessToken($this->getAccessToken($user));
             }
 
@@ -226,17 +214,14 @@ class CalendarRepository
             $this->googleClient->setCache(new Google_Cache_File($this->googleClient));
         }
 
-        if ($this->hasAccessToken($user) && $this->googleClient->isAccessTokenExpired())
-        {
-            try
-            {
+        if ($this->hasAccessToken($user) && $this->googleClient->isAccessTokenExpired()) {
+            try {
                 $refreshToken = $this->googleClient->getRefreshToken();
                 $this->googleClient->refreshToken($refreshToken);
 
                 $this->saveAccessToken($user, $this->googleClient->getAccessToken());
             }
-            catch (Exception)
-            {
+            catch (Exception) {
                 $this->clearAccessToken($user);
             }
         }
@@ -251,8 +236,7 @@ class CalendarRepository
     {
         $value = $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, $name]);
 
-        if (!$value)
-        {
+        if (!$value) {
             throw new NotConfiguredException($name);
         }
 
@@ -264,9 +248,9 @@ class CalendarRepository
         return $this->urlGenerator;
     }
 
-    protected function getUserSettingService(): UserSettingService
+    protected function getUserService(): UserService
     {
-        return $this->userSettingService;
+        return $this->userService;
     }
 
     public function hasAccessToken(User $user): bool
@@ -278,25 +262,21 @@ class CalendarRepository
 
     public function isConfigured(): bool
     {
-        try
-        {
+        try {
             return $this->getDeveloperKey() && $this->getClientId() && $this->getClientSecret();
         }
-        catch (NotConfiguredException)
-        {
+        catch (NotConfiguredException) {
             return false;
         }
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function login(User $user, $authenticationCode = null)
     {
-        try
-        {
-            if ($this->hasAccessToken($user))
-            {
+        try {
+            if ($this->hasAccessToken($user)) {
                 return true;
             }
 
@@ -311,62 +291,50 @@ class CalendarRepository
 
             $googleClient->setRedirectUri($redirectUrl);
 
-            if (isset($authenticationCode))
-            {
-                try
-                {
+            if (isset($authenticationCode)) {
+                try {
                     $googleClient->authenticate($authenticationCode);
 
                     return $this->saveAccessToken($user, $googleClient->getAccessToken());
                 }
-                catch (Exception)
-                {
+                catch (Exception) {
                     return $this->clearAccessToken($user);
                 }
             }
-            else
-            {
+            else {
                 $response = new RedirectResponse($googleClient->createAuthUrl());
                 $response->send();
                 exit;
             }
         }
-        catch (NotConfiguredException)
-        {
+        catch (NotConfiguredException) {
             return false;
         }
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function logout(User $user): bool
     {
-        try
-        {
-            if ($this->getGoogleClient($user)->revokeToken())
-            {
+        try {
+            if ($this->getGoogleClient($user)->revokeToken()) {
                 return $this->clearAccessToken($user);
             }
 
             return false;
         }
-        catch (NotConfiguredException|Google_Auth_Exception)
-        {
+        catch (NotConfiguredException|Google_Auth_Exception) {
             return false;
         }
     }
 
     public function saveAccessToken(User $user, string $accessToken): bool
     {
-        try
-        {
-            return $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
-                Manager::CONTEXT, 'token', $user, $accessToken
-            );
+        try {
+            return $this->getUserService()->updateUserSetting($user, Manager::CONTEXT, 'Token', $accessToken);
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             return false;
         }
     }

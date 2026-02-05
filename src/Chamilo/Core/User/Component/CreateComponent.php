@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CreateComponent extends Manager
 {
-
     /**
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
@@ -32,17 +31,14 @@ class CreateComponent extends Manager
         $currentUser = $this->getUser();
         $translator = $this->getTranslator();
 
-        if (!$currentUser->isPlatformAdministrator())
-        {
+        if (!$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
         $form = new UserCreationForm($this->getUrlGenerator()->fromRequest());
 
-        if ($form->validate())
-        {
-            try
-            {
+        if ($form->validate()) {
+            try {
                 $formValues = $form->exportValues();
 
                 $user = $this->getUserService()->createUserFromParameters(
@@ -50,22 +46,19 @@ class CreateComponent extends Manager
                     $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
                     $formValues[User::PROPERTY_EMAIL], (bool) $formValues[UserForm::PROPERTY_GENERATE_PASSWORD],
                     $formValues[User::PROPERTY_PASSWORD], 'Chamilo\Libraries\Authentication\Platform',
-                    (bool) $formValues[User::PROPERTY_PLATFORM_ADMINISTRATOR], $formValues[User::PROPERTY_STATUS],
+                    (bool) $formValues[User::PROPERTY_PLATFORM_ADMINISTRATOR],
                     (bool) $formValues[User::PROPERTY_ACTIVE], (bool) $formValues[UserForm::PROPERTY_SEND_MAIL]
                 );
 
                 $userPictureProvider = $this->getUserPictureProvider();
 
-                if ($userPictureProvider instanceof UserPictureUpdateProviderInterface)
-                {
+                if ($userPictureProvider instanceof UserPictureUpdateProviderInterface) {
                     $pictureInformation = $this->getRequest()->files->get(User::PROPERTY_PICTURE_URI);
 
-                    if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid())
-                    {
+                    if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid()) {
                         if (!$userPictureProvider->updateUserPictureFromParameters(
                             $user, $this->getUser(), $pictureInformation
-                        ))
-                        {
+                        )) {
                             $this->getNotificationMessageManager()->addMessage(
                                 new NotificationMessage(
                                     $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
@@ -91,8 +84,7 @@ class CreateComponent extends Manager
                     )
                 );
             }
-            catch (Exception $exception)
-            {
+            catch (Exception $exception) {
                 $this->getNotificationMessageManager()->addMessage(
                     new NotificationMessage($exception->getMessage(), NotificationMessage::TYPE_DANGER)
                 );

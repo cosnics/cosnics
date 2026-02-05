@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Service;
 
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
-use Chamilo\Core\User\Service\UserSettingService;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Architecture\Trait\SingleCacheAdapterHandlerTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -19,19 +19,18 @@ class OwnedCalendarsCacheService
 
     protected User $user;
 
-    protected UserSettingService $userSettingService;
+    protected UserService $userService;
 
     private CalendarRepository $calendarRepository;
 
     public function __construct(
-        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository, User $user,
-        UserSettingService $userSettingService
+        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository, User $user, UserService $userService
     )
     {
         $this->cacheAdapter = $cacheAdapter;
         $this->calendarRepository = $calendarRepository;
         $this->user = $user;
-        $this->userSettingService = $userSettingService;
+        $this->userService = $userService;
     }
 
     public function getCalendarRepository(): CalendarRepository
@@ -42,15 +41,15 @@ class OwnedCalendarsCacheService
     /**
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getOwnedCalendars(User $user): array
     {
         $cacheIdentifier = $this->getCacheKeyForParts([__METHOD__, $user->getId()]);
 
-        if (!$this->hasCacheDataForKey($cacheIdentifier))
-        {
-            $lifetimeInMinutes = $this->getUserSettingService()->getSettingForUser(
-                $this->getUser(), 'Chamilo\Core\Admin', 'refresh_external'
+        if (!$this->hasCacheDataForKey($cacheIdentifier)) {
+            $lifetimeInMinutes = $this->getUserService()->findUserSetting(
+                $this->getUser(), 'Chamilo\Core\Admin', 'DefaultLifetime'
             );
 
             $this->saveCacheDataForKey(
@@ -66,8 +65,8 @@ class OwnedCalendarsCacheService
         return $this->user;
     }
 
-    public function getUserSettingService(): UserSettingService
+    public function getUserService(): UserService
     {
-        return $this->userSettingService;
+        return $this->userService;
     }
 }

@@ -47,16 +47,6 @@ class SettingsConnector implements SettingsConnectorInterface
         return Manager::CONTEXT;
     }
 
-    public function getDateTermsAndConditionsUpdate(): array
-    {
-        $formattedDate = $this->getDatetimeUtilities()->formatLocaleDate(
-            (int) $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'date_terms_and_conditions_update']
-            ), IntlDateFormatter::SHORT, IntlDateFormatter::NONE
-        );
-
-        return [$formattedDate];
-    }
-
     public function getDatetimeUtilities(): DatetimeUtilities
     {
         return $this->datetimeUtilities;

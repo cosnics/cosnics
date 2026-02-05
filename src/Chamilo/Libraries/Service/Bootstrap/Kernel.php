@@ -227,11 +227,7 @@ class Kernel
 
     protected function getPlatformNotAvailableResponse(): PlatformNotAvailableResponse
     {
-        return new PlatformNotAvailableResponse(
-            $this->configurationConsulter->getSetting(
-                ['Chamilo\Core\Admin', 'maintenance_warning_message']
-            )
-        );
+        return new PlatformNotAvailableResponse();
     }
 
     public function getRequest(): ChamiloRequest

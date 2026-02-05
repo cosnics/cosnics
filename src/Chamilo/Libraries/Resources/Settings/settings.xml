@@ -239,12 +239,6 @@
             <setting name="microsoft_graph_client_secret"
                      field="HTML_QuickForm_password"
                      default=""/>
-            <setting name="microsoft_graph_access_token"
-                     field="HTML_QuickForm_text"
-                     default=""
-                     user_setting="true"
-                     locked="true"
-                     hidden="true"/>
             <setting name="microsoft_graph_external_user_id"
                      field="HTML_QuickForm_text"
                      default=""

@@ -40,27 +40,6 @@
                          source="getMailers"/>
             </setting>
         </category>
-        <category name="maintenance">
-            <setting name="maintenance_warning_show"
-                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
-                     default="0">
-                <options type="static">
-                    <option name="maintenance_warning_show"
-                            value="1"/>
-                </options>
-            </setting>
-            <setting name="maintenance_warning_message"
-                     field="HTML_QuickForm_text"
-                     default=""/>
-            <setting name="maintenance_block_access"
-                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_toggle"
-                     default="0">
-                <options type="static">
-                    <option name="maintenance_block_access"
-                            value="1"/>
-                </options>
-            </setting>
-        </category>
         <category name="visual">
             <setting name="platform_language"
                      field="HTML_QuickForm_select"
@@ -84,18 +63,7 @@
                      user_setting="1">
                 <options type="dynamic"
                          source="getThemes"/>
-                <availability source="isAllowedToChangeTheme"/>
             </setting>
-            <setting name="portal_home"
-                     field="HTML_QuickForm_html_editor"
-                     default=""/>
-        </category>
-
-        <category name="caching">
-            <setting name="refresh_external"
-                     field="HTML_QuickForm_text"
-                     default="60"
-                     user_setting="1"/>
         </category>
     </settings>
 </package>

@@ -21,7 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class RegisterComponent extends Manager implements NoAuthenticationSupportInterface
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
@@ -33,8 +32,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
 
         $allowRegistration = $configurationConsulter->getSetting([Manager::CONTEXT, 'allow_registration']);
 
-        if (!$allowRegistration == 0)
-        {
+        if (!$allowRegistration == 0) {
             throw new NotAllowedException();
         }
 
@@ -47,10 +45,8 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
             )
         );
 
-        if ($form->validate())
-        {
-            try
-            {
+        if ($form->validate()) {
+            try {
                 $formValues = $form->exportValues();
 
                 $user = $this->getUserService()->registerUserFromParameters(
@@ -58,21 +54,18 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
                     $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
                     $formValues[User::PROPERTY_EMAIL], (bool) $formValues[UserForm::PROPERTY_GENERATE_PASSWORD],
                     $formValues[User::PROPERTY_PASSWORD], 'Chamilo\Libraries\Authentication\Platform',
-                    $formValues[User::PROPERTY_STATUS], (bool) $formValues[UserForm::PROPERTY_SEND_MAIL]
+                    (bool) $formValues[UserForm::PROPERTY_SEND_MAIL]
                 );
 
                 $userPictureProvider = $this->getUserPictureProvider();
 
-                if ($userPictureProvider instanceof UserPictureUpdateProviderInterface)
-                {
+                if ($userPictureProvider instanceof UserPictureUpdateProviderInterface) {
                     $pictureInformation = $this->getRequest()->files->get(User::PROPERTY_PICTURE_URI);
 
-                    if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid())
-                    {
+                    if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid()) {
                         if (!$userPictureProvider->updateUserPictureFromParameters(
                             $user, $this->getUser(), $pictureInformation
-                        ))
-                        {
+                        )) {
                             $this->getNotificationMessageManager()->addMessage(
                                 new NotificationMessage(
                                     $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
@@ -83,8 +76,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
                     }
                 }
 
-                if ($allowRegistration == 2)
-                {
+                if ($allowRegistration == 2) {
                     $this->getNotificationMessageManager()->addMessage(
                         new NotificationMessage(
                             $translator->trans('UserAwaitingApproval', [], Manager::CONTEXT),
@@ -95,8 +87,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
 
                 return new RedirectResponse($this->getUrlGenerator()->fromParameters());
             }
-            catch (Exception $exception)
-            {
+            catch (Exception $exception) {
                 $this->getNotificationMessageManager()->addMessage(
                     new NotificationMessage($exception->getMessage(), NotificationMessage::TYPE_DANGER)
                 );

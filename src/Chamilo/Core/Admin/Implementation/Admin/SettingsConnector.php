@@ -143,11 +143,4 @@ class SettingsConnector implements SettingsConnectorInterface
                 [\Chamilo\Core\User\Manager::CONTEXT, 'allow_user_change_platform_timezone']
             ) == 1;
     }
-
-    public function isAllowedToChangeTheme(): bool
-    {
-        return $this->getConfigurationConsulter()->getSetting(
-                [\Chamilo\Core\User\Manager::CONTEXT, 'allow_user_theme_selection']
-            ) == 1;
-    }
 }

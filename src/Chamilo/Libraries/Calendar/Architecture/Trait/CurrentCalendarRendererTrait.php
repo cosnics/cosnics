@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Architecture\Trait;
 
-use Chamilo\Core\User\Service\UserSettingService;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Platform\ChamiloRequest;
@@ -21,8 +21,8 @@ trait CurrentCalendarRendererTrait
         $rendererType = $this->getRequest()->query->get(HtmlCalendarRenderer::PARAM_TYPE);
 
         if (!$rendererType) {
-            $rendererType = $this->getUserSettingService()->getSettingForUser(
-                $this->getUser(), 'Chamilo\Libraries', 'calendar_default_view'
+            $rendererType = $this->getUserService()->findUserSetting(
+                $this->getUser(), 'Chamilo\Libraries\Calendar', 'DefaultView'
             );
 
             if ($rendererType == HtmlCalendarRenderer::TYPE_MONTH) {
@@ -53,5 +53,5 @@ trait CurrentCalendarRendererTrait
 
     abstract public function getUser(): ?User;
 
-    abstract public function getUserSettingService(): UserSettingService;
+    abstract public function getUserService(): UserService;
 }

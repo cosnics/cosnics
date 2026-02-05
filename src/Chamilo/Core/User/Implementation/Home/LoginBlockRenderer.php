@@ -47,12 +47,10 @@ class LoginBlockRenderer extends BlockRenderer
     {
         $html = [];
 
-        if (!$user instanceof User)
-        {
+        if (!$user instanceof User) {
             $message = $this->getRequest()->query->get(AuthenticationValidator::PARAM_AUTHENTICATION_ERROR);
 
-            if ($message)
-            {
+            if ($message) {
                 $html[] =
                     '<div class="error-message" style="width: auto; left: 0%; right: 0%; margin: auto;">' . $message .
                     '</div>';
@@ -60,8 +58,7 @@ class LoginBlockRenderer extends BlockRenderer
 
             $html[] = $this->displayLoginForm();
         }
-        else
-        {
+        else {
             $profilePhotoUrl = $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
@@ -69,10 +66,6 @@ class LoginBlockRenderer extends BlockRenderer
                     Manager::PARAM_USER_ID => $user->getId()
                 ]
             );
-
-            $maximumHeight = $this->getConfigurationConsulter()->getSetting(
-                [Manager::CONTEXT, 'restrict_picture_height']
-            ) ? 'max-height:100px' : null;
 
             $logoutLink = $this->getUrlGenerator()->fromParameters(
                 [
@@ -83,7 +76,7 @@ class LoginBlockRenderer extends BlockRenderer
 
             $html[] =
                 '<img src="' . htmlspecialchars($profilePhotoUrl) . '" alt="' . htmlspecialchars($user->getFullName()) .
-                '"  class="img-thumbnail" style="max-width: 100%; ' . $maximumHeight . '" />';
+                '"  class="img-thumbnail" style="max-width: 100%; max-height:100px" />';
             $html[] = '<h3>' . htmlspecialchars($user->getFullName()) . '</h3>';
             $html[] = '<p>' . htmlspecialchars($user->getEmail()) . '</p>';
             $html[] = '<p><a href="' . $logoutLink . '" class="btn btn-danger" role="button">' . htmlspecialchars(
@@ -133,12 +126,10 @@ class LoginBlockRenderer extends BlockRenderer
                 [Manager::CONTEXT, 'allow_registration']
             ) || $configurationConsulter->getSetting(
                 [Manager::CONTEXT, 'allow_password_retrieval']
-            ))
-        {
+            )) {
             if ($configurationConsulter->getSetting(
                 [Manager::CONTEXT, 'allow_registration']
-            ))
-            {
+            )) {
                 $link = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
@@ -158,8 +149,7 @@ class LoginBlockRenderer extends BlockRenderer
             }
             if ($configurationConsulter->getSetting(
                 [Manager::CONTEXT, 'allow_password_retrieval']
-            ))
-            {
+            )) {
                 $link = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,

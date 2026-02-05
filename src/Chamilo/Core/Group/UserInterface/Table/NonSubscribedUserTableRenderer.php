@@ -95,17 +95,10 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
             $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_USERNAME)
         );
 
-        $showEmail = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'show_email_addresses']);
-
-        if ($showEmail) {
-            $this->addColumn(
-                $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_EMAIL)
-            );
-        }
-
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_STATUS)
+            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_EMAIL)
         );
+
         $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(
                 User::class, User::PROPERTY_PLATFORM_ADMINISTRATOR

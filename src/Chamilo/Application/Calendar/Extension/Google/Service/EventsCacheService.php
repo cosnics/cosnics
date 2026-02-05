@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Service;
 
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
-use Chamilo\Core\User\Service\UserSettingService;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Architecture\Trait\SingleCacheAdapterHandlerTrait;
 use Google_Service_Calendar_Events;
@@ -18,17 +18,17 @@ class EventsCacheService
 {
     use SingleCacheAdapterHandlerTrait;
 
-    protected UserSettingService $userSettingService;
+    protected UserService $userService;
 
     private CalendarRepository $calendarRepository;
 
     public function __construct(
-        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository, UserSettingService $userSettingService
+        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository, UserService $userService
     )
     {
         $this->cacheAdapter = $cacheAdapter;
         $this->calendarRepository = $calendarRepository;
-        $this->userSettingService = $userSettingService;
+        $this->userService = $userService;
     }
 
     public function getCalendarRepository(): CalendarRepository
@@ -38,6 +38,7 @@ class EventsCacheService
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getEventsForCalendarIdentifierAndBetweenDates(
         User $user, string $calendarIdentifier, $fromDate, $toDate
@@ -49,10 +50,9 @@ class EventsCacheService
             [__METHOD__, $user->getId(), $calendarIdentifier, $fromDate, $toDate]
         );
 
-        if (!$this->hasCacheDataForKey($cacheIdentifier))
-        {
-            $lifetimeInMinutes = $this->getUserSettingService()->getSettingForUser(
-                $user, 'Chamilo\Core\Admin', 'refresh_external'
+        if (!$this->hasCacheDataForKey($cacheIdentifier)) {
+            $lifetimeInMinutes = $this->getUserService()->findUserSetting(
+                $user, 'Chamilo\Core\Admin', 'DefaultLifetime'
             );
 
             $this->saveCacheDataForKey(
@@ -65,8 +65,8 @@ class EventsCacheService
         return $this->readCacheDataForKey($cacheIdentifier);
     }
 
-    public function getUserSettingService(): UserSettingService
+    public function getUserService(): UserService
     {
-        return $this->userSettingService;
+        return $this->userService;
     }
 }

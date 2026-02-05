@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Architecture\Interface;
 
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * @package Chamilo\Application\Calendar
@@ -11,14 +11,13 @@ use Chamilo\Libraries\Architecture\Domain\Application;
  */
 interface CalendarExtensionActionProviderInterface
 {
+    /**
+     * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface[]
+     */
+    public function getAdditional(User $user): array;
 
     /**
      * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface[]
      */
-    public function getAdditional(Application $application): array;
-
-    /**
-     * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface[]
-     */
-    public function getPrimary(Application $application): array;
+    public function getPrimary(User $user): array;
 }

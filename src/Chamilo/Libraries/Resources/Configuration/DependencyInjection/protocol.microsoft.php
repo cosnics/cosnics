@@ -3,8 +3,12 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Factory\GraphServiceClientFactory;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\CalendarRepository;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\TeamRepository;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository;
 use Microsoft\Graph\GraphServiceClient;
 
@@ -20,7 +24,11 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(CalendarRepository::class);
     $services->set(UserRepository::class);
+    $services->set(GroupRepository::class);
+    $services->set(TeamRepository::class);
 
     $services->set(UserService::class);
     $services->set(CalendarService::class);
+    $services->set(GroupService::class);
+    $services->set(TeamService::class);
 };

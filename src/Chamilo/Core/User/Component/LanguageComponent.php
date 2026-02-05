@@ -13,21 +13,19 @@ class LanguageComponent extends Manager
 {
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function run(): Response
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ChangeLanguage');
 
-        if ($this->isAllowedToChangeLanguage())
-        {
+        if ($this->isAllowedToChangeLanguage()) {
             $choice = $this->getRequest()->query->get(self::PARAM_LANGUAGE);
             $languages = array_keys($this->getLanguages());
 
-            if ($choice && in_array($choice, $languages))
-            {
-                $this->getUserSettingService()->saveUserSettingForSettingContextVariableAndUser(
-                    'Chamilo\Core\Admin', 'platform_language', $this->getUser(), $choice
+            if ($choice && in_array($choice, $languages)) {
+                $this->getUserService()->updateUserSetting(
+                    $this->getUser(), 'Chamilo\Core\Admin', 'PlatformLanguage', $choice
                 );
             }
         }
@@ -52,8 +50,6 @@ class LanguageComponent extends Manager
     {
         return $this->getConfigurationConsulter()->getSetting(
                 ['Chamilo\Core\User', 'allow_user_change_platform_language']
-            ) == 1 && $this->getConfigurationConsulter()->getSetting(
-                ['Chamilo\Core\User', 'allow_user_quick_change_platform_language']
             ) == 1;
     }
 }

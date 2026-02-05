@@ -57,13 +57,6 @@ abstract class UserForm extends FormValidator
         }
 
         $this->addElement(
-            HTML_QuickForm_select::class, User::PROPERTY_STATUS, $translator->trans('Status', [], Manager::CONTEXT), [
-                User::STATUS_STUDENT => $translator->trans('Student', [], Manager::CONTEXT),
-                User::STATUS_TEACHER => $translator->trans('CourseAdmin', [], Manager::CONTEXT)
-            ]
-        );
-
-        $this->addElement(
             HTML_QuickForm_toggle::class, User::PROPERTY_ACTIVE, $translator->trans('Active', [], Manager::CONTEXT)
         );
 

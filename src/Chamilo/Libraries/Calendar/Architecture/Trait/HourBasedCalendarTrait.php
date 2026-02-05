@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Architecture\Trait;
 
-use Chamilo\Core\User\Service\UserSettingService;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -10,7 +10,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 trait HourBasedCalendarTrait
 {
-
     protected int $endHour;
 
     protected bool $hideOtherHours;
@@ -21,10 +20,9 @@ trait HourBasedCalendarTrait
 
     public function getEndHour(): int
     {
-        if (!isset($this->endHour))
-        {
-            $this->endHour = (int) $this->getUserSettingService()->getSettingForUser(
-                $this->getUser(), 'Chamilo\Libraries', 'calendar_working_hours_end'
+        if (!isset($this->endHour)) {
+            $this->endHour = (int) $this->getUserService()->findUserSetting(
+                $this->getUser(), 'Chamilo\Libraries\Calendar', 'WorkingHoursEnd'
             );
         }
 
@@ -33,10 +31,9 @@ trait HourBasedCalendarTrait
 
     public function getHideOtherHours(): bool
     {
-        if (!isset($this->hideOtherHours))
-        {
-            $this->hideOtherHours = (bool) $this->getUserSettingService()->getSettingForUser(
-                $this->getUser(), 'Chamilo\Libraries', 'calendar_hide_non_working_hours'
+        if (!isset($this->hideOtherHours)) {
+            $this->hideOtherHours = (bool) $this->getUserService()->findUserSetting(
+                $this->getUser(), 'Chamilo\Libraries\Calendar', 'HideNonWorkingHours'
             );
         }
 
@@ -45,10 +42,9 @@ trait HourBasedCalendarTrait
 
     public function getHourStep(): int
     {
-        if (!isset($this->hourStep))
-        {
-            $this->hourStep = (int) $this->getUserSettingService()->getSettingForUser(
-                $this->getUser(), 'Chamilo\Libraries', 'calendar_hour_step'
+        if (!isset($this->hourStep)) {
+            $this->hourStep = (int) $this->getUserService()->findUserSetting(
+                $this->getUser(), 'Chamilo\Libraries\Calendar', 'HourStep'
             );
         }
 
@@ -57,10 +53,9 @@ trait HourBasedCalendarTrait
 
     public function getStartHour(): int
     {
-        if (!isset($this->startHour))
-        {
-            $this->startHour = (int) $this->getUserSettingService()->getSettingForUser(
-                $this->getUser(), 'Chamilo\Libraries', 'calendar_working_hours_start'
+        if (!isset($this->startHour)) {
+            $this->startHour = (int) $this->getUserService()->findUserSetting(
+                $this->getUser(), 'Chamilo\Libraries\Calendar', 'WorkingHoursStart'
             );
         }
 
@@ -69,5 +64,5 @@ trait HourBasedCalendarTrait
 
     abstract public function getUser(): ?User;
 
-    abstract public function getUserSettingService(): UserSettingService;
+    abstract public function getUserService(): UserService;
 }

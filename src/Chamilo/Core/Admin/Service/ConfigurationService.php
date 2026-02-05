@@ -8,7 +8,6 @@ use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Architecture\Trait\CacheAdapterHandlerTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
  * @package Chamilo\Core\Admin\Service
@@ -22,18 +21,15 @@ class ConfigurationService
 
     protected UserService $userService;
 
-    protected FilesystemAdapter $userSettingsCacheAdapter;
-
     private ConfigurationRepository $configurationRepository;
 
     public function __construct(
         ConfigurationRepository $configurationRepository, AdapterInterface $storageConfigurationCacheAdapter,
-        FilesystemAdapter $userSettingsCacheAdapter, UserService $userService
+        UserService $userService
     )
     {
         $this->configurationRepository = $configurationRepository;
         $this->storageConfigurationCacheAdapter = $storageConfigurationCacheAdapter;
-        $this->userSettingsCacheAdapter = $userSettingsCacheAdapter;
         $this->userService = $userService;
     }
 
@@ -72,16 +68,13 @@ class ConfigurationService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function createSettingFromParameters(
-        string $context, string $variable, ?string $value = null, bool $isUserSetting = false
-    ): bool
+    public function createSettingFromParameters(string $context, string $variable, ?string $value = null): bool
     {
         $setting = new Setting();
 
         $setting->setContext($context);
         $setting->setVariable($variable);
         $setting->setValue($value);
-        $setting->setUserSetting((int) $isUserSetting);
 
         return $this->createSetting($setting);
     }
@@ -98,15 +91,6 @@ class ConfigurationService
 
         if (!$this->clearCache()) {
             return false;
-        }
-
-        if ($setting->getUserSetting()) {
-            if (!$this->getUserService()->deleteUserSettingsForSettingIdentifier($setting->getId())) {
-                return false;
-            }
-            else {
-                return $this->clearAllCacheDataForAdapter($this->getUserSettingsCacheAdapter());
-            }
         }
 
         return true;
@@ -162,11 +146,6 @@ class ConfigurationService
         return $this->userService;
     }
 
-    public function getUserSettingsCacheAdapter(): FilesystemAdapter
-    {
-        return $this->userSettingsCacheAdapter;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Symfony\Component\Cache\Exception\CacheException
@@ -188,7 +167,7 @@ class ConfigurationService
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function updateSettingFromParameters(
-        string $context, string $variable, ?string $value = null, ?bool $isUserSetting = null
+        string $context, string $variable, ?string $value = null
     ): bool
     {
         $setting = $this->findSettingByContextAndVariableName($context, $variable);
@@ -199,10 +178,6 @@ class ConfigurationService
 
         if (!is_null($value)) {
             $setting->setValue($value);
-        }
-
-        if (!is_null($isUserSetting)) {
-            $setting->setUserSetting((int) $isUserSetting);
         }
 
         return $this->updateSetting($setting);

@@ -130,9 +130,8 @@ class BrowserComponent extends Manager
         $rendererType = $this->getRequest()->query->get(HtmlCalendarRenderer::PARAM_TYPE);
 
         if (!$rendererType) {
-            $rendererType = $this->getUserSettingService()->getSettingForUser(
-                $this->getUser(), 'Chamilo\Libraries', 'calendar_default_view'
-            );
+            $rendererType =
+                $this->getUserService()->findUserSetting($this->getUser(), 'Chamilo\Libraries', 'CalendarDefaultView');
 
             if ($rendererType == HtmlCalendarRenderer::TYPE_MONTH) {
                 $detect = new MobileDetect();
@@ -221,9 +220,9 @@ class BrowserComponent extends Manager
 
         foreach ($this->getCalendarExtensionActionProvider()->getCalendarExtenstionActionProviders() as $actionProvider)
         {
-            $primaryExtensionActions = array_merge($primaryExtensionActions, $actionProvider->getPrimary($this));
+            $primaryExtensionActions = array_merge($primaryExtensionActions, $actionProvider->getPrimary($this->getUser()));
             $additionalExtensionActions = array_merge(
-                $additionalExtensionActions, $actionProvider->getAdditional($this)
+                $additionalExtensionActions, $actionProvider->getAdditional($this->getUser())
             );
         }
 

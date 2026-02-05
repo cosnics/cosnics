@@ -81,21 +81,6 @@ class RegisterForm extends UserForm
             $includeCategoryTitle, $allowedToChangeFirstName, $allowedToChangeLastName, $allowedToChangeUsername,
             $requiresEmail, $allowedToChangeEmailAddress, $requiresOfficialCode, $allowedToChangeOfficialCode
         );
-
-        if ($this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'allow_teacher_registration']))
-        {
-            $translator = $this->getTranslator();
-
-            $status = [];
-
-            $status[5] = $translator->trans('Student');
-            $status[1] = $translator->trans('CourseAdmin');
-
-            $this->addElement(
-                HTML_QuickForm_select::class, User::PROPERTY_STATUS, $translator->trans('Status', [], Manager::CONTEXT),
-                $status
-            );
-        }
     }
 
     /**

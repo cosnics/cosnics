@@ -4,7 +4,8 @@ namespace Chamilo\Application\Calendar\Extension\Google\Implementation\Calendar;
 use Chamilo\Application\Calendar\Architecture\Interface\CalendarExtensionActionProviderInterface;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
-use Chamilo\Core\User\Service\UserSettingService;
+use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
@@ -27,15 +28,14 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
 
     protected UrlGenerator $urlGenerator;
 
-    protected UserSettingService $userSettingService;
+    protected UserService $userService;
 
     public function __construct(
-        UrlGenerator $urlGenerator, UserSettingService $userSettingService, Translator $translator,
-        CalendarService $calendarService
+        UrlGenerator $urlGenerator, UserService $userService, Translator $translator, CalendarService $calendarService
     )
     {
         $this->urlGenerator = $urlGenerator;
-        $this->userSettingService = $userSettingService;
+        $this->userService = $userService;
         $this->translator = $translator;
         $this->calendarService = $calendarService;
     }
@@ -43,10 +43,9 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
     /**
      * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface[]
      */
-    public function getAdditional(Application $application): array
+    public function getAdditional(User $user): array
     {
-        if (!$this->getCalendarService()->isConfigured())
-        {
+        if (!$this->getCalendarService()->isConfigured()) {
             return [];
         }
 
@@ -57,11 +56,9 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
             ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, [], ['dropdown-menu-right']
         );
 
-        $accessToken =
-            $this->getUserSettingService()->getSettingForUser($application->getUser(), Manager::CONTEXT, 'token');
+        $accessToken = $this->getUserService()->findUserSetting($user, Manager::CONTEXT, 'Token');
 
-        if (!$accessToken)
-        {
+        if (!$accessToken) {
             $link = $this->getUrlGenerator()->fromParameters(
                 [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_LOGIN]
             );
@@ -73,8 +70,7 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
                 )
             );
         }
-        else
-        {
+        else {
             $link = $this->getUrlGenerator()->fromParameters(
                 [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_LOGOUT]
             );
@@ -98,7 +94,7 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
     /**
      * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface[]
      */
-    public function getPrimary(Application $application): array
+    public function getPrimary(User $user): array
     {
         return [];
     }
@@ -113,8 +109,8 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
         return $this->urlGenerator;
     }
 
-    public function getUserSettingService(): UserSettingService
+    public function getUserService(): UserService
     {
-        return $this->userSettingService;
+        return $this->userService;
     }
 }

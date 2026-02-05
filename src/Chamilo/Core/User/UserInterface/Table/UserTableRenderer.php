@@ -157,9 +157,6 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
         );
         $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_EMAIL));
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_STATUS)
-        );
-        $this->addColumn(
             $this->getDataClassPropertyTableColumnFactory()->getColumn(
                 User::class, User::PROPERTY_PLATFORM_ADMINISTRATOR
             )
@@ -181,14 +178,6 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         // Add special features here
         switch ($column->getName()) {
-            // Exceptions that need post-processing go here ...
-            case User::PROPERTY_STATUS :
-                if ($result->getStatus() == '1') {
-                    return $translator->trans('CourseAdmin', [], Manager::CONTEXT);
-                }
-                else {
-                    return $translator->trans('Student', [], Manager::CONTEXT);
-                }
             case User::PROPERTY_PLATFORM_ADMINISTRATOR :
                 return $result->getPlatformAdmin() ? $trueGlyph->render() : $falseGlyph->render();
             case User::PROPERTY_ACTIVE :

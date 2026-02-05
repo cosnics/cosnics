@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Service\TableBuilder;
 
 use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
-use Chamilo\Core\User\Service\UserSettingService;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use HTML_Table;
 use Symfony\Component\Translation\Translator;
@@ -21,16 +21,15 @@ abstract class CalendarTableBuilder
 
     protected ?User $user;
 
-    protected UserSettingService $userSettingService;
+    protected UserService $userService;
 
     public function __construct(
-        Translator $translator, ?User $user, ConfigurationConsulter $configurationConsulter,
-        UserSettingService $userSettingService
+        Translator $translator, ?User $user, ConfigurationConsulter $configurationConsulter, UserService $userService
     )
     {
         $this->translator = $translator;
         $this->user = $user;
-        $this->userSettingService = $userSettingService;
+        $this->userService = $userService;
         $this->configurationConsulter = $configurationConsulter;
     }
 
@@ -71,8 +70,8 @@ abstract class CalendarTableBuilder
         return $this->user;
     }
 
-    public function getUserSettingService(): UserSettingService
+    public function getUserService(): UserService
     {
-        return $this->userSettingService;
+        return $this->userService;
     }
 }

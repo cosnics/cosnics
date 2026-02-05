@@ -59,6 +59,7 @@ class CalendarService
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function getEventsForCalendarIdentifierAndBetweenDates(
         User $user, string $calendarIdentifier, ?int $fromDate = null, ?int $toDate = null
@@ -80,6 +81,7 @@ class CalendarService
      *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function getOwnedCalendars(User $user): array
     {
@@ -101,11 +103,17 @@ class CalendarService
         return $this->getCalendarRepository()->isConfigured();
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     */
     public function login(User $user, $authenticationCode = null): bool
     {
         return $this->getCalendarRepository()->login($user, $authenticationCode);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     */
     public function logout(User $user): bool
     {
         return $this->getCalendarRepository()->logout($user);

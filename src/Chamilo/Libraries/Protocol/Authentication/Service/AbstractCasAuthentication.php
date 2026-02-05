@@ -52,15 +52,15 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
     {
         if (!isset($this->settings)) {
             $this->settings = [];
-            $this->settings['host'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'cas_host']);
-            $this->settings['port'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'cas_port']);
-            $this->settings['uri'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'cas_uri']);
+            $this->settings['host'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'host']);
+            $this->settings['port'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'port']);
+            $this->settings['uri'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'uri']);
             $this->settings['certificate'] = $this->configurationConsulter->getSetting(
-                ['Libraries', 'cas_certificate']
+                ['Libraries', 'certificate']
             );
-            $this->settings['log'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'cas_log']);
-            $this->settings['enable_log'] = $this->configurationConsulter->getSetting(
-                ['Chamilo\Libraries', 'cas_enable_log']
+            $this->settings['log'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'log']);
+            $this->settings['enableLog'] = $this->configurationConsulter->getSetting(
+                ['Chamilo\Libraries', 'enableLog']
             );
         }
 
@@ -94,29 +94,19 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
             $request = $this->getRequest();
 
             // initialize phpCAS
-            if ($settings['enable_log']) {
+            if ($settings['enableLog']) {
                 phpCAS::setLogger($this->logger);
             }
 
             $configurationConsulter = $this->getConfigurationConsulter();
 
-            $casVersion = $configurationConsulter->getSetting(['Libraries', 'cas_version']);
-
-            if ($casVersion == 'SAML_VERSION_1_1') {
-                phpCAS::client(
-                    SAML_VERSION_1_1, $settings['host'], (int) $settings['port'], $settings['uri'],
-                    $request->getSchemeAndHttpHost(), false
-                );
-            }
-            else {
-                phpCAS::client(
-                    CAS_VERSION_2_0, $settings['host'], (int) $settings['port'], $settings['uri'],
-                    $request->getSchemeAndHttpHost(), false
-                );
-            }
+            phpCAS::client(
+                SAML_VERSION_1_1, $settings['host'], (int) $settings['port'], $settings['uri'],
+                $request->getSchemeAndHttpHost(), false
+            );
 
             $casCheckCertificate = $configurationConsulter->getSetting(
-                ['Libraries', 'cas_check_certificate']
+                ['Libraries', 'checkCertificate']
             );
 
             // SSL validation for the CAS server
@@ -135,7 +125,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
         foreach ($settings as $setting => $value) {
             if (empty($value) && !in_array(
-                    $setting, ['uri', 'certificate', 'log', 'enable_log']
+                    $setting, ['uri', 'certificate', 'log', 'enableLog']
                 )) {
                 return false;
             }
@@ -156,16 +146,6 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
         $this->initializeClient();
         $configurationConsulter = $this->getConfigurationConsulter();
-
-        $externalAuthenticationEnabled = $configurationConsulter->getSetting(
-            ['Chamilo\Libraries', 'enableExternalAuthentication']
-        );
-
-        $bypassExternalAuthentication = (boolean) $this->getRequest()->query->get('noExtAuth', false);
-
-        if (!$externalAuthenticationEnabled || $bypassExternalAuthentication) {
-            return null;
-        }
 
         $authenticationException = new AuthenticationException(
             $this->getTranslator()->trans(

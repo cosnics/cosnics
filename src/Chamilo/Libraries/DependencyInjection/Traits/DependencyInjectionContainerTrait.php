@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\DependencyInjection\Traits;
 use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Service\UserSettingService;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
 use Chamilo\Libraries\Filesystem\Service\FilesystemTools;
@@ -244,11 +243,6 @@ trait DependencyInjectionContainerTrait
     public function getUserService(): UserService
     {
         return $this->getService(UserService::class);
-    }
-
-    public function getUserSettingService(): UserSettingService
-    {
-        return $this->getService(UserSettingService::class);
     }
 
     public function getWebPathBuilder(): WebPathBuilder

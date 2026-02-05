@@ -16,8 +16,6 @@ class PortalHomeBlockRenderer extends BlockRenderer
 
     public function displayContent(Element $block, ?User $user = null): string
     {
-        $html = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'portal_home']);
-
-        return $html ?: $this->getTranslator()->trans('ConfigurePortalHomeFirst', [], Manager::CONTEXT);
+        return '';
     }
 }

@@ -11,7 +11,7 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(Diagnoser::class)->args(
         [
-            '$installationDate' => '%chamilo.configuration.general.install_date%',
+            '$installationDate' => '%chamilo.configuration.general.installDate%',
             '$diagnoserTableRenderer' => service('Chamilo\Libraries\Service\Diagnoser\DiagnoserTableRenderer')
         ]
     );

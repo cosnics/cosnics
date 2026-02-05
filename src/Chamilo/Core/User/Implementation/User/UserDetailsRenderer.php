@@ -97,12 +97,8 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         $html[] = $translator->trans('Email', [], Manager::CONTEXT) . ': ' .
             $this->getStringUtilities()->encryptMailLink($user->getEmail());
         $html[] = '<br />' . $translator->trans('Username', [], Manager::CONTEXT) . ': ' . $user->getUsername();
-        $html[] = '<br />' . $translator->trans('Status', [], Manager::CONTEXT) . ': ' .
-            ($user->getStatus() == 1 ? $translator->trans('Teacher', [], Manager::CONTEXT) :
-                $translator->trans('Student', [], Manager::CONTEXT));
 
-        if ($user->isPlatformAdministrator())
-        {
+        if ($user->isPlatformAdministrator()) {
             $html[] = ', ' . $translator->trans('PlatformAdministrator', [], Manager::CONTEXT);
         }
 
@@ -120,8 +116,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
      */
     public function renderUserProperties(User $user, User $requestingUser): string
     {
-        if (!$requestingUser->isPlatformAdministrator())
-        {
+        if (!$requestingUser->isPlatformAdministrator()) {
             return '';
         }
 
@@ -137,8 +132,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
             'active'
         ];
 
-        foreach ($attributes as $i => $attribute)
-        {
+        foreach ($attributes as $i => $attribute) {
             $table->setCellContents(
                 $i, 0, $translator->trans(
                 $this->getStringUtilities()->createString($attribute)->upperCamelize()->toString(), [], Manager::CONTEXT
@@ -147,8 +141,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
             $value = $user->getDefaultProperty($attribute);
 
-            $value = match ($attribute)
-            {
+            $value = match ($attribute) {
                 User::PROPERTY_ACTIVE => $translator->trans(($value ? 'ConfirmYes' : 'ConfirmNo'), [],
                     StringUtilities::LIBRARIES),
                 User:: PROPERTY_REGISTRATION_DATE => $datetimeUtilities->formatLocaleDate($value),

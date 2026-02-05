@@ -33,7 +33,7 @@ class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
     {
         $errorHandlingConfiguration = $this->getErrorHandlingConfiguration();
 
-        return new FileExceptionLogger($errorHandlingConfiguration['logs_path']);
+        return new FileExceptionLogger($errorHandlingConfiguration['logs']);
     }
 
     public function getErrorHandlingConfiguration(): array

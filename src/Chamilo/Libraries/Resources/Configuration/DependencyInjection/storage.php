@@ -67,7 +67,7 @@ return static function (ContainerConfigurator $container) {
     $services->set('Chamilo\Libraries\Storage\Repository\Doctrine\DataClassRepository', DataClassRepository::class)
         ->args([
             '$dataClassDatabase' => service(DataClassDatabase::class),
-            '$queryCacheEnabled' => '%chamilo.configuration.debug.enable_query_cache%',
+            '$queryCacheEnabled' => '%chamilo.configuration.debug.enableQueryCache%',
         ]);
 
     $services->alias(

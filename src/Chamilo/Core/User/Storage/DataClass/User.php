@@ -3,6 +3,8 @@ namespace Chamilo\Core\User\Storage\DataClass;
 
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConfigurableDataClassInterface;
+use Chamilo\Libraries\Storage\Architecture\Trait\ConfigurableDataClassTrait;
 
 /**
  * @package Chamilo\Core\User\Storage\DataClass
@@ -11,10 +13,11 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class User extends DataClass
+class User extends DataClass implements ConfigurableDataClassInterface
 {
+    use ConfigurableDataClassTrait;
+
     public const CONTEXT = Manager::CONTEXT;
-    public const PROPERTY_ACTIVATION_DATE = 'activation_date';
     public const PROPERTY_ACTIVE = 'active';
     public const PROPERTY_AUTHENTICATION_SOURCE = 'auth_source';
     public const PROPERTY_CREATOR_IDENTIFIER = 'creator_id';
@@ -26,12 +29,8 @@ class User extends DataClass
     public const PROPERTY_PLATFORM_ADMINISTRATOR = 'admin';
     public const PROPERTY_REGISTRATION_DATE = 'registration_date';
     public const PROPERTY_SECURITY_TOKEN = 'security_token';
-    public const PROPERTY_STATUS = 'status';
     public const PROPERTY_SURNAME = 'lastname';
     public const PROPERTY_USERNAME = 'username';
-    public const STATUS_ANONYMOUS = 0;
-    public const STATUS_STUDENT = 5;
-    public const STATUS_TEACHER = 1;
 
     public function getActive(): bool
     {
@@ -59,12 +58,10 @@ class User extends DataClass
         $extendedPropertyNames[] = self::PROPERTY_PASSWORD;
         $extendedPropertyNames[] = self::PROPERTY_AUTHENTICATION_SOURCE;
         $extendedPropertyNames[] = self::PROPERTY_EMAIL;
-        $extendedPropertyNames[] = self::PROPERTY_STATUS;
         $extendedPropertyNames[] = self::PROPERTY_PLATFORM_ADMINISTRATOR;
         $extendedPropertyNames[] = self::PROPERTY_OFFICIAL_CODE;
         $extendedPropertyNames[] = self::PROPERTY_PICTURE_URI;
         $extendedPropertyNames[] = self::PROPERTY_CREATOR_IDENTIFIER;
-        $extendedPropertyNames[] = self::PROPERTY_ACTIVATION_DATE;
         $extendedPropertyNames[] = self::PROPERTY_REGISTRATION_DATE;
         $extendedPropertyNames[] = self::PROPERTY_ACTIVE;
         $extendedPropertyNames[] = self::PROPERTY_SECURITY_TOKEN;
@@ -115,11 +112,6 @@ class User extends DataClass
     public function getSecurityToken(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_SECURITY_TOKEN);
-    }
-
-    public function getStatus(): int
-    {
-        return $this->getDefaultProperty(self::PROPERTY_STATUS);
     }
 
     /**
@@ -203,11 +195,6 @@ class User extends DataClass
     public function setSecurityToken(?string $securityToken): void
     {
         $this->setDefaultProperty(self::PROPERTY_SECURITY_TOKEN, $securityToken);
-    }
-
-    public function setStatus(int $status): void
-    {
-        $this->setDefaultProperty(self::PROPERTY_STATUS, $status);
     }
 
     public function setSurname(?string $surname): void
