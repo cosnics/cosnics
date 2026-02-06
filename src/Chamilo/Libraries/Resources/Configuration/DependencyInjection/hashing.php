@@ -24,6 +24,6 @@ return static function (ContainerConfigurator $container) {
     $services->set(WhirlpoolHashingAlgorithm::class)->tag(HashingAlgorithm::class);
 
     $services->set(HashingAlgorithmFactory::class)->args(
-        ['$configuredHashingAlgorithm' => '%chamilo.configuration.general.hashingAlgorithm%']
+        ['$configuredHashingAlgorithm' => '%cosnics.libraries.protocol.security.hashingAlgorithmClass%']
     );
 };

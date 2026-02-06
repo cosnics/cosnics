@@ -18,6 +18,6 @@ return static function (ContainerConfigurator $container) {
     $services->set(WebPathBuilder::class);
     $services->set(ArchiveCreator::class);
     $services->set(HtmlPurifierFactory::class);
-    $services->set(ConfigurablePathBuilder::class)->args(['%chamilo.configuration.storage%']);
+    $services->set(ConfigurablePathBuilder::class)->args(['%cosnics.libraries.filesystem.path%']);
     $services->set(ZipArchiveFilecompression::class);
 };

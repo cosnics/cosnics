@@ -59,12 +59,12 @@ return static function (ContainerConfigurator $container) {
     $services->set('Chamilo\Libraries\UserInterface\Theme\Service\ThemeSystemPathBuilder', ThemePathBuilder::class)
         ->args([
             '$pathBuilder' => service(SystemPathBuilder::class),
-            '$theme' => '%chamilo.configuration.general.theme%',
+            '$theme' => '%cosnics.libraries.userInterface.theme%',
         ]);
 
     $services->set('Chamilo\Libraries\UserInterface\Theme\Service\ThemeWebPathBuilder', ThemePathBuilder::class)->args([
         '$pathBuilder' => service(WebPathBuilder::class),
-        '$theme' => '%chamilo.configuration.general.theme%',
+        '$theme' => '%cosnics.libraries.userInterface.theme%',
     ]);
 
     $services->set(ResourceManager::class);
@@ -107,8 +107,8 @@ return static function (ContainerConfigurator $container) {
     $services->set(HeaderRenderer::class)->args(
         [
             '$themeWebPathBuilder' => service('Chamilo\Libraries\UserInterface\Theme\Service\ThemeWebPathBuilder'),
-            '$siteConfiguration' => '%chamilo.configuration.general.site%',
-            '$institutionConfiguration' => '%chamilo.configuration.general.institution%'
+            '$siteConfiguration' => '%cosnics.libraries.userInterface.layout.site.name%',
+            '$institutionConfiguration' => '%cosnics.libraries.userInterface.layout.institution%'
         ]
     );
 

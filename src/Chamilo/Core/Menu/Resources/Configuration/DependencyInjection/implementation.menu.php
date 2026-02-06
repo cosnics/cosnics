@@ -12,16 +12,16 @@ return static function (ContainerConfigurator $container) {
     $services->defaults()->public()->autowire()->autoconfigure();
 
     $services->set(ApplicationItemRenderer::class)->args(
-        ['$fallbackIsoCodes' => '%chamilo.configuration.general.language.fallback%']
+        ['$fallbackIsoCodes' => '%cosnics.libraries.userInterface.translation.language.fallback%']
     )->tag(ItemRenderer::class);
 
     $services->set(CategoryItemRenderer::class)->args(
-        ['$fallbackIsoCodes' => '%chamilo.configuration.general.language.fallback%']
+        ['$fallbackIsoCodes' => '%cosnics.libraries.userInterface.translation.language.fallback%']
     )->tag(ItemRenderer::class);
 
     $services->set(LanguageItemRenderer::class)->tag(ItemRenderer::class);
 
     $services->set(LinkItemRenderer::class)->args(
-        ['$fallbackIsoCodes' => '%chamilo.configuration.general.language.fallback%']
+        ['$fallbackIsoCodes' => '%cosnics.libraries.userInterface.translation.language.fallback%']
     )->tag(ItemRenderer::class);
 };

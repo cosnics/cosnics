@@ -4,10 +4,8 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorCollection;
 use Chamilo\Libraries\Storage\Architecture\Domain\ConditionVariableTranslatorCollection;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClassRepositoryCache;
-use Chamilo\Libraries\Storage\Architecture\Domain\DataSourceName;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionTranslatorInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
-use Chamilo\Libraries\Storage\Factory\ConnectionFactory;
 use Chamilo\Libraries\Storage\Factory\DataClassFactory;
 use Chamilo\Libraries\Storage\Repository\DataClassDatabase;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
@@ -39,6 +37,7 @@ use Chamilo\Libraries\Storage\Service\QueryBuilderConfigurator;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
@@ -55,11 +54,13 @@ return static function (ContainerConfigurator $container) {
     $services->set(SearchQueryConditionGenerator::class);
     $services->set(StorageAliasGenerator::class);
 
-    $services->set(DataSourceName::class)->args(['%chamilo.configuration.database%']);
-    $services->set(ConnectionFactory::class);
-    $services->set(Connection::class)->factory([service(ConnectionFactory::class), 'getConnection']);
+    $services->set(Connection::class)->factory([service(DriverManager::class), 'getConnection'])->args(
+        ['%cosnics.libraries.storage.database%']
+    );
 
-    $services->set('Doctrine\DBAL\Connection\Session')->factory([service(ConnectionFactory::class), 'getConnection']);
+    $services->set('Doctrine\DBAL\Connection\Session')->factory([service(DriverManager::class), 'getConnection'])->args(
+        ['%cosnics.libraries.storage.database%']
+    );
 
     $services->set(DataClassDatabase::class);
 
@@ -67,7 +68,7 @@ return static function (ContainerConfigurator $container) {
     $services->set('Chamilo\Libraries\Storage\Repository\Doctrine\DataClassRepository', DataClassRepository::class)
         ->args([
             '$dataClassDatabase' => service(DataClassDatabase::class),
-            '$queryCacheEnabled' => '%chamilo.configuration.debug.enableQueryCache%',
+            '$queryCacheEnabled' => '%cosnics.libraries.storage.enableQueryCache%',
         ]);
 
     $services->alias(

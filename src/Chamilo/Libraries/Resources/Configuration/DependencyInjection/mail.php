@@ -14,7 +14,7 @@ return static function (ContainerConfigurator $container) {
         [service(MailerFactory::class), 'getActiveMailer']
     );
 
-    $services->set(MailerFactory::class)->args(['$configuredMailerClass' => '%chamilo.configuration.mailer%']);
+    $services->set(MailerFactory::class)->args(['$configuredMailerClass' => '%cosnics.libraries.protocol.mail.mailerClass%']);
     $services->set(PhpMailer::class)->tag(MailerInterface::class);
     $services->set(PlatformMailer::class)->tag(MailerInterface::class);
 };

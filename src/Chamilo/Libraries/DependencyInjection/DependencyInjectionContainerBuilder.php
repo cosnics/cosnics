@@ -16,8 +16,6 @@ use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\Storage\Architecture\Domain\DataSourceName;
-use Chamilo\Libraries\Storage\Factory\ConnectionFactory;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -36,8 +34,6 @@ class DependencyInjectionContainerBuilder
     private static ?ContainerInterface $container = null;
 
     private static ?DependencyInjectionContainerBuilder $instance = null;
-
-    protected ConnectionFactory $connectionFactory;
 
     protected Filesystem $filesystem;
 
@@ -127,19 +123,6 @@ class DependencyInjectionContainerBuilder
         }
 
         return $this->classnameUtilities;
-    }
-
-    protected function getConnectionFactory(): ConnectionFactory
-    {
-        if (!isset($this->connectionFactory)) {
-            $this->connectionFactory = new ConnectionFactory(
-                new DataSourceName(
-                    $this->getFileConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'database'])
-                )
-            );
-        }
-
-        return $this->connectionFactory;
     }
 
     public function getContainerExtensionFinder(): ContainerExtensionFinderInterface

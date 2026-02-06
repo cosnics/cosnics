@@ -31,7 +31,7 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(ChamiloRequest::class)->factory([ChamiloRequest::class, 'createFromGlobals']);
 
-    $services->set(Translator::class)->args(['%chamilo.configuration.general.language%'])->factory(
+    $services->set(Translator::class)->args(['%cosnics.libraries.userInterface.translation.default%'])->factory(
         [service(TranslatorFactory::class), 'createTranslator']
     );
 

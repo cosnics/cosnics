@@ -13,7 +13,7 @@ return static function (ContainerConfigurator $container) {
     $services->defaults()->public()->autowire()->autoconfigure();
 
     $services->set(ItemService::class)->args(
-        ['$fallbackIsoCodes' => '%chamilo.configuration.general.language.fallback%']
+        ['$fallbackIsoCodes' => '%cosnics.libraries.userInterface.translation.language.fallback%']
     );
 
     $services->set(CachedItemService::class)->args(

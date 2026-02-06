@@ -19,7 +19,7 @@ return static function (ContainerConfigurator $container) {
     $services->set(UserService::class)->args([
         '$userSettingsCacheAdapter' => service('Chamilo\Core\User\Service\Cache\UserSettingCacheService'),
         '$activeMailer' => service('Chamilo\Libraries\Protocol\Mail\ActiveMailer'),
-        '$securityKey' => '%chamilo.configuration.general.securityKey%',
+        '$securityKey' => '%cosnics.libraries.protocol.security.securityKey%',
     ]);
 
     $services->set(UserUrlGenerator::class);

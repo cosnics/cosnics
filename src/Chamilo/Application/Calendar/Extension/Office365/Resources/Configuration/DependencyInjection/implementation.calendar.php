@@ -25,7 +25,7 @@ return static function (ContainerConfigurator $container) {
         'Chamilo\Application\Calendar\Extension\Office365\Cache\CalendarCacheAdapter', FilesystemAdapter::class
     )->args([
         '$namespace' => 'Chamilo\Application\Calendar\Extension\Office365',
-        '$defaultLifetime' => '%chamilo.configuration.cache.external.defaultLifetime%',
+        '$defaultLifetime' => '%cosnics.libraries.cache.external.defaultLifetime%',
     ])->tag(AdapterInterface::class)->factory(
         [service(SymfonyCacheAdapterFactory::class), 'createFilesystemAdapter']
     );

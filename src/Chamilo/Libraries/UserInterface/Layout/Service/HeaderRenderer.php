@@ -16,15 +16,9 @@ use Symfony\Component\Translation\Translator;
  */
 class HeaderRenderer implements HeaderRendererInterface
 {
-    /**
-     * @var string[]
-     */
-    protected array $institutionConfiguration;
+    protected string $institutionName;
 
-    /**
-     * @var string[]
-     */
-    protected array $siteConfiguration;
+    protected string $siteName;
 
     protected Translator $translator;
 
@@ -38,8 +32,7 @@ class HeaderRenderer implements HeaderRendererInterface
 
     public function __construct(
         PageConfiguration $pageConfiguration, WebPathBuilder $webPathBuilder, ThemePathBuilder $themeWebPathBuilder,
-        BannerRenderer $bannerRenderer, Translator $translator, array $siteConfiguration = [],
-        array $institutionConfiguration = []
+        BannerRenderer $bannerRenderer, Translator $translator, string $siteName, string $institutionName
     )
     {
         $this->pageConfiguration = $pageConfiguration;
@@ -47,8 +40,8 @@ class HeaderRenderer implements HeaderRendererInterface
         $this->themeWebPathBuilder = $themeWebPathBuilder;
         $this->bannerRenderer = $bannerRenderer;
         $this->translator = $translator;
-        $this->siteConfiguration = $siteConfiguration;
-        $this->institutionConfiguration = $institutionConfiguration;
+        $this->siteName = $siteName;
+        $this->institutionName = $institutionName;
     }
 
     /**
@@ -131,13 +124,9 @@ class HeaderRenderer implements HeaderRendererInterface
         return $this->bannerRenderer;
     }
 
-    public function getInstitutionConfiguration(?string $variable = null): array|string|null
+    public function getInstitutionName(): string
     {
-        if (array_key_exists($variable, $this->institutionConfiguration)) {
-            return $this->institutionConfiguration[$variable];
-        }
-
-        return $this->institutionConfiguration;
+        return $this->institutionName;
     }
 
     public function getPageConfiguration(): PageConfiguration
@@ -147,16 +136,12 @@ class HeaderRenderer implements HeaderRendererInterface
 
     protected function getPageTitle(): string
     {
-        return $this->getInstitutionConfiguration('name') . ' - ' . $this->getSiteConfiguration('name');
+        return $this->getInstitutionName() . ' - ' . $this->getSiteName();
     }
 
-    public function getSiteConfiguration(?string $variable = null): array|string|null
+    public function getSiteName(): string
     {
-        if (array_key_exists($variable, $this->siteConfiguration)) {
-            return $this->siteConfiguration[$variable];
-        }
-
-        return $this->siteConfiguration;
+        return $this->siteName;
     }
 
     public function getThemeWebPathBuilder(): ThemePathBuilder

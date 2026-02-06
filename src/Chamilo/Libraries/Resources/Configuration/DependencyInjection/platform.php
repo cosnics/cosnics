@@ -16,7 +16,7 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(SessionFactory::class)->args([
         '$sessionStorage' => service(NativeSessionStorage::class),
-        '$securityKey' => '%chamilo.configuration.general.securityKey%',
+        '$securityKey' => '%cosnics.libraries.protocol.security.securityKey%',
     ]);
 
     $services->set(PdoSessionHandlerFactory::class)->args(['$connection' => service('Doctrine\DBAL\Connection\Session')]

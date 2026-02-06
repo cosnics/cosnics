@@ -27,6 +27,6 @@ return static function (ContainerConfigurator $container) {
     ]);
 
     $services->set('Chamilo\Libraries\Protocol\Authentication\Service\CasStreamHandler', StreamHandler::class)->args(
-        ['%chamilo.configuration.authentication.cas.log%']
+        ['%cosnics.libraries.protocol.authentication.cas.logPath%']
     )->factory([service(MonologStreamHandlerFactory::class), 'createStreamHandler']);
 };
