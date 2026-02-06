@@ -3,7 +3,6 @@ namespace Chamilo\Core\Admin\DependencyInjection;
 
 use Chamilo\Core\Admin\DependencyInjection\CompilerPass\ActionProviderCompilerPass;
 use Chamilo\Core\Admin\DependencyInjection\CompilerPass\SettingsConnectorsCompilerPass;
-use Chamilo\Core\Admin\Service\FileConfigurationLocator;
 use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
@@ -19,8 +18,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     implements ExtensionInterface, ICompilerPassExtension
 {
-    use ExtensionTrait
-    {
+    use ExtensionTrait {
         load as public extensionLoad;
     }
 
@@ -38,7 +36,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'implementation.home.php',
                 'service.php',
                 'service.consulter.php',
-                'service.dataLoader.php',
                 'service.finder.php',
                 'storage.php',
                 'userInterface.table.php'
@@ -50,21 +47,10 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         $this->extensionLoad($configs, $container);
 
-        $fileConfigurationLocator = new FileConfigurationLocator($this->getSystemPathBuilder());
-
-        if ($fileConfigurationLocator->isAvailable())
-        {
-            $configurationFilePath = $fileConfigurationLocator->getFilePath();
-            $configurationFileName = $fileConfigurationLocator->getFileName();
-        }
-        else
-        {
-            $configurationFilePath = $fileConfigurationLocator->getDefaultFilePath();
-            $configurationFileName = $fileConfigurationLocator->getDefaultFileName();
-        }
-
-        $configurationXmlFileLoader = new YamlFileLoader($container, new FileLocator($configurationFilePath));
-        $configurationXmlFileLoader->load($configurationFileName);
+        $yamlFileLoader = new YamlFileLoader(
+            $container, new FileLocator($this->getSystemPathBuilder()->getConfigurationStoragePath())
+        );
+        $yamlFileLoader->load('configuration.yaml');
     }
 
     public function registerCompilerPasses(ContainerBuilder $container): void

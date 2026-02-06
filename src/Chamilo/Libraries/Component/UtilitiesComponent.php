@@ -81,14 +81,6 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
                         break;
                 }
                 break;
-            case 'platform_setting' :
-                $properties[self::PROPERTY_RESULT] = $this->getConfigurationConsulter()->getSetting(
-                    [
-                        $request->request->get(self::PARAM_CONTEXT),
-                        $request->request->get(self::PARAM_VARIABLE)
-                    ]
-                );
-                break;
         }
 
         $result = new JsonAjaxResult(200);

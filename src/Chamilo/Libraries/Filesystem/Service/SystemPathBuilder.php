@@ -21,6 +21,12 @@ class SystemPathBuilder extends AbstractPathBuilder
         return $this->cache[self::BASE];
     }
 
+    public function getConfigurationStoragePath(): string
+    {
+        return $this->cache[self::CONFIGURATION_STORAGE] =
+            $this->getStoragePath() . 'configuration' . $this->getDirectorySeparator();
+    }
+
     public function getDirectorySeparator(): string
     {
         return DIRECTORY_SEPARATOR;

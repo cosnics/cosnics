@@ -17,6 +17,7 @@ abstract class AbstractPathBuilder
     public const BASE = 2;
     public const CACHE = 6;
     public const CONFIGURATION = 12;
+    public const CONFIGURATION_STORAGE = 99;
     public const CSS = 19;
     public const FULL = 1;
     public const I18N = 15;

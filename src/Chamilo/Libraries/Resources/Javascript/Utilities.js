@@ -4,26 +4,6 @@ var settings = [];
 var theme;
 var ajaxUri = getPath('WEB_PATH') + 'index.php';
 
-// Get a platform setting
-function getPlatformSetting(variable, application) {
-
-    if (typeof (settings[application]) == 'undefined'
-        ||
-        (typeof (settings[application]) !== 'undefined' && typeof (settings[application][variable]) == 'undefined')) {
-
-        if (typeof (settings[application]) == 'undefined') {
-            settings[application] = [];
-        }
-
-        settings[application][variable] = getUtilities('platform_setting', {
-            variable: variable,
-            context: application
-        });
-    }
-
-    return settings[application][variable];
-}
-
 // Get a translation
 function getTranslation(string, parameters, context) {
     if (typeof (translations[context]) == 'undefined'

@@ -1,7 +1,6 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Chamilo\Core\Admin\Service\ConfigurationService;
 use Chamilo\Core\Admin\Service\FileConfigurationLocator;
 use Chamilo\Core\Admin\Service\InternationalizationBundlesCacheService;
 use Chamilo\Core\Admin\Service\OnlineService;
@@ -27,13 +26,6 @@ return static function (ContainerConfigurator $container) {
     $services->set('Chamilo\Core\Admin\Service\PackageBundlesCacheAdapter', FilesystemAdapter::class)->args(
         ['$namespace' => 'Chamilo\Core\Admin\PackageBundles']
     )->tag(AdapterInterface::class)->factory([service(SymfonyCacheAdapterFactory::class), 'createFilesystemAdapter']);
-
-    $services->set(ConfigurationService::class)->args([
-        '$storageConfigurationCacheAdapter' => service(
-            'Chamilo\Core\Admin\Service\DataLoader\StorageConfigurationCacheAdapter'
-        ),
-        '$userSettingsCacheAdapter' => service('Chamilo\Core\User\Service\Cache\UserSettingCacheService'),
-    ]);
 
     $services->set(InternationalizationBundlesCacheService::class)->args(
         ['$cacheAdapter' => service('Chamilo\Core\Admin\Service\InternationalizationBundlesCacheAdapter')]

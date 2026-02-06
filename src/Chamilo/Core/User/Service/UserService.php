@@ -39,6 +39,8 @@ class UserService
 {
     protected MailerInterface $activeMailer;
 
+    protected string $administratorEmail;
+
     protected string $administratorName;
 
     protected bool $allowRegistration;
@@ -70,7 +72,7 @@ class UserService
         Translator $translator, WebPathBuilder $webPathBuilder, MailerInterface $activeMailer,
         PasswordGeneratorInterface $passwordGenerator, AuthenticationValidator $authenticationValidator,
         UrlGenerator $urlGenerator, EventDispatcherInterface $eventDispatcher, string $securityKey, string $siteName,
-        string $administratorName, bool $allowRegistration = false
+        string $administratorName, string $administratorEmail, bool $allowRegistration = false
     )
     {
         $this->userRepository = $userRepository;
@@ -87,6 +89,7 @@ class UserService
         $this->siteName = $siteName;
         $this->administratorName = $administratorName;
         $this->allowRegistration = $allowRegistration;
+        $this->administratorEmail = $administratorEmail;
     }
 
     /**
@@ -389,9 +392,9 @@ class UserService
         return $this->getUserRepository()->findUserProperties($retrieveProperties, $condition, $orderBy);
     }
 
-    public function findUserSetting(User $user, string $context, string $variable)
+    public function findUserSetting(User $user, string $context, string $variable, mixed $defaultValue = null)
     {
-        return $user->getSetting($this->determineUserSettingVariableName($context, $variable));
+        return $user->getSetting($this->determineUserSettingVariableName($context, $variable), $defaultValue);
     }
 
     /**
@@ -468,6 +471,11 @@ class UserService
     public function getActiveMailer(): MailerInterface
     {
         return $this->activeMailer;
+    }
+
+    public function getAdministratorEmail(): string
+    {
+        return $this->administratorEmail;
     }
 
     public function getAdministratorName(): string
@@ -699,12 +707,8 @@ class UserService
         $options['password'] = $password;
         $options['site_name'] = $this->getSiteName();
         $options['site_url'] = $this->getWebPathBuilder()->getBasePath();
-        $options['admin_name'] = $configurationConsulter->getSetting(
-            ['Chamilo\Core\Admin', 'administrator_name']
-        );
-        $options['admin_email'] = $configurationConsulter->getSetting(
-            ['Chamilo\Core\Admin', 'administrator_email']
-        );
+        $options['admin_name'] = $this->getAdministratorName();
+        $options['admin_email'] = $this->getAdministratorEmail();
 
         $subject =
             $this->getTranslator()->trans('YourRegistrationOn', [], Manager::CONTEXT) . ' ' . $options['site_name'];

@@ -14,7 +14,6 @@ use HTML_QuickForm_html;
 use HTML_QuickForm_password;
 use HTML_QuickForm_Rule_Compare;
 use HTML_QuickForm_Rule_Email;
-use HTML_QuickForm_select;
 use HTML_QuickForm_static;
 
 abstract class UserForm extends FormValidator
@@ -42,15 +41,13 @@ abstract class UserForm extends FormValidator
     {
         $translator = $this->getTranslator();
 
-        if ($includeCategoryTitle)
-        {
+        if ($includeCategoryTitle) {
             $this->addElement(
                 HTML_QuickForm_category::class, $translator->trans('AccountProperties', [], Manager::CONTEXT)
             );
         }
 
-        if ($isLockoutRisk)
-        {
+        if ($isLockoutRisk) {
             $this->addWarningMessage(
                 'admin_lockout_message', null, $translator->trans('LockOutWarningMessage', [], Manager::CONTEXT)
             );
@@ -75,8 +72,7 @@ abstract class UserForm extends FormValidator
     {
         $translator = $this->getTranslator();
 
-        if ($includeCategoryTitle)
-        {
+        if ($includeCategoryTitle) {
             $this->addElement(HTML_QuickForm_category::class, $translator->trans('Other', [], Manager::CONTEXT));
         }
 
@@ -95,25 +91,21 @@ abstract class UserForm extends FormValidator
         bool $includeCategoryTitle = true
     ): void
     {
-        if ($allowedToChangePassword)
-        {
+        if ($allowedToChangePassword) {
             $translator = $this->getTranslator();
 
-            if ($includeCategoryTitle)
-            {
+            if ($includeCategoryTitle) {
                 $this->addElement(HTML_QuickForm_category::class, $translator->trans('Password', [], Manager::CONTEXT));
             }
 
-            if ($allowedToGeneratePassword)
-            {
+            if ($allowedToGeneratePassword) {
                 $this->addElement(
                     HTML_QuickForm_toggle::class, self::PROPERTY_GENERATE_PASSWORD,
                     $translator->trans('AutoGeneratePassword', [], Manager::CONTEXT)
                 );
             }
 
-            if ($requiresCurrentPassword)
-            {
+            if ($requiresCurrentPassword) {
                 $this->addElement(
                     HTML_QuickForm_password::class, self::PROPERTY_CURRENT_PASSWORD,
                     $translator->trans('CurrentPassword', [], Manager::CONTEXT),
@@ -129,8 +121,7 @@ abstract class UserForm extends FormValidator
                 ['autocomplete' => 'off', 'class' => 'form-control']
             );
 
-            if ($requiresPasswordConfirmation)
-            {
+            if ($requiresPasswordConfirmation) {
                 $this->addElement(
                     HTML_QuickForm_password::class, self::PROPERTY_CONFIRM_PASSWORD,
                     $translator->trans('PasswordConfirmation', [], Manager::CONTEXT),
@@ -164,8 +155,7 @@ abstract class UserForm extends FormValidator
     {
         $translator = $this->getTranslator();
 
-        if ($includeCategoryTitle)
-        {
+        if ($includeCategoryTitle) {
             $this->addElement(
                 HTML_QuickForm_category::class, $translator->trans('PersonalDetails', [], Manager::CONTEXT)
             );
@@ -176,12 +166,10 @@ abstract class UserForm extends FormValidator
             User::PROPERTY_GIVEN_NAME, $translator->trans('FirstName', [], Manager::CONTEXT), $allowedToChangeFirstName
         );
 
-        if (!$allowedToChangeFirstName)
-        {
+        if (!$allowedToChangeFirstName) {
             $this->freeze([User::PROPERTY_GIVEN_NAME]);
         }
-        else
-        {
+        else {
             $this->applyFilter(User::PROPERTY_GIVEN_NAME, 'stripslashes');
             $this->applyFilter(User::PROPERTY_GIVEN_NAME, 'trim');
         }
@@ -191,12 +179,10 @@ abstract class UserForm extends FormValidator
             User::PROPERTY_SURNAME, $translator->trans('LastName', [], Manager::CONTEXT), $allowedToChangeLastName
         );
 
-        if (!$allowedToChangeLastName)
-        {
+        if (!$allowedToChangeLastName) {
             $this->freeze([User::PROPERTY_SURNAME]);
         }
-        else
-        {
+        else {
             $this->applyFilter(User::PROPERTY_GIVEN_NAME, 'stripslashes');
             $this->applyFilter(User::PROPERTY_GIVEN_NAME, 'trim');
         }
@@ -207,12 +193,10 @@ abstract class UserForm extends FormValidator
             $allowedToChangeEmailAddress && $requiresEmail
         );
 
-        if (!$allowedToChangeEmailAddress)
-        {
+        if (!$allowedToChangeEmailAddress) {
             $this->freeze(User::PROPERTY_EMAIL);
         }
-        else
-        {
+        else {
             $this->addRule(User::PROPERTY_EMAIL, $translator->trans('EmailWrong', [], Manager::CONTEXT),
                 HTML_QuickForm_Rule_Email::class);
             $this->applyFilter(User::PROPERTY_EMAIL, 'stripslashes');
@@ -227,12 +211,10 @@ abstract class UserForm extends FormValidator
             User::PROPERTY_USERNAME, $translator->trans('Username', [], Manager::CONTEXT), $allowedToChangeUsername
         );
 
-        if (!$allowedToChangeUsername)
-        {
+        if (!$allowedToChangeUsername) {
             $this->freeze(User::PROPERTY_USERNAME);
         }
-        else
-        {
+        else {
             $this->applyFilter(User::PROPERTY_USERNAME, 'stripslashes');
             $this->applyFilter(User::PROPERTY_USERNAME, 'trim');
             $this->addRule(
@@ -247,12 +229,10 @@ abstract class UserForm extends FormValidator
             $allowedToChangeOfficialCode && $requiresOfficialCode
         );
 
-        if (!$allowedToChangeOfficialCode)
-        {
+        if (!$allowedToChangeOfficialCode) {
             $this->freeze(User::PROPERTY_OFFICIAL_CODE);
         }
-        else
-        {
+        else {
             $this->applyFilter(User::PROPERTY_OFFICIAL_CODE, 'stripslashes');
             $this->applyFilter(User::PROPERTY_OFFICIAL_CODE, 'trim');
         }
@@ -267,13 +247,11 @@ abstract class UserForm extends FormValidator
     {
         $translator = $this->getTranslator();
 
-        if ($includeCategoryTitle)
-        {
+        if ($includeCategoryTitle) {
             $this->addElement(HTML_QuickForm_category::class, $translator->trans('PictureTitle', [], Manager::CONTEXT));
         }
 
-        if (!is_null($encodedUserPicture))
-        {
+        if (!is_null($encodedUserPicture)) {
             $this->addElement(
                 HTML_QuickForm_static::class, 'current_image', $translator->trans('CurrentImage', [], Manager::CONTEXT),
                 '<img class="my-account-photo" src="' . $encodedUserPicture . '" alt="' . $userFullname . '" />'
@@ -300,13 +278,11 @@ abstract class UserForm extends FormValidator
     {
         $newPassword = $exportValues[User::PROPERTY_PASSWORD];
 
-        if (empty($newPassword))
-        {
+        if (empty($newPassword)) {
             return true;
         }
 
-        if (empty($this->exportValue(self::PROPERTY_CURRENT_PASSWORD)))
-        {
+        if (empty($this->exportValue(self::PROPERTY_CURRENT_PASSWORD))) {
             return [
                 User::PROPERTY_PASSWORD => $this->getTranslator()->trans('EnterCurrentPassword', [], Manager::CONTEXT)
             ];
@@ -320,15 +296,13 @@ abstract class UserForm extends FormValidator
         $customPassword =
             empty($exportValues[User::PROPERTY_PASSWORD]) && !$exportValues[self::PROPERTY_GENERATE_PASSWORD];
 
-        if (!$customPassword)
-        {
+        if (!$customPassword) {
             return true;
         }
 
         $newPassword = $exportValues[User::PROPERTY_PASSWORD];
 
-        if (strlen($newPassword) < 6)
-        {
+        if (strlen($newPassword) < 6) {
             return ['pw' => $this->getTranslator()->trans('PasswordRequirements', [], Manager::CONTEXT)];
         }
 

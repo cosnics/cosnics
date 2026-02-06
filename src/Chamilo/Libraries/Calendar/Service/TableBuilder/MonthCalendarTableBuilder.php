@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\TableBuilder;
 
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Exception;
 use HTML_Table;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\TableBuilder
@@ -13,6 +15,17 @@ use HTML_Table;
 class MonthCalendarTableBuilder extends CalendarTableBuilder
 {
     public const TIME_PLACEHOLDER = '__TIME__';
+
+    protected string $defaultFirstDayOfWeek;
+
+    public function __construct(
+        Translator $translator, ?User $user, UserService $userService, string $defaultFirstDayOfWeek
+    )
+    {
+        parent::__construct($translator, $user, $userService);
+
+        $this->defaultFirstDayOfWeek = $defaultFirstDayOfWeek;
+    }
 
     protected function addEventItems(HTML_Table $table, $time, $row, $column, $items): void
     {
@@ -120,15 +133,20 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
         return str_replace(self::TIME_PLACEHOLDER, (string) $time, $dayUrlTemplate);
     }
 
+    public function getDefaultFirstDayOfWeek(): string
+    {
+        return $this->defaultFirstDayOfWeek;
+    }
+
     protected function getFirstDayOfWeek(): ?string
     {
         if ($this->getUser() instanceof User) {
             return $this->getUserService()->findUserSetting(
-                $this->getUser(), 'Chamilo\Libraries\Calendar', 'FirstDayOfWeek'
+                $this->getUser(), 'Chamilo\Libraries\Calendar', 'FirstDayOfWeek', $this->getDefaultFirstDayOfWeek()
             );
         }
         else {
-            return $this->getConfigurationConsulter()->getSetting(['Chamilo\Libraries', 'calendar_first_day_of_week']);
+            return $this->getDefaultFirstDayOfWeek();
         }
     }
 

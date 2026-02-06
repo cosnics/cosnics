@@ -37,8 +37,18 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(DayCalendarTableBuilder::class)->args(['$user' => service('Chamilo\Core\User\CurrentUser')]);
     $services->set(MiniMonthCalendarTableBuilder::class)->args(['$user' => service('Chamilo\Core\User\CurrentUser')]);
-    $services->set(MonthCalendarTableBuilder::class)->args(['$user' => service('Chamilo\Core\User\CurrentUser')]);
-    $services->set(WeekCalendarTableBuilder::class)->args(['$user' => service('Chamilo\Core\User\CurrentUser')]);
+    $services->set(MonthCalendarTableBuilder::class)->args(
+        [
+            '$user' => service('Chamilo\Core\User\CurrentUser'),
+            '$defaultFirstDayOfWeek' => '%cosnics.libraries.calendar.firstDayOfWeek%'
+        ]
+    );
+    $services->set(WeekCalendarTableBuilder::class)->args(
+        [
+            '$user' => service('Chamilo\Core\User\CurrentUser'),
+            '$defaultFirstDayOfWeek' => '%cosnics.libraries.calendar.firstDayOfWeek%'
+        ]
+    );
 
     $services->set(DayCalendarRenderer::class);
     $services->set(ICalCalendarRenderer::class);

@@ -32,8 +32,10 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
             $translator->trans('SaturdayShort', [], StringUtilities::LIBRARIES)
         ];
 
-        $startOfWeek =
-            $this->getConfigurationConsulter()->getSetting(['Chamilo\Libraries', 'calendar_first_day_of_week']);
+        $startOfWeek = $this->getUserService()->findUserSetting(
+            $this->getUser(), 'Chamilo\Libraries\Calendar', 'FirstDayOfWeek',
+            $this->getContainer()->getParameter('cosnics.libraries.calendar.firstDayOfWeek')
+        );
 
         if ($startOfWeek == 'sunday') {
             array_unshift($DaysShort, $translator->trans('SundayShort', [], StringUtilities::LIBRARIES));

@@ -1,7 +1,6 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Chamilo\Core\Admin\Storage\Repository\ConfigurationRepository;
 use Chamilo\Core\Admin\Storage\Repository\LanguageRepository;
 use Chamilo\Core\Admin\Storage\Repository\OnlineRepository;
 
@@ -10,6 +9,5 @@ return static function (ContainerConfigurator $container) {
     $services->defaults()->public()->autowire()->autoconfigure();
 
     $services->set(OnlineRepository::class);
-    $services->set(ConfigurationRepository::class);
     $services->set(LanguageRepository::class);
 };
