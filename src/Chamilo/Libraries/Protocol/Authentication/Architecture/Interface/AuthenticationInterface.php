@@ -13,7 +13,7 @@ interface AuthenticationInterface
      */
     public function getPriority(): int;
 
-    public function login(): ?User;
+    public function login(bool $checkIfAuthenticationSourceIsEnabled = true): ?User;
 
     public function logout(User $user): void;
 }

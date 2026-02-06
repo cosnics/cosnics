@@ -15,7 +15,6 @@ use Chamilo\Libraries\UserInterface\Tab\Service\LinkTabsRenderer;
  */
 abstract class ProfileComponent extends Manager
 {
-
     /**
      * @return \Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab[]
      */
@@ -33,8 +32,7 @@ abstract class ProfileComponent extends Manager
         ), self::ACTION_ACCOUNT == $action
         );
 
-        if ($this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'allow_change_user_picture']))
-        {
+        if ($this->getContainer()->getParameter('cosnics.application.user.rights.changeUserPicture')) {
             $tabs[] = new LinkTab(
                 self::ACTION_CHANGE_PICTURE,
                 htmlentities($translator->trans(self::ACTION_CHANGE_PICTURE . 'Title', [], Manager::CONTEXT)),
@@ -70,19 +68,16 @@ abstract class ProfileComponent extends Manager
 
         $html[] = parent::renderHeader($pageTitle);
 
-        if (count($availableTabs) > 1)
-        {
+        if (count($availableTabs) > 1) {
             $tabs = new TabsCollection();
 
-            foreach ($availableTabs as $availableTab)
-            {
+            foreach ($availableTabs as $availableTab) {
                 $tabs->add($availableTab);
             }
 
             $html[] = $this->getLinkTabsRenderer()->render($tabs, $this->getContent());
         }
-        else
-        {
+        else {
             $html[] = $this->getContent();
         }
 

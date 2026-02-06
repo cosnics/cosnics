@@ -4,7 +4,6 @@ namespace Chamilo\Application\Calendar\Implementation\Home;
 use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
@@ -35,13 +34,11 @@ class MonthBlockRenderer extends BlockRenderer
 
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
-        ConfigurationConsulter $configurationConsulter, MiniMonthCalendarRenderer $miniMonthCalendarRenderer,
-        ChamiloRequest $request, VisibilityRepository $calendarRendererProviderRepository
+        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, ChamiloRequest $request,
+        VisibilityRepository $calendarRendererProviderRepository
     )
     {
-        parent::__construct(
-            $homeService, $urlGenerator, $translator, $configurationConsulter
-        );
+        parent::__construct($homeService, $urlGenerator, $translator);
 
         $this->miniMonthCalendarRenderer = $miniMonthCalendarRenderer;
         $this->request = $request;

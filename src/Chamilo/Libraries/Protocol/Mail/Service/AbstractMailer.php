@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Mail\Service;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Domain\Mail;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
 
@@ -12,11 +11,17 @@ use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
  */
 abstract class AbstractMailer implements MailerInterface
 {
-    protected ConfigurationConsulter $configurationConsulter;
+    protected string $administratorEmail;
 
-    public function __construct(ConfigurationConsulter $configurationConsulter)
+    protected string $administratorName;
+
+    protected string $noRepyEmail;
+
+    public function __construct(string $administratorName, string $administratorEmail, ?string $noRepyEmail = null)
     {
-        $this->configurationConsulter = $configurationConsulter;
+        $this->administratorName = $administratorName;
+        $this->administratorEmail = $administratorEmail;
+        $this->noRepyEmail = $noRepyEmail;
     }
 
     /**
@@ -24,13 +29,11 @@ abstract class AbstractMailer implements MailerInterface
      */
     protected function determineDefaultEmail(): string
     {
-        $noReplyEmail = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'no_reply_email']);
-
-        if (!empty($noReplyEmail)) {
-            return $noReplyEmail;
+        if ($this->getNoRepyEmail()) {
+            return $this->getNoRepyEmail();
         }
 
-        return $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email']);
+        return $this->getAdministratorEmail();
     }
 
     /**
@@ -78,14 +81,19 @@ abstract class AbstractMailer implements MailerInterface
         return $this->getAdministratorName();
     }
 
-    protected function getAdministratorName(): string
+    protected function getAdministratorEmail(): string
     {
-        return $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_name']);
+        return $this->administratorEmail;
     }
 
-    public function getConfigurationConsulter(): ConfigurationConsulter
+    protected function getAdministratorName(): string
     {
-        return $this->configurationConsulter;
+        return $this->administratorName;
+    }
+
+    public function getNoRepyEmail(): string
+    {
+        return $this->noRepyEmail;
     }
 
     /**

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\GroupNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException;
@@ -17,19 +16,19 @@ use RuntimeException;
  */
 class GroupService
 {
-    protected ConfigurationConsulter $configurationConsulter;
+    protected string $groupBaseUri;
 
     protected GroupRepository $groupRepository;
 
     protected UserService $userService;
 
     public function __construct(
-        UserService $userService, GroupRepository $groupRepository, ConfigurationConsulter $configurationConsulter
+        UserService $userService, GroupRepository $groupRepository, string $groupBaseUri
     )
     {
         $this->userService = $userService;
         $this->groupRepository = $groupRepository;
-        $this->configurationConsulter = $configurationConsulter;
+        $this->groupBaseUri = $groupBaseUri;
     }
 
     /**
@@ -113,11 +112,6 @@ class GroupService
         return $this->getUserService()->getAndSaveUserIdentifier($user);
     }
 
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
-    }
-
     /**
      * @throws \Exception
      */
@@ -139,6 +133,11 @@ class GroupService
     public function getGroup(string $groupId): Group
     {
         return $this->groupRepository->getGroup($groupId);
+    }
+
+    public function getGroupBaseUri(): string
+    {
+        return $this->groupBaseUri;
     }
 
     /**
@@ -198,13 +197,9 @@ class GroupService
      */
     public function getGroupUrl(string $groupId): string
     {
-        $groupUrl = $this->configurationConsulter->getSetting(
-            ['Chamilo\Libraries', 'microsoft_graph_group_base_uri']
-        );
-
         $group = $this->groupRepository->getGroup($groupId);
 
-        return str_replace('{GROUP_ID}', $group->getMailNickname(), $groupUrl);
+        return str_replace('{GROUP_ID}', $group->getMailNickname(), $this->getGroupBaseUri());
     }
 
     /**

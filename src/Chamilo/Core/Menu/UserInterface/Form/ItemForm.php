@@ -55,12 +55,10 @@ class ItemForm extends FormValidator
 
         $this->addElement(HTML_QuickForm_category::class, $translator->trans('General', [], 'Chamilo\Core\Menu'));
 
-        if ($this->getItemType() === CategoryItemRenderer::class)
-        {
+        if ($this->getItemType() === CategoryItemRenderer::class) {
             $options[0] = $this->getTranslator()->trans('Home', [], Manager::CONTEXT);
         }
-        else
-        {
+        else {
             $options = $this->getMenuOptionsTreeRenderer()->getOptions();
         }
 
@@ -94,17 +92,16 @@ class ItemForm extends FormValidator
         $this->addElement(HTML_QuickForm_category::class, $translator->trans('Titles', [], 'Chamilo\Core\Menu'));
 
         $activeLanguages = $this->getLanguageConsulter()->getLanguages();
-        $platformLanguage = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'platform_language']);
+        $platformLanguage =
+            $this->getContainer()->getParameter('cosnics.libraries.userInterface.translation.language.default');
 
-        foreach ($activeLanguages as $isocode => $language)
-        {
+        foreach ($activeLanguages as $isocode => $language) {
             $this->addElement(
                 HTML_QuickForm_text::class, Item::PROPERTY_TITLES . '[' . $isocode . ']', $language,
                 ['class' => 'form-control']
             );
 
-            if ($isocode == $platformLanguage)
-            {
+            if ($isocode == $platformLanguage) {
                 $this->addRule(
                     Item::PROPERTY_TITLES . '[' . $isocode . ']',
                     $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
@@ -119,8 +116,7 @@ class ItemForm extends FormValidator
         $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($this->getItemType());
 
         if ($itemRenderer instanceof ConfigurableItemInterface &&
-            count($itemRenderer->getConfigurationPropertyNames()) > 0)
-        {
+            count($itemRenderer->getConfigurationPropertyNames()) > 0) {
             $itemRenderer->addConfigurationToForm($this);
         }
     }
@@ -132,8 +128,7 @@ class ItemForm extends FormValidator
     {
         $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($this->getItemType());
 
-        if ($itemRenderer instanceof TranslatableItemInterface)
-        {
+        if ($itemRenderer instanceof TranslatableItemInterface) {
             $this->buildFormTitles();
         }
     }
@@ -182,8 +177,7 @@ class ItemForm extends FormValidator
         $itemOptions = [];
         $itemOptions[0] = $this->getTranslator()->trans('Root', [], StringUtilities::LIBRARIES);
 
-        foreach ($items as $item)
-        {
+        foreach ($items as $item) {
             $itemRenderer = $itemRendererFactory->getItemRendererForItem($item);
             $itemOptions[$item->getId()] = '-- ' . $itemRenderer->renderTitleForCurrentLanguage($item);
         }
@@ -206,25 +200,20 @@ class ItemForm extends FormValidator
 
         $itemRenderer = $this->getItemRendererFactory()->getItemRendererForItem($item);
 
-        if ($itemRenderer instanceof TranslatableItemInterface)
-        {
+        if ($itemRenderer instanceof TranslatableItemInterface) {
             $activeLanguages = $this->getLanguageConsulter()->getLanguages();
 
-            foreach ($activeLanguages as $isoCode => $language)
-            {
+            foreach ($activeLanguages as $isoCode => $language) {
                 $defaults[Item::PROPERTY_TITLES][$isoCode] = $itemRenderer->renderTitleForIsocode($item, $isoCode);
             }
         }
 
-        if ($itemRenderer instanceof ConfigurableItemInterface)
-        {
-            foreach ($item->getConfiguration() as $setting => $settingValue)
-            {
+        if ($itemRenderer instanceof ConfigurableItemInterface) {
+            foreach ($item->getConfiguration() as $setting => $settingValue) {
                 $defaults[Item::PROPERTY_CONFIGURATION][$setting] = $settingValue;
             }
         }
 
         parent:: setDefaults($defaults);
     }
-
 }

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Menu\UserInterface\MenuRenderer;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Menu\Architecture\Domain\ItemRendererCollection;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -16,9 +15,11 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class MenuRenderer
 {
-    private ChamiloRequest $chamiloRequest;
+    protected array $brandPath;
 
-    private ConfigurationConsulter $configurationConsulter;
+    protected string $siteName;
+
+    private ChamiloRequest $chamiloRequest;
 
     private CachedItemService $itemCacheService;
 
@@ -30,16 +31,17 @@ class MenuRenderer
 
     public function __construct(
         CachedItemService $itemCacheService, ItemRendererCollection $itemRendererFactory,
-        ChamiloRequest $chamiloRequest, ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder,
-        ThemePathBuilder $themeWebPathBuilder
+        ChamiloRequest $chamiloRequest, WebPathBuilder $webPathBuilder, ThemePathBuilder $themeWebPathBuilder,
+        string $siteName, array $brandPath = []
     )
     {
         $this->itemCacheService = $itemCacheService;
         $this->itemRendererFactory = $itemRendererFactory;
         $this->chamiloRequest = $chamiloRequest;
-        $this->configurationConsulter = $configurationConsulter;
         $this->webPathBuilder = $webPathBuilder;
         $this->themeWebPathBuilder = $themeWebPathBuilder;
+        $this->siteName = $siteName;
+        $this->brandPath = $brandPath;
     }
 
     public function render(string $containerMode = 'container-fluid', ?User $user = null): string
@@ -49,18 +51,14 @@ class MenuRenderer
         $numberOfItems = 0;
         $itemRenditions = [];
 
-        if ($user instanceof User)
-        {
-            foreach ($this->findRootItems() as $item)
-            {
-                if (!$item->isHidden())
-                {
+        if ($user instanceof User) {
+            foreach ($this->findRootItems() as $item) {
+                if (!$item->isHidden()) {
                     $itemRenderer = $this->getItemRendererFactory()->getItemRendererForItem($item);
 
                     $itemHtml = $itemRenderer->render($item, $user);
 
-                    if (!empty($itemHtml))
-                    {
+                    if (!empty($itemHtml)) {
                         $numberOfItems ++;
                         $itemRenditions[] = $itemHtml;
                     }
@@ -83,14 +81,18 @@ class MenuRenderer
         return $this->getItemCacheService()->findItemsByParentIdentifier('0');
     }
 
+    public function getBrandPath(?string $component = null, ?string $defaultValue = null): array|string
+    {
+        if ($component) {
+            return $this->brandPath[$component] ?: $defaultValue;
+        }
+
+        return $this->brandPath;
+    }
+
     public function getChamiloRequest(): ChamiloRequest
     {
         return $this->chamiloRequest;
-    }
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
     }
 
     public function getItemCacheService(): CachedItemService
@@ -101,6 +103,11 @@ class MenuRenderer
     public function getItemRendererFactory(): ItemRendererCollection
     {
         return $this->itemRendererFactory;
+    }
+
+    public function getSiteName(): string
+    {
+        return $this->siteName;
     }
 
     public function getThemeWebPathBuilder(): ThemePathBuilder
@@ -115,24 +122,16 @@ class MenuRenderer
 
     public function renderBrand(): string
     {
-        $configurationConsulter = $this->getConfigurationConsulter();
+        $brandContext = $this->getBrandPath('context', 'Chamilo\Core\Admin');
+        $brandFilename = $this->getBrandPath('filename', 'LogoHeader');
+        $brandExtension = $this->getBrandPath('extension', 'png');
 
-        $siteName = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'site_name']);
-        $brandImage = $configurationConsulter->getSetting(['Chamilo\Core\Menu', 'brand_image']);
-
-        if ($brandImage)
-        {
-            $brandSource = $brandImage;
-        }
-        else
-        {
-            $brandSource = $this->getThemeWebPathBuilder()->getImagePath('Chamilo\Core\Admin', 'LogoHeader');
-        }
+        $brandWebPath = $this->getThemeWebPathBuilder()->getImagePath($brandContext, $brandFilename, $brandExtension);
 
         $basePath = $this->getWebPathBuilder()->getBasePath();
 
-        return '<a class="navbar-brand" href="' . $basePath . '">' . '<img alt="' . $siteName . '" src="' .
-            $brandSource . '"></a>';
+        return '<a class="navbar-brand" href="' . $basePath . '">' . '<img alt="' . $this->getSiteName() . '" src="' .
+            $brandWebPath . '"></a>';
     }
 
     public function renderFooter(): string
@@ -153,8 +152,7 @@ class MenuRenderer
 
         $class = 'navbar navbar-static-top navbar-cosnics navbar-inverse';
 
-        if ($numberOfItems == 0)
-        {
+        if ($numberOfItems == 0) {
             $class .= ' navbar-no-items';
         }
 
@@ -177,5 +175,4 @@ class MenuRenderer
 
         return implode(PHP_EOL, $html);
     }
-
 }

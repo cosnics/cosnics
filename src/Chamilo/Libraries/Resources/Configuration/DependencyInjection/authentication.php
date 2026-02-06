@@ -3,10 +3,10 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\Protocol\Authentication\Service\CasAuthentication;
 use Chamilo\Libraries\Protocol\Authentication\Service\PlatformAuthentication;
 use Chamilo\Libraries\Protocol\Authentication\Service\SecurityTokenAuthentication;
-use Ehb\Libraries\Log\MonologStreamHandlerFactory;
-use Ehb\Libraries\Protocol\Authentication\Service\CasAuthentication;
+use Chamilo\Libraries\Protocol\Log\Factory\MonologStreamHandlerFactory;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -14,7 +14,9 @@ return static function (ContainerConfigurator $container) {
     $services = $container->services();
     $services->defaults()->public()->autowire()->autoconfigure();
 
-    $services->set(AuthenticationValidator::class);
+    $services->set(AuthenticationValidator::class)->args(
+        ['$enabledSources' => '%cosnics.libraries.protocol.authentication.enabledSources%']
+    );
     $services->set(CasAuthentication::class)->tag(AuthenticationInterface::class)->args(
         ['$logger' => service('Chamilo\Libraries\Protocol\Authentication\Service\CasLogger')]
     );
@@ -23,7 +25,7 @@ return static function (ContainerConfigurator $container) {
 
     $services->set('Chamilo\Libraries\Protocol\Authentication\Service\CasLogger', Logger::class)->args([
         '$name' => 'Cas',
-        '$handlers' => [service('Ehb\Libraries\Protocol\Authentication\Service\CasStreamHandler')],
+        '$handlers' => [service('Chamilo\Libraries\Protocol\Authentication\Service\CasStreamHandler')],
     ]);
 
     $services->set('Chamilo\Libraries\Protocol\Authentication\Service\CasStreamHandler', StreamHandler::class)->args(

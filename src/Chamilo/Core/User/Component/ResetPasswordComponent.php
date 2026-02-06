@@ -21,7 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ResetPasswordComponent extends Manager implements NoAuthenticationSupportInterface
 {
-
     protected FormValidator $passwordResetForm;
 
     /**
@@ -31,16 +30,14 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
      */
     public function run(): Response
     {
-        if (!$this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'allow_password_retrieval']))
-        {
+        if (!$this->getContainer()->getParameter('cosnics.application.user.rights.retrievePassword')) {
             throw new NotAllowedException();
         }
 
         $translator = $this->getTranslator();
         $userService = $this->getUserService();
 
-        if ($this->getUser() instanceof User)
-        {
+        if ($this->getUser() instanceof User) {
             throw new UserException($translator->trans('AlreadyRegistered', [], Manager::CONTEXT));
         }
 
@@ -51,18 +48,14 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
         $requestKey = $this->getRequest()->query->get(self::PARAM_RESET_KEY);
         $requestUserIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID);
 
-        if (!is_null($requestKey) && !is_null($requestUserIdentifier))
-        {
+        if (!is_null($requestKey) && !is_null($requestUserIdentifier)) {
             $user = $userService->findUserByIdentifier($requestUserIdentifier);
 
-            if ($userService->isValidKeyForUser($requestKey, $user))
-            {
-                if (!$userService->createNewPasswordForUser($user))
-                {
+            if ($userService->isValidKeyForUser($requestKey, $user)) {
+                if (!$userService->createNewPasswordForUser($user)) {
                     throw new UserException($translator->trans('CreationOfNewPasswordFailed', [], Manager::CONTEXT));
                 }
-                else
-                {
+                else {
                     $html[] = $this->getNotificationMessageRenderer()->renderOne(
                         new NotificationMessage(
                             $translator->trans('YourNewPasswordHasBeenMailedToYou', [], Manager::CONTEXT)
@@ -70,29 +63,24 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
                     );
                 }
             }
-            else
-            {
+            else {
                 throw new UserException($translator->trans('InvalidRequest', [], Manager::CONTEXT));
             }
         }
-        else
-        {
+        else {
             $passwordResetForm = $this->getPasswordResetForm();
 
-            if ($passwordResetForm->validate())
-            {
+            if ($passwordResetForm->validate()) {
                 $user = $userService->findUserByEmail($passwordResetForm->exportValue(User::PROPERTY_EMAIL));
 
-                if ($userService->sendPasswordResetLinkforUser($user))
-                {
+                if ($userService->sendPasswordResetLinkforUser($user)) {
                     $html[] = '<div class="alert alert-success">' . $translator->trans(
                             'ResetLinkSendForUser',
                             ['USER' => $user->getFullName() . ' (' . $user->getUsername() . ')'], Manager::CONTEXT
                         ) . '</div>';
                 }
             }
-            else
-            {
+            else {
                 $html[] = $passwordResetForm->render();
             }
         }
@@ -107,8 +95,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
      */
     protected function getPasswordResetForm(): FormValidator
     {
-        if (!isset($this->passwordResetForm))
-        {
+        if (!isset($this->passwordResetForm)) {
             $translator = $this->getTranslator();
 
             $this->passwordResetForm = new FormValidator(

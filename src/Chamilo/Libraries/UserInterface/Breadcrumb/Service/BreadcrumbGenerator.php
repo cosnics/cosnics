@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Breadcrumb\Service;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
@@ -24,16 +23,15 @@ use Symfony\Component\Translation\Translator;
  */
 class BreadcrumbGenerator
 {
-
     protected BreadcrumbTrail $breadcrumbTrail;
 
     protected ClassnameUtilities $classnameUtilities;
 
-    protected ConfigurationConsulter $configurationConsulter;
-
     protected FileConfigurationLocator $fileConfigurationLocator;
 
     protected ChamiloRequest $request;
+
+    protected string $siteName;
 
     protected Translator $translator;
 
@@ -43,18 +41,18 @@ class BreadcrumbGenerator
 
     public function __construct(
         ClassnameUtilities $classnameUtilities, UrlGenerator $urlGenerator, Translator $translator,
-        FileConfigurationLocator $fileConfigurationLocator, ConfigurationConsulter $configurationConsulter,
-        WebPathBuilder $webPathBuilder, BreadcrumbTrail $breadcrumbTrail, ChamiloRequest $request
+        FileConfigurationLocator $fileConfigurationLocator, WebPathBuilder $webPathBuilder,
+        BreadcrumbTrail $breadcrumbTrail, ChamiloRequest $request, string $siteName = 'Cosnics'
     )
     {
         $this->classnameUtilities = $classnameUtilities;
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
         $this->fileConfigurationLocator = $fileConfigurationLocator;
-        $this->configurationConsulter = $configurationConsulter;
         $this->webPathBuilder = $webPathBuilder;
         $this->breadcrumbTrail = $breadcrumbTrail;
         $this->request = $request;
+        $this->siteName = $siteName;
     }
 
     public function addComponentBreadcrumb(Application $application): void
@@ -104,18 +102,10 @@ class BreadcrumbGenerator
 
     protected function generateRootBreadcrumb(): void
     {
-        // TODO: Can this be fixed more elegantly?
-        if ($this->getFileConfigurationLocator()->isAvailable())
-        {
-            $siteName = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'site_name']);
-        }
-        else
-        {
-            $siteName = 'Chamilo';
-        }
-
         $this->getBreadcrumbTrail()->add(
-            new Breadcrumb($this->getWebPathBuilder()->getBasePath(), $siteName, new FontAwesomeGlyph('home'))
+            new Breadcrumb(
+                $this->getWebPathBuilder()->getBasePath(), $this->getSiteName(), new FontAwesomeGlyph('home')
+            )
         );
     }
 
@@ -134,11 +124,6 @@ class BreadcrumbGenerator
         return $this->classnameUtilities;
     }
 
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
-    }
-
     public function getFileConfigurationLocator(): FileConfigurationLocator
     {
         return $this->fileConfigurationLocator;
@@ -147,6 +132,11 @@ class BreadcrumbGenerator
     public function getRequest(): ChamiloRequest
     {
         return $this->request;
+    }
+
+    public function getSiteName(): string
+    {
+        return $this->siteName;
     }
 
     public function getTranslator(): Translator

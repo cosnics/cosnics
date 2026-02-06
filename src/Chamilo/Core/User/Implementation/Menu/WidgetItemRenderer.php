@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Implementation\Menu;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
@@ -21,24 +20,22 @@ use Symfony\Component\Translation\Translator;
  */
 class WidgetItemRenderer extends ItemRenderer
 {
+    protected bool $canChangeUserPicture;
 
     protected UrlGenerator $urlGenerator;
-
-    private ConfigurationConsulter $configurationConsulter;
 
     private UserPictureProviderInterface $userPictureProvider;
 
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
-        ConfigurationConsulter $configurationConsulter, UserPictureProviderInterface $userPictureProvider,
-        UrlGenerator $urlGenerator
+        UserPictureProviderInterface $userPictureProvider, UrlGenerator $urlGenerator, bool $canChangeUserPicture = true
     )
     {
         parent::__construct($translator, $itemCacheService, $request);
 
-        $this->configurationConsulter = $configurationConsulter;
         $this->userPictureProvider = $userPictureProvider;
         $this->urlGenerator = $urlGenerator;
+        $this->canChangeUserPicture = $canChangeUserPicture;
     }
 
     public function render(Item $item, User $user): string
@@ -55,15 +52,13 @@ class WidgetItemRenderer extends ItemRenderer
         $html[] =
             '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
-        if ($item->showIcon())
-        {
+        if ($item->showIcon()) {
             $html[] =
                 '<img class="profile-picture img-circle img-thumbnail" src="' . $userPicture . '" title="' . $title .
                 '" alt="' . $title . '" />';
         }
 
-        if ($item->showTitle())
-        {
+        if ($item->showTitle()) {
             $html[] = '<div>' . $title . '</div>';
         }
 
@@ -78,10 +73,7 @@ class WidgetItemRenderer extends ItemRenderer
         $html[] = '<li role="separator" class="divider"></li>';
 
         // Change user profile picture
-        if ($this->getConfigurationConsulter()->getSetting(
-            [Manager::CONTEXT, 'allow_change_user_picture']
-        ))
-        {
+        if ($this->canChangeUserPicture()) {
             $html[] = '<li>';
             $html[] = '<a href="' . $this->getPictureUrl() . '">';
             $html[] = '<div>' . $translator->trans('EditProfilePicture', [], 'Chamilo\Core\User') . '</div>';
@@ -120,14 +112,14 @@ class WidgetItemRenderer extends ItemRenderer
         return implode(PHP_EOL, $html);
     }
 
+    public function canChangeUserPicture(): bool
+    {
+        return $this->canChangeUserPicture;
+    }
+
     public function getAccountUrl(): string
     {
         return $this->getUserUrl(Manager::ACTION_ACCOUNT);
-    }
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
     }
 
     public function getLogoutUrl(): string

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\UserInterface\Form;
 
-use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 class UserCreationForm extends UserForm
@@ -16,10 +15,8 @@ class UserCreationForm extends UserForm
      */
     public function buildForm(): void
     {
-        $configurationConsulter = $this->getConfigurationConsulter();
-
-        $requireEmail = (bool) $configurationConsulter->getSetting([Manager::CONTEXT, 'require_email']);
-        $requireOfficialCode = (bool) $configurationConsulter->getSetting([Manager::CONTEXT, 'require_official_code']);
+        $requireEmail = $this->getContainer()->getParameter('cosnics.application.user.require.email');
+        $requireOfficialCode = $this->getContainer()->getParameter('cosnics.application.user.require.officialCode');
 
         $this->buildPersonalDetailsCategoryForm(true, true, true, true, $requireEmail, true, $requireOfficialCode);
         $this->buildPasswordCategoryForm();

@@ -103,12 +103,17 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(BannerRenderer::class);
     $services->set(PageConfiguration::class);
-    $services->set(FooterRenderer::class);
+    $services->set(FooterRenderer::class)->args(
+        [
+            '$administratorData' => '%cosnics.libraries.userInterface.layout.administrator%',
+            '$institutionData' => '%cosnics.libraries.userInterface.layout.institution%'
+        ]
+    );
     $services->set(HeaderRenderer::class)->args(
         [
             '$themeWebPathBuilder' => service('Chamilo\Libraries\UserInterface\Theme\Service\ThemeWebPathBuilder'),
-            '$siteConfiguration' => '%cosnics.libraries.userInterface.layout.site.name%',
-            '$institutionConfiguration' => '%cosnics.libraries.userInterface.layout.institution%'
+            '$siteName' => '%cosnics.libraries.userInterface.layout.site.name%',
+            '$institutionName' => '%cosnics.libraries.userInterface.layout.institution.name%'
         ]
     );
 

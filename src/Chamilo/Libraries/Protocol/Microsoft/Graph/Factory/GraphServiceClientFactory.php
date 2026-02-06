@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Factory;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Microsoft\Graph\GraphServiceClient;
 use Microsoft\Kiota\Authentication\Oauth\ClientCredentialContext;
 
@@ -11,36 +10,11 @@ use Microsoft\Kiota\Authentication\Oauth\ClientCredentialContext;
  */
 class GraphServiceClientFactory
 {
-    protected ConfigurationConsulter $configurationConsulter;
-
-    public function __construct(ConfigurationConsulter $configurationConsulter)
+    public function buildGraphServiceClient(string $tenantId, string $clientId, string $clientSecret
+    ): GraphServiceClient
     {
-        $this->configurationConsulter = $configurationConsulter;
-    }
-
-    public function buildGraphServiceClient(): GraphServiceClient
-    {
-        $configurationConsulter = $this->getConfigurationConsulter();
-
-        $clientId = $configurationConsulter->getSetting(
-            ['Chamilo\Libraries', 'microsoft_graph_client_id']
+        return new GraphServiceClient(
+            new ClientCredentialContext($tenantId, $clientId, $clientSecret)
         );
-
-        $clientSecret = $configurationConsulter->getSetting(
-            ['Chamilo\Libraries', 'microsoft_graph_client_secret']
-        );
-
-        $tenantId = $configurationConsulter->getSetting(
-            ['Chamilo\Libraries', 'microsoft_graph_tenant_id']
-        );
-
-        $tokenRequestContext = new ClientCredentialContext($tenantId, $clientId, $clientSecret);
-
-        return new GraphServiceClient($tokenRequestContext);
-    }
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
     }
 }

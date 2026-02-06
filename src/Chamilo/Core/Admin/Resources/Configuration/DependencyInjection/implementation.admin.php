@@ -16,7 +16,8 @@ return static function (ContainerConfigurator $container) {
         [
             '$themeSystemPathBuilder' => service(
                 'Chamilo\Libraries\UserInterface\Theme\Service\ThemeSystemPathBuilder'
-            )
+            ),
+            '$userRights' => '%cosnics.application.user.rights%'
         ]
     )->tag(SettingsConnectorInterface::class);
 };

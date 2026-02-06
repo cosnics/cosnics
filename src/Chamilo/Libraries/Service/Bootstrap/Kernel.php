@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Service\Bootstrap;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Service\OnlineService;
 use Chamilo\Core\Home\Manager as HomeManager;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserEnterPageEvent;
@@ -13,6 +12,7 @@ use Chamilo\Libraries\Architecture\Interface\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Architecture\Response\PlatformNotAvailableResponse;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Response\NotAuthenticatedResponse;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
@@ -39,15 +39,17 @@ class Kernel
 
     protected EventDispatcherInterface $eventDispatcher;
 
+    protected bool $maintenanceMode;
+
     protected SessionInterface $session;
+
+    protected ?string $timezone;
 
     protected OnlineService $whoIsOnlineService;
 
     private ?Application $application = null;
 
     private ApplicationFactory $applicationFactory;
-
-    private ConfigurationConsulter $configurationConsulter;
 
     private ?string $context = null;
 
@@ -60,14 +62,13 @@ class Kernel
     private ?User $user;
 
     public function __construct(
-        ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
-        SessionInterface $session, ExceptionLoggerInterface $exceptionLogger, OnlineService $whoIsOnlineService,
+        ChamiloRequest $request, ApplicationFactory $applicationFactory, SessionInterface $session,
+        ExceptionLoggerInterface $exceptionLogger, OnlineService $whoIsOnlineService,
         AuthenticationValidator $authenticationValidator, UrlGenerator $urlGenerator,
-        EventDispatcherInterface $eventDispatcher, User $user = null
+        EventDispatcherInterface $eventDispatcher, string $timezone, bool $maintenanceMode = false, User $user = null
     )
     {
         $this->request = $request;
-        $this->configurationConsulter = $configurationConsulter;
         $this->applicationFactory = $applicationFactory;
         $this->session = $session;
         $this->exceptionLogger = $exceptionLogger;
@@ -76,6 +77,8 @@ class Kernel
         $this->authenticationValidator = $authenticationValidator;
         $this->whoIsOnlineService = $whoIsOnlineService;
         $this->eventDispatcher = $eventDispatcher;
+        $this->maintenanceMode = $maintenanceMode;
+        $this->timezone = $timezone;
     }
 
     /**
@@ -106,15 +109,11 @@ class Kernel
     protected function checkAuthentication(): Kernel
     {
         $applicationClassName = $this->getApplicationFactory()->getClassName($this->getContext());
-        $applicationRequiresAuthentication = !is_subclass_of(
-            $applicationClassName,
-            'Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface'
-        );
+        $applicationRequiresAuthentication =
+            !is_subclass_of($applicationClassName, NoAuthenticationSupportInterface::class);
 
         if ($applicationRequiresAuthentication) {
-            if (!$this->getAuthenticationValidator()->validate()) {
-                throw new NotAuthenticatedException(true);
-            }
+            $this->getAuthenticationValidator()->validate();
         }
 
         return $this;
@@ -125,7 +124,7 @@ class Kernel
      */
     protected function checkPlatformAvailability(): Kernel
     {
-        if ($this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'maintenance_block_access'])) {
+        if ($this->isMaintenanceMode()) {
             $asAdmin = $this->getSession()->get('_as_admin');
 
             if ($this->getUser() instanceof User && !$this->getUser()->isPlatformAdministrator() && !$asAdmin) {
@@ -163,9 +162,7 @@ class Kernel
 
     protected function configureTimezone(): Kernel
     {
-        date_default_timezone_set(
-            $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'platform_timezone'])
-        );
+        date_default_timezone_set($this->getTimezone());
 
         return $this;
     }
@@ -188,11 +185,6 @@ class Kernel
     public function getAuthenticationValidator(): AuthenticationValidator
     {
         return $this->authenticationValidator;
-    }
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
     }
 
     public function getContext(): ?string
@@ -238,6 +230,11 @@ class Kernel
     public function getSession(): SessionInterface
     {
         return $this->session;
+    }
+
+    public function getTimezone(): ?string
+    {
+        return $this->timezone;
     }
 
     public function getUrlGenerator(): UrlGenerator
@@ -296,6 +293,11 @@ class Kernel
         $response = new RedirectResponse($this->getUrlGenerator()->fromParameters($landingPageParameters));
         $response->send();
         exit;
+    }
+
+    public function isMaintenanceMode(): bool
+    {
+        return $this->maintenanceMode;
     }
 
     /**

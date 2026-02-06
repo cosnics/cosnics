@@ -2,12 +2,10 @@
 namespace Chamilo\Core\User\UserInterface\Form;
 
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_category;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_extended_checkbox;
 use HTML_QuickForm_Rule_Required;
-use HTML_QuickForm_select;
 use HTML_QuickForm_textarea;
 
 /**
@@ -31,8 +29,7 @@ class RegisterForm extends UserForm
      */
     public function buildConditionsCategoryForm(): void
     {
-        if ($this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, 'enable_terms_and_conditions']))
-        {
+        if ($this->getContainer()->getParameter('cosnics.application.user.enableTermsAndConditions')) {
             $translator = $this->getTranslator();
 
             $this->addElement(HTML_QuickForm_category::class, $translator->trans('Information', [], Manager::CONTEXT));
@@ -58,10 +55,8 @@ class RegisterForm extends UserForm
      */
     public function buildForm(): void
     {
-        $configurationConsulter = $this->getConfigurationConsulter();
-
-        $requireEmail = (bool) $configurationConsulter->getSetting([Manager::CONTEXT, 'require_email']);
-        $requireOfficialCode = (bool) $configurationConsulter->getSetting([Manager::CONTEXT, 'require_official_code']);
+        $requireEmail = $this->getContainer()->getParameter('cosnics.application.user.require.email');
+        $requireOfficialCode = $this->getContainer()->getParameter('cosnics.application.user.require.officialCode');
 
         $this->buildPersonalDetailsCategoryForm(true, true, true, true, $requireEmail, true, $requireOfficialCode);
         $this->buildPasswordCategoryForm();
@@ -69,18 +64,6 @@ class RegisterForm extends UserForm
         $this->buildConditionsCategoryForm();
         $this->buildOtherCategoryForm();
         $this->addSaveResetButtons();
-    }
-
-    public function buildPersonalDetailsCategoryForm(
-        bool $includeCategoryTitle = true, bool $allowedToChangeFirstName = true, bool $allowedToChangeLastName = true,
-        bool $allowedToChangeUsername = true, bool $requiresEmail = true, bool $allowedToChangeEmailAddress = true,
-        bool $requiresOfficialCode = true, bool $allowedToChangeOfficialCode = true
-    ): void
-    {
-        parent::buildPersonalDetailsCategoryForm(
-            $includeCategoryTitle, $allowedToChangeFirstName, $allowedToChangeLastName, $allowedToChangeUsername,
-            $requiresEmail, $allowedToChangeEmailAddress, $requiresOfficialCode, $allowedToChangeOfficialCode
-        );
     }
 
     /**

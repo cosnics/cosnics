@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Architecture\Domain;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
@@ -13,16 +12,16 @@ use Symfony\Component\Translation\Translator;
  */
 class UserPictureProviderCollection extends ArrayCollection
 {
-    protected ConfigurationConsulter $configurationConsulter;
+    protected string $activePictureProviderClass;
 
     protected Translator $translator;
 
-    public function __construct(ConfigurationConsulter $configurationConsulter, Translator $translator)
+    public function __construct(Translator $translator, string $activePictureProviderClass)
     {
         parent::__construct();
 
-        $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
+        $this->activePictureProviderClass = $activePictureProviderClass;
     }
 
     public function addAvailablePictureProvider(UserPictureProviderInterface $userPictureProvider): void
@@ -36,15 +35,18 @@ class UserPictureProviderCollection extends ArrayCollection
      */
     public function getActivePictureProvider(): UserPictureProviderInterface
     {
-        $configuredPictureProvider =
-            $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'userPictureProvider']);
+        $configuredPictureProvider = $this->getActivePictureProviderClass();
 
-        if (!$this->containsKey($configuredPictureProvider))
-        {
+        if (!$this->containsKey($configuredPictureProvider)) {
             throw new Exception($this->getTranslator()->trans('InvalidUserPictureProvider'));
         }
 
         return $this->get($configuredPictureProvider);
+    }
+
+    public function getActivePictureProviderClass(): string
+    {
+        return $this->activePictureProviderClass;
     }
 
     /**
@@ -53,11 +55,6 @@ class UserPictureProviderCollection extends ArrayCollection
     public function getAvailablePictureProviderTypes(): array
     {
         return $this->getKeys();
-    }
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
     }
 
     public function getTranslator(): Translator

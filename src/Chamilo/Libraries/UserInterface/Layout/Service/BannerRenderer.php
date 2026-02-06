@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Layout\Service;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\MenuRenderer;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -26,8 +25,6 @@ class BannerRenderer
 
     private BreadcrumbTrailRenderer $breadcrumbTrailRenderer;
 
-    private ConfigurationConsulter $configurationConsulter;
-
     private MenuRenderer $menuRenderer;
 
     private PageConfiguration $pageConfiguration;
@@ -40,13 +37,12 @@ class BannerRenderer
 
     public function __construct(
         PageConfiguration $pageConfiguration, SessionInterface $session, Translator $translator,
-        ConfigurationConsulter $configurationConsulter, UrlGenerator $urlGenerator, MenuRenderer $menuRenderer,
-        BreadcrumbTrail $breadcrumbTrail, BreadcrumbTrailRenderer $breadcrumbTrailRenderer
+        UrlGenerator $urlGenerator, MenuRenderer $menuRenderer, BreadcrumbTrail $breadcrumbTrail,
+        BreadcrumbTrailRenderer $breadcrumbTrailRenderer
     )
     {
         $this->pageConfiguration = $pageConfiguration;
         $this->session = $session;
-        $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
         $this->menuRenderer = $menuRenderer;
@@ -61,7 +57,6 @@ class BannerRenderer
     {
         $pageConfiguration = $this->getPageConfiguration();
         $session = $this->getSession();
-        $configurationConsulter = $this->getConfigurationConsulter();
         $translator = $this->getTranslator();
 
         $html = [];
@@ -110,11 +105,6 @@ class BannerRenderer
     public function getBreadcrumbTrailRenderer(): BreadcrumbTrailRenderer
     {
         return $this->breadcrumbTrailRenderer;
-    }
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
     }
 
     public function getMenuRenderer(): MenuRenderer

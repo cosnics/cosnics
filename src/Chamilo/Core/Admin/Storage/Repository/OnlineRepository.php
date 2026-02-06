@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Admin\Storage\Repository;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Storage\DataClass\Online;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
@@ -17,15 +16,14 @@ use Chamilo\Libraries\Storage\Repository\DataClassRepository;
  */
 class OnlineRepository
 {
-    protected ConfigurationConsulter $configurationConsulter;
-
     protected DataClassRepository $dataClassRepository;
 
-    public function __construct(ConfigurationConsulter $configurationConsulter, DataClassRepository $dataClassRepository
-    )
+    protected int $timeLimit;
+
+    public function __construct(DataClassRepository $dataClassRepository, int $timeLimit = 600)
     {
         $this->dataClassRepository = $dataClassRepository;
-        $this->configurationConsulter = $configurationConsulter;
+        $this->timeLimit = $timeLimit;
     }
 
     /**
@@ -43,10 +41,8 @@ class OnlineRepository
      */
     public function findDistinctOnlineUserIdentifiers(): array
     {
-        $timeLimit = $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'timelimit']);
-
         $pastTime = strtotime(
-            '-' . $timeLimit . ' seconds', time()
+            '-' . $this->getTimeLimit() . ' seconds', time()
         );
 
         $condition = new ComparisonCondition(
@@ -79,14 +75,14 @@ class OnlineRepository
         );
     }
 
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
-    }
-
     protected function getDataClassRepository(): DataClassRepository
     {
         return $this->dataClassRepository;
+    }
+
+    public function getTimeLimit(): int
+    {
+        return $this->timeLimit;
     }
 
     /**

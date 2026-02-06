@@ -39,17 +39,22 @@ class AccountForm extends UserForm
         $authentication =
             $this->authenticationValidator->getAuthenticationByType($this->user->getAuthenticationSource());
 
-        $allowedToChangeFirstName = $this->getSetting('allow_change_firstname');
-        $allowedToChangeLastName = $this->getSetting('allow_change_lastname');
+        $allowedToChangeFirstName =
+            $this->getContainer()->getParameter('cosnics.application.user.rights.changeGivenName');
+        $allowedToChangeLastName = $this->getContainer()->getParameter('cosnics.application.user.rights.changeSurname');
         $allowedToChangeUsername =
-            $this->getSetting('allow_change_username') && $authentication instanceof ChangeableUsernameInterface;
-        $allowedToChangeEmailAddress = $this->getSetting('allow_change_email');
-        $allowedToChangeOfficialCode = $this->getSetting('allow_change_official_code');
+            $this->getContainer()->getParameter('cosnics.application.user.rights.changeUsername') &&
+            $authentication instanceof ChangeableUsernameInterface;
+        $allowedToChangeEmailAddress =
+            $this->getContainer()->getParameter('cosnics.application.user.rights.changeEmail');
+        $allowedToChangeOfficialCode =
+            $this->getContainer()->getParameter('cosnics.application.user.rights.changeOfficialCode');
         $allowedToChangePassword =
-            $this->getSetting('allow_change_password') && $authentication instanceof ChangeablePasswordInterface;
+            $this->getContainer()->getParameter('cosnics.application.user.rights.changePassword') &&
+            $authentication instanceof ChangeablePasswordInterface;
 
-        $requireEmail = $this->getSetting('require_email');
-        $requireOfficialCode = $this->getSetting('require_official_code');
+        $requireEmail = $this->getContainer()->getParameter('cosnics.application.user.resuire.email');
+        $requireOfficialCode = $this->getContainer()->getParameter('cosnics.application.user.require.officialCode');
 
         $this->buildPersonalDetailsCategoryForm(
             true, $allowedToChangeFirstName, $allowedToChangeLastName, $allowedToChangeUsername, $requireEmail,
@@ -82,25 +87,25 @@ class AccountForm extends UserForm
 
     protected function canUserChangeAnything(): bool
     {
-        $configurationConsulter = $this->getConfigurationConsulter();
+        $authentication =
+            $this->authenticationValidator->getAuthenticationByType($this->user->getAuthenticationSource());
 
-        $settings = [
-            'allow_change_firstname',
-            'allow_change_lastname',
-            'allow_change_official_code',
-            'allow_change_email',
-            'allow_change_username',
-            'allow_change_user_picture',
-            'allow_change_password'
-        ];
+        $allowedToChangeFirstName =
+            $this->getContainer()->getParameter('cosnics.application.user.rights.changeGivenName');
+        $allowedToChangeLastName = $this->getContainer()->getParameter('cosnics.application.user.rights.changeSurname');
+        $allowedToChangeUsername =
+            $this->getContainer()->getParameter('cosnics.application.user.rights.changeUsername') &&
+            $authentication instanceof ChangeableUsernameInterface;
+        $allowedToChangeEmailAddress =
+            $this->getContainer()->getParameter('cosnics.application.user.rights.changeEmail');
+        $allowedToChangeOfficialCode =
+            $this->getContainer()->getParameter('cosnics.application.user.rights.changeOfficialCode');
+        $allowedToChangePassword =
+            $this->getContainer()->getParameter('cosnics.application.user.rights.changePassword') &&
+            $authentication instanceof ChangeablePasswordInterface;
 
-        foreach ($settings as $setting) {
-            if ($configurationConsulter->getSetting([Manager::CONTEXT, $setting])) {
-                return true;
-            }
-        }
-
-        return false;
+        return $allowedToChangeFirstName || $allowedToChangeLastName || $allowedToChangeUsername ||
+            $allowedToChangeEmailAddress || $allowedToChangeOfficialCode || $allowedToChangePassword;
     }
 
     /**
@@ -121,11 +126,6 @@ class AccountForm extends UserForm
         }
 
         return true;
-    }
-
-    public function getSetting(string $variable): bool
-    {
-        return (bool) $this->getConfigurationConsulter()->getSetting([Manager::CONTEXT, $variable]);
     }
 
     /**

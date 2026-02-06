@@ -19,7 +19,7 @@ class LanguageComponent extends Manager
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ChangeLanguage');
 
-        if ($this->isAllowedToChangeLanguage()) {
+        if ($this->getContainer()->getParameter('cosnics.application.user.rights.changeLanguage')) {
             $choice = $this->getRequest()->query->get(self::PARAM_LANGUAGE);
             $languages = array_keys($this->getLanguages());
 
@@ -44,12 +44,5 @@ class LanguageComponent extends Manager
     private function getLanguages(): array
     {
         return $this->getLanguageConsulter()->getLanguages();
-    }
-
-    private function isAllowedToChangeLanguage(): bool
-    {
-        return $this->getConfigurationConsulter()->getSetting(
-                ['Chamilo\Core\User', 'allow_user_change_platform_language']
-            ) == 1;
     }
 }

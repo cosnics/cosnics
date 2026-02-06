@@ -20,7 +20,11 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(GraphServiceClient::class)->factory(
         [service(GraphServiceClientFactory::class), 'buildGraphServiceClient']
-    );
+    )->args([
+        '$tenantId' => '%cosnics.libraries.protocol.microsoft.graph.tenantId%',
+        '$clientId' => '%cosnics.libraries.protocol.microsoft.graph.clientId%',
+        '$clientSecret' => '%cosnics.libraries.protocol.microsoft.graph.clientSecret%',
+    ]);
 
     $services->set(CalendarRepository::class);
     $services->set(UserRepository::class);
@@ -29,6 +33,8 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(UserService::class);
     $services->set(CalendarService::class);
-    $services->set(GroupService::class);
+    $services->set(GroupService::class)->args(
+        ['$groupBaseUri' => '%cosnics.libraries.protocol.microsoft.graph.baseUri.group%']
+    );
     $services->set(TeamService::class);
 };

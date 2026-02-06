@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Mail\Factory;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
 use Chamilo\Libraries\Protocol\Mail\Service\Platform;
@@ -14,8 +13,6 @@ use Symfony\Component\Translation\Translator;
  */
 class MailerFactory
 {
-    protected ConfigurationConsulter $configurationConsulter;
-
     protected string $configuredMailerClass;
 
     /**
@@ -26,10 +23,9 @@ class MailerFactory
     protected Translator $translator;
 
     public function __construct(
-        ConfigurationConsulter $configurationConsulter, Translator $translator, string $configuredMailerClass
+        Translator $translator, string $configuredMailerClass
     )
     {
-        $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
         $this->configuredMailerClass = $configuredMailerClass;
     }
@@ -49,11 +45,6 @@ class MailerFactory
         catch (ClassNotExistException) {
             return $this->getDefaultMailer();
         }
-    }
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
     }
 
     public function getConfiguredMailerClass(): string

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Home\Service;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Architecture\Domain\BlockRendererCollection;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\Repository\HomeRepository;
@@ -26,8 +25,6 @@ class HomeService
 
     protected ClassnameUtilities $classnameUtilities;
 
-    protected ConfigurationConsulter $configurationConsulter;
-
     protected SessionInterface $session;
 
     protected Translator $translator;
@@ -37,14 +34,13 @@ class HomeService
     private HomeRepository $homeRepository;
 
     public function __construct(
-        HomeRepository $homeRepository, SessionInterface $session, ConfigurationConsulter $configurationConsulter,
-        Translator $translator, BlockRendererCollection $blockRendererFactory, ClassnameUtilities $classnameUtilities,
+        HomeRepository $homeRepository, SessionInterface $session, Translator $translator,
+        BlockRendererCollection $blockRendererFactory, ClassnameUtilities $classnameUtilities,
         DisplayOrderHandler $displayOrderHandler
     )
     {
         $this->homeRepository = $homeRepository;
         $this->session = $session;
-        $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
         $this->blockRendererFactory = $blockRendererFactory;
         $this->classnameUtilities = $classnameUtilities;
@@ -67,8 +63,7 @@ class HomeService
      */
     public function createElement(Element $element): bool
     {
-        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeCreate($element))
-        {
+        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeCreate($element)) {
             return false;
         }
 
@@ -82,21 +77,17 @@ class HomeService
     {
         $childElements = $this->findElementsByParentIdentifier($element->getId());
 
-        foreach ($childElements as $childElement)
-        {
-            if (!$this->deleteElement($childElement))
-            {
+        foreach ($childElements as $childElement) {
+            if (!$this->deleteElement($childElement)) {
                 return false;
             }
         }
 
-        if (!$this->getHomeRepository()->deleteElement($element))
-        {
+        if (!$this->getHomeRepository()->deleteElement($element)) {
             return false;
         }
 
-        if (!$this->getDisplayOrderHandler()->handleDisplayOrderAfterDelete($element))
-        {
+        if (!$this->getDisplayOrderHandler()->handleDisplayOrderAfterDelete($element)) {
             return false;
         }
 
@@ -172,11 +163,6 @@ class HomeService
         return $this->classnameUtilities;
     }
 
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
-    }
-
     public function getCurrentTabIdentifier(ChamiloRequest $request): int
     {
         return $request->query->get(self::PARAM_TAB_ID);
@@ -231,10 +217,8 @@ class HomeService
     {
         $tabBlocks = $this->findBlocksForTabIdentifier($tab->getId());
 
-        foreach ($tabBlocks as $tabBlock)
-        {
-            if ($tabBlock->getContext() == 'Chamilo\Core\Admin' || $tabBlock->getContext() == 'Chamilo\Core\User')
-            {
+        foreach ($tabBlocks as $tabBlock) {
+            if ($tabBlock->getContext() == 'Chamilo\Core\Admin' || $tabBlock->getContext() == 'Chamilo\Core\User') {
                 return false;
             }
         }
@@ -249,8 +233,7 @@ class HomeService
      */
     public function updateElement(Element $element): bool
     {
-        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeUpdate($element))
-        {
+        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeUpdate($element)) {
             return false;
         }
 

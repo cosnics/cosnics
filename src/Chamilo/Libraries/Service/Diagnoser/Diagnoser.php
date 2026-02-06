@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Service\Diagnoser;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Chamilo\Libraries\Platform\ChamiloRequest;
@@ -29,8 +28,6 @@ class Diagnoser
 
     protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    protected ConfigurationConsulter $configurationConsulter;
-
     protected Connection $connection;
 
     protected DatetimeUtilities $datetimeUtilities;
@@ -48,13 +45,11 @@ class Diagnoser
     protected Translator $translator;
 
     public function __construct(
-        ConfigurationConsulter $configurationConsulter, Connection $connection, ChamiloRequest $request,
-        SystemPathBuilder $systemPathBuilder, ConfigurablePathBuilder $configurablePathBuilder, Translator $translator,
-        DatetimeUtilities $datetimeUtilities, TabsRenderer $tabsRenderer, SimpleTableRenderer $diagnoserTableRenderer,
-        int $installationDate
+        Connection $connection, ChamiloRequest $request, SystemPathBuilder $systemPathBuilder,
+        ConfigurablePathBuilder $configurablePathBuilder, Translator $translator, DatetimeUtilities $datetimeUtilities,
+        TabsRenderer $tabsRenderer, SimpleTableRenderer $diagnoserTableRenderer, int $installationDate
     )
     {
-        $this->configurationConsulter = $configurationConsulter;
         $this->connection = $connection;
         $this->request = $request;
         $this->systemPathBuilder = $systemPathBuilder;

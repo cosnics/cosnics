@@ -1,13 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Authentication\Service;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Exception;
 use Monolog\Logger;
 use phpCAS;
@@ -32,46 +30,30 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
     protected array $settings;
 
     public function __construct(
-        ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
-        UserService $userService, SessionInterface $session, Logger $logger
+        Translator $translator, ChamiloRequest $request, UserService $userService,
+        AuthenticationValidator $authenticationValidator, SessionInterface $session, Logger $logger, array $settings
     )
     {
-        parent::__construct($configurationConsulter, $translator, $request, $userService);
+        parent::__construct($translator, $request, $userService, $authenticationValidator);
 
         $this->session = $session;
         $this->logger = $logger;
+        $this->settings = $settings;
     }
 
     abstract protected function getCasUserIdentifierFromAttributes(string $casUser, array $casUserAttributes = []
     ): string;
-
-    /**
-     * @return string[]
-     */
-    protected function getConfiguration(): array
-    {
-        if (!isset($this->settings)) {
-            $this->settings = [];
-            $this->settings['host'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'host']);
-            $this->settings['port'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'port']);
-            $this->settings['uri'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'uri']);
-            $this->settings['certificate'] = $this->configurationConsulter->getSetting(
-                ['Libraries', 'certificate']
-            );
-            $this->settings['log'] = $this->configurationConsulter->getSetting(['Chamilo\Libraries', 'log']);
-            $this->settings['enableLog'] = $this->configurationConsulter->getSetting(
-                ['Chamilo\Libraries', 'enableLog']
-            );
-        }
-
-        return $this->settings;
-    }
 
     abstract public function getPriority(): int;
 
     public function getSession(): SessionInterface
     {
         return $this->session;
+    }
+
+    protected function getSetting(string $variable): ?string
+    {
+        return array_key_exists($variable, $this->settings) ? $this->settings[$variable] : null;
     }
 
     public function getSettings(): array
@@ -90,28 +72,21 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
             throw new Exception($this->getTranslator()->trans('CheckCASConfiguration'));
         }
         elseif (!phpCAS::isInitialized()) {
-            $settings = $this->getConfiguration();
             $request = $this->getRequest();
 
             // initialize phpCAS
-            if ($settings['enableLog']) {
+            if ($this->getSetting('enableLog')) {
                 phpCAS::setLogger($this->logger);
             }
 
-            $configurationConsulter = $this->getConfigurationConsulter();
-
             phpCAS::client(
-                SAML_VERSION_1_1, $settings['host'], (int) $settings['port'], $settings['uri'],
+                SAML_VERSION_1_1, $this->getSetting('host'), $this->getSetting('port'), $this->getSetting('uri'),
                 $request->getSchemeAndHttpHost(), false
             );
 
-            $casCheckCertificate = $configurationConsulter->getSetting(
-                ['Libraries', 'checkCertificate']
-            );
-
             // SSL validation for the CAS server
-            if ($casCheckCertificate == '1') {
-                phpCAS::setCasServerCACert($settings['certificate']);
+            if ($this->getSetting('checkCertificate')) {
+                phpCAS::setCasServerCACert($this->getSetting('certificatePath'));
             }
             else {
                 phpCAS::setNoCasServerValidation();
@@ -121,14 +96,16 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
     protected function isConfigured(): bool
     {
-        $settings = $this->getConfiguration();
+        if (!$this->getSetting('host')) {
+            return false;
+        }
 
-        foreach ($settings as $setting => $value) {
-            if (empty($value) && !in_array(
-                    $setting, ['uri', 'certificate', 'log', 'enableLog']
-                )) {
-                return false;
-            }
+        if ($this->getSetting('enableLog') && !$this->getSetting('logPath')) {
+            return false;
+        }
+
+        if ($this->getSetting('checkCertificate') && !$this->getSetting('certificatePath')) {
+            return false;
         }
 
         return true;
@@ -138,24 +115,12 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
      * @throws \Exception
      */
-    public function login(): ?User
+    public function login(bool $checkIfAuthenticationSourceIsEnabled = true): ?User
     {
-        if (!$this->isAuthSourceActive()) {
-            return null;
-        }
-
+        $this->checkAuthenticationSource($checkIfAuthenticationSourceIsEnabled);
         $this->initializeClient();
-        $configurationConsulter = $this->getConfigurationConsulter();
 
-        $authenticationException = new AuthenticationException(
-            $this->getTranslator()->trans(
-                'CasAuthenticationError', [
-                'PLATFORM' => $configurationConsulter->getSetting(
-                    ['Chamilo\Core\Admin', 'site_name']
-                )
-            ], StringUtilities::LIBRARIES
-            )
-        );
+        $authenticationException = new AuthenticationException($this->getTranslator()->trans('CasAuthenticationError'));
 
         try {
             phpCAS::forceAuthentication();

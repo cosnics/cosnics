@@ -1,12 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Authentication\Service;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException;
-use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -14,12 +12,12 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Libraries\Protocol\Authentication\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
-abstract class Authentication implements AuthenticationInterface
+abstract class Authentication
 {
     public const PARAM_LOGIN = 'login';
     public const PARAM_PASSWORD = 'password';
 
-    protected ConfigurationConsulter $configurationConsulter;
+    protected AuthenticationValidator $authenticationValidator;
 
     protected ChamiloRequest $request;
 
@@ -28,19 +26,32 @@ abstract class Authentication implements AuthenticationInterface
     protected UserService $userService;
 
     public function __construct(
-        ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
-        UserService $userService
+        Translator $translator, ChamiloRequest $request, UserService $userService,
+        AuthenticationValidator $authenticationValidator
     )
     {
-        $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
         $this->request = $request;
         $this->userService = $userService;
+        $this->authenticationValidator = $authenticationValidator;
     }
 
-    public function getConfigurationConsulter(): ConfigurationConsulter
+    /**
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
+     */
+    public function checkAuthenticationSource(bool $checkIfAuthenticationSourceIsEnabled = true): void
     {
-        return $this->configurationConsulter;
+        if ($checkIfAuthenticationSourceIsEnabled &&
+            !$this->getAuthenticationValidator()->isSourceEnabled(static::class)) {
+            throw new AuthenticationException(
+                $translator = $this->getTranslator()->trans('AuthSourceNotActive', [], StringUtilities::LIBRARIES)
+            );
+        }
+    }
+
+    public function getAuthenticationValidator(): AuthenticationValidator
+    {
+        return $this->authenticationValidator;
     }
 
     public function getRequest(): ChamiloRequest
@@ -60,6 +71,8 @@ abstract class Authentication implements AuthenticationInterface
      */
     protected function getUserFromCredentialsRequest(): ?User
     {
+        $translator = $this->getTranslator();
+
         $username = $this->getRequest()->request->get(self::PARAM_LOGIN);
 
         if (empty($username)) {
@@ -67,7 +80,6 @@ abstract class Authentication implements AuthenticationInterface
         }
 
         $user = $this->getUserService()->getUserByUsernameOrEmail($username);
-        $translator = $this->getTranslator();
 
         if (!$user instanceof User) {
             throw new AuthenticationException(
@@ -79,24 +91,11 @@ abstract class Authentication implements AuthenticationInterface
             return null;
         }
 
-        if (!$this->isAuthSourceActive()) {
-            throw new AuthenticationException(
-                $translator->trans('AuthSourceNotActive', [], StringUtilities::LIBRARIES)
-            );
-        }
-
         return $user;
     }
 
     public function getUserService(): UserService
     {
         return $this->userService;
-    }
-
-    protected function isAuthSourceActive(): bool
-    {
-        return (bool) $this->getConfigurationConsulter()->getSetting(
-            ['Chamilo\Libraries', 'enable' . str_replace('\\', '', static::class)]
-        );
     }
 }

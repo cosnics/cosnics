@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Home\UserInterface\HomeRenderer;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
@@ -19,8 +18,6 @@ use Symfony\Component\Translation\Translator;
  */
 class HomeRenderer
 {
-    protected ConfigurationConsulter $configurationConsulter;
-
     protected HomeService $homeService;
 
     protected TabRenderer $tabRenderer;
@@ -32,11 +29,10 @@ class HomeRenderer
     protected WebPathBuilder $webPathBuilder;
 
     public function __construct(
-        ConfigurationConsulter $configurationConsulter, HomeService $homeService, Translator $translator,
-        UrlGenerator $urlGenerator, WebPathBuilder $webPathBuilder, TabRenderer $tabRenderer
+        HomeService $homeService, Translator $translator, UrlGenerator $urlGenerator, WebPathBuilder $webPathBuilder,
+        TabRenderer $tabRenderer
     )
     {
-        $this->configurationConsulter = $configurationConsulter;
         $this->homeService = $homeService;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
@@ -53,11 +49,6 @@ class HomeRenderer
         $html[] = $this->renderContent($currentTabIdentifier, $user);
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
     }
 
     protected function getHomeService(): HomeService
@@ -98,8 +89,7 @@ class HomeRenderer
 
         $tabs = $this->getHomeService()->findElementsByTypeAndParentIdentifier(Element::TYPE_TAB);
 
-        foreach ($tabs as $tabKey => $tab)
-        {
+        foreach ($tabs as $tabKey => $tab) {
             $html[] = $tabRenderer->render($tab, $tabKey, $currentTabIdentifier, $user);
         }
 

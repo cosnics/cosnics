@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Home\UserInterface\HomeRenderer;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -17,13 +16,9 @@ abstract class BlockRenderer
     public const BLOCK_PROPERTY_ID = 'id';
     public const BLOCK_PROPERTY_IMAGE = 'image';
     public const BLOCK_PROPERTY_NAME = 'name';
-
     public const PARAM_ACTION = 'block_action';
-
     public const SOURCE_AJAX = 2;
     public const SOURCE_DEFAULT = 1;
-
-    protected ConfigurationConsulter $configurationConsulter;
 
     protected HomeService $homeService;
 
@@ -31,15 +26,11 @@ abstract class BlockRenderer
 
     protected UrlGenerator $urlGenerator;
 
-    public function __construct(
-        HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
-        ConfigurationConsulter $configurationConsulter
-    )
+    public function __construct(HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator)
     {
         $this->homeService = $homeService;
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
-        $this->configurationConsulter = $configurationConsulter;
     }
 
     public function render(Element $block, ?User $user = null): string
@@ -63,11 +54,6 @@ abstract class BlockRenderer
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
     }
 
     public function getHomeService(): HomeService
@@ -140,5 +126,4 @@ abstract class BlockRenderer
 
         return implode(PHP_EOL, $html);
     }
-
 }

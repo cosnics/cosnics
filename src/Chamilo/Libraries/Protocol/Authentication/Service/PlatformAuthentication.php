@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Authentication\Service;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -33,11 +32,11 @@ class PlatformAuthentication extends Authentication
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        ConfigurationConsulter $configurationConsulter, Translator $translator, ChamiloRequest $request,
-        UserService $userService, HashingAlgorithm $hashingUtilities, UrlGenerator $urlGenerator
+        Translator $translator, ChamiloRequest $request, UserService $userService,
+        AuthenticationValidator $authenticationValidator, HashingAlgorithm $hashingUtilities, UrlGenerator $urlGenerator
     )
     {
-        parent::__construct($configurationConsulter, $translator, $request, $userService);
+        parent::__construct($translator, $request, $userService, $authenticationValidator);
         $this->hashingUtilities = $hashingUtilities;
         $this->urlGenerator = $urlGenerator;
     }
@@ -92,15 +91,16 @@ class PlatformAuthentication extends Authentication
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function login(): ?User
+    public function login(bool $checkIfAuthenticationSourceIsEnabled = true): ?User
     {
+        $this->checkAuthenticationSource($checkIfAuthenticationSourceIsEnabled);
+
         $user = $this->getUserFromCredentialsRequest();
         if (!$user instanceof User) {
             return null;
         }
 
         $password = $this->getRequest()->request->get(self::PARAM_PASSWORD);
-
         $passwordHash = $this->getHashingUtilities()->hashString($password);
 
         if ($user->getPassword() == $passwordHash) {

@@ -12,5 +12,7 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(AccountItemRenderer::class)->tag(ItemRenderer::class);
     $services->set(LogoutItemRenderer::class)->tag(ItemRenderer::class);
-    $services->set(WidgetItemRenderer::class)->tag(ItemRenderer::class);
+    $services->set(WidgetItemRenderer::class)->args(
+        ['$canChangeUserPicture' => '%cosnics.application.user.rights.changeUserPicture%']
+    )->tag(ItemRenderer::class);
 };

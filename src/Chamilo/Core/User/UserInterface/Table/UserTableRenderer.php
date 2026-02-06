@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\UserInterface\Table;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -34,8 +33,6 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 {
     public const TABLE_IDENTIFIER = Manager::PARAM_USER_ID;
 
-    protected ConfigurationConsulter $configurationConsulter;
-
     protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
 
     protected User $user;
@@ -43,13 +40,12 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
     protected UserUrlGenerator $userUrlGenerator;
 
     public function __construct(
-        ConfigurationConsulter $configurationConsulter, User $user, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, UserUrlGenerator $userUrlGenerator,
-        ClassnameUtilities $classnameUtilities, MiniButtonToolBarRenderer $miniButtonToolBarRenderer
+        User $user, Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
+        Pager $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
+        UserUrlGenerator $userUrlGenerator, ClassnameUtilities $classnameUtilities,
+        MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )
     {
-        $this->configurationConsulter = $configurationConsulter;
         $this->user = $user;
         $this->userUrlGenerator = $userUrlGenerator;
         $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
@@ -58,11 +54,6 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
             $classnameUtilities
         );
-    }
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
     }
 
     public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
@@ -171,8 +162,6 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, mixed $result): string
     {
-        $translator = $this->getTranslator();
-
         $trueGlyph = new FontAwesomeGlyph('circle', ['text-success']);
         $falseGlyph = new FontAwesomeGlyph('circle', ['text-danger']);
 

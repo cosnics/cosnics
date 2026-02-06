@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Admin\UserInterface\Table;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -21,28 +20,20 @@ use Symfony\Component\Translation\Translator;
  */
 class OnlineTableRenderer extends DataClassListTableRenderer
 {
-    protected ConfigurationConsulter $configurationConsulter;
-
     protected User $user;
 
     public function __construct(
-        ConfigurationConsulter $configurationConsulter, User $user, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, ClassnameUtilities $classnameUtilities
+        User $user, Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
+        Pager $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
+        ClassnameUtilities $classnameUtilities
     )
     {
-        $this->configurationConsulter = $configurationConsulter;
         $this->user = $user;
 
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
             $classnameUtilities
         );
-    }
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
     }
 
     public function getUser(): User

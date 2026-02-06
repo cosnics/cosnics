@@ -27,12 +27,9 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
      */
     public function run(): Response
     {
-        $configurationConsulter = $this->getConfigurationConsulter();
         $translator = $this->getTranslator();
 
-        $allowRegistration = $configurationConsulter->getSetting([Manager::CONTEXT, 'allow_registration']);
-
-        if (!$allowRegistration == 0) {
+        if (!$this->getContainer()->getParameter('cosnics.application.user.rights.register')) {
             throw new NotAllowedException();
         }
 
@@ -74,15 +71,6 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
                             );
                         }
                     }
-                }
-
-                if ($allowRegistration == 2) {
-                    $this->getNotificationMessageManager()->addMessage(
-                        new NotificationMessage(
-                            $translator->trans('UserAwaitingApproval', [], Manager::CONTEXT),
-                            NotificationMessage::TYPE_SUCCESS
-                        )
-                    );
                 }
 
                 return new RedirectResponse($this->getUrlGenerator()->fromParameters());

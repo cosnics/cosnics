@@ -12,7 +12,9 @@ return static function (ContainerConfigurator $container) {
     $services->defaults()->public()->autowire()->autoconfigure();
 
     $services->set(UserDetailsRendererCollection::class);
-    $services->set(UserPictureProviderCollection::class);
+    $services->set(UserPictureProviderCollection::class)->args(
+        ['$activePictureProviderClass' => '%cosnics.application.user.pictureProviderClass%']
+    );
 
     $services->set('Chamilo\Core\User\CurrentUser', User::class)->factory([service(UserFactory::class), 'getUser']);
 

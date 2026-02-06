@@ -11,5 +11,7 @@ return static function (ContainerConfigurator $container) {
     $services->set(MenuRenderer::class)->args([
         '$webPathBuilder' => service(WebPathBuilder::class),
         '$themeWebPathBuilder' => service('Chamilo\Libraries\UserInterface\Theme\Service\ThemeWebPathBuilder'),
+        '$siteName' => '%cosnics.libraries.userInterface.layout.site.name%',
+        '$brandPath' => 'cosnics.libraries.userInterface.layout.brandPath%'
     ]);
 };

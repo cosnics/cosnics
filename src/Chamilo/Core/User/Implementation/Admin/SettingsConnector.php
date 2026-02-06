@@ -2,11 +2,9 @@
 namespace Chamilo\Core\User\Implementation\Admin;
 
 use Chamilo\Core\Admin\Architecture\Interface\SettingsConnectorInterface;
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Architecture\Domain\UserPictureProviderCollection;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
-use IntlDateFormatter;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -18,8 +16,6 @@ use Symfony\Component\Translation\Translator;
  */
 class SettingsConnector implements SettingsConnectorInterface
 {
-    protected ConfigurationConsulter $configurationConsulter;
-
     protected DatetimeUtilities $datetimeUtilities;
 
     protected Translator $translator;
@@ -27,19 +23,13 @@ class SettingsConnector implements SettingsConnectorInterface
     protected UserPictureProviderCollection $userPictureProviderFactory;
 
     public function __construct(
-        UserPictureProviderCollection $userPictureProviderFactory, ConfigurationConsulter $configurationConsulter,
-        DatetimeUtilities $datetimeUtilities, Translator $translator
+        UserPictureProviderCollection $userPictureProviderFactory, DatetimeUtilities $datetimeUtilities,
+        Translator $translator
     )
     {
         $this->userPictureProviderFactory = $userPictureProviderFactory;
-        $this->configurationConsulter = $configurationConsulter;
         $this->datetimeUtilities = $datetimeUtilities;
         $this->translator = $translator;
-    }
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
     }
 
     public function getContext(): string

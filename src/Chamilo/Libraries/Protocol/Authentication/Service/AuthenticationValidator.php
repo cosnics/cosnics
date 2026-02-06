@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Authentication\Service;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserLoginEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserLogoutEvent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -33,7 +33,7 @@ class AuthenticationValidator
      */
     protected array $authentications;
 
-    protected ConfigurationConsulter $configurationConsulter;
+    protected array $enabledSources;
 
     protected EventDispatcherInterface $eventDispatcher;
 
@@ -46,16 +46,16 @@ class AuthenticationValidator
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        ChamiloRequest $request, ConfigurationConsulter $configurationConsulter, Translator $translator,
-        SessionInterface $session, UrlGenerator $urlGenerator, EventDispatcherInterface $eventDispatcher
+        ChamiloRequest $request, Translator $translator, SessionInterface $session, UrlGenerator $urlGenerator,
+        EventDispatcherInterface $eventDispatcher, array $enabledSources = []
     )
     {
         $this->request = $request;
-        $this->configurationConsulter = $configurationConsulter;
         $this->translator = $translator;
         $this->session = $session;
         $this->urlGenerator = $urlGenerator;
         $this->eventDispatcher = $eventDispatcher;
+        $this->enabledSources = $enabledSources;
 
         $this->authentications = [];
     }
@@ -77,9 +77,39 @@ class AuthenticationValidator
         return null;
     }
 
+    public function getAuthentications(): array
+    {
+        return $this->authentications;
+    }
+
+    public function getEnabledSources(): array
+    {
+        return $this->enabledSources;
+    }
+
     public function getEventDispatcher(): EventDispatcherInterface
     {
         return $this->eventDispatcher;
+    }
+
+    public function getRequest(): ChamiloRequest
+    {
+        return $this->request;
+    }
+
+    public function getSession(): SessionInterface
+    {
+        return $this->session;
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
     }
 
     public function isAuthenticated(): bool
@@ -87,6 +117,11 @@ class AuthenticationValidator
         $userIdentifier = $this->session->get(AuthenticationValidator::SESSION_USER_ID);
 
         return !empty($userIdentifier);
+    }
+
+    public function isSourceEnabled(string $authenticationSource): bool
+    {
+        return in_array($authenticationSource, $this->getEnabledSources());
     }
 
     public function logout(User $user): void
@@ -129,41 +164,55 @@ class AuthenticationValidator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      */
-    public function validate(): bool
+    public function validate(bool $checkIfAuthenticationSourceIsEnabled = true): void
     {
         if ($this->isAuthenticated()) {
-            return true;
+            return;
         }
 
         foreach ($this->authentications as $authentication) {
-            $this->validateForAuthentication($authentication);
+            try {
+                $this->validateForAuthentication($authentication, $checkIfAuthenticationSourceIsEnabled);
+
+                return;
+            }
+            catch (NotAuthenticatedException) {
+            }
         }
 
-        return false;
+        throw new NotAuthenticatedException(true);
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      */
-    public function validateForAuthentication(Authentication $authentication, bool $redirectAfterLogin = true): bool
+    public function validateForAuthentication(
+        Authentication $authentication, bool $checkIfAuthenticationSourceIsEnabled = true,
+        bool $redirectAfterLogin = true
+    ): void
     {
-        $user = $authentication->login();
+        try {
+            $user = $authentication->login($checkIfAuthenticationSourceIsEnabled);
 
-        if (!$user instanceof User) {
-            return false;
+            if (!$user instanceof User) {
+                return;
+            }
+
+            $this->validateUser($user);
+            $this->setAuthenticatedUser($user);
+            $this->getEventDispatcher()->dispatch(new AfterUserLoginEvent($user, $this->request->getClientIp()));
+
+            if ($redirectAfterLogin) {
+                $this->redirectAfterLogin();
+            }
+
+            return;
         }
-
-        $this->validateUser($user);
-        $this->setAuthenticatedUser($user);
-        $this->getEventDispatcher()->dispatch(new AfterUserLoginEvent($user, $this->request->getClientIp()));
-
-        if ($redirectAfterLogin) {
-            $this->redirectAfterLogin();
+        catch (AuthenticationException) {
+            throw new NotAuthenticatedException(true);
         }
-
-        return true;
     }
 
     /**

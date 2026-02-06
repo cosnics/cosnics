@@ -14,7 +14,19 @@ return static function (ContainerConfigurator $container) {
         [service(MailerFactory::class), 'getActiveMailer']
     );
 
-    $services->set(MailerFactory::class)->args(['$configuredMailerClass' => '%cosnics.libraries.protocol.mail.mailerClass%']);
-    $services->set(PhpMailer::class)->tag(MailerInterface::class);
-    $services->set(PlatformMailer::class)->tag(MailerInterface::class);
+    $services->set(MailerFactory::class)->args(
+        ['$configuredMailerClass' => '%cosnics.libraries.protocol.mail.mailerClass%']
+    );
+    $services->set(PhpMailer::class)->args(
+        [
+            '$administratorName' => '%cosnics.libraries.userInterface.layout.administrator.name%',
+            '$administratorEmail' => '%cosnics.libraries.userInterface.layout.administrator.email%',
+            '$noRepyEmail' => '%cosnics.libraries.protocol.mail.noReplyEmail%',
+        ]
+    )->tag(MailerInterface::class);
+    $services->set(PlatformMailer::class)->args([
+        '$administratorName' => '%cosnics.libraries.userInterface.layout.administrator.name%',
+        '$administratorEmail' => '%cosnics.libraries.userInterface.layout.administrator.email%',
+        '$noRepyEmail' => '%cosnics.libraries.protocol.mail.noReplyEmail%',
+    ])->tag(MailerInterface::class);
 };

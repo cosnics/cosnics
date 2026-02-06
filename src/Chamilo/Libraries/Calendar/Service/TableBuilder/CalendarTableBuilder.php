@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\TableBuilder;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use HTML_Table;
@@ -15,22 +14,17 @@ abstract class CalendarTableBuilder
 {
     public const TIME_PLACEHOLDER = '__TIME__';
 
-    protected ConfigurationConsulter $configurationConsulter;
-
     protected Translator $translator;
 
     protected ?User $user;
 
     protected UserService $userService;
 
-    public function __construct(
-        Translator $translator, ?User $user, ConfigurationConsulter $configurationConsulter, UserService $userService
-    )
+    public function __construct(Translator $translator, ?User $user, UserService $userService)
     {
         $this->translator = $translator;
         $this->user = $user;
         $this->userService = $userService;
-        $this->configurationConsulter = $configurationConsulter;
     }
 
     /**
@@ -54,11 +48,6 @@ abstract class CalendarTableBuilder
     abstract protected function addEvents(int $displayTime, HTML_Table $table, array $cellMapping, array $events);
 
     abstract protected function buildTable(HTML_Table $table, int $displayTime, ?string $dayUrlTemplate = null): array;
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
-    }
 
     public function getTranslator(): Translator
     {

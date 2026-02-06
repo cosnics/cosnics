@@ -15,9 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class HomeComponent extends Manager implements NoAuthenticationSupportInterface
 {
-
     /**
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function run(): Response

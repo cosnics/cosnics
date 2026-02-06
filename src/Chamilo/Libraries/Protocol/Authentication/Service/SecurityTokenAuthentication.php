@@ -14,17 +14,6 @@ use Chamilo\Libraries\Service\Utilities\StringUtilities;
  */
 class SecurityTokenAuthentication extends Authentication implements AuthenticationInterface
 {
-    protected bool $disableAuthSourceCheck = false;
-
-    /**
-     * Disables the check if the auth source is active or not (used to make sure that this can run for certain
-     * components only)
-     */
-    public function disableAuthSourceCheck(): void
-    {
-        $this->disableAuthSourceCheck = true;
-    }
-
     public function getPriority(): int
     {
         return 300;
@@ -35,11 +24,10 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function login(): ?User
+    public function login(bool $checkIfAuthenticationSourceIsEnabled = true): ?User
     {
-        if (!$this->disableAuthSourceCheck && !$this->isAuthSourceActive()) {
-            return null;
-        }
+        $this->checkAuthenticationSource($checkIfAuthenticationSourceIsEnabled);
+        $translator = $this->getTranslator();
 
         $securityToken = $this->getRequest()->query->get(User::PROPERTY_SECURITY_TOKEN);
 
@@ -48,14 +36,17 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
 
             if (!$user instanceof User) {
                 throw new AuthenticationException(
-                    $this->getTranslator()->trans('InvalidSecurityToken', [], StringUtilities::LIBRARIES)
+                    $translator->trans('InvalidSecurityToken', [], StringUtilities::LIBRARIES)
                 );
             }
 
             return $user;
         }
-
-        return null;
+        else {
+            throw new AuthenticationException(
+                $translator->trans('NoSecurityToken', [], StringUtilities::LIBRARIES)
+            );
+        }
     }
 
     public function logout(User $user): void

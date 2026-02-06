@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Admin\Architecture\Domain;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Symfony\Component\Translation\Translator;
 
@@ -11,8 +10,6 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class AbstractActionProvider
 {
-    protected ConfigurationConsulter $configurationConsulter;
-
     protected Translator $translator;
 
     protected UrlGenerator $urlGenerator;

@@ -16,7 +16,6 @@ use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\Actions;
  */
 class ActionProvider extends AbstractActionProvider implements ActionProviderInterface
 {
-
     public function getActions(): Actions
     {
         $translator = $this->getTranslator();
@@ -73,6 +72,6 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
     public function getContext(): string
     {
-        return 'Chamilo\Core\Admin';
+        return Manager::CONTEXT;
     }
 }

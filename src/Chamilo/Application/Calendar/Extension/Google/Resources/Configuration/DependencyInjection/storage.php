@@ -7,5 +7,11 @@ return static function (ContainerConfigurator $container) {
     $services = $container->services();
     $services->defaults()->public()->autowire()->autoconfigure();
 
-    $services->set(CalendarRepository::class)->args(['$currentUser' => service('Chamilo\Core\User\CurrentUser')]);
+    $services->set(CalendarRepository::class)->args([
+        '$currentUser' => service('Chamilo\Core\User\CurrentUser'),
+        '$clientId' => '%cosnics.libraries.protocol.google.clientId%',
+        '$clientSecret' => '%cosnics.libraries.protocol.google.clientSecret%',
+        '$developerKey' => '%cosnics.libraries.protocol.google.developerKey%'
+
+    ]);
 };

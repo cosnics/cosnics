@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Group\UserInterface\Table;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -32,29 +31,20 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
 {
     public const TABLE_IDENTIFIER = Manager::PARAM_USER_ID;
 
-    protected ConfigurationConsulter $configurationConsulter;
-
     protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
 
     public function __construct(
-        ConfigurationConsulter $configurationConsulter, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
         DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
         ClassnameUtilities $classnameUtilities, MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )
     {
-        $this->configurationConsulter = $configurationConsulter;
         $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
 
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
             $classnameUtilities
         );
-    }
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
     }
 
     public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer

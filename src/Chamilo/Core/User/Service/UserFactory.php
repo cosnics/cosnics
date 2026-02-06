@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Service;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
@@ -16,8 +15,9 @@ use Throwable;
  */
 class UserFactory
 {
+    protected bool $canChangeLanguage;
 
-    private ConfigurationConsulter $configurationConsulter;
+    protected bool $canChangeTimezone;
 
     private SessionInterface $session;
 
@@ -30,21 +30,28 @@ class UserFactory
     private UserService $userService;
 
     public function __construct(
-        SessionInterface $session, UserService $userService, ConfigurationConsulter $configurationConsulter,
-        ThemePathBuilder $themeWebPathBuilder, ThemePathBuilder $themeSystemPathBuilder, Translator $translator
+        SessionInterface $session, UserService $userService, ThemePathBuilder $themeWebPathBuilder,
+        ThemePathBuilder $themeSystemPathBuilder, Translator $translator, bool $canChangeLanguage = true,
+        bool $canChangeTimezone = true
     )
     {
         $this->session = $session;
         $this->userService = $userService;
-        $this->configurationConsulter = $configurationConsulter;
         $this->themeWebPathBuilder = $themeWebPathBuilder;
         $this->themeSystemPathBuilder = $themeSystemPathBuilder;
         $this->translator = $translator;
+        $this->canChangeLanguage = $canChangeLanguage;
+        $this->canChangeTimezone = $canChangeTimezone;
     }
 
-    public function getConfigurationConsulter(): ConfigurationConsulter
+    public function canChangeLanguage(): bool
     {
-        return $this->configurationConsulter;
+        return $this->canChangeLanguage;
+    }
+
+    public function canChangeTimezone(): bool
+    {
+        return $this->canChangeTimezone;
     }
 
     public function getSession(): SessionInterface
@@ -71,26 +78,20 @@ class UserFactory
     {
         $userIdentifier = $this->getSession()->get(AuthenticationValidator::SESSION_USER_ID);
 
-        if ($userIdentifier)
-        {
-            try
-            {
+        if ($userIdentifier) {
+            try {
                 $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
 
-                if ($user instanceof User)
-                {
-                    $languageSelectionAllowed = $this->getConfigurationConsulter()->getSetting(
-                        ['Chamilo\Core\User', 'allow_user_change_platform_language']
-                    );
-
-                    if ($languageSelectionAllowed)
-                    {
+                if ($user instanceof User) {
+                    if ($this->canChangeLanguage()) {
                         $this->getTranslator()->setLocale(
                             $this->getUserService()->findUserSetting(
                                 $user, 'Chamilo\Core\Admin', 'PlatformLanguage'
                             )
                         );
+                    }
 
+                    if ($this->canChangeTimezone()) {
                         date_default_timezone_set(
                             $this->getUserService()->findUserSetting(
                                 $user, 'Chamilo\Core\Admin', 'PlatformTimezone'
@@ -101,8 +102,7 @@ class UserFactory
 
                 return $user;
             }
-            catch (Throwable)
-            {
+            catch (Throwable) {
                 return null;
             }
         }

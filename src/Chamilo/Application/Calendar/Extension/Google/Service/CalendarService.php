@@ -58,8 +58,8 @@ class CalendarService
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
     public function getEventsForCalendarIdentifierAndBetweenDates(
         User $user, string $calendarIdentifier, ?int $fromDate = null, ?int $toDate = null
@@ -81,10 +81,14 @@ class CalendarService
      *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getOwnedCalendars(User $user): array
     {
+        if (!$this->isConfigured()) {
+            return [];
+        }
+
         return $this->getOwnedCalendarsCacheService()->getOwnedCalendars($user);
     }
 

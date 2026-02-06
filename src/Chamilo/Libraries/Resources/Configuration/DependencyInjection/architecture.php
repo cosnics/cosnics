@@ -18,7 +18,13 @@ return static function (ContainerConfigurator $container) {
     $services->defaults()->public()->autowire()->autoconfigure();
 
     $services->set(Bootstrap::class)->args(['$showErrors' => '%cosnics.libraries.protocol.error.show%']);
-    $services->set(Kernel::class)->args(['$user' => service('Chamilo\Core\User\CurrentUser')]);
+    $services->set(Kernel::class)->args(
+        [
+            '$user' => service('Chamilo\Core\User\CurrentUser'),
+            '$timezone' => '%cosnics.libraries.calendar.timezone%',
+            '$maintenanceMode' => '%cosnics.libraries.service.maintenanceMode%'
+        ]
+    );
     $services->set(ApplicationFactory::class);
 
     $services->set(ErrorHandler::class)->args(

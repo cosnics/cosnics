@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Mail\Service\PhpMailer;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Domain\Mail;
 use Chamilo\Libraries\Protocol\Mail\Service\AbstractMailer;
@@ -22,9 +21,12 @@ class Mailer extends AbstractMailer
     /**
      * @throws \PHPMailer\PHPMailer\Exception
      */
-    public function __construct(ConfigurationConsulter $configurationConsulter, SystemPathBuilder $systemPathBuilder)
+    public function __construct(
+        SystemPathBuilder $systemPathBuilder, string $administratorName, string $administratorEmail,
+        ?string $noRepyEmail = null
+    )
     {
-        parent::__construct($configurationConsulter);
+        parent::__construct($administratorName, $administratorEmail, $noRepyEmail);
 
         $this->systemPathBuilder = $systemPathBuilder;
         $this->initializePhpMailer();

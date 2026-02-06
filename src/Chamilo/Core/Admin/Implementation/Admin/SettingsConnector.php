@@ -3,7 +3,6 @@ namespace Chamilo\Core\Admin\Implementation\Admin;
 
 use Chamilo\Core\Admin\Architecture\Interface\SettingsConnectorInterface;
 use Chamilo\Core\Admin\Manager;
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Admin\Service\Consulter\LanguageConsulter;
 use Chamilo\Libraries\Protocol\Mail\Factory\MailerFactory;
 use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
@@ -16,8 +15,6 @@ use Symfony\Component\Translation\Translator;
  */
 class SettingsConnector implements SettingsConnectorInterface
 {
-    protected ConfigurationConsulter $configurationConsulter;
-
     protected LanguageConsulter $languageConsulter;
 
     protected MailerFactory $mailerFactory;
@@ -26,21 +23,21 @@ class SettingsConnector implements SettingsConnectorInterface
 
     protected Translator $translator;
 
+    /**
+     * @var array<bool>
+     */
+    protected array $userRights;
+
     public function __construct(
-        ConfigurationConsulter $configurationConsulter, LanguageConsulter $languageConsulter,
-        MailerFactory $mailerFactory, ThemePathBuilder $themeSystemPathBuilder, Translator $translator
+        LanguageConsulter $languageConsulter, MailerFactory $mailerFactory, ThemePathBuilder $themeSystemPathBuilder,
+        Translator $translator, array $userRights
     )
     {
-        $this->configurationConsulter = $configurationConsulter;
         $this->languageConsulter = $languageConsulter;
         $this->mailerFactory = $mailerFactory;
         $this->themeSystemPathBuilder = $themeSystemPathBuilder;
         $this->translator = $translator;
-    }
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
+        $this->userRights = $userRights;
     }
 
     public function getContext(): string
@@ -107,6 +104,20 @@ class SettingsConnector implements SettingsConnectorInterface
         return $this->translator;
     }
 
+    public function getUserRight(string $rightName): bool
+    {
+        return array_key_exists($rightName, $this->userRights) ? $this->userRights[$rightName] : false;
+    }
+
+    public function getUserRights(?string $rightName = null): array|bool
+    {
+        if ($rightName) {
+            return $this->userRights[$rightName];
+        }
+
+        return $this->userRights;
+    }
+
     /**
      * @return int[]
      */
@@ -123,24 +134,13 @@ class SettingsConnector implements SettingsConnectorInterface
         return $workingHours;
     }
 
-    public function isAllowedQuickChangePlatformLanguage(): bool
-    {
-        return $this->isAllowedToChangePlatformLanguage() && $this->getConfigurationConsulter()->getSetting(
-                [\Chamilo\Core\User\Manager::CONTEXT, 'allow_user_quick_change_platform_language']
-            ) == 1;
-    }
-
     public function isAllowedToChangePlatformLanguage(): bool
     {
-        return $this->getConfigurationConsulter()->getSetting(
-                [\Chamilo\Core\User\Manager::CONTEXT, 'allow_user_change_platform_language']
-            ) == 1;
+        return $this->getUserRight('changeLanguage');
     }
 
     public function isAllowedToChangePlatformTimezone(): bool
     {
-        return $this->getConfigurationConsulter()->getSetting(
-                [\Chamilo\Core\User\Manager::CONTEXT, 'allow_user_change_platform_timezone']
-            ) == 1;
+        return $this->getUserRight('changeTimezone');
     }
 }

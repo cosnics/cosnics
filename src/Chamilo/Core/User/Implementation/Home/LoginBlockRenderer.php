@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Implementation\Home;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
@@ -26,18 +25,32 @@ class LoginBlockRenderer extends BlockRenderer
 {
     public const CONTEXT = Manager::CONTEXT;
 
+    protected bool $canRegister;
+
+    protected bool $canRetrievePassword;
+
     protected ChamiloRequest $request;
 
     public function __construct(
-        HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
-        ConfigurationConsulter $configurationConsulter, ChamiloRequest $request
+        HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator, ChamiloRequest $request,
+        bool $canRetrievePassword = true, bool $canRegister = false
     )
     {
-        parent::__construct(
-            $homeService, $urlGenerator, $translator, $configurationConsulter
-        );
+        parent::__construct($homeService, $urlGenerator, $translator);
 
         $this->request = $request;
+        $this->canRegister = $canRegister;
+        $this->canRetrievePassword = $canRetrievePassword;
+    }
+
+    private function canRegister(): bool
+    {
+        return $this->canRegister;
+    }
+
+    private function canRetrievePassword(): bool
+    {
+        return $this->canRetrievePassword;
     }
 
     /**
@@ -93,7 +106,6 @@ class LoginBlockRenderer extends BlockRenderer
     public function displayLoginForm(): string
     {
         $translator = $this->getTranslator();
-        $configurationConsulter = $this->getConfigurationConsulter();
 
         $form = new FormValidator('formLogin', FormValidator::FORM_METHOD_POST);
         $renderer = $form->defaultRenderer();
@@ -122,51 +134,42 @@ class LoginBlockRenderer extends BlockRenderer
             null, null, new FontAwesomeGlyph('sign-in-alt')
         );
 
-        if ($configurationConsulter->getSetting(
-                [Manager::CONTEXT, 'allow_registration']
-            ) || $configurationConsulter->getSetting(
-                [Manager::CONTEXT, 'allow_password_retrieval']
-            )) {
-            if ($configurationConsulter->getSetting(
-                [Manager::CONTEXT, 'allow_registration']
-            )) {
-                $link = $this->getUrlGenerator()->fromParameters(
-                    [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_REGISTER
-                    ]
-                );
+        if ($this->canRegister()) {
+            $link = $this->getUrlGenerator()->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
+                    Application::PARAM_ACTION => Manager::ACTION_REGISTER
+                ]
+            );
 
-                $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
+            $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
-                $buttons[] = $form->createElement(
-                    HTML_QuickForm_static::class, null, null,
-                    '<a href="' . htmlspecialchars($link) . '" class="btn btn-default">' . $glyph->render() . ' ' .
-                    htmlspecialchars(
-                        $translator->trans('Reg', [], Manager::CONTEXT)
-                    ) . '</a>'
-                );
-            }
-            if ($configurationConsulter->getSetting(
-                [Manager::CONTEXT, 'allow_password_retrieval']
-            )) {
-                $link = $this->getUrlGenerator()->fromParameters(
-                    [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD
-                    ]
-                );
+            $buttons[] = $form->createElement(
+                HTML_QuickForm_static::class, null, null,
+                '<a href="' . htmlspecialchars($link) . '" class="btn btn-default">' . $glyph->render() . ' ' .
+                htmlspecialchars(
+                    $translator->trans('Reg', [], Manager::CONTEXT)
+                ) . '</a>'
+            );
+        }
 
-                $glyph = new FontAwesomeGlyph('question-circle', [], null, 'fas');
+        if ($this->canRetrievePassword()) {
+            $link = $this->getUrlGenerator()->fromParameters(
+                [
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
+                    Application::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD
+                ]
+            );
 
-                $buttons[] = $form->createElement(
-                    HTML_QuickForm_static::class, null, null,
-                    '<a href="' . htmlspecialchars($link) . '" class="btn btn-default">' . $glyph->render() . ' ' .
-                    htmlspecialchars(
-                        $translator->trans('ResetPassword', [], Manager::CONTEXT)
-                    ) . '</a>'
-                );
-            }
+            $glyph = new FontAwesomeGlyph('question-circle', [], null, 'fas');
+
+            $buttons[] = $form->createElement(
+                HTML_QuickForm_static::class, null, null,
+                '<a href="' . htmlspecialchars($link) . '" class="btn btn-default">' . $glyph->render() . ' ' .
+                htmlspecialchars(
+                    $translator->trans('ResetPassword', [], Manager::CONTEXT)
+                ) . '</a>'
+            );
         }
 
         $form->addGroup($buttons, 'buttons', null, '&nbsp;', false);

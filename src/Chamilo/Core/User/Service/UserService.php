@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Service;
 
-use Chamilo\Core\Admin\Service\Consulter\ConfigurationConsulter;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserCreateEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserPasswordResetEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserRegistrationEvent;
@@ -40,13 +39,17 @@ class UserService
 {
     protected MailerInterface $activeMailer;
 
-    protected AuthenticationValidator $authenticationValidator;
+    protected string $administratorName;
 
-    protected ConfigurationConsulter $configurationConsulter;
+    protected bool $allowRegistration;
+
+    protected AuthenticationValidator $authenticationValidator;
 
     protected EventDispatcherInterface $eventDispatcher;
 
     protected PasswordGeneratorInterface $passwordGenerator;
+
+    protected string $siteName;
 
     protected Translator $translator;
 
@@ -64,17 +67,16 @@ class UserService
 
     public function __construct(
         UserRepository $userRepository, HashingAlgorithm $hashingUtilities, PropertyMapper $propertyMapper,
-        Translator $translator, ConfigurationConsulter $configurationConsulter, WebPathBuilder $webPathBuilder,
-        MailerInterface $activeMailer, PasswordGeneratorInterface $passwordGenerator,
-        AuthenticationValidator $authenticationValidator, UrlGenerator $urlGenerator,
-        EventDispatcherInterface $eventDispatcher, string $securityKey
+        Translator $translator, WebPathBuilder $webPathBuilder, MailerInterface $activeMailer,
+        PasswordGeneratorInterface $passwordGenerator, AuthenticationValidator $authenticationValidator,
+        UrlGenerator $urlGenerator, EventDispatcherInterface $eventDispatcher, string $securityKey, string $siteName,
+        string $administratorName, bool $allowRegistration = false
     )
     {
         $this->userRepository = $userRepository;
         $this->hashingUtilities = $hashingUtilities;
         $this->propertyMapper = $propertyMapper;
         $this->translator = $translator;
-        $this->configurationConsulter = $configurationConsulter;
         $this->webPathBuilder = $webPathBuilder;
         $this->activeMailer = $activeMailer;
         $this->passwordGenerator = $passwordGenerator;
@@ -82,6 +84,9 @@ class UserService
         $this->urlGenerator = $urlGenerator;
         $this->eventDispatcher = $eventDispatcher;
         $this->securityKey = $securityKey;
+        $this->siteName = $siteName;
+        $this->administratorName = $administratorName;
+        $this->allowRegistration = $allowRegistration;
     }
 
     /**
@@ -117,7 +122,6 @@ class UserService
      */
     public function createNewPasswordForUser(User $user): bool
     {
-        $configurationConsulter = $this->getConfigurationConsulter();
         $translator = $this->getTranslator();
 
         $newPassword = $this->getPasswordGenerator()->generatePassword();
@@ -153,9 +157,7 @@ class UserService
             $mailBody[] = '<p>' . $translator->trans('MailResetPasswordCloser', [], Manager::CONTEXT) . '<br/>';
             $mailBody[] = $translator->trans(
                     'MailResetPasswordSender', [
-                    'ADMINNAME' => $configurationConsulter->getSetting(
-                        ['Chamilo\Core\Admin', 'administrator_name']
-                    )
+                    'ADMINNAME' => $this->getAdministratorName()
                 ], Manager::CONTEXT
                 ) . '</p>';
             $mailBody[] = '</div>';
@@ -468,14 +470,14 @@ class UserService
         return $this->activeMailer;
     }
 
+    public function getAdministratorName(): string
+    {
+        return $this->administratorName;
+    }
+
     public function getAuthenticationValidator(): AuthenticationValidator
     {
         return $this->authenticationValidator;
-    }
-
-    public function getConfigurationConsulter(): ConfigurationConsulter
-    {
-        return $this->configurationConsulter;
     }
 
     public function getEventDispatcher(): EventDispatcherInterface
@@ -501,6 +503,11 @@ class UserService
     public function getSecurityKey(): string
     {
         return $this->securityKey;
+    }
+
+    public function getSiteName(): string
+    {
+        return $this->siteName;
     }
 
     public function getTranslator(): Translator
@@ -565,6 +572,11 @@ class UserService
         return $this->webPathBuilder;
     }
 
+    public function isRegistrationAllowed(): bool
+    {
+        return $this->allowRegistration;
+    }
+
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -593,18 +605,9 @@ class UserService
         bool $generatePassword, ?string $password = null, ?string $authSource = 'Platform', bool $sendEmail = false
     ): User
     {
-        $configurationConsulter = $this->getConfigurationConsulter();
-
-        if ($configurationConsulter->getSetting([Manager::CONTEXT, 'allow_registration']) == 0) {
-            $active = false;
-        }
-        else {
-            $active = true;
-        }
-
         $user = $this->createUserFromParameters(
             $firstName, $lastName, $username, $officialCode, $emailAddress, $generatePassword, $password, $authSource,
-            false, $active, $sendEmail
+            false, $this->isRegistrationAllowed(), $sendEmail
         );
 
         $this->getEventDispatcher()->dispatch(new AfterUserRegistrationEvent($user));
@@ -641,8 +644,6 @@ class UserService
         }
 
         try {
-            $configurationConsulter = $this->getConfigurationConsulter();
-
             $resetLink = $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
@@ -668,9 +669,7 @@ class UserService
             $mailBody[] = '<p>' . $translator->trans('MailResetPasswordCloser', [], Manager::CONTEXT) . '<br/>';
             $mailBody[] = $translator->trans(
                     'MailResetPasswordSender', [
-                    'ADMINNAME' => $configurationConsulter->getSetting(
-                        ['Chamilo\Core\Admin', 'administrator_name']
-                    )
+                    'ADMINNAME' => $this->getAdministratorName()
                 ], Manager::CONTEXT
                 ) . '</p>';
             $mailBody[] = '</div>';
@@ -693,14 +692,12 @@ class UserService
 
     public function sendRegistrationEmailToUser(User $user, string $password): bool
     {
-        $configurationConsulter = $this->getConfigurationConsulter();
-
         $options = [];
         $options['firstname'] = $user->getGivenName();
         $options['lastname'] = $user->getSurname();
         $options['username'] = $user->getUsername();
         $options['password'] = $password;
-        $options['site_name'] = $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'site_name']);
+        $options['site_name'] = $this->getSiteName();
         $options['site_url'] = $this->getWebPathBuilder()->getBasePath();
         $options['admin_name'] = $configurationConsulter->getSetting(
             ['Chamilo\Core\Admin', 'administrator_name']

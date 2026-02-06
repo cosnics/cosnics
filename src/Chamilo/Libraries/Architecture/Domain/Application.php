@@ -153,14 +153,6 @@ abstract class Application
         return $this->getTranslator()->trans($message, $param, static::CONTEXT);
     }
 
-    protected function getPageTitle(): string
-    {
-        $configurationConsulter = $this->getConfigurationConsulter();
-
-        return $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'institution']) . ' - ' .
-            $configurationConsulter->getSetting(['Chamilo\Core\Admin', 'site_name']);
-    }
-
     public function getResult(
         int $failures, int $count, string $failMessageSingle, string $failMessageMultiple, string $succesMessageSingle,
         string $succesMessageMultiple, ?string $context = null

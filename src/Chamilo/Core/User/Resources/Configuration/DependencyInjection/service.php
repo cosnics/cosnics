@@ -14,12 +14,17 @@ return static function (ContainerConfigurator $container) {
         '$themeSystemPathBuilder' => service(
             'Chamilo\Libraries\UserInterface\Theme\Service\ThemeSystemPathBuilder'
         ),
+        '$canChangeLanguage' => '%cosnics.application.user.rights.changeLanguage%',
+        '$canChangeTimezone' => '%cosnics.application.user.rights.changeTimezone%',
     ]);
 
     $services->set(UserService::class)->args([
         '$userSettingsCacheAdapter' => service('Chamilo\Core\User\Service\Cache\UserSettingCacheService'),
         '$activeMailer' => service('Chamilo\Libraries\Protocol\Mail\ActiveMailer'),
         '$securityKey' => '%cosnics.libraries.protocol.security.securityKey%',
+        '$siteName' => '%cosnics.libraries.userInterface.layout.site.name%',
+        '$administratorName' => '%cosnics.libraries.userInterface.layout.administrator.name%',
+        '$allowRegistration' => '%cosnics.application.user.rights.register%'
     ]);
 
     $services->set(UserUrlGenerator::class);

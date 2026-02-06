@@ -25,51 +25,40 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
     private CalendarRendererProvider $calendarRendererProvider;
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      * @throws \Exception
      */
     public function run(): Response
     {
         $authenticationValidator = $this->getAuthenticationValidator();
-        $securityCode = $this->getRequest()->getFromRequestOrQuery(User::PROPERTY_SECURITY_TOKEN);
 
-        if (!$authenticationValidator->isAuthenticated() && isset($securityCode))
-        {
-            $authentication = $this->getSecurityTokenAuthentication();
-            $authentication->disableAuthSourceCheck();
-
-            $authenticationValidator->validateForAuthentication($authentication, false);
+        if (!$authenticationValidator->isAuthenticated()) {
+            $authenticationValidator->validateForAuthentication($this->getSecurityTokenAuthentication(), false, false);
 
             $user = $this->getUser();
 
-            if ($user instanceof User)
-            {
+            if ($user instanceof User) {
                 return $this->renderCalendar($user);
             }
-            else
-            {
+            else {
                 $response = new Response();
                 $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
 
                 return $response;
             }
         }
-        else
-        {
-            if (!$this->getUser() instanceof User)
-            {
+        else {
+            if (!$this->getUser() instanceof User) {
                 $response = new Response();
                 $response->setStatusCode(401);
 
                 return $response;
             }
 
-            if ($this->getRequest()->query->has(self::PARAM_DOWNLOAD))
-            {
+            if ($this->getRequest()->query->has(self::PARAM_DOWNLOAD)) {
                 return ($this->renderCalendar($this->getUser()));
             }
-            else
-            {
+            else {
                 $icalDownloadUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
@@ -125,8 +114,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
 
     private function getCalendarRendererProvider(User $user): CalendarRendererProvider
     {
-        if (!isset($this->calendarRendererProvider))
-        {
+        if (!isset($this->calendarRendererProvider)) {
             $this->calendarRendererProvider = new CalendarRendererProvider(
                 $this->getVisibilityRepository(), $user, [], Manager::CONTEXT
             );

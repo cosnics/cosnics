@@ -8,5 +8,12 @@ return static function (ContainerConfigurator $container) {
     $services = $container->services();
     $services->defaults()->public()->autowire()->autoconfigure();
 
-    $services->set(LoginBlockRenderer::class)->tag(BlockRenderer::class);
+    $services->set(LoginBlockRenderer::class)->args(
+        [
+            '$canRetrievePassword' => '%cosnics.application.user.rights.retrievePassword%',
+            '$canRegister' => '%cosnics.application.user.rights.register%'
+        ]
+    )->tag(
+        BlockRenderer::class
+    );
 };
