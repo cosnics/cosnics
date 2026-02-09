@@ -46,9 +46,9 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
 
     /**
      * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \DateInvalidTimeZoneException
      * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     private function getCalendarEvents(User $user, string $calendarId, int $fromDate, int $toDate): array
     {

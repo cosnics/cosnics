@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain;
 
-use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Protocol\Security\Service\SecurityUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_advanced_element_finder;

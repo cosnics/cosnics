@@ -56,11 +56,6 @@ class GroupFeedComponent extends GroupsFeedComponent
         return $this->getService(GroupsTreeTraverser::class);
     }
 
-    public function getRequiredPostParameters(array $postParameters = []): array
-    {
-        return [];
-    }
-
     public function getUserElement(User $user): AdvancedElementFinderElement
     {
         $glyph = new FontAwesomeGlyph('user', [], null, 'fas');

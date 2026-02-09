@@ -5,7 +5,7 @@ use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\ActionsTableColumn;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn;
-use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableActions;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableActions;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableParameterValues;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableResultPosition;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Interface\TableActionsSupport;
@@ -25,7 +25,7 @@ abstract class ListTableRenderer extends AbstractTableRenderer
     public const DEFAULT_NUMBER_OF_ROWS_PER_PAGE = 20;
 
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, PageNavigationCalculator $pager,
         DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, ClassnameUtilities $classnameUtilities
     )
     {

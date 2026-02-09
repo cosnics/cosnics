@@ -90,7 +90,7 @@ class BrowseComponent extends Manager
             $this->getUrlGenerator()->fromParameters(
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
-                    self::PARAM_ACTION => self::ACTION_BROWSER,
+                    self::PARAM_ACTION => self::ACTION_BROWSE,
                     self::PARAM_GROUP_ID => $this->getGroupIdentifier()
                 ]
             )
@@ -119,7 +119,7 @@ class BrowseComponent extends Manager
                 $this->getUrlGenerator()->fromParameters(
                     [
                         self::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => self::ACTION_BROWSER,
+                        self::PARAM_ACTION => self::ACTION_BROWSE,
                         self::PARAM_GROUP_ID => $this->getGroupIdentifier()
                     ]
                 ), ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
@@ -380,7 +380,7 @@ class BrowseComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function renderHeader(string $pageTitle = ''): string
+    public function renderHeader(): string
     {
         $html = [];
 

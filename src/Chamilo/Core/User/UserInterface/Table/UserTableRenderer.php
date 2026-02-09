@@ -14,15 +14,15 @@ use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonD
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn;
-use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableAction;
-use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableActions;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableAction;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableActions;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableResultPosition;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Interface\TableActionsSupport;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Interface\TableRowActionsSupport;
 use Chamilo\Libraries\UserInterface\Table\Factory\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\UserInterface\Table\Service\DataClassListTableRenderer;
 use Chamilo\Libraries\UserInterface\Table\Service\ListHtmlTableRenderer;
-use Chamilo\Libraries\UserInterface\Table\Service\Pager;
+use Chamilo\Libraries\UserInterface\Table\Service\PageNavigationCalculator;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -41,7 +41,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     public function __construct(
         User $user, Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
-        Pager $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
+        PageNavigationCalculator $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
         UserUrlGenerator $userUrlGenerator, ClassnameUtilities $classnameUtilities,
         MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )

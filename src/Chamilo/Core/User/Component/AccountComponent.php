@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AccountComponent extends ProfileComponent
 {
-
     private AccountForm $accountForm;
 
     /**
@@ -34,8 +33,7 @@ class AccountComponent extends ProfileComponent
 
         $accountForm = $this->getAccountForm();
 
-        if ($accountForm->validate())
-        {
+        if ($accountForm->validate()) {
             $formValues = $accountForm->exportValues();
 
             $success = $this->getUserService()->updateAccountFromParameters(
@@ -47,16 +45,13 @@ class AccountComponent extends ProfileComponent
 
             $userPictureProvider = $this->getUserPictureProvider();
 
-            if ($userPictureProvider instanceof UserPictureUpdateProviderInterface)
-            {
+            if ($userPictureProvider instanceof UserPictureUpdateProviderInterface) {
                 $pictureInformation = $this->getRequest()->files->get(User::PROPERTY_PICTURE_URI);
 
-                if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid())
-                {
+                if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid()) {
                     if (!$userPictureProvider->updateUserPictureFromParameters(
                         $this->getUser(), $this->getUser(), $pictureInformation
-                    ))
-                    {
+                    )) {
                         $this->getNotificationMessageManager()->addMessage(
                             new NotificationMessage(
                                 $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
@@ -71,13 +66,12 @@ class AccountComponent extends ProfileComponent
 
             return $this->redirectWithMessage(
                 $translator->trans($message, [], Manager::CONTEXT), !$success, [
-                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => self::ACTION_ACCOUNT
                 ]
             );
         }
-        else
-        {
+        else {
             return new Response($this->renderPage());
         }
     }
@@ -87,8 +81,7 @@ class AccountComponent extends ProfileComponent
      */
     public function getAccountForm(): AccountForm
     {
-        if (!isset($this->accountForm))
-        {
+        if (!isset($this->accountForm)) {
             $this->accountForm = new AccountForm(
                 $this->getUser(), $this->getUrlGenerator()->fromRequest(), $this->getAuthenticationValidator()
             );

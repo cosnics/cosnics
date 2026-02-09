@@ -9,12 +9,11 @@ use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Service\BreadcrumbTrailRenderer;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Format\Structure
+ * @package Chamilo\Libraries\UserInterface\Layout\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
@@ -27,8 +26,6 @@ class BannerRenderer
 
     private MenuRenderer $menuRenderer;
 
-    private PageConfiguration $pageConfiguration;
-
     private SessionInterface $session;
 
     private Translator $translator;
@@ -36,12 +33,10 @@ class BannerRenderer
     private UrlGenerator $urlGenerator;
 
     public function __construct(
-        PageConfiguration $pageConfiguration, SessionInterface $session, Translator $translator,
-        UrlGenerator $urlGenerator, MenuRenderer $menuRenderer, BreadcrumbTrail $breadcrumbTrail,
-        BreadcrumbTrailRenderer $breadcrumbTrailRenderer
+        SessionInterface $session, Translator $translator, UrlGenerator $urlGenerator, MenuRenderer $menuRenderer,
+        BreadcrumbTrail $breadcrumbTrail, BreadcrumbTrailRenderer $breadcrumbTrailRenderer
     )
     {
-        $this->pageConfiguration = $pageConfiguration;
         $this->session = $session;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
@@ -50,23 +45,12 @@ class BannerRenderer
         $this->breadcrumbTrailRenderer = $breadcrumbTrailRenderer;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function render(?User $user = null): string
     {
-        $pageConfiguration = $this->getPageConfiguration();
         $session = $this->getSession();
         $translator = $this->getTranslator();
 
         $html = [];
-
-        if ($user instanceof User) {
-            $userFullName = $user->getFullName();
-        }
-        else {
-            $userFullName = '';
-        }
 
         if (!is_null($session->get('_as_admin'))) {
             $link = $this->getUrlGenerator()->fromParameters([
@@ -77,21 +61,18 @@ class BannerRenderer
             $html[] = '<div class="warning-banner bg-warning text-warning">';
             $html[] = $translator->trans('LoggedInAsUser', [], 'Chamilo\Core\User');
             $html[] = ' ';
-            $html[] = $userFullName;
+            $html[] = $user instanceof User ? $user->getFullName() : '';
             $html[] = ' ';
             $html[] = '<a href="' . $link . '">' . $translator->trans('Back', [], StringUtilities::LIBRARIES) . '</a>';
             $html[] = '</div>';
         }
 
-        $html[] = $this->getMenuRenderer()->render($pageConfiguration->getContainerMode(), $user);
+        $html[] = $this->getMenuRenderer()->render($user);
 
-        if ($pageConfiguration->getViewMode() == PageConfiguration::VIEW_MODE_FULL) {
-            $breadcrumbtrail = $this->getBreadcrumbTrail();
-            $breadcrumbtrail->setContainerMode($pageConfiguration->getContainerMode());
+        $breadcrumbtrail = $this->getBreadcrumbTrail();
 
-            if ($breadcrumbtrail->size() > 0) {
-                $html[] = $this->getBreadcrumbTrailRenderer()->render($breadcrumbtrail);
-            }
+        if ($breadcrumbtrail->count() > 0) {
+            $html[] = $this->getBreadcrumbTrailRenderer()->render($breadcrumbtrail);
         }
 
         return implode(PHP_EOL, $html);
@@ -110,11 +91,6 @@ class BannerRenderer
     public function getMenuRenderer(): MenuRenderer
     {
         return $this->menuRenderer;
-    }
-
-    public function getPageConfiguration(): PageConfiguration
-    {
-        return $this->pageConfiguration;
     }
 
     public function getSession(): SessionInterface

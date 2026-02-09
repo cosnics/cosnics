@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Home\DependencyInjection;
 
 use Chamilo\Core\Home\DependencyInjection\CompilerPass\AvailableBlockRendererCompilerPass;
-use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
-use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
-use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
+use Chamilo\Libraries\DependencyInjection\Architecture\Domain\AbstractDependencyInjectionExtension;
+use Chamilo\Libraries\DependencyInjection\Architecture\Interface\ICompilerPassExtension;
+use Chamilo\Libraries\DependencyInjection\Architecture\Trait\ExtensionTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
@@ -26,10 +26,10 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         return [
             'Chamilo\Core\Home' => [
-                'architecture.domain.php',
+                'architecture.php',
                 'service.php',
                 'storage.php',
-                'userInterface.homeRenderer.php'
+                'userInterface.php'
             ]
         ];
     }

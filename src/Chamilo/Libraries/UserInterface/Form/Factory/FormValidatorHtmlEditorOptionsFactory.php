@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Form\Factory;
 
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
-use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidatorHtmlEditorOptions;
 use Symfony\Component\Translation\Translator;

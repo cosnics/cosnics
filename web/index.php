@@ -1,6 +1,6 @@
 <?php
 
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\DependencyInjection\Service\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Service\Bootstrap\Bootstrap;
 use Chamilo\Libraries\Service\Bootstrap\Kernel;
 

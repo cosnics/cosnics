@@ -11,7 +11,7 @@ use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableResultPositio
 use Chamilo\Libraries\UserInterface\Table\Factory\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\UserInterface\Table\Service\DataClassListTableRenderer;
 use Chamilo\Libraries\UserInterface\Table\Service\ListHtmlTableRenderer;
-use Chamilo\Libraries\UserInterface\Table\Service\Pager;
+use Chamilo\Libraries\UserInterface\Table\Service\PageNavigationCalculator;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -24,7 +24,7 @@ class OnlineTableRenderer extends DataClassListTableRenderer
 
     public function __construct(
         User $user, Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
-        Pager $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
+        PageNavigationCalculator $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
         ClassnameUtilities $classnameUtilities
     )
     {

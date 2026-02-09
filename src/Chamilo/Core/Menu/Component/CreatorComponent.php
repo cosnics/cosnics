@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CreatorComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException
@@ -33,15 +32,13 @@ class CreatorComponent extends Manager
      */
     public function run(): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
         $itemType = $this->getRequest()->query->get(self::PARAM_TYPE);
 
-        if (is_null($itemType))
-        {
+        if (is_null($itemType)) {
             throw new ParameterNotDefinedException(self::PARAM_TYPE);
         }
 
@@ -65,23 +62,20 @@ class CreatorComponent extends Manager
         )
         );
 
-        if ($itemForm->validate())
-        {
+        if ($itemForm->validate()) {
             $item = $this->getCachedItemService()->createItemForTypeFromValues(
                 $itemType, $itemForm->exportValues()
             );
 
             $success = $item instanceof Item;
 
-            if ($success)
-            {
+            if ($success) {
                 $message = $this->getTranslator()->trans(
                     'ObjectCreated', ['OBJECT' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)],
                     StringUtilities::LIBRARIES
                 );
             }
-            else
-            {
+            else {
                 $message = $this->getTranslator()->trans(
                     'ObjectNotCreated',
                     ['OBJECT' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)],
@@ -91,7 +85,7 @@ class CreatorComponent extends Manager
 
             return $this->redirectWithMessage(
                 $message, !$success, [
-                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => Manager::ACTION_BROWSE,
                     Manager::PARAM_PARENT => $item->getParentId()
                 ]

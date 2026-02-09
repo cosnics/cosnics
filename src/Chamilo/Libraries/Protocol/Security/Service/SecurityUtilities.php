@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Security\Service;
 
-use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**

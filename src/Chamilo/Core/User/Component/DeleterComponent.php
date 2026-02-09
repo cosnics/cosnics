@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class DeleterComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -22,8 +21,7 @@ class DeleterComponent extends Manager
     {
         $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
 
-        if (!$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -32,21 +30,17 @@ class DeleterComponent extends Manager
         $translator = $this->getTranslator();
         $userService = $this->getUserService();
 
-        if (!is_array($userIdentifiers))
-        {
+        if (!is_array($userIdentifiers)) {
             $userIdentifiers = [$userIdentifiers];
         }
 
-        if (count($userIdentifiers) > 0)
-        {
+        if (count($userIdentifiers) > 0) {
             $failures = 0;
 
-            foreach ($userIdentifiers as $userIdentifier)
-            {
+            foreach ($userIdentifiers as $userIdentifier) {
                 $user = $userService->findUserByIdentifier($userIdentifier);
 
-                if (!$userService->deleteUser($user))
-                {
+                if (!$userService->deleteUser($user)) {
                     $failures ++;
                 }
             }
@@ -57,13 +51,12 @@ class DeleterComponent extends Manager
 
             return $this->redirectWithMessage(
                 $message, ($failures > 0), [
-                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => self::ACTION_BROWSE
                 ]
             );
         }
-        else
-        {
+        else {
             return new Response(
                 $this->displayErrorPage(
                     htmlentities(

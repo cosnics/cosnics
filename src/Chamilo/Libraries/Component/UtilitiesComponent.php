@@ -88,12 +88,4 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
 
         return $result->getResponse();
     }
-
-    /**
-     * @see \Chamilo\Libraries\Protocol\Ajax\Service\AjaxManager::getRequiredPostParameters()
-     */
-    public function getRequiredPostParameters(array $postParameters = []): array
-    {
-        return [self::PARAM_TYPE];
-    }
 }

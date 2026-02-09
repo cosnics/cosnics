@@ -1,17 +1,18 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection;
 
+use Chamilo\Libraries\DependencyInjection\Architecture\Domain\AbstractDependencyInjectionExtension;
+use Chamilo\Libraries\DependencyInjection\Architecture\Interface\ICompilerPassExtension;
+use Chamilo\Libraries\DependencyInjection\Architecture\Trait\ExtensionTrait;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\AuthenticationCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ButtonRendererCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheAdapterCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheDataPreLoaderCompilerPass;
-use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConditionTranslatorCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\EventDispatcherCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\HashingCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\MailerCompilerPass;
-use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
-use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
@@ -37,22 +38,27 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         return [
             'Chamilo\Libraries' => [
                 'architecture.php',
-                'authentication.php',
-                'cache.php',
                 'calendar.php',
-                'file.php',
-                'format.php',
-                'hashing.php',
-                'mail.php',
-                'platform.php',
+                'filesystem.php',
+                'protocol.authentication.php',
+                'protocol.console.php',
+                'protocol.mail.php',
                 'protocol.microsoft.php',
+                'protocol.security.php',
+                'protocol.session.php',
+                'service.php',
                 'storage.php',
-                'support.php',
-                'translation.php',
-                'utilities.php',
-                'vendor.php',
-                'console.php',
-                'console.doctrine.php'
+                'userInterface.breadcrumb.php',
+                'userInterface.buttonToolBar.php',
+                'userInterface.form.php',
+                'userInterface.layout.php',
+                'userInterface.notificationMessage.php',
+                'userInterface.tab.php',
+                'userInterface.table.php',
+                'userInterface.theme.php',
+                'userInterface.translation.php',
+                'userInterface.tree.php',
+                'vendor.php'
             ]
         ];
     }

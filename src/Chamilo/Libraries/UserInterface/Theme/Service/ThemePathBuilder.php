@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\UserInterface\Theme\Service;
 
 use Chamilo\Libraries\Filesystem\Service\AbstractPathBuilder;
 use Chamilo\Libraries\Filesystem\Service\FilesystemTools;
-use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 
@@ -13,14 +12,7 @@ use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
  */
 class ThemePathBuilder
 {
-    public const ICON_BIG = 48;
-    public const ICON_MEDIUM = 32;
-    public const ICON_MINI = 16;
-    public const ICON_SMALL = 22;
-
     protected FilesystemTools $filesystemTools;
-
-    private ClassnameUtilities $classnameUtilities;
 
     private AbstractPathBuilder $pathBuilder;
 
@@ -29,12 +21,11 @@ class ThemePathBuilder
     private string $theme;
 
     public function __construct(
-        StringUtilities $stringUtilities, ClassnameUtilities $classnameUtilities, AbstractPathBuilder $pathBuilder,
-        FilesystemTools $filesystemTools, string $theme
+        StringUtilities $stringUtilities, AbstractPathBuilder $pathBuilder, FilesystemTools $filesystemTools,
+        string $theme
     )
     {
         $this->stringUtilities = $stringUtilities;
-        $this->classnameUtilities = $classnameUtilities;
         $this->pathBuilder = $pathBuilder;
         $this->filesystemTools = $filesystemTools;
         $this->theme = $theme;
@@ -59,11 +50,6 @@ class ThemePathBuilder
         }
 
         return $availableThemes;
-    }
-
-    public function getClassnameUtilities(): ClassnameUtilities
-    {
-        return $this->classnameUtilities;
     }
 
     public function getCssPath(string $namespace, bool $includeTheme = true): string
@@ -112,11 +98,6 @@ class ThemePathBuilder
         return $this->stringUtilities;
     }
 
-    public function getStylesheetPath(?string $namespace = null, bool $minified = false): string
-    {
-        return $this->getCssPath($namespace) . 'Stylesheet' . ($minified ? '.min' : '') . '.css';
-    }
-
     public function getTemplatePath(string $namespace, bool $includeTheme = true): string
     {
         $cssPath = $this->getPathBuilder()->getTemplatesPath($namespace);
@@ -131,12 +112,5 @@ class ThemePathBuilder
     public function getTheme(): string
     {
         return $this->theme;
-    }
-
-    public function setTheme(string $theme): ThemePathBuilder
-    {
-        $this->theme = $theme;
-
-        return $this;
     }
 }

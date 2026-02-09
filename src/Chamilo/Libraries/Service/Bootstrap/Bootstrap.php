@@ -1,8 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Service\Bootstrap;
 
-use Chamilo\Core\Admin\Service\FileConfigurationLocator;
-use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Error\Service\ErrorHandler;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -13,10 +12,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 class Bootstrap
 {
-
     private ErrorHandler $errorHandler;
-
-    private FileConfigurationLocator $fileConfigurationLocator;
 
     private ChamiloRequest $request;
 
@@ -25,12 +21,10 @@ class Bootstrap
     private bool $showErrors;
 
     public function __construct(
-        ChamiloRequest $request, FileConfigurationLocator $fileConfigurationLocator, ErrorHandler $errorHandler,
-        SessionInterface $session, bool $showErrors = false
+        ChamiloRequest $request, ErrorHandler $errorHandler, SessionInterface $session, bool $showErrors = false
     )
     {
         $this->request = $request;
-        $this->fileConfigurationLocator = $fileConfigurationLocator;
         $this->session = $session;
         $this->errorHandler = $errorHandler;
         $this->showErrors = $showErrors;
@@ -39,11 +33,6 @@ class Bootstrap
     public function getErrorHandler(): ErrorHandler
     {
         return $this->errorHandler;
-    }
-
-    public function getFileConfigurationLocator(): FileConfigurationLocator
-    {
-        return $this->fileConfigurationLocator;
     }
 
     public function getRequest(): ChamiloRequest
@@ -63,8 +52,7 @@ class Bootstrap
 
     protected function registerErrorHandlers(): Bootstrap
     {
-        if (!$this->getShowErrors())
-        {
+        if (!$this->getShowErrors()) {
             $this->getErrorHandler()->registerErrorHandlers();
         }
 

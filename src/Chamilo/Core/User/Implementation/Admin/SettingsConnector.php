@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Implementation\Admin;
 
 use Chamilo\Core\Admin\Architecture\Interface\SettingsConnectorInterface;
-use Chamilo\Core\User\Architecture\Domain\UserPictureProviderCollection;
+use Chamilo\Core\User\Architecture\Domain\UserPictureProviderRegistry;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
 use Symfony\Component\Translation\Translator;
@@ -20,10 +20,10 @@ class SettingsConnector implements SettingsConnectorInterface
 
     protected Translator $translator;
 
-    protected UserPictureProviderCollection $userPictureProviderFactory;
+    protected UserPictureProviderRegistry $userPictureProviderFactory;
 
     public function __construct(
-        UserPictureProviderCollection $userPictureProviderFactory, DatetimeUtilities $datetimeUtilities,
+        UserPictureProviderRegistry $userPictureProviderFactory, DatetimeUtilities $datetimeUtilities,
         Translator $translator
     )
     {
@@ -47,7 +47,7 @@ class SettingsConnector implements SettingsConnectorInterface
         return $this->translator;
     }
 
-    public function getUserPictureProviderFactory(): UserPictureProviderCollection
+    public function getUserPictureProviderFactory(): UserPictureProviderRegistry
     {
         return $this->userPictureProviderFactory;
     }

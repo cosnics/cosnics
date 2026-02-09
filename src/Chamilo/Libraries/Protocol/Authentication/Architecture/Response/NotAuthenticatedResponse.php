@@ -1,11 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Authentication\Architecture\Response;
 
-use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylesubmitbutton;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Layout\Service\BaseFooterRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\BaseHeaderRenderer;
 use HTML_QuickForm_html;
 use HTML_QuickForm_password;
 use HTML_QuickForm_Rule_Required;
@@ -99,6 +101,16 @@ class NotAuthenticatedResponse extends Response
         );
 
         return $form->render();
+    }
+
+    protected function getFooterRenderer(): BaseFooterRenderer
+    {
+        return $this->getService(BaseFooterRenderer::class);
+    }
+
+    protected function getHeaderRenderer(): BaseHeaderRenderer
+    {
+        return $this->getService(BaseHeaderRenderer::class);
     }
 
     /**

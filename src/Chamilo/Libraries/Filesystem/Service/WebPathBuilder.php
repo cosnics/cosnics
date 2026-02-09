@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Filesystem\Service;
 
-use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 
 /**

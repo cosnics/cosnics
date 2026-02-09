@@ -3,9 +3,9 @@ namespace Chamilo\Core\Admin\DependencyInjection;
 
 use Chamilo\Core\Admin\DependencyInjection\CompilerPass\ActionProviderCompilerPass;
 use Chamilo\Core\Admin\DependencyInjection\CompilerPass\SettingsConnectorsCompilerPass;
-use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
-use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
-use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
+use Chamilo\Libraries\DependencyInjection\Architecture\Domain\AbstractDependencyInjectionExtension;
+use Chamilo\Libraries\DependencyInjection\Architecture\Interface\ICompilerPassExtension;
+use Chamilo\Libraries\DependencyInjection\Architecture\Trait\ExtensionTrait;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -31,14 +31,12 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         return [
             'Chamilo\Core\Admin' => [
-                'architecture.domain.php',
+                'architecture.php',
                 'implementation.admin.php',
                 'implementation.home.php',
                 'service.php',
-                'service.consulter.php',
-                'service.finder.php',
                 'storage.php',
-                'userInterface.table.php'
+                'userInterface.php'
             ]
         ];
     }

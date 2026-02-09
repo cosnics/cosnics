@@ -19,7 +19,7 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\AbstractBaseTableParameters;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\AbstractSortableTableColumn;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn;
-use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableActions;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableActions;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableParameterValues;
 use Doctrine\Common\Collections\ArrayCollection;
 use HTML_Table;
@@ -35,7 +35,7 @@ abstract class AbstractHtmlTableRenderer
 {
     protected ButtonToolBarRenderer $buttonToolBarRenderer;
 
-    protected PagerRenderer $pagerRenderer;
+    protected PageNavigationRenderer $pagerRenderer;
 
     protected ResourceManager $resourceManager;
 
@@ -48,7 +48,7 @@ abstract class AbstractHtmlTableRenderer
     protected WebPathBuilder $webPathBuilder;
 
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, PagerRenderer $pagerRenderer, SecurityUtilities $security,
+        Translator $translator, UrlGenerator $urlGenerator, PageNavigationRenderer $pagerRenderer, SecurityUtilities $security,
         ResourceManager $resourceManager, WebPathBuilder $webPathBuilder, ButtonToolBarRenderer $buttonToolBarRenderer
     )
     {
@@ -127,7 +127,7 @@ abstract class AbstractHtmlTableRenderer
 
     abstract public function getFormClasses(): string;
 
-    public function getPagerRenderer(): PagerRenderer
+    public function getPagerRenderer(): PageNavigationRenderer
     {
         return $this->pagerRenderer;
     }
@@ -293,7 +293,7 @@ abstract class AbstractHtmlTableRenderer
         TableParameterValues $parameterValues, array $parameterNames
     ): string
     {
-        if ($parameterValues->getTotalNumberOfItems() <= Pager::DISPLAY_PER_INCREMENT) {
+        if ($parameterValues->getTotalNumberOfItems() <= PageNavigationCalculator::DISPLAY_PER_INCREMENT) {
             return '';
         }
 

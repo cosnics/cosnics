@@ -7,8 +7,6 @@ use Symfony\Component\Translation\Loader\LoaderInterface;
 use Symfony\Component\Translation\MessageCatalogue;
 
 /**
- * Optimizes the translation resources
- *
  * @package Chamilo\Libraries\UserInterface\Translation\Service
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>

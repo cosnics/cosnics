@@ -36,50 +36,6 @@ class DataClassUrlGenerator
         );
     }
 
-    public function getBrowseUrl(
-        string $context, string $actionParameterName, string $dataClassParameterName, DataClass $dataClass,
-        array $additionalParameters = []
-    ): string
-    {
-        return $this->getActionUrl(
-            $context, $actionParameterName, $dataClassParameterName, Application::ACTION_BROWSER, $dataClass,
-            $additionalParameters
-        );
-    }
-
-    public function getCreateUrl(
-        string $context, string $actionParameterName, string $dataClassParameterName, DataClass $dataClass,
-        array $additionalParameters = []
-    ): string
-    {
-        return $this->getActionUrl(
-            $context, $actionParameterName, $dataClassParameterName, Application::ACTION_CREATOR, $dataClass,
-            $additionalParameters
-        );
-    }
-
-    public function getDeleteUrl(
-        string $context, string $actionParameterName, string $dataClassParameterName, DataClass $dataClass,
-        array $additionalParameters = []
-    ): string
-    {
-        return $this->getActionUrl(
-            $context, $actionParameterName, $dataClassParameterName, Application::ACTION_DELETER, $dataClass,
-            $additionalParameters
-        );
-    }
-
-    public function getUpdateUrl(
-        string $context, string $actionParameterName, string $dataClassParameterName, DataClass $dataClass,
-        array $additionalParameters = []
-    ): string
-    {
-        return $this->getActionUrl(
-            $context, $actionParameterName, $dataClassParameterName, Application::ACTION_UPDATER, $dataClass,
-            $additionalParameters
-        );
-    }
-
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;

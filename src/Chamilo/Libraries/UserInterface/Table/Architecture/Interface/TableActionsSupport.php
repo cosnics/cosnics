@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Table\Architecture\Interface;
 
-use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableActions;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableActions;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Table\Architecture\Interface

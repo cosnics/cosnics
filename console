@@ -1,7 +1,6 @@
 <?php
 
-use Chamilo\Libraries\Console;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\DependencyInjection\Service\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
 use Chamilo\Libraries\Service\Bootstrap\Bootstrap;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -19,8 +18,7 @@ $exceptionLogger = $container->get('Chamilo\Libraries\Architecture\ErrorHandler\
 /** @var \Symfony\Component\Console\Application $console */
 $console = $container->get('Chamilo\Libraries\Console');
 
-try
-{
+try {
     /** @var \Symfony\Component\Console\Helper\HelperSet $helperSet */
     $helperSet = $container->get('Chamilo\Libraries\Console\HelperSet');
 
@@ -28,8 +26,7 @@ try
     $console->setCatchExceptions(false);
     $console->run();
 }
-catch (Throwable $ex)
-{
+catch (Throwable $ex) {
     $console->renderThrowable($ex, new ConsoleOutput());
     $exceptionLogger->logException($ex, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
 }

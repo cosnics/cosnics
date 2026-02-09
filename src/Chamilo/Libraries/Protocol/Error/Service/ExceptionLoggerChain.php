@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Protocol\Error\Service;
 
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration;
+use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageHeaders;
 use Exception;
 use Throwable;
 
@@ -46,7 +46,7 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
         $this->exceptionLoggers = $exceptionLoggers;
     }
 
-    public function addJavascriptExceptionLogger(PageConfiguration $pageConfiguration): void
+    public function addJavascriptExceptionLogger(PageHeaders $pageConfiguration): void
     {
         foreach ($this->exceptionLoggers as $exceptionLogger) {
             $exceptionLogger->addJavascriptExceptionLogger($pageConfiguration);

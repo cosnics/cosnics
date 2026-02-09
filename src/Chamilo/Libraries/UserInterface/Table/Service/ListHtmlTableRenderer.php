@@ -6,7 +6,7 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\AbstractBaseTableParameters;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\AbstractSortableTableColumn;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn;
-use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableActions;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableActions;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableParameterValues;
 use Doctrine\Common\Collections\ArrayCollection;
 use HTML_Table;

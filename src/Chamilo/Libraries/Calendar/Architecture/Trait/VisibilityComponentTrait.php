@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Architecture\Trait;
 
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Calendar\Architecture\Interface\VisibilityServiceInterface;
-use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\Response;

@@ -2,14 +2,14 @@
 namespace Chamilo\Core\Menu\Implementation\Menu;
 
 use Chamilo\Core\Admin\Service\Consulter\LanguageConsulter;
-use Chamilo\Core\Menu\Architecture\Domain\ItemRendererCollection;
+use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
-use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
@@ -23,13 +23,13 @@ class LanguageItemRenderer extends ItemRenderer
 {
     protected UrlGenerator $urlGenerator;
 
-    private ItemRendererCollection $itemRendererFactory;
+    private ItemRendererRegistry $itemRendererFactory;
 
     private LanguageConsulter $languageConsulter;
 
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
-        LanguageConsulter $languageConsulter, ItemRendererCollection $itemRendererFactory, UrlGenerator $urlGenerator
+        LanguageConsulter $languageConsulter, ItemRendererRegistry $itemRendererFactory, UrlGenerator $urlGenerator
     )
     {
         parent::__construct($translator, $itemCacheService, $request);
@@ -85,7 +85,7 @@ class LanguageItemRenderer extends ItemRenderer
         }
     }
 
-    public function getItemRendererFactory(): ItemRendererCollection
+    public function getItemRendererFactory(): ItemRendererRegistry
     {
         return $this->itemRendererFactory;
     }

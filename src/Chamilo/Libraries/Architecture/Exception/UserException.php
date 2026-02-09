@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Exception;
 
-use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Protocol\Security\Service\SecurityUtilities;
 use Exception;
 

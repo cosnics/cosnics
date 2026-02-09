@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Menu\UserInterface\MenuRenderer;
 
-use Chamilo\Core\Menu\Architecture\Domain\ItemRendererCollection;
+use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
-use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -23,16 +23,15 @@ class MenuRenderer
 
     private CachedItemService $itemCacheService;
 
-    private ItemRendererCollection $itemRendererFactory;
+    private ItemRendererRegistry $itemRendererFactory;
 
     private ThemePathBuilder $themeWebPathBuilder;
 
     private WebPathBuilder $webPathBuilder;
 
     public function __construct(
-        CachedItemService $itemCacheService, ItemRendererCollection $itemRendererFactory,
-        ChamiloRequest $chamiloRequest, WebPathBuilder $webPathBuilder, ThemePathBuilder $themeWebPathBuilder,
-        string $siteName, array $brandPath = []
+        CachedItemService $itemCacheService, ItemRendererRegistry $itemRendererFactory, ChamiloRequest $chamiloRequest,
+        WebPathBuilder $webPathBuilder, ThemePathBuilder $themeWebPathBuilder, string $siteName, array $brandPath = []
     )
     {
         $this->itemCacheService = $itemCacheService;
@@ -44,7 +43,7 @@ class MenuRenderer
         $this->brandPath = $brandPath;
     }
 
-    public function render(string $containerMode = 'container-fluid', ?User $user = null): string
+    public function render(?User $user = null): string
     {
         $html = [];
 
@@ -66,7 +65,7 @@ class MenuRenderer
             }
         }
 
-        $html[] = $this->renderHeader($containerMode, $numberOfItems);
+        $html[] = $this->renderHeader($numberOfItems);
         $html[] = implode(PHP_EOL, $itemRenditions);
         $html[] = $this->renderFooter();
 
@@ -100,7 +99,7 @@ class MenuRenderer
         return $this->itemCacheService;
     }
 
-    public function getItemRendererFactory(): ItemRendererCollection
+    public function getItemRendererFactory(): ItemRendererRegistry
     {
         return $this->itemRendererFactory;
     }
@@ -146,7 +145,7 @@ class MenuRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function renderHeader(string $containerMode, int $numberOfItems = 0): string
+    public function renderHeader(int $numberOfItems = 0): string
     {
         $html = [];
 
@@ -157,7 +156,7 @@ class MenuRenderer
         }
 
         $html[] = '<nav class="' . $class . '">';
-        $html[] = '<div class="' . $containerMode . '">';
+        $html[] = '<div class="container-fluid">';
         $html[] = '<div class="navbar-header">';
 
         $html[] =

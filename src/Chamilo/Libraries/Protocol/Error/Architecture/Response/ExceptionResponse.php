@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Error\Architecture\Response;
 
-use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\UserInterface\Layout\Service\BaseFooterRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\BaseHeaderRenderer;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,5 +32,15 @@ class ExceptionResponse extends Response
         $html[] = $this->getFooterRenderer()->render();
 
         parent::__construct(implode(PHP_EOL, $html));
+    }
+
+    protected function getFooterRenderer(): BaseFooterRenderer
+    {
+        return $this->getService(BaseFooterRenderer::class);
+    }
+
+    protected function getHeaderRenderer(): BaseHeaderRenderer
+    {
+        return $this->getService(BaseHeaderRenderer::class);
     }
 }

@@ -3,9 +3,9 @@ namespace Chamilo\Core\User\DependencyInjection;
 
 use Chamilo\Core\User\DependencyInjection\CompilerPass\UserDetailsRendererCompilerPass;
 use Chamilo\Core\User\DependencyInjection\CompilerPass\UserPictureProviderCompilerPass;
-use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
-use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
-use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
+use Chamilo\Libraries\DependencyInjection\Architecture\Domain\AbstractDependencyInjectionExtension;
+use Chamilo\Libraries\DependencyInjection\Architecture\Interface\ICompilerPassExtension;
+use Chamilo\Libraries\DependencyInjection\Architecture\Trait\ExtensionTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
@@ -27,15 +27,14 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         return [
             'Chamilo\Core\User' => [
-                'architecture.domain.php',
-                'architecture.eventDispatcher.php',
+                'architecture.php',
                 'implementation.admin.php',
                 'implementation.home.php',
                 'implementation.menu.php',
                 'implementation.user.php',
                 'service.php',
                 'storage.php',
-                'userInterface.tables.php'
+                'userInterface.php'
             ]
         ];
     }

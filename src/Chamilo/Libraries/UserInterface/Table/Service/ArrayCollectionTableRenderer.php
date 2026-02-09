@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Table\Service;
 
-use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\AbstractBaseTableParameters;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\AbstractSortableTableColumn;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableParameterValues;
@@ -18,11 +18,11 @@ class ArrayCollectionTableRenderer
 {
     protected ListHtmlTableRenderer $htmlTableRenderer;
 
-    protected Pager $pager;
+    protected PageNavigationCalculator $pager;
 
     protected ChamiloRequest $request;
 
-    public function __construct(ChamiloRequest $request, Pager $pager, ListHtmlTableRenderer $htmlTableRenderer)
+    public function __construct(ChamiloRequest $request, PageNavigationCalculator $pager, ListHtmlTableRenderer $htmlTableRenderer)
     {
         $this->request = $request;
         $this->pager = $pager;
@@ -122,7 +122,7 @@ class ArrayCollectionTableRenderer
         $numberOfRowsPerPage = $this->determineNumberOfRowsPerPage($tableName, $defaultNumberOfRowsPerPage);
         $totalNumberOfItems = $tableData->count();
 
-        if ($numberOfRowsPerPage == Pager::DISPLAY_ALL) {
+        if ($numberOfRowsPerPage == PageNavigationCalculator::DISPLAY_ALL) {
             $numberOfItemsPerPage = $totalNumberOfItems;
         }
         else {
@@ -133,7 +133,7 @@ class ArrayCollectionTableRenderer
 
         $tableParameterValues->setTotalNumberOfItems($totalNumberOfItems);
         $tableParameterValues->setNumberOfRowsPerPage(
-            $numberOfRowsPerPage == Pager::DISPLAY_ALL ? $totalNumberOfItems : $numberOfRowsPerPage
+            $numberOfRowsPerPage == PageNavigationCalculator::DISPLAY_ALL ? $totalNumberOfItems : $numberOfRowsPerPage
         );
         $tableParameterValues->setNumberOfColumnsPerPage(1);
         $tableParameterValues->setNumberOfItemsPerPage($numberOfItemsPerPage);
@@ -174,7 +174,7 @@ class ArrayCollectionTableRenderer
         return $this->htmlTableRenderer;
     }
 
-    public function getPager(): Pager
+    public function getPager(): PageNavigationCalculator
     {
         return $this->pager;
     }

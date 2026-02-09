@@ -1,10 +1,9 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Breadcrumb\Service;
 
-use Chamilo\Core\Admin\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
-use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
@@ -27,8 +26,6 @@ class BreadcrumbGenerator
 
     protected ClassnameUtilities $classnameUtilities;
 
-    protected FileConfigurationLocator $fileConfigurationLocator;
-
     protected ChamiloRequest $request;
 
     protected string $siteName;
@@ -41,14 +38,13 @@ class BreadcrumbGenerator
 
     public function __construct(
         ClassnameUtilities $classnameUtilities, UrlGenerator $urlGenerator, Translator $translator,
-        FileConfigurationLocator $fileConfigurationLocator, WebPathBuilder $webPathBuilder,
-        BreadcrumbTrail $breadcrumbTrail, ChamiloRequest $request, string $siteName = 'Cosnics'
+        WebPathBuilder $webPathBuilder, BreadcrumbTrail $breadcrumbTrail, ChamiloRequest $request,
+        string $siteName = 'Cosnics'
     )
     {
         $this->classnameUtilities = $classnameUtilities;
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
-        $this->fileConfigurationLocator = $fileConfigurationLocator;
         $this->webPathBuilder = $webPathBuilder;
         $this->breadcrumbTrail = $breadcrumbTrail;
         $this->request = $request;
@@ -122,11 +118,6 @@ class BreadcrumbGenerator
     public function getClassnameUtilities(): ClassnameUtilities
     {
         return $this->classnameUtilities;
-    }
-
-    public function getFileConfigurationLocator(): FileConfigurationLocator
-    {
-        return $this->fileConfigurationLocator;
     }
 
     public function getRequest(): ChamiloRequest

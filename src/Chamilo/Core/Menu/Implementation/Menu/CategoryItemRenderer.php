@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Implementation\Menu;
 
-use Chamilo\Core\Menu\Architecture\Domain\ItemRendererCollection;
+use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
 use Chamilo\Core\Menu\Architecture\Interface\SelectableItemInterface;
 use Chamilo\Core\Menu\Architecture\Interface\TranslatableItemInterface;
 use Chamilo\Core\Menu\Architecture\Trait\TranslatableItemTrait;
@@ -10,7 +10,7 @@ use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 use Symfony\Component\Translation\Translator;
@@ -23,11 +23,11 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
 {
     use TranslatableItemTrait;
 
-    private ItemRendererCollection $itemRendererFactory;
+    private ItemRendererRegistry $itemRendererFactory;
 
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
-        ItemRendererCollection $itemRendererFactory, array $fallbackIsoCodes
+        ItemRendererRegistry $itemRendererFactory, array $fallbackIsoCodes
     )
     {
         parent::__construct($translator, $itemCacheService, $request);
@@ -91,7 +91,7 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
         return implode(PHP_EOL, $html);
     }
 
-    public function getItemRendererFactory(): ItemRendererCollection
+    public function getItemRendererFactory(): ItemRendererRegistry
     {
         return $this->itemRendererFactory;
     }

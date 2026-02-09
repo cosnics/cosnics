@@ -7,8 +7,6 @@ use Chamilo\Libraries\UserInterface\Translation\Factory\TranslatorFactory;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Manages the cache for the symfony translations
- *
  * @package Chamilo\Libraries\UserInterface\Translation\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>

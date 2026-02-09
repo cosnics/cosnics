@@ -53,7 +53,7 @@ class MultiPasswordResetComponent extends Manager
 
             return $this->redirectWithMessage(
                 $message, ($failures > 0), [
-                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => self::ACTION_BROWSE
                 ]
             );

@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UpdateComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectNotExistException
@@ -25,8 +24,7 @@ class UpdateComponent extends Manager
      */
     public function run(): Response
     {
-        if (!$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -34,12 +32,10 @@ class UpdateComponent extends Manager
 
         $groupIdentifier = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
 
-        if ($groupIdentifier)
-        {
+        if ($groupIdentifier) {
             $group = $this->getGroupService()->findGroupByIdentifier($groupIdentifier);
 
-            if (!$this->getUser()->isPlatformAdministrator())
-            {
+            if (!$this->getUser()->isPlatformAdministrator()) {
                 throw new NotAllowedException();
             }
 
@@ -53,8 +49,7 @@ class UpdateComponent extends Manager
             )
             );
 
-            if ($form->validate())
-            {
+            if ($form->validate()) {
                 $success = $form->updateGroup();
                 $group = $form->getGroup();
                 $message = $success ? $translator->trans(
@@ -67,14 +62,13 @@ class UpdateComponent extends Manager
 
                 return $this->redirectWithMessage(
                     $message, !$success, [
-                        Application::PARAM_CONTEXT => $this->getContext(),
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => self::ACTION_VIEW,
                         self::PARAM_GROUP_ID => $group->getId()
                     ]
                 );
             }
-            else
-            {
+            else {
                 $html = [];
 
                 $html[] = $this->renderHeader();
@@ -84,8 +78,7 @@ class UpdateComponent extends Manager
                 return new Response(implode(PHP_EOL, $html));
             }
         }
-        else
-        {
+        else {
             return new Response(
                 $this->displayErrorPage(
                     htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\DependencyInjection\CompilerPass;
 
-use Chamilo\Core\User\Architecture\Domain\UserPictureProviderCollection;
+use Chamilo\Core\User\Architecture\Domain\UserPictureProviderRegistry;
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -16,11 +16,11 @@ class UserPictureProviderCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
-        if ($container->hasDefinition(UserPictureProviderCollection::class))
+        if ($container->hasDefinition(UserPictureProviderRegistry::class))
         {
             $taggedServices = $container->findTaggedServiceIds(UserPictureProviderInterface::class);
 
-            $definition = $container->getDefinition(UserPictureProviderCollection::class);
+            $definition = $container->getDefinition(UserPictureProviderRegistry::class);
 
             foreach ($taggedServices as $taggedServiceId => $tags)
             {

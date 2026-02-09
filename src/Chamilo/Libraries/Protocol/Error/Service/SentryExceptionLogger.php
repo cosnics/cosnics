@@ -6,7 +6,7 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration;
+use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageHeaders;
 use Exception;
 use Sentry\Event;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -75,7 +75,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
     /**
      * Adds an exception logger for javascript to the header
      */
-    public function addJavascriptExceptionLogger(PageConfiguration $pageConfiguration): void
+    public function addJavascriptExceptionLogger(PageHeaders $pageConfiguration): void
     {
         $matches = [];
         preg_match('/https:\/\/(.*)@/', $this->getSentryConnectionString(), $matches);
@@ -110,7 +110,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
 
         $html[] = '</script>';
 
-        $pageConfiguration->addHtmlHeader(implode(PHP_EOL, $html));
+        $pageConfiguration->addHtml(implode(PHP_EOL, $html));
     }
 
     public function getSentryConnectionString(): string

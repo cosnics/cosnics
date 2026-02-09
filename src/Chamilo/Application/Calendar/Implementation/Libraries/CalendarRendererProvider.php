@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProvid
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Calendar\Architecture\Interface\VisibilitySupport;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\DependencyInjection\Service\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 
 /**

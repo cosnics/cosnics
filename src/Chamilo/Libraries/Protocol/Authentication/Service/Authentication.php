@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Protocol\Authentication\Service;
 
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
@@ -44,7 +44,7 @@ abstract class Authentication
         if ($checkIfAuthenticationSourceIsEnabled &&
             !$this->getAuthenticationValidator()->isSourceEnabled(static::class)) {
             throw new AuthenticationException(
-                $translator = $this->getTranslator()->trans('AuthSourceNotActive', [], StringUtilities::LIBRARIES)
+                $this->getTranslator()->trans('AuthSourceNotActive', [], StringUtilities::LIBRARIES)
             );
         }
     }

@@ -33,8 +33,7 @@ class EditorComponent extends Manager
      */
     public function run(): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -63,8 +62,7 @@ class EditorComponent extends Manager
 
         $itemForm->setItemDefaults($item);
 
-        if ($itemForm->validate())
-        {
+        if ($itemForm->validate()) {
             $success = $this->getCachedItemService()->saveItemFromValues($item, $itemForm->exportValues());
 
             $message = $this->getTranslator()->trans(
@@ -75,7 +73,7 @@ class EditorComponent extends Manager
 
             return $this->redirectWithMessage(
                 $message, !$success, [
-                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => Manager::ACTION_BROWSE,
                     Manager::PARAM_ITEM => $item->getParentId()
                 ]
@@ -101,15 +99,13 @@ class EditorComponent extends Manager
     {
         $itemIdentifier = $this->getRequest()->query->get(self::PARAM_ITEM);
 
-        if (is_null($itemIdentifier))
-        {
+        if (is_null($itemIdentifier)) {
             throw new ParameterNotDefinedException(self::PARAM_ITEM);
         }
 
         $item = $this->getItemService()->findItemByIdentifier($itemIdentifier);
 
-        if (!$item instanceof Item)
-        {
+        if (!$item instanceof Item) {
             throw new ObjectNotExistException($this->getTranslator()->trans('MenuItem'), $itemIdentifier);
         }
 

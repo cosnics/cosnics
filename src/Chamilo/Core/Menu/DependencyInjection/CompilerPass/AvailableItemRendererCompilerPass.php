@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\DependencyInjection\CompilerPass;
 
-use Chamilo\Core\Menu\Architecture\Domain\ItemRendererCollection;
+use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -16,11 +16,11 @@ class AvailableItemRendererCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
-        if ($container->hasDefinition(ItemRendererCollection::class))
+        if ($container->hasDefinition(ItemRendererRegistry::class))
         {
             $taggedServices = $container->findTaggedServiceIds(ItemRenderer::class);
 
-            $definition = $container->getDefinition(ItemRendererCollection::class);
+            $definition = $container->getDefinition(ItemRendererRegistry::class);
 
             foreach ($taggedServices as $taggedServiceId => $tags)
             {

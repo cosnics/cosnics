@@ -16,6 +16,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class LoginComponent extends Manager
 {
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function run(): Response
     {
         $isSuccessful = $this->getCalendarService()->login(

@@ -4,7 +4,8 @@ namespace Chamilo\Libraries\Component;
 use Chamilo\Libraries\Manager;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration;
+use Chamilo\Libraries\UserInterface\Layout\Service\BaseFooterRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\BaseHeaderRenderer;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -20,8 +21,6 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
         $translator = $this->getTranslator();
 
         $html = [];
-
-        $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
 
         $DaysShort = [
             $translator->trans('MondayShort', [], StringUtilities::LIBRARIES),
@@ -62,7 +61,7 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
             $translator->trans('DecemberLong', [], StringUtilities::LIBRARIES)
         ];
 
-        $html[] = $this->renderHeader();
+        $html[] = $this->getHeaderRenderer()->render();
 
         $html[] = $this->getResourceManager()->getResourceHtml(
             $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries\Format') . 'TblChange.js'
@@ -91,8 +90,18 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
         $html[] = '<script>';
         $html[] = 'initCalendar(' . $startOfWeekIdentifier . ');';
         $html[] = '</script>';
-        $html[] = $this->renderFooter();
+        $html[] = $this->getFooterRenderer()->render();
 
         return new Response(implode(PHP_EOL, $html));
+    }
+
+    protected function getFooterRenderer(): BaseFooterRenderer
+    {
+        return $this->getService(BaseFooterRenderer::class);
+    }
+
+    protected function getHeaderRenderer(): BaseHeaderRenderer
+    {
+        return $this->getService(BaseHeaderRenderer::class);
     }
 }

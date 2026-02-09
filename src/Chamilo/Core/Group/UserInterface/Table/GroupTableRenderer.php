@@ -17,15 +17,15 @@ use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRende
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\StaticTableColumn;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn;
-use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableAction;
-use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableActions;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableAction;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableActions;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableResultPosition;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Interface\TableActionsSupport;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Interface\TableRowActionsSupport;
 use Chamilo\Libraries\UserInterface\Table\Factory\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\UserInterface\Table\Service\DataClassListTableRenderer;
 use Chamilo\Libraries\UserInterface\Table\Service\ListHtmlTableRenderer;
-use Chamilo\Libraries\UserInterface\Table\Service\Pager;
+use Chamilo\Libraries\UserInterface\Table\Service\PageNavigationCalculator;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -51,7 +51,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
     public function __construct(
         GroupsTreeTraverser $groupsTreeTraverser, GroupMembershipService $groupMembershipService,
         StringUtilities $stringUtilities, Translator $translator, UrlGenerator $urlGenerator,
-        ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        ListHtmlTableRenderer $htmlTableRenderer, PageNavigationCalculator $pager,
         DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, GroupUrlGenerator $groupUrlGenerator,
         ClassnameUtilities $classnameUtilities, MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )

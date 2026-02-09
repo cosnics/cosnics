@@ -18,7 +18,7 @@ use Chamilo\Core\User\Storage\DataClass\UserActivity;
 use Chamilo\Core\User\Storage\DataClass\UserAuthenticationActivity;
 use Chamilo\Core\User\Storage\DataClass\UserVisit;
 use Chamilo\Core\User\Storage\Repository\UserTrackingRepository;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration;
+use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageHeaders;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -29,21 +29,21 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
 {
     protected ?User $currentUser;
 
-    protected PageConfiguration $pageConfiguration;
+    protected OnlineService $onlineService;
+
+    protected PageHeaders $pageConfiguration;
 
     protected UserTrackingRepository $userTrackingRepository;
 
-    protected OnlineService $whoIsOnlineService;
-
     public function __construct(
-        UserTrackingRepository $userTrackingRepository, ?User $currentUser, PageConfiguration $pageConfiguration,
-        OnlineService $whoIsOnlineService
+        UserTrackingRepository $userTrackingRepository, ?User $currentUser, PageHeaders $pageConfiguration,
+        OnlineService $onlineService
     )
     {
         $this->userTrackingRepository = $userTrackingRepository;
         $this->currentUser = $currentUser;
         $this->pageConfiguration = $pageConfiguration;
-        $this->whoIsOnlineService = $whoIsOnlineService;
+        $this->onlineService = $onlineService;
     }
 
     /**
@@ -82,7 +82,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
     {
         $userIdentifier = $afterUserEnterPage->getUser()->getId();
 
-        if (!$this->getWhoIsOnlineService()->updateOnlineForUserIdentifierWithCurrentTime(
+        if (!$this->getOnlineService()->updateOnlineForUserIdentifierWithCurrentTime(
             $userIdentifier
         )) {
             return false;
@@ -97,7 +97,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $this->getPageConfiguration()->addHtmlHeader('<script>var tracker=' . $userVisit->getId() . ';</script>');
+        $this->getPageConfiguration()->addHtml('<script>var tracker=' . $userVisit->getId() . ';</script>');
 
         return true;
     }
@@ -236,7 +236,12 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         return $this->currentUser;
     }
 
-    public function getPageConfiguration(): PageConfiguration
+    public function getOnlineService(): OnlineService
+    {
+        return $this->onlineService;
+    }
+
+    public function getPageConfiguration(): PageHeaders
     {
         return $this->pageConfiguration;
     }
@@ -261,11 +266,6 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
     public function getUserTrackingRepository(): UserTrackingRepository
     {
         return $this->userTrackingRepository;
-    }
-
-    public function getWhoIsOnlineService(): OnlineService
-    {
-        return $this->whoIsOnlineService;
     }
 
     protected function initializeUserActivityFromParameters(

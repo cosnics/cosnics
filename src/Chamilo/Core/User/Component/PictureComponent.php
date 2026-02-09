@@ -71,7 +71,7 @@ class PictureComponent extends ProfileComponent
 
                 return $this->redirectWithMessage(
                     $this->getTranslator()->trans($success ? $successMessage : $errorMessage), !$success, [
-                        Application::PARAM_CONTEXT => $this->getContext(),
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => self::ACTION_CHANGE_PICTURE
                     ]
                 );

@@ -1,0 +1,27 @@
+<?php
+namespace Chamilo\Libraries\DependencyInjection\Service;
+
+use Chamilo\Libraries\DependencyInjection\Architecture\Interface\ContainerExtensionFinderInterface;
+use Chamilo\Libraries\Filesystem\Service\PackagesContentFinder\PackagesClassFinderAware;
+
+/**
+ * Finds dependency injection extensions in a given list of packages
+ *
+ * @package Chamilo\Libraries\DependencyInjection\ExtensionFinder
+ * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ */
+class PackagesContainerExtensionFinder extends PackagesClassFinderAware implements ContainerExtensionFinderInterface
+{
+
+    /**
+     * @return string[]
+     * @throws \Exception
+     */
+    public function findContainerExtensions(): array
+    {
+        return $this->getPackagesClassFinder()->findClasses(
+            'DependencyInjection/DependencyInjectionExtension.php', 'DependencyInjection\\DependencyInjectionExtension'
+        );
+    }
+}

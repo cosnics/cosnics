@@ -13,15 +13,15 @@ use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButton
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableAction;
-use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableActions;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableAction;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableActions;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableResultPosition;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Interface\TableActionsSupport;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Interface\TableRowActionsSupport;
 use Chamilo\Libraries\UserInterface\Table\Factory\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\UserInterface\Table\Service\DataClassListTableRenderer;
 use Chamilo\Libraries\UserInterface\Table\Service\ListHtmlTableRenderer;
-use Chamilo\Libraries\UserInterface\Table\Service\Pager;
+use Chamilo\Libraries\UserInterface\Table\Service\PageNavigationCalculator;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -38,7 +38,7 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
     protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
 
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, PageNavigationCalculator $pager,
         DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, GroupUrlGenerator $groupUrlGenerator,
         ClassnameUtilities $classnameUtilities, MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )

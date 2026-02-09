@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Group\DependencyInjection;
 
-use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
-use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
+use Chamilo\Libraries\DependencyInjection\Architecture\Domain\AbstractDependencyInjectionExtension;
+use Chamilo\Libraries\DependencyInjection\Architecture\Trait\ExtensionTrait;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
@@ -23,13 +23,12 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
     {
         return [
             'Chamilo\Core\Group' => [
-                'architecture.eventDispatcher.php',
+                'architecture.php',
                 'implementation.admin.php',
                 'implementation.user.php',
                 'service.php',
                 'storage.php',
-                'userInterface.menu.php',
-                'userInterface.table.php'
+                'userInterface.php'
             ]
         ];
     }

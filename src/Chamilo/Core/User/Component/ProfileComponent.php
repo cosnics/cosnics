@@ -60,13 +60,13 @@ abstract class ProfileComponent extends Manager
         return $this->getService(LinkTabsRenderer::class);
     }
 
-    public function renderHeader(string $pageTitle = ''): string
+    public function renderHeader(): string
     {
         $availableTabs = $this->getAvailableTabs();
 
         $html = [];
 
-        $html[] = parent::renderHeader($pageTitle);
+        $html[] = parent::renderHeader();
 
         if (count($availableTabs) > 1) {
             $tabs = new TabsCollection();

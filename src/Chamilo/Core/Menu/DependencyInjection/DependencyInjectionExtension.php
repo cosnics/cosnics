@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Menu\DependencyInjection;
 
 use Chamilo\Core\Menu\DependencyInjection\CompilerPass\AvailableItemRendererCompilerPass;
-use Chamilo\Libraries\DependencyInjection\AbstractDependencyInjectionExtension;
-use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
-use Chamilo\Libraries\DependencyInjection\Traits\ExtensionTrait;
+use Chamilo\Libraries\DependencyInjection\Architecture\Domain\AbstractDependencyInjectionExtension;
+use Chamilo\Libraries\DependencyInjection\Architecture\Interface\ICompilerPassExtension;
+use Chamilo\Libraries\DependencyInjection\Architecture\Trait\ExtensionTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
@@ -26,14 +26,12 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         return [
             'Chamilo\Core\Menu' => [
-                'architecture.domain.php',
+                'architecture.php',
                 'implementation.admin.php',
                 'implementation.menu.php',
                 'service.php',
                 'storage.php',
-                'userInterface.menu.php',
-                'userInterface.menuRenderer.php',
-                'userInterface.table.php'
+                'userInterface.php',
             ]
         ];
     }

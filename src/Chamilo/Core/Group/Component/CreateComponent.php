@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CreateComponent extends Manager
 {
-
     /**
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
@@ -24,8 +23,7 @@ class CreateComponent extends Manager
      */
     public function run(): Response
     {
-        if (!$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -40,18 +38,16 @@ class CreateComponent extends Manager
             GroupForm::TYPE_CREATE, $group, $this->getUrlGenerator()->fromParameters(
             [
                 self::PARAM_CONTEXT => Manager::CONTEXT,
-                self::PARAM_ACTION => self::ACTION_CREATOR,
+                self::PARAM_ACTION => self::ACTION_CREATE,
                 self::PARAM_GROUP_ID => $parentGroupIdentifier
             ]
         )
         );
 
-        if ($form->validate())
-        {
+        if ($form->validate()) {
             $success = $form->createGroupFromForm();
 
-            if ($success)
-            {
+            if ($success) {
                 $group = $form->getGroup();
 
                 return $this->redirectWithMessage(
@@ -59,28 +55,26 @@ class CreateComponent extends Manager
                         'ObjectCreated', ['OBJECT' => $translator->trans('Group', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
                     ), (false), [
-                        Application::PARAM_CONTEXT => $this->getContext(),
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => self::ACTION_VIEW,
                         self::PARAM_GROUP_ID => $group->getId()
                     ]
                 );
             }
-            else
-            {
+            else {
                 return $this->redirectWithMessage(
                     $translator->trans(
                         'ObjectNotCreated', ['OBJECT' => $translator->trans('Group', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
                     ), (true), [
-                        Application::PARAM_CONTEXT => $this->getContext(),
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => self::ACTION_BROWSE,
                         self::PARAM_GROUP_ID => $parentGroupIdentifier
                     ]
                 );
             }
         }
-        else
-        {
+        else {
             $html = [];
 
             $html[] = $this->renderHeader();

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu;
 
-use Chamilo\Core\Menu\Architecture\Domain\ItemRendererCollection;
+use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -50,9 +50,9 @@ abstract class Manager extends Application
         return $this->getUrlGenerator()->fromParameters([Application::PARAM_ACTION => Manager::ACTION_BROWSE]);
     }
 
-    public function getItemRendererFactory(): ItemRendererCollection
+    public function getItemRendererFactory(): ItemRendererRegistry
     {
-        return $this->getService(ItemRendererCollection::class);
+        return $this->getService(ItemRendererRegistry::class);
     }
 
     public function getItemService(): ItemService

@@ -1,7 +1,10 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Chamilo\Core\Admin\Service\FileConfigurationLocator;
+use Chamilo\Core\Admin\Service\Consulter\LanguageConsulter;
+use Chamilo\Core\Admin\Service\Finder\BasicBundlesGenerator;
+use Chamilo\Core\Admin\Service\Finder\InternationalizationBundlesGenerator;
+use Chamilo\Core\Admin\Service\Finder\PackageBundlesGenerator;
 use Chamilo\Core\Admin\Service\InternationalizationBundlesCacheService;
 use Chamilo\Core\Admin\Service\OnlineService;
 use Chamilo\Core\Admin\Service\PackageBundlesCacheService;
@@ -16,7 +19,6 @@ return static function (ContainerConfigurator $container) {
     $services->defaults()->public()->autowire()->autoconfigure();
 
     $services->set(OnlineService::class);
-    $services->set(FileConfigurationLocator::class);
     $services->set(PackageFactory::class);
 
     $services->set(PackageBundlesCacheService::class)->args(
@@ -34,4 +36,10 @@ return static function (ContainerConfigurator $container) {
     $services->set('Chamilo\Core\Admin\Service\InternationalizationBundlesCacheAdapter', FilesystemAdapter::class)
         ->args(['$namespace' => 'Chamilo\Core\Admin\InternationalizationBundles'])->tag(AdapterInterface::class)
         ->factory([service(SymfonyCacheAdapterFactory::class), 'createFilesystemAdapter']);
+
+    $services->set(LanguageConsulter::class);
+
+    $services->set(BasicBundlesGenerator::class);
+    $services->set(InternationalizationBundlesGenerator::class);
+    $services->set(PackageBundlesGenerator::class);
 };

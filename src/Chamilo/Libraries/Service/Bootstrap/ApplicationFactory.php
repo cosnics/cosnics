@@ -3,9 +3,9 @@ namespace Chamilo\Libraries\Service\Bootstrap;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
 use Chamilo\Libraries\Architecture\Exception\UserException;
-use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -18,14 +18,11 @@ class ApplicationFactory
 {
     private ChamiloRequest $request;
 
-    private StringUtilities $stringUtilities;
-
     private Translator $translator;
 
-    public function __construct(ChamiloRequest $request, StringUtilities $stringUtilities, Translator $translator)
+    public function __construct(ChamiloRequest $request, Translator $translator)
     {
         $this->request = $request;
-        $this->stringUtilities = $stringUtilities;
         $this->translator = $translator;
     }
 
@@ -47,11 +44,9 @@ class ApplicationFactory
      * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      */
-    protected function createApplication(
-        string $context, ?User $user = null, ?string $fallBackAction = null
-    ): Application
+    protected function createApplication(string $context, ?User $user = null): Application
     {
-        $action = $this->getAction($context, $fallBackAction);
+        $action = $this->getAction($context);
         $className = $this->getClassName($context, $action);
 
         /**
@@ -63,7 +58,7 @@ class ApplicationFactory
     /**
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      */
-    protected function getAction(string $context, ?string $fallBackAction = null): string
+    protected function getAction(string $context): string
     {
         $actionParameter = $this->getActionParameter($context);
 
@@ -79,10 +74,6 @@ class ApplicationFactory
 
         if ($postAction) {
             return $postAction;
-        }
-
-        if ($fallBackAction) {
-            return $fallBackAction;
         }
 
         return $this->getDefaultAction($context);
@@ -102,11 +93,9 @@ class ApplicationFactory
      * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      */
-    public function getApplication(
-        string $context, ?User $user = null, ?string $fallBackAction = null
-    ): Application
+    public function getApplication(string $context, ?User $user = null): Application
     {
-        return $this->createApplication($context, $user, $fallBackAction);
+        return $this->createApplication($context, $user);
     }
 
     /**
@@ -155,11 +144,6 @@ class ApplicationFactory
     public function getRequest(): ChamiloRequest
     {
         return $this->request;
-    }
-
-    public function getStringUtilities(): StringUtilities
-    {
-        return $this->stringUtilities;
     }
 
     public function getTranslator(): Translator

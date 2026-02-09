@@ -2,7 +2,8 @@
 namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Manager;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration;
+use Chamilo\Libraries\UserInterface\Layout\Service\BaseFooterRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\BaseHeaderRenderer;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -17,21 +18,30 @@ class PrinterComponent extends BrowserComponent
     {
         $this->checkAuthorization(Manager::CONTEXT);
 
-        $this->getPageConfiguration()->setViewMode(PageConfiguration::VIEW_MODE_HEADERLESS);
-        $this->getPageConfiguration()->addCssFile(
+        $this->getPageConfiguration()->addCss(
             $this->getWebPathBuilder()->getCssPath(Manager::CONTEXT) . 'print.' .
             $this->getThemeWebPathBuilder()->getTheme() . '.min.css', 'print'
         );
 
         $html = [];
 
-        $html[] = $this->renderHeader();
-        $html[] = $this->renderNormalCalendar();
+        $html[] = $this->getHeaderRenderer()->render();
+        $html[] = $this->renderCalendar();
         $html[] = '<script>';
         $html[] = 'window.print();';
         $html[] = '</script>';
-        $html[] = $this->renderFooter();
+        $html[] = $this->getFooterRenderer()->render();
 
         return new Response(implode(PHP_EOL, $html));
+    }
+
+    protected function getFooterRenderer(): BaseFooterRenderer
+    {
+        return $this->getService(BaseFooterRenderer::class);
+    }
+
+    protected function getHeaderRenderer(): BaseHeaderRenderer
+    {
+        return $this->getService(BaseHeaderRenderer::class);
     }
 }

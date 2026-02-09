@@ -12,7 +12,6 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
  */
 class BreadcrumbTrailRenderer
 {
-
     private StringUtilities $stringUtilities;
 
     public function __construct(StringUtilities $stringUtilities)
@@ -22,15 +21,14 @@ class BreadcrumbTrailRenderer
 
     public function render(BreadcrumbTrail $breadcrumbTrail): string
     {
-        if ($breadcrumbTrail->size() == 0)
-        {
+        if ($breadcrumbTrail->count() == 0) {
             return '';
         }
 
         $html = [];
 
         $html[] = '<div class="container-breadcrumb">';
-        $html[] = '<div class="' . $breadcrumbTrail->getContainerMode() . '">';
+        $html[] = '<div class="container-fluid">';
         $html[] = $this->renderBreadcrumbs($breadcrumbTrail);
         $html[] = '</div>';
         $html[] = '</div>';
@@ -50,12 +48,10 @@ class BreadcrumbTrailRenderer
         $html[] = '<li>';
         $html[] = '<a href="' . htmlentities($breadcrumb->getUrl()) . '" target="_self">';
 
-        if ($breadcrumb->getInlineGlyph() instanceof InlineGlyph)
-        {
+        if ($breadcrumb->getInlineGlyph() instanceof InlineGlyph) {
             $html[] = $breadcrumb->getInlineGlyph()->render();
         }
-        else
-        {
+        else {
             $html[] = $this->getStringUtilities()->truncate($breadcrumb->getName(), 50);
         }
 
@@ -71,8 +67,7 @@ class BreadcrumbTrailRenderer
 
         $html[] = '<ol class="breadcrumb">';
 
-        foreach ($breadcrumbTrail->getBreadcrumbs() as $breadcrumb)
-        {
+        foreach ($breadcrumbTrail->toArray() as $breadcrumb) {
             $html[] = $this->renderBreadcrumb($breadcrumb);
         }
 

@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Factory;
 
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
-use Chamilo\Libraries\DependencyInjection\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjectionContainerTrait;
 
 /**
  * @package Chamilo\Libraries\Calendar\Factory

@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UnsubscribeComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -26,8 +25,7 @@ class UnsubscribeComponent extends Manager
     {
         $user = $this->getUser();
 
-        if (!$user->isPlatformAdministrator())
-        {
+        if (!$user->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -52,66 +50,54 @@ class UnsubscribeComponent extends Manager
 
         $failures = 0;
 
-        if (!empty($groupUserRelationIdentifiers))
-        {
-            if (!is_array($groupUserRelationIdentifiers))
-            {
+        if (!empty($groupUserRelationIdentifiers)) {
+            if (!is_array($groupUserRelationIdentifiers)) {
                 $groupUserRelationIdentifiers = [$groupUserRelationIdentifiers];
             }
 
-            foreach ($groupUserRelationIdentifiers as $groupUserRelationIdentifier)
-            {
+            foreach ($groupUserRelationIdentifiers as $groupUserRelationIdentifier) {
                 $groupUserRelation =
                     $groupMembershipService->findGroupRelUserByIdentifier($groupUserRelationIdentifier);
 
-                if (!$groupUserRelation instanceof GroupRelUser)
-                {
+                if (!$groupUserRelation instanceof GroupRelUser) {
                     continue;
                 }
 
                 $group = $groupService->findGroupByIdentifier($groupUserRelation->getGroupId());
                 $user = $userService->findUserByIdentifier($groupUserRelation->getUserId());
 
-                try
-                {
+                try {
                     $groupMembershipService->unsubscribeUserFromGroup($group, $user);
                 }
-                catch (RuntimeException)
-                {
+                catch (RuntimeException) {
                     $failures ++;
                 }
             }
 
-            if ($failures)
-            {
-                if (count($groupUserRelationIdentifiers) == 1)
-                {
+            if ($failures) {
+                if (count($groupUserRelationIdentifiers) == 1) {
                     $message = 'SelectedGroupRelUserNotDeleted';
                 }
-                else
-                {
+                else {
                     $message = 'SelectedGroupRelUsersNotDeleted';
                 }
             }
-            elseif (count($groupUserRelationIdentifiers) == 1)
-            {
+            elseif (count($groupUserRelationIdentifiers) == 1) {
                 $message = 'SelectedGroupRelUserDeleted';
             }
-            else
-            {
+            else {
                 $message = 'SelectedGroupRelUsersDeleted';
             }
 
             return $this->redirectWithMessage(
                 $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
-                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => self::ACTION_VIEW,
                     self::PARAM_GROUP_ID => $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID)
                 ]
             );
         }
-        else
-        {
+        else {
             return new Response(
                 $this->displayErrorPage(
                     htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))

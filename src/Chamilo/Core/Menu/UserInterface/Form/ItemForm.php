@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Menu\UserInterface\Form;
 
 use Chamilo\Core\Admin\Service\Consulter\LanguageConsulter;
-use Chamilo\Core\Menu\Architecture\Domain\ItemRendererCollection;
+use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
 use Chamilo\Core\Menu\Architecture\Interface\ConfigurableItemInterface;
 use Chamilo\Core\Menu\Architecture\Interface\TranslatableItemInterface;
 use Chamilo\Core\Menu\Implementation\Menu\CategoryItemRenderer;
@@ -133,9 +133,9 @@ class ItemForm extends FormValidator
         }
     }
 
-    public function getItemRendererFactory(): ItemRendererCollection
+    public function getItemRendererFactory(): ItemRendererRegistry
     {
-        return $this->getService(ItemRendererCollection::class);
+        return $this->getService(ItemRendererRegistry::class);
     }
 
     public function getItemService(): ItemService

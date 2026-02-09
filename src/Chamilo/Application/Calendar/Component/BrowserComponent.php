@@ -45,7 +45,7 @@ class BrowserComponent extends Manager
         $this->checkAuthorization(Manager::CONTEXT);
         $this->checkLoggedInAs();
 
-        $this->getPageConfiguration()->addCssFile(
+        $this->getPageConfiguration()->addCss(
             $this->getWebPathBuilder()->getCssPath(Manager::CONTEXT) . 'print.' .
             $this->getThemeWebPathBuilder()->getTheme() . '.min.css', 'print'
         );
@@ -54,7 +54,7 @@ class BrowserComponent extends Manager
 
         $html[] = $this->renderHeader();
         $html[] = '<div class="row">';
-        $html[] = $this->renderNormalCalendar();
+        $html[] = $this->renderCalendar();
         $html[] = '</div>';
         $html[] = $this->renderFooter();
 
@@ -220,7 +220,8 @@ class BrowserComponent extends Manager
 
         foreach ($this->getCalendarExtensionActionProvider()->getCalendarExtenstionActionProviders() as $actionProvider)
         {
-            $primaryExtensionActions = array_merge($primaryExtensionActions, $actionProvider->getPrimary($this->getUser()));
+            $primaryExtensionActions =
+                array_merge($primaryExtensionActions, $actionProvider->getPrimary($this->getUser()));
             $additionalExtensionActions = array_merge(
                 $additionalExtensionActions, $actionProvider->getAdditional($this->getUser())
             );
@@ -238,7 +239,7 @@ class BrowserComponent extends Manager
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Exception
      */
-    protected function renderNormalCalendar(): string
+    protected function renderCalendar(): string
     {
         $renderer = $this->getCalendarRendererFactory()->getRenderer($this->getCurrentRendererType());
 

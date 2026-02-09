@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\UserInterface\HomeRenderer;
 
-use Chamilo\Core\Home\Architecture\Domain\BlockRendererCollection;
+use Chamilo\Core\Home\Architecture\Domain\BlockRendererRegistry;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
@@ -18,14 +18,14 @@ use Symfony\Component\Translation\Translator;
 class ColumnRenderer
 {
 
-    protected BlockRendererCollection $blockRendererFactory;
+    protected BlockRendererRegistry $blockRendererFactory;
 
     protected HomeService $homeService;
 
     protected Translator $translator;
 
     public function __construct(
-        HomeService $homeService, Translator $translator, BlockRendererCollection $blockRendererFactory
+        HomeService $homeService, Translator $translator, BlockRendererRegistry $blockRendererFactory
     )
     {
         $this->homeService = $homeService;
@@ -65,7 +65,7 @@ class ColumnRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function getBlockRendererFactory(): BlockRendererCollection
+    public function getBlockRendererFactory(): BlockRendererRegistry
     {
         return $this->blockRendererFactory;
     }

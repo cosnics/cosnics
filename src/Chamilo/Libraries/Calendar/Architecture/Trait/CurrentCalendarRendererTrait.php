@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\Calendar\Architecture\Trait;
 
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
-use Chamilo\Libraries\Platform\ChamiloRequest;
 use Detection\MobileDetect;
 use Exception;
 

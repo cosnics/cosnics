@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Tab\Service;
 
-use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 

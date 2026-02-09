@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Home\DependencyInjection\CompilerPass;
 
-use Chamilo\Core\Home\Architecture\Domain\BlockRendererCollection;
+use Chamilo\Core\Home\Architecture\Domain\BlockRendererRegistry;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -16,11 +16,11 @@ class AvailableBlockRendererCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
-        if ($container->hasDefinition(BlockRendererCollection::class))
+        if ($container->hasDefinition(BlockRendererRegistry::class))
         {
             $taggedServices = $container->findTaggedServiceIds(BlockRenderer::class);
 
-            $definition = $container->getDefinition(BlockRendererCollection::class);
+            $definition = $container->getDefinition(BlockRendererRegistry::class);
 
             foreach ($taggedServices as $taggedServiceId => $tags)
             {

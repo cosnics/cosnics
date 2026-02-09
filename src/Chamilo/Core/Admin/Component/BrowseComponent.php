@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Component;
 
-use Chamilo\Core\Admin\Architecture\Domain\ActionProviderCollection;
+use Chamilo\Core\Admin\Architecture\Domain\ActionProviderRegistry;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Service\PackageBundlesCacheService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -39,9 +39,9 @@ class BrowseComponent extends Manager
         return new Response(implode(PHP_EOL, $html));
     }
 
-    public function getActionProvider(): ActionProviderCollection
+    public function getActionProvider(): ActionProviderRegistry
     {
-        return $this->getService(ActionProviderCollection::class);
+        return $this->getService(ActionProviderRegistry::class);
     }
 
     /**

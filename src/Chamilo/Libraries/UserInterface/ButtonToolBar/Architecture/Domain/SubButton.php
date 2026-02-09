@@ -13,7 +13,7 @@ use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\SubButtonRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
 /**
- * @package Chamilo\Libraries\Format\Structure\ButtonToolBar
+ * @package Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>

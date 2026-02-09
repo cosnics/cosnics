@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Table\Service;
 
-use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\AbstractBaseTableParameters;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableParameterValues;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException;
@@ -12,11 +12,11 @@ use Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumb
  */
 class RequestTableParameterValuesCompiler
 {
-    protected Pager $pager;
+    protected PageNavigationCalculator $pager;
 
     protected ChamiloRequest $request;
 
-    public function __construct(ChamiloRequest $request, Pager $pager)
+    public function __construct(ChamiloRequest $request, PageNavigationCalculator $pager)
     {
         $this->request = $request;
         $this->pager = $pager;
@@ -91,7 +91,7 @@ class RequestTableParameterValuesCompiler
         $numberOfColumnsPerPage = $defaultParameterValues[TableParameterValues::PARAM_NUMBER_OF_COLUMNS_PER_PAGE];
         $numberOfRowsPerPage = $this->determineNumberOfRowsPerPage($parameterNames, $defaultParameterValues);
 
-        if ($numberOfRowsPerPage == Pager::DISPLAY_ALL) {
+        if ($numberOfRowsPerPage == PageNavigationCalculator::DISPLAY_ALL) {
             $numberOfRowsPerPage = $totalNumberOfItems;
             $numberOfItemsPerPage = $totalNumberOfItems;
         }
@@ -126,7 +126,7 @@ class RequestTableParameterValuesCompiler
         return $tableParameterValues;
     }
 
-    public function getPager(): Pager
+    public function getPager(): PageNavigationCalculator
     {
         return $this->pager;
     }

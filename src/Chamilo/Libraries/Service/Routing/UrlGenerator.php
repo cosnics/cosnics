@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\Service\Routing;
 
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
-use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**

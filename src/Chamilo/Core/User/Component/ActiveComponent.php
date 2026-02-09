@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ActiveComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -21,8 +20,7 @@ class ActiveComponent extends Manager
      */
     public function run(): Response
     {
-        if (!$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -35,19 +33,15 @@ class ActiveComponent extends Manager
 
         $active = $this->getState();
 
-        if (!is_array($ids))
-        {
+        if (!is_array($ids)) {
             $ids = [$ids];
         }
 
-        if (count($ids) > 0)
-        {
+        if (count($ids) > 0) {
             $failures = 0;
 
-            foreach ($ids as $id)
-            {
-                if (!$this->getUser()->isPlatformAdministrator())
-                {
+            foreach ($ids as $id) {
+                if (!$this->getUser()->isPlatformAdministrator()) {
                     $failures ++;
                     continue;
                 }
@@ -55,21 +49,18 @@ class ActiveComponent extends Manager
                 $user = $userService->findUserByIdentifier($id);
                 $user->setActive($active);
 
-                if (!$userService->updateUser($user))
-                {
+                if (!$userService->updateUser($user)) {
                     $failures ++;
                 }
             }
 
-            if ($active == 0)
-            {
+            if ($active == 0) {
                 $message = $this->getResult(
                     $failures, count($ids), 'UserNotDeactivated', 'UsersNotDeactivated', 'UserDeactivated',
                     'UsersDeactivated'
                 );
             }
-            else
-            {
+            else {
                 $message = $this->getResult(
                     $failures, count($ids), 'UserNotActivated', 'UsersNotActivated', 'UserActivated', 'UsersActivated'
                 );
@@ -77,13 +68,12 @@ class ActiveComponent extends Manager
 
             return $this->redirectWithMessage(
                 $message, ($failures > 0), [
-                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => self::ACTION_BROWSE
                 ]
             );
         }
-        else
-        {
+        else {
             return new Response(
                 $this->displayErrorPage(
                     htmlentities(

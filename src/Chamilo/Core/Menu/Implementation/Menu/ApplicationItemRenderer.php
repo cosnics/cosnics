@@ -12,7 +12,7 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
-use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_category;
@@ -96,7 +96,6 @@ class ApplicationItemRenderer extends ItemRenderer
 
     /**
      * @throws \QuickformException
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function addConfigurationToForm(FormValidator $formValidator): void
     {
@@ -171,7 +170,6 @@ class ApplicationItemRenderer extends ItemRenderer
 
     /**
      * @return string[]
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     protected function getApplicationOptions(): array
     {

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Error\Architecture\Interface;
 
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration;
+use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageHeaders;
 use Throwable;
 
 /**
@@ -18,7 +18,7 @@ interface ExceptionLoggerInterface
     /**
      * Adds an exception logger for javascript to the header
      */
-    public function addJavascriptExceptionLogger(PageConfiguration $pageConfiguration);
+    public function addJavascriptExceptionLogger(PageHeaders $pageConfiguration);
 
     /**
      * Logs an exception

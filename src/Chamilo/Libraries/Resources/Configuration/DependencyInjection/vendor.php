@@ -1,8 +1,8 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Filesystem\Factory\HtmlPurifierFactory;
-use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Session\Factory\PdoSessionHandlerFactory;
 use Chamilo\Libraries\Protocol\Session\Factory\SessionFactory;
 use Chamilo\Libraries\UserInterface\Translation\Factory\TranslatorFactory;

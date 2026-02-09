@@ -15,16 +15,15 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class LogoutComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Google_Auth_Exception
      */
     public function run(): Response
     {
         $isSuccessful = $this->getCalendarService()->logout($this->getUser());
 
-        if ($isSuccessful)
-        {
+        if ($isSuccessful) {
             $this->getAvailabilityService()->deleteAvailabilityByCalendarType(Manager::CONTEXT);
         }
 

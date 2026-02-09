@@ -7,10 +7,12 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionTranslatorInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
 use Chamilo\Libraries\Storage\Factory\DataClassFactory;
+use Chamilo\Libraries\Storage\Factory\SymfonyCacheAdapterFactory;
 use Chamilo\Libraries\Storage\Repository\DataClassDatabase;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Repository\DisplayOrderRepository;
 use Chamilo\Libraries\Storage\Repository\NestedSetDataClassRepository;
+use Chamilo\Libraries\Storage\Service\CacheDataPreLoaderManager;
 use Chamilo\Libraries\Storage\Service\Condition\AndConditionTranslator;
 use Chamilo\Libraries\Storage\Service\Condition\ComparisonConditionTranslator;
 use Chamilo\Libraries\Storage\Service\Condition\ContainsConditionTranslator;
@@ -36,6 +38,7 @@ use Chamilo\Libraries\Storage\Service\PropertyMapper;
 use Chamilo\Libraries\Storage\Service\QueryBuilderConfigurator;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
+use Chamilo\Libraries\Storage\Service\SymfonyCacheAdapterManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 
@@ -106,4 +109,8 @@ return static function (ContainerConfigurator $container) {
     $services->set(ContainsConditionTranslator::class)->tag(ConditionTranslatorInterface::class);
     $services->set(StartsWithConditionTranslator::class)->tag(ConditionTranslatorInterface::class);
     $services->set(EndsWithConditionTranslator::class)->tag(ConditionTranslatorInterface::class);
+
+    $services->set(CacheDataPreLoaderManager::class);
+    $services->set(SymfonyCacheAdapterManager::class);
+    $services->set(SymfonyCacheAdapterFactory::class);
 };

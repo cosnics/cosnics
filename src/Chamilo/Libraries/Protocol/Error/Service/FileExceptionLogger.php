@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Protocol\Error\Service;
 
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
-use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageConfiguration;
+use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageHeaders;
 use Exception;
 use Throwable;
 
@@ -32,7 +32,7 @@ class FileExceptionLogger implements ExceptionLoggerInterface
         $this->logPath = $logPath;
     }
 
-    public function addJavascriptExceptionLogger(PageConfiguration $pageConfiguration)
+    public function addJavascriptExceptionLogger(PageHeaders $pageConfiguration)
     {
     }
 

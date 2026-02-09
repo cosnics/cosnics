@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class SubscribeComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
@@ -27,8 +26,7 @@ class SubscribeComponent extends Manager
     {
         $groupIdentifier = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
 
-        if (!$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -53,69 +51,56 @@ class SubscribeComponent extends Manager
 
         $failures = 0;
 
-        if (!empty($userIdentifiers))
-        {
-            if (!is_array($userIdentifiers))
-            {
+        if (!empty($userIdentifiers)) {
+            if (!is_array($userIdentifiers)) {
                 $userIdentifiers = [$userIdentifiers];
             }
 
             $group = $groupService->findGroupByIdentifier($groupIdentifier);
             $containsDuplicates = false;
 
-            foreach ($userIdentifiers as $user)
-            {
+            foreach ($userIdentifiers as $user) {
                 $user = $userService->findUserByIdentifier($user);
 
                 $groupUserRelation = $groupMembershipService->getGroupUserRelationByGroupAndUser($group, $user);
 
-                if (!$groupUserRelation instanceof GroupRelUser)
-                {
-                    try
-                    {
+                if (!$groupUserRelation instanceof GroupRelUser) {
+                    try {
                         $groupMembershipService->subscribeUserToGroup($group, $user);
                     }
-                    catch (RuntimeException)
-                    {
+                    catch (RuntimeException) {
                         $failures ++;
                     }
                 }
-                else
-                {
+                else {
                     $containsDuplicates = true;
                 }
             }
 
-            if ($failures)
-            {
-                if (count($userIdentifiers) == 1)
-                {
+            if ($failures) {
+                if (count($userIdentifiers) == 1) {
                     $message = 'SelectedUserNotAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
                 }
-                else
-                {
+                else {
                     $message = 'SelectedUsersNotAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
                 }
             }
-            elseif (count($userIdentifiers) == 1)
-            {
+            elseif (count($userIdentifiers) == 1) {
                 $message = 'SelectedUserAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
             }
-            else
-            {
+            else {
                 $message = 'SelectedUsersAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
             }
 
             return $this->redirectWithMessage(
                 $translator->trans($message), (bool) $failures, [
-                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => self::ACTION_VIEW,
                     self::PARAM_GROUP_ID => $groupIdentifier
                 ]
             );
         }
-        else
-        {
+        else {
             return new Response(
                 $this->displayErrorPage(
                     htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
@@ -123,5 +108,4 @@ class SubscribeComponent extends Manager
             );
         }
     }
-
 }

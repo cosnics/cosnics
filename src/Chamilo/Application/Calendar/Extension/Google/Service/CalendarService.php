@@ -108,7 +108,7 @@ class CalendarService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function login(User $user, $authenticationCode = null): bool
     {
@@ -116,7 +116,8 @@ class CalendarService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Google_Auth_Exception
      */
     public function logout(User $user): bool
     {

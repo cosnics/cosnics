@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\UserInterface\Table;
 
-use Chamilo\Core\Menu\Architecture\Domain\ItemRendererCollection;
+use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -16,15 +16,15 @@ use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRende
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\StaticTableColumn;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn;
-use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableAction;
-use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableActions;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableAction;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableActions;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableResultPosition;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Interface\TableActionsSupport;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Interface\TableRowActionsSupport;
 use Chamilo\Libraries\UserInterface\Table\Factory\DataClassPropertyTableColumnFactory;
 use Chamilo\Libraries\UserInterface\Table\Service\DataClassListTableRenderer;
 use Chamilo\Libraries\UserInterface\Table\Service\ListHtmlTableRenderer;
-use Chamilo\Libraries\UserInterface\Table\Service\Pager;
+use Chamilo\Libraries\UserInterface\Table\Service\PageNavigationCalculator;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -36,15 +36,15 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
     public const PROPERTY_TYPE = 'Type';
     public const TABLE_IDENTIFIER = Manager::PARAM_ITEM;
 
-    protected ItemRendererCollection $itemRendererFactory;
+    protected ItemRendererRegistry $itemRendererFactory;
 
     protected ItemService $itemService;
 
     protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
 
     public function __construct(
-        ItemRendererCollection $itemRendererFactory, ItemService $itemService, Translator $translator,
-        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        ItemRendererRegistry $itemRendererFactory, ItemService $itemService, Translator $translator,
+        UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, PageNavigationCalculator $pager,
         DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
         ClassnameUtilities $classnameUtilities, MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )
@@ -76,7 +76,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         );
     }
 
-    public function getItemRendererFactory(): ItemRendererCollection
+    public function getItemRendererFactory(): ItemRendererRegistry
     {
         return $this->itemRendererFactory;
     }

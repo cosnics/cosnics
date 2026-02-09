@@ -56,7 +56,7 @@ class JsonAjaxResult
     }
 
     /**
-     * @param string[] $properties
+     * @param mixed $properties
      */
     public function setProperties(array $properties): static
     {

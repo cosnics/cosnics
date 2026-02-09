@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
-use Chamilo\Core\User\Architecture\Domain\UserDetailsRendererCollection;
+use Chamilo\Core\User\Architecture\Domain\UserDetailsRendererRegistry;
 use Chamilo\Core\User\Architecture\Interface\UserDetailsRendererInterface;
 use Chamilo\Core\User\Implementation\User\UserDetailsRenderer;
 use Chamilo\Core\User\Manager;
@@ -144,9 +144,9 @@ class ViewComponent extends Manager
         return $this->getService(TabsRenderer::class);
     }
 
-    public function getUserDetailsRendererCollection(): UserDetailsRendererCollection
+    public function getUserDetailsRendererCollection(): UserDetailsRendererRegistry
     {
-        return $this->getService(UserDetailsRendererCollection::class);
+        return $this->getService(UserDetailsRendererRegistry::class);
     }
 
     /**

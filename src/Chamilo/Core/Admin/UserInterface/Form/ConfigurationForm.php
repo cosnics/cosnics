@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\UserInterface\Form;
 
-use Chamilo\Core\Admin\Architecture\Domain\SettingsConnectorCollection;
+use Chamilo\Core\Admin\Architecture\Domain\SettingsConnectorRegistry;
 use Chamilo\Core\Admin\Architecture\Interface\SettingsConnectorInterface;
 use Chamilo\Core\Admin\Service\ConfigurationService;
 use Chamilo\Core\Admin\Storage\DataClass\Setting;
@@ -190,9 +190,9 @@ class ConfigurationForm extends FormValidator
         return $this->getService(ConfigurationService::class);
     }
 
-    public function getSettingsConnectorFactory(): SettingsConnectorCollection
+    public function getSettingsConnectorFactory(): SettingsConnectorRegistry
     {
-        return $this->getService(SettingsConnectorCollection::class);
+        return $this->getService(SettingsConnectorRegistry::class);
     }
 
     protected function isHidden($setting): bool

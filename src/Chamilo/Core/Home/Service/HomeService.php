@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Home\Service;
 
-use Chamilo\Core\Home\Architecture\Domain\BlockRendererCollection;
+use Chamilo\Core\Home\Architecture\Domain\BlockRendererRegistry;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\Repository\HomeRepository;
-use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -21,7 +21,7 @@ class HomeService
 {
     public const PARAM_TAB_ID = 'tab';
 
-    protected BlockRendererCollection $blockRendererFactory;
+    protected BlockRendererRegistry $blockRendererFactory;
 
     protected ClassnameUtilities $classnameUtilities;
 
@@ -35,7 +35,7 @@ class HomeService
 
     public function __construct(
         HomeRepository $homeRepository, SessionInterface $session, Translator $translator,
-        BlockRendererCollection $blockRendererFactory, ClassnameUtilities $classnameUtilities,
+        BlockRendererRegistry $blockRendererFactory, ClassnameUtilities $classnameUtilities,
         DisplayOrderHandler $displayOrderHandler
     )
     {
@@ -153,7 +153,7 @@ class HomeService
         );
     }
 
-    public function getBlockRendererFactory(): BlockRendererCollection
+    public function getBlockRendererFactory(): BlockRendererRegistry
     {
         return $this->blockRendererFactory;
     }

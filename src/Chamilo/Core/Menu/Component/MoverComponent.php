@@ -17,7 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class MoverComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException
@@ -28,22 +27,19 @@ class MoverComponent extends Manager
      */
     public function run(): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
         $moveDirection = $this->getRequest()->query->get(self::PARAM_DIRECTION);
 
-        if (is_null($moveDirection))
-        {
+        if (is_null($moveDirection)) {
             throw new ParameterNotDefinedException(self::PARAM_DIRECTION);
         }
 
         $itemIdentifier = $this->getRequest()->query->get(self::PARAM_ITEM);
 
-        if (is_null($itemIdentifier))
-        {
+        if (is_null($itemIdentifier)) {
             throw new ParameterNotDefinedException(self::PARAM_ITEM);
         }
 
@@ -59,7 +55,7 @@ class MoverComponent extends Manager
 
         return $this->redirectWithMessage(
             $message, !$success, [
-                Application::PARAM_CONTEXT => $this->getContext(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_BROWSE,
                 Manager::PARAM_PARENT => $item->getParentId()
             ]

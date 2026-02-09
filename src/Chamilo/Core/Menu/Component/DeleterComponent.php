@@ -27,8 +27,7 @@ class DeleterComponent extends Manager
      */
     public function run(): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -36,10 +35,8 @@ class DeleterComponent extends Manager
         $failures = 0;
         $parentIdentifier = 0;
 
-        foreach ($items as $item)
-        {
-            if (!$this->getCachedItemService()->deleteItem($item))
-            {
+        foreach ($items as $item) {
+            if (!$this->getCachedItemService()->deleteItem($item)) {
                 $failures ++;
             }
 
@@ -53,7 +50,7 @@ class DeleterComponent extends Manager
 
         return $this->redirectWithMessage(
             $message, (bool) $failures, [
-                Application::PARAM_CONTEXT => $this->getContext(),
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_BROWSE,
                 Manager::PARAM_PARENT => $parentIdentifier
             ]
@@ -69,13 +66,11 @@ class DeleterComponent extends Manager
     {
         $itemIdentifiers = $this->getRequest()->query->get(self::PARAM_ITEM);
 
-        if (is_null($itemIdentifiers))
-        {
+        if (is_null($itemIdentifiers)) {
             throw new ParameterNotDefinedException(self::PARAM_ITEM);
         }
 
-        if (!is_array($itemIdentifiers))
-        {
+        if (!is_array($itemIdentifiers)) {
             $itemIdentifiers = [$itemIdentifiers];
         }
 

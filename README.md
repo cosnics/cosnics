@@ -1,7 +1,0 @@
-# Cosnics
-
-## Installation
-
-## Developers
-
-## Jenkins

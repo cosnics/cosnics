@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class DeleteComponent extends Manager
 {
-
     /**
      * @throws \Exception
      * @throws \Throwable
@@ -25,8 +24,7 @@ class DeleteComponent extends Manager
         $groupService = $this->getGroupService();
         $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID);
 
-        if (!$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -44,49 +42,40 @@ class DeleteComponent extends Manager
 
         $failures = 0;
 
-        if (!empty($ids))
-        {
-            if (!is_array($ids))
-            {
+        if (!empty($ids)) {
+            if (!is_array($ids)) {
                 $ids = [$ids];
             }
 
-            foreach ($ids as $id)
-            {
+            foreach ($ids as $id) {
                 $group = $groupService->findGroupByIdentifier($id);
 
-                if (!$groupService->deleteGroup($group))
-                {
+                if (!$groupService->deleteGroup($group)) {
                     $failures ++;
                 }
             }
 
-            if ($failures)
-            {
-                if (count($ids) == 1)
-                {
+            if ($failures) {
+                if (count($ids) == 1) {
                     $message = $translator->trans(
                         'ObjectNotDeleted', ['OBJECT' => $translator->trans('SelectedGroup', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
                     );
                 }
-                else
-                {
+                else {
                     $message = $translator->trans(
                         'ObjectsNotDeleted', ['OBJECT' => $translator->trans('SelectedGroups', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
                     );
                 }
             }
-            elseif (count($ids) == 1)
-            {
+            elseif (count($ids) == 1) {
                 $message = $translator->trans(
                     'ObjectDeleted', ['OBJECT' => $translator->trans('SelectedGroup', [], Manager::CONTEXT)],
                     StringUtilities::LIBRARIES
                 );
             }
-            else
-            {
+            else {
                 $message = $translator->trans(
                     'ObjectsDeleted', ['OBJECT' => $translator->trans('SelectedGroups', [], Manager::CONTEXT)],
                     StringUtilities::LIBRARIES
@@ -95,13 +84,12 @@ class DeleteComponent extends Manager
 
             return $this->redirectWithMessage(
                 $message, (bool) $failures, [
-                    Application::PARAM_CONTEXT => $this->getContext(),
+                    Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => self::ACTION_BROWSE
                 ]
             );
         }
-        else
-        {
+        else {
             return new Response(
                 $this->displayErrorPage(
                     htmlentities($translator->trans('NoObjectsSelected', [], StringUtilities::LIBRARIES))

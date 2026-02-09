@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\UserInterface\Layout\Service;
 use InvalidArgumentException;
 
 /**
- * @package Chamilo\Libraries\Format\Structure
+ * @package Chamilo\Libraries\UserInterface\Layout\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
 class ProgressBarRenderer
@@ -27,8 +27,7 @@ class ProgressBarRenderer
 
         $contextualClass = $mode == self::MODE_DEFAULT ? '' : 'progress-bar-' . $mode;
 
-        if ($striped)
-        {
+        if ($striped) {
             $contextualClass .= ' progress-bar-striped';
         }
 
@@ -56,16 +55,13 @@ class ProgressBarRenderer
         int $progress, ?string $status = null, ?int $maxWidth = 150, bool $striped = false
     ): string
     {
-        if ($progress >= 90)
-        {
+        if ($progress >= 90) {
             $mode = self::MODE_DANGER;
         }
-        elseif ($progress >= 80)
-        {
+        elseif ($progress >= 80) {
             $mode = self::MODE_WARNING;
         }
-        else
-        {
+        else {
             $mode = self::MODE_SUCCESS;
         }
 
@@ -77,8 +73,7 @@ class ProgressBarRenderer
      */
     protected function validateMode(string $mode = self::MODE_DEFAULT): void
     {
-        if (!in_array($mode, $this->getAllowedModes()))
-        {
+        if (!in_array($mode, $this->getAllowedModes())) {
             throw new InvalidArgumentException(
                 sprintf(
                     'The given mode must be a valid string and must be one of (%s)',
@@ -93,8 +88,7 @@ class ProgressBarRenderer
      */
     protected function validateProgress(int $progress): void
     {
-        if ($progress < 0 || $progress > 100)
-        {
+        if ($progress < 0 || $progress > 100) {
             throw new InvalidArgumentException(
                 'The given progress must be a valid integer and must be between 0 and 100'
             );

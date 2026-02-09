@@ -35,12 +35,4 @@ class DeleteTemporaryFileComponent extends Manager
             return JsonAjaxResult::generalError($translator->trans('FileNotRemoved', [], StringUtilities::LIBRARIES));
         }
     }
-
-    /**
-     * @see \Chamilo\Libraries\Protocol\Ajax\Service\AjaxManager::getRequiredPostParameters()
-     */
-    public function getRequiredPostParameters(array $postParameters = []): array
-    {
-        return [self::PARAM_FILE];
-    }
 }

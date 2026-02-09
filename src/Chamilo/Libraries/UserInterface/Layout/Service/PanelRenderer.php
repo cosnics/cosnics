@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\UserInterface\Layout\Service;
 use InvalidArgumentException;
 
 /**
- * @package Chamilo\Libraries\Format\Structure
+ * @package Chamilo\Libraries\UserInterface\Layout\Service
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class PanelRenderer
@@ -63,8 +63,7 @@ class PanelRenderer
 
         $html[] = '<div class="panel ' . $contextualClass . '">';
 
-        if (!is_null($title))
-        {
+        if (!is_null($title)) {
             $html[] = '<div class="panel-heading">';
             $html[] = '<h5 class="panel-title">' . $title . '</h5>';
             $html[] = '</div>';
@@ -81,8 +80,7 @@ class PanelRenderer
 
         $html[] = '<table class="table table-bordered">';
 
-        foreach ($tableValues as $key => $value)
-        {
+        foreach ($tableValues as $key => $value) {
             $html[] = '<tr>';
             $html[] = '<td class="cell-stat-2x"><strong>' . $key . '</strong></td>';
             $html[] = '<td>' . $value . '</td>';
@@ -100,8 +98,7 @@ class PanelRenderer
      */
     protected function validateMode(string $mode = self::MODE_DEFAULT): void
     {
-        if (!in_array($mode, $this->getAllowedModes()))
-        {
+        if (!in_array($mode, $this->getAllowedModes())) {
             throw new InvalidArgumentException(
                 sprintf(
                     'The given mode must be a valid string and must be one of (%s)',

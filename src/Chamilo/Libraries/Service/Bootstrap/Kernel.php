@@ -1,16 +1,15 @@
 <?php
 namespace Chamilo\Libraries\Service\Bootstrap;
 
-use Chamilo\Core\Admin\Service\OnlineService;
-use Chamilo\Core\Home\Manager as HomeManager;
+use Chamilo\Core\Home\Manager;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserEnterPageEvent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Exception\PlatformNotAvailableException;
 use Chamilo\Libraries\Architecture\Exception\UserException;
 use Chamilo\Libraries\Architecture\Interface\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Architecture\Response\PlatformNotAvailableResponse;
-use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Response\NotAuthenticatedResponse;
@@ -18,7 +17,6 @@ use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
 use Chamilo\Libraries\Protocol\Error\Architecture\Response\ExceptionResponse;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
-use Exception;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,10 +43,6 @@ class Kernel
 
     protected ?string $timezone;
 
-    protected OnlineService $whoIsOnlineService;
-
-    private ?Application $application = null;
-
     private ApplicationFactory $applicationFactory;
 
     private ?string $context = null;
@@ -62,10 +56,10 @@ class Kernel
     private ?User $user;
 
     public function __construct(
-        ChamiloRequest $request, ApplicationFactory $applicationFactory, SessionInterface $session,
-        ExceptionLoggerInterface $exceptionLogger, OnlineService $whoIsOnlineService,
-        AuthenticationValidator $authenticationValidator, UrlGenerator $urlGenerator,
-        EventDispatcherInterface $eventDispatcher, string $timezone, bool $maintenanceMode = false, User $user = null
+        ChamiloRequest $request, SessionInterface $session, ApplicationFactory $applicationFactory,
+        ExceptionLoggerInterface $exceptionLogger, AuthenticationValidator $authenticationValidator,
+        UrlGenerator $urlGenerator, EventDispatcherInterface $eventDispatcher, string $timezone, User $user = null,
+        bool $maintenanceMode = false
     )
     {
         $this->request = $request;
@@ -75,29 +69,9 @@ class Kernel
         $this->urlGenerator = $urlGenerator;
         $this->user = $user;
         $this->authenticationValidator = $authenticationValidator;
-        $this->whoIsOnlineService = $whoIsOnlineService;
         $this->eventDispatcher = $eventDispatcher;
         $this->maintenanceMode = $maintenanceMode;
         $this->timezone = $timezone;
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
-     * @throws \Exception
-     */
-    protected function buildApplication(): Kernel
-    {
-        $context = $this->getContext();
-
-        if (!isset($context)) {
-            throw new Exception('Must call configureContext before buildApplication');
-        }
-
-        $this->setApplication(
-            $this->getApplicationFactory()->getApplication($this->getContext(), $this->getUser())
-        );
-
-        return $this;
     }
 
     /**
@@ -106,7 +80,7 @@ class Kernel
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
      * @throws \Exception
      */
-    protected function checkAuthentication(): Kernel
+    protected function checkAuthentication(): static
     {
         $applicationClassName = $this->getApplicationFactory()->getClassName($this->getContext());
         $applicationRequiresAuthentication =
@@ -122,7 +96,7 @@ class Kernel
     /**
      * @throws \Chamilo\Libraries\Architecture\Exception\PlatformNotAvailableException
      */
-    protected function checkPlatformAvailability(): Kernel
+    protected function checkPlatformAvailability(): static
     {
         if ($this->isMaintenanceMode()) {
             $asAdmin = $this->getSession()->get('_as_admin');
@@ -135,7 +109,7 @@ class Kernel
         return $this;
     }
 
-    protected function configureContext(): Kernel
+    protected function configureContext(): static
     {
         $getContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
 
@@ -160,21 +134,11 @@ class Kernel
         return $this;
     }
 
-    protected function configureTimezone(): Kernel
+    protected function configureTimezone(): static
     {
         date_default_timezone_set($this->getTimezone());
 
         return $this;
-    }
-
-    public function getApplication(): ?Application
-    {
-        return $this->application;
-    }
-
-    public function setApplication(Application $application): void
-    {
-        $this->application = $application;
     }
 
     public function getApplicationFactory(): ApplicationFactory
@@ -190,8 +154,7 @@ class Kernel
     public function getContext(): ?string
     {
         if (!isset($this->context)) {
-            $this->context =
-                $this->getRequest()->getFromRequestOrQuery(Application::PARAM_CONTEXT, HomeManager::CONTEXT);
+            $this->context = $this->getRequest()->query->get(Application::PARAM_CONTEXT, Manager::CONTEXT);
         }
 
         return $this->context;
@@ -247,36 +210,31 @@ class Kernel
         return $this->user;
     }
 
-    public function getWhoIsOnlineService(): OnlineService
-    {
-        return $this->whoIsOnlineService;
-    }
-
     /**
      * Redirects response of Microsoft OAuth 2.0 Authorization workflow to the component which have called
      * MicrosoftClientService::login(...).
      *
      * @see MicrosoftClientService::login(...)
      */
-    public function handleOAuth2(): ?RedirectResponse
+    public function handleOAuth2(): static
     {
         $code = $this->getRequest()->query->get(self::PARAM_CODE);
         $state = $this->getRequest()->query->get(self::PARAM_STATE);
         $sessionState = $this->getRequest()->query->get(self::PARAM_SESSION_STATE); // Not provided in OAUTH2 v2.0
 
         if (!$code || !$state) {
-            return null;
+            return $this;
         }
         $decodedState = base64_decode($state);
 
         if (!$decodedState) {
-            return null;
+            return $this;
         }
 
         $stateParameters = json_decode($decodedState, true);
 
         if (!is_array($stateParameters) || !array_key_exists('landingPageParameters', $stateParameters)) {
-            return null;
+            return $this;
         }
 
         $landingPageParameters = $stateParameters['landingPageParameters'];
@@ -306,9 +264,13 @@ class Kernel
     public function launch(): void
     {
         try {
-            $this->configureTimezone()->configureContext()->handleOAuth2();
-            $response = $this->checkAuthentication()->checkPlatformAvailability()->buildApplication()->traceVisit()
-                ->runApplication();
+            $this->configureTimezone()->configureContext()->handleOAuth2()->checkAuthentication()
+                ->checkPlatformAvailability();
+
+            $application = $this->getApplicationFactory()->getApplication($this->getContext(), $this->getUser());
+            $this->traceVisit($application);
+
+            $response = $application->run();
         }
         catch (NotAuthenticatedException) {
             $response = $this->getNotAuthenticatedResponse();
@@ -325,37 +287,14 @@ class Kernel
         $this->sendResponse($response);
     }
 
-    /**
-     * @throws \Exception
-     */
-    protected function runApplication(): Response
-    {
-        $application = $this->getApplication();
-
-        if (!isset($application)) {
-            throw new Exception('Must call buildApplication before runApplication');
-        }
-
-        return $application->run();
-    }
-
     protected function sendResponse(Response $response): void
     {
         $response->send();
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
-     * @throws \Exception
-     */
-    protected function traceVisit(): Kernel
+    protected function traceVisit(Application $application): static
     {
-        $applicationClassName = $this->getApplicationFactory()->getClassName($this->getContext());
-        $applicationRequiresTracing = !is_subclass_of(
-            $applicationClassName, NoVisitTraceComponentInterface::class
-        );
-
-        if ($applicationRequiresTracing && $this->getUser() instanceof User) {
+        if (!$application instanceof NoVisitTraceComponentInterface::class && $this->getUser() instanceof User) {
             $this->getEventDispatcher()->dispatch(
                 new AfterUserEnterPageEvent($this->getUser(), $this->getRequest()->getRequestUri())
             );

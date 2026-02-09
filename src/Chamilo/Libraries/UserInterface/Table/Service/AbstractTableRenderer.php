@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderProperty;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\AbstractBaseTableParameters;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\AbstractSortableTableColumn;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn;
-use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\FormAction\TableActions;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableActions;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableParameterValues;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableResultPosition;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Interface\TableActionsSupport;
@@ -40,14 +40,14 @@ abstract class AbstractTableRenderer
 
     protected AbstractHtmlTableRenderer $htmlTableRenderer;
 
-    protected Pager $pager;
+    protected PageNavigationCalculator $pager;
 
     protected Translator $translator;
 
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, AbstractHtmlTableRenderer $htmlTableRenderer, Pager $pager,
+        Translator $translator, UrlGenerator $urlGenerator, AbstractHtmlTableRenderer $htmlTableRenderer, PageNavigationCalculator $pager,
         DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, ClassnameUtilities $classnameUtilities
     )
     {
@@ -200,7 +200,7 @@ abstract class AbstractTableRenderer
         return null;
     }
 
-    public function getPager(): Pager
+    public function getPager(): PageNavigationCalculator
     {
         return $this->pager;
     }

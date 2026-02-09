@@ -80,7 +80,7 @@ class TruncateComponent extends Manager
             {
                 return $this->redirectWithMessage(
                     $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
-                        Application::PARAM_CONTEXT => $this->getContext(),
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => self::ACTION_VIEW,
                         self::PARAM_GROUP_ID => $groupIdentifiers[0]
                     ]
@@ -90,7 +90,7 @@ class TruncateComponent extends Manager
             {
                 return $this->redirectWithMessage(
                     $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
-                        Application::PARAM_CONTEXT => $this->getContext(),
+                        Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => self::ACTION_BROWSE
                     ]
                 );
