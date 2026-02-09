@@ -57,11 +57,11 @@ return static function (ContainerConfigurator $container) {
     $services->set(SearchQueryConditionGenerator::class);
     $services->set(StorageAliasGenerator::class);
 
-    $services->set(Connection::class)->factory([service(DriverManager::class), 'getConnection'])->args(
+    $services->set(Connection::class)->factory([DriverManager::class, 'getConnection'])->args(
         ['%cosnics.libraries.storage.database%']
     );
 
-    $services->set('Doctrine\DBAL\Connection\Session')->factory([service(DriverManager::class), 'getConnection'])->args(
+    $services->set('Doctrine\DBAL\Connection\Session')->factory([DriverManager::class, 'getConnection'])->args(
         ['%cosnics.libraries.storage.database%']
     );
 

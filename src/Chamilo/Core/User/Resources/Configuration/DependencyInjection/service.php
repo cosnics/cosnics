@@ -23,6 +23,7 @@ return static function (ContainerConfigurator $container) {
         '$securityKey' => '%cosnics.libraries.protocol.security.securityKey%',
         '$siteName' => '%cosnics.libraries.userInterface.layout.site.name%',
         '$administratorName' => '%cosnics.libraries.userInterface.layout.administrator.name%',
+        '$administratorEmail' => '%cosnics.libraries.userInterface.layout.administrator.email%',
         '$allowRegistration' => '%cosnics.application.user.rights.register%'
     ]);
 

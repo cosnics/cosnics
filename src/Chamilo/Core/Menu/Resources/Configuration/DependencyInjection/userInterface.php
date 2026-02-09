@@ -27,7 +27,11 @@ return static function (ContainerConfigurator $container) {
         '$webPathBuilder' => service(WebPathBuilder::class),
         '$themeWebPathBuilder' => service('Chamilo\Libraries\UserInterface\Theme\Service\ThemeWebPathBuilder'),
         '$siteName' => '%cosnics.libraries.userInterface.layout.site.name%',
-        '$brandPath' => 'cosnics.libraries.userInterface.layout.brandPath%'
+        '$brandPath' => [
+            'context' => '%cosnics.libraries.userInterface.layout.brandPath.context%',
+            'filename' => '%cosnics.libraries.userInterface.layout.brandPath.filename%',
+            'extension' => '%cosnics.libraries.userInterface.layout.brandPath.extension%'
+        ]
     ]);
 
     $services->set(ItemTableRenderer::class);

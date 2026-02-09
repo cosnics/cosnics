@@ -31,9 +31,10 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(ChamiloRequest::class)->factory([ChamiloRequest::class, 'createFromGlobals']);
 
-    $services->set(Translator::class)->args(['%cosnics.libraries.userInterface.translation.default%'])->factory(
-        [service(TranslatorFactory::class), 'createTranslator']
-    );
+    $services->set(Translator::class)->args(['%cosnics.libraries.userInterface.translation.language.default%'])
+        ->factory(
+            [service(TranslatorFactory::class), 'createTranslator']
+        );
 
     $services->alias(SessionInterface::class, Session::class);
     $services->set(Session::class)->factory([service(SessionFactory::class), 'getSession']);

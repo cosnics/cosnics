@@ -28,8 +28,15 @@ return static function (ContainerConfigurator $container) {
     $services->set(DefaultHeaderRenderer::class);
     $services->set(DefaultFooterRenderer::class)->args(
         [
-            '$administratorData' => '%cosnics.libraries.userInterface.layout.administrator%',
-            '$institutionData' => '%cosnics.libraries.userInterface.layout.institution%'
+            '$administratorData' => [
+                'name' => '%cosnics.libraries.userInterface.layout.administrator.name%',
+                'uri' => '%cosnics.libraries.userInterface.layout.administrator.uri%',
+                'email' => '%cosnics.libraries.userInterface.layout.administrator.email%'
+            ],
+            '$institutionData' => [
+                'name' => '%cosnics.libraries.userInterface.layout.institution.name%',
+                'uri' => '%cosnics.libraries.userInterface.layout.institution.uri%'
+            ]
         ]
     );
 

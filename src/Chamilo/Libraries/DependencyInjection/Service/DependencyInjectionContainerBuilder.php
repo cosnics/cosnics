@@ -140,7 +140,7 @@ class DependencyInjectionContainerBuilder
     {
         return realpath(
                 __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' .
-                DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR
+                DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR
             ) . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'symfony' . DIRECTORY_SEPARATOR .
             'DependencyInjection.php';
     }
@@ -149,7 +149,7 @@ class DependencyInjectionContainerBuilder
     {
         return realpath(
                 __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' .
-                DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR
+                DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR
             ) . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR;
     }
 

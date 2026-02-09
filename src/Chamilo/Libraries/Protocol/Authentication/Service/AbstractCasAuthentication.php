@@ -20,29 +20,71 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class AbstractCasAuthentication extends Authentication implements AuthenticationInterface
 {
+    protected ?string $certificatePath;
+
+    protected bool $checkCertificate;
+
+    protected bool $enableLog;
+
+    protected string $host;
+
+    protected ?string $logPath;
+
     protected Logger $logger;
+
+    protected int $port;
 
     protected SessionInterface $session;
 
-    /**
-     * @var string[]
-     */
-    protected array $settings;
+    protected string $uri;
 
     public function __construct(
         Translator $translator, ChamiloRequest $request, UserService $userService,
-        AuthenticationValidator $authenticationValidator, SessionInterface $session, Logger $logger, array $settings
+        AuthenticationValidator $authenticationValidator, SessionInterface $session, Logger $logger,
+        string $host = '', bool $enableLog = false, bool $checkCertificate = false, ?string $certificatePath = null,
+        ?string $logPath = null, int $port = 443, string $uri = ''
     )
     {
         parent::__construct($translator, $request, $userService, $authenticationValidator);
 
         $this->session = $session;
         $this->logger = $logger;
-        $this->settings = $settings;
+        $this->host = $host;
+        $this->enableLog = $enableLog;
+        $this->checkCertificate = $checkCertificate;
+        $this->certificatePath = $certificatePath;
+        $this->logPath = $logPath;
+        $this->port = $port;
+        $this->uri = $uri;
     }
 
     abstract protected function getCasUserIdentifierFromAttributes(string $casUser, array $casUserAttributes = []
     ): string;
+
+    public function getCertificatePath(): ?string
+    {
+        return $this->certificatePath;
+    }
+
+    public function getHost(): string
+    {
+        return $this->host;
+    }
+
+    public function getLogPath(): ?string
+    {
+        return $this->logPath;
+    }
+
+    public function getLogger(): Logger
+    {
+        return $this->logger;
+    }
+
+    public function getPort(): int
+    {
+        return $this->port;
+    }
 
     abstract public function getPriority(): int;
 
@@ -51,14 +93,9 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
         return $this->session;
     }
 
-    protected function getSetting(string $variable): ?string
+    public function getUri(): ?string
     {
-        return array_key_exists($variable, $this->settings) ? $this->settings[$variable] : null;
-    }
-
-    public function getSettings(): array
-    {
-        return $this->settings;
+        return $this->uri;
     }
 
     abstract protected function getUserByCasUserIdentifier(string $userIdentifier): ?User;
@@ -75,18 +112,18 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
             $request = $this->getRequest();
 
             // initialize phpCAS
-            if ($this->getSetting('enableLog')) {
+            if ($this->isLogEnabled()) {
                 phpCAS::setLogger($this->logger);
             }
 
             phpCAS::client(
-                SAML_VERSION_1_1, $this->getSetting('host'), $this->getSetting('port'), $this->getSetting('uri'),
-                $request->getSchemeAndHttpHost(), false
+                SAML_VERSION_1_1, $this->getHost(), $this->getPort(), $this->getUri(), $request->getSchemeAndHttpHost(),
+                false
             );
 
             // SSL validation for the CAS server
-            if ($this->getSetting('checkCertificate')) {
-                phpCAS::setCasServerCACert($this->getSetting('certificatePath'));
+            if ($this->isCertificateCheckEnabled()) {
+                phpCAS::setCasServerCACert($this->getCertificatePath());
             }
             else {
                 phpCAS::setNoCasServerValidation();
@@ -94,21 +131,31 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
         }
     }
 
+    public function isCertificateCheckEnabled(): bool
+    {
+        return $this->checkCertificate;
+    }
+
     protected function isConfigured(): bool
     {
-        if (!$this->getSetting('host')) {
+        if (!$this->getHost()) {
             return false;
         }
 
-        if ($this->getSetting('enableLog') && !$this->getSetting('logPath')) {
+        if ($this->isLogEnabled() && !$this->getLogPath()) {
             return false;
         }
 
-        if ($this->getSetting('checkCertificate') && !$this->getSetting('certificatePath')) {
+        if ($this->isCertificateCheckEnabled() && !$this->getCertificatePath()) {
             return false;
         }
 
         return true;
+    }
+
+    public function isLogEnabled(): bool
+    {
+        return $this->enableLog;
     }
 
     /**

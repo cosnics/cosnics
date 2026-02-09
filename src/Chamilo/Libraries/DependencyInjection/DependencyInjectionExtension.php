@@ -9,6 +9,7 @@ use Chamilo\Libraries\DependencyInjection\CompilerPass\ButtonRendererCompilerPas
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheAdapterCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheDataPreLoaderCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConditionTranslatorCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\ConditionVariableTranslatorCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\EventDispatcherCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\HashingCompilerPass;
@@ -82,6 +83,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         $container->addCompilerPass(new CacheAdapterCompilerPass());
         $container->addCompilerPass(new AuthenticationCompilerPass());
         $container->addCompilerPass(new ConditionTranslatorCompilerPass());
+        $container->addCompilerPass(new ConditionVariableTranslatorCompilerPass());
         $container->addCompilerPass(new EventDispatcherCompilerPass());
         $container->addCompilerPass(new ButtonRendererCompilerPass());
     }

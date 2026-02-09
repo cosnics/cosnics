@@ -36,7 +36,10 @@ return static function (ContainerConfigurator $container) {
     $services->set(LegendRenderer::class);
 
     $services->set(DayCalendarTableBuilder::class)->args(['$user' => service('Chamilo\Core\User\CurrentUser')]);
-    $services->set(MiniMonthCalendarTableBuilder::class)->args(['$user' => service('Chamilo\Core\User\CurrentUser')]);
+    $services->set(MiniMonthCalendarTableBuilder::class)->args([
+        '$user' => service('Chamilo\Core\User\CurrentUser'),
+        '$defaultFirstDayOfWeek' => '%cosnics.libraries.calendar.firstDayOfWeek%'
+    ]);
     $services->set(MonthCalendarTableBuilder::class)->args(
         [
             '$user' => service('Chamilo\Core\User\CurrentUser'),

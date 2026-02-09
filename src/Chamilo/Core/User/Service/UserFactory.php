@@ -84,19 +84,22 @@ class UserFactory
 
                 if ($user instanceof User) {
                     if ($this->canChangeLanguage()) {
-                        $this->getTranslator()->setLocale(
-                            $this->getUserService()->findUserSetting(
-                                $user, 'Chamilo\Core\Admin', 'PlatformLanguage'
-                            )
-                        );
+                        $userLanguage =
+                            $this->getUserService()->findUserSetting($user, 'Chamilo\Core\Admin', 'PlatformLanguage');
+
+                        if ($userLanguage) {
+                            $this->getTranslator()->setLocale($userLanguage);
+                        }
                     }
 
                     if ($this->canChangeTimezone()) {
-                        date_default_timezone_set(
-                            $this->getUserService()->findUserSetting(
-                                $user, 'Chamilo\Core\Admin', 'PlatformTimezone'
-                            )
+                        $userTimezone = $this->getUserService()->findUserSetting(
+                            $user, 'Chamilo\Core\Admin', 'PlatformTimezone'
                         );
+
+                        if ($userTimezone) {
+                            date_default_timezone_set($userTimezone);
+                        }
                     }
                 }
 

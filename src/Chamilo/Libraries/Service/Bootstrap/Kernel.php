@@ -294,7 +294,7 @@ class Kernel
 
     protected function traceVisit(Application $application): static
     {
-        if (!$application instanceof NoVisitTraceComponentInterface::class && $this->getUser() instanceof User) {
+        if (!$application instanceof NoVisitTraceComponentInterface && $this->getUser() instanceof User) {
             $this->getEventDispatcher()->dispatch(
                 new AfterUserEnterPageEvent($this->getUser(), $this->getRequest()->getRequestUri())
             );

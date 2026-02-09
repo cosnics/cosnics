@@ -175,8 +175,6 @@ class AuthenticationValidator
         foreach ($this->authentications as $authentication) {
             try {
                 $this->validateForAuthentication($authentication, $checkIfAuthenticationSourceIsEnabled);
-
-                return;
             }
             catch (NotAuthenticatedException) {
             }

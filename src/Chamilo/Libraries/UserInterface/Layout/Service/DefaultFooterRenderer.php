@@ -124,7 +124,7 @@ class DefaultFooterRenderer
         $administratorData = $this->getAdministratorData();
 
         $administratorEmail = $administratorData['email'];
-        $administratorWebsite = $administratorData['website'];
+        $administratorUri = $administratorData['uri'];
         $administratorName = $administratorData['name'];
 
         $links = [];
@@ -132,10 +132,10 @@ class DefaultFooterRenderer
         $links[] =
             '<a href="' . $institutionData['url'] . '" target="about:blank">' . $institutionData['name'] . '</a>';
 
-        if (!empty($administratorEmail) && !empty($administratorWebsite)) {
+        if (!empty($administratorEmail) && !empty($administratorUri)) {
             $email = $stringUtilities->encryptMailLink($administratorEmail, $administratorName);
             $links[] = $translator->trans(
-                'ManagerContactWebsite', ['EMAIL' => $email, 'WEBSITE' => $administratorWebsite],
+                'ManagerContactWebsite', ['EMAIL' => $email, 'WEBSITE' => $administratorUri],
                 StringUtilities::LIBRARIES
             );
         }
@@ -147,9 +147,9 @@ class DefaultFooterRenderer
                     );
             }
 
-            if (!empty($administratorWebsite)) {
+            if (!empty($administratorUri)) {
                 $links[] = $translator->trans('Support', [], StringUtilities::LIBRARIES) . ': <a href="' .
-                    $administratorWebsite . '">' . $administratorName . '</a>';
+                    $administratorUri . '">' . $administratorName . '</a>';
             }
         }
 

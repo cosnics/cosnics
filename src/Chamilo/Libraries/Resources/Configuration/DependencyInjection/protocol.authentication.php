@@ -18,7 +18,16 @@ return static function (ContainerConfigurator $container) {
         ['$enabledSources' => '%cosnics.libraries.protocol.authentication.enabledSources%']
     );
     $services->set(CasAuthentication::class)->tag(AuthenticationInterface::class)->args(
-        ['$logger' => service('Chamilo\Libraries\Protocol\Authentication\Service\CasLogger')]
+        [
+            '$logger' => service('Chamilo\Libraries\Protocol\Authentication\Service\CasLogger'),
+            '$host' => '%cosnics.libraries.protocol.authentication.cas.host%',
+            '$enableLog' => '%cosnics.libraries.protocol.authentication.cas.enableLog%',
+            '$checkCertificate' => '%cosnics.libraries.protocol.authentication.cas.checkCertificate%',
+            '$certificatePath' => '%cosnics.libraries.protocol.authentication.cas.certificatePath%',
+            '$logPath' => '%cosnics.libraries.protocol.authentication.cas.logPath%',
+            '$port' => '%cosnics.libraries.protocol.authentication.cas.port%',
+            '$uri' => '%cosnics.libraries.protocol.authentication.cas.uri%'
+        ]
     );
     $services->set(PlatformAuthentication::class)->tag(AuthenticationInterface::class);
     $services->set(SecurityTokenAuthentication::class)->tag(AuthenticationInterface::class);
