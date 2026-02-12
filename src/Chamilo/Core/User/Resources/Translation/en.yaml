@@ -185,7 +185,7 @@ ImportUserMailNotSent: "It was not possible to send an email to the user"
 ImportUserMailSent: "An email has been sent to the user"
 ImportUserNoUsernameFound: "There is no username for this user."
 ImportUserNoValidActionFound: "There is no (valid) action for this user. View the details tab to see a list of the available actions."
-ImportUserNoValidLanguageFound: "The language for this new user is not valid. The system uses the platform language for this user".
+ImportUserNoValidLanguageFound: "The language for this new user is not valid. The system uses the platform language for this user."
 ImportUserNoValidStatusFound: "The status for this new user is not valid. The system resolves the status to <b>Student</b>. View the details tab to see a list of the available statusses."
 ImportUserResultDescription: "The system has tried to import <b>{TotalUsers}</b> with the following result:"
 ImportUsersDescription: "Import users from csv / xml files"

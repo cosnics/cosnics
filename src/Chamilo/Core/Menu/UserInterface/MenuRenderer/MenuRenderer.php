@@ -6,6 +6,7 @@ use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -121,7 +122,7 @@ class MenuRenderer
 
     public function renderBrand(): string
     {
-        $brandContext = $this->getBrandPath('context', 'Chamilo\Core\Admin');
+        $brandContext = $this->getBrandPath('context', StringUtilities::LIBRARIES);
         $brandFilename = $this->getBrandPath('filename', 'LogoHeader');
         $brandExtension = $this->getBrandPath('extension', 'png');
 

@@ -20,7 +20,6 @@ abstract class AbstractPathBuilder
     public const CONFIGURATION_STORAGE = 99;
     public const CSS = 19;
     public const FULL = 1;
-    public const I18N = 15;
     public const IMAGES = 20;
     public const JAVASCRIPT = 14;
     public const LOG = 7;
@@ -33,6 +32,7 @@ abstract class AbstractPathBuilder
     public const STORAGE = 4;
     public const TEMPLATES = 18;
     public const TEMPORARY = 5;
+    public const TRANSLATION = 15;
     public const VENDOR = 16;
 
     /**
@@ -59,13 +59,13 @@ abstract class AbstractPathBuilder
         return $this->classnameUtilities;
     }
 
-    public function getConfigurationPath(string $namespace = 'Chamilo\Core\Admin'): string
+    public function getConfigurationPath(string $namespace = 'Chamilo\Libraries'): string
     {
         return $this->cache[self::CONFIGURATION][$namespace] =
             $this->getResourcesPath($namespace) . 'Configuration' . $this->getDirectorySeparator();
     }
 
-    public function getCssPath(string $namespace = 'Chamilo\Core\Admin'): string
+    public function getCssPath(string $namespace = 'Chamilo\Libraries'): string
     {
         return $this->cache[self::CSS][$namespace] =
             $this->getResourcesPath($namespace) . 'Css' . $this->getDirectorySeparator();
@@ -73,25 +73,19 @@ abstract class AbstractPathBuilder
 
     abstract public function getDirectorySeparator(): string;
 
-    public function getI18nPath(string $namespace = 'Chamilo\Core\Admin'): string
-    {
-        return $this->cache[self::I18N][$namespace] =
-            $this->getResourcesPath($namespace) . 'I18n' . $this->getDirectorySeparator();
-    }
-
     public function getImagesPath(string $namespace = StringUtilities::LIBRARIES): string
     {
         return $this->cache[self::IMAGES][$namespace] =
             $this->getResourcesPath($namespace) . 'Images' . $this->getDirectorySeparator();
     }
 
-    public function getJavascriptPath(string $namespace = 'Chamilo\Core\Admin'): string
+    public function getJavascriptPath(string $namespace = 'Chamilo\Libraries'): string
     {
         return $this->cache[self::JAVASCRIPT][$namespace] =
             $this->getResourcesPath($namespace) . 'Javascript' . $this->getDirectorySeparator();
     }
 
-    public function getPluginPath(string $namespace = 'Chamilo\Core\Admin'): string
+    public function getPluginPath(string $namespace = 'Chamilo\Libraries'): string
     {
         return $this->cache[self::PLUGIN][$namespace] =
             $this->getResourcesPath($namespace) . 'Plugin' . $this->getDirectorySeparator();
@@ -105,16 +99,22 @@ abstract class AbstractPathBuilder
             ($namespace ? $this->namespaceToPath($namespace) . $this->getDirectorySeparator() : '');
     }
 
-    public function getResourcesPath(string $namespace = 'Chamilo\Core\Admin'): string
+    public function getResourcesPath(string $namespace = 'Chamilo\Libraries'): string
     {
         return $this->cache[self::RESOURCE][$namespace] =
             $this->namespaceToFullPath($namespace) . 'Resources' . $this->getDirectorySeparator();
     }
 
-    public function getTemplatesPath(string $namespace = 'Chamilo\Core\Admin'): string
+    public function getTemplatesPath(string $namespace = 'Chamilo\Libraries'): string
     {
         return $this->cache[self::TEMPLATES][$namespace] =
             $this->getResourcesPath($namespace) . 'Templates' . $this->getDirectorySeparator();
+    }
+
+    public function getTranslationPath(string $namespace = 'Chamilo\Libraries'): string
+    {
+        return $this->cache[self::TRANSLATION][$namespace] =
+            $this->getResourcesPath($namespace) . 'Translation' . $this->getDirectorySeparator();
     }
 
     public function namespaceToFullPath(?string $namespace = null): string

@@ -30,16 +30,14 @@ class LanguageRepository
      */
     public function findLanguages(): ArrayCollection
     {
-        $languagesPath = $this->getSystemPathBuilder()->namespaceToFullPath('Chamilo\Libraries') . 'Resources/I18n/';
+        $languagesPath = $this->getSystemPathBuilder()->getTranslationPath('Chamilo\Libraries');
         $languageFiles =
             $this->getFilesystemTools()->getDirectoryContent($languagesPath, FileTypeFilterIterator::ONLY_FILES, false);
 
         $languages = new ArrayCollection();
 
-        foreach ($languageFiles as $languageFile)
-        {
-            if ($languageFile->getExtension() == 'json')
-            {
+        foreach ($languageFiles as $languageFile) {
+            if ($languageFile->getExtension() == 'json') {
                 $languageValues = json_decode(file_get_contents($languageFile->getPathname()), true);
 
                 $languages->add(
@@ -59,8 +57,7 @@ class LanguageRepository
         $languageValues = [];
         $languages = $this->findLanguages();
 
-        foreach ($languages as $language)
-        {
+        foreach ($languages as $language) {
             $languageValues[$language->getCode(LanguageCodeEnum::ISO_639_1)] = $language->getName();
         }
 

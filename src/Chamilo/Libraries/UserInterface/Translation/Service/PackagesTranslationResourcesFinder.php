@@ -29,7 +29,7 @@ class PackagesTranslationResourcesFinder implements TranslationResourcesFinderIn
     {
         $resources = [];
 
-        $translationFiles = $this->packagesFilesFinder->findFiles('Resources/I18n/', '/.*\.i18n$/');
+        $translationFiles = $this->packagesFilesFinder->findFiles('Resources/Translation/', '/.*\.yaml/');
 
         foreach ($translationFiles as $package => $translationFilesPerPackage) {
             foreach ($translationFilesPerPackage as $translationFile) {

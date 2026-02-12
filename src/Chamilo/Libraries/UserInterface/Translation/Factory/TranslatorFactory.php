@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Translation\Factory;
 
-use Chamilo\Core\Admin\Service\Finder\InternationalizationBundlesGenerator;
+use Chamilo\Core\Admin\Service\Finder\TranslationBundlesGenerator;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
 use Chamilo\Libraries\Filesystem\Service\PackagesContentFinder\PackagesFilesFinder;
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
@@ -9,7 +9,7 @@ use Chamilo\Libraries\UserInterface\Translation\Service\OptimizedTranslationsPhp
 use Chamilo\Libraries\UserInterface\Translation\Service\PackagesTranslationResourcesFinder;
 use Chamilo\Libraries\UserInterface\Translation\Service\TranslationResourcesOptimizer;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Translation\Loader\IniFileLoader;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -23,13 +23,13 @@ class TranslatorFactory
 
     protected Filesystem $filesystem;
 
-    protected InternationalizationBundlesGenerator $internationalizationBundlesGenerator;
+    protected TranslationBundlesGenerator $internationalizationBundlesGenerator;
 
     protected SystemPathBuilder $systemPathBuilder;
 
     public function __construct(
         Filesystem $filesystem, ConfigurablePathBuilder $configurablePathBuilder, SystemPathBuilder $systemPathBuilder,
-        InternationalizationBundlesGenerator $internationalizationBundlesGenerator
+        TranslationBundlesGenerator $internationalizationBundlesGenerator
     )
     {
         $this->filesystem = $filesystem;
@@ -49,7 +49,7 @@ class TranslatorFactory
         }
 
         $translationResourcesOptimizer = new TranslationResourcesOptimizer(
-            new IniFileLoader(), new PackagesTranslationResourcesFinder(
+            new YamlFileLoader(), new PackagesTranslationResourcesFinder(
             new PackagesFilesFinder(
                 $this->getSystemPathBuilder(), $packageNamespaces
             )
@@ -85,7 +85,7 @@ class TranslatorFactory
         return $this->filesystem;
     }
 
-    public function getInternationalizationBundlesGenerator(): InternationalizationBundlesGenerator
+    public function getInternationalizationBundlesGenerator(): TranslationBundlesGenerator
     {
         return $this->internationalizationBundlesGenerator;
     }

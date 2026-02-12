@@ -3,7 +3,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Core\Admin\Service\Consulter\LanguageConsulter;
 use Chamilo\Core\Admin\Service\Finder\BasicBundlesGenerator;
-use Chamilo\Core\Admin\Service\Finder\InternationalizationBundlesGenerator;
+use Chamilo\Core\Admin\Service\Finder\TranslationBundlesGenerator;
 use Chamilo\Core\Admin\Service\Finder\PackageBundlesGenerator;
 use Chamilo\Core\Admin\Service\OnlineService;
 use Chamilo\Core\Admin\Service\PackageBundlesCacheService;
@@ -35,6 +35,6 @@ return static function (ContainerConfigurator $container) {
     $services->set(LanguageConsulter::class);
 
     $services->set(BasicBundlesGenerator::class);
-    $services->set(InternationalizationBundlesGenerator::class);
+    $services->set(TranslationBundlesGenerator::class);
     $services->set(PackageBundlesGenerator::class);
 };

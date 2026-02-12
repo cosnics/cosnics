@@ -5,13 +5,12 @@ namespace Chamilo\Core\Admin\Service\Finder;
  * @package Chamilo\Core\Admin\Service\Finder
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class InternationalizationBundlesGenerator extends AbstractBundlesGenerator
+class TranslationBundlesGenerator extends AbstractBundlesGenerator
 {
-
     protected function verifyPackage(string $folderNamespace): bool
     {
-        $i18nPath = $this->getSystemPathBuilder()->getI18nPath($folderNamespace);
+        $translationPath = $this->getSystemPathBuilder()->getTranslationPath($folderNamespace);
 
-        return file_exists($i18nPath) && is_dir($i18nPath);
+        return file_exists($translationPath) && is_dir($translationPath);
     }
 }
