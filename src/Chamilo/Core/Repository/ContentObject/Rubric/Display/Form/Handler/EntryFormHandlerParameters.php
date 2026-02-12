@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInte
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 
 /**
  * Class EntryFormHandlerParameters
@@ -56,7 +57,7 @@ class EntryFormHandlerParameters
     {
         if (empty($targetUsers))
         {
-            throw new \InvalidArgumentException('The target users can not be empty');
+            throw new UserException('The target users can not be empty');
         }
 
         foreach ($targetUsers as $targetUser)
