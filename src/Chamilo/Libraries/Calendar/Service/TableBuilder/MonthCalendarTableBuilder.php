@@ -142,7 +142,7 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
     {
         if ($this->getUser() instanceof User) {
             return $this->getUserService()->findUserSetting(
-                $this->getUser(), 'Chamilo\Libraries\Calendar', 'FirstDayOfWeek', $this->getDefaultFirstDayOfWeek()
+                $this->getUser(), 'cosnics.libraries.calendar.firstDayOfWeek', $this->getDefaultFirstDayOfWeek()
             );
         }
         else {

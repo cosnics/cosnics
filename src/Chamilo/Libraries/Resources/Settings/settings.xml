@@ -1,95 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package context="Chamilo\Libraries">
     <settings>
-        <category name="authentication">
-            <setting name="enableExternalAuthentication"
-                     field="HTML_QuickForm_HTML_QuickForm_toggle">
-                <options type="static">
-                    <option name="enableExternalAuthentication"
-                            value="1"/>
-                </options>
-            </setting>
-            <setting name="enableChamiloLibrariesAuthenticationPlatform"
-                     field="HTML_QuickForm_toggle"
-                     default="1">
-                <options type="static">
-                    <option name="enablePlatformAuthenticationPlatform"
-                            value="1"/>
-                </options>
-            </setting>
-            <setting name="enableChamiloLibrariesAuthenticationSecurityToken"
-                     field="HTML_QuickForm_toggle">
-                <options type="static">
-                    <option name="enableChamiloLibrariesAuthenticationSecurityToken"
-                            value="1"/>
-                </options>
-            </setting>
-            <setting name="enableChamiloLibrariesAuthenticationAnonymous"
-                     field="HTML_QuickForm_toggle">
-                <options type="static">
-                    <option name="enableChamiloLibrariesAuthenticationAnonymous"
-                            value="0"/>
-                </options>
-            </setting>
-            <setting name="enableChamiloLibrariesAuthenticationCas"
-                     field="HTML_QuickForm_toggle">
-                <options type="static">
-                    <option name="enableChamiloLibrariesAuthenticationCas"
-                            value="1"/>
-                </options>
-            </setting>
-        </category>
-        <category name="cas_authentication">
-            <setting name="cas_host"
+        <category name="Calendar">
+            <setting name="cosnics.libraries.calendar.hourStep"
                      field="HTML_QuickForm_text"
-                     default=""/>
-            <setting name="cas_port"
-                     field="HTML_QuickForm_text"
-                     default=""/>
-            <setting name="cas_uri"
-                     field="HTML_QuickForm_text"
-                     default=""/>
-            <setting name="cas_version"
-                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_bootstrap_radio"
-                     default="SAML_VERSION_1_1">
-                <options type="static">
-                    <option name="SAML VERSION 1.1"
-                            value="SAML_VERSION_1_1"/>
-                    <option name="CAS VERSION 2.0"
-                            value="CAS_VERSION_2_0"/>
-                </options>
-            </setting>
-            <setting name="cas_check_certificate"
-                     field="HTML_QuickForm_toggle"
-                     default="1">
-                <options type="static">
-                    <option name="cas_check_certificate"
-                            value="1"/>
-                </options>
-            </setting>
-            <setting name="cas_certificate"
-                     field="HTML_QuickForm_text"
-                     default=""/>
-            <setting name="cas_enable_log"
-                     field="HTML_QuickForm_toggle">
-                <options type="static">
-                    <option name="cas_enable_log"
-                            value="1"/>
-                </options>
-            </setting>
-            <setting name="cas_log"
-                     field="HTML_QuickForm_text"
-                     default=""/>
-        </category>
-        <category name="calendar">
-            <setting name="calendar_hour_step"
-                     field="HTML_QuickForm_text"
-                     default="1">
-            </setting>
-            <setting name="calendar_working_hours_start"
+                     default="1"></setting>
+            <setting name="cosnics.libraries.calendar.workingHoursStart"
                      field="HTML_QuickForm_select"
-                     default="0"
-                     user_setting="1">
+                     default="0">
                 <options type="static">
                     <option value="0"
                             name="00"/>
@@ -141,10 +59,9 @@
                             name="23"/>
                 </options>
             </setting>
-            <setting name="calendar_working_hours_end"
+            <setting name="cosnics.libraries.calendar.workingHoursEnd"
                      field="HTML_QuickForm_select"
-                     default="24"
-                     user_setting="1">
+                     default="24">
                 <options type="static">
                     <option value="0"
                             name="00"/>
@@ -196,19 +113,17 @@
                             name="23"/>
                 </options>
             </setting>
-            <setting name="calendar_hide_non_working_hours"
+            <setting name="cosnics.libraries.calendar.hideNonWorkingHours"
                      field="HTML_QuickForm_toggle"
-                     default="0"
-                     user_setting="1">
+                     default="0">
                 <options type="static">
                     <option name="hide_non_working_hours"
                             value="1"/>
                 </options>
             </setting>
-            <setting name="calendar_default_view"
+            <setting name="cosnics.libraries.calendar.defaultView"
                      field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_bootstrap_radio"
-                     default="Month"
-                     user_setting="1">
+                     default="Month">
                 <options type="static">
                     <option name="Month"
                             value="Month"/>
@@ -220,10 +135,9 @@
                             value="List"/>
                 </options>
             </setting>
-            <setting name="calendar_first_day_of_week"
+            <setting name="cosnics.libraries.calendar.firstDayOfWeek"
                      field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_bootstrap_radio"
-                     default="monday"
-                     user_setting="1">
+                     default="monday">
                 <options type="static">
                     <option name="Sunday"
                             value="sunday"/>
@@ -232,33 +146,31 @@
                 </options>
             </setting>
         </category>
-        <category name="microsoft_graph_general">
-            <setting name="microsoft_graph_client_id"
+        <category name="MicrosoftGraph">
+            <setting name="cosnics.libraries.protocol.microsoft.graph.externalUserIdentifier"
                      field="HTML_QuickForm_text"
                      default=""/>
-            <setting name="microsoft_graph_client_secret"
-                     field="HTML_QuickForm_password"
-                     default=""/>
-            <setting name="microsoft_graph_external_user_id"
-                     field="HTML_QuickForm_text"
-                     default=""
-                     user_setting="true"
-                     locked="true"
-                     hidden="true"/>
-            <setting name="microsoft_graph_tenant_id"
-                     field="HTML_QuickForm_text"
-                     default=""/>
-            <setting name="cosnics_prefix"
-                     field="HTML_QuickForm_text"
-                     default="cosnics_"/>
         </category>
-        <category name="microsoft_graph_groups">
-            <setting name="microsoft_graph_planner_base_uri"
+        <category name="UserInterface">
+            <setting name="cosnics.libraries.userInterface.translation.language.default"
+                     field="HTML_QuickForm_select"
+                     default="english">
+                <options type="dynamic"
+                         source="getLanguages"/>
+                <availability source="isAllowedToChangePlatformLanguage"/>
+            </setting>
+            <setting name="cosnics.libraries.calendar.timezone"
+                     field="HTML_QuickForm_select"
+                     default="Europe/Brussels">
+                <options type="dynamic"
+                         source="getTimeZones"/>
+                <availability source="isAllowedToChangePlatformTimezone"/>
+            </setting>
+        </category>
+        <category name="Caching">
+            <setting name="cosnics.libraries.storage.cache.external.defaultLifetime"
                      field="HTML_QuickForm_text"
-                     default="https://tasks.office.com/tenantName.onmicrosoft.com/nl-NL/Home/Planner"/>
-            <setting name="microsoft_graph_group_base_uri"
-                     field="HTML_QuickForm_text"
-                     default="https://outlook.office.com/owa/?realm=realm&amp;exsvurl=1&amp;ll-cc=1043&amp;modurl=0&amp;path=/group/{GROUP_ID}@tenant.onmicrosoft.com/people"/>
+                     default="3600"/>
         </category>
     </settings>
 </package>

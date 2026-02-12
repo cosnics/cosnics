@@ -45,8 +45,6 @@ class Kernel
 
     private ApplicationFactory $applicationFactory;
 
-    private ?string $context = null;
-
     private ExceptionLoggerInterface $exceptionLogger;
 
     private ChamiloRequest $request;
@@ -109,31 +107,6 @@ class Kernel
         return $this;
     }
 
-    protected function configureContext(): static
-    {
-        $getContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
-
-        if (!$getContext) {
-            $postContext = $this->getRequest()->request->get(Application::PARAM_CONTEXT);
-
-            if (!$postContext) {
-                $this->getRequest()->query->set(Application::PARAM_CONTEXT, 'Chamilo\Core\Home');
-
-                $context = 'Chamilo\Core\Home';
-            }
-            else {
-                $context = $postContext;
-            }
-        }
-        else {
-            $context = $getContext;
-        }
-
-        $this->setContext($context);
-
-        return $this;
-    }
-
     protected function configureTimezone(): static
     {
         date_default_timezone_set($this->getTimezone());
@@ -153,16 +126,7 @@ class Kernel
 
     public function getContext(): ?string
     {
-        if (!isset($this->context)) {
-            $this->context = $this->getRequest()->query->get(Application::PARAM_CONTEXT, Manager::CONTEXT);
-        }
-
-        return $this->context;
-    }
-
-    public function setContext(string $context): void
-    {
-        $this->context = $context;
+        return $this->getRequest()->query->get(Application::PARAM_CONTEXT, Manager::CONTEXT);
     }
 
     public function getEventDispatcher(): EventDispatcherInterface
@@ -264,8 +228,7 @@ class Kernel
     public function launch(): void
     {
         try {
-            $this->configureTimezone()->configureContext()->handleOAuth2()->checkAuthentication()
-                ->checkPlatformAvailability();
+            $this->configureTimezone()->handleOAuth2()->checkAuthentication()->checkPlatformAvailability();
 
             $application = $this->getApplicationFactory()->getApplication($this->getContext(), $this->getUser());
             $this->traceVisit($application);

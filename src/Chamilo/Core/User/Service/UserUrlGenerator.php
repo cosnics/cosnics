@@ -39,11 +39,6 @@ class UserUrlGenerator
         return $this->getUserActionUrl(Manager::ACTION_VIEW, $user);
     }
 
-    public function getEmailUrl(User $user): string
-    {
-        return $this->getUserActionUrl(Manager::ACTION_EMAIL, $user);
-    }
-
     public function getUpdateUrl(User $user): string
     {
         return $this->getUserActionUrl(Manager::ACTION_UPDATE, $user);

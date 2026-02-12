@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionActionProv
 use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProviderCollection;
 use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Manager;
-use Chamilo\Core\User\Component\SettingsComponent;
+use Chamilo\Core\User\Component\ConfigureComponent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Calendar\Factory\HtmlCalendarRendererFactory;
@@ -130,8 +130,10 @@ class BrowserComponent extends Manager
         $rendererType = $this->getRequest()->query->get(HtmlCalendarRenderer::PARAM_TYPE);
 
         if (!$rendererType) {
-            $rendererType =
-                $this->getUserService()->findUserSetting($this->getUser(), 'Chamilo\Libraries', 'CalendarDefaultView');
+            $rendererType = $this->getUserService()->findUserSetting(
+                $this->getUser(), 'cosnics.libraries.calendar.defaultView',
+                $this->getContainer()->getParameter('cosnics.libraries.calendar.defaultView')
+            );
 
             if ($rendererType == HtmlCalendarRenderer::TYPE_MONTH) {
                 $detect = new MobileDetect();
@@ -182,8 +184,8 @@ class BrowserComponent extends Manager
         $settingsUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::CONTEXT,
-                Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_SETTINGS,
-                SettingsComponent::PARAM_SELECTED_CONTEXT => 'Chamilo\Core\User'
+                Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_CONFIGURE,
+                ConfigureComponent::PARAM_SELECTED_CONTEXT => 'Chamilo\Core\User'
             ]
         );
 

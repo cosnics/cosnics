@@ -13,16 +13,13 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class ButtonRendererCompilerPass implements CompilerPassInterface
 {
-
     public function process(ContainerBuilder $container): void
     {
-        if ($container->hasDefinition(ButtonRendererCollection::class))
-        {
+        if ($container->hasDefinition(ButtonRendererCollection::class)) {
             $taggedServices = $container->findTaggedServiceIds(ButtonRendererInterface::class);
             $definition = $container->getDefinition(ButtonRendererCollection::class);
 
-            foreach ($taggedServices as $taggedServiceId => $tags)
-            {
+            foreach ($taggedServices as $taggedServiceId => $tags) {
                 $definition->addMethodCall('addButtonRenderer', [new Reference($taggedServiceId)]);
             }
         }

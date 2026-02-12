@@ -79,7 +79,7 @@ class OnlineTableRenderer extends DataClassListTableRenderer
                     $profilePhotoUrl = $urlGenerator->fromParameters(
                         [
                             Application::PARAM_CONTEXT => Manager::CONTEXT,
-                            Application::PARAM_ACTION => Manager::ACTION_USER_PICTURE,
+                            Application::PARAM_ACTION => Manager::ACTION_DOWNLOAD_USER_PICTURE,
                             Manager::PARAM_USER_ID => $result->getId()
                         ]
                     );

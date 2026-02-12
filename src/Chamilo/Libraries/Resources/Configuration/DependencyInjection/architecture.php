@@ -1,6 +1,7 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
 use Chamilo\Libraries\Protocol\Error\Factory\ExceptionLoggerFactory;
 use Chamilo\Libraries\Protocol\Error\Service\ErrorHandler;
@@ -12,6 +13,8 @@ use Chamilo\Libraries\Service\Routing\DataClassUrlGenerator;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ActionResultRenderer;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
@@ -26,6 +29,11 @@ return static function (ContainerConfigurator $container) {
         ]
     );
     $services->set(ApplicationFactory::class);
+
+    $services->set(ChamiloRequest::class)->factory([ChamiloRequest::class, 'createFromGlobals']);
+
+    $services->set(EventDispatcher::class);
+    $services->alias(EventDispatcherInterface::class, EventDispatcher::class);
 
     $services->set(ErrorHandler::class)->args(
         ['$themeSystemPathBuilder' => service('Chamilo\Libraries\UserInterface\Theme\Service\ThemeSystemPathBuilder')]

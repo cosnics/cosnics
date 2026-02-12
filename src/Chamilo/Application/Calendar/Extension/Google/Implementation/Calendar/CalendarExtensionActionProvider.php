@@ -56,7 +56,7 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
             ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, [], ['dropdown-menu-right']
         );
 
-        $accessToken = $this->getUserService()->findUserSetting($user, Manager::CONTEXT, 'Token');
+        $accessToken = $this->getUserService()->findUserSetting($user, 'cosnics.libraries.protocol.google.token');
 
         if (!$accessToken) {
             $link = $this->getUrlGenerator()->fromParameters(

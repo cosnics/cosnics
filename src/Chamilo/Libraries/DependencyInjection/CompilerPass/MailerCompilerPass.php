@@ -13,16 +13,13 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class MailerCompilerPass implements CompilerPassInterface
 {
-
     public function process(ContainerBuilder $container): void
     {
-        if ($container->hasDefinition(MailerFactory::class))
-        {
+        if ($container->hasDefinition(MailerFactory::class)) {
             $taggedServices = $container->findTaggedServiceIds(MailerInterface::class);
             $definition = $container->getDefinition(MailerFactory::class);
 
-            foreach ($taggedServices as $taggedServiceId => $tags)
-            {
+            foreach ($taggedServices as $taggedServiceId => $tags) {
                 $definition->addMethodCall('addMailer', [new Reference($taggedServiceId)]);
             }
         }

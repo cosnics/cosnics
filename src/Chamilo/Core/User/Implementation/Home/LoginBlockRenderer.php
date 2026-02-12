@@ -75,7 +75,7 @@ class LoginBlockRenderer extends BlockRenderer
             $profilePhotoUrl = $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => Manager::ACTION_USER_PICTURE,
+                    Application::PARAM_ACTION => Manager::ACTION_DOWNLOAD_USER_PICTURE,
                     Manager::PARAM_USER_ID => $user->getId()
                 ]
             );
@@ -114,7 +114,7 @@ class LoginBlockRenderer extends BlockRenderer
         $html = '<script>$(document).ready(function(){document.formLogin.login.focus();});</script>';
         $form->addElement(HTML_QuickForm_html::class, $html);
         $form->addElement(
-            HTML_QuickForm_text::class, 'login', $translator->trans('UserName', [], Manager::CONTEXT),
+            HTML_QuickForm_text::class, 'login', $translator->trans('Username', [], Manager::CONTEXT),
             ['style' => 'width: 90%;']
         );
         $form->addRule('login', $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),

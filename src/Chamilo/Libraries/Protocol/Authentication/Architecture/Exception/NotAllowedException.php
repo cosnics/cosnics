@@ -54,7 +54,7 @@ class NotAllowedException extends UserException
         );
 
         $form->addElement(
-            HTML_QuickForm_text::class, 'login', $translator->trans('UserName', [], StringUtilities::LIBRARIES),
+            HTML_QuickForm_text::class, 'login', $translator->trans('Username', [], StringUtilities::LIBRARIES),
             ['size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control']
         );
 

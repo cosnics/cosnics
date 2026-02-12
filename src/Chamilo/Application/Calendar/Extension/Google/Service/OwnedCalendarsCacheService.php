@@ -17,6 +17,8 @@ class OwnedCalendarsCacheService
 {
     use SingleCacheAdapterHandlerTrait;
 
+    protected int $defaultLifetime;
+
     protected User $user;
 
     protected UserService $userService;
@@ -24,18 +26,25 @@ class OwnedCalendarsCacheService
     private CalendarRepository $calendarRepository;
 
     public function __construct(
-        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository, User $user, UserService $userService
+        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository, User $user, UserService $userService,
+        int $defaultLifetime = 3600
     )
     {
         $this->cacheAdapter = $cacheAdapter;
         $this->calendarRepository = $calendarRepository;
         $this->user = $user;
         $this->userService = $userService;
+        $this->defaultLifetime = $defaultLifetime;
     }
 
     public function getCalendarRepository(): CalendarRepository
     {
         return $this->calendarRepository;
+    }
+
+    public function getDefaultLifetime(): int
+    {
+        return $this->defaultLifetime;
     }
 
     /**
@@ -48,12 +57,13 @@ class OwnedCalendarsCacheService
         $cacheIdentifier = $this->getCacheKeyForParts([__METHOD__, $user->getId()]);
 
         if (!$this->hasCacheDataForKey($cacheIdentifier)) {
-            $lifetimeInMinutes = $this->getUserService()->findUserSetting(
-                $this->getUser(), 'Chamilo\Core\Admin', 'DefaultLifetime'
+            $lifetime = $this->getUserService()->findUserSetting(
+                $this->getUser(), 'cosnics.libraries.storage.cache.external.defaultLifetime',
+                $this->getDefaultLifetime()
             );
 
             $this->saveCacheDataForKey(
-                $cacheIdentifier, $this->getCalendarRepository()->findOwnedCalendars($user), $lifetimeInMinutes * 60
+                $cacheIdentifier, $this->getCalendarRepository()->findOwnedCalendars($user), $lifetime
             );
         }
 

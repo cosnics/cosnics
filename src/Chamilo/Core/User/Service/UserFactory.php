@@ -84,8 +84,9 @@ class UserFactory
 
                 if ($user instanceof User) {
                     if ($this->canChangeLanguage()) {
-                        $userLanguage =
-                            $this->getUserService()->findUserSetting($user, 'Chamilo\Core\Admin', 'PlatformLanguage');
+                        $userLanguage = $this->getUserService()->findUserSetting(
+                            $user, 'cosnics.libraries.userInterface.translation.language.default'
+                        );
 
                         if ($userLanguage) {
                             $this->getTranslator()->setLocale($userLanguage);
@@ -93,9 +94,8 @@ class UserFactory
                     }
 
                     if ($this->canChangeTimezone()) {
-                        $userTimezone = $this->getUserService()->findUserSetting(
-                            $user, 'Chamilo\Core\Admin', 'PlatformTimezone'
-                        );
+                        $userTimezone =
+                            $this->getUserService()->findUserSetting($user, 'cosnics.libraries.calendar.timezone');
 
                         if ($userTimezone) {
                             date_default_timezone_set($userTimezone);

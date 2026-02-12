@@ -14,17 +14,14 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class CacheAdapterCompilerPass implements CompilerPassInterface
 {
-
     public function process(ContainerBuilder $container): void
     {
-        if ($container->hasDefinition(SymfonyCacheAdapterManager::class))
-        {
+        if ($container->hasDefinition(SymfonyCacheAdapterManager::class)) {
             $taggedServices = $container->findTaggedServiceIds(AdapterInterface::class);
 
             $definition = $container->getDefinition(SymfonyCacheAdapterManager::class);
 
-            foreach ($taggedServices as $taggedServiceId => $tags)
-            {
+            foreach ($taggedServices as $taggedServiceId => $tags) {
                 $definition->addMethodCall('addCacheAdapter', [$taggedServiceId, new Reference($taggedServiceId)]);
             }
         }

@@ -16,17 +16,14 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class CacheDataPreLoaderCompilerPass implements CompilerPassInterface
 {
-
     public function process(ContainerBuilder $container): void
     {
-        if ($container->hasDefinition(CacheDataPreLoaderManager::class))
-        {
+        if ($container->hasDefinition(CacheDataPreLoaderManager::class)) {
             $taggedServices = $container->findTaggedServiceIds(CacheDataPreLoaderInterface::class);
 
             $definition = $container->getDefinition(CacheDataPreLoaderManager::class);
 
-            foreach ($taggedServices as $taggedServiceId => $tags)
-            {
+            foreach ($taggedServices as $taggedServiceId => $tags) {
                 $definition->addMethodCall(
                     'addCacheDataPreLoaderService', [$taggedServiceId, new Reference($taggedServiceId)]
                 );

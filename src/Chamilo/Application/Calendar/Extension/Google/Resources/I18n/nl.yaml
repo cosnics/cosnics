@@ -1,0 +1,9 @@
+# Package: Chamilo\Application\Calendar\Extension\Google
+# Language: nl
+
+"cosnics.libraries.protocol.google.token": "Inlog token (wordt automatisch ingevuld door het systeem)"
+GoogleCalendarLogin: "Inloggen"
+SourceName: "Google - {CALENDAR}"
+Token: "Inlog token (wordt automatisch ingevuld door het systeem)"
+TypeCategory: "Calendar Extensions"
+TypeName: "Google"

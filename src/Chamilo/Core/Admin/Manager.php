@@ -11,7 +11,6 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 abstract class Manager extends Application
 {
     public const ACTION_BROWSE = 'Browse';
-    public const ACTION_CONFIGURE = 'Configure';
     public const ACTION_DIAGNOSE = 'Diagnose';
     public const ACTION_ONLINE = 'Online';
     public const ACTION_VIEW_LOGS = 'ViewLogs';

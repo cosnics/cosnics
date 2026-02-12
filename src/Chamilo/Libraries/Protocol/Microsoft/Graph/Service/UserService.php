@@ -32,14 +32,14 @@ class UserService
     public function getAndSaveUserIdentifier(User $user): ?string
     {
         $userIdentifier = $this->getUserService()->findUserSetting(
-            $user, 'Chamilo\Libraries\Protocol\Microsoft\Graph', 'ExternalUserIdentifier'
+            $user, 'cosnics.libraries.protocol.microsoft.graph.externalUserIdentifier'
         );
 
         if (empty($userIdentifier)) {
             $userIdentifier = $this->getUserIdentifier($user);
 
             $this->getUserService()->updateUserSetting(
-                $user, 'Chamilo\Libraries\Protocol\Microsoft\Graph', 'ExternalUserIdentifier', $userIdentifier
+                $user, 'cosnics.libraries.protocol.microsoft.graph.externalUserIdentifier', $userIdentifier
             );
         }
 

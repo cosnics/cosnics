@@ -5,7 +5,6 @@ use Chamilo\Core\Admin\Service\Consulter\LanguageConsulter;
 use Chamilo\Core\Admin\Service\Finder\BasicBundlesGenerator;
 use Chamilo\Core\Admin\Service\Finder\InternationalizationBundlesGenerator;
 use Chamilo\Core\Admin\Service\Finder\PackageBundlesGenerator;
-use Chamilo\Core\Admin\Service\InternationalizationBundlesCacheService;
 use Chamilo\Core\Admin\Service\OnlineService;
 use Chamilo\Core\Admin\Service\PackageBundlesCacheService;
 use Chamilo\Core\Admin\Service\PackageFactory;
@@ -28,10 +27,6 @@ return static function (ContainerConfigurator $container) {
     $services->set('Chamilo\Core\Admin\Service\PackageBundlesCacheAdapter', FilesystemAdapter::class)->args(
         ['$namespace' => 'Chamilo\Core\Admin\PackageBundles']
     )->tag(AdapterInterface::class)->factory([service(SymfonyCacheAdapterFactory::class), 'createFilesystemAdapter']);
-
-    $services->set(InternationalizationBundlesCacheService::class)->args(
-        ['$cacheAdapter' => service('Chamilo\Core\Admin\Service\InternationalizationBundlesCacheAdapter')]
-    )->tag(CacheDataPreLoaderInterface::class);
 
     $services->set('Chamilo\Core\Admin\Service\InternationalizationBundlesCacheAdapter', FilesystemAdapter::class)
         ->args(['$namespace' => 'Chamilo\Core\Admin\InternationalizationBundles'])->tag(AdapterInterface::class)

@@ -32,7 +32,7 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
         ];
 
         $startOfWeek = $this->getUserService()->findUserSetting(
-            $this->getUser(), 'Chamilo\Libraries\Calendar', 'FirstDayOfWeek',
+            $this->getUser(), 'cosnics.libraries.calendar.firstDayOfWeek',
             $this->getContainer()->getParameter('cosnics.libraries.calendar.firstDayOfWeek')
         );
 

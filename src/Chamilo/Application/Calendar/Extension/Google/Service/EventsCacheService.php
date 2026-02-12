@@ -18,22 +18,31 @@ class EventsCacheService
 {
     use SingleCacheAdapterHandlerTrait;
 
+    protected int $defaultLifetime;
+
     protected UserService $userService;
 
     private CalendarRepository $calendarRepository;
 
     public function __construct(
-        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository, UserService $userService
+        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository, UserService $userService,
+        int $defaultLifetime = 3600
     )
     {
         $this->cacheAdapter = $cacheAdapter;
         $this->calendarRepository = $calendarRepository;
         $this->userService = $userService;
+        $this->defaultLifetime = $defaultLifetime;
     }
 
     public function getCalendarRepository(): CalendarRepository
     {
         return $this->calendarRepository;
+    }
+
+    public function getDefaultLifetime(): int
+    {
+        return $this->defaultLifetime;
     }
 
     /**
@@ -51,14 +60,14 @@ class EventsCacheService
         );
 
         if (!$this->hasCacheDataForKey($cacheIdentifier)) {
-            $lifetimeInMinutes = $this->getUserService()->findUserSetting(
-                $user, 'Chamilo\Core\Admin', 'DefaultLifetime'
+            $lifetime = $this->getUserService()->findUserSetting(
+                $user, 'cosnics.libraries.storage.cache.external.defaultLifetime', $this->getDefaultLifetime()
             );
 
             $this->saveCacheDataForKey(
                 $cacheIdentifier, $calendarRepository->findEventsForCalendarIdentifierAndBetweenDates(
                 $user, $calendarIdentifier, $fromDate, $toDate
-            ), $lifetimeInMinutes * 60
+            ), $lifetime
             );
         }
 

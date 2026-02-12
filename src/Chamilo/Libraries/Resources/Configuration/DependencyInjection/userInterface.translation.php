@@ -1,14 +1,17 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Chamilo\Libraries\Storage\Architecture\Interface\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\UserInterface\Translation\Factory\TranslatorFactory;
-use Chamilo\Libraries\UserInterface\Translation\Service\TranslationCacheService;
+use Symfony\Component\Translation\Translator;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
     $services->defaults()->public()->autowire()->autoconfigure();
 
     $services->set(TranslatorFactory::class);
-    $services->set(TranslationCacheService::class)->tag(CacheDataPreLoaderInterface::class);
+
+    $services->set(Translator::class)->args(['%cosnics.libraries.userInterface.translation.language.default%'])
+        ->factory(
+            [service(TranslatorFactory::class), 'createTranslator']
+        );
 };

@@ -26,16 +26,6 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_CONFIGURE
-        ];
-
-        $links[] = new Action(
-            $translator->trans('SettingsDescription', [], $context), $translator->trans('Settings', [], $context),
-            new FontAwesomeGlyph('cog', ['fa-fw', 'fa-2x'], null, 'fas'), $urlGenerator->fromParameters($parameters)
-        );
-
-        $parameters = [
-            Application::PARAM_CONTEXT => $context,
             Application::PARAM_ACTION => Manager::ACTION_DIAGNOSE
         ];
 

@@ -148,7 +148,7 @@ class UserService
                 '</p>';
             $mailBody[] = '<p>' . $translator->trans('MailResetPasswordDoneBody', [], Manager::CONTEXT) . '</p>';
             $mailBody[] =
-                '<p>' . $translator->trans('UserName', [], Manager::CONTEXT) . ': ' . $user->getUsername() . '<br/>';
+                '<p>' . $translator->trans('Username', [], Manager::CONTEXT) . ': ' . $user->getUsername() . '<br/>';
             $mailBody[] =
                 $translator->trans('MailResetPasswordNew', [], Manager::CONTEXT) . ': ' . $newPassword . '</p>';
             $mailBody[] = '<p>' . $translator->trans(
@@ -272,11 +272,6 @@ class UserService
         return $this->getHashingUtilities()->hashString($this->getSecurityKey() . $user->getEmail());
     }
 
-    protected function determineUserSettingVariableName(string $context, string $variable): string
-    {
-        return $context . '\\' . $variable;
-    }
-
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -392,9 +387,9 @@ class UserService
         return $this->getUserRepository()->findUserProperties($retrieveProperties, $condition, $orderBy);
     }
 
-    public function findUserSetting(User $user, string $context, string $variable, mixed $defaultValue = null)
+    public function findUserSetting(User $user, string $variable, mixed $defaultValue = null)
     {
-        return $user->getSetting($this->determineUserSettingVariableName($context, $variable), $defaultValue);
+        return $user->getSetting($variable, $defaultValue);
     }
 
     /**
@@ -670,7 +665,7 @@ class UserService
                 '</p>';
             $mailBody[] = '<p>' . $translator->trans('MailResetPasswordAskBody', [], Manager::CONTEXT) . '</p>';
             $mailBody[] =
-                '<p>' . $translator->trans('UserName', [], Manager::CONTEXT) . ': ' . $user->getUsername() . '<br/>';
+                '<p>' . $translator->trans('Username', [], Manager::CONTEXT) . ': ' . $user->getUsername() . '<br/>';
             $mailBody[] =
                 $translator->trans('MailResetPasswordLink', [], Manager::CONTEXT) . ': <a href="' . $resetLink . '">' .
                 $resetLink . '</a></p>';
@@ -830,9 +825,9 @@ class UserService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updateUserSetting(User $user, string $context, string $variable, mixed $value = null): bool
+    public function updateUserSetting(User $user, string $variable, mixed $value = null): bool
     {
-        $user->setSetting($this->determineUserSettingVariableName($context, $variable), $value);
+        $user->setSetting($variable, $value);
 
         return $this->updateUser($user);
     }

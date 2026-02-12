@@ -41,6 +41,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'architecture.php',
                 'calendar.php',
                 'filesystem.php',
+                'implementation.admin.php',
                 'protocol.authentication.php',
                 'protocol.console.php',
                 'protocol.mail.php',
@@ -58,8 +59,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'userInterface.table.php',
                 'userInterface.theme.php',
                 'userInterface.translation.php',
-                'userInterface.tree.php',
-                'vendor.php'
+                'userInterface.tree.php'
             ]
         ];
     }

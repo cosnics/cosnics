@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Translation\Factory;
 
-use Chamilo\Core\Admin\Service\InternationalizationBundlesCacheService;
+use Chamilo\Core\Admin\Service\Finder\InternationalizationBundlesGenerator;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
 use Chamilo\Libraries\Filesystem\Service\PackagesContentFinder\PackagesFilesFinder;
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
@@ -23,28 +23,24 @@ class TranslatorFactory
 
     protected Filesystem $filesystem;
 
-    protected InternationalizationBundlesCacheService $internationalizationBundlesCacheService;
+    protected InternationalizationBundlesGenerator $internationalizationBundlesGenerator;
 
     protected SystemPathBuilder $systemPathBuilder;
 
     public function __construct(
-        Filesystem $filesystem, ConfigurablePathBuilder $configurablePathBuilder,
-        InternationalizationBundlesCacheService $internationalizationBundlesCacheService,
-        SystemPathBuilder $systemPathBuilder
+        Filesystem $filesystem, ConfigurablePathBuilder $configurablePathBuilder, SystemPathBuilder $systemPathBuilder,
+        InternationalizationBundlesGenerator $internationalizationBundlesGenerator
     )
     {
         $this->filesystem = $filesystem;
         $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->internationalizationBundlesCacheService = $internationalizationBundlesCacheService;
         $this->systemPathBuilder = $systemPathBuilder;
+        $this->internationalizationBundlesGenerator = $internationalizationBundlesGenerator;
     }
 
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
     protected function addOptimizedTranslationResources(Translator $translator): void
     {
-        $packageNamespaces = $this->getInternationalizationBundlesCacheService()->getPackageNamespaces();
+        $packageNamespaces = $this->getInternationalizationBundlesGenerator()->getPackageNamespaces();
 
         $translationCachePath = $this->getTranslationCachePath();
 
@@ -67,9 +63,6 @@ class TranslatorFactory
         }
     }
 
-    /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
-     */
     public function createTranslator(?string $locale = null, array $fallbackLanguages = []): Translator
     {
         $translator = new Translator($locale);
@@ -92,9 +85,9 @@ class TranslatorFactory
         return $this->filesystem;
     }
 
-    public function getInternationalizationBundlesCacheService(): InternationalizationBundlesCacheService
+    public function getInternationalizationBundlesGenerator(): InternationalizationBundlesGenerator
     {
-        return $this->internationalizationBundlesCacheService;
+        return $this->internationalizationBundlesGenerator;
     }
 
     public function getSystemPathBuilder(): SystemPathBuilder

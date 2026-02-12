@@ -22,19 +22,25 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
     protected string $defaultFirstDayOfWeek;
 
     public function __construct(
-        Translator $translator, ?User $user, UserService $userService, string $defaultFirstDayOfWeek
+        Translator $translator, ?User $user, UserService $userService, string $defaultFirstDayOfWeek,
+        bool $defaultHideNonWorkingHours, int $defaultHourStep, int $defaultWorkingHoursEnd,
+        int $defaultWorkingHoursStart
     )
     {
         parent::__construct($translator, $user, $userService);
 
         $this->defaultFirstDayOfWeek = $defaultFirstDayOfWeek;
+        $this->setDefaultHideNonWorkingHours($defaultHideNonWorkingHours);
+        $this->setDefaultHourStep($defaultHourStep);
+        $this->setDefaultWorkingHoursEnd($defaultWorkingHoursEnd);
+        $this->setDefaultWorkingHoursStart($defaultWorkingHoursStart);
     }
 
     protected function addEvents(int $displayTime, HTML_Table $table, array $cellMapping, array $events): void
     {
         $workingStart = $this->getStartHour();
         $workingEnd = $this->getEndHour();
-        $hide = $this->getHideOtherHours();
+        $hide = $this->getHideNonWorkingHours();
         $start = 0;
         $end = 24;
 
@@ -83,7 +89,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
 
         $workingStart = $this->getStartHour();
         $workingEnd = $this->getEndHour();
-        $hide = $this->getHideOtherHours();
+        $hide = $this->getHideNonWorkingHours();
         $start = 0;
         $end = 24;
 
@@ -173,7 +179,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
     {
         if ($this->getUser() instanceof User) {
             return $this->getUserService()->findUserSetting(
-                $this->getUser(), 'Chamilo\Libraries\Calendar', 'FirstDayOfWeek', $this->getDefaultFirstDayOfWeek()
+                $this->getUser(), 'cosnics.libraries.calendar.firstDayOfWeek', $this->getDefaultFirstDayOfWeek()
             );
         }
         else {

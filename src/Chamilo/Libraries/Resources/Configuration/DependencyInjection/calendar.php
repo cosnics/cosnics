@@ -35,7 +35,13 @@ return static function (ContainerConfigurator $container) {
     $services->set(JumpBarRenderer::class);
     $services->set(LegendRenderer::class);
 
-    $services->set(DayCalendarTableBuilder::class)->args(['$user' => service('Chamilo\Core\User\CurrentUser')]);
+    $services->set(DayCalendarTableBuilder::class)->args([
+        '$user' => service('Chamilo\Core\User\CurrentUser'),
+        '$defaultHideNonWorkingHours' => '%cosnics.libraries.calendar.hideNonWorkingHours%',
+        '$defaultHourStep' => '%cosnics.libraries.calendar.hourStep%',
+        '$defaultWorkingHoursEnd' => '%cosnics.libraries.calendar.workingHoursEnd%',
+        '$defaultWorkingHoursStart' => '%cosnics.libraries.calendar.workingHoursStart%'
+    ]);
     $services->set(MiniMonthCalendarTableBuilder::class)->args([
         '$user' => service('Chamilo\Core\User\CurrentUser'),
         '$defaultFirstDayOfWeek' => '%cosnics.libraries.calendar.firstDayOfWeek%'
@@ -49,7 +55,11 @@ return static function (ContainerConfigurator $container) {
     $services->set(WeekCalendarTableBuilder::class)->args(
         [
             '$user' => service('Chamilo\Core\User\CurrentUser'),
-            '$defaultFirstDayOfWeek' => '%cosnics.libraries.calendar.firstDayOfWeek%'
+            '$defaultFirstDayOfWeek' => '%cosnics.libraries.calendar.firstDayOfWeek%',
+            '$defaultHideNonWorkingHours' => '%cosnics.libraries.calendar.hideNonWorkingHours%',
+            '$defaultHourStep' => '%cosnics.libraries.calendar.hourStep%',
+            '$defaultWorkingHoursEnd' => '%cosnics.libraries.calendar.workingHoursEnd%',
+            '$defaultWorkingHoursStart' => '%cosnics.libraries.calendar.workingHoursStart%'
         ]
     );
 

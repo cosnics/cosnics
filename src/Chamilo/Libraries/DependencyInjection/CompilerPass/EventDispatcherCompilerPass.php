@@ -13,17 +13,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class EventDispatcherCompilerPass implements CompilerPassInterface
 {
-
     public function process(ContainerBuilder $container): void
     {
-        if ($container->has(EventDispatcherInterface::class))
-        {
+        if ($container->has(EventDispatcherInterface::class)) {
             $taggedServices = $container->findTaggedServiceIds(EventSubscriberInterface::class);
 
             $definition = $container->findDefinition(EventDispatcherInterface::class);
 
-            foreach ($taggedServices as $taggedServiceId => $tags)
-            {
+            foreach ($taggedServices as $taggedServiceId => $tags) {
                 $definition->addMethodCall('addSubscriber', [new Reference($taggedServiceId)]);
             }
         }

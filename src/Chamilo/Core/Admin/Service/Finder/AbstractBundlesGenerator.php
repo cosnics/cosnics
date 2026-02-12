@@ -9,7 +9,6 @@ use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
  */
 abstract class AbstractBundlesGenerator
 {
-
     protected SystemPathBuilder $systemPathBuilder;
 
     public function __construct(SystemPathBuilder $systemPathBuilder)
@@ -27,10 +26,8 @@ abstract class AbstractBundlesGenerator
 
         $packageNamespaces = [];
 
-        foreach ($packages as $package)
-        {
-            if ($this->verifyPackage($package))
-            {
+        foreach ($packages as $package) {
+            if ($this->verifyPackage($package)) {
                 $packageNamespaces[] = $package;
             }
         }

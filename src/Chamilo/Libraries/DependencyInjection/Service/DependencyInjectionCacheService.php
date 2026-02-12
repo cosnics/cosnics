@@ -4,9 +4,7 @@ namespace Chamilo\Libraries\DependencyInjection\Service;
 use Chamilo\Libraries\Storage\Service\FileBasedCacheService;
 
 /**
- * Manages the cache for the symfony dependency injection
- *
- * @package Chamilo\Libraries\DependencyInjection
+ * @package Chamilo\Libraries\DependencyInjection\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */

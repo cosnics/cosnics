@@ -10,41 +10,98 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 trait HourBasedCalendarTrait
 {
+    protected bool $defaultHideNonWorkingHours;
+
+    protected int $defaultHourStep;
+
+    protected int $defaultWorkingHoursEnd;
+
+    protected int $defaultWorkingHoursStart;
+
     protected int $endHour;
 
-    protected bool $hideOtherHours;
+    protected bool $hideNonWorkingHours;
 
     protected int $hourStep;
 
     protected int $startHour;
 
+    protected function getDefaultHideNonWorkingHours(): bool
+    {
+        return $this->defaultHideNonWorkingHours;
+    }
+
+    public function setDefaultHideNonWorkingHours(bool $defaultHideNonWorkingHours): HourBasedCalendarTrait
+    {
+        $this->defaultHideNonWorkingHours = $defaultHideNonWorkingHours;
+
+        return $this;
+    }
+
+    protected function getDefaultHourStep(): int
+    {
+        return $this->defaultHourStep;
+    }
+
+    public function setDefaultHourStep(int $defaultHourStep): HourBasedCalendarTrait
+    {
+        $this->defaultHourStep = $defaultHourStep;
+
+        return $this;
+    }
+
+    protected function getDefaultWorkingHoursEnd(): int
+    {
+        return $this->defaultWorkingHoursEnd;
+    }
+
+    public function setDefaultWorkingHoursEnd(int $defaultWorkingHoursEnd): HourBasedCalendarTrait
+    {
+        $this->defaultWorkingHoursEnd = $defaultWorkingHoursEnd;
+
+        return $this;
+    }
+
+    protected function getDefaultWorkingHoursStart(): int
+    {
+        return $this->defaultWorkingHoursStart;
+    }
+
+    public function setDefaultWorkingHoursStart(int $defaultWorkingHoursStart): HourBasedCalendarTrait
+    {
+        $this->defaultWorkingHoursStart = $defaultWorkingHoursStart;
+
+        return $this;
+    }
+
     public function getEndHour(): int
     {
         if (!isset($this->endHour)) {
-            $this->endHour = (int) $this->getUserService()->findUserSetting(
-                $this->getUser(), 'Chamilo\Libraries\Calendar', 'WorkingHoursEnd'
+            $this->endHour = $this->getUserService()->findUserSetting(
+                $this->getUser(), 'cosnics.libraries.calendar.workingHoursEnd', $this->getDefaultWorkingHoursEnd()
             );
         }
 
         return $this->endHour;
     }
 
-    public function getHideOtherHours(): bool
+    public function getHideNonWorkingHours(): bool
     {
-        if (!isset($this->hideOtherHours)) {
-            $this->hideOtherHours = (bool) $this->getUserService()->findUserSetting(
-                $this->getUser(), 'Chamilo\Libraries\Calendar', 'HideNonWorkingHours'
+        if (!isset($this->hideNonWorkingHours)) {
+            $this->hideNonWorkingHours = $this->getUserService()->findUserSetting(
+                $this->getUser(), 'cosnics.libraries.calendar.hideNonWorkingHours',
+                $this->getDefaultHideNonWorkingHours()
             );
         }
 
-        return $this->hideOtherHours;
+        return $this->hideNonWorkingHours;
     }
 
     public function getHourStep(): int
     {
         if (!isset($this->hourStep)) {
-            $this->hourStep = (int) $this->getUserService()->findUserSetting(
-                $this->getUser(), 'Chamilo\Libraries\Calendar', 'HourStep'
+            $this->hourStep = $this->getUserService()->findUserSetting(
+                $this->getUser(), 'cosnics.libraries.calendar.hourStep', $this->getDefaultHourStep()
             );
         }
 
@@ -54,8 +111,8 @@ trait HourBasedCalendarTrait
     public function getStartHour(): int
     {
         if (!isset($this->startHour)) {
-            $this->startHour = (int) $this->getUserService()->findUserSetting(
-                $this->getUser(), 'Chamilo\Libraries\Calendar', 'WorkingHoursStart'
+            $this->startHour = $this->getUserService()->findUserSetting(
+                $this->getUser(), 'cosnics.libraries.calendar.workingHoursStart', $this->getDefaultWorkingHoursStart()
             );
         }
 

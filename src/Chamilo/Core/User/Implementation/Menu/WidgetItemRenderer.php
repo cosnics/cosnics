@@ -129,7 +129,7 @@ class WidgetItemRenderer extends ItemRenderer
 
     public function getPictureUrl(): string
     {
-        return $this->getUserUrl(Manager::ACTION_CHANGE_PICTURE);
+        return $this->getUserUrl(Manager::ACTION_UPDATE_USER_PICTURE);
     }
 
     public function getRendererTypeGlyph(): InlineGlyph
@@ -144,7 +144,7 @@ class WidgetItemRenderer extends ItemRenderer
 
     public function getSettingsUrl(): string
     {
-        return $this->getUserUrl(Manager::ACTION_SETTINGS);
+        return $this->getUserUrl(Manager::ACTION_CONFIGURE);
     }
 
     public function getUrlGenerator(): UrlGenerator

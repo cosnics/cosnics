@@ -34,20 +34,20 @@ abstract class ProfileComponent extends Manager
 
         if ($this->getContainer()->getParameter('cosnics.application.user.rights.changeUserPicture')) {
             $tabs[] = new LinkTab(
-                self::ACTION_CHANGE_PICTURE,
-                htmlentities($translator->trans(self::ACTION_CHANGE_PICTURE . 'Title', [], Manager::CONTEXT)),
+                self::ACTION_UPDATE_USER_PICTURE,
+                htmlentities($translator->trans(self::ACTION_UPDATE_USER_PICTURE . 'Title', [], Manager::CONTEXT)),
                 new FontAwesomeGlyph('image', ['fa-lg'], null, 'fas'), $this->getUrlGenerator()->fromParameters(
-                [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_CHANGE_PICTURE]
-            ), self::ACTION_CHANGE_PICTURE == $action
+                [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_UPDATE_USER_PICTURE]
+            ), self::ACTION_UPDATE_USER_PICTURE == $action
             );
         }
 
         $tabs[] = new LinkTab(
-            self::ACTION_SETTINGS,
-            htmlentities($translator->trans(self::ACTION_SETTINGS . 'Title', [], Manager::CONTEXT)),
+            self::ACTION_CONFIGURE,
+            htmlentities($translator->trans(self::ACTION_CONFIGURE . 'Title', [], Manager::CONTEXT)),
             new FontAwesomeGlyph('cog', ['fa-lg'], null, 'fas'), $this->getUrlGenerator()->fromParameters(
-            [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_SETTINGS]
-        ), self::ACTION_SETTINGS == $action
+            [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_CONFIGURE]
+        ), self::ACTION_CONFIGURE == $action
         );
 
         return $tabs;

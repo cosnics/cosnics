@@ -5,15 +5,12 @@ use Chamilo\Libraries\DependencyInjection\Architecture\Interface\ContainerExtens
 use Chamilo\Libraries\Filesystem\Service\PackagesContentFinder\PackagesClassFinderAware;
 
 /**
- * Finds dependency injection extensions in a given list of packages
- *
- * @package Chamilo\Libraries\DependencyInjection\ExtensionFinder
+ * @package Chamilo\Libraries\DependencyInjection\Service
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PackagesContainerExtensionFinder extends PackagesClassFinderAware implements ContainerExtensionFinderInterface
 {
-
     /**
      * @return string[]
      * @throws \Exception

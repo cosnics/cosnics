@@ -19,9 +19,7 @@ use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Builds the default dependency injection container for Chamilo
- *
- * @package Chamilo\Libraries\DependencyInjection
+ * @package Chamilo\Libraries\DependencyInjection\Service
  * @author  Sven Vanpoucke - Hogeschool Gent
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */

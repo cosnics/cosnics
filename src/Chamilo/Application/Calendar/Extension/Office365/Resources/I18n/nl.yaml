@@ -1,0 +1,8 @@
+# Package: Chamilo\Application\Calendar\Extension\Office365
+# Language: nl
+
+Office365CalendarLogin: "Inloggen bij Office 365"
+SourceName: "Office 365 - {CALENDAR}"
+Token: "Inlog token (wordt automatisch ingevuld door het systeem)"
+TypeCategory: "Calendar Extensions"
+TypeName: "Office 365"

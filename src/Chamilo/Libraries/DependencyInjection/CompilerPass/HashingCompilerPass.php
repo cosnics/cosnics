@@ -15,13 +15,11 @@ class HashingCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if ($container->hasDefinition(HashingAlgorithmFactory::class))
-        {
+        if ($container->hasDefinition(HashingAlgorithmFactory::class)) {
             $taggedServices = $container->findTaggedServiceIds(HashingAlgorithm::class);
             $definition = $container->getDefinition(HashingAlgorithmFactory::class);
 
-            foreach ($taggedServices as $taggedServiceId => $tags)
-            {
+            foreach ($taggedServices as $taggedServiceId => $tags) {
                 $definition->addMethodCall('addHashingAlgorithm', [new Reference($taggedServiceId)]);
             }
         }

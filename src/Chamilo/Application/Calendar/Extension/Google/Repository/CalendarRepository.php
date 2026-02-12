@@ -120,7 +120,7 @@ class CalendarRepository
 
     public function getAccessToken(User $user): ?string
     {
-        return $this->getUserService()->findUserSetting($user, Manager::CONTEXT, 'Token');
+        return $this->getUserService()->findUserSetting($user, 'cosnics.libraries.protocol.google.token');
     }
 
     public function getCacheIdentifier($userToken, $method, $additionalIdentifiers = []): string

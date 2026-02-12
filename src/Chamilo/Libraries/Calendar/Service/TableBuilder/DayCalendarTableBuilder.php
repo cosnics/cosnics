@@ -1,10 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\TableBuilder;
 
+use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Calendar\Architecture\Trait\HourBasedCalendarTrait;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Exception;
 use HTML_Table;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\TableBuilder
@@ -14,11 +17,24 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
 {
     use HourBasedCalendarTrait;
 
+    public function __construct(
+        Translator $translator, ?User $user, UserService $userService, bool $defaultHideNonWorkingHours,
+        int $defaultHourStep, int $defaultWorkingHoursEnd, int $defaultWorkingHoursStart
+    )
+    {
+        parent::__construct($translator, $user, $userService);
+
+        $this->setDefaultHideNonWorkingHours($defaultHideNonWorkingHours);
+        $this->setDefaultHourStep($defaultHourStep);
+        $this->setDefaultWorkingHoursEnd($defaultWorkingHoursEnd);
+        $this->setDefaultWorkingHoursStart($defaultWorkingHoursStart);
+    }
+
     protected function addEvents(int $displayTime, HTML_Table $table, array $cellMapping, array $events): void
     {
         $start = 0;
 
-        if ($this->getHideOtherHours()) {
+        if ($this->getHideNonWorkingHours()) {
             $start = $this->getStartHour();
         }
 
@@ -60,7 +76,7 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
         $startHour = 0;
         $endHour = 24;
 
-        if ($this->getHideOtherHours()) {
+        if ($this->getHideNonWorkingHours()) {
             $startHour = $this->getStartHour();
             $endHour = $this->getEndHour();
         }
@@ -124,7 +140,7 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
 
     public function getTableEndTime(int $displayTime): int
     {
-        if ($this->getHideOtherHours()) {
+        if ($this->getHideNonWorkingHours()) {
             return strtotime(date('Y-m-d ' . ($this->getEndHour() - 1) . ':59:59', $displayTime));
         }
 
@@ -133,7 +149,7 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
 
     public function getTableStartTime(int $displayTime): int
     {
-        if ($this->getHideOtherHours()) {
+        if ($this->getHideNonWorkingHours()) {
             return strtotime(date('Y-m-d ' . $this->getStartHour() . ':00:00', $displayTime));
         }
 

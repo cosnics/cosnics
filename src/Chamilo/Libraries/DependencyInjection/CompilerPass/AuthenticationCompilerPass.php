@@ -17,13 +17,11 @@ class AuthenticationCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if ($container->hasDefinition(AuthenticationValidator::class))
-        {
+        if ($container->hasDefinition(AuthenticationValidator::class)) {
             $taggedServices = $container->findTaggedServiceIds(AuthenticationInterface::class);
             $definition = $container->getDefinition(AuthenticationValidator::class);
 
-            foreach ($taggedServices as $taggedServiceId => $tags)
-            {
+            foreach ($taggedServices as $taggedServiceId => $tags) {
                 $definition->addMethodCall('addAuthentication', [new Reference($taggedServiceId)]);
             }
         }

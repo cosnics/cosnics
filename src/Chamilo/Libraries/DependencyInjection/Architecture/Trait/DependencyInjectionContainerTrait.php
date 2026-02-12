@@ -25,7 +25,6 @@ use Chamilo\Libraries\UserInterface\Layout\Service\DefaultHeaderRenderer;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageManager;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageRenderer;
 use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
-use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -35,9 +34,9 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Translation\Translator;
 
 /**
- * @package Chamilo\Libraries\Architecture\Traits
+ * @package Chamilo\Libraries\DependencyInjection\Architecture\Trait
  * @author  Sven Vanpoucke - Hogeschool Gent
- * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 trait DependencyInjectionContainerTrait
 {
@@ -99,6 +98,16 @@ trait DependencyInjectionContainerTrait
         return $this->getService(DatetimeUtilities::class);
     }
 
+    public function getDefaultFooterRenderer(): DefaultFooterRenderer
+    {
+        return $this->getService(DefaultFooterRenderer::class);
+    }
+
+    public function getDefaultHeaderRenderer(): DefaultHeaderRenderer
+    {
+        return $this->getService(DefaultHeaderRenderer::class);
+    }
+
     /**
      * @param class-string<\Symfony\Component\EventDispatcher\EventDispatcherInterface> $className
      */
@@ -130,11 +139,6 @@ trait DependencyInjectionContainerTrait
     public function getGroupService(): GroupService
     {
         return $this->getService(GroupService::class);
-    }
-
-    public function getLogger(): Logger
-    {
-        return $this->getService(Logger::class);
     }
 
     public function getNotificationMessageManager(): NotificationMessageManager
@@ -230,15 +234,5 @@ trait DependencyInjectionContainerTrait
     public function getWebPathBuilder(): WebPathBuilder
     {
         return $this->getService(WebPathBuilder::class);
-    }
-
-    public function getDefaultHeaderRenderer(): DefaultHeaderRenderer
-    {
-        return $this->getService(DefaultHeaderRenderer::class);
-    }
-
-    public function getDefaultFooterRenderer(): DefaultFooterRenderer
-    {
-        return $this->getService(DefaultFooterRenderer::class);
     }
 }
