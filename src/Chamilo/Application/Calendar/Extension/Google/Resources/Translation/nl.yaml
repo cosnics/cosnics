@@ -3,7 +3,7 @@
 
 "cosnics.libraries.protocol.google.token": "Inlog token (wordt automatisch ingevuld door het systeem)"
 GoogleCalendarLogin: "Inloggen"
-SourceName: "Google - {CALENDAR}"
+SourceName: "Google - %Calendar%"
 Token: "Inlog token (wordt automatisch ingevuld door het systeem)"
 TypeCategory: "Calendar Extensions"
 TypeName: "Google"
