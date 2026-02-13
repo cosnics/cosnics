@@ -48,7 +48,7 @@ class MoveComponent extends Manager
             $success = $form->moveGroup();
             $parent = $form->getNewParent();
             $message = $translator->trans(
-                $success ? 'ObjectMoved' : 'ObjectNotMoved', ['OBJECT' => $translator->trans('Group')],
+                $success ? 'ObjectMoved' : 'ObjectNotMoved', ['%Object%' => $translator->trans('Group')],
                 StringUtilities::LIBRARIES
             );
 

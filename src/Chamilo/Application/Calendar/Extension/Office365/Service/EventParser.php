@@ -179,7 +179,7 @@ class EventParser
     private function getSource(string $calendarName): string
     {
         return $this->getTranslator()->trans(
-            'SourceName', ['{CALENDAR}' => $calendarName], Manager::CONTEXT
+            'SourceName', ['%Calendar%' => $calendarName], Manager::CONTEXT
         );
     }
 

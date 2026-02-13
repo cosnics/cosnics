@@ -53,10 +53,10 @@ class UpdateComponent extends Manager
                 $success = $form->updateGroup();
                 $group = $form->getGroup();
                 $message = $success ? $translator->trans(
-                    'ObjectUpdated', ['OBJECT' => $translator->trans('Group', [], Manager::CONTEXT)],
+                    'ObjectUpdated', ['%Object%' => $translator->trans('Group', [], Manager::CONTEXT)],
                     StringUtilities::LIBRARIES
                 ) : $translator->trans(
-                    'ObjectNotUpdated', ['OBJECT' => $translator->trans('Group', [], Manager::CONTEXT)],
+                    'ObjectNotUpdated', ['%Object%' => $translator->trans('Group', [], Manager::CONTEXT)],
                     StringUtilities::LIBRARIES
                 );
 

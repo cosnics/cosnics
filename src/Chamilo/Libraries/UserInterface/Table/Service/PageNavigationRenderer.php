@@ -73,15 +73,15 @@ class PageNavigationRenderer
         $pager = $this->getPager();
         $variables = [];
 
-        $variables['{START}'] = $pager->getCurrentRangeStart(
+        $variables['%Start%'] = $pager->getCurrentRangeStart(
             $parameterValues->getPageNumber(), $parameterValues->getNumberOfItemsPerPage(),
             $parameterValues->getTotalNumberOfItems()
         );
-        $variables['{END}'] = $pager->getCurrentRangeEnd(
+        $variables['%End%'] = $pager->getCurrentRangeEnd(
             $parameterValues->getPageNumber(), $parameterValues->getNumberOfItemsPerPage(),
             $parameterValues->getTotalNumberOfItems()
         );
-        $variables['{TOTAL}'] = $parameterValues->getTotalNumberOfItems();
+        $variables['%Total%'] = $parameterValues->getTotalNumberOfItems();
 
         return $this->getTranslator()->trans('ShowingStartToEndOfTotalEntries', $variables, StringUtilities::LIBRARIES);
     }
@@ -141,7 +141,7 @@ class PageNavigationRenderer
         }
         else {
             $dropDownButtonLabel = $translator->trans(
-                $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE], ['{NUMBER}' => $numberOfItemsPerPage],
+                $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE], ['%Number%' => $numberOfItemsPerPage],
                 $translationVariables[Application::PARAM_CONTEXT]
             );
         }
@@ -160,7 +160,7 @@ class PageNavigationRenderer
             $dropDownButton->addButton(
                 new SubButton(
                     $translator->trans(
-                        $translationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW], ['{NUMBER}' => $nr],
+                        $translationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW], ['%Number%' => $nr],
                         $translationVariables[Application::PARAM_CONTEXT]
                     ), null, $this->getUrlGenerator()->fromRequest(
                     [$itemsPerPageParameterName => $numberrOfRowsOption]

@@ -47,7 +47,7 @@ class CreatorComponent extends Manager
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 $this->getUrlGenerator()->fromRequest(), $this->getTranslator()->trans(
-                'AddMenuItemComponentTitle', ['{ITEM_TYPE}' => $itemRenderer->getRendererTypeName()], Manager::CONTEXT
+                'AddMenuItemComponentTitle', ['%ItemType%' => $itemRenderer->getRendererTypeName()], Manager::CONTEXT
             )
             )
         );
@@ -71,14 +71,14 @@ class CreatorComponent extends Manager
 
             if ($success) {
                 $message = $this->getTranslator()->trans(
-                    'ObjectCreated', ['OBJECT' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)],
+                    'ObjectCreated', ['%Object%' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)],
                     StringUtilities::LIBRARIES
                 );
             }
             else {
                 $message = $this->getTranslator()->trans(
                     'ObjectNotCreated',
-                    ['OBJECT' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)],
+                    ['%Object%' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)],
                     StringUtilities::LIBRARIES
                 );
             }

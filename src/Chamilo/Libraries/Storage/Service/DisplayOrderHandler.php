@@ -272,11 +272,11 @@ class DisplayOrderHandler
             throw new DisplayOrderException(
                 $this->getTranslator()->trans(
                     'InvalidDisplayOrderExceptionMessage', [
-                    '{TYPE}' => get_class($dataClass),
-                    '{ID}' => $dataClass->getId(),
-                    '{CONTEXT}' => $this->getDisplayOrderContextAsString($dataClass),
-                    '{DISPLAY_ORDER}' => $displayOrder,
-                    '{COUNT}' => $numberOfOtherDisplayOrdersInContext
+                    '%Type%' => get_class($dataClass),
+                    '%Id%' => $dataClass->getId(),
+                    '%Context%' => $this->getDisplayOrderContextAsString($dataClass),
+                    '%DisplayOrder%' => $displayOrder,
+                    '%Count%' => $numberOfOtherDisplayOrdersInContext
                 ], StringUtilities::LIBRARIES
                 )
             );

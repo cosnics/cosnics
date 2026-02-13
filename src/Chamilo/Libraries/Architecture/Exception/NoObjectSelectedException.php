@@ -15,7 +15,7 @@ class NoObjectSelectedException extends UserException
     public function __construct(string $objectTranslation)
     {
         parent::__construct(
-            $this->getTranslator()->trans('NoObjectSelected', ['OBJECT' => $objectTranslation],
+            $this->getTranslator()->trans('NoObjectSelected', ['%Object%' => $objectTranslation],
                 StringUtilities::LIBRARIES)
         );
     }

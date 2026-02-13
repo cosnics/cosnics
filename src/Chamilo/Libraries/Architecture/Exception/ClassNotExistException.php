@@ -11,7 +11,7 @@ class ClassNotExistException extends UserException
     public function __construct(string $class)
     {
         parent::__construct(
-            $this->getTranslator()->trans('ClassNotExist', ['CLASS' => $class], StringUtilities::LIBRARIES)
+            $this->getTranslator()->trans('ClassNotExist', ['%Class%' => $class], StringUtilities::LIBRARIES)
         );
     }
 }

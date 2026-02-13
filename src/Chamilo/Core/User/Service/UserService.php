@@ -144,7 +144,7 @@ class UserService
 
             $mailBody[] = '<div style="font-family:arial, sans-serif">';
             $mailBody[] = '<p>' .
-                $translator->trans('MailResetPasswordDear', ['USER' => $user->getFullName()], Manager::CONTEXT) .
+                $translator->trans('MailResetPasswordDear', ['%User%' => $user->getFullName()], Manager::CONTEXT) .
                 '</p>';
             $mailBody[] = '<p>' . $translator->trans('MailResetPasswordDoneBody', [], Manager::CONTEXT) . '</p>';
             $mailBody[] =
@@ -153,14 +153,14 @@ class UserService
                 $translator->trans('MailResetPasswordNew', [], Manager::CONTEXT) . ': ' . $newPassword . '</p>';
             $mailBody[] = '<p>' . $translator->trans(
                     'MailResetPasswordLogIn', [
-                    'LOGINLINK' => '<a href="' . $this->getWebPathBuilder()->getBasePath() . '">' .
+                    '%LoginLink%' => '<a href="' . $this->getWebPathBuilder()->getBasePath() . '">' .
                         $this->getWebPathBuilder()->getBasePath() . '</a>'
                 ], Manager::CONTEXT
                 ) . '</p>';
             $mailBody[] = '<p>' . $translator->trans('MailResetPasswordCloser', [], Manager::CONTEXT) . '<br/>';
             $mailBody[] = $translator->trans(
                     'MailResetPasswordSender', [
-                    'ADMINNAME' => $this->getAdministratorName()
+                    '%AdminName%' => $this->getAdministratorName()
                 ], Manager::CONTEXT
                 ) . '</p>';
             $mailBody[] = '</div>';
@@ -629,7 +629,7 @@ class UserService
             throw new UserException(
                 $translator->trans(
                     'ResetPasswordNotPossibleForInactiveUser',
-                    ['USER' => $user->getFullName() . ' (' . $user->getUsername() . ')'], Manager::CONTEXT
+                    ['%User%' => $user->getFullName() . ' (' . $user->getUsername() . ')'], Manager::CONTEXT
                 )
             );
         }
@@ -641,7 +641,7 @@ class UserService
             throw new UserException(
                 $translator->trans(
                     'ResetPasswordNotPossibleForThisUser',
-                    ['USER' => $user->getFullName() . ' (' . $user->getUsername() . ')'], Manager::CONTEXT
+                    ['%User%' => $user->getFullName() . ' (' . $user->getUsername() . ')'], Manager::CONTEXT
                 )
             );
         }
@@ -661,7 +661,7 @@ class UserService
             $mailBody = [];
             $mailBody[] = '<div style="font-family:arial, sans-serif">';
             $mailBody[] = '<p>' .
-                $translator->trans('MailResetPasswordDear', ['USER' => $user->getFullName()], Manager::CONTEXT) .
+                $translator->trans('MailResetPasswordDear', ['%User%' => $user->getFullName()], Manager::CONTEXT) .
                 '</p>';
             $mailBody[] = '<p>' . $translator->trans('MailResetPasswordAskBody', [], Manager::CONTEXT) . '</p>';
             $mailBody[] =
@@ -672,7 +672,7 @@ class UserService
             $mailBody[] = '<p>' . $translator->trans('MailResetPasswordCloser', [], Manager::CONTEXT) . '<br/>';
             $mailBody[] = $translator->trans(
                     'MailResetPasswordSender', [
-                    'ADMINNAME' => $this->getAdministratorName()
+                    '%AdminName%' => $this->getAdministratorName()
                 ], Manager::CONTEXT
                 ) . '</p>';
             $mailBody[] = '</div>';
@@ -687,7 +687,7 @@ class UserService
             throw new UserException(
                 $translator->trans(
                     'SendingPasswordResetLinkNotPossibleForThisUser',
-                    ['USER' => $user->getFullName() . ' (' . $user->getUsername() . ')'], Manager::CONTEXT
+                    ['%User%' => $user->getFullName() . ' (' . $user->getUsername() . ')'], Manager::CONTEXT
                 )
             );
         }

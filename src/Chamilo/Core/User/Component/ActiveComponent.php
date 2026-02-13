@@ -78,7 +78,7 @@ class ActiveComponent extends Manager
                 $this->displayErrorPage(
                     htmlentities(
                         $translator->trans(
-                            'NoObjectSelected', ['OBJECT' => $translator->trans('User', [], Manager::CONTEXT)],
+                            'NoObjectSelected', ['%Object%' => $translator->trans('User', [], Manager::CONTEXT)],
                             StringUtilities::LIBRARIES
                         )
                     )

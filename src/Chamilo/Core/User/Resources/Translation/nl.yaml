@@ -230,7 +230,7 @@ MailResetPasswordDoneBody: "Uw paswoord is gereset. Uw nieuwe details worden hie
 MailResetPasswordLink: "Link"
 MailResetPasswordLogIn: "Om in te loggen klik op de link: %LoginLink%"
 MailResetPasswordNew: "Nieuw paswoord"
-MailResetPasswordSender: "%AdminFirstName% %AdminLastName%"
+MailResetPasswordSender: "%AdminName%"
 Manager: "Beheerder"
 ManageRights: "Beheer rechten"
 MandatoryFields: "verplichte velden zijn in het vet aangeduid"

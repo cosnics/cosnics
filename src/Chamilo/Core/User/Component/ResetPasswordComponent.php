@@ -76,7 +76,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
                 if ($userService->sendPasswordResetLinkforUser($user)) {
                     $html[] = '<div class="alert alert-success">' . $translator->trans(
                             'ResetLinkSendForUser',
-                            ['USER' => $user->getFullName() . ' (' . $user->getUsername() . ')'], Manager::CONTEXT
+                            ['%User%' => $user->getFullName() . ' (' . $user->getUsername() . ')'], Manager::CONTEXT
                         ) . '</div>';
                 }
             }

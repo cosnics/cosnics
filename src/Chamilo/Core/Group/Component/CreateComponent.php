@@ -52,7 +52,7 @@ class CreateComponent extends Manager
 
                 return $this->redirectWithMessage(
                     $translator->trans(
-                        'ObjectCreated', ['OBJECT' => $translator->trans('Group', [], Manager::CONTEXT)],
+                        'ObjectCreated', ['%Object%' => $translator->trans('Group', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
                     ), (false), [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
@@ -64,7 +64,7 @@ class CreateComponent extends Manager
             else {
                 return $this->redirectWithMessage(
                     $translator->trans(
-                        'ObjectNotCreated', ['OBJECT' => $translator->trans('Group', [], Manager::CONTEXT)],
+                        'ObjectNotCreated', ['%Object%' => $translator->trans('Group', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
                     ), (true), [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,

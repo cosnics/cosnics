@@ -135,7 +135,7 @@ class DefaultFooterRenderer
         if (!empty($administratorEmail) && !empty($administratorUri)) {
             $email = $stringUtilities->encryptMailLink($administratorEmail, $administratorName);
             $links[] = $translator->trans(
-                'ManagerContactWebsite', ['EMAIL' => $email, 'WEBSITE' => $administratorUri],
+                'ManagerContactWebsite', ['%Email%' => $email, '%Website%' => $administratorUri],
                 StringUtilities::LIBRARIES
             );
         }

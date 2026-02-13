@@ -28,7 +28,7 @@ class ActionResultRenderer
             $translator->trans('ActionResultAction' . $actionResult->getActionType(), [], $actionResult->getContext());
 
         if ($actionResult->isSingleAction()) {
-            $parameters['OBJECT'] = $translator->trans(
+            $parameters['%Object%'] = $translator->trans(
                 'ActionResultSingleEntity' . $actionResult->getEntityType(), [], $actionResult->getContext()
             );
 
@@ -40,7 +40,7 @@ class ActionResultRenderer
             }
         }
         else {
-            $parameters['OBJECT'] = $translator->trans(
+            $parameters['%Object%'] = $translator->trans(
                 'ActionResultMultipleEntity' . $actionResult->getEntityType(), [], $actionResult->getContext()
             );
 

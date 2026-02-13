@@ -40,6 +40,8 @@ class DeleteComponent extends Manager
             )
         );
 
+        $this->getTranslator([], []);
+
         $failures = 0;
 
         if (!empty($ids)) {
@@ -58,26 +60,26 @@ class DeleteComponent extends Manager
             if ($failures) {
                 if (count($ids) == 1) {
                     $message = $translator->trans(
-                        'ObjectNotDeleted', ['OBJECT' => $translator->trans('SelectedGroup', [], Manager::CONTEXT)],
+                        'ObjectNotDeleted', ['%Object%' => $translator->trans('SelectedGroup', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
                     );
                 }
                 else {
                     $message = $translator->trans(
-                        'ObjectsNotDeleted', ['OBJECT' => $translator->trans('SelectedGroups', [], Manager::CONTEXT)],
+                        'ObjectsNotDeleted', ['%Object%' => $translator->trans('SelectedGroups', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
                     );
                 }
             }
             elseif (count($ids) == 1) {
                 $message = $translator->trans(
-                    'ObjectDeleted', ['OBJECT' => $translator->trans('SelectedGroup', [], Manager::CONTEXT)],
+                    'ObjectDeleted', ['%Object%' => $translator->trans('SelectedGroup', [], Manager::CONTEXT)],
                     StringUtilities::LIBRARIES
                 );
             }
             else {
                 $message = $translator->trans(
-                    'ObjectsDeleted', ['OBJECT' => $translator->trans('SelectedGroups', [], Manager::CONTEXT)],
+                    'ObjectsDeleted', ['%Object%' => $translator->trans('SelectedGroups', [], Manager::CONTEXT)],
                     StringUtilities::LIBRARIES
                 );
             }

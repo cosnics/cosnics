@@ -12,6 +12,6 @@ class ParameterNotDefinedException extends UserException
 {
     public function __construct(string $parameter)
     {
-        parent::__construct($this->getTranslator()->trans('ParameterNotDefined', ['PARAMETER' => $parameter]));
+        parent::__construct($this->getTranslator()->trans('ParameterNotDefined', ['%Parameter%' => $parameter]));
     }
 }

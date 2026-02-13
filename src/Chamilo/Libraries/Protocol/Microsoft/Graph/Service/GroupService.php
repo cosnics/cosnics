@@ -199,7 +199,7 @@ class GroupService
     {
         $group = $this->groupRepository->getGroup($groupId);
 
-        return str_replace('{GROUP_ID}', $group->getMailNickname(), $this->getGroupBaseUri());
+        return str_replace('%GroupId', $group->getMailNickname(), $this->getGroupBaseUri());
     }
 
     /**

@@ -386,7 +386,7 @@ abstract class AbstractHtmlTableRenderer
             $dropDownButton->setLabel(
                 $translator->trans(
                     'TableOrderPropertyWithDirection',
-                    ['{PROPERTY}' => $orderProperty->getTitle(), '{DIRECTION}' => $orderDirection],
+                    ['%Property%' => $orderProperty->getTitle(), '%Direction%' => $orderDirection],
                     StringUtilities::LIBRARIES
                 )
             );

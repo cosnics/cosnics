@@ -43,7 +43,7 @@ class EditorComponent extends Manager
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 $this->getUrlGenerator()->fromRequest(), $this->getTranslator()->trans(
-                'EditMenuItemComponentTitle', ['{ITEM_NAME}' => $itemRenderer->renderTitleForCurrentLanguage($item)],
+                'EditMenuItemComponentTitle', ['%ItemName%' => $itemRenderer->renderTitleForCurrentLanguage($item)],
                 Manager::CONTEXT
             )
             )
@@ -67,7 +67,7 @@ class EditorComponent extends Manager
 
             $message = $this->getTranslator()->trans(
                 $success ? 'ObjectCreated' : 'ObjectNotCreated',
-                ['OBJECT' => $this->getTranslator()->trans('ManagerItem', [], 'Chamilo\Core\Menu')],
+                ['%Object%' => $this->getTranslator()->trans('ManagerItem', [], 'Chamilo\Core\Menu')],
                 StringUtilities::LIBRARIES
             );
 

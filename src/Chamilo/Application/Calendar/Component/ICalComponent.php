@@ -86,15 +86,15 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
                 $notificationMessages = [];
 
                 $notificationMessages[] = new NotificationMessage(
-                    $translator->trans('ICalExternalMessage', ['{URL}' => $icalExternalUrl], Manager::CONTEXT)
+                    $translator->trans('ICalExternalMessage', ['%Url%' => $icalExternalUrl], Manager::CONTEXT)
                 );
 
                 $notificationMessages[] = new NotificationMessage(
-                    $translator->trans('ICalDownloadMessage', ['{URL}' => $icalDownloadUrl], Manager::CONTEXT)
+                    $translator->trans('ICalDownloadMessage', ['%Url%' => $icalDownloadUrl], Manager::CONTEXT)
                 );
 
                 $notificationMessages[] = new NotificationMessage(
-                    $translator->trans('ICalWarningMessage', ['{INCLUDED_CALENDARS}' => $includedCalendars],
+                    $translator->trans('ICalWarningMessage', ['%IncludedCalendars%' => $includedCalendars],
                         Manager::CONTEXT), NotificationMessage::TYPE_WARNING
                 );
 

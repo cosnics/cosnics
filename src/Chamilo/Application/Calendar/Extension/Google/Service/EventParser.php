@@ -98,7 +98,7 @@ class EventParser
     private function getSource(CalendarProperties $calendarProperties): string
     {
         return $this->getTranslator()->trans(
-            'SourceName', ['{CALENDAR}' => $calendarProperties->getSummary()], Manager::CONTEXT
+            'SourceName', ['%Calendar%' => $calendarProperties->getSummary()], Manager::CONTEXT
         );
     }
 

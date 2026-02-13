@@ -229,7 +229,7 @@ MailResetPasswordDoneBody: "Your password has been reset. Your new details are s
 MailResetPasswordLink: "Link"
 MailResetPasswordLogIn: "To log in, click the link: %LoginLink%"
 MailResetPasswordNew: "New password"
-MailResetPasswordSender: "%AdminFirstName% %AdminLastName%"
+MailResetPasswordSender: "%AdmiName%"
 Manager: "Manager"
 ManageRights: "Manage rights"
 MandatoryFields: "mandatory fields are marked in bold"

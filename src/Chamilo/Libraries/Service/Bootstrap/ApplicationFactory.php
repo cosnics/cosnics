@@ -133,7 +133,7 @@ class ApplicationFactory
         if (!class_exists($managerClass)) {
             throw new UserException(
                 $this->getTranslator()->trans(
-                    'InvalidApplication', ['CONTEXT' => $context], StringUtilities::LIBRARIES
+                    'InvalidApplication', ['%Context%' => $context], StringUtilities::LIBRARIES
                 )
             );
         }
