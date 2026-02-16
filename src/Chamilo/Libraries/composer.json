@@ -26,10 +26,6 @@
                     "input": "Resources/Javascript/"
                 },
                 {
-                    "output": "Chamilo/Libraries/Format/Resources/Javascript/TblChange.js",
-                    "input": "Format/Resources/Javascript/TblChange.js"
-                },
-                {
                     "output": "Chamilo/Libraries/Resources/Plugin/",
                     "input": "Resources/Plugin/"
                 },
@@ -118,7 +114,7 @@
                         "Resources/Css/Aqua/Tree.min.css",
                         "Resources/Css/Aqua/Bootstrap.min.css",
                         "Resources/Css/Aqua/Stylesheet.min.css",
-                        "Resources/Css/Aqua/Calendar/Stylesheet.min.css"
+                        "Resources/Css/Aqua/Calendar.min.css"
                     ]
                 },
                 {
@@ -131,7 +127,8 @@
                         "Resources/Css/Aqua/Tree.min.css",
                         "Resources/Css/Aqua/Bootstrap.min.css",
                         "Resources/Css/Aqua/Stylesheet.min.css",
-                        "Resources/Css/Ruby/Stylesheet.min.css"
+                        "Resources/Css/Ruby/Stylesheet.min.css",
+                        "Resources/Css/Ruby/Calendar.min.css"
                     ]
                 },
                 {

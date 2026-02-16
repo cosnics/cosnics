@@ -16,11 +16,11 @@ $container->get(Bootstrap::class)->setup();
 $exceptionLogger = $container->get('Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger');
 
 /** @var \Symfony\Component\Console\Application $console */
-$console = $container->get('Chamilo\Libraries\Console');
+$console = $container->get('Chamilo\Libraries\Protocol\Console\Console');
 
 try {
     /** @var \Symfony\Component\Console\Helper\HelperSet $helperSet */
-    $helperSet = $container->get('Chamilo\Libraries\Console\HelperSet');
+    $helperSet = $container->get('Chamilo\Libraries\Protocol\Console\HelperSet');
 
     $console->setHelperSet($helperSet);
     $console->setCatchExceptions(false);
