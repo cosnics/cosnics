@@ -30,7 +30,7 @@ class LanguageRepository
      */
     public function findLanguages(): ArrayCollection
     {
-        $languagesPath = $this->getSystemPathBuilder()->getTranslationPath('Chamilo\Libraries');
+        $languagesPath = $this->getSystemPathBuilder()->getTranslationPath();
         $languageFiles =
             $this->getFilesystemTools()->getDirectoryContent($languagesPath, FileTypeFilterIterator::ONLY_FILES, false);
 

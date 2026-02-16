@@ -65,6 +65,7 @@ class ConditionTranslatorCollection extends ArrayCollection
      */
     public function translate(QueryBuilder $querybuilder, ConditionInterface $condition, ?bool $enableAliasing = true)
     {
+        /** @noinspection PhpParamsInspection */
         return $this->getTranslator($condition->getConditionTranslatorClass())->translate(
             $querybuilder, $condition, $enableAliasing
         );

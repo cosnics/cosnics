@@ -7,7 +7,6 @@ use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Application\Calendar\Extension\Google\Service\EventParser;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -72,16 +71,16 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    private function getCalendarIdentifiers(CalendarRendererProvider $calendarRendererProvider): array
+    private function getCalendarIdentifiers(User $user): array
     {
         $availabilities = $this->getAvailabilityService()->getAvailabilitiesForUserAndCalendarType(
-            $calendarRendererProvider->getDataUser(), Manager::CONTEXT
+            $user, Manager::CONTEXT
         );
 
         $calendarIdentifiers = [];
 
         if ($availabilities->count() == 0) {
-            $availableCalendars = $this->getCalendars();
+            $availableCalendars = $this->getCalendars($user);
 
             foreach ($availableCalendars as $availableCalendar) {
                 $calendarIdentifiers[] = $availableCalendar->getIdentifier();
@@ -108,7 +107,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @see \Chamilo\Application\Calendar\Architecture\Interface\CalendarExtensionDataProviderInterface::getCalendars()
      */
-    public function getCalendars(User $user = null): array
+    public function getCalendars(User $user): array
     {
         $calendarService = $this->getCalendarService();
 
@@ -130,23 +129,18 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
      * @throws \DateInvalidTimeZoneException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $fromDate, $toDate): array
+    public function getEvents(User $user, $fromDate, $toDate): array
     {
         $calendarService = $this->getCalendarService();
 
-        if (!$calendarService->isConfigured() ||
-            !$calendarService->isAuthenticated($calendarRendererProvider->getDataUser())) {
+        if (!$calendarService->isConfigured() || !$calendarService->isAuthenticated($user)) {
             return [];
         }
 
         $events = [];
 
-        foreach ($this->getCalendarIdentifiers($calendarRendererProvider) as $calendarIdentifier) {
-            $events = array_merge(
-                $events, $this->getCalendarEvents(
-                $calendarRendererProvider->getDataUser(), $calendarIdentifier, $fromDate, $toDate
-            )
-            );
+        foreach ($this->getCalendarIdentifiers($user) as $calendarIdentifier) {
+            $events = array_merge($events, $this->getCalendarEvents($user, $calendarIdentifier, $fromDate, $toDate));
         }
 
         return $events;

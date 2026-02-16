@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
 use Chamilo\Libraries\Calendar\Service\JumpBarRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
@@ -50,9 +49,8 @@ class WeekCalendarRenderer extends SidebarTableCalendarRenderer
         return $this->datetimeUtilities;
     }
 
-    public function getDayUrlTemplate(CalendarRendererProviderInterface $dataProvider): string
+    public function getDayUrlTemplate(array $displayParameters): string
     {
-        $displayParameters = $dataProvider->getDisplayParameters();
         $displayParameters[self::PARAM_TIME] = WeekCalendarTableBuilder::TIME_PLACEHOLDER;
         $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
 
@@ -62,6 +60,16 @@ class WeekCalendarRenderer extends SidebarTableCalendarRenderer
     public function getEventDayRenderer(): EventDayRenderer
     {
         return $this->eventDayRenderer;
+    }
+
+    public function getEventsEndTime(int $displayTime): int
+    {
+        return $this->getWeekCalendarTableBuilder()->getTableEndTime($displayTime);
+    }
+
+    public function getEventsStartTime(int $displayTime): int
+    {
+        return $this->getWeekCalendarTableBuilder()->getTableStartTime($displayTime);
     }
 
     public function getNextDisplayTime(int $displayTime): int
@@ -80,16 +88,21 @@ class WeekCalendarRenderer extends SidebarTableCalendarRenderer
     }
 
     /**
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
+     *
      * @throws \Exception
      */
-    public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
+    public function renderFullCalendar(
+        array $events, array $displayParameters, int $displayTime, array $invisibleSources = [],
+        ?string $invisibilityContext = null
+    ): string
     {
         $calendarTableBuilder = $this->getWeekCalendarTableBuilder();
 
-        $startTime = $calendarTableBuilder->getTableStartTime($displayTime);
-        $endTime = $calendarTableBuilder->getTableEndTime($displayTime);
+        $startTime = $this->getEventsStartTime($displayTime);
+        $endTime = $this->getEventsEndTime($displayTime);
 
-        $events = $this->getEvents($dataProvider, $startTime, $endTime);
+        $events = $this->orderEvents($events);
 
         $tableDate = $startTime;
         $eventsToShow = [];
@@ -105,7 +118,7 @@ class WeekCalendarRenderer extends SidebarTableCalendarRenderer
                     $tableDate < $endDate && $endDate <= $nextTableDate ||
                     $startDate <= $tableDate && $nextTableDate <= $endDate) {
                     $eventsToShow[$tableDate][] = $this->getEventDayRenderer()->render(
-                        $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($dataProvider, $event)
+                        $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($event, $invisibleSources)
                     );
                 }
             }
@@ -114,10 +127,10 @@ class WeekCalendarRenderer extends SidebarTableCalendarRenderer
         }
 
         return $calendarTableBuilder->render($displayTime, $eventsToShow, ['table-calendar-week'],
-            $this->getDayUrlTemplate($dataProvider));
+            $this->getDayUrlTemplate($displayParameters));
     }
 
-    public function renderTitle(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
+    public function renderTitle(int $displayTime): string
     {
         $weekNumber = date('W', $displayTime);
         $dateTimeUtilities = $this->getDatetimeUtilities();

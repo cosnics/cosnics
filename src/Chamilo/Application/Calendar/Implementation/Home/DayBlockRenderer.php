@@ -1,9 +1,8 @@
 <?php
 namespace Chamilo\Application\Calendar\Implementation\Home;
 
-use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Manager;
-use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
+use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
@@ -29,7 +28,7 @@ class DayBlockRenderer extends BlockRenderer
     public const CONFIGURATION_TIME_START = 'time_start';
     public const CONTEXT = Manager::CONTEXT;
 
-    protected VisibilityRepository $calendarRendererProviderRepository;
+    protected CalendarDataProvider $calendarDataProvider;
 
     protected DatetimeUtilities $datetimeUtilities;
 
@@ -40,7 +39,7 @@ class DayBlockRenderer extends BlockRenderer
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         DatetimeUtilities $datetimeUtilities, MiniDayCalendarRenderer $miniDayCalendarRenderer, ChamiloRequest $request,
-        VisibilityRepository $calendarRendererProviderRepository
+        CalendarDataProvider $calendarDataProvider
     )
     {
         parent::__construct($homeService, $urlGenerator, $translator);
@@ -48,26 +47,31 @@ class DayBlockRenderer extends BlockRenderer
         $this->datetimeUtilities = $datetimeUtilities;
         $this->miniDayCalendarRenderer = $miniDayCalendarRenderer;
         $this->request = $request;
-        $this->calendarRendererProviderRepository = $calendarRendererProviderRepository;
+        $this->calendarDataProvider = $calendarDataProvider;
     }
 
     /**
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function displayContent(Element $block, ?User $user = null): string
     {
-        $dataProvider = new CalendarRendererProvider(
-            $this->getCalendarRendererProviderRepository(), $user, [], Manager::CONTEXT
-        );
+        $miniDayCalendarRenderer = $this->getMiniDayCalendarRenderer();
+        $events = [];
+
+        if ($user instanceof User) {
+            $events = $this->getCalendarDataProvider()->getEvents(
+                $user, $miniDayCalendarRenderer->getEventsStartTime($this->getDisplayTime()),
+                $miniDayCalendarRenderer->getEventsEndTime($this->getDisplayTime())
+            );
+        }
 
         return '<div style="max-height: 500px; overflow: auto;">' .
-            $this->getMiniDayCalendarRenderer()->renderFullCalendar($dataProvider, $this->getDisplayTime()) . '</div>';
+            $miniDayCalendarRenderer->renderFullCalendar($events, $this->getDisplayTime()) . '</div>';
     }
 
-    public function getCalendarRendererProviderRepository(): VisibilityRepository
+    protected function getCalendarDataProvider(): CalendarDataProvider
     {
-        return $this->calendarRendererProviderRepository;
+        return $this->calendarDataProvider;
     }
 
     public function getDatetimeUtilities(): DatetimeUtilities

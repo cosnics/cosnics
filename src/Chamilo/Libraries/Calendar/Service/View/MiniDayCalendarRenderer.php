@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\DayCalendarTableBuilder;
@@ -32,14 +31,19 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
     }
 
     /**
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Visibility[] $invisibleSources
+     *
      * @throws \Exception
      */
-    public function render(CalendarRendererProviderInterface $dataProvider, int $displayTime, array $viewActions = []
+    public function render(
+        array $events, array $displayParameters, int $displayTime, array $viewActions = [],
+        array $invisibleSources = [], ?string $invisibilityContext = null
     ): string
     {
         $html = [];
-        $html[] = $this->renderFullCalendar($dataProvider, $displayTime);
-        $html[] = $this->getLegendRenderer()->render($dataProvider);
+        $html[] = $this->renderFullCalendar($events, $displayTime, $invisibleSources);
+        $html[] = $this->getLegendRenderer()->render($invisibleSources, $invisibilityContext);
 
         return implode(PHP_EOL, $html);
     }
@@ -54,19 +58,32 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
         return $this->eventDayRenderer;
     }
 
+    public function getEventsEndTime(int $displayTime): int
+    {
+        return $this->getDayCalendarTableBuilder()->getTableEndTime($displayTime);
+    }
+
+    public function getEventsStartTime(int $displayTime): int
+    {
+        return $this->getDayCalendarTableBuilder()->getTableStartTime($displayTime);
+    }
+
     /**
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
+     *
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Exception
      */
-    public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
+    public function renderFullCalendar(
+        array $events, int $displayTime, array $invisibleSources = []
+    ): string
     {
         $calendarTableBuilder = $this->getDayCalendarTableBuilder();
 
-        $startTime = $calendarTableBuilder->getTableStartTime($displayTime);
-        $endTime = $calendarTableBuilder->getTableEndTime($displayTime);
+        $startTime = $this->getEventsStartTime($displayTime);
+        $endTime = $this->getEventsEndTime($displayTime);
 
-        $events = $this->getEvents($dataProvider, $startTime, $endTime);
+        $events = $this->orderEvents($events);
 
         $tableDate = $startTime;
         $eventsToShow = [];
@@ -82,7 +99,7 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
                     $tableDate < $endDate && $endDate < $nextTableDate ||
                     $startDate <= $tableDate && $nextTableDate <= $endDate) {
                     $eventsToShow[$tableDate][] = $this->getEventDayRenderer()->render(
-                        $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($dataProvider, $event)
+                        $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($event, $invisibleSources)
 
                     );
                 }

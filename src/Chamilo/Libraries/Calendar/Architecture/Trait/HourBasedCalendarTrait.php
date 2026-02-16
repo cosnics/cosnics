@@ -31,7 +31,7 @@ trait HourBasedCalendarTrait
         return $this->defaultHideNonWorkingHours;
     }
 
-    public function setDefaultHideNonWorkingHours(bool $defaultHideNonWorkingHours): HourBasedCalendarTrait
+    public function setDefaultHideNonWorkingHours(bool $defaultHideNonWorkingHours): static
     {
         $this->defaultHideNonWorkingHours = $defaultHideNonWorkingHours;
 
@@ -43,7 +43,7 @@ trait HourBasedCalendarTrait
         return $this->defaultHourStep;
     }
 
-    public function setDefaultHourStep(int $defaultHourStep): HourBasedCalendarTrait
+    public function setDefaultHourStep(int $defaultHourStep): static
     {
         $this->defaultHourStep = $defaultHourStep;
 
@@ -55,7 +55,7 @@ trait HourBasedCalendarTrait
         return $this->defaultWorkingHoursEnd;
     }
 
-    public function setDefaultWorkingHoursEnd(int $defaultWorkingHoursEnd): HourBasedCalendarTrait
+    public function setDefaultWorkingHoursEnd(int $defaultWorkingHoursEnd): static
     {
         $this->defaultWorkingHoursEnd = $defaultWorkingHoursEnd;
 
@@ -67,7 +67,7 @@ trait HourBasedCalendarTrait
         return $this->defaultWorkingHoursStart;
     }
 
-    public function setDefaultWorkingHoursStart(int $defaultWorkingHoursStart): HourBasedCalendarTrait
+    public function setDefaultWorkingHoursStart(int $defaultWorkingHoursStart): static
     {
         $this->defaultWorkingHoursStart = $defaultWorkingHoursStart;
 

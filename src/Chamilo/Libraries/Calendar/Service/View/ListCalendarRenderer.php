@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Architecture\Trait\AgendaCalendarTrait;
 use Chamilo\Libraries\Calendar\Service\Event\EventListRenderer;
 use Chamilo\Libraries\Calendar\Service\JumpBarRenderer;
@@ -66,9 +65,9 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
-    public function renderNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
+    public function renderNavigation(array $displayParameters, int $displayTime): string
     {
-        $urlFormat = $this->determineNavigationUrl($dataProvider);
+        $urlFormat = $this->determineNavigationUrl($displayParameters);
         $todayUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, (string) time(), $urlFormat);
 
         $buttonToolBar = new ButtonToolBar();

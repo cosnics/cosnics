@@ -126,7 +126,7 @@ class Kernel
 
     public function getContext(): ?string
     {
-        return $this->getRequest()->query->get(Application::PARAM_CONTEXT, Manager::CONTEXT);
+        return $this->getRequest()->getFromQueryOrRequest(Application::PARAM_CONTEXT, Manager::CONTEXT);
     }
 
     public function getEventDispatcher(): EventDispatcherInterface

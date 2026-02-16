@@ -25,14 +25,12 @@ class VisibilityService implements VisibilityServiceInterface
      */
     public function changeVisibility(string $userIdentifier, string $source): bool
     {
-        try
-        {
+        try {
             $visibility = $this->retrieveVisibilityForUserIdentifierAndSource($userIdentifier, $source);
 
             return $this->deleteVisibility($visibility);
         }
-        catch (StorageNoResultException)
-        {
+        catch (StorageNoResultException) {
             return $this->createVisibilityFromParameters($userIdentifier, $source);
         }
     }

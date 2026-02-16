@@ -2,8 +2,6 @@
 namespace Chamilo\Libraries\Calendar\Architecture\Trait;
 
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
-use Chamilo\Libraries\Calendar\Architecture\Interface\ActionSupport;
-use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\Event\EventListRenderer;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageRenderer;
@@ -16,24 +14,13 @@ use Symfony\Component\Translation\Translator;
 trait AgendaCalendarTrait
 {
     /**
-     * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button[]
-     */
-    public function getActions(CalendarRendererProviderInterface $dataProvider, Event $event): array
-    {
-        if ($dataProvider instanceof ActionSupport) {
-            return $dataProvider->getEventActions($event);
-        }
-
-        return [];
-    }
-
-    /**
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
+     *
      * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[][]
      */
-    public function getAgendaEvents(CalendarRendererProviderInterface $dataProvider, int $startTime, int $endTime
-    ): array
+    public function getAgendaEvents(array $events): array
     {
-        $events = $this->getEvents($dataProvider, $startTime, $endTime);
+        $events = $this->orderEvents($events);
 
         $structuredEvents = [];
 
@@ -52,7 +39,7 @@ trait AgendaCalendarTrait
         ksort($structuredEvents);
 
         foreach ($structuredEvents as &$dateEvents) {
-            usort($dateEvents, [$this, 'orderEvents']);
+            usort($dateEvents, [$this, 'orderStructuredEvents']);
         }
 
         return $structuredEvents;
@@ -62,33 +49,40 @@ trait AgendaCalendarTrait
 
     abstract public function getEventListRenderer(): EventListRenderer;
 
-    /**
-     * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
-     */
-    abstract public function getEvents(CalendarRendererProviderInterface $dataProvider, int $startTime, int $endTime
-    ): array;
+    public function getEventsEndTime(int $displayTime): int
+    {
+        return $this->getEndTime($displayTime);
+    }
+
+    public function getEventsStartTime(int $displayTime): int
+    {
+        return $displayTime;
+    }
 
     abstract public function getNotificationMessageRenderer(): NotificationMessageRenderer;
 
     abstract public function getTranslator(): Translator;
 
-    abstract public function isEventSourceVisible(CalendarRendererProviderInterface $dataProvider, Event $event): bool;
+    abstract public function isEventSourceVisible(Event $event, array $invisibleSources = []): bool;
 
-    abstract public function isSourceVisible(
-        CalendarRendererProviderInterface $dataProvider, string $source, ?int $userIdentifier = null
-    ): bool;
+    abstract public function isSourceVisible(string $source, array $invisibleSources = []): bool;
 
-    public function orderEvents(Event $eventLeft, Event $eventRight): int
+    public function orderStructuredEvents(Event $eventLeft, Event $eventRight): int
     {
         return strcmp((string) $eventLeft->getStartDate(), (string) $eventRight->getStartDate());
     }
 
     /**
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
+     *
      * @throws \Exception
      */
-    public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
+    public function renderFullCalendar(
+        array $events, array $displayParameters, int $displayTime, array $invisibleSources = [],
+        ?string $invisibilityContext = null
+    ): string
     {
-        $events = $this->getAgendaEvents($dataProvider, $displayTime, $this->getEndTime($displayTime));
+        $events = $this->getAgendaEvents($events);
 
         $html = [];
 
@@ -99,7 +93,7 @@ trait AgendaCalendarTrait
                 $hiddenEvents = 0;
 
                 foreach ($dateEvents as $dateEvent) {
-                    if (!$this->isSourceVisible($dataProvider, $dateEvent->getSource())) {
+                    if (!$this->isSourceVisible($dateEvent->getSource(), $invisibleSources)) {
                         $hiddenEvents ++;
                     }
                 }
@@ -118,8 +112,7 @@ trait AgendaCalendarTrait
                 foreach ($dateEvents as $dateEvent) {
                     $html[] = '<li class="list-group-item ">';
                     $html[] = $this->getEventListRenderer()->render(
-                        $dateEvent, $this->isEventSourceVisible($dataProvider, $dateEvent),
-                        $this->getActions($dataProvider, $dateEvent)
+                        $dateEvent, $this->isEventSourceVisible($dateEvent, $invisibleSources), $dateEvent->getActions()
                     );
                     $html[] = '</li>';
                 }
@@ -143,7 +136,7 @@ trait AgendaCalendarTrait
         return implode('', $html);
     }
 
-    public function renderTitle(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
+    public function renderTitle(int $displayTime): string
     {
         return date('d M Y', $displayTime) . ' - ' . date('d M Y', $this->getEndTime($displayTime));
     }

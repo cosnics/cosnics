@@ -20,6 +20,7 @@ class PropertyConditionVariableTranslator extends ConditionVariableTranslator
         return PropertyConditionVariable::class;
     }
 
+    /** @noinspection PhpUnusedParameterInspection */
     public function translate(
         QueryBuilder $querybuilder, PropertyConditionVariable $propertyConditionVariable, ?bool $enableAliasing = true
     ): string

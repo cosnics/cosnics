@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Calendar\Service\View;
 
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
 use Chamilo\Libraries\Calendar\Architecture\Domain\EventAttendee;
-use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\Recurrence\VObjectRecurrenceRulesFormatter;
 use DateTime;
 use DateTimeZone;
@@ -31,12 +30,17 @@ class ICalCalendarRenderer extends CalendarRenderer
     }
 
     /**
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
+     *
      * @throws \Exception
      */
-    public function render(CalendarRendererProviderInterface $dataProvider): string
+    public function render(array $events): string
     {
         $this->addTimeZone();
-        $this->addEvents($dataProvider);
+
+        foreach ($events as $event) {
+            $this->addEvent($event);
+        }
 
         return $this->getCalendar()->serialize();
     }
@@ -123,20 +127,6 @@ class ICalCalendarRenderer extends CalendarRenderer
     }
 
     /**
-     * @throws \Exception
-     */
-    private function addEvents(CalendarRendererProviderInterface $dataProvider): void
-    {
-        $providedEvents = $dataProvider->getEvents(
-            strtotime('first day of 2 months ago midnight'), strtotime('last day of +6 months midnight')
-        );
-
-        foreach ($providedEvents as $providedEvent) {
-            $this->addEvent($providedEvent);
-        }
-    }
-
-    /**
      * @return void
      * @throws \Exception
      * @author MicroEducate
@@ -213,16 +203,28 @@ class ICalCalendarRenderer extends CalendarRenderer
         $this->calendar = $calendar;
     }
 
+    public function getEventsEndTime(): int
+    {
+        return strtotime('last day of +6 months midnight');
+    }
+
+    public function getEventsStartTime(): int
+    {
+        return strtotime('first day of 2 months ago midnight');
+    }
+
     /**
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
+     *
      * @throws \Exception
      */
-    public function renderAndGetResponse(CalendarRendererProviderInterface $dataProvider): Response
+    public function renderAndGetResponse(array $events): Response
     {
         $headers = [];
 
         $headers['Content-Type'] = 'text/calendar; charset=utf-8';
         $headers['Content-Disposition'] = 'attachment; filename="myCalendar.ics"';
 
-        return new Response($this->render($dataProvider), 200, $headers);
+        return new Response($this->render($events), 200, $headers);
     }
 }

@@ -8,9 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @package Chamilo\Application\Calendar\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CalendarExtensionDataProviderCollection extends ArrayCollection
+class CalendarExtensionDataProviderRegistry extends ArrayCollection
 {
-
     public function addCalendarExtensionDataProvider(
         CalendarExtensionDataProviderInterface $calendarExtensionDataProvider
     ): void

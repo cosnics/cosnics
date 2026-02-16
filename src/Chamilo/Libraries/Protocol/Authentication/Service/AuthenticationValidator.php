@@ -180,7 +180,7 @@ class AuthenticationValidator
             }
         }
 
-        throw new NotAuthenticatedException(true);
+        throw new NotAuthenticatedException('Authentication validation failed');
     }
 
     /**
@@ -209,7 +209,9 @@ class AuthenticationValidator
             return;
         }
         catch (AuthenticationException) {
-            throw new NotAuthenticatedException(true);
+            throw new NotAuthenticatedException(
+                'Authentication validation failed for authentication: ' . get_class($authentication)
+            );
         }
     }
 

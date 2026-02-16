@@ -210,7 +210,7 @@ trait DependencyInjectionContainerTrait
     /**
      * @param class-string<\Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder> $className
      */
-    public function getThemeWebPathBuilder(string $className = 'Chamilo\Libraries\Format\Theme\ThemeWebPathBuilder'
+    public function getThemeWebPathBuilder(string $className = 'Chamilo\Libraries\UserInterface\Theme\Service\ThemeWebPathBuilder'
     ): ThemePathBuilder
     {
         return $this->getService($className);

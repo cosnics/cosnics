@@ -40,8 +40,6 @@ class DeleteComponent extends Manager
             )
         );
 
-        $this->getTranslator([], []);
-
         $failures = 0;
 
         if (!empty($ids)) {

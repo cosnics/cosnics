@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Calendar\Implementation\Home;
 
-use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Manager;
+use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
@@ -26,6 +26,8 @@ class MonthBlockRenderer extends BlockRenderer
 {
     public const CONTEXT = Manager::CONTEXT;
 
+    protected CalendarDataProvider $calendarDataProvider;
+
     protected VisibilityRepository $calendarRendererProviderRepository;
 
     protected MiniMonthCalendarRenderer $miniMonthCalendarRenderer;
@@ -35,7 +37,7 @@ class MonthBlockRenderer extends BlockRenderer
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         MiniMonthCalendarRenderer $miniMonthCalendarRenderer, ChamiloRequest $request,
-        VisibilityRepository $calendarRendererProviderRepository
+        VisibilityRepository $calendarRendererProviderRepository, CalendarDataProvider $calendarDataProvider
     )
     {
         parent::__construct($homeService, $urlGenerator, $translator);
@@ -43,6 +45,7 @@ class MonthBlockRenderer extends BlockRenderer
         $this->miniMonthCalendarRenderer = $miniMonthCalendarRenderer;
         $this->request = $request;
         $this->calendarRendererProviderRepository = $calendarRendererProviderRepository;
+        $this->calendarDataProvider = $calendarDataProvider;
     }
 
     /**
@@ -50,14 +53,29 @@ class MonthBlockRenderer extends BlockRenderer
      */
     public function displayContent(Element $block, ?User $user = null): string
     {
-        $dataProvider = new CalendarRendererProvider(
-            $this->getCalendarRendererProviderRepository(), $user, [
+        $displayParameters = [
             Application::PARAM_CONTEXT => Manager::CONTEXT,
             HtmlCalendarRenderer::PARAM_TYPE => HtmlCalendarRenderer::TYPE_DAY
-        ], Manager::CONTEXT
-        );
+        ];
 
-        return $this->getMiniMonthCalendarRenderer()->renderCalendar($dataProvider, $this->getDisplayTime());
+        $miniMonthCalendarRenderer = $this->getMiniMonthCalendarRenderer();
+        $events = [];
+
+        if ($user instanceof User) {
+            $events = $this->getCalendarDataProvider()->getEvents(
+                $user, $miniMonthCalendarRenderer->getEventsStartTime($this->getDisplayTime()),
+                $miniMonthCalendarRenderer->getEventsEndTime($this->getDisplayTime())
+            );
+        }
+
+        return $this->getMiniMonthCalendarRenderer()->renderCalendar(
+            $events, $displayParameters, $this->getDisplayTime()
+        );
+    }
+
+    protected function getCalendarDataProvider(): CalendarDataProvider
+    {
+        return $this->calendarDataProvider;
     }
 
     public function getCalendarRendererProviderRepository(): VisibilityRepository

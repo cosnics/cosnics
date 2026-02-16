@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Calendar\Service\View;
 
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
-use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\Event\EventMonthRenderer;
 use Chamilo\Libraries\Calendar\Service\JumpBarRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
@@ -40,9 +39,8 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
         $this->monthCalendarTableBuilder = $monthCalendarTableBuilder;
     }
 
-    public function getDayUrlTemplate(CalendarRendererProviderInterface $dataProvider): string
+    public function getDayUrlTemplate(array $displayParameters): string
     {
-        $displayParameters = $dataProvider->getDisplayParameters();
         $displayParameters[self::PARAM_TIME] = MonthCalendarTableBuilder::TIME_PLACEHOLDER;
         $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
 
@@ -52,6 +50,16 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
     public function getEventMonthRenderer(): EventMonthRenderer
     {
         return $this->eventMonthRenderer;
+    }
+
+    public function getEventsEndTime(int $displayTime): int
+    {
+        return $this->getMonthCalendarTableBuilder()->getTableEndTime($displayTime);
+    }
+
+    public function getEventsStartTime(int $displayTime): int
+    {
+        return $this->getMonthCalendarTableBuilder()->getTableStartTime($displayTime);
     }
 
     public function getMonthCalendarTableBuilder(): MonthCalendarTableBuilder
@@ -80,15 +88,20 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
     }
 
     /**
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
+     *
      * @throws \Exception
      */
-    public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
+    public function renderFullCalendar(
+        array $events, array $displayParameters, int $displayTime, array $invisibleSources = [],
+        ?string $invisibilityContext = null
+    ): string
     {
         $calendarTableBuilder = $this->getMonthCalendarTableBuilder();
-        $startTime = $calendarTableBuilder->getTableStartTime($displayTime);
-        $endTime = $calendarTableBuilder->getTableEndTime($displayTime);
+        $startTime = $this->getEventsStartTime($displayTime);
+        $endTime = $this->getEventsEndTime($displayTime);
 
-        $events = $this->getEvents($dataProvider, $startTime, $endTime);
+        $events = $this->orderEvents($events);
         $tableDate = $startTime;
         $eventsToShow = [];
 
@@ -103,7 +116,7 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
                     $tableDate < $endDate && $endDate <= $nextTableDate ||
                     $startDate <= $tableDate && $nextTableDate <= $endDate) {
                     $eventsToShow[$tableDate][] = $this->getEventMonthRenderer()->render(
-                        $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($dataProvider, $event),
+                        $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($event, $invisibleSources),
                         $this->isFadedEvent($displayTime, $event)
                     );
                 }
@@ -116,13 +129,13 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
 
         $html[] = '<div class="month-calendar">';
         $html[] = $calendarTableBuilder->render($displayTime, $eventsToShow, ['table-calendar-month'],
-            $this->getDayUrlTemplate($dataProvider));
+            $this->getDayUrlTemplate($displayParameters));
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
 
-    public function renderTitle(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
+    public function renderTitle(int $displayTime): string
     {
         return $this->getTranslator()->trans(date('F', $displayTime) . 'Long', [], StringUtilities::LIBRARIES) . ' ' .
             date('Y', $displayTime);

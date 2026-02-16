@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Application\Calendar\Component;
 
-use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionActionProviderCollection;
-use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProviderCollection;
-use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvider;
+use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionActionProviderRegistry;
+use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProviderRegistry;
 use Chamilo\Application\Calendar\Manager;
+use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Core\User\Component\ConfigureComponent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class BrowserComponent extends Manager
 {
-    protected CalendarRendererProvider $calendarRendererProvider;
+    protected CalendarDataProvider $calendarRendererProvider;
 
     private int $currentTime;
 
@@ -38,7 +38,6 @@ class BrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     * @throws \Symfony\Component\Cache\Exception\CacheException
      */
     public function run(): Response
     {
@@ -78,37 +77,24 @@ class BrowserComponent extends Manager
         }
     }
 
-    protected function getCalendarExtensionActionProvider(): CalendarExtensionActionProviderCollection
+    protected function getCalendarDataProvider(): CalendarDataProvider
     {
-        return $this->getService(CalendarExtensionActionProviderCollection::class);
+        return $this->getService(CalendarDataProvider::class);
     }
 
-    protected function getCalendarExtensionDataProvider(): CalendarExtensionDataProviderCollection
+    protected function getCalendarExtensionActionProvider(): CalendarExtensionActionProviderRegistry
     {
-        return $this->getService(CalendarExtensionDataProviderCollection::class);
+        return $this->getService(CalendarExtensionActionProviderRegistry::class);
+    }
+
+    protected function getCalendarExtensionDataProvider(): CalendarExtensionDataProviderRegistry
+    {
+        return $this->getService(CalendarExtensionDataProviderRegistry::class);
     }
 
     protected function getCalendarRendererFactory(): HtmlCalendarRendererFactory
     {
         return $this->getService(HtmlCalendarRendererFactory::class);
-    }
-
-    protected function getCalendarRendererProvider(): CalendarRendererProvider
-    {
-        if (!isset($this->calendarRendererProvider)) {
-            $displayParameters = [
-                self::PARAM_CONTEXT => Manager::CONTEXT,
-                self::PARAM_ACTION => self::ACTION_BROWSE,
-                HtmlCalendarRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
-                HtmlCalendarRenderer::PARAM_TIME => $this->getCurrentRendererTime()
-            ];
-
-            $this->calendarRendererProvider = new CalendarRendererProvider(
-                $this->getVisibilityRepository(), $this->getUser(), $displayParameters, Manager::CONTEXT
-            );
-        }
-
-        return $this->calendarRendererProvider;
     }
 
     public function getCurrentRendererTime(): int
@@ -238,15 +224,28 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Exception
      */
     protected function renderCalendar(): string
     {
         $renderer = $this->getCalendarRendererFactory()->getRenderer($this->getCurrentRendererType());
 
+        $displayParameters = [
+            self::PARAM_CONTEXT => Manager::CONTEXT,
+            self::PARAM_ACTION => self::ACTION_BROWSE,
+            HtmlCalendarRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
+            HtmlCalendarRenderer::PARAM_TIME => $this->getCurrentRendererTime()
+        ];
+
+        $events = $this->getCalendarDataProvider()->getEvents(
+            $this->getUser(), $renderer->getEventsStartTime($this->getCurrentRendererTime()),
+            $renderer->getEventsEndTime($this->getCurrentRendererTime())
+        );
+
         return $renderer->render(
-            $this->getCalendarRendererProvider(), $this->getCurrentRendererTime(), $this->getViewActions()
+            $events, $displayParameters, $this->getCurrentRendererTime(), $this->getViewActions(),
+            $this->getCalendarDataProvider()->getVisibilities($this->getUser()->getId()), Manager::CONTEXT
         );
     }
 

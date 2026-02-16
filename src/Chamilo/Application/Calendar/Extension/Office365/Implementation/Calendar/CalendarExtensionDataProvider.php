@@ -7,7 +7,6 @@ use Chamilo\Application\Calendar\Extension\Office365\Service\EventParser;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
@@ -55,15 +54,13 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
     {
         $availableCalendar = new AvailableCalendar();
 
-        try
-        {
+        try {
             $calendar = $this->getCalendarService()->getCalendarByIdentifier($calendarIdentifier, $user);
             $availableCalendar->setType(self::CONTEXT);
             $availableCalendar->setIdentifier($calendar->getId());
             $availableCalendar->setName($calendar->getName());
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             $availableCalendar->setIdentifier($calendarIdentifier);
             $availableCalendar->setName('NOT FOUND');
         }
@@ -76,8 +73,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
      */
     protected function getCalendarEvents(string $calendarIdentifier, User $user, int $fromDate, int $toDate): array
     {
-        try
-        {
+        try {
             $events = $this->getCalendarService()->findEventsForCalendarIdentifierAndBetweenDates(
                 $user, $calendarIdentifier, $fromDate, $toDate
             );
@@ -85,16 +81,14 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
             $availableCalendar = $this->getCalendarByIdentifier($calendarIdentifier, $user);
             $parsedEvents = [];
 
-            foreach ($events as $event)
-            {
+            foreach ($events as $event) {
                 $parsedEvents =
                     array_merge($parsedEvents, $this->getEventParser()->getEvents($availableCalendar, $event));
             }
 
             return $parsedEvents;
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             return [];
         }
     }
@@ -102,29 +96,24 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    protected function getCalendarIdentifiers(CalendarRendererProvider $calendarRendererProvider): array
+    protected function getCalendarIdentifiers(User $user): array
     {
         $availabilities = $this->getAvailabilityService()->getAvailabilitiesForUserAndCalendarType(
-            $calendarRendererProvider->getDataUser(), self::CONTEXT
+            $user, self::CONTEXT
         );
 
         $calendarIdentifiers = [];
 
-        if ($availabilities->count() == 0)
-        {
-            $availableCalendars = $this->getCalendars($calendarRendererProvider->getDataUser());
+        if ($availabilities->count() == 0) {
+            $availableCalendars = $this->getCalendars($user);
 
-            foreach ($availableCalendars as $availableCalendar)
-            {
+            foreach ($availableCalendars as $availableCalendar) {
                 $calendarIdentifiers[] = $availableCalendar->getIdentifier();
             }
         }
-        else
-        {
-            foreach ($availabilities as $availability)
-            {
-                if ($availability->isActive())
-                {
+        else {
+            foreach ($availabilities as $availability) {
+                if ($availability->isActive()) {
                     $calendarIdentifiers[] = $availability->getCalendarId();
                 }
             }
@@ -145,23 +134,19 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
     {
         $filesystemAdapter = $this->getFilesystemAdapter();
 
-        try
-        {
+        try {
             $identifier = [__METHOD__, $user->getId()];
             $identifierString = md5(serialize($identifier));
 
             $cacheItem = $filesystemAdapter->getItem($identifierString);
 
-            if (!$cacheItem->isHit())
-            {
-                try
-                {
+            if (!$cacheItem->isHit()) {
+                try {
                     $availableCalendars = [];
 
                     $ownedCalendars = $this->getCalendarService()->listOwnedCalendars($user);
 
-                    foreach ($ownedCalendars as $ownedCalendar)
-                    {
+                    foreach ($ownedCalendars as $ownedCalendar) {
                         $availableCalendar = new AvailableCalendar();
 
                         $availableCalendar->setType(self::CONTEXT);
@@ -171,8 +156,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
                         $availableCalendars[] = $availableCalendar;
                     }
                 }
-                catch (Exception)
-                {
+                catch (Exception) {
                     $availableCalendars = [];
                 }
 
@@ -182,8 +166,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
 
             return $cacheItem->get();
         }
-        catch (InvalidArgumentException)
-        {
+        catch (InvalidArgumentException) {
             return [];
         }
     }
@@ -197,17 +180,16 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
      * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function getEvents(CalendarRendererProvider $calendarRendererProvider, int $fromDate, int $toDate): array
+    public function getEvents(User $user, int $fromDate, int $toDate): array
     {
         $filesystemAdapter = $this->getFilesystemAdapter();
 
-        try
-        {
-            $calendarIdentifiers = $this->getCalendarIdentifiers($calendarRendererProvider);
+        try {
+            $calendarIdentifiers = $this->getCalendarIdentifiers($user);
 
             $identifier = [
                 __METHOD__,
-                $calendarRendererProvider->getDataUser()->getId(),
+                $user->getId(),
                 $calendarIdentifiers,
                 $fromDate,
                 $toDate
@@ -216,15 +198,13 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
 
             $cacheItem = $filesystemAdapter->getItem($identifierString);
 
-            if (!$cacheItem->isHit())
-            {
+            if (!$cacheItem->isHit()) {
                 $events = [];
 
-                foreach ($calendarIdentifiers as $calendarIdentifier)
-                {
+                foreach ($calendarIdentifiers as $calendarIdentifier) {
                     $events = array_merge(
                         $events, $this->getCalendarEvents(
-                        $calendarIdentifier, $calendarRendererProvider->getDataUser(), $fromDate, $toDate
+                        $calendarIdentifier, $user, $fromDate, $toDate
                     )
                     );
                 }
@@ -235,8 +215,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
 
             return $cacheItem->get();
         }
-        catch (InvalidArgumentException)
-        {
+        catch (InvalidArgumentException) {
             return [];
         }
     }

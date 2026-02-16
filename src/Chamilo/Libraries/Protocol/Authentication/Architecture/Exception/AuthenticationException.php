@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Authentication\Architecture\Exception;
 
+use Chamilo\Libraries\Architecture\Exception\UserException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Exception;
 
 /**
  * @package Chamilo\Libraries\Protocol\Authentication\Architecture\Exception
@@ -10,12 +10,11 @@ use Exception;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class AuthenticationException extends NotAllowedException
+class AuthenticationException extends UserException
 {
-
     protected string $errorMessage;
 
-    public function __construct(?string $message = null, ?int $code = null, ?string $previous = null)
+    public function __construct(?string $message = null, ?int $code = 0, ?string $previous = null)
     {
         $this->getSession()->set('request_uri', $_SERVER['REQUEST_URI']);
 
@@ -30,7 +29,7 @@ class AuthenticationException extends NotAllowedException
         $html[] = $this->getTranslator()->trans('LoginTryAgain', [], StringUtilities::LIBRARIES);
         $html[] = '</a></p>';
 
-        Exception::__construct(implode(PHP_EOL, $html), $code, $previous);
+        parent::__construct(implode(PHP_EOL, $html), $code, $previous);
     }
 
     public function getErrorMessage(): string

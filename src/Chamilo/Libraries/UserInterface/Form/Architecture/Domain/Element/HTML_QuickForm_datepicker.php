@@ -187,7 +187,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $html = [];
 
         $html[] = $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'TblChange.js'
+            $this->getWebPathBuilder()->getJavascriptPath() . 'TblChange.js'
         );
         $html[] = '<script>';
         $html[] = 'var max_year="' . ((int) date('Y') + 10) . '";';

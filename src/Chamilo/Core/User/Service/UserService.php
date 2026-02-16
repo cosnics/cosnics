@@ -245,6 +245,7 @@ class UserService
         return $user;
     }
 
+    /** @noinspection PhpUnusedParameterInspection */
     public function deleteUser(User $user): bool
     {
         return false;

@@ -2,6 +2,7 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Application\Calendar\Service\AvailabilityService;
+use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Application\Calendar\Service\VisibilityService;
 
 return static function (ContainerConfigurator $container) {
@@ -10,4 +11,5 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(AvailabilityService::class);
     $services->set(VisibilityService::class);
+    $services->set(CalendarDataProvider::class);
 };

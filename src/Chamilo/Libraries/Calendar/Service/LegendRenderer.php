@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service;
 
-use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Architecture\Interface\VisibilitySupport;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
@@ -43,9 +41,11 @@ class LegendRenderer
     /**
      * Builds a colour-based legend for the calendar to help users to see the origin of the the published events
      *
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Visibility[] $invisibleSources
+     *
      * @throws \Exception
      */
-    public function render(CalendarRendererProviderInterface $dataProvider): string
+    public function render(array $invisibleSources, ?string $invisibilityContext = null): string
     {
         $translator = $this->getTranslator();
 
@@ -68,16 +68,11 @@ class LegendRenderer
             foreach ($sources as $source) {
                 $sourceClasses = $this->getSourceClasses($source);
 
-                if ($dataProvider instanceof VisibilitySupport) {
-                    $isSourceVisible = $dataProvider->isSourceVisible($source);
-                    $eventClasses = !$isSourceVisible ? ' event-container-source-faded' : '';
+                $isSourceVisible = $this->isSourceVisible($invisibleSources, $source);
+                $eventClasses = !$isSourceVisible ? ' event-container-source-faded' : '';
 
-                    if ($isSourceVisible) {
-                        $visibleSources ++;
-                    }
-                }
-                else {
-                    $eventClasses = '';
+                if ($isSourceVisible) {
+                    $visibleSources ++;
                 }
 
                 $result[] = '<li class="list-group-item">';
@@ -93,14 +88,13 @@ class LegendRenderer
             $result[] = '</ul>';
             $result[] = '</div>';
 
-            if ($dataProvider instanceof VisibilitySupport) {
+            if ($invisibilityContext) {
                 $result[] = '<script>';
-                $result[] =
-                    'var calendarVisibilityContext = ' . json_encode($dataProvider->getVisibilityContext()) . ';';
+                $result[] = 'var calendarVisibilityContext = ' . json_encode($invisibilityContext) . ';';
                 $result[] = '</script>';
 
                 $result[] = $this->getResourceManager()->getResourceHtml(
-                    $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'Calendar/Highlight.js'
+                    $this->getWebPathBuilder()->getJavascriptPath() . 'Calendar/Highlight.js'
                 );
 
                 if ($visibleSources == 0) {
@@ -202,5 +196,10 @@ class LegendRenderer
     public function hasSources(): bool
     {
         return count($this->getSources()) > 0;
+    }
+
+    public function isSourceVisible(array $invisibleSources, string $source): bool
+    {
+        return !array_key_exists($source, $invisibleSources);
     }
 }

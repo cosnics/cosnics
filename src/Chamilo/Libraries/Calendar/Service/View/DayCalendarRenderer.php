@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
 use Chamilo\Libraries\Calendar\Service\JumpBarRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
@@ -59,6 +58,16 @@ class DayCalendarRenderer extends SidebarTableCalendarRenderer
         return $this->eventDayRenderer;
     }
 
+    public function getEventsEndTime(int $displayTime): int
+    {
+        return $this->getDayCalendarTableBuilder()->getTableEndTime($displayTime);
+    }
+
+    public function getEventsStartTime(int $displayTime): int
+    {
+        return $this->getDayCalendarTableBuilder()->getTableStartTime($displayTime);
+    }
+
     public function getNextDisplayTime(int $displayTime): int
     {
         return strtotime('+1 Day', $displayTime);
@@ -70,16 +79,21 @@ class DayCalendarRenderer extends SidebarTableCalendarRenderer
     }
 
     /**
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
+     *
      * @throws \Exception
      */
-    public function renderFullCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
+    public function renderFullCalendar(
+        array $events, array $displayParameters, int $displayTime, array $invisibleSources = [],
+        ?string $invisibilityContext = null
+    ): string
     {
         $calendarTableBuilder = $this->getDayCalendarTableBuilder();
 
-        $startTime = $calendarTableBuilder->getTableStartTime($displayTime);
-        $endTime = $calendarTableBuilder->getTableEndTime($displayTime);
+        $startTime = $this->getEventsStartTime($displayTime);
+        $endTime = $this->getEventsEndTime($displayTime);
 
-        $events = $this->getEvents($dataProvider, $startTime, $endTime);
+        $events = $this->orderEvents($events);
 
         $tableDate = $startTime;
         $eventsToShow = [];
@@ -95,7 +109,7 @@ class DayCalendarRenderer extends SidebarTableCalendarRenderer
                     $tableDate < $endDate && $endDate < $nextTableDate ||
                     $startDate <= $tableDate && $nextTableDate <= $endDate) {
                     $eventsToShow[$tableDate][] = $this->getEventDayRenderer()->render(
-                        $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($dataProvider, $event)
+                        $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($event, $invisibleSources)
 
                     );
                 }
@@ -107,7 +121,7 @@ class DayCalendarRenderer extends SidebarTableCalendarRenderer
         return $calendarTableBuilder->render($displayTime, $eventsToShow, ['table-calendar-day']);
     }
 
-    public function renderTitle(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
+    public function renderTitle(int $displayTime): string
     {
         return $this->getDatetimeUtilities()->formatLocaleDate(
             $displayTime, IntlDateFormatter::FULL, IntlDateFormatter::NONE

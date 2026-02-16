@@ -25,7 +25,7 @@ class LanguageComponent extends Manager
 
             if ($choice && in_array($choice, $languages)) {
                 $this->getUserService()->updateUserSetting(
-                    $this->getUser(), 'Chamilo\Core\Admin', 'PlatformLanguage', $choice
+                    $this->getUser(), 'cosnics.libraries.userInterface.translation.language.default', $choice
                 );
             }
         }

@@ -18,6 +18,8 @@ class JsTreeRenderer
 
     /**
      * @param string[] $selectedPathIdentifiers
+     *
+     * @noinspection PhpUnnecessaryCurlyVarSyntaxInspection
      */
     public function render(string $name, string $parameterName, string $dataUrl, array $selectedPathIdentifiers): string
     {

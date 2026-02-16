@@ -19,9 +19,9 @@ class UserException extends Exception
     /**
      * @throws \Exception
      */
-    public function __construct($message)
+    public function __construct(string $message, int $code = 0, ?Exception $previous = null)
     {
-        parent::__construct($this->getSecurity()->removeXSS($message));
+        parent::__construct($this->getSecurity()->removeXSS($message), $code, $previous);
     }
 
     protected function getSecurity(): SecurityUtilities

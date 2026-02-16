@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
-use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
@@ -24,9 +23,9 @@ abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
-    public function renderNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
+    public function renderNavigation(array $displayParameters, int $displayTime): string
     {
-        $urlFormat = $this->determineNavigationUrl($dataProvider);
+        $urlFormat = $this->determineNavigationUrl($displayParameters);
         $translator = $this->getTranslator();
 
         $previousTime = $this->getPreviousDisplayTime($displayTime);

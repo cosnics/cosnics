@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\DependencyInjection\CompilerPass;
 
-use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProviderCollection;
+use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProviderRegistry;
 use Chamilo\Application\Calendar\Architecture\Interface\CalendarExtensionDataProviderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -16,9 +16,9 @@ class CalendarExtensionDataProviderCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
-        if ($container->hasDefinition(CalendarExtensionDataProviderCollection::class))
+        if ($container->hasDefinition(CalendarExtensionDataProviderRegistry::class))
         {
-            $definition = $container->getDefinition(CalendarExtensionDataProviderCollection::class);
+            $definition = $container->getDefinition(CalendarExtensionDataProviderRegistry::class);
 
             $taggedServices = $container->findTaggedServiceIds(CalendarExtensionDataProviderInterface::class);
 

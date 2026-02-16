@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Calendar\Architecture\Interface;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
 
 /**
  * @package Chamilo\Application\Calendar\Architecture
@@ -12,20 +11,19 @@ use Chamilo\Libraries\Calendar\Service\CalendarRendererProvider;
  */
 interface CalendarExtensionDataProviderInterface
 {
-
     /**
      * Get the individual calendars in the implementing context
      *
      * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
      */
-    public function getCalendars(?User $user = null): array;
+    public function getCalendars(User $user): array;
 
     /**
      * Gets the events published in the implementing context
      *
      * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      */
-    public function getEvents(CalendarRendererProvider $calendarRendererProvider, int $fromDate, int $toDate): array;
+    public function getEvents(User $user, int $fromDate, int $toDate): array;
 
     public function getName(): string;
 }

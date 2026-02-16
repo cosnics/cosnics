@@ -2,8 +2,6 @@
 namespace Chamilo\Libraries\Calendar\Service\View;
 
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
-use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
-use Chamilo\Libraries\Calendar\Architecture\Interface\VisibilitySupport;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
@@ -49,13 +47,17 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
         $this->buttonToolBarRenderer = $buttonToolBarRenderer;
     }
 
+    /**
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Visibility[] $invisibleSources
+     */
     abstract public function render(
-        CalendarRendererProviderInterface $dataProvider, int $displayTime, array $viewActions = []
+        array $events, array $displayParameters, int $displayTime, array $viewActions = [],
+        array $invisibleSources = [], ?string $invisibilityContext = null
     ): string;
 
-    public function determineNavigationUrl(CalendarRendererProviderInterface $dataProvider): string
+    public function determineNavigationUrl(array $parameters): string
     {
-        $parameters = $dataProvider->getDisplayParameters();
         $parameters[self::PARAM_TIME] = CalendarTableBuilder::TIME_PLACEHOLDER;
 
         return $this->getUrlGenerator()->fromParameters($parameters);
@@ -66,13 +68,42 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
         return $this->buttonToolBarRenderer;
     }
 
+    abstract public function getEventsEndTime(int $displayTime): int;
+
+    abstract public function getEventsStartTime(int $displayTime): int;
+
+    public function getLegendRenderer(): LegendRenderer
+    {
+        return $this->legendRenderer;
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
+    }
+
+    public function isEventSourceVisible(Event $event, array $invisibleSources = []): bool
+    {
+        return $this->isSourceVisible($event->getSource(), $invisibleSources);
+    }
+
+    public function isSourceVisible(string $source, array $invisibleSources = []): bool
+    {
+        return !array_key_exists($source, $invisibleSources);
+    }
+
     /**
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
+     *
      * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      */
-    public function getEvents(CalendarRendererProviderInterface $dataProvider, int $startTime, int $endTime): array
+    public function orderEvents(array $events): array
     {
-        $events = $dataProvider->getEventsInPeriod($startTime, $endTime);
-
         usort(
             $events, function (Event $eventLeft, Event $eventRight) {
             if ($eventLeft->getStartDate() < $eventRight->getStartDate()) {
@@ -90,44 +121,7 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
         return $events;
     }
 
-    public function getLegendRenderer(): LegendRenderer
-    {
-        return $this->legendRenderer;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function isEventSourceVisible(CalendarRendererProviderInterface $dataProvider, Event $event): bool
-    {
-        return $this->isSourceVisible($dataProvider, $event->getSource());
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function isSourceVisible(
-        CalendarRendererProviderInterface $dataProvider, string $source, ?int $userIdentifier = null
-    ): bool
-    {
-        if ($dataProvider instanceof VisibilitySupport) {
-            return $dataProvider->isSourceVisible($source, $userIdentifier);
-        }
-
-        return true;
-    }
-
-    public function renderTypeButton(CalendarRendererProviderInterface $dataProvider): DropDownButtonCollection
+    public function renderTypeButton(array $displayParameters): DropDownButtonCollection
     {
         $rendererTypes = [
             HtmlCalendarRenderer::TYPE_MONTH,
@@ -136,7 +130,6 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
             HtmlCalendarRenderer::TYPE_LIST
         ];
 
-        $displayParameters = $dataProvider->getDisplayParameters();
         $currentRendererType = $displayParameters[self::PARAM_TYPE];
         $translator = $this->getTranslator();
 
@@ -165,7 +158,7 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
-    public function renderViewActions(CalendarRendererProviderInterface $dataProvider, array $viewActions = []): string
+    public function renderViewActions(array $displayParameters, array $viewActions = []): string
     {
         $buttonToolBar = new ButtonToolBar();
 
@@ -173,7 +166,7 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
             $buttonToolBar->addButton($viewAction);
         }
 
-        $buttonToolBar->addButton($this->renderTypeButton($dataProvider));
+        $buttonToolBar->addButton($this->renderTypeButton($displayParameters));
 
         return $this->getButtonToolBarRenderer()->render($buttonToolBar);
     }

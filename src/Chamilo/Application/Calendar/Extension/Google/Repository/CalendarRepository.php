@@ -63,7 +63,7 @@ class CalendarRepository
      */
     public function clearAccessToken(User $user): bool
     {
-        return $this->getUserService()->updateUserSetting($user, Manager::CONTEXT, 'Token');
+        return $this->getUserService()->updateUserSetting($user, 'cosnics.libraries.protocol.google.token', '');
     }
 
     /**
@@ -185,6 +185,7 @@ class CalendarRepository
                 $this->googleClient->setAccessToken($this->getAccessToken($user));
             }
 
+            /** @noinspection PhpParamsInspection */
             $this->googleClient->setClassConfig(
                 'Google_Cache_File', ['directory' => $this->getConfigurablePathBuilder()->getCachePath(__NAMESPACE__)]
             );
@@ -282,7 +283,9 @@ class CalendarRepository
     public function saveAccessToken(User $user, string $accessToken): bool
     {
         try {
-            return $this->getUserService()->updateUserSetting($user, Manager::CONTEXT, 'Token', $accessToken);
+            return $this->getUserService()->updateUserSetting(
+                $user, 'cosnics.libraries.protocol.google.token', $accessToken
+            );
         }
         catch (Exception) {
             return false;

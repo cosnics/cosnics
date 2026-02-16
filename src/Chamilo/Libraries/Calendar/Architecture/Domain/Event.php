@@ -12,6 +12,11 @@ namespace Chamilo\Libraries\Calendar\Architecture\Domain;
 class Event
 {
     /**
+     * @var \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button[]
+     */
+    protected array $actions = [];
+
+    /**
      * @var \Chamilo\Libraries\Calendar\Architecture\Domain\EventAttendee[]
      */
     private array $attendees;
@@ -38,10 +43,15 @@ class Event
 
     private ?string $url;
 
+    /**
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\EventAttendee[] $attendees
+     * @param \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button[] $actions
+     */
     public function __construct(
         ?string $id = null, ?int $startDate = null, ?int $endDate = null, ?RecurrenceRules $recurrenceRules = null,
         ?string $url = null, ?string $title = null, ?string $content = null, ?string $location = null,
-        ?string $source = null, ?string $context = null, ?EventAttendee $organizer = null, $attendees = []
+        ?string $source = null, ?string $context = null, ?EventAttendee $organizer = null, array $attendees = [],
+        array $actions = []
     )
     {
         $this->id = $id;
@@ -56,6 +66,19 @@ class Event
         $this->context = $context;
         $this->organizer = $organizer;
         $this->attendees = $attendees;
+        $this->actions = $actions;
+    }
+
+    public function getActions(): array
+    {
+        return $this->actions;
+    }
+
+    public function setActions(array $actions): Event
+    {
+        $this->actions = $actions;
+
+        return $this;
     }
 
     public function getAttendees(): array

@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Calendar\Component;
 
-use Chamilo\Application\Calendar\Implementation\Libraries\CalendarRendererProvider;
 use Chamilo\Application\Calendar\Manager;
+use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Calendar\Service\View\ICalCalendarRenderer;
@@ -21,8 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 class ICalComponent extends Manager implements NoAuthenticationSupportInterface
 {
     public const PARAM_DOWNLOAD = 'download';
-
-    private CalendarRendererProvider $calendarRendererProvider;
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
@@ -75,8 +73,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
                     ]
                 );
 
-                $includedCalendars =
-                    implode(', ', $this->getCalendarRendererProvider($this->getUser())->getSourceNames());
+                $includedCalendars = implode(', ', $this->getCalendarRendererProvider()->getSourceNames());
 
                 $translator = $this->getTranslator();
                 $html = [];
@@ -112,15 +109,9 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
         return $this->getService(AuthenticationValidator::class);
     }
 
-    private function getCalendarRendererProvider(User $user): CalendarRendererProvider
+    private function getCalendarRendererProvider(): CalendarDataProvider
     {
-        if (!isset($this->calendarRendererProvider)) {
-            $this->calendarRendererProvider = new CalendarRendererProvider(
-                $this->getVisibilityRepository(), $user, [], Manager::CONTEXT
-            );
-        }
-
-        return $this->calendarRendererProvider;
+        return $this->getService(CalendarDataProvider::class);
     }
 
     public function getICalCalendarRenderer(): ICalCalendarRenderer
@@ -138,6 +129,11 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
      */
     private function renderCalendar(User $user): Response
     {
-        return $this->getICalCalendarRenderer()->renderAndGetResponse($this->getCalendarRendererProvider($user));
+        $iCalRenderer = $this->getICalCalendarRenderer();
+        $events = $this->getCalendarRendererProvider()->getEvents(
+            $user, $iCalRenderer->getEventsStartTime(), $iCalRenderer->getEventsEndTime()
+        );
+
+        return $iCalRenderer->renderAndGetResponse($events);
     }
 }

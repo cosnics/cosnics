@@ -68,6 +68,7 @@ class ConditionVariableTranslatorCollection extends ArrayCollection
         QueryBuilder $querybuilder, ConditionVariableInterface $conditionVariable, ?bool $enableAliasing = true
     )
     {
+        /** @noinspection PhpParamsInspection */
         return $this->getTranslator($conditionVariable->getConditionVariableTranslatorClass())->translate(
             $querybuilder, $conditionVariable, $enableAliasing
         );

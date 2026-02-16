@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Calendar\Service\View;
 
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
-use Chamilo\Libraries\Calendar\Architecture\Interface\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Service\Event\EventMiniMonthRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
@@ -44,18 +43,23 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
     }
 
     /**
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Visibility[] $invisibleSources
+     *
      * @throws \Exception
      */
-    public function render(CalendarRendererProviderInterface $dataProvider, int $displayTime, array $viewActions = []
+    public function render(
+        array $events, array $displayParameters, int $displayTime, array $viewActions = [],
+        array $invisibleSources = [], ?string $invisibilityContext = null
     ): string
     {
         $html = [];
 
         $html[] = '<div class="panel panel-default">';
-        $html[] = $this->renderNavigation($dataProvider, $displayTime);
+        $html[] = $this->renderNavigation($displayParameters, $displayTime);
 
         $html[] = '<div class="table-calendar-mini-container">';
-        $html[] = $this->renderCalendar($dataProvider, $displayTime);
+        $html[] = $this->renderCalendar($events, $displayParameters, $displayTime, $invisibleSources);
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
 
@@ -67,6 +71,16 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
     public function getEventMiniMonthRenderer(): EventMiniMonthRenderer
     {
         return $this->eventMiniMonthRenderer;
+    }
+
+    public function getEventsEndTime(int $displayTime): int
+    {
+        return $this->getMiniMonthCalendarTableBuilder()->getTableEndTime($displayTime);
+    }
+
+    public function getEventsStartTime(int $displayTime): int
+    {
+        return $this->getMiniMonthCalendarTableBuilder()->getTableStartTime($displayTime);
     }
 
     public function getMiniMonthCalendarTableBuilder(): MiniMonthCalendarTableBuilder
@@ -95,16 +109,20 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
     }
 
     /**
+     * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
+     *
      * @throws \Exception
      */
-    public function renderCalendar(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
+    public function renderCalendar(
+        array $events, array $displayParameters, int $displayTime, array $invisibleSources = []
+    ): string
     {
         $calendarTableBuilder = $this->getMiniMonthCalendarTableBuilder();
 
-        $startTime = $calendarTableBuilder->getTableStartTime($displayTime);
-        $endTime = $calendarTableBuilder->getTableEndTime($displayTime);
+        $startTime = $this->getEventsStartTime($displayTime);
+        $endTime = $this->getEventsEndTime($displayTime);
 
-        $events = $this->getEvents($dataProvider, $startTime, $endTime);
+        $events = $this->orderEvents($events);
         $tableDate = $startTime;
         $eventsToShow = [];
 
@@ -121,7 +139,7 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
                     $this->getLegendRenderer()->addSource($event->getSource());
 
                     $eventsToShow[$tableDate][] = $this->getEventMiniMonthRenderer()->render(
-                        $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($dataProvider, $event),
+                        $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($event, $invisibleSources),
                         $this->isFadedEvent($displayTime, $event)
                     );
                 }
@@ -134,24 +152,24 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
 
         $html[] = '<div class="table-calendar-mini-container">';
         $html[] = $calendarTableBuilder->render($displayTime, $eventsToShow, ['table-calendar-mini'],
-            $this->determineNavigationUrl($dataProvider));
+            $this->determineNavigationUrl($displayParameters));
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
 
         $html[] = $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath('Chamilo\Libraries') . 'Calendar/EventTooltip.js'
+            $this->getWebPathBuilder()->getJavascriptPath() . 'Calendar/EventTooltip.js'
         );
 
         return implode(PHP_EOL, $html);
     }
 
-    public function renderNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
+    public function renderNavigation(array $displayParameters, int $displayTime): string
     {
         $html = [];
 
         $html[] = '<div class="panel-heading table-calendar-mini-navigation">';
-        $html[] = $this->renderPreviousMonthNavigation($dataProvider, $displayTime);
-        $html[] = $this->renderNextMonthNavigation($dataProvider, $displayTime);
+        $html[] = $this->renderPreviousMonthNavigation($displayParameters, $displayTime);
+        $html[] = $this->renderNextMonthNavigation($displayParameters, $displayTime);
         $html[] = '<h4 class="panel-title">';
         $html[] = $this->renderTitle($displayTime);
         $html[] = '</h4>';
@@ -160,9 +178,9 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function renderNextMonthNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime): string
+    public function renderNextMonthNavigation(array $displayParameters, int $displayTime): string
     {
-        $urlFormat = $this->determineNavigationUrl($dataProvider);
+        $urlFormat = $this->determineNavigationUrl($displayParameters);
         $nextTime = strtotime('+1 Month', $displayTime);
         $nextUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, (string) $nextTime, $urlFormat);
 
@@ -171,10 +189,9 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
         return '<a href="' . $nextUrl . '">' . $glyph->render() . '</a>';
     }
 
-    public function renderPreviousMonthNavigation(CalendarRendererProviderInterface $dataProvider, int $displayTime
-    ): string
+    public function renderPreviousMonthNavigation(array $displayParameters, int $displayTime): string
     {
-        $urlFormat = $this->determineNavigationUrl($dataProvider);
+        $urlFormat = $this->determineNavigationUrl($displayParameters);
         $previousTime = strtotime('-1 Month', $displayTime);
         $previousUrl = str_replace(CalendarTableBuilder::TIME_PLACEHOLDER, (string) $previousTime, $urlFormat);
 
