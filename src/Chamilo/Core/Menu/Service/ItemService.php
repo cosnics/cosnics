@@ -6,6 +6,7 @@ use Chamilo\Core\Menu\Implementation\Menu\ApplicationItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Chamilo\Libraries\Storage\Service\PropertyMapper;
@@ -67,13 +68,11 @@ class ItemService implements ItemServiceInterface
      */
     public function createItem(Item $item): bool
     {
-        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeCreate($item))
-        {
+        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeCreate($item)) {
             return false;
         }
 
-        if (!$this->getItemRepository()->createItem($item))
-        {
+        if (!$this->getItemRepository()->createItem($item)) {
             return false;
         }
 
@@ -98,18 +97,15 @@ class ItemService implements ItemServiceInterface
         $item->setIconClass($values[Item::PROPERTY_ICON_CLASS]);
         $item->setParentId($values[Item::PROPERTY_PARENT]);
 
-        foreach ($values[Item::PROPERTY_TITLES] as $isoCode => $title)
-        {
+        foreach ($values[Item::PROPERTY_TITLES] as $isoCode => $title) {
             $item->setTitleForIsoCode($isoCode, $title);
         }
 
-        foreach ($values[Item::PROPERTY_CONFIGURATION] as $configurationVariable => $configurationValue)
-        {
+        foreach ($values[Item::PROPERTY_CONFIGURATION] as $configurationVariable => $configurationValue) {
             $item->setSetting($configurationVariable, $configurationValue);
         }
 
-        if (!$this->createItem($item))
-        {
+        if (!$this->createItem($item)) {
             return null;
         }
 
@@ -123,18 +119,15 @@ class ItemService implements ItemServiceInterface
      */
     public function deleteItem(Item $item): bool
     {
-        if (!$this->deleteItemChildren($item))
-        {
+        if (!$this->deleteItemChildren($item)) {
             return false;
         }
 
-        if (!$this->getItemRepository()->deleteItem($item))
-        {
+        if (!$this->getItemRepository()->deleteItem($item)) {
             return false;
         }
 
-        if (!$this->getDisplayOrderHandler()->handleDisplayOrderAfterDelete($item))
-        {
+        if (!$this->getDisplayOrderHandler()->handleDisplayOrderAfterDelete($item)) {
             return false;
         }
 
@@ -150,10 +143,8 @@ class ItemService implements ItemServiceInterface
     {
         $itemChildren = $this->findItemsByParentIdentifier($item->getId());
 
-        foreach ($itemChildren as $itemChild)
-        {
-            if (!$this->deleteItem($itemChild))
-            {
+        foreach ($itemChildren as $itemChild) {
+            if (!$this->deleteItem($itemChild)) {
                 return false;
             }
         }
@@ -262,7 +253,7 @@ class ItemService implements ItemServiceInterface
      */
     public function findRootItems(): ArrayCollection
     {
-        return $this->findItemsByParentIdentifier('0');
+        return $this->findItemsByParentIdentifier(DataClass::EMPTY_UUID);
     }
 
     /**
@@ -337,8 +328,7 @@ class ItemService implements ItemServiceInterface
     {
         $parentHasChanged = $item->getParentId() != $values[Item::PROPERTY_PARENT];
 
-        if ($parentHasChanged && !isset($values[Item::PROPERTY_SORT]))
-        {
+        if ($parentHasChanged && !isset($values[Item::PROPERTY_SORT])) {
             $item->setSort(null);
         }
 
@@ -347,18 +337,15 @@ class ItemService implements ItemServiceInterface
         $item->setIconClass($values[Item::PROPERTY_ICON_CLASS]);
         $item->setParentId($values[Item::PROPERTY_PARENT]);
 
-        foreach ($values[Item::PROPERTY_TITLES] as $isoCode => $title)
-        {
+        foreach ($values[Item::PROPERTY_TITLES] as $isoCode => $title) {
             $item->setTitleForIsoCode($isoCode, $title);
         }
 
-        foreach ($values[Item::PROPERTY_CONFIGURATION] as $configurationVariable => $configurationValue)
-        {
+        foreach ($values[Item::PROPERTY_CONFIGURATION] as $configurationVariable => $configurationValue) {
             $item->setSetting($configurationVariable, $configurationValue);
         }
 
-        if (!$this->updateItem($item))
-        {
+        if (!$this->updateItem($item)) {
             return false;
         }
 
@@ -372,13 +359,11 @@ class ItemService implements ItemServiceInterface
      */
     public function updateItem(Item $item): bool
     {
-        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeUpdate($item))
-        {
+        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeUpdate($item)) {
             return false;
         }
 
-        if (!$this->getItemRepository()->updateItem($item))
-        {
+        if (!$this->getItemRepository()->updateItem($item)) {
             return false;
         }
 

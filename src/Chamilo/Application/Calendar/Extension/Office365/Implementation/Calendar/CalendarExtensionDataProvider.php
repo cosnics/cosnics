@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Office365\Implementation\Calendar;
 
+use Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar;
 use Chamilo\Application\Calendar\Architecture\Interface\CalendarExtensionDataProviderInterface;
 use Chamilo\Application\Calendar\Extension\Office365\Manager;
 use Chamilo\Application\Calendar\Extension\Office365\Service\EventParser;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
-use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService;
 use Exception;
@@ -128,7 +128,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
     }
 
     /**
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     * @return \Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar[]
      */
     public function getCalendars(?User $user = null): array
     {

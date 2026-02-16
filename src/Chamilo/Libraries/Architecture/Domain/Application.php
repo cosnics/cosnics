@@ -148,6 +148,6 @@ abstract class Application
 
     public function renderHeader(): string
     {
-        return $this->getDefaultHeaderRenderer()->render($this, $this->getUser());
+        return $this->getApplicationHeaderRenderer()->render($this, $this->getUser());
     }
 }

@@ -10,6 +10,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
@@ -246,7 +247,7 @@ class GroupService
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function findGroupsForParentIdentifier(string $parentIdentifier = '0'): ArrayCollection
+    public function findGroupsForParentIdentifier(string $parentIdentifier = DataClass::EMPTY_UUID): ArrayCollection
     {
         return $this->getGroupRepository()->findGroupsForParentIdentifier($parentIdentifier);
     }
@@ -259,7 +260,7 @@ class GroupService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findGroupsForSearchQueryAndParentIdentifier(
-        ?string $searchQuery = null, string $parentIdentifier = '0'
+        ?string $searchQuery = null, string $parentIdentifier = DataClass::EMPTY_UUID
     ): ArrayCollection
     {
         return $this->getGroupRepository()->findGroupsForSearchQueryAndParentIdentifier(

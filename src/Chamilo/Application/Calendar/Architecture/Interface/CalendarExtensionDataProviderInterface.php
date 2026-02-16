@@ -14,7 +14,7 @@ interface CalendarExtensionDataProviderInterface
     /**
      * Get the individual calendars in the implementing context
      *
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     * @return \Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar[]
      */
     public function getCalendars(User $user): array;
 

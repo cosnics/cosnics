@@ -34,7 +34,7 @@ class UploadTemporaryFileComponent extends Manager
 
         $this->getFilesystem()->mkdir($temporaryPath);
 
-        $fileName = md5(Uuid::v4()->__toString());
+        $fileName = md5(Uuid::v7()->__toString());
         $temporaryFilePath = $temporaryPath . $fileName;
 
         $result = move_uploaded_file($file->getRealPath(), $temporaryFilePath);

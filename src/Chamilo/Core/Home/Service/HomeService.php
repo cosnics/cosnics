@@ -6,6 +6,7 @@ use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\Repository\HomeRepository;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -145,7 +146,7 @@ class HomeService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findElementsByTypeAndParentIdentifier(
-        string $type, string $parentIdentifier = '0'
+        string $type, string $parentIdentifier = DataClass::EMPTY_UUID
     ): ArrayCollection
     {
         return $this->getHomeRepository()->findElementsByTypeAndParentIdentifier(

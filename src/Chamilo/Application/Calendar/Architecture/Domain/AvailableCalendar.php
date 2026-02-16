@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Calendar\Storage\DataClass;
+namespace Chamilo\Application\Calendar\Architecture\Domain;
 
 /**
  * @package Chamilo\Application\Calendar\Storage\DataClass

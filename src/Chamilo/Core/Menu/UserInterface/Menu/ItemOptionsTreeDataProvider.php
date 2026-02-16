@@ -6,6 +6,7 @@ use Chamilo\Core\Menu\Implementation\Menu\CategoryItemRenderer;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeDataProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
@@ -46,7 +47,7 @@ class ItemOptionsTreeDataProvider extends OptionsTreeDataProvider
      */
     protected function getChildDataClasses(string $parentIdentifier): ArrayCollection
     {
-        if ($parentIdentifier === '0')
+        if ($parentIdentifier === DataClass::EMPTY_UUID)
         {
             return $this->getItemService()->findRootCategoryItems();
         }
@@ -92,7 +93,7 @@ class ItemOptionsTreeDataProvider extends OptionsTreeDataProvider
     protected function getRootDataClass(): Item
     {
         $rootItem = new Item();
-        $rootItem->setId('0');
+        $rootItem->setId(DataClass::EMPTY_UUID);
 
         foreach ($this->getLanguageConsulter()->getLanguages() as $isoCode => $languageName)
         {

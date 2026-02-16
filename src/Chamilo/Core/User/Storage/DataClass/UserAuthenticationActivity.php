@@ -2,16 +2,16 @@
 namespace Chamilo\Core\User\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
 
 /**
  * @package Chamilo\Core\User\Storage\DataClass
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserAuthenticationActivity extends DataClass
+class UserAuthenticationActivity extends DataClass implements UuidDataClassInterface
 {
     public const ACTIVITY_LOGIN = 1;
     public const ACTIVITY_LOGOUT = 2;
-
     public const PROPERTY_ACTION = 'action';
     public const PROPERTY_DATE = 'date';
     public const PROPERTY_IP = 'ip';

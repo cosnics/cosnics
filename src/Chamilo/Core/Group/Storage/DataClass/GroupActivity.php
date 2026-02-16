@@ -2,12 +2,13 @@
 namespace Chamilo\Core\Group\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
 
 /**
  * @package Chamilo\Core\Group\Storage\DataClass
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class GroupActivity extends DataClass
+class GroupActivity extends DataClass implements UuidDataClassInterface
 {
     public const ACTIVITY_CREATED = 1;
     public const ACTIVITY_DELETED = 2;
@@ -16,7 +17,6 @@ class GroupActivity extends DataClass
     public const ACTIVITY_TRUNCATED = 3;
     public const ACTIVITY_UNSUBSCRIBED = 6;
     public const ACTIVITY_UPDATED = 7;
-
     public const PROPERTY_ACTION = 'action';
     public const PROPERTY_DATE = 'date';
     public const PROPERTY_GROUP_ID = 'reference_id';

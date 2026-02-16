@@ -147,7 +147,7 @@ class HomeRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findElementsByTypeAndParentIdentifier(
-        string $type, string $parentIdentifier = '0'
+        string $type, string $parentIdentifier = DataClass::EMPTY_UUID
     ): ArrayCollection
     {
         $conditions = [];

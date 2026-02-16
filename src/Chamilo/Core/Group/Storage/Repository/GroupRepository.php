@@ -270,7 +270,7 @@ class GroupRepository
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function findGroupsForParentIdentifier(string $parentIdentifier = '0'): ArrayCollection
+    public function findGroupsForParentIdentifier(string $parentIdentifier = DataClass::EMPTY_UUID): ArrayCollection
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
@@ -294,7 +294,7 @@ class GroupRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findGroupsForSearchQueryAndParentIdentifier(
-        ?string $searchQuery = null, string $parentIdentifier = '0'
+        ?string $searchQuery = null, string $parentIdentifier = DataClass::EMPTY_UUID
     ): ArrayCollection
     {
         $conditions = [];

@@ -3,6 +3,7 @@ namespace Chamilo\Application\Calendar\Storage\DataClass;
 
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
 
 /**
  * @package Chamilo\Application\Calendar\Storage\DataClass
@@ -10,7 +11,7 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Availability extends DataClass
+class Availability extends DataClass implements UuidDataClassInterface
 {
     public const CONTEXT = Manager::CONTEXT;
 

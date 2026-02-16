@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Storage\DataClass;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConfigurableDataClassInterface;
+use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
 use Chamilo\Libraries\Storage\Architecture\Trait\ConfigurableDataClassTrait;
 
 /**
@@ -13,7 +14,7 @@ use Chamilo\Libraries\Storage\Architecture\Trait\ConfigurableDataClassTrait;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class User extends DataClass implements ConfigurableDataClassInterface
+class User extends DataClass implements ConfigurableDataClassInterface, UuidDataClassInterface
 {
     use ConfigurableDataClassTrait;
 

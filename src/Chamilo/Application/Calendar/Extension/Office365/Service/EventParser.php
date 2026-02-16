@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Office365\Service;
 
+use Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar;
 use Chamilo\Application\Calendar\Extension\Office365\Architecture\Domain\Event;
 use Chamilo\Application\Calendar\Extension\Office365\Manager;
-use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Libraries\Calendar\Architecture\Domain\EventAttendee;
 use DateTime;
 use DateTimeZone;

@@ -6,6 +6,7 @@ use Chamilo\Core\Menu\UserInterface\Table\ItemTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
@@ -103,7 +104,7 @@ class BrowserComponent extends Manager
     public function getParentIdentifier(): string
     {
         if (!isset($this->parentIdentifier)) {
-            $this->parentIdentifier = $this->getRequest()->query->get(self::PARAM_PARENT, '0');
+            $this->parentIdentifier = $this->getRequest()->query->get(self::PARAM_PARENT, DataClass::EMPTY_UUID);
         }
 
         return $this->parentIdentifier;
@@ -123,10 +124,10 @@ class BrowserComponent extends Manager
             ]
         );
 
-        $selectedPathIdentifiers = ['0'];
+        $selectedPathIdentifiers = [DataClass::EMPTY_UUID];
 
-        if ($this->getParentIdentifier() != '0') {
-            $selectedPathIdentifiers = ['0', $this->getParentIdentifier()];
+        if ($this->getParentIdentifier() != DataClass::EMPTY_UUID) {
+            $selectedPathIdentifiers = [DataClass::EMPTY_UUID, $this->getParentIdentifier()];
         }
 
         return $this->getJsTreeRenderer()->render(

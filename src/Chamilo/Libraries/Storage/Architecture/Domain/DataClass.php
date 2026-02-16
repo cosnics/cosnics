@@ -12,6 +12,7 @@ abstract class DataClass
 {
     use DependencyInjectionContainerTrait;
 
+    public const EMPTY_UUID = '00000000-0000-0000-0000-000000000000';
     public const PROPERTIES_DEFAULT = 'default_properties';
     public const PROPERTIES_OPTIONAL = 'optional_properties';
     public const PROPERTY_ID = 'id';

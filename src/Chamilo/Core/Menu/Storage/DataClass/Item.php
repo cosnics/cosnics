@@ -5,6 +5,7 @@ use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConfigurableDataClassInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDisplayOrderSupport;
+use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
 use Chamilo\Libraries\Storage\Architecture\Trait\ConfigurableDataClassTrait;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
@@ -15,20 +16,19 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Item extends DataClass implements DataClassDisplayOrderSupport, ConfigurableDataClassInterface
+class Item extends DataClass
+    implements DataClassDisplayOrderSupport, ConfigurableDataClassInterface, UuidDataClassInterface
 {
     use ConfigurableDataClassTrait;
 
     public const CONTEXT = Manager::CONTEXT;
-
     public const DISPLAY_BOTH = 3;
     public const DISPLAY_ICON = 1;
     public const DISPLAY_TEXT = 2;
-
     public const PROPERTY_DISPLAY = 'display';
     public const PROPERTY_HIDDEN = 'hidden';
     public const PROPERTY_ICON_CLASS = 'icon_class';
-    public const PROPERTY_PARENT = 'parent';
+    public const PROPERTY_PARENT = 'parent_id';
     public const PROPERTY_SORT = 'sort';
     public const PROPERTY_TITLES = 'titles';
     public const PROPERTY_TYPE = 'type';
@@ -195,5 +195,4 @@ class Item extends DataClass implements DataClassDisplayOrderSupport, Configurab
     {
         return $this->getDisplay() == self::DISPLAY_TEXT || $this->getDisplay() == self::DISPLAY_BOTH;
     }
-
 }

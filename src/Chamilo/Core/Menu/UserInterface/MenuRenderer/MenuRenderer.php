@@ -7,6 +7,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -78,7 +79,7 @@ class MenuRenderer
      */
     public function findRootItems(): ArrayCollection
     {
-        return $this->getItemCacheService()->findItemsByParentIdentifier('0');
+        return $this->getItemCacheService()->findItemsByParentIdentifier(DataClass::EMPTY_UUID);
     }
 
     public function getBrandPath(?string $component = null, ?string $defaultValue = null): array|string

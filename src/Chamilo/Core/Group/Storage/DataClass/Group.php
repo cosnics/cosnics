@@ -3,6 +3,7 @@ namespace Chamilo\Core\Group\Storage\DataClass;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
+use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
 
 /**
  * @package Chamilo\Core\Group\Storage\DataClass
@@ -10,7 +11,7 @@ use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
  * @author  Dieter De Neef
  * @author  Sven Vanpoucke
  */
-class Group extends NestedSet
+class Group extends NestedSet implements UuidDataClassInterface
 {
     public const CONTEXT = Manager::CONTEXT;
 

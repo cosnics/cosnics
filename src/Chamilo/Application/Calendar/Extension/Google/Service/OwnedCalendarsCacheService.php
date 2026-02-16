@@ -48,7 +48,7 @@ class OwnedCalendarsCacheService
     }
 
     /**
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     * @return \Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar[]
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */

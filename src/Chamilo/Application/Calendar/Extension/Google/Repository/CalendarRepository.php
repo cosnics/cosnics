@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Google\Repository;
 
+use Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar;
 use Chamilo\Application\Calendar\Extension\Google\Implementation\Calendar\CalendarExtensionDataProvider;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
-use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -94,7 +94,7 @@ class CalendarRepository
     }
 
     /**
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     * @return \Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findOwnedCalendars(User $user): array

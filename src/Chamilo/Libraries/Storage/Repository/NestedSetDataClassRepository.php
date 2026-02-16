@@ -501,7 +501,7 @@ class NestedSetDataClassRepository
      * @throws \Throwable
      */
     public function move(
-        NestedSet $nestedSet, string $newParentId = '0', string $newPreviousId = '0',
+        NestedSet $nestedSet, string $newParentId = DataClass::EMPTY_UUID, string $newPreviousId = '0',
         ?ConditionInterface $condition = null
     ): bool
     {

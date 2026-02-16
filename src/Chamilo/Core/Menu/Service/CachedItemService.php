@@ -3,6 +3,7 @@ namespace Chamilo\Core\Menu\Service;
 
 use Chamilo\Core\Menu\Architecture\Interface\ItemServiceInterface;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Interface\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\Storage\Architecture\Trait\SingleCacheAdapterHandlerTrait;
@@ -59,8 +60,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function createItem(Item $item): bool
     {
-        if (!$this->getItemService()->createItem($item))
-        {
+        if (!$this->getItemService()->createItem($item)) {
             return false;
         }
 
@@ -78,13 +78,11 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
     {
         $item = $this->getItemService()->createItemForTypeFromValues($itemType, $values);
 
-        if (!$item)
-        {
+        if (!$item) {
             return null;
         }
 
-        if (!$this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]))
-        {
+        if (!$this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS])) {
             return null;
         }
 
@@ -99,8 +97,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function deleteItem(Item $item): bool
     {
-        if (!$this->getItemService()->deleteItem($item))
-        {
+        if (!$this->getItemService()->deleteItem($item)) {
             return false;
         }
 
@@ -115,8 +112,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function deleteItemChildren(Item $item): bool
     {
-        if (!$this->getItemService()->deleteItemChildren($item))
-        {
+        if (!$this->getItemService()->deleteItemChildren($item)) {
             return false;
         }
 
@@ -188,13 +184,11 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function findItemsGroupedByParentIdentifier(): array
     {
-        try
-        {
+        try {
             return $this->loadCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS],
                 [$this, '__findItemsGroupedByParentIdentifier']);
         }
-        catch (CacheException)
-        {
+        catch (CacheException) {
             return [];
         }
     }
@@ -209,7 +203,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
 
     public function findRootItems(): ArrayCollection
     {
-        return $this->findItemsByParentIdentifier('0');
+        return $this->findItemsByParentIdentifier(DataClass::EMPTY_UUID);
     }
 
     public function getItemService(): ItemService
@@ -239,8 +233,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function moveItemInDirection(Item $item, int $moveDirection): bool
     {
-        if (!$this->getItemService()->moveItemInDirection($item, $moveDirection))
-        {
+        if (!$this->getItemService()->moveItemInDirection($item, $moveDirection)) {
             return false;
         }
 
@@ -260,8 +253,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function saveItemFromValues(Item $item, array $values): bool
     {
-        if (!$this->getItemService()->saveItemFromValues($item, $values))
-        {
+        if (!$this->getItemService()->saveItemFromValues($item, $values)) {
             return false;
         }
 
@@ -274,8 +266,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function updateItem(Item $item): bool
     {
-        if (!$this->getItemService() - $this->updateItem($item))
-        {
+        if (!$this->getItemService() - $this->updateItem($item)) {
             return false;
         }
 

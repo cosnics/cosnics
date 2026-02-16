@@ -7,6 +7,7 @@ use Chamilo\Core\Group\UserInterface\Form\GroupForm;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -29,7 +30,7 @@ class CreateComponent extends Manager
 
         $translator = $this->getTranslator();
 
-        $parentGroupIdentifier = $this->getRequest()->query->get(self::PARAM_GROUP_ID, '0');
+        $parentGroupIdentifier = $this->getRequest()->query->get(self::PARAM_GROUP_ID, DataClass::EMPTY_UUID);
 
         $group = new Group();
         $group->setParentId($parentGroupIdentifier);

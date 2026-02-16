@@ -20,7 +20,7 @@ class AvailabilityForm extends FormValidator
     private AvailabilityService $availabilityService;
 
     /**
-     * @var \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[][]
+     * @var \Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar[][]
      */
     private array $availableCalendars;
 
@@ -83,7 +83,7 @@ class AvailabilityForm extends FormValidator
     }
 
     /**
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[][]
+     * @return \Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar[][]
      */
     public function getAvailableCalendars(): array
     {

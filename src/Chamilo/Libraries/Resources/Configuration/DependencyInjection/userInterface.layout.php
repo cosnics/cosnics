@@ -2,6 +2,7 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageHeaders;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\BannerRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\BaseFooterRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\BaseHeaderRenderer;
@@ -39,6 +40,8 @@ return static function (ContainerConfigurator $container) {
             ]
         ]
     );
+
+    $services->set(ApplicationHeaderRenderer::class);
 
     $services->set(PanelRenderer::class);
     $services->set(ProgressBarRenderer::class);

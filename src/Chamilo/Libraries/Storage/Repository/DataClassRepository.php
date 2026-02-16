@@ -240,7 +240,7 @@ class DataClassRepository
     public function create(DataClass $dataClass): bool
     {
         if ($dataClass instanceof UuidDataClassInterface && !$dataClass->isIdentified()) {
-            $dataClass->setId(Uuid::v4()->__toString());
+            $dataClass->setId(Uuid::v7()->__toString());
         }
 
         $objectProperties = $dataClass->getDefaultProperties();

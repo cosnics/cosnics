@@ -124,7 +124,7 @@ class AvailabilityService
     }
 
     /**
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[][]
+     * @return \Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar[][]
      */
     public function getAvailableCalendars(User $user): array
     {

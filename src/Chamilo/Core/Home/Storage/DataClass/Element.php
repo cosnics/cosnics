@@ -5,6 +5,7 @@ use Chamilo\Core\Home\Manager;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConfigurableDataClassInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDisplayOrderSupport;
+use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
 use Chamilo\Libraries\Storage\Architecture\Trait\ConfigurableDataClassTrait;
 
 /**
@@ -13,7 +14,8 @@ use Chamilo\Libraries\Storage\Architecture\Trait\ConfigurableDataClassTrait;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Element extends DataClass implements DataClassDisplayOrderSupport, ConfigurableDataClassInterface
+class Element extends DataClass
+    implements DataClassDisplayOrderSupport, ConfigurableDataClassInterface, UuidDataClassInterface
 {
     use ConfigurableDataClassTrait;
 
@@ -21,22 +23,18 @@ class Element extends DataClass implements DataClassDisplayOrderSupport, Configu
     public const CONFIGURATION_CONTEXT = 'context';
     public const CONFIGURATION_VISIBILITY = 'visibility';
     public const CONFIGURATION_WIDTH = 'width';
-
     public const CONTEXT = Manager::CONTEXT;
-
     public const PROPERTY_PARENT_ID = 'parent_id';
     public const PROPERTY_SORT = 'sort';
     public const PROPERTY_TITLE = 'title';
     public const PROPERTY_TYPE = 'type';
-
     public const TYPE_BLOCK = 'Chamilo\Core\Home\Storage\DataClass\Block';
     public const TYPE_COLUMN = 'Chamilo\Core\Home\Storage\DataClass\Column';
     public const TYPE_TAB = 'Chamilo\Core\Home\Storage\DataClass\Tab';
 
     public function getBlockType(): ?string
     {
-        if ($this->getType() == self::TYPE_BLOCK)
-        {
+        if ($this->getType() == self::TYPE_BLOCK) {
             return (string) $this->getSetting(self::CONFIGURATION_BLOCK_TYPE);
         }
 
@@ -45,8 +43,7 @@ class Element extends DataClass implements DataClassDisplayOrderSupport, Configu
 
     public function getContext(): ?string
     {
-        if ($this->getType() == self::TYPE_BLOCK)
-        {
+        if ($this->getType() == self::TYPE_BLOCK) {
             return (string) $this->getSetting(self::CONFIGURATION_CONTEXT);
         }
 
@@ -104,8 +101,7 @@ class Element extends DataClass implements DataClassDisplayOrderSupport, Configu
 
     public function getVisibility(): ?bool
     {
-        if ($this->getType() == self::TYPE_BLOCK)
-        {
+        if ($this->getType() == self::TYPE_BLOCK) {
             return (bool) $this->getSetting(self::CONFIGURATION_VISIBILITY);
         }
 
@@ -114,8 +110,7 @@ class Element extends DataClass implements DataClassDisplayOrderSupport, Configu
 
     public function getWidth(): ?int
     {
-        if ($this->getType() == self::TYPE_COLUMN)
-        {
+        if ($this->getType() == self::TYPE_COLUMN) {
             return (int) $this->getSetting(self::CONFIGURATION_WIDTH);
         }
 
@@ -144,8 +139,7 @@ class Element extends DataClass implements DataClassDisplayOrderSupport, Configu
 
     public function isVisible(): ?bool
     {
-        if ($this->getType() == self::TYPE_BLOCK)
-        {
+        if ($this->getType() == self::TYPE_BLOCK) {
             return $this->getVisibility();
         }
 
@@ -164,8 +158,7 @@ class Element extends DataClass implements DataClassDisplayOrderSupport, Configu
 
     public function setBlockType(string $blockType): Element
     {
-        if ($this->getType() == self::TYPE_BLOCK)
-        {
+        if ($this->getType() == self::TYPE_BLOCK) {
             $this->setSetting(self::CONFIGURATION_BLOCK_TYPE, $blockType);
         }
 
@@ -174,8 +167,7 @@ class Element extends DataClass implements DataClassDisplayOrderSupport, Configu
 
     public function setContext(string $context): Element
     {
-        if ($this->getType() == self::TYPE_BLOCK)
-        {
+        if ($this->getType() == self::TYPE_BLOCK) {
             $this->setSetting(self::CONFIGURATION_CONTEXT, $context);
         }
 
@@ -212,8 +204,7 @@ class Element extends DataClass implements DataClassDisplayOrderSupport, Configu
 
     public function setVisibility(bool $visibility): Element
     {
-        if ($this->getType() == self::TYPE_BLOCK)
-        {
+        if ($this->getType() == self::TYPE_BLOCK) {
             $this->setSetting(self::CONFIGURATION_VISIBILITY, $visibility);
         }
 
@@ -222,8 +213,7 @@ class Element extends DataClass implements DataClassDisplayOrderSupport, Configu
 
     public function setWidth(int $width): Element
     {
-        if ($this->getType() == self::TYPE_COLUMN)
-        {
+        if ($this->getType() == self::TYPE_COLUMN) {
             $this->setSetting(self::CONFIGURATION_WIDTH, $width);
         }
 

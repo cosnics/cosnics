@@ -39,7 +39,7 @@ class GroupRepository
             $group->setDisplayName($groupName);
             $group->setMailEnabled(false);
             $group->setMailNickname(
-                str_replace('-', '_', $this->platformPrefix . Uuid::v4())
+                str_replace('-', '_', $this->platformPrefix . Uuid::v7())
             );
             $group->setGroupTypes(['Unified']);
             $group->setSecurityEnabled(false);

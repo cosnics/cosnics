@@ -2,14 +2,14 @@
 namespace Chamilo\Core\User\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
 
 /**
  * @package Chamilo\Core\User\Storage\DataClass
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserVisit extends DataClass
+class UserVisit extends DataClass implements UuidDataClassInterface
 {
-
     public const PROPERTY_ENTER_DATE = 'enter_date';
     public const PROPERTY_LEAVE_DATE = 'leave_date';
     public const PROPERTY_LOCATION = 'location';
@@ -79,5 +79,4 @@ class UserVisit extends DataClass
 
         return $this;
     }
-
 }

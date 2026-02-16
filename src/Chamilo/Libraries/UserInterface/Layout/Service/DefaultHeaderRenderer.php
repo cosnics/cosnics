@@ -2,9 +2,7 @@
 namespace Chamilo\Libraries\UserInterface\Layout\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
-use Chamilo\Libraries\UserInterface\Breadcrumb\Service\BreadcrumbGenerator;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageManager;
 
 /**
@@ -15,8 +13,6 @@ class DefaultHeaderRenderer
 {
     protected BaseHeaderRenderer $baseHeaderRenderer;
 
-    protected BreadcrumbGenerator $breadcrumbGenerator;
-
     protected BreadcrumbTrail $breadcrumbTrail;
 
     protected NotificationMessageManager $notificationMessageManager;
@@ -24,22 +20,18 @@ class DefaultHeaderRenderer
     private BannerRenderer $bannerRenderer;
 
     public function __construct(
-        BaseHeaderRenderer $baseHeaderRenderer, BreadcrumbGenerator $breadcrumbGenerator,
-        BreadcrumbTrail $breadcrumbTrail, NotificationMessageManager $notificationMessageManager,
-        BannerRenderer $bannerRenderer
+        BaseHeaderRenderer $baseHeaderRenderer, BreadcrumbTrail $breadcrumbTrail,
+        NotificationMessageManager $notificationMessageManager, BannerRenderer $bannerRenderer
     )
     {
         $this->baseHeaderRenderer = $baseHeaderRenderer;
-        $this->breadcrumbGenerator = $breadcrumbGenerator;
         $this->breadcrumbTrail = $breadcrumbTrail;
         $this->notificationMessageManager = $notificationMessageManager;
         $this->bannerRenderer = $bannerRenderer;
     }
 
-    public function render(Application $application, ?User $user = null): string
+    public function render(?User $user = null): string
     {
-        $this->getBreadcrumbGenerator()->addComponentBreadcrumb($application);
-
         $html = [];
 
         $html[] = $this->getBaseHeaderRenderer()->renderHeader();
@@ -65,11 +57,6 @@ class DefaultHeaderRenderer
     public function getBaseHeaderRenderer(): BaseHeaderRenderer
     {
         return $this->baseHeaderRenderer;
-    }
-
-    public function getBreadcrumbGenerator(): BreadcrumbGenerator
-    {
-        return $this->breadcrumbGenerator;
     }
 
     public function getBreadcrumbTrail(): BreadcrumbTrail
