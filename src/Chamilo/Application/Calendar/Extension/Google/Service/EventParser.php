@@ -4,8 +4,6 @@ namespace Chamilo\Application\Calendar\Extension\Google\Service;
 use Chamilo\Application\Calendar\Extension\Google\Architecture\Domain\CalendarProperties;
 use Chamilo\Application\Calendar\Extension\Google\Architecture\Domain\Event;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
-use Chamilo\Libraries\Calendar\Architecture\Domain\RecurrenceRules;
-use Chamilo\Libraries\Calendar\Service\Recurrence\RecurrenceRulesIcalParser;
 use DateTime;
 use DateTimeZone;
 use Google_Service_Calendar_Event;
@@ -20,7 +18,6 @@ use Symfony\Component\Translation\Translator;
  */
 class EventParser
 {
-
     private Translator $translator;
 
     public function __construct(Translator $translator)
@@ -30,12 +27,10 @@ class EventParser
 
     private function determineTime(Google_Service_Calendar_EventDateTime $eventDateTime): string
     {
-        if ($eventDateTime->getDateTime())
-        {
+        if ($eventDateTime->getDateTime()) {
             return $eventDateTime->getDateTime();
         }
-        else
-        {
+        else {
             return $eventDateTime->getDate();
         }
     }
@@ -45,12 +40,10 @@ class EventParser
      */
     private function determineTimeZone(string $eventTimeZone, string $calendarTimeZone): ?DateTimeZone
     {
-        if ($eventTimeZone || $calendarTimeZone)
-        {
+        if ($eventTimeZone || $calendarTimeZone) {
             return new DateTimeZone($eventTimeZone ?: $calendarTimeZone);
         }
-        else
-        {
+        else {
             return null;
         }
     }
@@ -62,9 +55,7 @@ class EventParser
     public function getEvents(CalendarProperties $calendarProperties, Google_Service_Calendar_Event $googleCalendarEvent
     ): array
     {
-
-        if (is_null($googleCalendarEvent->getStart()) || is_null($googleCalendarEvent->getEnd()))
-        {
+        if (is_null($googleCalendarEvent->getStart()) || is_null($googleCalendarEvent->getEnd())) {
             return [];
         }
 
@@ -73,26 +64,15 @@ class EventParser
         $event = new Event(
             $googleCalendarEvent->getId(),
             $this->getTimestamp($googleCalendarEvent->getStart(), $calendarProperties->getTimeZone()),
-            $this->getTimestamp($googleCalendarEvent->getEnd(), $calendarProperties->getTimeZone()),
-            $this->getRecurrence($googleCalendarEvent->getRecurrence()), $url, $googleCalendarEvent->getSummary(),
-            $googleCalendarEvent->getDescription(), $googleCalendarEvent->getLocation(),
-            $this->getSource($calendarProperties), Manager::CONTEXT
+            $this->getTimestamp($googleCalendarEvent->getEnd(), $calendarProperties->getTimeZone()), $url,
+            $googleCalendarEvent->getSummary(), $googleCalendarEvent->getDescription(),
+            $googleCalendarEvent->getLocation(), $this->getSource($calendarProperties), Manager::CONTEXT
         );
 
         $event->setCalendarProperties($calendarProperties);
         $event->setGoogleCalendarEvent($googleCalendarEvent);
 
         return [$event];
-    }
-
-    /**
-     * @param string[] $recurrenceRules
-     */
-    private function getRecurrence(array $recurrenceRules = []): RecurrenceRules
-    {
-        $recurrenceRulesIcalParser = new RecurrenceRulesIcalParser();
-
-        return $recurrenceRulesIcalParser->getRules($recurrenceRules[0]);
     }
 
     private function getSource(CalendarProperties $calendarProperties): string

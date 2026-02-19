@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Calendar\Service\View;
 
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
 use Chamilo\Libraries\Calendar\Architecture\Domain\EventAttendee;
-use Chamilo\Libraries\Calendar\Service\Recurrence\VObjectRecurrenceRulesFormatter;
+use Chamilo\Libraries\Calendar\Architecture\Enum\AttendeeTypeEnum;
 use DateTime;
 use DateTimeZone;
 use Exception;
@@ -93,12 +93,6 @@ class ICalCalendarRenderer extends CalendarRenderer
             $event->add('URL', $providedEvent->getUrl());
         }
 
-        $vObjectRecurrenceRulesFormatter = new VObjectRecurrenceRulesFormatter();
-
-        if ($providedEvent->getRecurrenceRules()->hasRecurrence()) {
-            $event->add('RRULE', $vObjectRecurrenceRulesFormatter->format($providedEvent->getRecurrenceRules()));
-        }
-
         if ($providedEvent->getOrganizer() instanceof EventAttendee) {
             $organizerValue = 'MAILTO:' . $providedEvent->getOrganizer()->getEmail();
 
@@ -112,12 +106,12 @@ class ICalCalendarRenderer extends CalendarRenderer
         foreach ($providedEvent->getAttendees() as $attendee) {
             $attendeeValues = [];
 
-            if ($attendee->getICalType()) {
-                $attendeeValues['ROLE'] = $attendee->getICalType();
+            if ($attendee->getType() !== AttendeeTypeEnum::RESOURCE) {
+                $attendeeValues['ROLE'] = $attendee->getType()->getICal();
             }
 
-            if ($attendee->getICalResponseStatus()) {
-                $attendeeValues['PARTSTAT'] = $attendee->getICalResponseStatus();
+            if ($attendee->getResponseStatus()->getICal()) {
+                $attendeeValues['PARTSTAT'] = $attendee->getResponseStatus()->getICal();
             }
 
             $attendeeValues['CN'] = $attendee->getName();

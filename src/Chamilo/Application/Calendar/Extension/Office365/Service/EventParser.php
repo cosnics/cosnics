@@ -5,6 +5,8 @@ use Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar;
 use Chamilo\Application\Calendar\Extension\Office365\Architecture\Domain\Event;
 use Chamilo\Application\Calendar\Extension\Office365\Manager;
 use Chamilo\Libraries\Calendar\Architecture\Domain\EventAttendee;
+use Chamilo\Libraries\Calendar\Architecture\Enum\AttendeeTypeEnum;
+use Chamilo\Libraries\Calendar\Architecture\Enum\ResponseStatusEnum;
 use DateTime;
 use DateTimeZone;
 use Exception;
@@ -19,7 +21,6 @@ use Symfony\Component\Translation\Translator;
  */
 class EventParser
 {
-
     private Translator $translator;
 
     public function __construct(Translator $translator)
@@ -27,45 +28,39 @@ class EventParser
         $this->translator = $translator;
     }
 
-    private function determineAttendeeType(?string $sourceAttendeeType): ?int
+    private function determineAttendeeType(?string $sourceAttendeeType): ?AttendeeTypeEnum
     {
-        return match ($sourceAttendeeType)
-        {
-            'required' => EventAttendee::TYPE_REQUIRED,
-            'optional' => EventAttendee::TYPE_OPTIONAL,
-            'resource' => EventAttendee::TYPE_RESOURCE,
+        return match ($sourceAttendeeType) {
+            'required' => AttendeeTypeEnum::REQUIRED,
+            'optional' => AttendeeTypeEnum::OPTIONAL,
+            'resource' => AttendeeTypeEnum::RESOURCE,
             default => null
         };
     }
 
-    private function determineResponseStatus(?string $responseType): ?int
+    private function determineResponseStatus(?string $responseType): ?ResponseStatusEnum
     {
-        return match ($responseType)
-        {
-            'organizer' => EventAttendee::RESPONSE_STATUS_ORGANIZER,
-            'accepted' => EventAttendee::RESPONSE_STATUS_ACCEPTED,
-            'declined' => EventAttendee::RESPONSE_STATUS_DECLINED,
-            'tentativelyAccepted' => EventAttendee::RESPONSE_STATUS_TENTATIVE,
-            'none', 'notResponded' => EventAttendee::RESPONSE_STATUS_NONE,
+        return match ($responseType) {
+            'organizer' => ResponseStatusEnum::ORGANIZER,
+            'accepted' => ResponseStatusEnum::ACCEPTED,
+            'declined' => ResponseStatusEnum::DECLINED,
+            'tentativelyAccepted' => ResponseStatusEnum::TENTATIVE,
+            'none', 'notResponded' => ResponseStatusEnum::NONE,
             default => null
         };
     }
 
     private function determineTimeZone(?string $eventTimeZone = null): ?DateTimeZone
     {
-        if ($eventTimeZone)
-        {
-            try
-            {
+        if ($eventTimeZone) {
+            try {
                 return new DateTimeZone($eventTimeZone);
             }
-            catch (Exception)
-            {
+            catch (Exception) {
                 return null;
             }
         }
-        else
-        {
+        else {
             return null;
         }
     }
@@ -79,28 +74,23 @@ class EventParser
     {
         $eventAttendees = [];
 
-        foreach ($attendees as $sourceAttendee)
-        {
-            if (!$sourceAttendee->getStatus()->getResponse()->is(EventAttendee::RESPONSE_STATUS_NONE))
-            {
+        foreach ($attendees as $sourceAttendee) {
+            if (!$sourceAttendee->getStatus()->getResponse()->is(ResponseStatusEnum::NONE->value)) {
                 $responseDate = $sourceAttendee->getStatus()->getTime()->getTimestamp();
             }
-            else
-            {
+            else {
                 $responseDate = null;
             }
 
             $email = $sourceAttendee->getEmailAddress()->getAddress();
 
-            if (is_null($email))
-            {
+            if (is_null($email)) {
                 $email = '-';
             }
 
             $name = $sourceAttendee->getEmailAddress()->getAddress() ?? 'Unknown';
 
-            if (is_null($name))
-            {
+            if (is_null($name)) {
                 $name = 'Unknown';
             }
 
@@ -121,9 +111,7 @@ class EventParser
         AvailableCalendar $availableCalendar, \Microsoft\Graph\Generated\Models\Event $sourceEvent
     ): array
     {
-        try
-        {
-
+        try {
             $startDate = $this->getTimestamp(
                 $sourceEvent->getStart()->getDateTime(), $sourceEvent->getStart()->getTimeZone(),
                 (bool) $sourceEvent->getIsAllDay()
@@ -135,8 +123,8 @@ class EventParser
             );
 
             $event = new Event(
-                $sourceEvent->getId(), $startDate, $endDate, null, $sourceEvent->getWebLink(),
-                $sourceEvent->getSubject(), strip_tags($sourceEvent->getBody()->getContent(), '<br>'),
+                $sourceEvent->getId(), $startDate, $endDate, $sourceEvent->getWebLink(), $sourceEvent->getSubject(),
+                strip_tags($sourceEvent->getBody()->getContent(), '<br>'),
                 $sourceEvent->getLocation()->getDisplayName(), $this->getSource($availableCalendar->getName()),
                 Manager::CONTEXT, $this->getOrganizer($sourceEvent->getOrganizer()),
                 $this->getAttendees($sourceEvent->getAttendees())
@@ -144,32 +132,28 @@ class EventParser
 
             return [$event];
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             return [];
         }
     }
 
     private function getOrganizer(?Recipient $sourceOrganizer): ?EventAttendee
     {
-        if ($sourceOrganizer instanceof Recipient)
-        {
+        if ($sourceOrganizer instanceof Recipient) {
             $email = $sourceOrganizer->getEmailAddress()->getAddress();
 
-            if (is_null($email))
-            {
+            if (is_null($email)) {
                 $email = '-';
             }
 
             $name = $sourceOrganizer->getEmailAddress()->getName();
 
-            if (is_null($name))
-            {
+            if (is_null($name)) {
                 $name = 'Unknown';
             }
 
             return new EventAttendee(
-                $email, $name, EventAttendee::TYPE_ORGANIZER, null, EventAttendee::RESPONSE_STATUS_ORGANIZER
+                $email, $name, AttendeeTypeEnum::ORGANIZER, ResponseStatusEnum::ORGANIZER, null
             );
         }
 
@@ -190,8 +174,7 @@ class EventParser
     {
         $dateTime = new DateTime($eventDateTime, $this->determineTimeZone($eventTimeZone));
 
-        if ($isAllDay)
-        {
+        if ($isAllDay) {
             return mktime(
                 0, 0, 0, (int) $dateTime->format('n'), (int) $dateTime->format('j'), (int) $dateTime->format('Y')
             );

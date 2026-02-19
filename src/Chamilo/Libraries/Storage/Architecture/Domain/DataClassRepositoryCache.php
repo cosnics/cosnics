@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain;
 
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\CacheTypeEnum;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -11,14 +12,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class DataClassRepositoryCache
 {
-    public const TYPE_COUNT = 1;
-    public const TYPE_COUNT_GROUPED = 2;
-    public const TYPE_DISTINCT = 3;
-    public const TYPE_RECORD = 4;
-    public const TYPE_RECORDS = 5;
-    public const TYPE_RETRIEVE = 6;
-    public const TYPE_RETRIEVES = 7;
-
     /**
      * @var array[][][]
      */
@@ -29,7 +22,7 @@ class DataClassRepositoryCache
         $this->cache = [];
     }
 
-    private function add(string $className, int $type, ?StorageParameters $parameters, callable $value): mixed
+    private function add(string $className, CacheTypeEnum $type, ?StorageParameters $parameters, callable $value): mixed
     {
         if (!$this->existsForType($type, $className, $parameters)) {
             $this->setForType($type, $className, $parameters->hash(), $value());
@@ -42,7 +35,7 @@ class DataClassRepositoryCache
         string $className, StorageParameters $parameters, callable $value
     ): int
     {
-        return $this->add($className, self::TYPE_COUNT, $parameters, $value);
+        return $this->add($className, CacheTypeEnum::COUNT, $parameters, $value);
     }
 
     /**
@@ -52,47 +45,47 @@ class DataClassRepositoryCache
         string $className, StorageParameters $parameters, callable $value
     ): array
     {
-        return $this->add($className, self::TYPE_COUNT_GROUPED, $parameters, $value);
+        return $this->add($className, CacheTypeEnum::COUNT_GROUPED, $parameters, $value);
     }
 
     public function addForDistinct(
         string $className, StorageParameters $parameters, callable $value
     ): array
     {
-        return $this->add($className, self::TYPE_DISTINCT, $parameters, $value);
+        return $this->add($className, CacheTypeEnum::DISTINCT, $parameters, $value);
     }
 
     public function addForRecord(string $className, StorageParameters $parameters, callable $value): array
     {
-        return $this->add($className, self::TYPE_RECORD, $parameters, $value);
+        return $this->add($className, CacheTypeEnum::RECORD, $parameters, $value);
     }
 
     public function addForRecords(
         string $cacheDataClassName, StorageParameters $parameters, callable $value
     ): ArrayCollection
     {
-        return $this->add($cacheDataClassName, self::TYPE_RECORDS, $parameters, $value);
+        return $this->add($cacheDataClassName, CacheTypeEnum::RECORDS, $parameters, $value);
     }
 
     public function addForRetrieve(
         string $cacheDataClassName, StorageParameters $parameters, callable $value
     ): ?DataClass
     {
-        return $this->add($cacheDataClassName, self::TYPE_RETRIEVE, $parameters, $value);
+        return $this->add($cacheDataClassName, CacheTypeEnum::RETRIEVE, $parameters, $value);
     }
 
     public function addForRetrieves(
         string $cacheDataClassName, StorageParameters $parameters, callable $value
     ): ArrayCollection
     {
-        return $this->add($cacheDataClassName, self::TYPE_RETRIEVES, $parameters, $value);
+        return $this->add($cacheDataClassName, CacheTypeEnum::RETRIEVES, $parameters, $value);
     }
 
-    public function existsForType(int $type, string $class, StorageParameters $parameters): bool
+    public function existsForType(CacheTypeEnum $type, string $class, StorageParameters $parameters): bool
     {
         $hash = $parameters->hash();
 
-        if (isset($this->cache[$class][$type][$hash])) {
+        if (isset($this->cache[$class][$type->value][$hash])) {
             return true;
         }
         else {
@@ -100,10 +93,10 @@ class DataClassRepositoryCache
         }
     }
 
-    public function getForType(int $type, string $class, StorageParameters $parameters)
+    public function getForType(CacheTypeEnum $type, string $class, StorageParameters $parameters)
     {
         if ($this->existsForType($type, $class, $parameters)) {
-            return $this->cache[$class][$type][$parameters->hash()];
+            return $this->cache[$class][$type->value][$parameters->hash()];
         }
         else {
             return null;
@@ -115,9 +108,9 @@ class DataClassRepositoryCache
         $this->cache = [];
     }
 
-    private function setForType(int $type, string $class, string $hash, mixed $value): void
+    private function setForType(CacheTypeEnum $type, string $class, string $hash, mixed $value): void
     {
-        $this->cache[$class][$type][$hash] = $value;
+        $this->cache[$class][$type->value][$hash] = $value;
     }
 
     public function truncateClass(string $class): bool

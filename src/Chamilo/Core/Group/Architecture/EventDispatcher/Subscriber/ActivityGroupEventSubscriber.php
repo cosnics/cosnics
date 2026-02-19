@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Architecture\EventDispatcher\Subscriber;
 
+use Chamilo\Core\Group\Architecture\Enum\GroupActivityTypeEnum;
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupCreateEvent;
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupDeleteEvent;
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupEmptyEvent;
@@ -19,7 +20,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class ActivityGroupEventSubscriber implements EventSubscriberInterface
 {
-
     protected ?User $currentUser;
 
     protected GroupTrackingRepository $groupTrackingRepository;
@@ -38,7 +38,7 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivity::ACTIVITY_CREATED, $afterGroupCreateEvent->getGroup()->getId()
+                GroupActivityTypeEnum::CREATED, $afterGroupCreateEvent->getGroup()->getId()
             )
         );
     }
@@ -51,7 +51,7 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivity::ACTIVITY_DELETED, $afterGroupDeleteEvent->getGroup()->getId()
+                GroupActivityTypeEnum::DELETED, $afterGroupDeleteEvent->getGroup()->getId()
             )
         );
     }
@@ -64,7 +64,7 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivity::ACTIVITY_TRUNCATED, $afterGroupEmptyEvent->getGroup()->getId()
+                GroupActivityTypeEnum::TRUNCATED, $afterGroupEmptyEvent->getGroup()->getId()
             )
         );
     }
@@ -77,7 +77,7 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivity::ACTIVITY_MOVED, $afterGroupMoveEvent->getGroup()->getId()
+                GroupActivityTypeEnum::MOVED, $afterGroupMoveEvent->getGroup()->getId()
             )
         );
     }
@@ -90,7 +90,7 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivity::ACTIVITY_SUBSCRIBED, $afterGroupSubscribeEvent->getGroup()->getId(),
+                GroupActivityTypeEnum::SUBSCRIBED, $afterGroupSubscribeEvent->getGroup()->getId(),
                 $afterGroupSubscribeEvent->getUser()->getId()
             )
         );
@@ -104,7 +104,7 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivity::ACTIVITY_UNSUBSCRIBED, $afterGroupUnsubscribeEvent->getGroup()->getId(),
+                GroupActivityTypeEnum::UNSUBSCRIBED, $afterGroupUnsubscribeEvent->getGroup()->getId(),
                 $afterGroupUnsubscribeEvent->getUser()->getId()
             )
         );
@@ -118,7 +118,7 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
     {
         return $this->getGroupTrackingRepository()->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivity::ACTIVITY_UPDATED, $afterGroupUpdateEvent->getGroup()->getId()
+                GroupActivityTypeEnum::UPDATED, $afterGroupUpdateEvent->getGroup()->getId()
             )
         );
     }
@@ -147,7 +147,7 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
     }
 
     protected function initializeGroupActivityFromParameters(
-        int $action, string $groupIdentifier, ?string $targetUserIdentifier = null
+        GroupActivityTypeEnum $action, string $groupIdentifier, ?string $targetUserIdentifier = null
     ): GroupActivity
     {
         $currentUser = $this->getCurrentUser();

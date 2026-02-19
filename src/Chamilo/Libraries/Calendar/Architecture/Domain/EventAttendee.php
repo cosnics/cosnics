@@ -1,33 +1,28 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Architecture\Domain;
 
+use Chamilo\Libraries\Calendar\Architecture\Enum\AttendeeTypeEnum;
+use Chamilo\Libraries\Calendar\Architecture\Enum\ResponseStatusEnum;
+
 /**
  * @package Chamilo\Libraries\Calendar\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class EventAttendee
 {
-    public const RESPONSE_STATUS_ACCEPTED = 1;
-    public const RESPONSE_STATUS_DECLINED = 2;
-    public const RESPONSE_STATUS_NONE = 5;
-    public const RESPONSE_STATUS_ORGANIZER = 4;
-    public const RESPONSE_STATUS_TENTATIVE = 3;
-    public const TYPE_OPTIONAL = 2;
-    public const TYPE_ORGANIZER = 4;
-    public const TYPE_REQUIRED = 1;
-    public const TYPE_RESOURCE = 3;
-
     private string $email;
 
     private string $name;
 
     private ?int $responseDate;
 
-    private ?int $responseStatus;
+    private ?ResponseStatusEnum $responseStatus;
 
-    private ?int $type;
+    private ?AttendeeTypeEnum $type;
 
-    public function __construct(string $email, string $name, ?int $type, ?int $responseStatus, ?int $responseDate)
+    public function __construct(
+        string $email, string $name, ?AttendeeTypeEnum $type, ?ResponseStatusEnum $responseStatus, ?int $responseDate
+    )
     {
         $this->email = $email;
         $this->name = $name;
@@ -46,26 +41,6 @@ class EventAttendee
         $this->email = $email;
 
         return $this;
-    }
-
-    public function getICalResponseStatus(): ?string
-    {
-        return match ($this->getResponseStatus()) {
-            self::RESPONSE_STATUS_ACCEPTED => 'ACCEPTED',
-            self::RESPONSE_STATUS_DECLINED => 'DECLINED',
-            self::RESPONSE_STATUS_TENTATIVE => 'TENTATIVE',
-            default => null
-        };
-    }
-
-    public function getICalType(): ?string
-    {
-        return match ($this->getType()) {
-            self::TYPE_OPTIONAL => 'OPT-PARTICIPANT',
-            self::TYPE_ORGANIZER => 'CHAIR',
-            self::TYPE_REQUIRED => 'REQ-PARTICIPANT',
-            default => null
-        };
     }
 
     public function getName(): string
@@ -92,7 +67,7 @@ class EventAttendee
         return $this;
     }
 
-    public function getResponseStatus(): ?int
+    public function getResponseStatus(): ?ResponseStatusEnum
     {
         return $this->responseStatus;
     }
@@ -104,12 +79,12 @@ class EventAttendee
         return $this;
     }
 
-    public function getType(): int
+    public function getType(): AttendeeTypeEnum
     {
         return $this->type;
     }
 
-    public function setType(int $type): EventAttendee
+    public function setType(AttendeeTypeEnum $type): EventAttendee
     {
         $this->type = $type;
 

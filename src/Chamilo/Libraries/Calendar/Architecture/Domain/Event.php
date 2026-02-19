@@ -33,8 +33,6 @@ class Event
 
     private ?EventAttendee $organizer;
 
-    private ?RecurrenceRules $recurrenceRules;
-
     private ?string $source;
 
     private ?int $startDate;
@@ -48,16 +46,14 @@ class Event
      * @param \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button[] $actions
      */
     public function __construct(
-        ?string $id = null, ?int $startDate = null, ?int $endDate = null, ?RecurrenceRules $recurrenceRules = null,
-        ?string $url = null, ?string $title = null, ?string $content = null, ?string $location = null,
-        ?string $source = null, ?string $context = null, ?EventAttendee $organizer = null, array $attendees = [],
-        array $actions = []
+        ?string $id = null, ?int $startDate = null, ?int $endDate = null, ?string $url = null, ?string $title = null,
+        ?string $content = null, ?string $location = null, ?string $source = null, ?string $context = null,
+        ?EventAttendee $organizer = null, array $attendees = [], array $actions = []
     )
     {
         $this->id = $id;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
-        $this->recurrenceRules = $recurrenceRules ?: new RecurrenceRules();
         $this->url = $url;
         $this->title = $title;
         $this->content = $content;
@@ -161,18 +157,6 @@ class Event
     public function setOrganizer(?EventAttendee $organizer): Event
     {
         $this->organizer = $organizer;
-
-        return $this;
-    }
-
-    public function getRecurrenceRules(): ?RecurrenceRules
-    {
-        return $this->recurrenceRules;
-    }
-
-    public function setRecurrenceRules(?RecurrenceRules $recurrenceRules): Event
-    {
-        $this->recurrenceRules = $recurrenceRules;
 
         return $this;
     }

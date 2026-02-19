@@ -5,8 +5,8 @@ use Chamilo\Core\Admin\Architecture\Interface\ActionProviderInterface;
 use Chamilo\Core\Admin\UserInterface\Form\AdminSearchForm;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\IdentGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\NamespaceIdentGlyph;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Enum\IdentGlyphSizeEnum;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\Action;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ActionsTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
@@ -69,7 +69,7 @@ class ActionProviderRegistry extends ArrayCollection
             $actionsTab = new ActionsTab(
                 $this->getClassnameUtilities()->getNamespaceId($actions->getContext()),
                 $this->getTranslator()->trans('TypeName', [], $actions->getContext()), new NamespaceIdentGlyph(
-                    $actions->getContext(), true, false, false, IdentGlyph::SIZE_SMALL
+                    $actions->getContext(), true, false, false, IdentGlyphSizeEnum::SMALL
                 )
             );
 

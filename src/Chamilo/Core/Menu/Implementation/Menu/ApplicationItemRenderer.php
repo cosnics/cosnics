@@ -19,9 +19,9 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickF
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_extended_checkbox;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\IdentGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\NamespaceIdentGlyph;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Enum\IdentGlyphSizeEnum;
 use HTML_QuickForm_Rule_Required;
 use HTML_QuickForm_select;
 use Symfony\Component\Translation\Translator;
@@ -66,16 +66,13 @@ class ApplicationItemRenderer extends ItemRenderer
 
         $html[] = '<a href="' . $this->getApplicationItemUrl($item) . '">';
 
-        if ($item->showIcon())
-        {
-            if (!empty($item->getIconClass()))
-            {
+        if ($item->showIcon()) {
+            if (!empty($item->getIconClass())) {
                 $glyph = new FontAwesomeGlyph($item->getIconClass(), ['fa-2x'], $title, 'fas');
             }
-            else
-            {
+            else {
                 $glyph = new NamespaceIdentGlyph(
-                    $item->getSetting(self::CONFIGURATION_APPLICATION), false, false, false, IdentGlyph::SIZE_MEDIUM,
+                    $item->getSetting(self::CONFIGURATION_APPLICATION), false, false, false, IdentGlyphSizeEnum::MEDIUM,
                     [], $title
                 );
             }
@@ -83,8 +80,7 @@ class ApplicationItemRenderer extends ItemRenderer
             $html[] = $glyph->render();
         }
 
-        if ($item->showTitle())
-        {
+        if ($item->showTitle()) {
             $html[] = '<div>' . $title . '</div>';
         }
 
@@ -137,8 +133,7 @@ class ApplicationItemRenderer extends ItemRenderer
     {
         $application = $item->getSetting(self::CONFIGURATION_APPLICATION);
 
-        if ($application == 'root')
-        {
+        if ($application == 'root') {
             return $this->getUrlGenerator()->fromParameters();
         }
 
@@ -148,19 +143,16 @@ class ApplicationItemRenderer extends ItemRenderer
 
         $component = $item->getSetting(self::CONFIGURATION_COMPONENT);
 
-        if ($component)
-        {
+        if ($component) {
             $parameters[Application::PARAM_ACTION] = $component;
         }
 
         $extraParameters = $item->getSetting(self::CONFIGURATION_EXTRA_PARAMETERS);
 
-        if ($extraParameters)
-        {
+        if ($extraParameters) {
             parse_str($extraParameters, $parsedExtraParameters);
 
-            foreach ($parsedExtraParameters as $key => $value)
-            {
+            foreach ($parsedExtraParameters as $key => $value) {
                 $parameters[$key] = $value;
             }
         }
@@ -177,10 +169,8 @@ class ApplicationItemRenderer extends ItemRenderer
 
         $activeApplications = [];
 
-        foreach ($packages as $package)
-        {
-            if (!$package->isApplication())
-            {
+        foreach ($packages as $package) {
+            if (!$package->isApplication()) {
                 continue;
             }
 
@@ -231,15 +221,13 @@ class ApplicationItemRenderer extends ItemRenderer
         $currentContext = $request->query->get(Application::PARAM_CONTEXT);
         $currentAction = $request->query->get(Application::PARAM_ACTION);
 
-        if ($currentContext != $item->getSetting(self::CONFIGURATION_APPLICATION))
-        {
+        if ($currentContext != $item->getSetting(self::CONFIGURATION_APPLICATION)) {
             return false;
         }
 
         $component = $item->getSetting(self::CONFIGURATION_COMPONENT);
 
-        if ($component && $currentAction != $component)
-        {
+        if ($component && $currentAction != $component) {
             return false;
         }
 
@@ -248,8 +236,7 @@ class ApplicationItemRenderer extends ItemRenderer
 
     public function renderTitleForCurrentLanguage(Item $item): string
     {
-        if ($item->getSetting(self::CONFIGURATION_USE_TRANSLATION))
-        {
+        if ($item->getSetting(self::CONFIGURATION_USE_TRANSLATION)) {
             return $this->getTranslator()->trans('TypeName', [], $item->getSetting(self::CONFIGURATION_APPLICATION));
         }
 
@@ -258,8 +245,7 @@ class ApplicationItemRenderer extends ItemRenderer
 
     public function renderTitleForIsoCode(Item $item, string $isoCode): string
     {
-        if ($item->getSetting(self::CONFIGURATION_USE_TRANSLATION))
-        {
+        if ($item->getSetting(self::CONFIGURATION_USE_TRANSLATION)) {
             return $this->getTranslator()->trans('TypeName', [], $item->getSetting(self::CONFIGURATION_APPLICATION),
                 $isoCode);
         }

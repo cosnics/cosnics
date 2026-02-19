@@ -2,11 +2,10 @@
 namespace Chamilo\Core\User\Architecture\EventDispatcher\Subscriber;
 
 use Chamilo\Core\Admin\Service\OnlineService;
+use Chamilo\Core\User\Architecture\Enum\UserActivityTypeEnum;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserCreateEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserDeleteEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserEnterPageEvent;
-use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserExportEvent;
-use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserImportEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserLoginEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserPasswordResetEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserRegistrationEvent;
@@ -54,7 +53,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivity::ACTIVITY_CREATED, $afterUserCreateEvent->getUser()->getId(),
+                UserActivityTypeEnum::CREATED, $afterUserCreateEvent->getUser()->getId(),
                 $this->getCurrentUser() instanceof User ? $this->getCurrentUser()->getId() : null
             )
         );
@@ -68,7 +67,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivity::ACTIVITY_DELETED, $afterUserDeleteEvent->getUser()->getId(),
+                UserActivityTypeEnum::DELETED, $afterUserDeleteEvent->getUser()->getId(),
                 $this->getCurrentUser() instanceof User ? $this->getCurrentUser()->getId() : null
             )
         );
@@ -106,34 +105,6 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function afterUserExport(AfterUserExportEvent $afterUserExportEvent): bool
-    {
-        return $this->getUserTrackingRepository()->createUserActivity(
-            $this->initializeUserActivityFromParameters(
-                UserActivity::ACTIVITY_EXPORTED, $afterUserExportEvent->getTransferUser()->getId(),
-                $afterUserExportEvent->getUser()->getId()
-            )
-        );
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function afterUserImport(AfterUserImportEvent $afterUserImportEvent): bool
-    {
-        return $this->getUserTrackingRepository()->createUserActivity(
-            $this->initializeUserActivityFromParameters(
-                UserActivity::ACTIVITY_IMPORTED, $afterUserImportEvent->getTransferUser()->getId(),
-                $afterUserImportEvent->getUser()->getId()
-            )
-        );
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
     public function afterUserLogin(AfterUserLoginEvent $afterUserLoginEvent): bool
     {
         return $this->createAuthenticationActivityFormParameters(
@@ -150,7 +121,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivity::ACTIVITY_PASSWORD_RESET, $afterUserPasswordResetEvent->getUser()->getId(),
+                UserActivityTypeEnum::PASSWORD_RESET, $afterUserPasswordResetEvent->getUser()->getId(),
                 $this->getCurrentUser() instanceof User ? $this->getCurrentUser()->getId() : null
             )
         );
@@ -164,7 +135,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivity::ACTIVITY_REGISTERED, $afterUserRegistrationEvent->getUser()->getId()
+                UserActivityTypeEnum::REGISTERED, $afterUserRegistrationEvent->getUser()->getId()
             )
         );
     }
@@ -177,7 +148,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
     {
         return $this->getUserTrackingRepository()->createUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivity::ACTIVITY_UPDATED, $afterUserUpdateEvent->getUser()->getId(),
+                UserActivityTypeEnum::UPDATED, $afterUserUpdateEvent->getUser()->getId(),
                 $this->getCurrentUser() instanceof User ? $this->getCurrentUser()->getId() : null
             )
         );
@@ -251,8 +222,6 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
         return [
             AfterUserCreateEvent::class => 'afterUserCreate',
             AfterUserDeleteEvent::class => 'afterUserDelete',
-            AfterUserExportEvent::class => 'afterUserExport',
-            AfterUserImportEvent::class => 'afterUserImport',
             AfterUserLoginEvent::class => 'afterUserLogin',
             AfterUserPasswordResetEvent::class => 'afterUserPasswordReset',
             AfterUserRegistrationEvent::class => 'afterUserRegistration',
@@ -269,7 +238,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
     }
 
     protected function initializeUserActivityFromParameters(
-        int $action, string $targetUserIdentifier, ?string $sourceUserIdentifier = null
+        UserActivityTypeEnum $action, string $targetUserIdentifier, ?string $sourceUserIdentifier = null
     ): UserActivity
     {
         $userActivity = new UserActivity();

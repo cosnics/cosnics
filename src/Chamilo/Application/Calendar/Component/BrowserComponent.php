@@ -12,6 +12,7 @@ use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Calendar\Factory\HtmlCalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SplitDropdownButtonCollection;
@@ -171,7 +172,7 @@ class BrowserComponent extends Manager
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::CONTEXT,
                 Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_CONFIGURE,
-                ConfigureComponent::PARAM_SELECTED_CONTEXT => 'Chamilo\Core\User'
+                ConfigureComponent::PARAM_SELECTED_CONTEXT => StringUtilities::LIBRARIES
             ]
         );
 

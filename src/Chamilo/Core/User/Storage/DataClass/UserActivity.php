@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Storage\DataClass;
 
+use Chamilo\Core\User\Architecture\Enum\UserActivityTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
 
@@ -10,22 +11,14 @@ use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
  */
 class UserActivity extends DataClass implements UuidDataClassInterface
 {
-    public const ACTIVITY_CREATED = 1;
-    public const ACTIVITY_DELETED = 2;
-    public const ACTIVITY_EXPORTED = 3;
-    public const ACTIVITY_IMPORTED = 4;
-    public const ACTIVITY_PASSWORD_RESET = 5;
-    public const ACTIVITY_QUOTA = 6;
-    public const ACTIVITY_REGISTERED = 7;
-    public const ACTIVITY_UPDATED = 8;
     public const PROPERTY_ACTION = 'action';
     public const PROPERTY_DATE = 'date';
     public const PROPERTY_SOURCE_USER_ID = 'source_user_id';
     public const PROPERTY_TARGET_USER_ID = 'target_user_id';
 
-    public function getAction(): int
+    public function getAction(): UserActivityTypeEnum
     {
-        return $this->getDefaultProperty(self::PROPERTY_ACTION);
+        return UserActivityTypeEnum::from($this->getDefaultProperty(self::PROPERTY_ACTION));
     }
 
     public function getDate(): int
@@ -63,9 +56,9 @@ class UserActivity extends DataClass implements UuidDataClassInterface
         return $this->getDefaultProperty(self::PROPERTY_TARGET_USER_ID);
     }
 
-    public function setAction(int $action): UserActivity
+    public function setAction(UserActivityTypeEnum $action): UserActivity
     {
-        $this->setDefaultProperty(self::PROPERTY_ACTION, $action);
+        $this->setDefaultProperty(self::PROPERTY_ACTION, $action->value);
 
         return $this;
     }

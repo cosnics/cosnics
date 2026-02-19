@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain;
 
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Enum\IdentGlyphSizeEnum;
+
 /**
  * @package Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -9,14 +11,10 @@ namespace Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain;
  */
 class IdentGlyph extends FontAwesomeGlyph
 {
-    public const SIZE_BIG = 48;
-    public const SIZE_MEDIUM = 32;
-    public const SIZE_MINI = 16;
-    public const SIZE_SMALL = 22;
-
     public function __construct(
         string $type, bool $isAligned = false, bool $isNew = false, bool $isDisabled = false,
-        int $size = IdentGlyph::SIZE_SMALL, array $extraClasses = [], ?string $title = null, string $style = 'fas-ci'
+        IdentGlyphSizeEnum $size = IdentGlyphSizeEnum::SMALL, array $extraClasses = [], ?string $title = null,
+        string $style = 'fas-ci'
     )
     {
         $classes = [];
@@ -33,17 +31,7 @@ class IdentGlyph extends FontAwesomeGlyph
             $classes[] = 'fas-ci-disabled';
         }
 
-        switch ($size) {
-            case IdentGlyph::SIZE_SMALL;
-                $classes[] = 'fa-lg';
-                break;
-            case IdentGlyph::SIZE_MEDIUM;
-                $classes[] = 'fa-2x';
-                break;
-            case IdentGlyph::SIZE_BIG;
-                $classes[] = 'fa-3x';
-                break;
-        }
+        $classes[] = $size->toClass();
 
         foreach ($extraClasses as $extraClass) {
             $classes[] = $extraClass;

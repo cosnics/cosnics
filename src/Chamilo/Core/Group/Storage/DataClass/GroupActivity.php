@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Storage\DataClass;
 
+use Chamilo\Core\Group\Architecture\Enum\GroupActivityTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
 
@@ -10,22 +11,15 @@ use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
  */
 class GroupActivity extends DataClass implements UuidDataClassInterface
 {
-    public const ACTIVITY_CREATED = 1;
-    public const ACTIVITY_DELETED = 2;
-    public const ACTIVITY_MOVED = 4;
-    public const ACTIVITY_SUBSCRIBED = 5;
-    public const ACTIVITY_TRUNCATED = 3;
-    public const ACTIVITY_UNSUBSCRIBED = 6;
-    public const ACTIVITY_UPDATED = 7;
     public const PROPERTY_ACTION = 'action';
     public const PROPERTY_DATE = 'date';
     public const PROPERTY_GROUP_ID = 'reference_id';
     public const PROPERTY_TARGET_USER_ID = 'target_user_id';
     public const PROPERTY_USER_ID = 'user_id';
 
-    public function getAction(): int
+    public function getAction(): GroupActivityTypeEnum
     {
-        return $this->getDefaultProperty(self::PROPERTY_ACTION);
+        return GroupActivityTypeEnum::from($this->getDefaultProperty(self::PROPERTY_ACTION));
     }
 
     public function getDate(): int
@@ -69,9 +63,9 @@ class GroupActivity extends DataClass implements UuidDataClassInterface
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
-    public function setAction(int $action): static
+    public function setAction(GroupActivityTypeEnum $action): static
     {
-        $this->setDefaultProperty(self::PROPERTY_ACTION, $action);
+        $this->setDefaultProperty(self::PROPERTY_ACTION, $action->value);
 
         return $this;
     }
