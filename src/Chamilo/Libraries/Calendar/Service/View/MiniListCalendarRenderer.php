@@ -49,7 +49,7 @@ class MiniListCalendarRenderer extends MiniCalendarRenderer
         $html[] = $this->renderTitle($displayTime);
         $html[] = '</h4>';
 
-        $html[] = $this->renderFullCalendar($events, $displayTime);
+        $html[] = $this->renderFullCalendar($events, $displayParameters, $displayTime);
         $html[] = $this->getLegendRenderer()->render($invisibleSources, $invisibilityContext);
 
         $html[] = '<div class="clearfix"></div>';

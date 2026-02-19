@@ -40,37 +40,12 @@ class ComparisonConditionTranslator extends ConditionTranslator implements Condi
             return implode(' ', $string);
         }
 
-        $string[] = $this->translateOperator($comparisonCondition->getOperator());
+        $string[] = $comparisonCondition->getOperator()->toString();
 
         $string[] = $this->getConditionVariableTranslatorCollection()->translate(
             $querybuilder, $rightConditionVariable, $enableAliasing
         );
 
         return implode(' ', $string);
-    }
-
-    private function translateOperator(ComparisonTypeEnum $conditionOperator): string
-    {
-        switch ($conditionOperator) {
-            case ComparisonTypeEnum::GREATER_THAN :
-                $translatedOperator = '>';
-                break;
-            case ComparisonTypeEnum::GREATER_THAN_OR_EQUAL :
-                $translatedOperator = '>=';
-                break;
-            case ComparisonTypeEnum::LESS_THAN :
-                $translatedOperator = '<';
-                break;
-            case ComparisonTypeEnum::LESS_THAN_OR_EQUAL :
-                $translatedOperator = '<=';
-                break;
-            case ComparisonTypeEnum::EQUAL :
-                $translatedOperator = '=';
-                break;
-            default :
-                die('Unknown operator for Comparison condition');
-        }
-
-        return $translatedOperator;
     }
 }

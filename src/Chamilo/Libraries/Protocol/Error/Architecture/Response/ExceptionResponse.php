@@ -2,8 +2,6 @@
 namespace Chamilo\Libraries\Protocol\Error\Architecture\Response;
 
 use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\UserInterface\Layout\Service\BaseFooterRenderer;
-use Chamilo\Libraries\UserInterface\Layout\Service\BaseHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultHeaderRenderer;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
