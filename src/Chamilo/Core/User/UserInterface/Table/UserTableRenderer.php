@@ -5,12 +5,12 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn;
@@ -194,8 +194,8 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
             $buttonToolBar->addButton(
                 new Button(
                     label: $translator->trans('Edit', [], StringUtilities::LIBRARIES),
-                    inlineGlyph: new FontAwesomeGlyph('pencil-alt'), action: $editUrl,
-                    display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+                    inlineGlyph: new FontAwesomeGlyph('pencil-alt'), action: $editUrl, display: DisplayTypeEnum::ICON,
+                    classes: ['btn-link']
                 )
             );
 
@@ -205,7 +205,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
                 new Button(
                     label: $translator->trans('Detail', [], Manager::CONTEXT), inlineGlyph: new FontAwesomeGlyph(
                     'info-circle'
-                ), action: $detailUrl, display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+                ), action: $detailUrl, display: DisplayTypeEnum::ICON, classes: ['btn-link']
                 )
             );
         }
@@ -217,9 +217,8 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
                 $buttonToolBar->addButton(
                     new Button(
                         label: $translator->trans('Delete', [], StringUtilities::LIBRARIES),
-                        inlineGlyph: new FontAwesomeGlyph('times'), action: $deleteUrl,
-                        display: ButtonDisplayInterface::DISPLAY_ICON, confirmationMessage: $this->getTranslator()
-                        ->trans(
+                        inlineGlyph: new FontAwesomeGlyph('times'), action: $deleteUrl, display: DisplayTypeEnum::ICON,
+                        confirmationMessage: $this->getTranslator()->trans(
                             'ConfirmChosenAction', [], StringUtilities::LIBRARIES
                         ), classes: ['btn-link']
                     )
@@ -229,8 +228,8 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
                 $buttonToolBar->addButton(
                     new Button(
                         label: $translator->trans('DeleteNA', [], StringUtilities::LIBRARIES),
-                        inlineGlyph: new FontAwesomeGlyph('times', ['text-muted']),
-                        display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+                        inlineGlyph: new FontAwesomeGlyph('times', ['text-muted']), display: DisplayTypeEnum::ICON,
+                        classes: ['btn-link']
                     )
                 );
             }
@@ -242,7 +241,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
                     new Button(
                         label: $translator->trans('LoginAsUser', [], Manager::CONTEXT),
                         inlineGlyph: new FontAwesomeGlyph('mask'), action: $changeUserUrl,
-                        display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+                        display: DisplayTypeEnum::ICON, classes: ['btn-link']
                     )
                 );
             }
@@ -251,8 +250,8 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
             $buttonToolBar->addButton(
                 new Button(
                     label: $translator->trans('DeleteNA', [], StringUtilities::LIBRARIES),
-                    inlineGlyph: new FontAwesomeGlyph('times', ['text-muted']),
-                    display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+                    inlineGlyph: new FontAwesomeGlyph('times', ['text-muted']), display: DisplayTypeEnum::ICON,
+                    classes: ['btn-link']
                 )
             );
         }

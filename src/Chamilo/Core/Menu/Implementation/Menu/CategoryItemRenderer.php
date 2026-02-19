@@ -11,6 +11,7 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 use Symfony\Component\Translation\Translator;
@@ -48,41 +49,35 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
         $html[] =
             '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
-        if ($item->showIcon())
-        {
+        if ($item->showIcon()) {
             $html[] = '<div>';
 
-            if ($isSelected)
-            {
+            if ($isSelected) {
                 $glyph = new FontAwesomeGlyph(
                     'folder-open', ['fa-2x', 'fa-fw'], $title, 'fas'
                 );
             }
-            else
-            {
+            else {
                 $glyph = $this->getRendererTypeGlyph();
                 $glyph->setExtraClasses(['fa-2x', 'fa-fw']);
             }
 
             $html[] = $glyph->render();
 
-            if (!$item->showTitle())
-            {
+            if (!$item->showTitle()) {
                 $html[] = '&nbsp;<span class="caret"></span>';
             }
 
             $html[] = '</div>';
         }
 
-        if ($item->showTitle())
-        {
+        if ($item->showTitle()) {
             $html[] = '<div>' . $title . '&nbsp;<span class="caret"></span></div>';
         }
 
         $html[] = '</a>';
 
-        if ($this->getItemCacheService()->doesItemHaveChildren($item))
-        {
+        if ($this->getItemCacheService()->doesItemHaveChildren($item)) {
             $html[] = $this->renderChildren($item, $user);
         }
 
@@ -110,12 +105,10 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
     {
         $childItems = $this->getItemCacheService()->findItemsByParentIdentifier($item->getId());
 
-        foreach ($childItems as $childItem)
-        {
+        foreach ($childItems as $childItem) {
             $itemRenderer = $this->getItemRendererFactory()->getItemRendererForItem($childItem);
 
-            if ($itemRenderer instanceof SelectableItemInterface && $itemRenderer->isSelected($childItem, $user))
-            {
+            if ($itemRenderer instanceof SelectableItemInterface && $itemRenderer->isSelected($childItem, $user)) {
                 return true;
             }
         }
@@ -131,11 +124,9 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
 
         $html[] = '<ul class="dropdown-menu">';
 
-        foreach ($childItems as $childItem)
-        {
-            if (!$childItem->isHidden())
-            {
-                $childItem->setDisplay(Item::DISPLAY_TEXT);
+        foreach ($childItems as $childItem) {
+            if (!$childItem->isHidden()) {
+                $childItem->setDisplay(DisplayTypeEnum::LABEL);
 
                 $itemRenderer = $this->getItemRendererFactory()->getItemRendererForItem($childItem);
                 $html[] = $itemRenderer->render($childItem, $user);
@@ -156,5 +147,4 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
     {
         return $this->determineItemTitleForIsoCode($item, $isoCode);
     }
-
 }

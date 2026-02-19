@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Service\ConditionVariable;
 
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\OperationTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionVariableTranslator;
@@ -35,22 +36,22 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
         );
 
         switch ($operationConditionVariable->getOperator()) {
-            case OperationConditionVariable::ADDITION :
+            case OperationTypeEnum::ADDITION :
                 $strings[] = '+';
                 break;
-            case OperationConditionVariable::DIVISION :
+            case OperationTypeEnum::DIVISION :
                 $strings[] = '/';
                 break;
-            case OperationConditionVariable::MINUS :
+            case OperationTypeEnum::MINUS :
                 $strings[] = '-';
                 break;
-            case OperationConditionVariable::MULTIPLICATION :
+            case OperationTypeEnum::MULTIPLICATION :
                 $strings[] = '*';
                 break;
-            case OperationConditionVariable::BITWISE_AND :
+            case OperationTypeEnum::BITWISE_AND :
                 $strings[] = '&';
                 break;
-            case OperationConditionVariable::BITWISE_OR :
+            case OperationTypeEnum::BITWISE_OR :
                 $strings[] = '|';
                 break;
         }

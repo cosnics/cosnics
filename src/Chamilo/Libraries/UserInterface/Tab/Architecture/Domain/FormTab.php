@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Tab\Architecture\Domain;
 
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
 /**
@@ -24,7 +25,7 @@ class FormTab extends GenericTab
      */
     public function __construct(
         string $identifier, string $label, ?InlineGlyph $inlineGlyph, $method, array $parameters = [],
-        int $display = self::DISPLAY_ICON_AND_TITLE
+        DisplayTypeEnum $display = DisplayTypeEnum::ICON_AND_LABEL
     )
     {
         parent::__construct($identifier, $label, $inlineGlyph, $display);

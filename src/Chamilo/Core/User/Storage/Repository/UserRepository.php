@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Storage\Repository;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\ComparisonTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
@@ -104,7 +105,7 @@ class UserRepository
         }
 
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(User::class, User::PROPERTY_ACTIVE), ComparisonCondition::EQUAL,
+            new PropertyConditionVariable(User::class, User::PROPERTY_ACTIVE), ComparisonTypeEnum::EQUAL,
             new StaticConditionVariable(1)
         );
 

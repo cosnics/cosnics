@@ -4,11 +4,11 @@ namespace Chamilo\Core\Group\UserInterface\Table;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableAction;
@@ -34,8 +34,8 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
     protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
 
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, PageNavigationCalculator $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
+        PageNavigationCalculator $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
         ClassnameUtilities $classnameUtilities, MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )
     {
@@ -118,7 +118,7 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
         $buttonToolBar->addButton(
             new Button(
                 $translator->trans('UnsubscribeSelected', [], Manager::CONTEXT), new FontAwesomeGlyph('plus-circle'),
-                $subscribeUrl, ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+                $subscribeUrl, DisplayTypeEnum::ICON, classes: ['btn-link']
             )
         );
 

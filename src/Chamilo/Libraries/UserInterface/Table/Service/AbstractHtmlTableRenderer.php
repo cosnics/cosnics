@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Table\Service;
 
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Protocol\Security\Service\SecurityUtilities;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
@@ -13,7 +14,6 @@ use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SplitDropd
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButtonDivider;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButtonHeader;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\AbstractBaseTableParameters;
@@ -48,8 +48,9 @@ abstract class AbstractHtmlTableRenderer
     protected WebPathBuilder $webPathBuilder;
 
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, PageNavigationRenderer $pagerRenderer, SecurityUtilities $security,
-        ResourceManager $resourceManager, WebPathBuilder $webPathBuilder, ButtonToolBarRenderer $buttonToolBarRenderer
+        Translator $translator, UrlGenerator $urlGenerator, PageNavigationRenderer $pagerRenderer,
+        SecurityUtilities $security, ResourceManager $resourceManager, WebPathBuilder $webPathBuilder,
+        ButtonToolBarRenderer $buttonToolBarRenderer
     )
     {
         $this->urlGenerator = $urlGenerator;
@@ -72,14 +73,14 @@ abstract class AbstractHtmlTableRenderer
 
         if ($formActionsCount > 1) {
             $button = new SplitDropdownButtonCollection(
-                $firstAction->getTitle(), null, $firstAction->getAction(), ButtonDisplayInterface::DISPLAY_LABEL,
+                $firstAction->getTitle(), null, $firstAction->getAction(), DisplayTypeEnum::LABEL,
                 $firstAction->getConfirmationMessage(), ['btn-sm btn-table-action'], null, ['btn-table-action']
             );
 
             foreach ($formActions as $formAction) {
                 $button->addButton(
                     new SubButton(
-                        $formAction->getTitle(), null, $formAction->getAction(), ButtonDisplayInterface::DISPLAY_LABEL,
+                        $formAction->getTitle(), null, $formAction->getAction(), DisplayTypeEnum::LABEL,
                         $formAction->getConfirmationMessage()
                     )
                 );
@@ -90,7 +91,7 @@ abstract class AbstractHtmlTableRenderer
         else {
             $buttonToolBar->addButton(
                 new Button(
-                    $firstAction->getTitle(), null, $firstAction->getAction(), ButtonDisplayInterface::DISPLAY_LABEL,
+                    $firstAction->getTitle(), null, $firstAction->getAction(), DisplayTypeEnum::LABEL,
                     $firstAction->getConfirmationMessage(), ['btn-sm', 'btn-table-action']
                 )
             );
@@ -323,7 +324,7 @@ abstract class AbstractHtmlTableRenderer
 
             $subButtons[] = new SubButton(
                 $translator->trans('ASC', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('chevron-down'),
-                $propertyUrl, ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, null, [], null, $isSelected
+                $propertyUrl, DisplayTypeEnum::ICON_AND_LABEL, null, [], null, $isSelected
             );
 
             $propertyUrl = $this->getUrlGenerator()->fromRequest(
@@ -333,7 +334,7 @@ abstract class AbstractHtmlTableRenderer
 
             $subButtons[] = new SubButton(
                 $translator->trans('DESC', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('chevron-up'),
-                $propertyUrl, ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, null, [], null, $isSelected
+                $propertyUrl, DisplayTypeEnum::ICON_AND_LABEL, null, [], null, $isSelected
             );
         }
 
@@ -423,7 +424,7 @@ abstract class AbstractHtmlTableRenderer
 
                 $subButtons[] = new SubButton(
                     $this->getSecurity()->removeXSS($tableColumn->getTitle()), null, $propertyUrl,
-                    ButtonDisplayInterface::DISPLAY_LABEL, null, [], null, $isSelected
+                    DisplayTypeEnum::LABEL, null, [], null, $isSelected
                 );
             }
         }

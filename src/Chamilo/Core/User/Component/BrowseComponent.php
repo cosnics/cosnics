@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Table\UserTableRenderer;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
@@ -11,7 +12,6 @@ use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Form\ButtonSearchForm;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
@@ -71,7 +71,7 @@ class BrowseComponent extends Manager
                     $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                     $this->getUrlGenerator()->fromParameters(
                         [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_CREATE]
-                    ), ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+                    ), DisplayTypeEnum::ICON_AND_LABEL
                 )
             );
         }

@@ -2,13 +2,13 @@
 namespace Chamilo\Libraries\UserInterface\Table\Service;
 
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
@@ -36,7 +36,8 @@ class PageNavigationRenderer
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        Translator $translator, PageNavigationCalculator $pager, UrlGenerator $urlGenerator, ButtonToolBarRenderer $buttonToolBarRenderer
+        Translator $translator, PageNavigationCalculator $pager, UrlGenerator $urlGenerator,
+        ButtonToolBarRenderer $buttonToolBarRenderer
     )
     {
         $this->translator = $translator;
@@ -146,13 +147,13 @@ class PageNavigationRenderer
             );
         }
 
-        $dropDownButton =
-            new DropDownButtonCollection($dropDownButtonLabel, null, ButtonDisplayInterface::DISPLAY_LABEL, ['btn-sm'],
-                ['dropdown-menu-right']);
+        $dropDownButton = new DropDownButtonCollection($dropDownButtonLabel, null, DisplayTypeEnum::LABEL, ['btn-sm'],
+            ['dropdown-menu-right']);
         $buttonGroup->addButton($dropDownButton);
 
         for (
-            $nr = PageNavigationCalculator::DISPLAY_PER_INCREMENT; $nr <= $parameterValues->getTotalNumberOfItems() && $nr <= 100;
+            $nr = PageNavigationCalculator::DISPLAY_PER_INCREMENT;
+            $nr <= $parameterValues->getTotalNumberOfItems() && $nr <= 100;
             $nr += PageNavigationCalculator::DISPLAY_PER_INCREMENT
         ) {
             $numberrOfRowsOption = ($nr / $parameterValues->getNumberOfColumnsPerPage());
@@ -164,7 +165,7 @@ class PageNavigationRenderer
                         $translationVariables[Application::PARAM_CONTEXT]
                     ), null, $this->getUrlGenerator()->fromRequest(
                     [$itemsPerPageParameterName => $numberrOfRowsOption]
-                ), ButtonDisplayInterface::DISPLAY_LABEL, null, [], null,
+                ), DisplayTypeEnum::LABEL, null, [], null,
                     $numberrOfRowsOption == $parameterValues->getNumberOfRowsPerPage()
                 )
             );
@@ -178,7 +179,7 @@ class PageNavigationRenderer
                         $translationVariables[Application::PARAM_CONTEXT]
                     ), null, $this->getUrlGenerator()->fromRequest(
                     [$itemsPerPageParameterName => PageNavigationCalculator::DISPLAY_ALL]
-                ), ButtonDisplayInterface::DISPLAY_LABEL, null, [], null,
+                ), DisplayTypeEnum::LABEL, null, [], null,
                     $numberOfItemsPerPage == $parameterValues->getTotalNumberOfItems()
                 )
             );

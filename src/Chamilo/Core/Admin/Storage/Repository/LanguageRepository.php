@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Admin\Storage\Repository;
 
 use Chamilo\Core\Admin\Architecture\Domain\Language;
-use Chamilo\Core\Admin\Architecture\Domain\LanguageCodeEnum;
+use Chamilo\Core\Admin\Architecture\Enum\LanguageCodeEnum;
 use Chamilo\Libraries\Filesystem\Service\FilesystemTools;
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Doctrine\Common\Collections\ArrayCollection;

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Tab\Architecture\Domain;
 
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
 /**
@@ -9,11 +10,7 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
  */
 abstract class AbstractTab
 {
-    public const DISPLAY_ICON = 1;
-    public const DISPLAY_ICON_AND_TITLE = 3;
-    public const DISPLAY_TITLE = 2;
-
-    protected int $display;
+    protected DisplayTypeEnum $display;
 
     protected string $identifier;
 
@@ -22,7 +19,8 @@ abstract class AbstractTab
     protected string $label;
 
     public function __construct(
-        string $identifier, string $label, ?InlineGlyph $inlineGlyph, int $display = self::DISPLAY_ICON_AND_TITLE
+        string $identifier, string $label, ?InlineGlyph $inlineGlyph,
+        DisplayTypeEnum $display = DisplayTypeEnum::ICON_AND_LABEL
     )
     {
         $this->identifier = $identifier;
@@ -31,12 +29,12 @@ abstract class AbstractTab
         $this->display = $display;
     }
 
-    public function getDisplay(): int
+    public function getDisplay(): DisplayTypeEnum
     {
         return $this->display;
     }
 
-    public function setDisplay(int $display): static
+    public function setDisplay(DisplayTypeEnum $display): static
     {
         $this->display = $display;
 
@@ -81,11 +79,11 @@ abstract class AbstractTab
 
     public function isIconVisible(): bool
     {
-        return $this->getDisplay() == self::DISPLAY_ICON_AND_TITLE || $this->getDisplay() == self::DISPLAY_ICON;
+        return $this->getDisplay() == DisplayTypeEnum::ICON_AND_LABEL || $this->getDisplay() == DisplayTypeEnum::ICON;
     }
 
     public function isTextVisible(): bool
     {
-        return $this->getDisplay() == self::DISPLAY_ICON_AND_TITLE || $this->getDisplay() == self::DISPLAY_TITLE;
+        return $this->getDisplay() == DisplayTypeEnum::ICON_AND_LABEL || $this->getDisplay() == DisplayTypeEnum::LABEL;
     }
 }

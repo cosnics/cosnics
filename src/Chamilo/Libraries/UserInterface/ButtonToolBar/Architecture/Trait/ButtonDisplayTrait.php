@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait;
 
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
 /**
@@ -9,18 +10,18 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
  */
 trait ButtonDisplayTrait
 {
-    private int $display = 0;
+    private DisplayTypeEnum $display;
 
     private ?InlineGlyph $inlineGlyph = null;
 
     private ?string $label = null;
 
-    public function getDisplay(): int
+    public function getDisplay(): DisplayTypeEnum
     {
         return $this->display;
     }
 
-    public function setDisplay(int $display): static
+    public function setDisplay(DisplayTypeEnum $display): static
     {
         $this->display = $display;
 

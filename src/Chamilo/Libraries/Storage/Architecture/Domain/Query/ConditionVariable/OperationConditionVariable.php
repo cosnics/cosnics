@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable;
 
 use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\OperationTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
 use Chamilo\Libraries\Storage\Service\ConditionVariable\OperationConditionVariableTranslator;
 
@@ -15,21 +16,14 @@ class OperationConditionVariable implements ConditionVariableInterface
 {
     use HashableTrait;
 
-    public const ADDITION = 1;
-    public const BITWISE_AND = 5;
-    public const BITWISE_OR = 6;
-    public const DIVISION = 4;
-    public const MINUS = 2;
-    public const MULTIPLICATION = 3;
-
     private ConditionVariableInterface $leftConditionVariable;
 
-    private int $operator;
+    private OperationTypeEnum $operator;
 
     private ConditionVariableInterface $rightConditionVariable;
 
     public function __construct(
-        ConditionVariableInterface $leftConditionVariable, int $operator,
+        ConditionVariableInterface $leftConditionVariable, OperationTypeEnum $operator,
         ConditionVariableInterface $rightConditionVariable
     )
     {
@@ -56,7 +50,7 @@ class OperationConditionVariable implements ConditionVariableInterface
         $parts[] = $this->getLeftConditionVariable()->getHashParts();
         $parts[] = $this->getRightConditionVariable()->getHashParts();
 
-        if ($this->getOperator() != self::DIVISION) {
+        if ($this->getOperator() !== OperationTypeEnum::DIVISION) {
             sort($parts);
         }
 
@@ -64,7 +58,7 @@ class OperationConditionVariable implements ConditionVariableInterface
             $hashParts[] = $part;
         }
 
-        $hashParts[] = $this->getOperator();
+        $hashParts[] = $this->getOperator()->value;
 
         return $hashParts;
     }
@@ -81,12 +75,12 @@ class OperationConditionVariable implements ConditionVariableInterface
         return $this;
     }
 
-    public function getOperator(): int
+    public function getOperator(): OperationTypeEnum
     {
         return $this->operator;
     }
 
-    public function setOperator(int $operator): static
+    public function setOperator(OperationTypeEnum $operator): static
     {
         $this->operator = $operator;
 

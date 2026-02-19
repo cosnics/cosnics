@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service;
 
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
@@ -8,7 +9,6 @@ use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGrou
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use QuickformException;
 use Symfony\Component\Translation\Translator;
@@ -50,7 +50,7 @@ class JumpBarRenderer
 
         $buttonToolBar->addButton(
             new Button($this->getTranslator()->trans('JumpTo', [], StringUtilities::LIBRARIES), null, null,
-                ButtonDisplayInterface::DISPLAY_LABEL, null, ['btn-link'])
+                DisplayTypeEnum::LABEL, null, ['btn-link'])
         );
         $buttonToolBar->addButton($buttonGroup);
 
@@ -65,8 +65,7 @@ class JumpBarRenderer
 
             $isActive = date('j', $currentTime) == $day;
             $dateButton->addButton(
-                new SubButton((string) $day, null, $dayUrl, ButtonDisplayInterface::DISPLAY_LABEL, null, [], null,
-                    $isActive)
+                new SubButton((string) $day, null, $dayUrl, DisplayTypeEnum::LABEL, null, [], null, $isActive)
             );
         }
 
@@ -82,8 +81,7 @@ class JumpBarRenderer
 
             $isActive = date('n', $currentTime) == $month;
             $monthButton->addButton(
-                new SubButton($monthLabel, null, $monthUrl, ButtonDisplayInterface::DISPLAY_LABEL, null, [], null,
-                    $isActive)
+                new SubButton($monthLabel, null, $monthUrl, DisplayTypeEnum::LABEL, null, [], null, $isActive)
             );
         }
 
@@ -98,8 +96,7 @@ class JumpBarRenderer
 
             $isActive = date('Y', $currentTime) == $year;
             $yearButton->addButton(
-                new SubButton((string) $year, null, $yearUrl, ButtonDisplayInterface::DISPLAY_LABEL, null, [], null,
-                    $isActive)
+                new SubButton((string) $year, null, $yearUrl, DisplayTypeEnum::LABEL, null, [], null, $isActive)
             );
         }
 

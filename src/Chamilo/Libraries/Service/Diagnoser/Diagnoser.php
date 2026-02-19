@@ -2,12 +2,12 @@
 namespace Chamilo\Libraries\Service\Diagnoser;
 
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\AbstractTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ContentTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
@@ -76,8 +76,7 @@ class Diagnoser
 
             $tabs->add(
                 new ContentTab(
-                    $section, $this->getTranslation(ucfirst($section) . 'Title'), $table, null,
-                    AbstractTab::DISPLAY_TITLE
+                    $section, $this->getTranslation(ucfirst($section) . 'Title'), $table, null, DisplayTypeEnum::LABEL
                 )
             );
         }

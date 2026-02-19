@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition;
 
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\ComparisonTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
 use Chamilo\Libraries\Storage\Service\Condition\EqualityConditionTranslator;
@@ -20,7 +21,7 @@ class EqualityCondition extends ComparisonCondition implements ConditionInterfac
         ConditionVariableInterface $leftConditionVariable, ?ConditionVariableInterface $rightConditionVariable
     )
     {
-        parent::__construct($leftConditionVariable, self::EQUAL, $rightConditionVariable);
+        parent::__construct($leftConditionVariable, ComparisonTypeEnum::EQUAL, $rightConditionVariable);
     }
 
     public function getConditionTranslatorClass(): string

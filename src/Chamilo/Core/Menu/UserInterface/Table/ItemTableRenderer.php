@@ -6,12 +6,12 @@ use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\StaticTableColumn;
@@ -171,8 +171,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
             new Button(
                 label: $translator->trans('Edit', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
                 'pencil-alt'
-            ), action: $this->getItemEditingUrl($result), display: ButtonDisplayInterface::DISPLAY_ICON,
-                classes: ['btn-link']
+            ), action: $this->getItemEditingUrl($result), display: DisplayTypeEnum::ICON, classes: ['btn-link']
             )
         );
 
@@ -180,8 +179,8 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
             $buttonToolBar->addButton(
                 new Button(
                     label: $translator->trans('MoveUpNA', [], StringUtilities::LIBRARIES),
-                    inlineGlyph: new FontAwesomeGlyph('up-long', ['text-muted']),
-                    display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+                    inlineGlyph: new FontAwesomeGlyph('up-long', ['text-muted']), display: DisplayTypeEnum::ICON,
+                    classes: ['btn-link']
                 )
             );
         }
@@ -191,7 +190,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
                     label: $translator->trans('MoveUp', [], StringUtilities::LIBRARIES),
                     inlineGlyph: new FontAwesomeGlyph('up-long'), action: $this->getItemMovingUrl(
                     $result, ItemService::PARAM_DIRECTION_UP
-                ), display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+                ), display: DisplayTypeEnum::ICON, classes: ['btn-link']
                 )
             );
         }
@@ -200,8 +199,8 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
             $buttonToolBar->addButton(
                 new Button(
                     label: $translator->trans('MoveDownNA', [], StringUtilities::LIBRARIES),
-                    inlineGlyph: new FontAwesomeGlyph('down-long', ['text-muted']),
-                    display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+                    inlineGlyph: new FontAwesomeGlyph('down-long', ['text-muted']), display: DisplayTypeEnum::ICON,
+                    classes: ['btn-link']
                 )
             );
         }
@@ -211,7 +210,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
                     label: $translator->trans('MoveDown', [], StringUtilities::LIBRARIES),
                     inlineGlyph: new FontAwesomeGlyph('down-long'), action: $this->getItemMovingUrl(
                     $result, ItemService::PARAM_DIRECTION_DOWN
-                ), display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+                ), display: DisplayTypeEnum::ICON, classes: ['btn-link']
                 )
             );
         }
@@ -220,7 +219,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
             new Button(
                 label: $translator->trans('Delete', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
                 'times'
-            ), action: $this->getItemDeletingUrl($result), display: ButtonDisplayInterface::DISPLAY_ICON,
+            ), action: $this->getItemDeletingUrl($result), display: DisplayTypeEnum::ICON,
                 confirmationMessage: $this->getTranslator()->trans(
                     'ConfirmChosenAction', [], StringUtilities::LIBRARIES
                 ), classes: ['btn-link']

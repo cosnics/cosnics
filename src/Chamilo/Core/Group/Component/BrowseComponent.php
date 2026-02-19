@@ -10,6 +10,7 @@ use Chamilo\Core\Group\UserInterface\Table\GroupTableRenderer;
 use Chamilo\Core\Group\UserInterface\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
@@ -22,7 +23,6 @@ use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait\ButtonToolBarSearchFormTrait;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
@@ -100,16 +100,14 @@ class BrowseComponent extends Manager
         $commonActions->addButton(
             new Button(
                 $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
-                $this->getGroupUrlGenerator()->getCreateUrl($this->getGroup()),
-                ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+                $this->getGroupUrlGenerator()->getCreateUrl($this->getGroup()), DisplayTypeEnum::ICON_AND_LABEL
             )
         );
 
         $commonActions->addButton(
             new Button(
                 $translator->trans('Root', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'),
-                $this->getGroupUrlGenerator()->getViewUrl($this->getRootGroup()),
-                ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+                $this->getGroupUrlGenerator()->getViewUrl($this->getRootGroup()), DisplayTypeEnum::ICON_AND_LABEL
             )
         );
 
@@ -122,7 +120,7 @@ class BrowseComponent extends Manager
                         self::PARAM_ACTION => self::ACTION_BROWSE,
                         self::PARAM_GROUP_ID => $this->getGroupIdentifier()
                     ]
-                ), ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+                ), DisplayTypeEnum::ICON_AND_LABEL
             )
         );
         $buttonToolBar->addButton($commonActions);
@@ -180,8 +178,8 @@ class BrowseComponent extends Manager
             new Button(
                 label: $translator->trans('Edit', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
                 'pencil-alt'
-            ), action: $this->getGroupUrlGenerator()->getUpdateUrl($group),
-                display: ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, classes: ['btn-link']
+            ), action: $this->getGroupUrlGenerator()->getUpdateUrl($group), display: DisplayTypeEnum::ICON_AND_LABEL,
+                classes: ['btn-link']
             )
         );
 
@@ -191,7 +189,7 @@ class BrowseComponent extends Manager
                     label: $translator->trans('Delete', [], StringUtilities::LIBRARIES),
                     inlineGlyph: new FontAwesomeGlyph('times'), action: $this->getGroupUrlGenerator()->getDeleteUrl(
                     $group
-                ), display: ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, classes: ['btn-link']
+                ), display: DisplayTypeEnum::ICON_AND_LABEL, classes: ['btn-link']
                 )
             );
         }
@@ -200,7 +198,7 @@ class BrowseComponent extends Manager
             new Button(
                 label: $translator->trans('AddUsers'), inlineGlyph: new FontAwesomeGlyph('plus-circle'),
                 action: $this->getGroupUrlGenerator()->getSubscribeUrl($group),
-                display: ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, classes: ['btn-link']
+                display: DisplayTypeEnum::ICON_AND_LABEL, classes: ['btn-link']
             )
         );
 
@@ -214,7 +212,7 @@ class BrowseComponent extends Manager
                 new Button(
                     label: $translator->trans('Truncate'), inlineGlyph: new FontAwesomeGlyph('trash-alt'),
                     action: $this->getGroupUrlGenerator()->getTruncateUrl($group),
-                    display: ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, classes: ['btn-link']
+                    display: DisplayTypeEnum::ICON_AND_LABEL, classes: ['btn-link']
                 )
             );
         }
@@ -223,7 +221,7 @@ class BrowseComponent extends Manager
                 new Button(
                     label: $translator->trans('TruncateNA'), inlineGlyph: new FontAwesomeGlyph(
                     'trash-alt', ['text-muted']
-                ), display: ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, classes: ['btn-link']
+                ), display: DisplayTypeEnum::ICON_AND_LABEL, classes: ['btn-link']
                 )
             );
         }

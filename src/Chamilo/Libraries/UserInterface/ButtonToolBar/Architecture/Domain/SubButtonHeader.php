@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain;
 
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait\ButtonClassesTrait;
@@ -20,7 +21,8 @@ class SubButtonHeader implements ButtonInterface, ButtonDisplayInterface
     use ButtonDisplayTrait;
 
     public function __construct(
-        ?string $label = null, ?InlineGlyph $inlineGlyph = null, int $display = self::DISPLAY_LABEL, array $classes = []
+        ?string $label = null, ?InlineGlyph $inlineGlyph = null, DisplayTypeEnum $display = DisplayTypeEnum::LABEL,
+        array $classes = []
     )
     {
         $this->setLabel($label);

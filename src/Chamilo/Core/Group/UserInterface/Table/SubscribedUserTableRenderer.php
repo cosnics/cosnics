@@ -6,11 +6,11 @@ use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableAction;
@@ -38,9 +38,10 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
     protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
 
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, PageNavigationCalculator $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, GroupUrlGenerator $groupUrlGenerator,
-        ClassnameUtilities $classnameUtilities, MiniButtonToolBarRenderer $miniButtonToolBarRenderer
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
+        PageNavigationCalculator $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
+        GroupUrlGenerator $groupUrlGenerator, ClassnameUtilities $classnameUtilities,
+        MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )
     {
         $this->groupUrlGenerator = $groupUrlGenerator;
@@ -110,8 +111,8 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
         $buttonToolBar->addButton(
             new Button(
                 label: $translator->trans('UnsubscribeSelected', [], Manager::CONTEXT),
-                inlineGlyph: new FontAwesomeGlyph('times'), action: $unsubscribeUrl,
-                display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+                inlineGlyph: new FontAwesomeGlyph('times'), action: $unsubscribeUrl, display: DisplayTypeEnum::ICON,
+                classes: ['btn-link']
             )
         );
 

@@ -7,10 +7,10 @@ use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
 
@@ -53,7 +53,7 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
 
         $dropdownButton = new DropDownButtonCollection(
             $translator->trans('TypeName', [], Manager::CONTEXT), new FontAwesomeGlyph('google', [], null, 'fab'),
-            ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, [], ['dropdown-menu-right']
+            DisplayTypeEnum::ICON_AND_LABEL, [], ['dropdown-menu-right']
         );
 
         $accessToken = $this->getUserService()->findUserSetting($user, 'cosnics.libraries.protocol.google.token');

@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Admin\Storage\Repository;
 
 use Chamilo\Core\Admin\Storage\DataClass\Online;
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\ComparisonTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
@@ -47,7 +48,7 @@ class OnlineRepository
 
         $condition = new ComparisonCondition(
             new PropertyConditionVariable(Online::class, Online::PROPERTY_LAST_ACCESS_DATE),
-            ComparisonCondition::GREATER_THAN, new StaticConditionVariable($pastTime)
+            ComparisonTypeEnum::GREATER_THAN, new StaticConditionVariable($pastTime)
         );
 
         return $this->getDataClassRepository()->distinct(

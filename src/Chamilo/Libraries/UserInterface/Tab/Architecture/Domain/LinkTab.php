@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Tab\Architecture\Domain;
 
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
 /**
@@ -27,7 +28,7 @@ class LinkTab extends AbstractTab
     public function __construct(
         string $identifier, string $label, ?InlineGlyph $inlineGlyph, string $link, bool $isSelected = false,
         ?string $confirmationMessage = null, string $position = self::POSITION_LEFT,
-        int $display = self::DISPLAY_ICON_AND_TITLE, $target = self::TARGET_WINDOW
+        DisplayTypeEnum $display = DisplayTypeEnum::ICON_AND_LABEL, $target = self::TARGET_WINDOW
     )
     {
         parent::__construct($identifier, $label, $inlineGlyph, $display);

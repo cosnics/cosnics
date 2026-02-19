@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain;
 
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDropDownCollectionInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface;
@@ -24,8 +25,9 @@ class DropDownButtonCollection implements ButtonInterface, ButtonDisplayInterfac
     use DropDownButtonCollectionTrait;
 
     public function __construct(
-        ?string $label = null, ?InlineGlyph $inlineGlyph = null, int $display = self::DISPLAY_ICON_AND_LABEL,
-        array $classes = [], array $dropDownClasses = [], ArrayCollection $dropDownButtons = new ArrayCollection()
+        ?string $label = null, ?InlineGlyph $inlineGlyph = null,
+        DisplayTypeEnum $display = DisplayTypeEnum::ICON_AND_LABEL, array $classes = [], array $dropDownClasses = [],
+        ArrayCollection $dropDownButtons = new ArrayCollection()
     )
     {
         $this->setLabel($label);

@@ -1,8 +1,8 @@
 <?php
-namespace Chamilo\Core\Admin\Architecture\Domain;
+namespace Chamilo\Core\Admin\Architecture\Enum;
 
 /**
- * @package Chamilo\Core\Admin\Architecture\Domain
+ * @package Chamilo\Core\Admin\Architecture\Enum
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 enum LanguageCodeEnum: string

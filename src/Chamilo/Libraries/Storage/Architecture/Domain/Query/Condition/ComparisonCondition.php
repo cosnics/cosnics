@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition;
 
 use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\ComparisonTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
 use Chamilo\Libraries\Storage\Service\Condition\ComparisonConditionTranslator;
@@ -15,20 +16,14 @@ class ComparisonCondition implements ConditionInterface
 {
     use HashableTrait;
 
-    public const EQUAL = 5;
-    public const GREATER_THAN = 3;
-    public const GREATER_THAN_OR_EQUAL = 4;
-    public const LESS_THAN = 1;
-    public const LESS_THAN_OR_EQUAL = 2;
-
     private ConditionVariableInterface $leftConditionVariable;
 
-    private int $operator;
+    private ComparisonTypeEnum $operator;
 
     private ?ConditionVariableInterface $rightConditionVariable;
 
     public function __construct(
-        ConditionVariableInterface $leftConditionVariable, int $operator,
+        ConditionVariableInterface $leftConditionVariable, ComparisonTypeEnum $operator,
         ?ConditionVariableInterface $rightConditionVariable
     )
     {
@@ -47,16 +42,16 @@ class ComparisonCondition implements ConditionInterface
         $hashParts = [];
 
         $hashParts[] = static::class;
-        $hashParts[] = $this->getOperator();
+        $hashParts[] = $this->getOperator()->value;
 
         switch ($this->getOperator()) {
-            case self::LESS_THAN :
-            case self::LESS_THAN_OR_EQUAL :
+            case ComparisonTypeEnum::LESS_THAN :
+            case ComparisonTypeEnum::LESS_THAN_OR_EQUAL :
                 $hashParts[] = $this->getRightConditionVariable() instanceof ConditionVariableInterface ?
                     $this->getRightConditionVariable()->getHashParts() : null;
                 $hashParts[] = $this->getLeftConditionVariable()->getHashParts();
                 break;
-            case self::EQUAL :
+            case ComparisonTypeEnum::EQUAL :
                 $parts = [];
                 $parts[] = $this->getLeftConditionVariable()->getHashParts();
                 $parts[] = $this->getRightConditionVariable() instanceof ConditionVariableInterface ?
@@ -84,7 +79,7 @@ class ComparisonCondition implements ConditionInterface
         return $this->leftConditionVariable;
     }
 
-    public function getOperator(): int
+    public function getOperator(): ComparisonTypeEnum
     {
         return $this->operator;
     }

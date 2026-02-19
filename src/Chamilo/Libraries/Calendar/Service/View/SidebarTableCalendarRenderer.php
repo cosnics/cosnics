@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 
 /**
@@ -41,7 +41,7 @@ abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
         $buttonToolBar->addButton(
             new Button(
                 $translator->trans('Today', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'), $todayUrl,
-                ButtonDisplayInterface::DISPLAY_ICON
+                DisplayTypeEnum::ICON
             )
         );
 
@@ -50,13 +50,13 @@ abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
         $buttonGroup->addButton(
             new Button(
                 $translator->trans('Previous', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('caret-left'),
-                $previousUrl, ButtonDisplayInterface::DISPLAY_ICON
+                $previousUrl, DisplayTypeEnum::ICON
             )
         );
         $buttonGroup->addButton(
             new Button(
                 $translator->trans('Next', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('caret-right'),
-                $nextUrl, ButtonDisplayInterface::DISPLAY_ICON
+                $nextUrl, DisplayTypeEnum::ICON
             )
         );
 

@@ -6,6 +6,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\UserInterface\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
@@ -17,7 +18,6 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\Static
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
@@ -132,15 +132,14 @@ class ViewComponent extends Manager
                         self::PARAM_ACTION => self::ACTION_VIEW,
                         self::PARAM_GROUP_ID => $currentGroup->getId()
                     ]
-                ), ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+                ), DisplayTypeEnum::ICON_AND_LABEL
             )
         );
 
         $commonActions->addButton(
             new Button(
                 $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                $this->getGroupUrlGenerator()->getUpdateUrl($currentGroup),
-                ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+                $this->getGroupUrlGenerator()->getUpdateUrl($currentGroup), DisplayTypeEnum::ICON_AND_LABEL
             )
         );
 
@@ -148,8 +147,7 @@ class ViewComponent extends Manager
             $commonActions->addButton(
                 new Button(
                     $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'),
-                    $this->getGroupUrlGenerator()->getDeleteUrl($currentGroup),
-                    ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+                    $this->getGroupUrlGenerator()->getDeleteUrl($currentGroup), DisplayTypeEnum::ICON_AND_LABEL
                 )
             );
         }
@@ -158,7 +156,7 @@ class ViewComponent extends Manager
             new Button(
                 $translator->trans('AddUsers', [], \Chamilo\Core\User\Manager::CONTEXT),
                 new FontAwesomeGlyph('plus-circle'), $this->getGroupUrlGenerator()->getSubscribeUrl($currentGroup),
-                ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+                DisplayTypeEnum::ICON_AND_LABEL
             )
         );
 
@@ -168,8 +166,7 @@ class ViewComponent extends Manager
             $toolActions->addButton(
                 new Button(
                     $translator->trans('Truncate', [], Manager::CONTEXT), new FontAwesomeGlyph('trash-alt'),
-                    $this->getGroupUrlGenerator()->getTruncateUrl($currentGroup),
-                    ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+                    $this->getGroupUrlGenerator()->getTruncateUrl($currentGroup), DisplayTypeEnum::ICON_AND_LABEL
                 )
             );
         }
@@ -177,8 +174,7 @@ class ViewComponent extends Manager
             $toolActions->addButton(
                 new Button(
                     $translator->trans('TruncateNA', [], Manager::CONTEXT),
-                    new FontAwesomeGlyph('trash-alt', ['text-muted']), null,
-                    ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+                    new FontAwesomeGlyph('trash-alt', ['text-muted']), null, DisplayTypeEnum::ICON_AND_LABEL
                 )
             );
         }

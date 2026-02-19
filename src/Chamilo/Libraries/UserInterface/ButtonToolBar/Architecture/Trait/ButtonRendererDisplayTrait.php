@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait;
 
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 
 /**
@@ -18,8 +19,8 @@ trait ButtonRendererDisplayTrait
     {
         $html = [];
 
-        $displayLabel = $button->getDisplay() != ButtonDisplayInterface::DISPLAY_ICON && $button->getLabel();
-        $displayIcon = $button->getDisplay() != ButtonDisplayInterface::DISPLAY_LABEL && $button->getInlineGlyph();
+        $displayLabel = $button->getDisplay() != DisplayTypeEnum::ICON && $button->getLabel();
+        $displayIcon = $button->getDisplay() != DisplayTypeEnum::LABEL && $button->getInlineGlyph();
 
         if ($displayIcon) {
             $html[] = $button->getInlineGlyph()->render();

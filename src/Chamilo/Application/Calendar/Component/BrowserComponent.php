@@ -8,6 +8,7 @@ use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Core\User\Component\ConfigureComponent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Calendar\Factory\HtmlCalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
@@ -15,7 +16,6 @@ use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SplitDropdownButtonCollection;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use DateTime;
 use Detection\MobileDetect;
@@ -177,7 +177,7 @@ class BrowserComponent extends Manager
 
         $splitDropdownButton = new SplitDropdownButtonCollection(
             $translator->trans('ConfigComponent', [], Manager::CONTEXT), new FontAwesomeGlyph('cog'), $settingsUrl,
-            ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, null, [], null, ['dropdown-menu-right']
+            DisplayTypeEnum::ICON_AND_LABEL, null, [], null, ['dropdown-menu-right']
         );
 
         $availabilityUrl = $this->getUrlGenerator()->fromParameters(

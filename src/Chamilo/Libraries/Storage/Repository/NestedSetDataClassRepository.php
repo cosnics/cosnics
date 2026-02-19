@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Storage\Repository;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\ComparisonTypeEnum;
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\OperationTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
@@ -301,21 +303,21 @@ class NestedSetDataClassRepository
         if ($includeSelf) {
             $conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE),
-                ComparisonCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable($nestedSet->getLeftValue())
+                ComparisonTypeEnum::LESS_THAN_OR_EQUAL, new StaticConditionVariable($nestedSet->getLeftValue())
             );
             $conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE),
-                ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($nestedSet->getRightValue())
+                ComparisonTypeEnum::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($nestedSet->getRightValue())
             );
         }
         else {
             $conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE),
-                ComparisonCondition::LESS_THAN, new StaticConditionVariable($nestedSet->getLeftValue())
+                ComparisonTypeEnum::LESS_THAN, new StaticConditionVariable($nestedSet->getLeftValue())
             );
             $conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE),
-                ComparisonCondition::GREATER_THAN, new StaticConditionVariable($nestedSet->getRightValue())
+                ComparisonTypeEnum::GREATER_THAN, new StaticConditionVariable($nestedSet->getRightValue())
             );
         }
 
@@ -349,13 +351,13 @@ class NestedSetDataClassRepository
         if ($recursive) {
             $conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE),
-                $includeSelf ? ComparisonCondition::GREATER_THAN_OR_EQUAL : ComparisonCondition::GREATER_THAN,
+                $includeSelf ? ComparisonTypeEnum::GREATER_THAN_OR_EQUAL : ComparisonTypeEnum::GREATER_THAN,
                 new StaticConditionVariable($nestedSet->getLeftValue())
             );
 
             $conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE),
-                $includeSelf ? ComparisonCondition::LESS_THAN_OR_EQUAL : ComparisonCondition::LESS_THAN,
+                $includeSelf ? ComparisonTypeEnum::LESS_THAN_OR_EQUAL : ComparisonTypeEnum::LESS_THAN,
                 new StaticConditionVariable($nestedSet->getRightValue())
             );
         }
@@ -601,11 +603,11 @@ class NestedSetDataClassRepository
 
                 $conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE),
-                    ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($afterPreInsertLeft)
+                    ComparisonTypeEnum::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($afterPreInsertLeft)
                 );
                 $conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE),
-                    ComparisonCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable($afterPreInsertRight)
+                    ComparisonTypeEnum::LESS_THAN_OR_EQUAL, new StaticConditionVariable($afterPreInsertRight)
                 );
 
                 if ($condition) {
@@ -623,13 +625,13 @@ class NestedSetDataClassRepository
 
                 $properties[] = new UpdateProperty(
                     $leftValueVariable, new OperationConditionVariable(
-                        $leftValueVariable, OperationConditionVariable::ADDITION, new StaticConditionVariable($shift)
+                        $leftValueVariable, OperationTypeEnum::ADDITION, new StaticConditionVariable($shift)
                     )
                 );
 
                 $properties[] = new UpdateProperty(
                     $rightValueVariable, new OperationConditionVariable(
-                        $rightValueVariable, OperationConditionVariable::ADDITION, new StaticConditionVariable($shift)
+                        $rightValueVariable, OperationTypeEnum::ADDITION, new StaticConditionVariable($shift)
                     )
                 );
 
@@ -695,7 +697,7 @@ class NestedSetDataClassRepository
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE),
-            ComparisonCondition::GREATER_THAN, new StaticConditionVariable($nestedSet->getLeftValue())
+            ComparisonTypeEnum::GREATER_THAN, new StaticConditionVariable($nestedSet->getLeftValue())
         );
 
         if ($condition) {
@@ -709,7 +711,7 @@ class NestedSetDataClassRepository
 
         $rightValueDataClassProperty = new UpdateProperty(
             $rightValueVariable, new OperationConditionVariable(
-                $rightValueVariable, OperationConditionVariable::MINUS, new StaticConditionVariable($delta)
+                $rightValueVariable, OperationTypeEnum::MINUS, new StaticConditionVariable($delta)
             )
         );
 
@@ -717,7 +719,7 @@ class NestedSetDataClassRepository
         $properties[] = $rightValueDataClassProperty;
         $properties[] = new UpdateProperty(
             $leftValueVariable, new OperationConditionVariable(
-                $leftValueVariable, OperationConditionVariable::MINUS, new StaticConditionVariable($delta)
+                $leftValueVariable, OperationTypeEnum::MINUS, new StaticConditionVariable($delta)
             )
         );
 
@@ -741,12 +743,12 @@ class NestedSetDataClassRepository
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE),
-            ComparisonCondition::LESS_THAN, new StaticConditionVariable($nestedSet->getLeftValue())
+            ComparisonTypeEnum::LESS_THAN, new StaticConditionVariable($nestedSet->getLeftValue())
         );
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE),
-            ComparisonCondition::GREATER_THAN, new StaticConditionVariable($nestedSet->getRightValue())
+            ComparisonTypeEnum::GREATER_THAN, new StaticConditionVariable($nestedSet->getRightValue())
         );
 
         if ($condition) {
@@ -794,7 +796,7 @@ class NestedSetDataClassRepository
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE),
-            ComparisonCondition::GREATER_THAN, new StaticConditionVariable($insertAfter)
+            ComparisonTypeEnum::GREATER_THAN, new StaticConditionVariable($insertAfter)
         );
 
         if ($condition) {
@@ -808,8 +810,7 @@ class NestedSetDataClassRepository
         $properties = [];
         $properties[] = new UpdateProperty(
             $leftValueVariable, new OperationConditionVariable(
-                $leftValueVariable, OperationConditionVariable::ADDITION,
-                new StaticConditionVariable($numberOfElements * 2)
+                $leftValueVariable, OperationTypeEnum::ADDITION, new StaticConditionVariable($numberOfElements * 2)
             )
         );
 
@@ -830,7 +831,7 @@ class NestedSetDataClassRepository
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE),
-            ComparisonCondition::GREATER_THAN, new StaticConditionVariable($insertAfter)
+            ComparisonTypeEnum::GREATER_THAN, new StaticConditionVariable($insertAfter)
         );
 
         if ($condition) {
@@ -844,8 +845,7 @@ class NestedSetDataClassRepository
         $properties = [];
         $properties[] = new UpdateProperty(
             $rightValueVariable, new OperationConditionVariable(
-                $rightValueVariable, OperationConditionVariable::ADDITION,
-                new StaticConditionVariable($numberOfElements * 2)
+                $rightValueVariable, OperationTypeEnum::ADDITION, new StaticConditionVariable($numberOfElements * 2)
             )
         );
 

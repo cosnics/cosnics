@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
@@ -8,7 +9,6 @@ use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Symfony\Component\Translation\Translator;
@@ -135,8 +135,7 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
 
         $button = new DropDownButtonCollection(
             $translator->trans($currentRendererType . 'View', [], 'Chamilo\Libraries'),
-            new FontAwesomeGlyph('calendar-alt'), ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL, [],
-            ['dropdown-menu-right']
+            new FontAwesomeGlyph('calendar-alt'), DisplayTypeEnum::ICON_AND_LABEL, [], ['dropdown-menu-right']
         );
 
         foreach ($rendererTypes as $rendererType) {
@@ -145,8 +144,8 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
             $button->addButton(
                 new SubButton(
                     $translator->trans($rendererType . 'View', [], 'Chamilo\Libraries'), null,
-                    $this->getUrlGenerator()->fromParameters($displayParameters), ButtonDisplayInterface::DISPLAY_LABEL,
-                    null, [], null, $currentRendererType == $rendererType
+                    $this->getUrlGenerator()->fromParameters($displayParameters), DisplayTypeEnum::LABEL, null, [],
+                    null, $currentRendererType == $rendererType
                 )
             );
         }

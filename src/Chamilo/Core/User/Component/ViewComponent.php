@@ -6,12 +6,12 @@ use Chamilo\Core\User\Architecture\Interface\UserDetailsRendererInterface;
 use Chamilo\Core\User\Implementation\User\UserDetailsRenderer;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ContentTab;
@@ -85,7 +85,7 @@ class ViewComponent extends Manager
         $commonActions->addButton(
             new Button(
                 $translator->trans('Edit', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
-                $editUrl, ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+                $editUrl, DisplayTypeEnum::ICON_AND_LABEL
             )
         );
 
@@ -94,7 +94,7 @@ class ViewComponent extends Manager
         $commonActions->addButton(
             new Button(
                 $translator->trans('Delete', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('times'), $deleteUrl,
-                ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+                DisplayTypeEnum::ICON_AND_LABEL
             )
         );
 
@@ -103,7 +103,7 @@ class ViewComponent extends Manager
         $toolActions->addButton(
             new Button(
                 $translator->trans('LoginAsUser', [], Manager::CONTEXT), new FontAwesomeGlyph('mask'), $changeUserUrl,
-                ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+                DisplayTypeEnum::ICON_AND_LABEL
             )
         );
 

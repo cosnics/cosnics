@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Storage\Architecture\Domain\Query;
 
 use Chamilo\Libraries\Protocol\Security\Architecture\Interface\HashableInterface;
 use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\JoinTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 
 /**
@@ -16,18 +17,14 @@ class Join implements HashableInterface
 {
     use HashableTrait;
 
-    public const TYPE_LEFT = 2;
-    public const TYPE_NORMAL = 1;
-    public const TYPE_RIGHT = 3;
-
     private ?ConditionInterface $condition;
 
     private string $dataClassName;
 
-    private int $type;
+    private JoinTypeEnum $type;
 
     public function __construct(
-        string $dataClassName, ?ConditionInterface $condition = null, ?int $type = self::TYPE_NORMAL
+        string $dataClassName, ?ConditionInterface $condition = null, JoinTypeEnum $type = JoinTypeEnum::NORMAL
     )
     {
         $this->dataClassName = $dataClassName;
@@ -68,17 +65,17 @@ class Join implements HashableInterface
 
         $hashParts[] = $this->getDataClassName();
         $hashParts[] = $this->getCondition()->getHashParts();
-        $hashParts[] = $this->getType();
+        $hashParts[] = $this->getType()->value;
 
         return $hashParts;
     }
 
-    public function getType(): int
+    public function getType(): JoinTypeEnum
     {
         return $this->type;
     }
 
-    public function setType(int $type): static
+    public function setType(JoinTypeEnum $type): static
     {
         $this->type = $type;
 

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Group\Storage\Repository;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\ComparisonTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
@@ -355,7 +356,7 @@ class GroupRepository
             Group::class, new StorageParameters(
                 condition: new EqualityCondition(
                     new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
-                    new StaticConditionVariable(0)
+                    new StaticConditionVariable(DataClass::EMPTY_UUID)
                 )
             )
         );
@@ -372,12 +373,12 @@ class GroupRepository
 
             $childrenCondition[] = new ComparisonCondition(
                 new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_LEFT_VALUE),
-                ComparisonCondition::GREATER_THAN, new StaticConditionVariable($group->getLeftValue())
+                ComparisonTypeEnum::GREATER_THAN, new StaticConditionVariable($group->getLeftValue())
             );
 
             $childrenCondition[] = new ComparisonCondition(
                 new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_RIGHT_VALUE),
-                ComparisonCondition::LESS_THAN, new StaticConditionVariable($group->getRightValue())
+                ComparisonTypeEnum::LESS_THAN, new StaticConditionVariable($group->getRightValue())
             );
 
             $childrenCondition = new AndCondition($childrenCondition);
@@ -429,13 +430,13 @@ class GroupRepository
                     [
                         new ComparisonCondition(
                             new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_LEFT_VALUE),
-                            ComparisonCondition::LESS_THAN_OR_EQUAL,
+                            ComparisonTypeEnum::LESS_THAN_OR_EQUAL,
                             new StaticConditionVariable($descendent[NestedSet::PROPERTY_LEFT_VALUE])
                         ),
 
                         new ComparisonCondition(
                             new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_RIGHT_VALUE),
-                            ComparisonCondition::GREATER_THAN_OR_EQUAL,
+                            ComparisonTypeEnum::GREATER_THAN_OR_EQUAL,
                             new StaticConditionVariable($descendent[NestedSet::PROPERTY_RIGHT_VALUE])
                         )
                     ]

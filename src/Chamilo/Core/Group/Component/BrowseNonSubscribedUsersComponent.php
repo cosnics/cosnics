@@ -5,6 +5,7 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\UserInterface\Table\NonSubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
@@ -18,7 +19,6 @@ use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
 use Symfony\Component\HttpFoundation\Response;
@@ -98,7 +98,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
                     self::PARAM_ACTION => self::ACTION_BROWSE_NON_SUBSCRIBED_USERS,
                     self::PARAM_GROUP_ID => $group->getId()
                 ]
-            ), ButtonDisplayInterface::DISPLAY_ICON_AND_LABEL
+            ), DisplayTypeEnum::ICON_AND_LABEL
             )
         );
 

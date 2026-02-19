@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Storage\Repository;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\ComparisonTypeEnum;
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\OperationTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
@@ -37,15 +39,14 @@ class DisplayOrderRepository
 
         $displayOrderCondition = $this->getDisplayOrderCondition($dataClass);
 
-        if ($displayOrderCondition instanceof AndCondition)
-        {
+        if ($displayOrderCondition instanceof AndCondition) {
             $conditions[] = $displayOrderCondition;
         }
 
         $displayOrder = $dataClass->getDefaultProperty($dataClass->getDisplayOrderPropertyName());
 
         $conditions[] = $this->getDisplayOrderUpdateComparisonCondition(
-            $dataClass, ComparisonCondition::GREATER_THAN_OR_EQUAL, $displayOrder
+            $dataClass, ComparisonTypeEnum::GREATER_THAN_OR_EQUAL, $displayOrder
         );
 
         return $this->getDataClassRepository()->updates(
@@ -63,13 +64,11 @@ class DisplayOrderRepository
 
         $displayOrderCondition = $this->getDisplayOrderCondition($dataClass);
 
-        if ($displayOrderCondition instanceof AndCondition)
-        {
+        if ($displayOrderCondition instanceof AndCondition) {
             $conditions[] = $displayOrderCondition;
         }
 
-        if ($dataClass->isIdentified())
-        {
+        if ($dataClass->isIdentified()) {
             $conditions[] = new NotCondition(
                 new EqualityCondition(
                     new PropertyConditionVariable(
@@ -79,12 +78,10 @@ class DisplayOrderRepository
             );
         }
 
-        if (count($conditions))
-        {
+        if (count($conditions)) {
             $condition = new AndCondition($conditions);
         }
-        else
-        {
+        else {
             $condition = null;
         }
 
@@ -106,13 +103,12 @@ class DisplayOrderRepository
 
         $displayOrderCondition = $this->getDisplayOrderConditionForContextProperties($dataClass, $contextProperties);
 
-        if ($displayOrderCondition instanceof AndCondition)
-        {
+        if ($displayOrderCondition instanceof AndCondition) {
             $conditions[] = $displayOrderCondition;
         }
 
         $conditions[] = $this->getDisplayOrderUpdateComparisonCondition(
-            $dataClass, ComparisonCondition::GREATER_THAN, $displayOrder
+            $dataClass, ComparisonTypeEnum::GREATER_THAN, $displayOrder
         );
 
         return $this->getDataClassRepository()->updates(
@@ -190,8 +186,7 @@ class DisplayOrderRepository
     {
         $conditions = [];
 
-        foreach ($contextProperties as $propertyName => $propertyValue)
-        {
+        foreach ($contextProperties as $propertyName => $propertyValue) {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     $this->determinePropertyDataClassName($dataClass), $propertyName
@@ -208,8 +203,7 @@ class DisplayOrderRepository
 
         $retrieveProperties->add($this->getDisplayOrderPropertyConditionVariable($dataClass));
 
-        foreach ($dataClass->getDisplayOrderContextPropertyNames() as $propertyName)
-        {
+        foreach ($dataClass->getDisplayOrderContextPropertyNames() as $propertyName) {
             $retrieveProperties->add(
                 new PropertyConditionVariable(
                     $this->determinePropertyDataClassName($dataClass), $propertyName
@@ -229,7 +223,7 @@ class DisplayOrderRepository
     }
 
     protected function getDisplayOrderUpdateComparisonCondition(
-        DataClassDisplayOrderSupport $dataClass, int $operator, int $displayOrder
+        DataClassDisplayOrderSupport $dataClass, ComparisonTypeEnum $operator, int $displayOrder
     ): ComparisonCondition
     {
         return new ComparisonCondition(
@@ -245,7 +239,7 @@ class DisplayOrderRepository
         $displayOrderPropertyConditionVariable = $this->getDisplayOrderPropertyConditionVariable($dataClass);
 
         $updateVariable = new OperationConditionVariable(
-            $displayOrderPropertyConditionVariable, OperationConditionVariable::ADDITION,
+            $displayOrderPropertyConditionVariable, OperationTypeEnum::ADDITION,
             new StaticConditionVariable($additionValue)
         );
 

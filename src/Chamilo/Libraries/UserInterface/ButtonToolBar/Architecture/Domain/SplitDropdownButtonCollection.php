@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain;
 
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonActionInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDropDownCollectionInterface;
@@ -29,8 +30,9 @@ class SplitDropdownButtonCollection
 
     public function __construct(
         ?string $label = null, ?InlineGlyph $inlineGlyph = null, ?string $action = null,
-        int $display = self::DISPLAY_ICON_AND_LABEL, ?string $confirmationMessage = null, array $classes = [],
-        ?string $target = null, array $dropDownClasses = [], ArrayCollection $dropDownButtons = new ArrayCollection()
+        DisplayTypeEnum $display = DisplayTypeEnum::ICON_AND_LABEL, ?string $confirmationMessage = null,
+        array $classes = [], ?string $target = null, array $dropDownClasses = [],
+        ArrayCollection $dropDownButtons = new ArrayCollection()
     )
     {
         $this->setLabel($label);

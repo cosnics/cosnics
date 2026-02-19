@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Core\Menu\Manager;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConfigurableDataClassInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDisplayOrderSupport;
@@ -22,9 +23,6 @@ class Item extends DataClass
     use ConfigurableDataClassTrait;
 
     public const CONTEXT = Manager::CONTEXT;
-    public const DISPLAY_BOTH = 3;
-    public const DISPLAY_ICON = 1;
-    public const DISPLAY_TEXT = 2;
     public const PROPERTY_DISPLAY = 'display';
     public const PROPERTY_HIDDEN = 'hidden';
     public const PROPERTY_ICON_CLASS = 'icon_class';
@@ -55,9 +53,9 @@ class Item extends DataClass
         );
     }
 
-    public function getDisplay(): int
+    public function getDisplay(): DisplayTypeEnum
     {
-        return $this->getDefaultProperty(self::PROPERTY_DISPLAY);
+        return DisplayTypeEnum::from($this->getDefaultProperty(self::PROPERTY_DISPLAY));
     }
 
     /**
@@ -131,7 +129,7 @@ class Item extends DataClass
         return (bool) $this->getHidden();
     }
 
-    public function setDisplay(int $display = self::DISPLAY_ICON): Item
+    public function setDisplay(DisplayTypeEnum $display = DisplayTypeEnum::ICON): Item
     {
         $this->setDefaultProperty(self::PROPERTY_DISPLAY, $display);
 
@@ -188,11 +186,11 @@ class Item extends DataClass
 
     public function showIcon(): bool
     {
-        return $this->getDisplay() == self::DISPLAY_BOTH || $this->getDisplay() == self::DISPLAY_ICON;
+        return $this->getDisplay() == DisplayTypeEnum::ICON_AND_LABEL || $this->getDisplay() == DisplayTypeEnum::ICON;
     }
 
     public function showTitle(): bool
     {
-        return $this->getDisplay() == self::DISPLAY_TEXT || $this->getDisplay() == self::DISPLAY_BOTH;
+        return $this->getDisplay() == DisplayTypeEnum::ICON_AND_LABEL || $this->getDisplay() == DisplayTypeEnum::LABEL;
     }
 }

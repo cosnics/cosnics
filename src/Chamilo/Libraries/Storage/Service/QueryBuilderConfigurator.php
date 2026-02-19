@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\Storage\Service;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorCollection;
 use Chamilo\Libraries\Storage\Architecture\Domain\ConditionVariableTranslatorCollection;
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\JoinTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\GroupBy;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Join;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Joins;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
@@ -148,13 +148,13 @@ class QueryBuilderConfigurator
             $joinAlias = $storageAliasGenerator->getTableAlias($joinDataClassStorageUnitName);
 
             switch ($join->getType()) {
-                case Join::TYPE_NORMAL :
+                case JoinTypeEnum::NORMAL :
                     $queryBuilder->join($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
                     break;
-                case Join::TYPE_RIGHT :
+                case JoinTypeEnum::RIGHT :
                     $queryBuilder->rightJoin($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
                     break;
-                case Join::TYPE_LEFT :
+                case JoinTypeEnum::LEFT :
                     $queryBuilder->leftJoin($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
                     break;
             }

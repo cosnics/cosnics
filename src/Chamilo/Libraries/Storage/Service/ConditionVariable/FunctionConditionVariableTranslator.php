@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Service\ConditionVariable;
 
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\FunctionTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionVariableTranslator;
@@ -29,27 +30,27 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
     {
         $strings = [];
         switch ($functionConditionVariable->getFunction()) {
-            case FunctionConditionVariable::SUM :
+            case FunctionTypeEnum::SUM :
                 $strings[] = 'SUM';
                 break;
-            case FunctionConditionVariable::COUNT :
+            case FunctionTypeEnum::COUNT :
                 $strings[] = 'COUNT';
                 break;
-            case FunctionConditionVariable::MIN :
+            case FunctionTypeEnum::MIN :
                 $strings[] = 'MIN';
                 break;
-            case FunctionConditionVariable::MAX :
+            case FunctionTypeEnum::MAX :
                 $strings[] = 'MAX';
                 break;
-            case FunctionConditionVariable::DISTINCT :
+            case FunctionTypeEnum::DISTINCT :
                 $strings[] = 'DISTINCT';
                 break;
-            case FunctionConditionVariable::AVERAGE :
+            case FunctionTypeEnum::AVERAGE :
                 $strings[] = 'AVG';
                 break;
         }
 
-        if ($functionConditionVariable->getFunction() !== FunctionConditionVariable::DISTINCT) {
+        if ($functionConditionVariable->getFunction() !== FunctionTypeEnum::DISTINCT) {
             $strings[] = '(';
         }
         else {
@@ -60,7 +61,7 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
             $querybuilder, $functionConditionVariable->getConditionVariable(), $enableAliasing
         );
 
-        if ($functionConditionVariable->getFunction() !== FunctionConditionVariable::DISTINCT) {
+        if ($functionConditionVariable->getFunction() !== FunctionTypeEnum::DISTINCT) {
             $strings[] = ')';
         }
 

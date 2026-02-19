@@ -3,6 +3,9 @@ namespace Chamilo\Libraries\Storage\Repository;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClassRepositoryCache;
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\ComparisonTypeEnum;
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\FunctionTypeEnum;
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\OperationTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
@@ -62,7 +65,7 @@ class DataClassRepository
             new RetrieveProperties(
                 [
                     new FunctionConditionVariable(
-                        FunctionConditionVariable::COUNT,
+                        FunctionTypeEnum::COUNT,
                         $parameters->getRetrieveProperties()->getFirst(new StaticConditionVariable(1))
                     )
                 ]
@@ -83,7 +86,7 @@ class DataClassRepository
     {
         $retrieveProperties = $parameters->getRetrieveProperties();
         $retrieveProperties->add(
-            new FunctionConditionVariable(FunctionConditionVariable::COUNT, new StaticConditionVariable(1))
+            new FunctionConditionVariable(FunctionTypeEnum::COUNT, new StaticConditionVariable(1))
         );
 
         return $this->getDataClassDatabase()->countGrouped($dataClassName::getStorageUnitName(), $parameters);
@@ -383,17 +386,17 @@ class DataClassRepository
         $direction = 0;
 
         if (is_null($end) || $start < $end) {
-            $startOperator = ComparisonCondition::GREATER_THAN;
+            $startOperator = ComparisonTypeEnum::GREATER_THAN;
             $direction = - 1;
         }
 
         if (!is_null($end)) {
             if ($start < $end) {
-                $endOperator = ComparisonCondition::LESS_THAN_OR_EQUAL;
+                $endOperator = ComparisonTypeEnum::LESS_THAN_OR_EQUAL;
             }
             else {
-                $startOperator = ComparisonCondition::LESS_THAN;
-                $endOperator = ComparisonCondition::GREATER_THAN_OR_EQUAL;
+                $startOperator = ComparisonTypeEnum::LESS_THAN;
+                $endOperator = ComparisonTypeEnum::GREATER_THAN_OR_EQUAL;
                 $direction = 1;
             }
         }
@@ -415,7 +418,7 @@ class DataClassRepository
         $condition = new AndCondition($conditions);
 
         $updateVariable = new OperationConditionVariable(
-            $displayOrderPropertyVariable, OperationConditionVariable::ADDITION, new StaticConditionVariable($direction)
+            $displayOrderPropertyVariable, OperationTypeEnum::ADDITION, new StaticConditionVariable($direction)
         );
 
         $properties = new UpdateProperties();
@@ -526,7 +529,7 @@ class DataClassRepository
             condition: $condition, retrieveProperties: new RetrieveProperties(
             [
                 new FunctionConditionVariable(
-                    FunctionConditionVariable::MAX, new PropertyConditionVariable($dataClassName, $property),
+                    FunctionTypeEnum::MAX, new PropertyConditionVariable($dataClassName, $property),
                     self::ALIAS_MAX_SORT
                 )
             ]

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Service\Condition;
 
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\ComparisonTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionTranslator;
@@ -33,7 +34,7 @@ class ComparisonConditionTranslator extends ConditionTranslator implements Condi
             $querybuilder, $comparisonCondition->getLeftConditionVariable(), $enableAliasing
         );
 
-        if ($comparisonCondition->getOperator() == ComparisonCondition::EQUAL && is_null($rightConditionVariable)) {
+        if ($comparisonCondition->getOperator() == ComparisonTypeEnum::EQUAL && is_null($rightConditionVariable)) {
             $string[] = 'IS NULL';
 
             return implode(' ', $string);
@@ -48,22 +49,22 @@ class ComparisonConditionTranslator extends ConditionTranslator implements Condi
         return implode(' ', $string);
     }
 
-    private function translateOperator(int $conditionOperator): string
+    private function translateOperator(ComparisonTypeEnum $conditionOperator): string
     {
         switch ($conditionOperator) {
-            case ComparisonCondition::GREATER_THAN :
+            case ComparisonTypeEnum::GREATER_THAN :
                 $translatedOperator = '>';
                 break;
-            case ComparisonCondition::GREATER_THAN_OR_EQUAL :
+            case ComparisonTypeEnum::GREATER_THAN_OR_EQUAL :
                 $translatedOperator = '>=';
                 break;
-            case ComparisonCondition::LESS_THAN :
+            case ComparisonTypeEnum::LESS_THAN :
                 $translatedOperator = '<';
                 break;
-            case ComparisonCondition::LESS_THAN_OR_EQUAL :
+            case ComparisonTypeEnum::LESS_THAN_OR_EQUAL :
                 $translatedOperator = '<=';
                 break;
-            case ComparisonCondition::EQUAL :
+            case ComparisonTypeEnum::EQUAL :
                 $translatedOperator = '=';
                 break;
             default :

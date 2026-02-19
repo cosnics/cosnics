@@ -5,6 +5,7 @@ use Chamilo\Core\Menu\Architecture\Interface\ItemServiceInterface;
 use Chamilo\Core\Menu\Implementation\Menu\ApplicationItemRenderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
@@ -91,7 +92,7 @@ class ItemService implements ItemServiceInterface
     {
         $item = new Item();
 
-        $item->setDisplay(Item::DISPLAY_BOTH);
+        $item->setDisplay(DisplayTypeEnum::ICON_AND_LABEL);
         $item->setType($itemType);
         $item->setHidden(isset($values[Item::PROPERTY_HIDDEN]) ? 1 : 0);
         $item->setIconClass($values[Item::PROPERTY_ICON_CLASS]);
@@ -332,7 +333,7 @@ class ItemService implements ItemServiceInterface
             $item->setSort(null);
         }
 
-        $item->setDisplay(Item::DISPLAY_BOTH);
+        $item->setDisplay(DisplayTypeEnum::ICON_AND_LABEL);
         $item->setHidden(isset($values[Item::PROPERTY_HIDDEN]) ? 1 : 0);
         $item->setIconClass($values[Item::PROPERTY_ICON_CLASS]);
         $item->setParentId($values[Item::PROPERTY_PARENT]);

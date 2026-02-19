@@ -7,12 +7,12 @@ use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\StaticTableColumn;
@@ -216,7 +216,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
             new Button(
                 label: $translator->trans('Edit', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
                 'pencil-alt'
-            ), action: $editUrl, display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+            ), action: $editUrl, display: DisplayTypeEnum::ICON, classes: ['btn-link']
             )
         );
 
@@ -226,7 +226,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
             new Button(
                 label: $translator->trans('AddUsers', [], 'Chamilo\Core\Group'), inlineGlyph: new FontAwesomeGlyph(
                 'plus-circle'
-            ), action: $subscribeUrl, display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+            ), action: $subscribeUrl, display: DisplayTypeEnum::ICON, classes: ['btn-link']
             )
         );
 
@@ -239,10 +239,10 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
                 new Button(
                     label: $translator->trans('Truncate', [], 'Chamilo\Core\Group'), inlineGlyph: new FontAwesomeGlyph(
                     'trash-alt'
-                ), action: $truncateUrl, display: ButtonDisplayInterface::DISPLAY_ICON,
-                    confirmationMessage: $this->getTranslator()->trans(
-                        'ConfirmChosenAction', [], StringUtilities::LIBRARIES
-                    ), classes: ['btn-link']
+                ), action: $truncateUrl, display: DisplayTypeEnum::ICON, confirmationMessage: $this->getTranslator()
+                        ->trans(
+                            'ConfirmChosenAction', [], StringUtilities::LIBRARIES
+                        ), classes: ['btn-link']
                 )
             );
         }
@@ -250,8 +250,8 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
             $buttonToolBar->addButton(
                 new Button(
                     label: $translator->trans('TruncateNA', [], 'Chamilo\Core\Group'),
-                    inlineGlyph: new FontAwesomeGlyph('trash-alt', ['text-muted']),
-                    display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+                    inlineGlyph: new FontAwesomeGlyph('trash-alt', ['text-muted']), display: DisplayTypeEnum::ICON,
+                    classes: ['btn-link']
                 )
             );
         }
@@ -262,8 +262,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
             new Button(
                 label: $translator->trans('Delete', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
                 'times'
-            ), action: $deleteUrl, display: ButtonDisplayInterface::DISPLAY_ICON,
-                confirmationMessage: $this->getTranslator()->trans(
+            ), action: $deleteUrl, display: DisplayTypeEnum::ICON, confirmationMessage: $this->getTranslator()->trans(
                     'ConfirmChosenAction', [], StringUtilities::LIBRARIES
                 ), classes: ['btn-link']
             )
@@ -275,7 +274,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
             new Button(
                 label: $translator->trans('Move', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
                 'window-restore', ['fa-flip-horizontal'], null, 'fas'
-            ), action: $moveUrl, display: ButtonDisplayInterface::DISPLAY_ICON, classes: ['btn-link']
+            ), action: $moveUrl, display: DisplayTypeEnum::ICON, classes: ['btn-link']
             )
         );
 
