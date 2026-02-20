@@ -50,13 +50,6 @@ footer.chamilo-footer {
     margin-bottom: 10px;
 }
 
-.warning-banner {
-    border-bottom: 1px solid #ffd89b;
-    padding: 10px;
-    text-align: center;
-    z-index: 9999;
-}
-
 .panel.panel-attachments {
     margin-bottom: 0px;
     margin-top: 20px;

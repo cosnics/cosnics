@@ -33,7 +33,6 @@ class LinkItemRenderer extends ItemRenderer
 
     public const CONFIGURATION_TARGET = 'target';
     public const CONFIGURATION_URL = 'url';
-
     public const TARGET_BLANK = '_blank';
     public const TARGET_PARENT = '_parent';
     public const TARGET_SELF = '_self';
@@ -61,28 +60,23 @@ class LinkItemRenderer extends ItemRenderer
 
         $html = [];
 
-        $html[] = '<li class="' . ($this->isSelected($item, $user) ? 'active' : '') . '">';
-        $html[] = '<a href="' . $item->getSetting(self::CONFIGURATION_URL) . '" target="' .
-            $item->getSetting(self::CONFIGURATION_TARGET) . '">';
+        $html[] = '<li class="nav-item">';
+        $html[] = '<a class="text-center nav-link' . ($this->isSelected($item, $user) ? 'active' : '') . '" href="' .
+            $item->getSetting(self::CONFIGURATION_URL) . '" target="' . $item->getSetting(self::CONFIGURATION_TARGET) .
+            '">';
 
-        if ($item->showIcon())
-        {
-            if (!$item->getIconClass())
-            {
+        if ($item->showIcon()) {
+            if (!$item->getIconClass()) {
                 $glyph = $this->getRendererTypeGlyph();
             }
-            else
-            {
-                $glyph = new FontAwesomeGlyph($item->getIconClass(), ['fa-2x']);
+            else {
+                $glyph = new FontAwesomeGlyph($item->getIconClass(), ['fa-lg']);
             }
-
-            $glyph->setExtraClasses(['fa-2x']);
 
             $html[] = $glyph->render();
         }
 
-        if ($item->showTitle())
-        {
+        if ($item->showTitle()) {
             $html[] = '<div>' . $title . '</div>';
         }
 
@@ -154,21 +148,17 @@ class LinkItemRenderer extends ItemRenderer
         $basePath = $this->getWebPathBuilder()->getBasePath();
         $urlBasePath = $urlParts['scheme'] . '://' . $urlParts['host'] . $urlParts['path'];
 
-        if ($basePath == $urlBasePath)
-        {
+        if ($basePath == $urlBasePath) {
             parse_str($urlParts['query'], $queryParts);
 
-            foreach ($queryParts as $queryPartVariable => $queryPartValue)
-            {
+            foreach ($queryParts as $queryPartVariable => $queryPartValue) {
                 if (!$this->getRequest()->query->has($queryPartVariable) ||
-                    $this->getRequest()->query->get($queryPartVariable) !== $queryPartValue)
-                {
+                    $this->getRequest()->query->get($queryPartVariable) !== $queryPartValue) {
                     return false;
                 }
             }
         }
-        else
-        {
+        else {
             return false;
         }
 

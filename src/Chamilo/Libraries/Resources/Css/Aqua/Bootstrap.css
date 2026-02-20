@@ -1,14 +1,6 @@
 /******************************
  * SPECIFIC BOOTSTRAP CHANGES *
  ******************************/
-body {
-    font-size: 13px;
-}
-
-body h3#page-title {
-    margin-top: 0;
-}
-
 blockquote {
     opacity: 0.7;
 }

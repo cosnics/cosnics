@@ -21,6 +21,15 @@ class HomeComponent extends Manager implements NoAuthenticationSupportInterface
      */
     public function run(): Response
     {
+        /**
+         * TODO: Rights
+         * - Platform admin
+         * - Selected user(s)
+         * - Selected group(s)
+         * - Selected Entra group(s)
+         * -> Via IDM or Graph API?
+         * -> Mapping of usernames / user principals
+         */
         $authenticationValidator = $this->getAuthenticationValidator();
         $authenticationValidator->validate();
 

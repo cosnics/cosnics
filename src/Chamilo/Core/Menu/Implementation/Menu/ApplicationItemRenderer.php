@@ -60,11 +60,12 @@ class ApplicationItemRenderer extends ItemRenderer
     {
         $html = [];
 
-        $html[] = '<li class="' . ($this->isSelected($item, $user) ? 'active' : '') . '">';
+        $html[] = '<li class="nav-item">';
 
         $title = $this->renderTitleForCurrentLanguage($item);
 
-        $html[] = '<a href="' . $this->getApplicationItemUrl($item) . '">';
+        $html[] = '<a class="text-center nav-link' . ($this->isSelected($item, $user) ? ' active' : '') . '" href="' .
+            $this->getApplicationItemUrl($item) . '">';
 
         if ($item->showIcon()) {
             if (!empty($item->getIconClass())) {
@@ -72,7 +73,7 @@ class ApplicationItemRenderer extends ItemRenderer
             }
             else {
                 $glyph = new NamespaceIdentGlyph(
-                    $item->getSetting(self::CONFIGURATION_APPLICATION), false, false, false, IdentGlyphSizeEnum::MEDIUM,
+                    $item->getSetting(self::CONFIGURATION_APPLICATION), false, false, false, IdentGlyphSizeEnum::SMALL,
                     [], $title
                 );
             }

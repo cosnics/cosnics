@@ -43,16 +43,13 @@ class LanguageItemRenderer extends ItemRenderer
     {
         $languages = $this->getLanguageConsulter()->getOtherLanguages($this->getTranslator()->getLocale());
 
-        if (count($languages) > 1)
-        {
+        if (count($languages) > 1) {
             return $this->renderDropdown($item);
         }
-        else
-        {
+        else {
             $html = [];
 
-            foreach ($languages as $isocode => $language)
-            {
+            foreach ($languages as $isocode => $language) {
                 $languageUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
@@ -64,16 +61,14 @@ class LanguageItemRenderer extends ItemRenderer
 
                 $html = [];
 
-                $html[] = '<li>';
-                $html[] = '<a href="' . $languageUrl . '">';
+                $html[] = '<li class="nav-item">';
+                $html[] = '<a class="text-center nav-link" href="' . $languageUrl . '">';
 
-                if ($item->showIcon())
-                {
-                    $html[] = $this->getRenderedGlyph(!$item->showTitle());
+                if ($item->showIcon()) {
+                    $html[] = $this->getRenderedGlyph();
                 }
 
-                if ($item->showTitle())
-                {
+                if ($item->showTitle()) {
                     $html[] = '<div>' . $language . '</div>';
                 }
 
@@ -95,25 +90,12 @@ class LanguageItemRenderer extends ItemRenderer
         return $this->languageConsulter;
     }
 
-    public function getRenderedGlyph(bool $showCaret = false): string
+    public function getRenderedGlyph(): string
     {
         $glyph = $this->getRendererTypeGlyph();
-        $glyph->setExtraClasses(['fa-2x', 'fa-fw']);
+        $glyph->setExtraClasses(['fa-lg', 'fa-fw']);
 
-        $html = [];
-
-        $html[] = '<div>';
-
-        $html[] = $glyph->render();
-
-        if ($showCaret)
-        {
-            $html[] = '&nbsp;<span class="caret"></span>';
-        }
-
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return $glyph->render();
     }
 
     public function getRendererTypeGlyph(): InlineGlyph
@@ -135,20 +117,18 @@ class LanguageItemRenderer extends ItemRenderer
     {
         $html = [];
 
-        $html[] = '<li class="dropdown">';
+        $html[] = '<li class="nav-item dropdown">';
         $html[] =
-            '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+            '<a href="#" class="text-center nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">';
 
         $title = strtoupper($this->getTranslator()->getLocale());
 
-        if ($item->showIcon())
-        {
-            $html[] = $this->getRenderedGlyph(!$item->showTitle());
+        if ($item->showIcon()) {
+            $html[] = $this->getRenderedGlyph();
         }
 
-        if ($item->showTitle())
-        {
-            $html[] = '<div>' . $title . '&nbsp;<span class="caret"></span></div>';
+        if ($item->showTitle()) {
+            $html[] = '<span>' . $title . '</span>';
         }
 
         $html[] = '</a>';
@@ -167,14 +147,12 @@ class LanguageItemRenderer extends ItemRenderer
         $languages = $this->getLanguageConsulter()->getLanguages();
         $currentLanguage = $this->getTranslator()->getLocale();
 
-        if (count($languages) > 1)
-        {
+        if (count($languages) > 1) {
             $currentUrl = $this->getRequest()->getUri();
 
             $html[] = '<ul class="dropdown-menu">';
 
-            foreach ($languages as $isocode => $language)
-            {
+            foreach ($languages as $isocode => $language) {
                 $languageUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
@@ -184,13 +162,10 @@ class LanguageItemRenderer extends ItemRenderer
                     ]
                 );
 
-                if ($currentLanguage != $isocode)
-                {
+                if ($currentLanguage != $isocode) {
                     $html[] = '<li>';
-                    $html[] = '<a href="' . $languageUrl . '">';
-                    $html[] = '<div>';
+                    $html[] = '<a class="dropdown-item" href="' . $languageUrl . '">';
                     $html[] = $language;
-                    $html[] = '</div>';
                     $html[] = '</a>';
                     $html[] = '</li>';
                 }

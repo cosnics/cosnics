@@ -37,12 +37,11 @@ class DefaultHeaderRenderer
         $html[] = $this->getBaseHeaderRenderer()->renderHeader();
         $html[] = $this->getBannerRenderer()->render($user);
 
-        $html[] = '<div class="container-fluid">';
+        $html[] = '<main class="container-xl">';
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="col-sm-12 clearfix">';
         $html[] = $this->renderPageTitle();
-        $html[] = '<div class="clearfix"></div>';
 
         $html[] = $this->getNotificationMessageManager()->renderMessages();
 

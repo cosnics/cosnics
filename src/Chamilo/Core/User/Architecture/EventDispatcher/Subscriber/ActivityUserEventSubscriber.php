@@ -96,7 +96,7 @@ class ActivityUserEventSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        $this->getPageConfiguration()->addHtml('<script>var tracker=' . $userVisit->getId() . ';</script>');
+        $this->getPageConfiguration()->addHtml('<script>var tracker="' . $userVisit->getId() . '";</script>');
 
         return true;
     }

@@ -27,11 +27,12 @@ class BreadcrumbTrailRenderer
 
         $html = [];
 
-        $html[] = '<div class="container-breadcrumb">';
-        $html[] = '<div class="container-fluid">';
+
+        $html[] = '<nav class="bg-body-tertiary" aria-label="breadcrumb">';
+        $html[] = '<div class="container-xxl">';
         $html[] = $this->renderBreadcrumbs($breadcrumbTrail);
         $html[] = '</div>';
-        $html[] = '</div>';
+        $html[] = '</nav>';
 
         return implode(PHP_EOL, $html);
     }
@@ -45,7 +46,7 @@ class BreadcrumbTrailRenderer
     {
         $html = [];
 
-        $html[] = '<li>';
+        $html[] = '<li class="breadcrumb-item">';
         $html[] = '<a href="' . htmlentities($breadcrumb->getUrl()) . '" target="_self">';
 
         if ($breadcrumb->getInlineGlyph() instanceof InlineGlyph) {
@@ -65,7 +66,7 @@ class BreadcrumbTrailRenderer
     {
         $html = [];
 
-        $html[] = '<ol class="breadcrumb">';
+        $html[] = '<ol class="breadcrumb breadcrumb-chevron py-3">';
 
         foreach ($breadcrumbTrail->toArray() as $breadcrumb) {
             $html[] = $this->renderBreadcrumb($breadcrumb);

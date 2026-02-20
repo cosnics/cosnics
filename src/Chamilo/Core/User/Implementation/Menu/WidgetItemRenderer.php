@@ -48,34 +48,33 @@ class WidgetItemRenderer extends ItemRenderer
 
         $title = $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
 
-        $html[] = '<li>';
-        $html[] =
-            '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+        $html[] = '<li class="nav-item dropdown">';
+        $html[] = '<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">';
 
         if ($item->showIcon()) {
             $html[] =
-                '<img class="profile-picture img-circle img-thumbnail" src="' . $userPicture . '" title="' . $title .
+                '<img class="img-profile img-thumbnail rounded-circle" src="' . $userPicture . '" title="' . $title .
                 '" alt="' . $title . '" />';
         }
 
         if ($item->showTitle()) {
-            $html[] = '<div>' . $title . '</div>';
+            $html[] = '<span>' . $title . '</span>';
         }
 
         $html[] = '</a>';
 
-        $html[] = '<ul class="dropdown-menu">';
+        $html[] = '<ul class="dropdown-menu dropdown-menu-end">';
 
         // Header
-        $html[] = '<li><a><div >' . $user->getFullName() . '</div></a></li>';
+        $html[] = '<li><a class="dropdown-item"><div >' . $user->getFullName() . '</div></a></li>';
 
         // Divider
-        $html[] = '<li role="separator" class="divider"></li>';
+        $html[] = '<li><hr class="dropdown-divider"></li>';
 
         // Change user profile picture
         if ($this->canChangeUserPicture()) {
             $html[] = '<li>';
-            $html[] = '<a href="' . $this->getPictureUrl() . '">';
+            $html[] = '<a class="dropdown-item" href="' . $this->getPictureUrl() . '">';
             $html[] = '<div>' . $translator->trans('EditProfilePicture', [], 'Chamilo\Core\User') . '</div>';
             $html[] = '</a>';
             $html[] = '</li>';
@@ -83,24 +82,24 @@ class WidgetItemRenderer extends ItemRenderer
 
         // Account
         $html[] = '<li>';
-        $html[] = '<a href="' . $this->getAccountUrl() . '">';
+        $html[] = '<a class="dropdown-item" href="' . $this->getAccountUrl() . '">';
         $html[] = '<div>' . $translator->trans('MyAccount', [], 'Chamilo\Core\User') . '</div>';
         $html[] = '</a>';
         $html[] = '</li>';
 
         // Settings
         $html[] = '<li>';
-        $html[] = '<a href="' . $this->getSettingsUrl() . '">';
+        $html[] = '<a class="dropdown-item" href="' . $this->getSettingsUrl() . '">';
         $html[] = '<div>' . $translator->trans('Settings', [], 'Chamilo\Core\User') . '</div>';
         $html[] = '</a>';
         $html[] = '</li>';
 
         // Divider
-        $html[] = '<li role="separator" class="divider"></li>';
+        $html[] = '<li><hr class="dropdown-divider"></li>';
 
         // Logout
         $html[] = '<li>';
-        $html[] = '<a href="' . $this->getLogoutUrl() . '">';
+        $html[] = '<a class="dropdown-item" href="' . $this->getLogoutUrl() . '">';
         $html[] = '<div>' . $translator->trans('Logout', [], 'Chamilo\Core\User') . '</div>';
         $html[] = '</a>';
         $html[] = '</li>';

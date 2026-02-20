@@ -37,7 +37,7 @@ class BaseFooterRenderer
     {
         $html = [];
 
-        $html[] = '</div>';
+        $html[] = '</main>';
 
         return implode(PHP_EOL, $html);
     }

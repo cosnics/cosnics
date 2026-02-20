@@ -131,7 +131,7 @@ class Item extends DataClass
 
     public function setDisplay(DisplayTypeEnum $display = DisplayTypeEnum::ICON): Item
     {
-        $this->setDefaultProperty(self::PROPERTY_DISPLAY, $display);
+        $this->setDefaultProperty(self::PROPERTY_DISPLAY, $display->value);
 
         return $this;
     }

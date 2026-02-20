@@ -52,13 +52,15 @@ class BannerRenderer
 
         $html = [];
 
+        $html[] = '<header>';
+
         if (!is_null($session->get('_as_admin'))) {
             $link = $this->getUrlGenerator()->fromParameters([
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_LOGIN_AS
             ]);
 
-            $html[] = '<div class="warning-banner bg-warning text-warning">';
+            $html[] = '<div class="text-center text-bg-warning p-3">';
             $html[] = $translator->trans('LoggedInAsUser', [], 'Chamilo\Core\User');
             $html[] = ' ';
             $html[] = $user instanceof User ? $user->getFullName() : '';
@@ -74,6 +76,8 @@ class BannerRenderer
         if ($breadcrumbtrail->count() > 0) {
             $html[] = $this->getBreadcrumbTrailRenderer()->render($breadcrumbtrail);
         }
+
+        $html[] = '</header>';
 
         return implode(PHP_EOL, $html);
     }

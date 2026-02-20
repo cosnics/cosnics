@@ -50,9 +50,8 @@
                 {
                     "output": "Chamilo/Libraries/Resources/Javascript/cosnics.vendor.bootstrap.min.js",
                     "input": [
-                        "Resources/Plugin/Bootstrap/bootstrap.min.js",
-                        "Resources/Plugin/Bootstrap/bootstrap-toggle.min.js",
-                        "Resources/Plugin/Bootstrap/BootstrapConflictFixes.js"
+                        "Resources/Plugin/Bootstrap/v5/js/bootstrap.bundle.min.js",
+                        "Resources/Plugin/Bootstrap/v5/js/bootstrap5-toggle.ecmas.min.js"
                     ]
                 },
                 {
@@ -83,9 +82,9 @@
                 {
                     "output": "Chamilo/Libraries/Resources/Css/cosnics.vendor.bootstrap.min.css",
                     "input": [
-                        "Resources/Plugin/Bootstrap/css/bootstrap.min.css",
-                        "Resources/Plugin/BootstrapCheckbox/awesome-bootstrap-checkbox.min.css",
-                        "Resources/Plugin/Bootstrap/css/bootstrap-toggle.min.css"
+                        "Resources/Plugin/Bootstrap/v5/css/bootstrap.min.css",
+                        "Resources/Plugin/BootstrapCheckbox/v5/awesome-bootstrap-checkbox.min.css",
+                        "Resources/Plugin/Bootstrap/v5/css/bootstrap5-toggle.min.css"
                     ]
                 },
                 {
@@ -98,7 +97,7 @@
                 {
                     "output": "Chamilo/Libraries/Resources/Css/cosnics.vendor.min.css",
                     "input": [
-                        "Resources/Plugin/FontAwesome6/css/all.min.css",
+                        "Resources/Plugin/FontAwesome/v7/css/all.min.css",
                         "Resources/Plugin/ConnectIdents/ConnectIdents.min.css",
                         "Resources/Plugin/Dropzone/dropzone.min.css",
                         "Resources/Plugin/Highlight/github.min.css"

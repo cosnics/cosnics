@@ -17,7 +17,6 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class MenuItemRenderer extends ItemRenderer
 {
-
     protected UrlGenerator $urlGenerator;
 
     private ClassnameUtilities $classnameUtilities;
@@ -39,21 +38,19 @@ abstract class MenuItemRenderer extends ItemRenderer
 
         $selected = $this instanceof SelectableItemInterface && $this->isSelected($item, $user);
 
-        $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
-        $html[] = '<a href="' . $this->getUrl() . '">';
+        $html[] = '<li class="nav-item">';
+        $html[] = '<a class="text-center nav-link' . ($selected ? ' active' : '') . '" href="' . $this->getUrl() . '">';
 
         $title = $this->renderTitleForCurrentLanguage($item);
 
-        if ($item->showIcon())
-        {
+        if ($item->showIcon()) {
             $glyph = $this->getRendererTypeGlyph();
-            $glyph->setExtraClasses(['fa-2x']);
+            $glyph->setExtraClasses(['fa-lg']);
 
             $html[] = $glyph->render();
         }
 
-        if ($item->showTitle())
-        {
+        if ($item->showTitle()) {
             $html[] = '<div>' . $title . '</div>';
         }
 

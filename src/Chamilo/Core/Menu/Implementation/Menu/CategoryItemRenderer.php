@@ -45,13 +45,11 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
 
         $title = $this->renderTitleForCurrentLanguage($item);
 
-        $html[] = '<li class="dropdown' . ($isSelected ? ' active' : '') . '">';
-        $html[] =
-            '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+        $html[] = '<li class="nav-item dropdown">';
+        $html[] = '<a href="#" class="nav-link dropdown-toggle' . ($isSelected ? ' active' : '') .
+            '" data-bs-toggle="dropdown" aria-expanded="false">';
 
         if ($item->showIcon()) {
-            $html[] = '<div>';
-
             if ($isSelected) {
                 $glyph = new FontAwesomeGlyph(
                     'folder-open', ['fa-2x', 'fa-fw'], $title, 'fas'
@@ -63,16 +61,10 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
             }
 
             $html[] = $glyph->render();
-
-            if (!$item->showTitle()) {
-                $html[] = '&nbsp;<span class="caret"></span>';
-            }
-
-            $html[] = '</div>';
         }
 
         if ($item->showTitle()) {
-            $html[] = '<div>' . $title . '&nbsp;<span class="caret"></span></div>';
+            $html[] = '<span>' . $title . '</span>';
         }
 
         $html[] = '</a>';
@@ -122,7 +114,7 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
 
         $html = [];
 
-        $html[] = '<ul class="dropdown-menu">';
+        $html[] = '<ul class="dropdown-menu dropdown-menu-end">';
 
         foreach ($childItems as $childItem) {
             if (!$childItem->isHidden()) {

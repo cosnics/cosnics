@@ -59,6 +59,7 @@ class DefaultFooterRenderer
         $html[] = $this->getBaseFooterRenderer()->renderHeader();
         $html[] = $this->getContainerHeader();
         $html[] = implode(' | ', $this->getLinks());
+        $html[] = '&nbsp;&copy;&nbsp;' . date('Y');
         $html[] = $this->getContainerFooter();
         $html[] = $this->getBaseFooterRenderer()->renderFooter();
 
@@ -82,11 +83,7 @@ class DefaultFooterRenderer
     {
         $html = [];
 
-        $html[] = '&nbsp;&copy;&nbsp;' . date('Y');
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '</div> <!-- end of .container-fluid" -->';
+        $html[] = '</p>';
         $html[] = '</footer>';
 
         return implode(PHP_EOL, $html);
@@ -96,10 +93,8 @@ class DefaultFooterRenderer
     {
         $html = [];
 
-        $html[] = '<footer class="chamilo-footer">';
-        $html[] = '<div class="container-fluid">';
-        $html[] = '<div class="row footer">';
-        $html[] = '<div class="col-xs-12">';
+        $html[] = '<footer class="container py-5">';
+        $html[] = '<p class="text-center text-body-secondary">';
 
         return implode(PHP_EOL, $html);
     }
@@ -148,8 +143,9 @@ class DefaultFooterRenderer
             }
 
             if (!empty($administratorUri)) {
-                $links[] = $translator->trans('Support', [], StringUtilities::LIBRARIES) . ': <a href="' .
-                    $administratorUri . '">' . $administratorName . '</a>';
+                $links[] =
+                    $translator->trans('Support', [], StringUtilities::LIBRARIES) . ': <a href="' . $administratorUri .
+                    '">' . $administratorName . '</a>';
             }
         }
 
