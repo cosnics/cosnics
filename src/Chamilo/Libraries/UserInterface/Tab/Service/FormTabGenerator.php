@@ -26,11 +26,10 @@ class FormTabGenerator
     /**
      * @throws \QuickformException
      */
-    public function renderContent(string $formTabsGeneratorName, FormValidator $form, FormTab $tab): void
+    public function renderContent(FormValidator $form, FormTab $tab): void
     {
         $form->addElement(
-            HTML_QuickForm_html::class,
-            $this->getGenericTabRenderer()->renderContentHeader($formTabsGeneratorName, $tab)
+            HTML_QuickForm_html::class, $this->getGenericTabRenderer()->renderContentHeader($tab)
         );
         $this->renderContentSingleTab($form, $tab);
         $form->addElement(HTML_QuickForm_html::class, $this->getGenericTabRenderer()->renderContentFooter());
@@ -47,8 +46,8 @@ class FormTabGenerator
         call_user_func_array($method, $tab->getParameters());
     }
 
-    public function renderNavigation(string $formTabsGeneratorName, FormTab $tab): string
+    public function renderNavigation(FormTab $tab): string
     {
-        return $this->getGenericTabRenderer()->renderNavigation($formTabsGeneratorName, $tab);
+        return $this->getGenericTabRenderer()->renderNavigation($tab);
     }
 }

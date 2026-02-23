@@ -11,44 +11,32 @@ use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
  */
 class TabsRenderer
 {
-    private ActionsTabRenderer $actionsTabRenderer;
+    protected ActionsTabRenderer $actionsTabRenderer;
 
-    private ContentTabRenderer $contentTabRenderer;
+    protected ContentTabRenderer $contentTabRenderer;
 
-    private GenericTabsRenderer $genericTabsRenderer;
+    protected GenericTabRenderer $genericTabRenderer;
 
     public function __construct(
-        GenericTabsRenderer $genericTabsRenderer, ContentTabRenderer $contentTabRenderer,
-        ActionsTabRenderer $actionsTabRenderer
+        ContentTabRenderer $contentTabRenderer, ActionsTabRenderer $actionsTabRenderer, GenericTabRenderer $tabRenderer
     )
     {
-        $this->genericTabsRenderer = $genericTabsRenderer;
         $this->contentTabRenderer = $contentTabRenderer;
         $this->actionsTabRenderer = $actionsTabRenderer;
+        $this->genericTabRenderer = $tabRenderer;
     }
 
     /**
      * @param \Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection<\Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\GenericTab> $tabs
      */
-    public function render(string $name, TabsCollection $tabs): string
+    public function render(string $name, TabsCollection $tabs, ?string $selectedTab = null): string
     {
         $html = [];
 
         if (!$tabs->isEmpty()) {
-            $html[] = $this->renderHeader($name, $tabs);
-
-            foreach ($tabs as $tab) {
-                switch (get_class($tab)) {
-                    case ContentTab::class:
-                        $html[] = $this->getContentTabRenderer()->renderContent($name, $tab);
-                        break;
-                    case ActionsTab::class:
-                        $html[] = $this->getActionsTabRenderer()->renderContent($name, $tab);
-                        break;
-                }
-            }
-
-            $html[] = $this->getGenericTabsRenderer()->renderFooter($name, $tabs);
+            $html[] = $this->renderHeader($name, $tabs, $selectedTab);
+            $html[] = $this->renderContent($tabs, $selectedTab);
+            $html[] = $this->renderFooter();
         }
 
         return implode(PHP_EOL, $html);
@@ -64,32 +52,49 @@ class TabsRenderer
         return $this->contentTabRenderer;
     }
 
-    public function getGenericTabsRenderer(): GenericTabsRenderer
+    public function getGenericTabRenderer(): GenericTabRenderer
     {
-        return $this->genericTabsRenderer;
+        return $this->genericTabRenderer;
+    }
+
+    protected function renderContent( TabsCollection $tabs): string
+    {
+        $html = [];
+
+        foreach ($tabs as $tab) {
+            switch (get_class($tab)) {
+                case ContentTab::class:
+                    $html[] = $this->getContentTabRenderer()->renderContent($tab);
+                    break;
+                case ActionsTab::class:
+                    $html[] = $this->getActionsTabRenderer()->renderContent($tab);
+                    break;
+            }
+        }
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderFooter(): string
+    {
+        return '</div>';
     }
 
     /**
      * @param \Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection<\Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\GenericTab> $tabs
      */
-    public function renderHeader(string $name, TabsCollection $tabs): string
+    public function renderHeader(string $name, TabsCollection $tabs, ?string $selectedTab = null): string
     {
         $html = [];
 
-        $html[] = $this->getGenericTabsRenderer()->renderHeaderTop($name);
+        $html[] = '<ul class="nav nav-tabs"  id="' . $name . 'Tabs" role="tablist">';
 
         foreach ($tabs as $tab) {
-            switch (get_class($tab)) {
-                case ContentTab::class:
-                    $html[] = $this->getContentTabRenderer()->renderNavigation($name, $tab);
-                    break;
-                case ActionsTab::class:
-                    $html[] = $this->getActionsTabRenderer()->renderNavigation($name, $tab);
-                    break;
-            }
+            $html[] = $this->getGenericTabRenderer()->renderNavigation($tab, $selectedTab);
         }
 
-        $html[] = $this->getGenericTabsRenderer()->renderHeaderBottom($name);
+        $html[] = '</ul>';
+        $html[] = '<div class="tab-content">';
 
         return implode(PHP_EOL, $html);
     }

@@ -1,22 +1,21 @@
 <?php
-namespace Chamilo\Libraries\UserInterface\Tab\Service;
+namespace Chamilo\Libraries\UserInterface\Tab\Architecture\Trait;
 
-use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\GenericTab;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabNavigationInterface;
 
 /**
- * @package Chamilo\Libraries\UserInterface\Tab\Service
+ * @package Chamilo\Libraries\UserInterface\Tab\Architecture\Trait
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class GenericTabRenderer
+trait TabNavigatonRendererTrait
 {
-    public function renderNavigation(GenericTab $tab, ?string $selectedTab = null): string
+    public function renderNavigation(TabNavigationInterface $tab, ?string $selectedTab = null): string
     {
         $isActive = $tab->getIdentifier() === $selectedTab;
 
         $html = [];
 
         $html[] = '<li class="nav-item" role="presentation">';
-
         $html[] = '<button class="nav-link' . ($isActive ? ' active' : '') . '" id="' . $tab->getIdentifier() .
             '-tab" data-bs-toggle="tab" data-bs-target="#' . $tab->getIdentifier() .
             '" type="button" role="tab" aria-controls="' . $tab->getIdentifier() . '">';

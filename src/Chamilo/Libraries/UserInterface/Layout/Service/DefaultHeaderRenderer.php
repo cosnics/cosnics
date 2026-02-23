@@ -37,7 +37,7 @@ class DefaultHeaderRenderer
         $html[] = $this->getBaseHeaderRenderer()->renderHeader();
         $html[] = $this->getBannerRenderer()->render($user);
 
-        $html[] = '<main class="container-xl">';
+        $html[] = '<main class="container-xxl">';
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-sm-12 clearfix">';
@@ -75,7 +75,7 @@ class DefaultHeaderRenderer
         if ($breadcrumbTrail->count() > 0) {
             $pageTitle = $breadcrumbTrail->last()->getName();
 
-            return '<h3 id="page-title" title="' . htmlentities(strip_tags($pageTitle)) . '">' . $pageTitle . '</h3>';
+            return '<h3 title="' . htmlentities(strip_tags($pageTitle)) . '">' . $pageTitle . '</h3>';
         }
 
         return '';

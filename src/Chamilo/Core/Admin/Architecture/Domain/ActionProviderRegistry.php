@@ -4,6 +4,7 @@ namespace Chamilo\Core\Admin\Architecture\Domain;
 use Chamilo\Core\Admin\Architecture\Interface\ActionProviderInterface;
 use Chamilo\Core\Admin\UserInterface\Form\AdminSearchForm;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\NamespaceIdentGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Enum\IdentGlyphSizeEnum;
@@ -21,14 +22,19 @@ class ActionProviderRegistry extends ArrayCollection
 {
     protected ClassnameUtilities $classnameUtilities;
 
+    protected StringUtilities $stringUtilities;
+
     protected Translator $translator;
 
-    public function __construct(ClassnameUtilities $classnameUtilities, Translator $translator)
+    public function __construct(
+        ClassnameUtilities $classnameUtilities, Translator $translator, StringUtilities $stringUtilities
+    )
     {
         parent::__construct();
 
         $this->classnameUtilities = $classnameUtilities;
         $this->translator = $translator;
+        $this->stringUtilities = $stringUtilities;
     }
 
     public function addActionProvider(ActionProviderInterface $actionProvider): void
@@ -54,6 +60,11 @@ class ActionProviderRegistry extends ArrayCollection
         return $this->classnameUtilities;
     }
 
+    public function getStringUtilities(): StringUtilities
+    {
+        return $this->stringUtilities;
+    }
+
     /**
      * @throws \QuickformException
      */
@@ -61,13 +72,14 @@ class ActionProviderRegistry extends ArrayCollection
     {
         $tabsCollection = new TabsCollection();
         $index = 0;
+
         foreach ($this->getActionProviders() as $actionProvider) {
             $index ++;
 
             $actions = $actionProvider->getActions();
 
             $actionsTab = new ActionsTab(
-                $this->getClassnameUtilities()->getNamespaceId($actions->getContext()),
+                $this->getStringUtilities()->createString($actions->getContext())->md5()->toString(),
                 $this->getTranslator()->trans('TypeName', [], $actions->getContext()), new NamespaceIdentGlyph(
                     $actions->getContext(), true, false, false, IdentGlyphSizeEnum::SMALL
                 )

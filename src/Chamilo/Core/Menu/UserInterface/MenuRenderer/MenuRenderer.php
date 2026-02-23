@@ -203,7 +203,7 @@ class MenuRenderer
         }
 
         $html[] = '<nav class="navbar navbar-expand-lg ' . $colour . '" data-bs-theme="dark">';
-        $html[] = '<div class="container-xxl" data-bs-theme="dark">';
+        $html[] = '<div class="container-xxl">';
         $html[] = '<div class="navbar-header">';
 
         $html[] = $this->renderBrand();

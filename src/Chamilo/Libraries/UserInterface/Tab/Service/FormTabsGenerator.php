@@ -13,11 +13,8 @@ class FormTabsGenerator
 {
     private FormTabGenerator $formTabGenerator;
 
-    private GenericTabsRenderer $genericTabsRenderer;
-
-    public function __construct(GenericTabsRenderer $genericTabsRenderer, FormTabGenerator $formTabGenerator)
+    public function __construct(FormTabGenerator $formTabGenerator)
     {
-        $this->genericTabsRenderer = $genericTabsRenderer;
         $this->formTabGenerator = $formTabGenerator;
     }
 
@@ -37,23 +34,18 @@ class FormTabsGenerator
                 $this->getFormTabGenerator()->renderContentSingleTab($form, $tab);
             }
             else {
-                $this->getFormTabGenerator()->renderContent($name, $form, $tab);
+                $this->getFormTabGenerator()->renderContent($form, $tab);
             }
         }
 
         if ($tabs->hasMultipleTabs()) {
-            $form->addElement(HTML_QuickForm_html::class, $this->getGenericTabsRenderer()->renderFooter($name, $tabs));
+            $form->addElement(HTML_QuickForm_html::class, '</div>');
         }
     }
 
     public function getFormTabGenerator(): FormTabGenerator
     {
         return $this->formTabGenerator;
-    }
-
-    public function getGenericTabsRenderer(): GenericTabsRenderer
-    {
-        return $this->genericTabsRenderer;
     }
 
     /**
@@ -63,13 +55,14 @@ class FormTabsGenerator
     {
         $html = [];
 
-        $html[] = $this->getGenericTabsRenderer()->renderHeaderTop($name);
+        $html[] = '<ul class="nav nav-tabs"  id="' . $name . 'Tabs" role="tablist">';
 
         foreach ($tabs as $tab) {
-            $html[] = $this->getFormTabGenerator()->renderNavigation($name, $tab);
+            $html[] = $this->getFormTabGenerator()->renderNavigation($tab);
         }
 
-        $html[] = $this->getGenericTabsRenderer()->renderHeaderBottom($name);
+        $html[] = '</ul>';
+        $html[] = '<div class="tab-content">';
 
         return implode(PHP_EOL, $html);
     }

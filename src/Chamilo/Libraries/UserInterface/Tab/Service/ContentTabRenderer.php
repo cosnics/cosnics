@@ -2,38 +2,31 @@
 namespace Chamilo\Libraries\UserInterface\Tab\Service;
 
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ContentTab;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabNavigationRendererInterface;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabRendererInterface;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Trait\TabNavigatonRendererTrait;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Tab\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ContentTabRenderer
+class ContentTabRenderer implements TabRendererInterface, TabNavigationRendererInterface
 {
-    private GenericTabRenderer $genericTabRenderer;
+    use TabNavigatonRendererTrait;
 
-    public function __construct(GenericTabRenderer $genericTabRenderer)
-    {
-        $this->genericTabRenderer = $genericTabRenderer;
-    }
-
-    public function getGenericTabRenderer(): GenericTabRenderer
-    {
-        return $this->genericTabRenderer;
-    }
-
-    public function renderContent(string $tabsRendererName, ContentTab $tab): string
+    public function renderContent(ContentTab $tab): string
     {
         $html = [];
 
-        $html[] = $this->getGenericTabRenderer()->renderContentHeader($tabsRendererName, $tab);
+        $html[] = '<div role="tabpanel" class="tab-pane clearfix" id="' . $tab->getIdentifier() .
+            '" role="tabpanel" aria-labelledby="' . $tab->getIdentifier() . '-tab" tabindex="0">';
+        $html[] = '<div class="list-group">';
+        $html[] = '<div class="list-group-item">';
         $html[] = $tab->getContent();
-        $html[] = $this->getGenericTabRenderer()->renderContentFooter();
+        $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function renderNavigation(string $tabsRendererName, ContentTab $tab): string
-    {
-        return $this->getGenericTabRenderer()->renderNavigation($tabsRendererName, $tab);
     }
 }

@@ -49,8 +49,8 @@ abstract class BlockRenderer
     {
         $html = [];
 
-        $html[] = '<div class="panel-heading' . ($block->isVisible() ? '' : ' panel-heading-without-content') . '">';
-        $html[] = '<h3 class="panel-title">' . $this->getTitle($block) . '</h3>';
+        $html[] = '<div class="card-header">';
+        $html[] = '<h5 class="card-title">' . $this->getTitle($block) . '</h5>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -88,7 +88,6 @@ abstract class BlockRenderer
     public function renderContentFooter(): string
     {
         $html[] = '</div>';
-        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -97,8 +96,7 @@ abstract class BlockRenderer
     {
         $html = [];
 
-        $html[] = '<div class="portal-block-content' . ($block->isVisible() ? '' : ' hidden') . '">';
-        $html[] = '<div class="panel-body">';
+        $html[] = '<div class="card-body">';
 
         return implode(PHP_EOL, $html);
     }
@@ -118,8 +116,9 @@ abstract class BlockRenderer
     {
         $html = [];
 
-        $html[] = '<div class="panel panel-default portal-block" data-column-id="' . $block->getParentId() .
-            '" data-element-id="' . $block->getId() . '">';
+        $html[] =
+            '<div class="card text-bg-light mb-3" data-column-id="' . $block->getParentId() . '" data-element-id="' .
+            $block->getId() . '">';
         $html[] = $this->displayTitle($block);
         $html[] = $this->renderContentHeader($block);
         $html[] = '<div style="overflow:auto;">';

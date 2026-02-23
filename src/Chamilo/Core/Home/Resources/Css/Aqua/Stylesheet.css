@@ -93,11 +93,6 @@
     display: inline-block !important;
 }
 
-.portal-tabs .panel-heading-without-content {
-    border-bottom: 0px solid white;
-    border-radius: 3px;
-}
-
 .portal-block-sortable-helper,
 .portal-tab-sortable-helper {
     background-color: #f2f2f2 !important;

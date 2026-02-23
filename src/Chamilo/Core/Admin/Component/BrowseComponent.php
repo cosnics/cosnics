@@ -25,8 +25,7 @@ class BrowseComponent extends Manager
      */
     public function run(): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -49,14 +48,9 @@ class BrowseComponent extends Manager
      */
     public function getCurrentTab(): string
     {
-        if (!isset($this->currentTab))
-        {
-            $this->currentTab = $this->getRequest()->query->get(
-                self::PARAM_TAB, $this->getClassnameUtilities()->getNamespaceId('Chamilo\Core')
-            );
-        }
+        $currentTab = $this->getRequest()->query->get(self::PARAM_TAB, Manager::CONTEXT);
 
-        return $this->currentTab;
+        return $this->getStringUtilities()->createString($currentTab)->md5()->toString();
     }
 
     public function getPackageBundlesCacheService(): PackageBundlesCacheService
@@ -77,6 +71,6 @@ class BrowseComponent extends Manager
         $tabsCollection = $this->getActionProvider()->getTabsCollection();
         $tabsCollection->sortByLabel();
 
-        return $this->getTabsRenderer()->render('admin', $tabsCollection);
+        return $this->getTabsRenderer()->render('admin', $tabsCollection, $this->getCurrentTab());
     }
 }
