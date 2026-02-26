@@ -12,7 +12,7 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_category;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_extended_checkbox;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_checkbox;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer;
 use HTML_QuickForm_Rule_Required;
@@ -73,7 +73,7 @@ class ItemForm extends FormValidator
         );
 
         $this->addElement(
-            HTML_QuickForm_extended_checkbox::class, Item::PROPERTY_HIDDEN,
+            HTML_QuickForm_checkbox::class, Item::PROPERTY_HIDDEN,
             $translator->trans('Hidden', [], 'Chamilo\Core\Menu')
         );
         $this->addElement(

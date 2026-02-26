@@ -32,7 +32,7 @@ class StringUtilities
         return Stringy::create($string, $this->getEncoding());
     }
 
-    public function encryptMailLink(string $email, ?string $clickableText = null, string $styleClass = ''): string
+    public function encryptMailLink(string $email, ?string $clickableText = null): string
     {
         if (is_null($clickableText)) {
             $clickableText = $email;
@@ -40,14 +40,6 @@ class StringUtilities
         // mailto already present?
         if (!str_starts_with($email, 'mailto:')) {
             $email = 'mailto:' . $email;
-        }
-
-        // class (stylesheet) defined?
-        if ($styleClass != '') {
-            $styleClass = ' class="full_url_print ' . $styleClass . '"';
-        }
-        else {
-            $styleClass = ' class="full_url_print"';
         }
 
         // encrypt email
@@ -70,7 +62,7 @@ class StringUtilities
         }
 
         // return encrypted mailto hyperlink
-        return '<a href="' . $hmail . '"' . $styleClass . '>' . $hclickableText . '</a>';
+        return '<a href="' . $hmail . '">' . $hclickableText . '</a>';
     }
 
     public function getEncoding(): string

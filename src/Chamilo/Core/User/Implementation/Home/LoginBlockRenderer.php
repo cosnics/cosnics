@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylesubmitbutton;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_submit;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use HTML_QuickForm_html;
@@ -109,7 +109,7 @@ class LoginBlockRenderer extends BlockRenderer
 
         $form = new FormValidator('formLogin', FormValidator::FORM_METHOD_POST);
         $renderer = $form->defaultRenderer();
-        $renderer->setElementTemplate('<div class="form-row">{label}<br />{element}</div>');
+        $renderer->setElementTemplate('<div class="row">{label}<br />{element}</div>');
         $form->setRequiredNote('');
         $html = '<script>$(document).ready(function(){document.formLogin.login.focus();});</script>';
         $form->addElement(HTML_QuickForm_html::class, $html);
@@ -130,7 +130,7 @@ class LoginBlockRenderer extends BlockRenderer
 
         $buttons = [];
         $buttons[] = $form->createElement(
-            HTML_QuickForm_stylesubmitbutton::class, 'submitAuth', $translator->trans('Login', [], Manager::CONTEXT),
+            HTML_QuickForm_button_submit::class, 'submitAuth', $translator->trans('Login', [], Manager::CONTEXT),
             null, null, new FontAwesomeGlyph('sign-in-alt')
         );
 
@@ -146,7 +146,7 @@ class LoginBlockRenderer extends BlockRenderer
 
             $buttons[] = $form->createElement(
                 HTML_QuickForm_static::class, null, null,
-                '<a href="' . htmlspecialchars($link) . '" class="btn btn-default">' . $glyph->render() . ' ' .
+                '<a href="' . htmlspecialchars($link) . '" class="btn btn-light">' . $glyph->render() . ' ' .
                 htmlspecialchars(
                     $translator->trans('Reg', [], Manager::CONTEXT)
                 ) . '</a>'
@@ -165,7 +165,7 @@ class LoginBlockRenderer extends BlockRenderer
 
             $buttons[] = $form->createElement(
                 HTML_QuickForm_static::class, null, null,
-                '<a href="' . htmlspecialchars($link) . '" class="btn btn-default">' . $glyph->render() . ' ' .
+                '<a href="' . htmlspecialchars($link) . '" class="btn btn-light">' . $glyph->render() . ' ' .
                 htmlspecialchars(
                     $translator->trans('ResetPassword', [], Manager::CONTEXT)
                 ) . '</a>'

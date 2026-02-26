@@ -4,9 +4,6 @@ namespace Chamilo\Core\User\UserInterface\Form;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_category;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylefile;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_toggle;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule\HTML_QuickForm_Rule_Filetype;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule\HTML_QuickForm_Rule_Username;
@@ -37,15 +34,9 @@ abstract class UserForm extends FormValidator
     /**
      * @throws \QuickformException
      */
-    public function buildAccountCategoryForm(bool $isLockoutRisk = false, bool $includeCategoryTitle = true): void
+    public function buildAccountCategoryForm(bool $isLockoutRisk = false): void
     {
         $translator = $this->getTranslator();
-
-        if ($includeCategoryTitle) {
-            $this->addElement(
-                HTML_QuickForm_category::class, $translator->trans('AccountProperties', [], Manager::CONTEXT)
-            );
-        }
 
         if ($isLockoutRisk) {
             $this->addWarningMessage(
@@ -53,13 +44,9 @@ abstract class UserForm extends FormValidator
             );
         }
 
-        $this->addElement(
-            HTML_QuickForm_toggle::class, User::PROPERTY_ACTIVE, $translator->trans('Active', [], Manager::CONTEXT)
-        );
-
-        $this->addElement(
-            HTML_QuickForm_toggle::class, User::PROPERTY_PLATFORM_ADMINISTRATOR,
-            $translator->trans('PlatformAdministrator', [], Manager::CONTEXT)
+        $this->addCheckbox(User::PROPERTY_ACTIVE, $translator->trans('Active', [], Manager::CONTEXT));
+        $this->addCheckbox(
+            User::PROPERTY_PLATFORM_ADMINISTRATOR, $translator->trans('PlatformAdministrator', [], Manager::CONTEXT)
         );
     }
 
@@ -68,17 +55,10 @@ abstract class UserForm extends FormValidator
     /**
      * @throws \QuickformException
      */
-    public function buildOtherCategoryForm(bool $includeCategoryTitle = true): void
+    public function buildOtherCategoryForm(): void
     {
-        $translator = $this->getTranslator();
-
-        if ($includeCategoryTitle) {
-            $this->addElement(HTML_QuickForm_category::class, $translator->trans('Other', [], Manager::CONTEXT));
-        }
-
-        $this->addElement(
-            HTML_QuickForm_toggle::class, self::PROPERTY_SEND_MAIL,
-            $translator->trans('SendMailToUser', [], Manager::CONTEXT)
+        $this->addCheckbox(
+            self::PROPERTY_SEND_MAIL, $this->getTranslator()->trans('SendMailToUser', [], Manager::CONTEXT)
         );
     }
 
@@ -87,21 +67,15 @@ abstract class UserForm extends FormValidator
      */
     public function buildPasswordCategoryForm(
         bool $allowedToChangePassword = true, bool $allowedToGeneratePassword = true,
-        bool $requiresCurrentPassword = false, bool $requiresPasswordConfirmation = false,
-        bool $includeCategoryTitle = true
+        bool $requiresCurrentPassword = false, bool $requiresPasswordConfirmation = false
     ): void
     {
         if ($allowedToChangePassword) {
             $translator = $this->getTranslator();
 
-            if ($includeCategoryTitle) {
-                $this->addElement(HTML_QuickForm_category::class, $translator->trans('Password', [], Manager::CONTEXT));
-            }
-
             if ($allowedToGeneratePassword) {
-                $this->addElement(
-                    HTML_QuickForm_toggle::class, self::PROPERTY_GENERATE_PASSWORD,
-                    $translator->trans('AutoGeneratePassword', [], Manager::CONTEXT)
+                $this->addCheckbox(
+                    self::PROPERTY_GENERATE_PASSWORD, $translator->trans('AutoGeneratePassword', [], Manager::CONTEXT)
                 );
             }
 
@@ -148,18 +122,12 @@ abstract class UserForm extends FormValidator
      * @throws \QuickformException
      */
     public function buildPersonalDetailsCategoryForm(
-        bool $includeCategoryTitle = true, bool $allowedToChangeFirstName = true, bool $allowedToChangeLastName = true,
+        bool $allowedToChangeFirstName = true, bool $allowedToChangeLastName = true,
         bool $allowedToChangeUsername = true, bool $requiresEmail = true, bool $allowedToChangeEmailAddress = true,
         bool $requiresOfficialCode = true, bool $allowedToChangeOfficialCode = true
     ): void
     {
         $translator = $this->getTranslator();
-
-        if ($includeCategoryTitle) {
-            $this->addElement(
-                HTML_QuickForm_category::class, $translator->trans('PersonalDetails', [], Manager::CONTEXT)
-            );
-        }
 
         // Firstname
         $this->addTextfield(
@@ -242,14 +210,10 @@ abstract class UserForm extends FormValidator
      * @throws \QuickformException
      */
     public function buildPictureCategoryForm(
-        ?string $encodedUserPicture = null, ?string $userFullname = null, bool $includeCategoryTitle = true
+        ?string $encodedUserPicture = null, ?string $userFullname = null
     ): void
     {
         $translator = $this->getTranslator();
-
-        if ($includeCategoryTitle) {
-            $this->addElement(HTML_QuickForm_category::class, $translator->trans('PictureTitle', [], Manager::CONTEXT));
-        }
 
         if (!is_null($encodedUserPicture)) {
             $this->addElement(
@@ -258,16 +222,13 @@ abstract class UserForm extends FormValidator
             );
         }
 
-        $this->addElement(
-            HTML_QuickForm_stylefile::class, User::PROPERTY_PICTURE_URI, $translator->trans('AddPicture')
+        $this->addFile(
+            User::PROPERTY_PICTURE_URI, $translator->trans('AddPicture'),
+            $translator->trans('AllowedProfileImageFormats', [], Manager::CONTEXT)
         );
         $this->addRule(
             User::PROPERTY_PICTURE_URI, $translator->trans('OnlyImagesAllowed', [], Manager::CONTEXT),
             HTML_QuickForm_Rule_Filetype::class, ['jpg', 'jpeg', 'png', 'gif', 'JPG', 'JPEG', 'PNG', 'GIF']
-        );
-        $this->addElement(
-            HTML_QuickForm_static::class, 'allowed_profile_image_formats', null,
-            $translator->trans('AllowedProfileImageFormats', [], Manager::CONTEXT)
         );
     }
 

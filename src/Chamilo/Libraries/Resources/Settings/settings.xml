@@ -114,7 +114,7 @@
                 </options>
             </setting>
             <setting name="cosnics.libraries.calendar.hideNonWorkingHours"
-                     field="HTML_QuickForm_toggle"
+                     field="HTML_QuickForm_checkbox"
                      default="0">
                 <options type="static">
                     <option name="hide_non_working_hours"

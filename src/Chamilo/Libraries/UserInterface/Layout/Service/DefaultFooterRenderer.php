@@ -125,7 +125,7 @@ class DefaultFooterRenderer
         $links = [];
 
         $links[] =
-            '<a href="' . $institutionData['url'] . '" target="about:blank">' . $institutionData['name'] . '</a>';
+            '<a href="' . $institutionData['uri'] . '" target="about:blank">' . $institutionData['name'] . '</a>';
 
         if (!empty($administratorEmail) && !empty($administratorUri)) {
             $email = $stringUtilities->encryptMailLink($administratorEmail, $administratorName);

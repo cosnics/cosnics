@@ -89,7 +89,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
         $html[] = '<div class="panel-body">';
 
-        $html[] = '<img class="img-thumbnail pull-right" src="' . $userPicture . '" alt="' . $user->getFullName() .
+        $html[] = '<img class="img-thumbnail float-end" src="' . $userPicture . '" alt="' . $user->getFullName() .
             '" style="max-height: 150px;"/>';
 
         $translator = $this->getTranslator();

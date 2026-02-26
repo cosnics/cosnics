@@ -5,15 +5,14 @@ use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjection
 use Chamilo\Libraries\Protocol\Security\Service\SecurityUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_advanced_element_finder;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_bootstrap_radio;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_radio;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_reset;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_submit;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_category;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_checkbox;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_datepicker;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_extended_checkbox;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylebutton;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylefile;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_styleresetbutton;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylesubmitbutton;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_toggle;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule\HTML_QuickForm_Rule_Date;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule\HTML_QuickForm_Rule_DateCompare;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule\HTML_QuickForm_Rule_Filetype;
@@ -124,6 +123,20 @@ class FormValidator extends HTML_QuickForm
     /**
      * @throws \QuickformException
      */
+    public function addCheckbox(string $name, string $label): HTML_QuickForm_checkbox
+    {
+        $checkboxElement = $this->addElement(HTML_QuickForm_checkbox::class, $name, $label);
+
+        if ($checkboxElement instanceof HTML_QuickForm_checkbox) {
+            $this->getRenderer()->setElementTemplate($this->getCheckboxTemplate(), $name);
+        }
+
+        return $checkboxElement;
+    }
+
+    /**
+     * @throws \QuickformException
+     */
     public function addDatepicker(string $name, string $label, bool $includeTimePicker = true
     ): HTML_QuickForm_element|HTML_QuickForm_datepicker
     {
@@ -150,6 +163,20 @@ class FormValidator extends HTML_QuickForm
     /**
      * @throws \QuickformException
      */
+    public function addFile(string $name, string $label, ?string $instructions = null): HTML_QuickForm_stylefile
+    {
+        $fileElement = $this->addElement(HTML_QuickForm_stylefile::class, $name, $label, [], $instructions);
+
+        if ($fileElement instanceof HTML_QuickForm_stylefile) {
+            $this->getRenderer()->setElementTemplate($this->getFileTemplate(), $name);
+        }
+
+        return $fileElement;
+    }
+
+    /**
+     * @throws \QuickformException
+     */
     public function addFileDropzone(
         string $elementName, array $dropzoneOptions = [], bool $includeLabel = true, bool $markRequired = false
     ): void
@@ -171,7 +198,7 @@ class FormValidator extends HTML_QuickForm
         $dropzoneHtml[] = '<div id="' . $elementName . '-upload" class="file-upload">';
 
         $dropzoneHtml[] = '<div class="file-previews files" id="' . $elementName . '-previews">';
-        $dropzoneHtml[] = '<div id="' . $elementName . '-template" class="thumbnail pull-left">';
+        $dropzoneHtml[] = '<div id="' . $elementName . '-template" class="thumbnail float-start">';
         $dropzoneHtml[] = '<div class="preview">';
         $dropzoneHtml[] = '<div class="file-upload-no-preview">';
 
@@ -193,8 +220,7 @@ class FormValidator extends HTML_QuickForm
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
 
-        $dropzoneHtml[] =
-            '<div class="file-upload-buttons btn-toolbar btn-action-toolbar btn-action-toolbar-vertical">';
+        $dropzoneHtml[] = '<div class="file-upload-buttons btn-toolbar">';
         $dropzoneHtml[] = '<div class="file-upload-buttons-group btn-group btn-group-vertical">';
         $dropzoneHtml[] = '<a data-dz-remove class="btn btn-danger delete">';
 
@@ -368,15 +394,15 @@ class FormValidator extends HTML_QuickForm
     {
         $html = [];
 
-        $html[] = '<div id="' . $name . '" class="form-row row">';
+        $html[] = '<div id="' . $name . '" class="row">';
 
         if ($noMargin) {
-            $html[] = '<div class="col-xs-12">';
+            $html[] = '<div class="col-12">';
         }
         else {
-            $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">';
+            $html[] = '<div class="col-12 col-sm-4 col-md-3 col-lg-2 form-label">';
             $html[] = '</div>';
-            $html[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
+            $html[] = '<div class="col-12 col-sm-8 col-md-9 col-lg-10">';
         }
 
         $html[] = '<div role="alert" class="alert alert-' . $type . '">';
@@ -422,11 +448,11 @@ class FormValidator extends HTML_QuickForm
         $buttons = [];
 
         $buttons[] = $this->createElement(
-            HTML_QuickForm_stylesubmitbutton::class, 'submit', $this->getTranslation('Save'), ['class' => 'positive']
+            HTML_QuickForm_button_submit::class, 'submit', $this->getTranslation('Save')
         );
 
         $buttons[] = $this->createElement(
-            HTML_QuickForm_styleresetbutton::class, 'reset', $this->getTranslation('Reset'), ['class' => 'normal empty']
+            HTML_QuickForm_button_reset::class, 'reset', $this->getTranslation('Reset')
         );
 
         return $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -513,11 +539,11 @@ class FormValidator extends HTML_QuickForm
         $choices = [];
 
         $choices[] = $this->createElement(
-            HTML_QuickForm_bootstrap_radio::class, $foreverElementName, '', $this->getTranslation('Forever'), 1
+            HTML_QuickForm_button_radio::class, $foreverElementName, '', $this->getTranslation('Forever'), 1
         );
 
         $choices[] = $this->createElement(
-            HTML_QuickForm_bootstrap_radio::class, $foreverElementName, '', $this->getTranslation('LimitedPeriod'), 0
+            HTML_QuickForm_button_radio::class, $foreverElementName, '', $this->getTranslation('LimitedPeriod'), 0
         );
 
         $this->addElement(HTML_QuickForm_html::class, '<div class="form-time-period">');
@@ -672,26 +698,61 @@ class FormValidator extends HTML_QuickForm
         return $values;
     }
 
+    public function getCheckboxTemplate(): string
+    {
+        $glyph = new FontAwesomeGlyph('star', ['text-danger', 'fa-xs'], null, 'fas');
+
+        $html = [];
+
+        $html[] = '<div class="mb-3 clearfix">';
+        $html[] = '        <div class="form-check form-switch">';
+        $html[] = '            {element}';
+        $html[] = '            <label class="form-check-label">{label}</label>';
+        $html[] = '            <!-- BEGIN required -->';
+        $html[] = '            <span class="text-danger ms-1">' . $glyph->render() . '</span>';
+        $html[] = '            <!-- END required -->';
+        $html[] = '        </div>';
+        $html[] = '        <!-- BEGIN error -->';
+        $html[] = '        <div class="invalid-feedback">{error}</div>';
+        $html[] = '        <!-- END error -->';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
     protected function getDatePickerTemplate(): string
     {
         return str_replace('<div class="element">', '<div class="element form-inline">', $this->getElementTemplate());
     }
 
-    public function getElementTemplate(?string $extraClasses = null): string
+    public function getElementTemplate(): string
     {
         $html = [];
-        $glyph = new FontAwesomeGlyph('star', ['text-danger', 'fa-xs'], null, 'fas');
+        $glyph = new FontAwesomeGlyph('asterisk', ['text-danger', 'fa-2xs'], null, 'fas');
 
-        $html[] = '<div class="form-row row ' . $extraClasses . '">';
-        $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label control-label">';
-        $html[] = '{label}<!-- BEGIN required --><span class="text-danger">&nbsp;' . $glyph->render() .
-            '</span> <!-- END required -->';
+        $html[] = '<div class="form-floating mb-3 clearfix">';
+        $html[] = '    {element}';
+        $html[] = '    <label>';
+        $html[] = '        {label}';
+        $html[] = '        <!-- BEGIN required -->';
+        $html[] = '        <span class="text-danger ms-1">' . $glyph->render() . '</span>';
+        $html[] = '        <!-- END required -->';
+        $html[] = '    </label>';
+        $html[] = '    <!-- BEGIN error -->';
+        $html[] = '    <div class="invalid-feedback">{error}</div>';
+        $html[] = '    <!-- END error -->';
         $html[] = '</div>';
-        $html[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
-        $html[] =
-            '<div class="element"><!-- BEGIN error --><small class="text-danger">{error}</small><br /><!-- END error -->	{element}</div>';
-        $html[] = '<div class="form_feedback"></div></div>';
-        $html[] = '<div class="clearfix"></div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function getFileTemplate(): string
+    {
+        $html = [];
+
+        $html[] = '<div class="mb-3">';
+        $html[] = '<label for="formFile" class="form-label">{label}</label>';
+        $html[] = '{element}';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -746,9 +807,8 @@ class FormValidator extends HTML_QuickForm
     {
         $html = [];
 
-        $html[] = '<div class="form-row row">';
-        $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label"></div>';
-        $html[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">{requiredNote}</div>';
+        $html[] = '<div class="form-text text-danger">';
+        $html[] = '{requiredNote}';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -775,17 +835,16 @@ class FormValidator extends HTML_QuickForm
         static::registerElementType(HTML_QuickForm_advanced_element_finder::class);
 
         // Button elements
-        static::registerElementType(HTML_QuickForm_stylebutton::class);
-        static::registerElementType(HTML_QuickForm_stylesubmitbutton::class);
-        static::registerElementType(HTML_QuickForm_styleresetbutton::class);
+        static::registerElementType(HTML_QuickForm_button::class);
+        static::registerElementType(HTML_QuickForm_button_submit::class);
+        static::registerElementType(HTML_QuickForm_button_reset::class);
 
-        // Toggle and category elements
-        static::registerElementType(HTML_QuickForm_toggle::class);
+        // Category element
         static::registerElementType(HTML_QuickForm_category::class);
 
         // Replacing some default elements
-        static::registerElementType(HTML_QuickForm_bootstrap_radio::class);
-        static::registerElementType(HTML_QuickForm_extended_checkbox::class);
+        static::registerElementType(HTML_QuickForm_button_radio::class);
+        static::registerElementType(HTML_QuickForm_checkbox::class);
         static::registerElementType(HTML_QuickForm_stylefile::class);
     }
 
@@ -804,12 +863,9 @@ class FormValidator extends HTML_QuickForm
 
     public function setDefaultTemplates(): void
     {
-        $glyph = new FontAwesomeGlyph('star', ['text-danger', 'fa-xs'], null, 'fas');
+        $glyph = new FontAwesomeGlyph('asterisk', ['text-danger', 'fa-xs', 'me-2'], null, 'fas');
 
-        HTML_QuickForm::setRequiredNote(
-            '<span class="text-danger">&nbsp;' . $glyph->render() . '&nbsp;<small>' .
-            $this->getTranslation('ThisFieldIsRequired') . '</small></span>'
-        );
+        HTML_QuickForm::setRequiredNote($glyph->render() . $this->getTranslation('ThisFieldIsRequired'));
 
         $this->renderer = $this->defaultRenderer();
 

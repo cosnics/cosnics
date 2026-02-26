@@ -121,13 +121,13 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
             ['class' => 'element_query form-control', 'id' => $safeName . '_search_field']
         );
 
-        $this->_elements[] = new HTML_QuickForm_stylebutton(
+        $this->_elements[] = new HTML_QuickForm_button(
             'activate_' . $this->getName(), $translator->trans('AddToSelection', [], StringUtilities::LIBRARIES),
             ['id' => $activateButtonId, 'class' => 'btn-primary activate_elements form-control'], '',
             new FontAwesomeGlyph('arrow-alt-circle-right', [], null, 'fas')
         );
 
-        $this->_elements[] = new HTML_QuickForm_stylebutton(
+        $this->_elements[] = new HTML_QuickForm_button(
             'deactivate_' . $this->getName(), $translator->trans('RemoveFromSelection', [], StringUtilities::LIBRARIES),
             ['id' => $deactivateButtonId, 'class' => 'btn-danger deactivate_elements form-control'], '',
             new FontAwesomeGlyph('arrow-alt-circle-left', [], null, 'fas')

@@ -57,7 +57,7 @@ class AccountForm extends UserForm
         $requireOfficialCode = $this->getContainer()->getParameter('cosnics.application.user.require.officialCode');
 
         $this->buildPersonalDetailsCategoryForm(
-            true, $allowedToChangeFirstName, $allowedToChangeLastName, $allowedToChangeUsername, $requireEmail,
+            $allowedToChangeFirstName, $allowedToChangeLastName, $allowedToChangeUsername, $requireEmail,
             $allowedToChangeEmailAddress, $requireOfficialCode, $allowedToChangeOfficialCode
         );
 

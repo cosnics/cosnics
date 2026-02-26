@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element;
 
-use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use HTML_QuickForm;
 use HTML_QuickForm_file;
+use QuickformException;
+use ReflectionClass;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element
@@ -14,44 +14,66 @@ use HTML_QuickForm_file;
  */
 class HTML_QuickForm_stylefile extends HTML_QuickForm_file
 {
-    use DependencyInjectionContainerTrait;
+    protected ?string $instructions;
+
+    public function __construct(
+        ?string $elementName = null, ?string $elementLabel = null, array|string|null $attributes = null,
+        ?string $instructions = null
+    )
+    {
+        parent::__construct($elementName, $elementLabel, $attributes);
+        $this->instructions = $instructions;
+
+        $defaultAttributes = [];
+        $defaultAttributes[] = $this->getAttribute('class');
+        $defaultAttributes[] = 'form-control';
+
+        $this->setAttribute('class', implode(' ', $defaultAttributes));
+    }
+
+    public function onQuickFormEvent(string $event, mixed $arg, ?HTML_QuickForm $caller = null): bool
+    {
+        switch ($event) {
+            case 'updateValue':
+                if ($caller->getAttribute('method') == 'get') {
+                    throw new QuickformException('Cannot add a file upload field to a GET method form');
+                }
+
+                $values = [];
+                $this->_value = $this->_findValue($values);
+                $caller->updateAttributes(['enctype' => 'multipart/form-data']);
+                $caller->setMaxFileSize();
+                break;
+            case 'addElement':
+                $this->onQuickFormEvent('createElement', $arg, $caller);
+
+                return $this->onQuickFormEvent('updateValue', null, $caller);
+            case 'createElement':
+                $class = new ReflectionClass($this);
+                $parameters = $class->getConstructor()->getParameters();
+
+                foreach ($parameters as $key => $parameter) {
+                    $arg[$key] = is_null($arg[$key]) ?
+                        ($parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null) : $arg[$key];
+                }
+
+                static::__construct($arg[0], $arg[1], $arg[2], $arg[3]);
+                break;
+        }
+
+        return true;
+    }
 
     public function toHtml(): string
     {
-        if ($this->_flagFrozen) {
-            return $this->getFrozenHtml();
+        $html = [];
+
+        $html[] = parent::toHtml();
+
+        if ($this->instructions) {
+            $html[] = '<div class="form-text">' . $this->instructions . '</div>';
         }
-        else {
-            $glyph = new FontAwesomeGlyph('upload', [], null, 'fas');
 
-            $html = [];
-
-            $html[] = $this->_getTabs();
-
-            $html[] = '<div class="input-group">';
-
-            $html[] = '<span class="input-group-btn">';
-            $html[] = '<label class="btn btn-default">';
-            $html[] = $glyph->render();
-            $html[] = ' ';
-            $html[] = $this->getTranslator()->trans(
-                'ChooseFileInputLabel', [], StringUtilities::LIBRARIES
-            );
-            $html[] = ' ';
-
-            $this->setAttribute('style', 'display: none !important;');
-            $this->setAttribute('onchange', '$(\'#' . $this->getName() . '-info\').val(this.files[0].name)');
-
-            $html[] = '<input' . $this->_getAttrString($this->_attributes) . ' />';
-
-            $html[] = '</label>';
-            $html[] = '</span>';
-
-            $html[] = '<input type="text" id="' . $this->getName() . '-info" class="form-control" disabled />';
-
-            $html[] = '</div>';
-
-            return implode('', $html);
-        }
+        return implode(PHP_EOL, $html);
     }
 }

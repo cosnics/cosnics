@@ -1,15 +1,17 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Tab\Service;
 
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabNavigationInterface;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabNavigationRendererInterface;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabRendererInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Tab\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class LinkTabRenderer
+class LinkTabRenderer implements TabRendererInterface, TabNavigationRendererInterface
 {
     protected Translator $translator;
 
@@ -18,50 +20,29 @@ class LinkTabRenderer
         $this->translator = $translator;
     }
 
+    public function getTabType(): string
+    {
+        return LinkTab::class;
+    }
+
     public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
-    public function renderNavigation(LinkTab $tab): string
+    /**
+     * @param \Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab $tab
+     */
+    public function renderNavigation(TabNavigationInterface $tab, ?string $selectedTab = null): string
     {
-        $classes = [];
-
-        if ($tab->isSelected()) {
-            $classes[] = 'active';
-        }
-
-        $classes[] = 'pull-' . $tab->getPosition();
+        $isActive = $tab->getIdentifier() === $selectedTab;
 
         $html = [];
-        $html[] = '<li class="' . implode(' ', $classes) . '">';
 
-        $link = [];
-        $link[] = '<a';
-
-        if ($tab->getLink() && $tab->opensInWindow()) {
-            $link[] = 'href="' . $tab->getLink() . '"';
-
-            if ($tab->hasConfirmationMessage()) {
-                $link[] = 'onclick="return confirm(\'' . addslashes(
-                        htmlentities(
-                            $tab->getConfirmationMessage() === true ? $this->getTranslator()->trans(
-                                'Confirm', [], StringUtilities::LIBRARIES
-                            ) : $tab->getConfirmationMessage()
-                        )
-                    ) . '\');"';
-            }
-        }
-        elseif ($tab->getLink() && $tab->opensInPopup()) {
-            $link[] = 'href="" onclick="javascript:openPopup(\'' . $tab->getLink() . '\'); return false"';
-        }
-        else {
-            $link[] = 'style="cursor: default;"';
-        }
-
-        $link[] = '>';
-
-        $html[] = implode(' ', $link);
+        $html[] = '<li class="nav-item" role="presentation">';
+        $html[] = '<a href="' . $tab->getLink() . '" class="nav-link' . ($isActive ? ' active' : '') . '" id="' .
+            $tab->getIdentifier() . '-tab" data-bs-toggle="tab" data-bs-target="#' . $tab->getIdentifier() .
+            '" type="button" role="tab" aria-controls="' . $tab->getIdentifier() . '">';
 
         if ($tab->getInlineGlyph() && $tab->isIconVisible()) {
             $html[] = $tab->getInlineGlyph()->render();

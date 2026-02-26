@@ -8,7 +8,7 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedE
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylesubmitbutton;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_submit;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use HTML_QuickForm_Rule_Email;
@@ -114,7 +114,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
                 HTML_QuickForm_Rule_Email::class
             );
             $this->passwordResetForm->addElement(
-                HTML_QuickForm_stylesubmitbutton::class, 'submit',
+                HTML_QuickForm_button_submit::class, 'submit',
                 $translator->trans('Ok', [], StringUtilities::LIBRARIES)
             );
         }

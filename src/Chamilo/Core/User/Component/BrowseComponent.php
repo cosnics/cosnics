@@ -125,12 +125,6 @@ class BrowseComponent extends Manager
             $adminUserTableRenderer->determineOrderBy($tableParameterValues)
         );
 
-        $html = [];
-
-        $html[] = '<div style="float: right; width: 100%;">';
-        $html[] = $adminUserTableRenderer->render($tableParameterValues, $users);
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return $adminUserTableRenderer->render($tableParameterValues, $users);
     }
 }

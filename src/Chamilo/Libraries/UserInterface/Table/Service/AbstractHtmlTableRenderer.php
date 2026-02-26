@@ -394,9 +394,7 @@ abstract class AbstractHtmlTableRenderer
 
             $buttonToolBar->addButton($dropDownButton);
 
-            $html[] = '<div class="pull-right table-order-property">';
             $html[] = $this->getButtonToolBarRenderer()->render($buttonToolBar);
-            $html[] = '</div>';
         }
 
         return implode(PHP_EOL, $html);
@@ -416,16 +414,18 @@ abstract class AbstractHtmlTableRenderer
 
         if ($this->hasSortableColumns($tableColumns)) {
             foreach ($tableColumns as $index => $tableColumn) {
-                $propertyUrl = $this->getUrlGenerator()->fromRequest(
-                    [$parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX] => $index]
-                );
+                if ($tableColumn instanceof AbstractSortableTableColumn) {
+                    $propertyUrl = $this->getUrlGenerator()->fromRequest(
+                        [$parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX] => $index]
+                    );
 
-                $isSelected = $currentOrderColumnIndex == $index;
+                    $isSelected = $currentOrderColumnIndex == $index;
 
-                $subButtons[] = new SubButton(
-                    $this->getSecurity()->removeXSS($tableColumn->getTitle()), null, $propertyUrl,
-                    DisplayTypeEnum::LABEL, null, [], null, $isSelected
-                );
+                    $subButtons[] = new SubButton(
+                        $this->getSecurity()->removeXSS($tableColumn->getTitle()), null, $propertyUrl,
+                        DisplayTypeEnum::LABEL, null, [], null, $isSelected
+                    );
+                }
             }
         }
 
@@ -450,7 +450,7 @@ abstract class AbstractHtmlTableRenderer
         $html[] = $this->renderTableHeader($tableColumns, $tableName, $parameterNames, $parameterValues, $tableActions);
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="col-12">';
 
         $html[] = '<div class="' . $this->getTableContainerClasses() . '">';
         $html[] = $this->renderTableBody($htmlTable, $tableColumns, $tableRows, $tableActions);
@@ -497,25 +497,25 @@ abstract class AbstractHtmlTableRenderer
         $html[] = '<div class="row">';
 
         if ($hasFormActions) {
-            $html[] = '<div class="col-xs-12 col-md-6 table-navigation-actions">';
+            $html[] = '<div class="col-12 col-md-4">';
             $html[] = $this->renderActions($tableName, $tableActions);
             $html[] = '</div>';
         }
 
-        $classes = 'col-xs-12';
+        $classes = 'col-12';
 
         if ($hasFormActions) {
-            $classes .= ' col-md-6';
+            $classes .= ' col-md-8';
         }
 
-        $html[] = '<div class="' . $classes . ' table-navigation-pagination">';
+        $html[] = '<div class="' . $classes . '">';
         $html[] = $this->renderNavigation($parameterValues, $parameterNames);
         $html[] = '</div>';
 
         $html[] = '</div>';
 
         if ($hasFormActions) {
-            $html[] = '<input type="submit" name="Submit" value="Submit" style="display:none;" />';
+            $html[] = '<input class="d-none" type="submit" name="Submit" value="Submit" />';
             $html[] = '</form>';
             $html[] = $this->getTableActionsJavascript();
         }
@@ -537,8 +537,8 @@ abstract class AbstractHtmlTableRenderer
         $html = [];
 
         $html[] = $this->renderTableHeaderStart($tableName, $tableActions);
-        $html[] = $this->renderNumberOfItemsPerPageSelector($parameterValues, $parameterNames);
         $html[] = $this->renderPropertySorting($tableColumns, $parameterValues, $parameterNames);
+        $html[] = $this->renderNumberOfItemsPerPageSelector($parameterValues, $parameterNames);
         $html[] = $this->renderTableHeaderEnd();
 
         return implode(PHP_EOL, $html);
@@ -573,22 +573,12 @@ abstract class AbstractHtmlTableRenderer
                 '" name="form_' . $tableName . '">';
         }
 
-        $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12 col-md-6 table-navigation-actions">';
+        $html[] = '<div class="row mb-3">';
+        $html[] = '<div class="col-12 d-flex justify-content-between">';
 
         if ($hasFormActions) {
             $html[] = $this->renderActions($tableName, $tableActions);
         }
-
-        $html[] = '</div>';
-
-        $classes = 'col-xs-12';
-
-        if ($hasFormActions) {
-            $classes .= ' col-md-6';
-        }
-
-        $html[] = '<div class="' . $classes . ' table-navigation-search">';
 
         return implode(PHP_EOL, $html);
     }

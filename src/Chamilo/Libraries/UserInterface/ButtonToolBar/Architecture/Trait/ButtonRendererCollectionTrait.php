@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait;
 
 use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonRendererCollection;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonRendererRegistry;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -11,14 +11,14 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 trait ButtonRendererCollectionTrait
 {
-    protected ButtonRendererCollection $buttonRendererCollection;
+    protected ButtonRendererRegistry $buttonRendererCollection;
 
-    public function getButtonRendererCollection(): ButtonRendererCollection
+    public function getButtonRendererCollection(): ButtonRendererRegistry
     {
         return $this->buttonRendererCollection;
     }
 
-    public function setButtonRendererCollection(ButtonRendererCollection $buttonRendererCollection): static
+    public function setButtonRendererCollection(ButtonRendererRegistry $buttonRendererCollection): static
     {
         $this->buttonRendererCollection = $buttonRendererCollection;
 

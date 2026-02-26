@@ -22,6 +22,11 @@ trait ButtonRendererDisplayTrait
         $displayLabel = $button->getDisplay() != DisplayTypeEnum::ICON && $button->getLabel();
         $displayIcon = $button->getDisplay() != DisplayTypeEnum::LABEL && $button->getInlineGlyph();
 
+        if($displayIcon && $displayLabel)
+        {
+            $button->getInlineGlyph()->addExtraClasses(['me-2']);
+        }
+
         if ($displayIcon) {
             $html[] = $button->getInlineGlyph()->render();
         }

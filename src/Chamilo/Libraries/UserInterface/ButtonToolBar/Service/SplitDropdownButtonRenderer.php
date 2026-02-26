@@ -47,13 +47,11 @@ class SplitDropdownButtonRenderer extends AbstractButtonCollectionButtonRenderer
     {
         $html = [];
 
-        $html[] = '<a';
-        $html[] = 'class="' .
+        $html[] = '<a class="' .
             $this->renderClasses($splitDropDownButton, $this->getDefaultButtonClasses([static::DROPDOWN_CLASS])) . '"';
         $html[] = static::DROPDOWN_TOGGLE_ATTRIBUTES;
         $html[] = '>';
-        $html[] = $this->renderCaret();
-        $html[] = '<span class="sr-only"></span>';
+        $html[] = '<span class="visually-hidden">Toggle Dropdown</span>';
         $html[] = '</a>';
 
         $html[] = $this->renderDropDownButtons($splitDropDownButton);

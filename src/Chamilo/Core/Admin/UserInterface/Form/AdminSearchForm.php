@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Admin\UserInterface\Form;
 
 use Chamilo\Core\Admin\Manager;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylesubmitbutton;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_submit;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use HTML_QuickForm_html;
@@ -52,7 +52,7 @@ class AdminSearchForm extends FormValidator
         $this->addElement(HTML_QuickForm_html::class, '<span class="input-group-btn">');
 
         $this->addElement(
-            HTML_QuickForm_stylesubmitbutton::class, 'submit',
+            HTML_QuickForm_button_submit::class, 'submit',
             $this->getTranslator()->trans('Search', [], Manager::CONTEXT), null, null, new FontAwesomeGlyph('search')
         );
 

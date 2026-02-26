@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\UserInterface\Form;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_extended_checkbox;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_checkbox;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use HTML_QuickForm_static;
 
@@ -60,7 +60,7 @@ class AvailabilityForm extends FormValidator
             foreach ($ownedCalendars as $ownedCalendar)
             {
                 $calendarElements[] = $this->createElement(
-                    HTML_QuickForm_extended_checkbox::class,
+                    HTML_QuickForm_checkbox::class,
                     AvailabilityService::PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
                     $ownedCalendar->getIdentifier() . '][' . AvailabilityService::PROPERTY_AVAILABLE . ']', null,
                     $ownedCalendar->getName(), null, 1, 0

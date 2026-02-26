@@ -113,7 +113,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $glyph = new FontAwesomeGlyph('calendar-alt');
 
         $popupLink =
-            '<a class="btn btn-default" href="javascript:openCalendar(\'' . $jsFormName . '\',\'' . $elementName .
+            '<a class="btn btn-light" href="javascript:openCalendar(\'' . $jsFormName . '\',\'' . $elementName .
             '\')">' . $glyph->render() . '</a>';
         $specialCharacters = ['D', 'l', 'd', 'M', 'F', 'm', 'y', 'H', 'a', 'A', 's', 'i', 'h', 'g', 'W', '.', ' '];
 

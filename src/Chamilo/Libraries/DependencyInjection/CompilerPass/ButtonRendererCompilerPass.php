@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection\CompilerPass;
 
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonRendererCollection;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonRendererRegistry;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,9 +15,9 @@ class ButtonRendererCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if ($container->hasDefinition(ButtonRendererCollection::class)) {
+        if ($container->hasDefinition(ButtonRendererRegistry::class)) {
             $taggedServices = $container->findTaggedServiceIds(ButtonRendererInterface::class);
-            $definition = $container->getDefinition(ButtonRendererCollection::class);
+            $definition = $container->getDefinition(ButtonRendererRegistry::class);
 
             foreach ($taggedServices as $taggedServiceId => $tags) {
                 $definition->addMethodCall('addButtonRenderer', [new Reference($taggedServiceId)]);

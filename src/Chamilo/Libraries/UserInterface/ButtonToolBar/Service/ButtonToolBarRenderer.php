@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Service;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonRendererCollection;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonRendererRegistry;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait\ButtonRendererClassesTrait;
@@ -23,7 +23,7 @@ class ButtonToolBarRenderer extends AbstractButtonCollectionButtonRenderer imple
     protected SearchQueryConditionGenerator $searchQueryConditionGenerator;
 
     public function __construct(
-        SearchQueryConditionGenerator $searchQueryConditionGenerator, ButtonRendererCollection $buttonRendererCollection
+        SearchQueryConditionGenerator $searchQueryConditionGenerator, ButtonRendererRegistry $buttonRendererCollection
     )
     {
         $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
@@ -40,7 +40,8 @@ class ButtonToolBarRenderer extends AbstractButtonCollectionButtonRenderer imple
         $html = [];
 
         $html[] = '<div';
-        $html[] = 'class="' . $this->renderClasses($buttonToolBar, ['btn-toolbar', 'btn-action-toolbar']) . '">';
+        $html[] = 'class="' . $this->renderClasses($buttonToolBar, ['btn-toolbar'], ['justify-content-between']) .
+            '" role="toolbar">';
 
         foreach ($buttonToolBar->getButtons() as $button) {
             $html[] =

@@ -20,9 +20,9 @@ class ActionRenderer
             $onclick = '';
         }
 
-        $html[] = '<div class="list-group-item vertical-action">';
+        $html[] = '<li class="list-group-item vertical-action clearfix">';
 
-        $html[] = '<div class="pull-left icon">';
+        $html[] = '<div class="float-start my-2 me-3">';
         $html[] = '<a href="' . $action->getUrl() . '" ' . $onclick . '>';
 
         $html[] = $action->getInlineGlyph()->render();
@@ -30,18 +30,17 @@ class ActionRenderer
         $html[] = '</a>';
         $html[] = '</div>';
 
-        $html[] = '<div class="pull-left">';
+        $html[] = '<div class="float-start">';
 
         if ($action->getTitle()) {
             $html[] = '<h5 class="list-group-item-heading"><a href="' . $action->getUrl() . '" ' . $onclick . '>' .
                 $action->getTitle() . '</a></h5>';
         }
 
-        $html[] = '<p class="list-group-item-text">' . $action->getContent() . '</p>';
+        $html[] = '<p>' . $action->getContent() . '</p>';
         $html[] = '</div>';
 
-        $html[] = '<div class="clearfix"></div>';
-        $html[] = '</div>';
+        $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
     }

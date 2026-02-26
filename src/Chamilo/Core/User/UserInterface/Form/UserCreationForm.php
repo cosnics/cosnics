@@ -18,7 +18,7 @@ class UserCreationForm extends UserForm
         $requireEmail = $this->getContainer()->getParameter('cosnics.application.user.require.email');
         $requireOfficialCode = $this->getContainer()->getParameter('cosnics.application.user.require.officialCode');
 
-        $this->buildPersonalDetailsCategoryForm(true, true, true, true, $requireEmail, true, $requireOfficialCode);
+        $this->buildPersonalDetailsCategoryForm(true, true, true, $requireEmail, true, $requireOfficialCode);
         $this->buildPasswordCategoryForm();
         $this->buildPictureCategoryForm();
         $this->buildAccountCategoryForm();

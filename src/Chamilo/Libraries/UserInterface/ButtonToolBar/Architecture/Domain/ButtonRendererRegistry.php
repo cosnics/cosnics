@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @package Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ButtonRendererCollection extends ArrayCollection
+class ButtonRendererRegistry extends ArrayCollection
 {
     public function addButtonRenderer(ButtonRendererInterface $buttonRenderer): void
     {

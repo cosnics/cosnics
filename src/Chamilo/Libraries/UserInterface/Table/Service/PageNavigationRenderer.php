@@ -5,7 +5,6 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
@@ -94,17 +93,17 @@ class PageNavigationRenderer
     {
         $html = [];
 
-        $html[] = '<li' . ($isDisabled ? ' class="disabled"' : '') . '>';
-        $symbolHtml = '<span aria-hidden="true">' . $inlineGlyph->render() . '</span>';
+        $html[] = '<li class="page-item' . ($isDisabled ? ' disabled' : '') . '">';
+        $html[] = '<a class="page-link" aria-label="' . $translation . '"';
 
-        if ($isDisabled) {
-            $html[] = $symbolHtml;
+        if (!$isDisabled) {
+            $html[] =
+                ' href="' . $this->getUrlGenerator()->fromRequest([$pageNumberParameterName => $targetPage]) . '"';
         }
-        else {
-            $html[] = '<a href="' . $this->getUrlGenerator()->fromRequest([$pageNumberParameterName => $targetPage]) .
-                '" aria-label="' . $translation . '">' . $symbolHtml . '</a>';
-        }
+        $html[] = '>';
 
+        $html[] = '<span aria-hidden="true">' . $inlineGlyph->render() . '</span>';
+        $html[] = '</a>';
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
@@ -121,8 +120,6 @@ class PageNavigationRenderer
     ): string
     {
         $buttonToolBar = new ButtonToolBar();
-        $buttonGroup = new ButtonGroup();
-        $buttonToolBar->addButton($buttonGroup);
         $translator = $this->getTranslator();
 
         $defaultTranslationVariables[Application::PARAM_CONTEXT] = StringUtilities::LIBRARIES;
@@ -149,7 +146,7 @@ class PageNavigationRenderer
 
         $dropDownButton = new DropDownButtonCollection($dropDownButtonLabel, null, DisplayTypeEnum::LABEL, ['btn-sm'],
             ['dropdown-menu-right']);
-        $buttonGroup->addButton($dropDownButton);
+        $buttonToolBar->addButton($dropDownButton);
 
         for (
             $nr = PageNavigationCalculator::DISPLAY_PER_INCREMENT;
@@ -185,13 +182,7 @@ class PageNavigationRenderer
             );
         }
 
-        $html = [];
-
-        $html[] = '<div class="pull-right">';
-        $html[] = $this->getButtonToolBarRenderer()->render($buttonToolBar);
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return $this->getButtonToolBarRenderer()->render($buttonToolBar);
     }
 
     /**
@@ -219,8 +210,7 @@ class PageNavigationRenderer
 
         $html = [];
 
-        $html[] = '<nav class="pull-right">';
-        $html[] = '<ul class="pagination">';
+        $html[] = '<ul class="pagination pagination-sm float-end">';
 
         if ($numberOfPages > 1) {
             $currentPageNumber = $parameterValues->getPageNumber();
@@ -238,7 +228,8 @@ class PageNavigationRenderer
             );
 
             for ($i = $start; $i <= $end; $i ++) {
-                $html[] = '<li' . ($currentPageNumber == $i ? ' class="active"' : '') . '><a href="' .
+                $html[] = '<li class="page-item' . ($currentPageNumber == $i ? ' active' : '') .
+                    '"><a class="page-link" href="' .
                     $this->getUrlGenerator()->fromRequest([$pageNumberParameterName => $i]) . '">' . $i . '</a></li>';
             }
 
@@ -256,15 +247,14 @@ class PageNavigationRenderer
         }
 
         if ($includeRange) {
-            $html[] = '<li class="disabled">';
-            $html[] = '<span>';
+            $html[] = '<li class="page-item">';
+            $html[] = '<a class="page-link">';
             $html[] = $this->renderCurrentRange($parameterValues);
-            $html[] = '</span>';
+            $html[] = '</a>';
             $html[] = '</li>';
         }
 
         $html[] = '</ul>';
-        $html[] = '</nav>';
 
         return implode(PHP_EOL, $html);
     }

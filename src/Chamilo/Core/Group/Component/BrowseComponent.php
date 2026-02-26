@@ -383,10 +383,10 @@ class BrowseComponent extends Manager
         $html = [];
 
         $html[] = parent::renderHeader();
-        $html[] = '<div class="col-xs-12 col-md-4 col-lg-3">';
+        $html[] = '<div class="col-12 col-md-4 col-lg-3">';
         $html[] = $this->renderMenu();
         $html[] = '</div>';
-        $html[] = '<div class="col-xs-12 col-md-8 col-lg-9">';
+        $html[] = '<div class="col-12 col-md-8 col-lg-9">';
 
         return implode(PHP_EOL, $html);
     }

@@ -67,10 +67,6 @@ tfoot {
     display: table-footer-group
 }
 
-.btn-action-toolbar, nav, .breadcrumb, .footer, .warning-emulator {
-    display: none !important;
-}
-
 .table-calendar-main {
     clear: both;
     width: 100%;

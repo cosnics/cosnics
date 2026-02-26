@@ -4,8 +4,8 @@ namespace Chamilo\Core\User\UserInterface\Form;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_category;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_styleresetbutton;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylesubmitbutton;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_reset;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_submit;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use HTML_QuickForm_Rule_Required;
@@ -49,11 +49,11 @@ class EmailForm extends FormValidator
         );
 
         $buttons[] = $this->createElement(
-            HTML_QuickForm_stylesubmitbutton::class, 'submit', $translator->trans('Email', [], Manager::CONTEXT), null,
+            HTML_QuickForm_button_submit::class, 'submit', $translator->trans('Email', [], Manager::CONTEXT), null,
             null, new FontAwesomeGlyph('arrow-right')
         );
         $buttons[] = $this->createElement(
-            HTML_QuickForm_styleresetbutton::class, 'reset', $translator->trans('Reset', [], StringUtilities::LIBRARIES)
+            HTML_QuickForm_button_reset::class, 'reset', $translator->trans('Reset', [], StringUtilities::LIBRARIES)
         );
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

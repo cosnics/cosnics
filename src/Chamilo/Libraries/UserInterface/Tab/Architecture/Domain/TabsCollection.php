@@ -27,17 +27,6 @@ class TabsCollection extends ArrayCollection
         return $this->count() == 1;
     }
 
-    public function isValidIdentifier(string $tabIdentifierToValidate): bool
-    {
-        foreach ($this->toArray() as $tab) {
-            if ($tab->getIdentifier() == $tabIdentifierToValidate) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public function sortByLabel(): static
     {
         $tabs = $this->toArray();

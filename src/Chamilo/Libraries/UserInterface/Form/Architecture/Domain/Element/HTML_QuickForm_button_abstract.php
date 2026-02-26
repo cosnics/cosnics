@@ -11,7 +11,7 @@ use HTML_QuickForm_element;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
+class HTML_QuickForm_button_abstract extends HTML_QuickForm_element
 {
     private ?InlineGlyph $glyph;
 
@@ -26,7 +26,6 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
 
         $defaultAttributes = [];
         $defaultAttributes[] = 'btn';
-        $defaultAttributes[] = 'btn-default';
         $defaultAttributes[] = $this->getAttribute('class');
 
         $this->setAttribute('class', implode(' ', $defaultAttributes));
@@ -42,16 +41,12 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
         }
     }
 
+    /**
+     * Returns a 'safe' element's value
+     */
     public function exportValue(array &$submitValues, bool $assoc = false): mixed
     {
-        $type = $this->getType();
-
-        if ('reset' == $type || 'button' == $type) {
-            return null;
-        }
-        else {
-            return parent::exportValue($submitValues, $assoc);
-        }
+        return $this->_prepareValue($this->_findValue($submitValues), $assoc);
     }
 
     public function getFrozenHtml(): string
@@ -138,9 +133,12 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
 
             $html[] = $this->_getTabs() . '<button' . $this->_getAttrString($this->_attributes) . ' >';
 
+            if ($this->getGlyph() && $this->getStyleButtonLabel()) {
+                $this->getGlyph()->addExtraClasses(['me-1']);
+            }
+
             if ($this->getGlyph()) {
-                $html[] =
-                    $this->_getTabs() . $this->getGlyph()->render() . ($this->getStyleButtonLabel() ? '&nbsp;' : '');
+                $html[] = $this->_getTabs() . $this->getGlyph()->render();
             }
 
             if ($this->getStyleButtonLabel()) {

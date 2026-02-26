@@ -26,19 +26,27 @@ class ActionsTabRenderer implements TabRendererInterface, TabNavigationRendererI
         return $this->actionRenderer;
     }
 
-    public function renderContent(ActionsTab $tab): string
+    public function getTabType(): string
     {
+        return ActionsTab::class;
+    }
+
+    public function renderContent(ActionsTab $tab, ?string $selectedTab = null): string
+    {
+        $isActive = $tab->getIdentifier() === $selectedTab;
+
         $html = [];
 
-        $html[] = '<div role="tabpanel" class="tab-pane clearfix" id="' . $tab->getIdentifier() .
-            '" role="tabpanel" aria-labelledby="' . $tab->getIdentifier() . '-tab" tabindex="0">';
-        $html[] = '<div class="list-group">';
+        $html[] = '<div role="tabpanel" class="tab-pane' . ($isActive ? ' active' : '') . ' clearfix" id="' .
+            $tab->getIdentifier() . '" role="tabpanel" aria-labelledby="' . $tab->getIdentifier() .
+            '-tab" tabindex="0">';
+        $html[] = '<ul class="list-group">';
 
         foreach ($tab->getActions() as $action) {
             $html[] = $this->getActionRenderer()->render($action);
         }
 
-        $html[] = '</div>';
+        $html[] = '</ul>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

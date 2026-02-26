@@ -5,9 +5,8 @@ use Chamilo\Core\Admin\Architecture\Domain\SettingsConnectorRegistry;
 use Chamilo\Core\Admin\Architecture\Interface\SettingsConnectorInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_bootstrap_radio;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_extended_checkbox;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_toggle;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_radio;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_checkbox;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use DOMDocument;
 use HTML_QuickForm_html;
@@ -129,14 +128,12 @@ class ConfigurationForm extends FormValidator
                             $options = $setting['options']['values'];
                         }
 
-                        if ($setting['field'] == HTML_QuickForm_bootstrap_radio::class ||
-                            $setting['field'] == HTML_QuickForm_extended_checkbox::class ||
-                            $setting['field'] == HTML_QuickForm_toggle::class) {
+                        if ($setting['field'] == HTML_QuickForm_button_radio::class ||
+                            $setting['field'] == HTML_QuickForm_checkbox::class) {
                             $group = [];
 
                             foreach ($options as $optionValue => $optionName) {
-                                if ($setting['field'] == HTML_QuickForm_extended_checkbox::class ||
-                                    $setting['field'] == HTML_QuickForm_toggle::class) {
+                                if ($setting['field'] == HTML_QuickForm_checkbox::class) {
                                     $group[] = $this->createElement(
                                         $setting['field'], $name, null, null, $optionValue
                                     );

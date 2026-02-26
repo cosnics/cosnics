@@ -17,9 +17,8 @@ class SubButtonDividerRenderer implements ButtonRendererInterface
     {
         $html = [];
 
-        $html[] = '<li';
-        $html[] = 'role="separator"';
-        $html[] = 'class="' . $this->renderClasses($subButtonDivider, ['divider']) . '">';
+        $html[] = '<li>';
+        $html[] = '<hr class="' . $this->renderClasses($subButtonDivider, ['divider']) . '">';
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);

@@ -1,7 +1,8 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Chamilo\Core\Home\UserInterface\HomeRenderer\TabRenderer;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabRendererRegistry;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabRendererInterface;
 use Chamilo\Libraries\UserInterface\Tab\Service\ActionRenderer;
 use Chamilo\Libraries\UserInterface\Tab\Service\ActionsTabRenderer;
 use Chamilo\Libraries\UserInterface\Tab\Service\ContentTabRenderer;
@@ -16,14 +17,14 @@ return static function (ContainerConfigurator $container) {
     $services = $container->services();
     $services->defaults()->public()->autowire()->autoconfigure();
 
+    $services->set(TabRendererRegistry::class);
     $services->set(FormTabGenerator::class);
     $services->set(FormTabsGenerator::class);
-    $services->set(LinkTabRenderer::class);
+    $services->set(LinkTabRenderer::class)->tag(TabRendererInterface::class);
     $services->set(LinkTabsRenderer::class);
     $services->set(ActionRenderer::class);
-    $services->set(ActionsTabRenderer::class);
-    $services->set(ContentTabRenderer::class);
+    $services->set(ActionsTabRenderer::class)->tag(TabRendererInterface::class);
+    $services->set(ContentTabRenderer::class)->tag(TabRendererInterface::class);
     $services->set(GenericTabRenderer::class);
-    $services->set(TabRenderer::class);
     $services->set(TabsRenderer::class);
 };

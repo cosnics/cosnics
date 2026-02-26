@@ -50,23 +50,23 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
     {
         $html = [];
 
-        $html[] = '<div class="col-xs-12 col-lg-9 table-calendar-main">';
+        $html[] = '<div class="col-12 col-lg-9 table-calendar-main">';
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12 col-lg-4">';
-        $html[] = '<div class="pull-left">';
+        $html[] = '<div class="col-12 col-lg-4">';
+        $html[] = '<div class="float-start">';
         $html[] = $this->renderNavigation($displayParameters, $displayTime);
         $html[] = '</div>';
 
-        $html[] = '<div class="table-calendar-current-time pull-left">';
+        $html[] = '<div class="table-calendar-current-time float-start">';
         $html[] = '<h4>';
         $html[] = $this->renderTitle($displayTime);
         $html[] = '</h4>';
         $html[] = '</div>';
         $html[] = '</div>';
 
-        $html[] = '<div class="col-xs-12 col-lg-8">';
-        $html[] = '<div class="pull-right">';
+        $html[] = '<div class="col-12 col-lg-8">';
+        $html[] = '<div class="float-end">';
         $html[] = $this->renderViewActions($displayParameters, $viewActions);
         $html[] = '</div>';
         $html[] = '</div>';
@@ -77,7 +77,7 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
         );
         $html[] = '</div>';
 
-        $html[] = '<div class="col-xs-12 col-lg-3 table-calendar-sidebar">';
+        $html[] = '<div class="col-12 col-lg-3 table-calendar-sidebar">';
         $html[] = $this->renderMiniMonth(
             $events, $displayParameters, $displayTime, $viewActions, $invisibleSources, $invisibilityContext
         );

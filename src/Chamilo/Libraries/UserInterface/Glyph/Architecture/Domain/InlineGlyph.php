@@ -32,6 +32,17 @@ abstract class InlineGlyph
         return '<span class="' . $this->getClassNamesString() . '"' . $title . '></span>';
     }
 
+    public function addExtraClasses(array $extraClasses): static
+    {
+        foreach ($extraClasses as $extraClass) {
+            if (!in_array($extraClass, $this->extraClasses)) {
+                $this->extraClasses[] = $extraClass;
+            }
+        }
+
+        return $this;
+    }
+
     /**
      * @return string[]
      */

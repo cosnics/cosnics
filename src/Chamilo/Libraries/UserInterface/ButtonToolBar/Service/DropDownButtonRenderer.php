@@ -24,7 +24,7 @@ class DropDownButtonRenderer extends AbstractButtonCollectionButtonRenderer
     {
         $html = [];
 
-        $html[] = '<div class="btn-group">';
+        $html[] = '<div class="dropdown">';
         $html[] = $this->renderLink($dropDownButton);
         $html[] = $this->renderDropDownButtons($dropDownButton);
         $html[] = '</div>';
@@ -48,7 +48,6 @@ class DropDownButtonRenderer extends AbstractButtonCollectionButtonRenderer
         $html[] = 'title="' . $this->getTitle($dropDownButton) . '"';
         $html[] = '>';
         $html[] = $this->renderInlineGlyphAndLabel($dropDownButton);
-        $html[] = $this->renderCaret();
         $html[] = '</a>';
 
         return implode(PHP_EOL, $html);

@@ -21,8 +21,8 @@ class SubButtonHeaderRenderer implements ButtonRendererInterface, ButtonRenderer
         $html = [];
 
         $html[] = '<li';
-        $html[] = 'class="' . $this->renderClasses($button, ['dropdown-header']) . '">';
-        $html[] = 'title="' . $this->getTitle($button) . '"';
+        $html[] = 'class="' . $this->renderClasses($button, ['dropdown-header']) . '"';
+        $html[] = 'title="' . $this->getTitle($button) . '">';
         $html[] = $this->renderInlineGlyphAndLabel($button);
         $html[] = '</li>';
 

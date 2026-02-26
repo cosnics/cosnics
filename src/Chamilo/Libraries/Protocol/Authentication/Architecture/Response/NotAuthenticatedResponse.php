@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Protocol\Authentication\Architecture\Response;
 
 use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylesubmitbutton;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_submit;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Layout\Service\BaseFooterRenderer;
@@ -86,7 +86,7 @@ class NotAuthenticatedResponse extends Response
 
         $form->addElement(HTML_QuickForm_html::class, '<div class="form-group text-right">');
         $form->addElement(
-            HTML_QuickForm_stylesubmitbutton::class, 'submitAuth',
+            HTML_QuickForm_button_submit::class, 'submitAuth',
             $translator->trans('Login', [], StringUtilities::LIBRARIES), null, null, new FontAwesomeGlyph('sign-in-alt')
         );
         $form->addElement(HTML_QuickForm_html::class, '</div>');
@@ -122,9 +122,9 @@ class NotAuthenticatedResponse extends Response
 
         $html[] = '<div class="row">';
 
-        $html[] = '<div class="col-xs-12 col-md-2 col-lg-3"></div>';
+        $html[] = '<div class="col-12 col-md-2 col-lg-3"></div>';
 
-        $html[] = '<div class="col-xs-12 col-md-8 col-lg-6">';
+        $html[] = '<div class="col-12 col-md-8 col-lg-6">';
         $html[] = '<div class="panel panel-danger">';
         $html[] = '<div class="panel-heading">';
         $html[] = $this->getTranslator()->trans('NotAuthenticated', [], StringUtilities::LIBRARIES);
@@ -135,7 +135,7 @@ class NotAuthenticatedResponse extends Response
         $html[] = '</div>';
         $html[] = '</div>';
 
-        $html[] = '<div class="col-xs-12 col-md-2 col-lg-3"></div>';
+        $html[] = '<div class="col-12 col-md-2 col-lg-3"></div>';
 
         $html[] = '</div>';
 

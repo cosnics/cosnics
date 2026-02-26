@@ -4,7 +4,6 @@ namespace Chamilo\Core\User\UserInterface\Form;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_category;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_extended_checkbox;
 use HTML_QuickForm_Rule_Required;
 use HTML_QuickForm_textarea;
 
@@ -38,9 +37,8 @@ class RegisterForm extends UserForm
                 $translator->trans('TermsAndConditions', [], Manager::CONTEXT),
                 ['cols' => 80, 'rows' => 10, 'disabled' => 'disabled', 'style' => 'background-color: white;']
             );
-            $this->addElement(
-                HTML_QuickForm_extended_checkbox::class, self::PROPERTY_ACCEPT_CONDITIONS, '',
-                $translator->trans('IAccept', [], Manager::CONTEXT)
+            $this->addCheckbox(
+                self::PROPERTY_ACCEPT_CONDITIONS, $translator->trans('IAccept', [], Manager::CONTEXT)
             );
             $this->addRule(
                 self::PROPERTY_ACCEPT_CONDITIONS,
@@ -58,7 +56,7 @@ class RegisterForm extends UserForm
         $requireEmail = $this->getContainer()->getParameter('cosnics.application.user.require.email');
         $requireOfficialCode = $this->getContainer()->getParameter('cosnics.application.user.require.officialCode');
 
-        $this->buildPersonalDetailsCategoryForm(true, true, true, true, $requireEmail, true, $requireOfficialCode);
+        $this->buildPersonalDetailsCategoryForm(true, true, true, $requireEmail, true, $requireOfficialCode);
         $this->buildPasswordCategoryForm();
         $this->buildPictureCategoryForm();
         $this->buildConditionsCategoryForm();

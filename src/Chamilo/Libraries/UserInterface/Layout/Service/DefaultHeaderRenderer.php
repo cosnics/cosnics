@@ -40,7 +40,7 @@ class DefaultHeaderRenderer
         $html[] = '<main class="container-xxl">';
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-sm-12 clearfix">';
+        $html[] = '<div class="col-12 clearfix">';
         $html[] = $this->renderPageTitle();
 
         $html[] = $this->getNotificationMessageManager()->renderMessages();

@@ -1,7 +1,7 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonRendererCollection;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonRendererRegistry;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonGroupRenderer;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonRenderer;
@@ -17,7 +17,7 @@ return static function (ContainerConfigurator $container) {
     $services = $container->services();
     $services->defaults()->public()->autowire()->autoconfigure();
 
-    $services->set(ButtonRendererCollection::class);
+    $services->set(ButtonRendererRegistry::class);
     $services->set(ButtonToolBarRenderer::class);
     $services->set(MiniButtonToolBarRenderer::class);
     $services->set(ButtonGroupRenderer::class)->tag(ButtonRendererInterface::class);

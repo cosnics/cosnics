@@ -38,7 +38,7 @@ class ColumnRenderer
     {
         $html = [];
 
-        $html[] = '<div class="col-xs-12 col-md-' . $column->getWidth() . ' " data-tab-id="' . $column->getParentId() .
+        $html[] = '<div class="col-12 col-md-' . $column->getWidth() . ' " data-tab-id="' . $column->getParentId() .
             '" data-element-id="' . $column->getId() . '" data-element-width="' . $column->getWidth() . '">';
 
         $blocks = $this->getHomeService()->findElementsByTypeAndParentIdentifier(

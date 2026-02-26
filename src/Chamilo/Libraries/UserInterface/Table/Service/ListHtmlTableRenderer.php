@@ -59,7 +59,7 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
 
     public function getTableClasses(): string
     {
-        return 'table table-striped table-bordered table-hover table-data';
+        return 'table table-striped table-bordered table-hover';
     }
 
     public function getTableContainerClasses(): string

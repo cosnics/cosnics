@@ -5,7 +5,7 @@ use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylesubmitbutton;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_submit;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use HTML_QuickForm_html;
 use HTML_QuickForm_select;
@@ -91,7 +91,7 @@ class ViewLogsComponent extends Manager
         $form->addElement(HTML_QuickForm_select::class, 'line_count', '', $lines);
 
         $form->addElement(
-            HTML_QuickForm_stylesubmitbutton::class, 'submit', $translator->trans('Ok', [], StringUtilities::LIBRARIES),
+            HTML_QuickForm_button_submit::class, 'submit', $translator->trans('Ok', [], StringUtilities::LIBRARIES),
             ['class' => 'positive finish']
         );
         $form->addElement(
@@ -109,7 +109,7 @@ class ViewLogsComponent extends Manager
     public function displayLogfileTable(string $logFile, int $lineCount): string
     {
         $translator = $this->getTranslator();
-        $table = new HTML_Table(['class' => 'table table-striped table-bordered table-hover table-data']);
+        $table = new HTML_Table(['class' => 'table table-striped table-bordered table-hover']);
 
         $phpErrorLogPath = ini_get('error_log');
         $phpErrorFileName = basename($phpErrorLogPath);

@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Form;
 
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_stylebutton;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use HTML_QuickForm_html;
@@ -58,20 +58,18 @@ class ButtonSearchForm extends FormValidator
     {
         $this->renderer->setFormTemplate('<form {attributes}>{content}</form>');
 
-        $this->addElement(HTML_QuickForm_html::class, '<div class="action-bar input-group pull-right">');
+        $this->addElement(HTML_QuickForm_html::class, '<div class="input-group">');
 
         $this->addElement(
             HTML_QuickForm_text::class, self::PARAM_SIMPLE_SEARCH_QUERY,
             $this->getTranslator()->trans('Search', [], StringUtilities::LIBRARIES),
-            ['class' => 'form-group form-control action-bar-search']
+            ['class' => 'form-control action-bar-search']
         );
 
         $this->renderer->setElementTemplate('{element} ', self::PARAM_SIMPLE_SEARCH_QUERY);
 
-        $this->addElement(HTML_QuickForm_html::class, '<div class="input-group-btn">');
-
         $this->addElement(
-            HTML_QuickForm_stylebutton::class, 'submit', null, null, 'submit', new FontAwesomeGlyph('search')
+            HTML_QuickForm_button::class, 'submit', null, null, 'submit', new FontAwesomeGlyph('search')
         );
 
         $buttonElementTemplate = '{element}';
@@ -80,12 +78,11 @@ class ButtonSearchForm extends FormValidator
 
         if ($this->getQuery()) {
             $this->addElement(
-                HTML_QuickForm_stylebutton::class, 'clear', null, null, 'clear', new FontAwesomeGlyph('times')
+                HTML_QuickForm_button::class, 'clear', null, null, 'clear', new FontAwesomeGlyph('times')
             );
             $this->renderer->setElementTemplate($buttonElementTemplate, 'clear');
         }
 
-        $this->addElement(HTML_QuickForm_html::class, '</div>');
         $this->addElement(HTML_QuickForm_html::class, '</div>');
     }
 

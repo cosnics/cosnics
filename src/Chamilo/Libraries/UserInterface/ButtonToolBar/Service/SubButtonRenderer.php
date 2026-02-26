@@ -24,8 +24,15 @@ class SubButtonRenderer
     {
         $html = [];
 
-        $html[] = '<li' . ($button->getState() ? ' class="active"' : '') . '>';
-        $html[] = $this->renderLink($button);
+        $html[] = '<li>';
+
+        $linkClasses = ['dropdown-item'];
+
+        if ($button->getState()) {
+            $linkClasses[] = 'active';
+        }
+
+        $html[] = $this->renderLink($button, [], $linkClasses);
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);

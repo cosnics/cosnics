@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Tab\Service;
 
-use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ActionsTab;
-use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ContentTab;
+use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabRendererRegistry;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 
 /**
@@ -17,13 +17,17 @@ class TabsRenderer
 
     protected GenericTabRenderer $genericTabRenderer;
 
+    protected TabRendererRegistry $tabRendererRegistry;
+
     public function __construct(
-        ContentTabRenderer $contentTabRenderer, ActionsTabRenderer $actionsTabRenderer, GenericTabRenderer $tabRenderer
+        TabRendererRegistry $tabRendererRegistry, ContentTabRenderer $contentTabRenderer,
+        ActionsTabRenderer $actionsTabRenderer, GenericTabRenderer $tabRenderer
     )
     {
         $this->contentTabRenderer = $contentTabRenderer;
         $this->actionsTabRenderer = $actionsTabRenderer;
         $this->genericTabRenderer = $tabRenderer;
+        $this->tabRendererRegistry = $tabRendererRegistry;
     }
 
     /**
@@ -57,18 +61,21 @@ class TabsRenderer
         return $this->genericTabRenderer;
     }
 
-    protected function renderContent( TabsCollection $tabs): string
+    public function getTabRendererRegistry(): TabRendererRegistry
+    {
+        return $this->tabRendererRegistry;
+    }
+
+    protected function renderContent(TabsCollection $tabs, ?string $selectedTab = null): string
     {
         $html = [];
 
         foreach ($tabs as $tab) {
-            switch (get_class($tab)) {
-                case ContentTab::class:
-                    $html[] = $this->getContentTabRenderer()->renderContent($tab);
-                    break;
-                case ActionsTab::class:
-                    $html[] = $this->getActionsTabRenderer()->renderContent($tab);
-                    break;
+            try {
+                $tabRenderer = $this->tabRendererRegistry->getTabRendererForTab($tab);
+                $html[] = $tabRenderer->renderContent($tab, $selectedTab);
+            }
+            catch (ClassNotExistException) {
             }
         }
 
@@ -90,7 +97,12 @@ class TabsRenderer
         $html[] = '<ul class="nav nav-tabs"  id="' . $name . 'Tabs" role="tablist">';
 
         foreach ($tabs as $tab) {
-            $html[] = $this->getGenericTabRenderer()->renderNavigation($tab, $selectedTab);
+            try {
+                $tabRenderer = $this->tabRendererRegistry->getTabRendererForTab($tab);
+                $html[] = $tabRenderer->renderNavigation($tab, $selectedTab);
+            }
+            catch (ClassNotExistException) {
+            }
         }
 
         $html[] = '</ul>';

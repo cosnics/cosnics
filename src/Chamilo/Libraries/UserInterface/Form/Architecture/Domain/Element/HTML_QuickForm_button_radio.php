@@ -19,9 +19,8 @@ use HTML_QuickForm_radio;
  * @author   Adam Daniel <adaniel1@eesus.jnj.com>
  * @author   Bertrand Mansion <bmansion@mamasam.com>
  */
-class HTML_QuickForm_bootstrap_radio extends HTML_QuickForm_radio
+class HTML_QuickForm_button_radio extends HTML_QuickForm_radio
 {
-
     public function __construct(
         ?string $elementName = null, ?string $elementLabel = null, ?string $text = null, ?string $value = null,
         null|array|string $attributes = null
@@ -32,8 +31,7 @@ class HTML_QuickForm_bootstrap_radio extends HTML_QuickForm_radio
 
     public function toHtml(): string
     {
-        if (!$this->isFrozen())
-        {
+        if (!$this->isFrozen()) {
             $html = [];
 
             $html[] = '<div class="radio">';

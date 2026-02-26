@@ -46,11 +46,11 @@ class BrowserComponent extends Manager
         $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar());
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12 col-lg-2">';
+        $html[] = '<div class="col-12 col-lg-2">';
         $html[] = $this->renderMenu();
         $html[] = '</div>';
 
-        $html[] = '<div class="col-xs-12 col-lg-10">';
+        $html[] = '<div class="col-12 col-lg-10">';
         $html[] = $this->renderTable();
         $html[] = '</div>';
         $html[] = '</div>';

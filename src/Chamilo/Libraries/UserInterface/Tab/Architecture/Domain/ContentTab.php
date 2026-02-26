@@ -3,12 +3,15 @@ namespace Chamilo\Libraries\UserInterface\Tab\Architecture\Domain;
 
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabInterface;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabNavigationInterface;
+use Chamilo\Libraries\UserInterface\Tab\Service\ContentTabRenderer;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Tab\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ContentTab extends GenericTab
+class ContentTab extends GenericTab implements TabInterface, TabNavigationInterface
 {
     private string $content;
 
@@ -31,5 +34,10 @@ class ContentTab extends GenericTab
         $this->content = $content;
 
         return $this;
+    }
+
+    public function getTabRendererClassName(): string
+    {
+        return ContentTabRenderer::class;
     }
 }

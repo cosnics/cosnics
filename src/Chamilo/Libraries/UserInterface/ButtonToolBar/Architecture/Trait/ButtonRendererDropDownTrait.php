@@ -11,8 +11,8 @@ trait ButtonRendererDropDownTrait
 {
     use ButtonRendererCollectionTrait;
 
-    protected const DROPDOWN_CLASS = 'dropdown-toggle';
-    protected const DROPDOWN_TOGGLE_ATTRIBUTES = 'data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button"';
+    protected const DROPDOWN_CLASS = 'dropdown-toggle dropdown-toggle-split';
+    protected const DROPDOWN_TOGGLE_ATTRIBUTES = ' data-bs-toggle="dropdown" aria-expanded="false" ';
 
     /**
      * @return string[]
@@ -20,11 +20,6 @@ trait ButtonRendererDropDownTrait
     public function determineDropDownClasses(ButtonDropDownCollectionInterface $dropDownButton): array
     {
         return array_merge(['dropdown-menu'], $dropDownButton->getDropDownClasses());
-    }
-
-    protected function renderCaret(): string
-    {
-        return '<span class="caret"></span>';
     }
 
     public function renderDropDownButtons(ButtonDropDownCollectionInterface $dropDownButton): string

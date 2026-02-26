@@ -18,7 +18,7 @@ class ButtonGroupRenderer extends AbstractButtonCollectionButtonRenderer impleme
         $html = [];
 
         $html[] = '<div';
-        $html[] = 'class="' . $this->renderClasses($buttonGroup, [], ['action-bar', 'btn-group']) . '">';
+        $html[] = 'class="' . $this->renderClasses($buttonGroup, [], ['btn-group', 'me-2']) . '">';
         $html[] = $this->renderSubButtons($buttonGroup->getButtons());
         $html[] = '</div>';
 

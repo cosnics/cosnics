@@ -10,7 +10,7 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
+class HTML_QuickForm_button_reset extends HTML_QuickForm_button_abstract
 {
     public function __construct(
         ?string $elementName = null, ?string $elementLabel = null, null|array|string $attributes = null,
@@ -19,25 +19,17 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
     {
         // Quickform forces all arguments to "null", so the defaults in the constructor are not triggered
         if (!isset($glyph)) {
-            $glyph = new FontAwesomeGlyph('check', [], null, 'fas');
+            $glyph = new FontAwesomeGlyph('trash-alt');
         }
 
         parent::__construct($elementName, $elementLabel, $attributes, $value, $glyph);
 
-        $this->setType('submit');
+        $this->setType('reset');
 
         $defaultAttributes = [];
         $defaultAttributes[] = $this->getAttribute('class');
-        $defaultAttributes[] = 'btn-success';
+        $defaultAttributes[] = 'btn-secondary';
 
         $this->setAttribute('class', implode(' ', $defaultAttributes));
-    }
-
-    /**
-     * Returns a 'safe' element's value
-     */
-    public function exportValue(array &$submitValues, bool $assoc = false): mixed
-    {
-        return $this->_prepareValue($this->_findValue($submitValues), $assoc);
     }
 }

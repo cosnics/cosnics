@@ -14,12 +14,20 @@ class ContentTabRenderer implements TabRendererInterface, TabNavigationRendererI
 {
     use TabNavigatonRendererTrait;
 
-    public function renderContent(ContentTab $tab): string
+    public function getTabType(): string
     {
+        return ContentTab::class;
+    }
+
+    public function renderContent(ContentTab $tab, ?string $selectedTab = null): string
+    {
+        $isActive = $tab->getIdentifier() === $selectedTab;
+
         $html = [];
 
-        $html[] = '<div role="tabpanel" class="tab-pane clearfix" id="' . $tab->getIdentifier() .
-            '" role="tabpanel" aria-labelledby="' . $tab->getIdentifier() . '-tab" tabindex="0">';
+        $html[] = '<div role="tabpanel" class="tab-pane' . ($isActive ? ' active' : '') . ' clearfix" id="' .
+            $tab->getIdentifier() . '" role="tabpanel" aria-labelledby="' . $tab->getIdentifier() .
+            '-tab" tabindex="0">';
         $html[] = '<div class="list-group">';
         $html[] = '<div class="list-group-item">';
         $html[] = $tab->getContent();

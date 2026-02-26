@@ -2,12 +2,15 @@
 namespace Chamilo\Libraries\UserInterface\Tab\Architecture\Domain;
 
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabInterface;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabNavigationInterface;
+use Chamilo\Libraries\UserInterface\Tab\Service\ActionsTabRenderer;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Tab\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ActionsTab extends GenericTab
+class ActionsTab extends GenericTab implements TabInterface, TabNavigationInterface
 {
     /**
      * @var \Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\Action[]
@@ -48,5 +51,10 @@ class ActionsTab extends GenericTab
         $this->actions = $actions;
 
         return $this;
+    }
+
+    public function getTabRendererClassName(): string
+    {
+        return ActionsTabRenderer::class;
     }
 }

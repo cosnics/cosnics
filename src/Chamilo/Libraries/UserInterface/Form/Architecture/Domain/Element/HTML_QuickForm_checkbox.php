@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element;
 
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use HTML_QuickForm;
 use HTML_QuickForm_input;
 use ReflectionClass;
@@ -11,7 +12,7 @@ use ReflectionClass;
  * @package Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element
  * @author  Sven Vanpoucke - Hogeschool Gent
  */
-class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
+class HTML_QuickForm_checkbox extends HTML_QuickForm_input
 {
     protected string $_text = '';
 
@@ -36,8 +37,14 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
         $this->_persistantFreeze = true;
         $this->_text = $text;
         $this->setType('checkbox');
-        $this->updateAttributes(['value' => 1]);
+        $this->updateAttributes(['value' => 1, 'role' => 'switch']);
         $this->setValue($value);
+
+        $defaultAttributes = [];
+        $defaultAttributes[] = $this->getAttribute('class');
+        $defaultAttributes[] = 'form-check-input';
+
+        $this->setAttribute('class', implode(' ', $defaultAttributes));
 
         $this->returnValue = $returnValue;
     }
@@ -174,35 +181,5 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_input
     public function setValue($value): void
     {
         $this->updateAttributes(['value' => $value]);
-    }
-
-    public function toHtml(): string
-    {
-        if (!$this->isFrozen()) {
-            $html = [];
-
-            $html[] = '<div class="' . $this->getCheckboxClasses() . '">';
-            $html[] = parent::toHtml();
-            $html[] = '<label>';
-            $html[] = $this->_text;
-            $html[] = '</label>';
-            $html[] = '</div>';
-
-            return implode(PHP_EOL, $html);
-        }
-
-        $this->_generateId(); // Seems to be necessary when this is used in a group.
-
-        if (0 == strlen($this->_text)) {
-            $label = '';
-        }
-        elseif ($this->_flagFrozen) {
-            $label = $this->_text;
-        }
-        else {
-            $label = '<label for="' . $this->getAttribute('id') . '">' . $this->_text . '</label>';
-        }
-
-        return parent::toHtml() . $label;
     }
 }

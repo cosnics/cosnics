@@ -11,12 +11,6 @@ class HTML_QuickForm_category extends HTML_QuickForm_html
 {
     public function __construct(?string $title = null)
     {
-        $html = '';
-
-        if ($title != null) {
-            $html = '<h4 class="form-category">' . $title . '</h4>';
-        }
-
-        parent::__construct($html);
+        parent::__construct('<h4 class="form-category">' . $title . '</h4>');
     }
 }
