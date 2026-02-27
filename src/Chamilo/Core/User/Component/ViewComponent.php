@@ -50,7 +50,7 @@ class ViewComponent extends Manager
 
             $html[] = $this->renderHeader();
             $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar($user));
-            $html[] = $this->getTabsRenderer()->render('userDetails', $this->getTabsCollection($user));
+            $html[] = $this->getTabsRenderer()->renderNavigationAndContent('userDetails', $this->getTabsCollection($user));
 
             $html[] = $this->renderFooter();
 

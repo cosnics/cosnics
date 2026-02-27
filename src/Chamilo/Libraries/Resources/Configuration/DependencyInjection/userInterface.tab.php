@@ -10,7 +10,6 @@ use Chamilo\Libraries\UserInterface\Tab\Service\FormTabGenerator;
 use Chamilo\Libraries\UserInterface\Tab\Service\FormTabsGenerator;
 use Chamilo\Libraries\UserInterface\Tab\Service\GenericTabRenderer;
 use Chamilo\Libraries\UserInterface\Tab\Service\LinkTabRenderer;
-use Chamilo\Libraries\UserInterface\Tab\Service\LinkTabsRenderer;
 use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
 
 return static function (ContainerConfigurator $container) {
@@ -21,7 +20,6 @@ return static function (ContainerConfigurator $container) {
     $services->set(FormTabGenerator::class);
     $services->set(FormTabsGenerator::class);
     $services->set(LinkTabRenderer::class)->tag(TabRendererInterface::class);
-    $services->set(LinkTabsRenderer::class);
     $services->set(ActionRenderer::class);
     $services->set(ActionsTabRenderer::class)->tag(TabRendererInterface::class);
     $services->set(ContentTabRenderer::class)->tag(TabRendererInterface::class);

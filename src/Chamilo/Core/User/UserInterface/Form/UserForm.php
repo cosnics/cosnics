@@ -11,7 +11,6 @@ use HTML_QuickForm_html;
 use HTML_QuickForm_password;
 use HTML_QuickForm_Rule_Compare;
 use HTML_QuickForm_Rule_Email;
-use HTML_QuickForm_static;
 
 abstract class UserForm extends FormValidator
 {
@@ -136,6 +135,7 @@ abstract class UserForm extends FormValidator
 
         if (!$allowedToChangeFirstName) {
             $this->freeze([User::PROPERTY_GIVEN_NAME]);
+            $this->getRenderer()->setElementTemplate($this->getFrozenElementTemplate(), User::PROPERTY_GIVEN_NAME);
         }
         else {
             $this->applyFilter(User::PROPERTY_GIVEN_NAME, 'stripslashes');
@@ -149,6 +149,7 @@ abstract class UserForm extends FormValidator
 
         if (!$allowedToChangeLastName) {
             $this->freeze([User::PROPERTY_SURNAME]);
+            $this->getRenderer()->setElementTemplate($this->getFrozenElementTemplate(), User::PROPERTY_SURNAME);
         }
         else {
             $this->applyFilter(User::PROPERTY_GIVEN_NAME, 'stripslashes');
@@ -163,6 +164,7 @@ abstract class UserForm extends FormValidator
 
         if (!$allowedToChangeEmailAddress) {
             $this->freeze(User::PROPERTY_EMAIL);
+            $this->getRenderer()->setElementTemplate($this->getFrozenElementTemplate(), User::PROPERTY_EMAIL);
         }
         else {
             $this->addRule(User::PROPERTY_EMAIL, $translator->trans('EmailWrong', [], Manager::CONTEXT),
@@ -181,6 +183,7 @@ abstract class UserForm extends FormValidator
 
         if (!$allowedToChangeUsername) {
             $this->freeze(User::PROPERTY_USERNAME);
+            $this->getRenderer()->setElementTemplate($this->getFrozenElementTemplate(), User::PROPERTY_USERNAME);
         }
         else {
             $this->applyFilter(User::PROPERTY_USERNAME, 'stripslashes');
@@ -199,6 +202,7 @@ abstract class UserForm extends FormValidator
 
         if (!$allowedToChangeOfficialCode) {
             $this->freeze(User::PROPERTY_OFFICIAL_CODE);
+            $this->getRenderer()->setElementTemplate($this->getFrozenElementTemplate(), User::PROPERTY_OFFICIAL_CODE);
         }
         else {
             $this->applyFilter(User::PROPERTY_OFFICIAL_CODE, 'stripslashes');
@@ -216,14 +220,18 @@ abstract class UserForm extends FormValidator
         $translator = $this->getTranslator();
 
         if (!is_null($encodedUserPicture)) {
-            $this->addElement(
-                HTML_QuickForm_static::class, 'current_image', $translator->trans('CurrentImage', [], Manager::CONTEXT),
-                '<img class="my-account-photo" src="' . $encodedUserPicture . '" alt="' . $userFullname . '" />'
-            );
+            $html = [];
+
+            $html[] = '<div class="mb-3">';
+            $html[] = '<h6>' . $translator->trans('CurrentImage', [], Manager::CONTEXT) . '</h6>';
+            $html[] = '<img class="img-thumbnail" src="' . $encodedUserPicture . '" alt="' . $userFullname . '" />';
+            $html[] = '</div>';
+
+            $this->addElement(HTML_QuickForm_html::class, implode(PHP_EOL, $html));
         }
 
         $this->addFile(
-            User::PROPERTY_PICTURE_URI, $translator->trans('AddPicture'),
+            User::PROPERTY_PICTURE_URI, $translator->trans('AddPicture', [], Manager::CONTEXT),
             $translator->trans('AllowedProfileImageFormats', [], Manager::CONTEXT)
         );
         $this->addRule(

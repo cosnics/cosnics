@@ -108,7 +108,10 @@ class ConfigureComponent extends ProfileComponent
                 $translator->trans('SelectApplicationToConfigure', [], Manager::CONTEXT) . '</div><br />';
         }
 
-        $html[] = $this->getLinkTabsRenderer()->render($tabs, $this->form->render());
+        $html[] = $this->getTabsRenderer()->renderNavigation(
+            'package', $tabs, $this->getRequest()->query->get(self::PARAM_SELECTED_CONTEXT)
+        );
+        $html[] = $this->form->render();
 
         return implode(PHP_EOL, $html);
     }

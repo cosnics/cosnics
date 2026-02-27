@@ -71,6 +71,6 @@ class BrowseComponent extends Manager
         $tabsCollection = $this->getActionProvider()->getTabsCollection();
         $tabsCollection->sortByLabel();
 
-        return $this->getTabsRenderer()->render('admin', $tabsCollection, $this->getCurrentTab());
+        return $this->getTabsRenderer()->renderNavigationAndContent('admin', $tabsCollection, $this->getCurrentTab());
     }
 }

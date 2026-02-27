@@ -114,7 +114,7 @@
                 </options>
             </setting>
             <setting name="cosnics.libraries.calendar.hideNonWorkingHours"
-                     field="HTML_QuickForm_checkbox"
+                     field="Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_checkbox"
                      default="0">
                 <options type="static">
                     <option name="hide_non_working_hours"
@@ -122,7 +122,7 @@
                 </options>
             </setting>
             <setting name="cosnics.libraries.calendar.defaultView"
-                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_bootstrap_radio"
+                     field="Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_radio"
                      default="Month">
                 <options type="static">
                     <option name="Month"
@@ -136,7 +136,7 @@
                 </options>
             </setting>
             <setting name="cosnics.libraries.calendar.firstDayOfWeek"
-                     field="Chamilo\Libraries\Format\Form\Element\HTML_QuickForm_bootstrap_radio"
+                     field="Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_radio"
                      default="monday">
                 <options type="static">
                     <option name="Sunday"

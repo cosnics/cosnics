@@ -41,8 +41,7 @@ class LinkTabRenderer implements TabRendererInterface, TabNavigationRendererInte
 
         $html[] = '<li class="nav-item" role="presentation">';
         $html[] = '<a href="' . $tab->getLink() . '" class="nav-link' . ($isActive ? ' active' : '') . '" id="' .
-            $tab->getIdentifier() . '-tab" data-bs-toggle="tab" data-bs-target="#' . $tab->getIdentifier() .
-            '" type="button" role="tab" aria-controls="' . $tab->getIdentifier() . '">';
+            $tab->getIdentifier() . '-tab">';
 
         if ($tab->getInlineGlyph() && $tab->isIconVisible()) {
             $html[] = $tab->getInlineGlyph()->render();

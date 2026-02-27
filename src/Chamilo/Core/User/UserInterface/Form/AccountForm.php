@@ -8,7 +8,6 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeableU
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_category;
-use HTML_QuickForm_static;
 
 /**
  * @package Chamilo\Core\User\Form
@@ -53,7 +52,7 @@ class AccountForm extends UserForm
             $this->getContainer()->getParameter('cosnics.application.user.rights.changePassword') &&
             $authentication instanceof ChangeablePasswordInterface;
 
-        $requireEmail = $this->getContainer()->getParameter('cosnics.application.user.resuire.email');
+        $requireEmail = $this->getContainer()->getParameter('cosnics.application.user.require.email');
         $requireOfficialCode = $this->getContainer()->getParameter('cosnics.application.user.require.officialCode');
 
         $this->buildPersonalDetailsCategoryForm(
@@ -80,9 +79,7 @@ class AccountForm extends UserForm
         if ($includeCategoryTitle) {
             $this->addElement(HTML_QuickForm_category::class, $translator->trans('Other'));
         }
-        $this->addElement(
-            HTML_QuickForm_static::class, User::PROPERTY_SECURITY_TOKEN, $translator->trans('SecurityToken')
-        );
+        $this->addStatic(User::PROPERTY_SECURITY_TOKEN, $translator->trans('SecurityToken'));
     }
 
     protected function canUserChangeAnything(): bool

@@ -484,6 +484,6 @@ class BrowseComponent extends Manager
             )
         );
 
-        return $this->getTabsRenderer()->render('group_browser', $tabs);
+        return $this->getTabsRenderer()->renderNavigationAndContent('group_browser', $tabs);
     }
 }

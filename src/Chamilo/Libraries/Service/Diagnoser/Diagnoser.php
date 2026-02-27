@@ -76,7 +76,7 @@ class Diagnoser
             );
         }
 
-        return $this->getTabsRenderer()->render('diagnoser', $tabs);
+        return $this->getTabsRenderer()->renderNavigationAndContent('diagnoser', $tabs);
     }
 
     public function buildSetting(

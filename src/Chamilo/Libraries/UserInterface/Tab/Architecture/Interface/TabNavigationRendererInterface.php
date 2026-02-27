@@ -7,5 +7,5 @@ namespace Chamilo\Libraries\UserInterface\Tab\Architecture\Interface;
  */
 interface TabNavigationRendererInterface
 {
-    public function renderNavigation(TabNavigationInterface $tab): string;
+    public function renderNavigation(TabNavigationInterface $tab, ?string $selectedTab = null): string;
 }

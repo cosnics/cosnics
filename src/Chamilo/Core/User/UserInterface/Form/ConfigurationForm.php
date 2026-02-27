@@ -54,7 +54,6 @@ class ConfigurationForm extends FormValidator
         $configuration = $this->configuration;
 
         $translator = $this->getTranslator();
-        $stringUtilities = $this->getStringUtilities();
 
         if (is_array($configuration['settings']) && count($configuration['settings']) > 0) {
             $settingsConnector = $this->getSettingsConnectorFactory()->getSettingsConnectorForContext($context);
@@ -128,37 +127,16 @@ class ConfigurationForm extends FormValidator
                             $options = $setting['options']['values'];
                         }
 
-                        if ($setting['field'] == HTML_QuickForm_button_radio::class ||
-                            $setting['field'] == HTML_QuickForm_checkbox::class) {
-                            $group = [];
-
-                            foreach ($options as $optionValue => $optionName) {
-                                if ($setting['field'] == HTML_QuickForm_checkbox::class) {
-                                    $group[] = $this->createElement(
-                                        $setting['field'], $name, null, null, $optionValue
-                                    );
-                                }
-                                else {
-                                    $group[] = $this->createElement(
-                                        $setting['field'], $name, null, $translator->trans(
-                                        (string) $stringUtilities->createString($optionName)->upperCamelize(), [],
-                                        $context
-                                    ), $optionValue
-                                    );
-                                }
-                            }
-
-                            $this->addGroup(
-                                $group, $name, $translator->trans(
-                                $name, [], $context
-                            ), '', false
-                            );
+                        if ($setting['field'] == HTML_QuickForm_button_radio::class) {
+                            $this->addRadioButton($name, $translator->trans($name, [], $context), $options);
+                        }
+                        elseif ($setting['field'] == HTML_QuickForm_checkbox::class) {
+                            $this->addCheckbox($name, $translator->trans($name, [], $context));
                         }
                         elseif ($setting['field'] == HTML_QuickForm_select::class) {
                             $this->addElement(
-                                HTML_QuickForm_select::class, $name, $translator->trans(
-                                $name, [], $context
-                            ), $options, ['class' => 'form-control']
+                                HTML_QuickForm_select::class, $name, $translator->trans($name, [], $context), $options,
+                                ['class' => 'form-control']
                             );
                         }
                     }

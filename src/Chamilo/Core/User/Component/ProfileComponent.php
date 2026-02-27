@@ -5,7 +5,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
-use Chamilo\Libraries\UserInterface\Tab\Service\LinkTabsRenderer;
+use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -15,12 +15,17 @@ use Chamilo\Libraries\UserInterface\Tab\Service\LinkTabsRenderer;
  */
 abstract class ProfileComponent extends Manager
 {
+    protected function getAction(): string
+    {
+        return $this->getRequest()->query->get(self::PARAM_ACTION);
+    }
+
     /**
      * @return \Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab[]
      */
     public function getAvailableTabs(): array
     {
-        $action = $this->getRequest()->query->get(self::PARAM_ACTION);
+        $action = $this->getAction();
         $translator = $this->getTranslator();
         $tabs = [];
 
@@ -55,18 +60,18 @@ abstract class ProfileComponent extends Manager
 
     abstract public function getContent(): string;
 
-    public function getLinkTabsRenderer(): LinkTabsRenderer
+    public function getTabsRenderer(): TabsRenderer
     {
-        return $this->getService(LinkTabsRenderer::class);
+        return $this->getService(TabsRenderer::class);
     }
 
-    public function renderHeader(): string
+    public function renderPage(): string
     {
-        $availableTabs = $this->getAvailableTabs();
-
         $html = [];
 
-        $html[] = parent::renderHeader();
+        $html[] = $this->renderHeader();
+
+        $availableTabs = $this->getAvailableTabs();
 
         if (count($availableTabs) > 1) {
             $tabs = new TabsCollection();
@@ -75,20 +80,10 @@ abstract class ProfileComponent extends Manager
                 $tabs->add($availableTab);
             }
 
-            $html[] = $this->getLinkTabsRenderer()->render($tabs, $this->getContent());
-        }
-        else {
-            $html[] = $this->getContent();
+            $html[] = $this->getTabsRenderer()->renderNavigation('profile', $tabs, $this->getAction());
         }
 
-        return implode(PHP_EOL, $html);
-    }
-
-    public function renderPage(): string
-    {
-        $html = [];
-
-        $html[] = $this->renderHeader();
+        $html[] = $this->getContent();
         $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);

@@ -125,13 +125,7 @@ class FormValidator extends HTML_QuickForm
      */
     public function addCheckbox(string $name, string $label): HTML_QuickForm_checkbox
     {
-        $checkboxElement = $this->addElement(HTML_QuickForm_checkbox::class, $name, $label);
-
-        if ($checkboxElement instanceof HTML_QuickForm_checkbox) {
-            $this->getRenderer()->setElementTemplate($this->getCheckboxTemplate(), $name);
-        }
-
-        return $checkboxElement;
+        return $this->addElement($this->createCheckbox($name, $label));
     }
 
     /**
@@ -165,13 +159,7 @@ class FormValidator extends HTML_QuickForm
      */
     public function addFile(string $name, string $label, ?string $instructions = null): HTML_QuickForm_stylefile
     {
-        $fileElement = $this->addElement(HTML_QuickForm_stylefile::class, $name, $label, [], $instructions);
-
-        if ($fileElement instanceof HTML_QuickForm_stylefile) {
-            $this->getRenderer()->setElementTemplate($this->getFileTemplate(), $name);
-        }
-
-        return $fileElement;
+        return $this->addElement($this->createFile($name, $label, $instructions));
     }
 
     /**
@@ -443,6 +431,14 @@ class FormValidator extends HTML_QuickForm
     /**
      * @throws \QuickformException
      */
+    public function addRadioButton(string $name, string $label, array $options): HTML_QuickForm_button_radio
+    {
+        return $this->addElement($this->createRadioButton($name, $label, $options));
+    }
+
+    /**
+     * @throws \QuickformException
+     */
     public function addSaveResetButtons(): HTML_QuickForm_group
     {
         $buttons = [];
@@ -498,6 +494,17 @@ class FormValidator extends HTML_QuickForm
             'Jquery/jquery.file.upload.single.js'
         )
         );
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function addStatic(
+        ?string $elementName = null, ?string $elementLabel = null, ?string $text = null,
+        null|array|string $attributes = null
+    ): HTML_QuickForm_static
+    {
+        return $this->addElement($this->createStatic($elementName, $elementLabel, $text, $attributes));
     }
 
     /**
@@ -602,6 +609,34 @@ class FormValidator extends HTML_QuickForm
     }
 
     /**
+     * @throws \QuickformException
+     */
+    public function createCheckbox(string $name, string $label): HTML_QuickForm_checkbox
+    {
+        $checkboxElement = $this->createElement(HTML_QuickForm_checkbox::class, $name, $label);
+
+        if ($checkboxElement instanceof HTML_QuickForm_checkbox) {
+            $this->getRenderer()->setElementTemplate($this->getCheckboxTemplate(), $name);
+        }
+
+        return $checkboxElement;
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function createFile(string $name, string $label, ?string $instructions = null): HTML_QuickForm_stylefile
+    {
+        $fileElement = $this->createElement(HTML_QuickForm_stylefile::class, $name, $label, [], $instructions);
+
+        if ($fileElement instanceof HTML_QuickForm_stylefile) {
+            $this->getRenderer()->setElementTemplate($this->getFileTemplate(), $name);
+        }
+
+        return $fileElement;
+    }
+
+    /**
      * @param \HTML_QuickForm_element[] $elements
      *
      * @throws \QuickformException
@@ -655,11 +690,43 @@ class FormValidator extends HTML_QuickForm
     /**
      * @throws \QuickformException
      */
+    public function createRadioButton(string $name, string $label, array $options): HTML_QuickForm_button_radio
+    {
+        $checkboxElement = $this->createElement(HTML_QuickForm_button_radio::class, $name, $label, $options);
+
+        if ($checkboxElement instanceof HTML_QuickForm_button_radio) {
+            $this->getRenderer()->setElementTemplate($this->getRadioButtonTemplate(), $name);
+        }
+
+        return $checkboxElement;
+    }
+
+    /**
+     * @throws \QuickformException
+     */
     public function createSelect($name, $label, $values, $attributes = []): HTML_QuickForm_select
     {
         $attributes = $this->addFormControlToElementAttributes($attributes);
 
         return $this->createElement(HTML_QuickForm_select::class, $name, $label, $values, $attributes);
+    }
+
+    /**
+     * @throws \QuickformException
+     */
+    public function createStatic(
+        ?string $elementName = null, ?string $elementLabel = null, ?string $text = null,
+        null|array|string $attributes = null
+    ): HTML_QuickForm_static
+    {
+        $staticElement =
+            $this->createElement(HTML_QuickForm_static::class, $elementName, $elementLabel, $text, $attributes);
+
+        if ($staticElement instanceof HTML_QuickForm_static) {
+            $this->getRenderer()->setElementTemplate($this->getStaticTemplate(), $elementName);
+        }
+
+        return $staticElement;
     }
 
     /**
@@ -785,12 +852,46 @@ class FormValidator extends HTML_QuickForm
         return $this->getService(FormValidatorHtmlEditorRenderer::class);
     }
 
+    public function getFrozenElementTemplate(): string
+    {
+        $html = [];
+
+        $html[] = '<div class="form-floating mb-3 clearfix">';
+        $html[] = '    <div class="form-control">{element}</div>';
+        $html[] = '    <label>{label}</label>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
     /**
      * @return string[]
      */
     public function getHtmlEditors(): array
     {
         return $this->htmlEditors;
+    }
+
+    public function getRadioButtonTemplate(): string
+    {
+        $glyph = new FontAwesomeGlyph('star', ['text-danger', 'fa-xs'], null, 'fas');
+
+        $html = [];
+
+        $html[] = '<div class="mb-3 clearfix">';
+        $html[] = '    <label class="form-label">';
+        $html[] = '    {label}';
+        $html[] = '    <!-- BEGIN required -->';
+        $html[] = '    <span class="text-danger ms-1">' . $glyph->render() . '</span>';
+        $html[] = '    <!-- END required -->';
+        $html[] = '    </label>';
+        $html[] = '    {element}';
+        $html[] = '    <!-- BEGIN error -->';
+        $html[] = '    <div class="invalid-feedback">{error}</div>';
+        $html[] = '    <!-- END error -->';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     public function getRenderer(): HTML_QuickForm_Renderer_Default
@@ -817,6 +918,18 @@ class FormValidator extends HTML_QuickForm
     private function getSecurity(): SecurityUtilities
     {
         return $this->getService(SecurityUtilities::class);
+    }
+
+    public function getStaticTemplate(): string
+    {
+        $html = [];
+
+        $html[] = '<div class="form-floating mb-3 clearfix">';
+        $html[] = '    <div class="form-control">{element}</div>';
+        $html[] = '    <label>{label}</label>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     protected function getTranslation(

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element;
 
-use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use HTML_QuickForm;
 use HTML_QuickForm_input;
 use ReflectionClass;
@@ -58,11 +57,6 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
         }
 
         return $this->_prepareValue($value, $assoc);
-    }
-
-    public function getCheckboxClasses(): string
-    {
-        return 'checkbox no-toggle-style';
     }
 
     public function getChecked(): bool
