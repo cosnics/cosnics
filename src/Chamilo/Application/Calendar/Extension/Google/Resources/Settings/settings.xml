@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package context="Chamilo\Application\Calendar\Extension\Google">
     <settings>
-        <category name="general">
+        <category name="Security">
             <setting name="cosnics.libraries.protocol.google.token"
                      field="HTML_QuickForm_text"
                      default=""/>

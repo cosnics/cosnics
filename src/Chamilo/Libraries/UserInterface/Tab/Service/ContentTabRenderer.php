@@ -28,11 +28,7 @@ class ContentTabRenderer implements TabRendererInterface, TabNavigationRendererI
         $html[] = '<div role="tabpanel" class="tab-pane' . ($isActive ? ' active' : '') . ' clearfix" id="' .
             $tab->getIdentifier() . '" role="tabpanel" aria-labelledby="' . $tab->getIdentifier() .
             '-tab" tabindex="0">';
-        $html[] = '<div class="list-group">';
-        $html[] = '<div class="list-group-item">';
         $html[] = $tab->getContent();
-        $html[] = '</div>';
-        $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

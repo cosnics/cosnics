@@ -63,7 +63,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
         $html = [];
 
         $html[] = $this->renderHeader();
-        $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar()) . '<br />';
+        $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar());
         $html[] = $output;
         $html[] = $this->renderFooter();
 

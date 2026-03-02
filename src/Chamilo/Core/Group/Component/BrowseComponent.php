@@ -20,13 +20,12 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\Proper
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait\ButtonToolBarSearchFormTrait;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ContentTab;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
@@ -41,9 +40,13 @@ class BrowseComponent extends Manager
 {
     use ButtonToolBarSearchFormTrait;
 
-    public const TAB_DETAILS = 2;
-    public const TAB_SUBGROUPS = 0;
-    public const TAB_USERS = 1;
+    public const TAB_DETAILS = 'details';
+    public const TAB_SUBGROUPS = 'subgroups';
+    public const TAB_USERS = 'users';
+
+    protected int $numberOfGroups;
+
+    protected int $numberOfSubscribedUsers;
 
     private ?Group $group;
 
@@ -71,7 +74,6 @@ class BrowseComponent extends Manager
         $html = [];
 
         $html[] = $this->renderHeader();
-        $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar()) . '<br />';
         $html[] = $this->renderTabs();
         $html[] = $this->renderFooter();
 
@@ -82,50 +84,27 @@ class BrowseComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function getButtonToolBar(): ButtonToolBar
+    protected function countNumberOfGroups(): int
     {
-        $translator = $this->getTranslator();
+        if (!isset($this->numberOfGroups)) {
+            return $this->getGroupsTreeTraverser()->countSubGroupsForGroup($this->getGroup());
+        }
 
-        $buttonToolBar = new ButtonToolBar(
-            $this->getUrlGenerator()->fromParameters(
-                [
-                    self::PARAM_CONTEXT => Manager::CONTEXT,
-                    self::PARAM_ACTION => self::ACTION_BROWSE,
-                    self::PARAM_GROUP_ID => $this->getGroupIdentifier()
-                ]
-            )
-        );
-        $commonActions = new ButtonGroup();
+        return $this->numberOfGroups;
+    }
 
-        $commonActions->addButton(
-            new Button(
-                $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
-                $this->getGroupUrlGenerator()->getCreateUrl($this->getGroup()), DisplayTypeEnum::ICON_AND_LABEL
-            )
-        );
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
+    protected function countNumberOfSubscribedUsers(): int
+    {
+        if (!isset($this->numberOfSubscribedUsers)) {
+            $this->numberOfSubscribedUsers =
+                $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifier($this->getGroupIdentifier());
+        }
 
-        $commonActions->addButton(
-            new Button(
-                $translator->trans('Root', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'),
-                $this->getGroupUrlGenerator()->getViewUrl($this->getRootGroup()), DisplayTypeEnum::ICON_AND_LABEL
-            )
-        );
-
-        $commonActions->addButton(
-            new Button(
-                $translator->trans('ShowAll', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('folder'),
-                $this->getUrlGenerator()->fromParameters(
-                    [
-                        self::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => self::ACTION_BROWSE,
-                        self::PARAM_GROUP_ID => $this->getGroupIdentifier()
-                    ]
-                ), DisplayTypeEnum::ICON_AND_LABEL
-            )
-        );
-        $buttonToolBar->addButton($commonActions);
-
-        return $buttonToolBar;
+        return $this->numberOfSubscribedUsers;
     }
 
     public function getButtonToolBarSearchProperties(?string $type = null): array
@@ -160,10 +139,8 @@ class BrowseComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     * @throws \QuickformException
      */
     public function getGroupDetails(): string
     {
@@ -172,72 +149,30 @@ class BrowseComponent extends Manager
 
         $html = [];
 
-        $buttonToolBar = new MiniButtonToolBar();
+        $html[] = '<table class="table table-striped table-bordered table-hover">';
+        $html[] = ' <tbody>';
+        $html[] = '<tr>';
+        $html[] = '<th scope="row">'. $translator->trans('Name', [], Manager::CONTEXT) .'</th>';
+        $html[] = '<td>'. $group->getName() .'</td>';
+        $html[] = '</tr>';
+        $html[] = '<tr>';
+        $html[] = '<th scope="row">'. $translator->trans('Code', [], Manager::CONTEXT) .'</th>';
+        $html[] = '<td>'. $group->getCode() .'</td>';
+        $html[] = '</tr>';
+        $html[] = '<tr>';
+        $html[] = '<th scope="row">'. $translator->trans('Description', [], Manager::CONTEXT) .'</th>';
+        $html[] = '<td>'. $group->getDescription() .'</td>';
+        $html[] = '</tr>';
+        $html[] = '</tbody>';
+        $html[] = '</table>';
 
-        $buttonToolBar->addButton(
-            new Button(
-                label: $translator->trans('Edit', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
-                'pencil-alt'
-            ), action: $this->getGroupUrlGenerator()->getUpdateUrl($group), display: DisplayTypeEnum::ICON_AND_LABEL,
-                classes: ['btn-link']
-            )
-        );
+        $html[] = '<h5>' . $translator->trans('Code', [], Manager::CONTEXT) . ':</h5>';
+        $html[] = $group->getCode();
 
-        if ($this->getGroup()->getId() != $this->getRootGroup()->getId()) {
-            $buttonToolBar->addButton(
-                new Button(
-                    label: $translator->trans('Delete', [], StringUtilities::LIBRARIES),
-                    inlineGlyph: new FontAwesomeGlyph('times'), action: $this->getGroupUrlGenerator()->getDeleteUrl(
-                    $group
-                ), display: DisplayTypeEnum::ICON_AND_LABEL, classes: ['btn-link']
-                )
-            );
+        if ($group->getDescription()) {
+            $html[] = '<h5>' . $translator->trans('Description', [], Manager::CONTEXT) . ':</h5>';
+            $html[] = $group->getDescription();
         }
-
-        $buttonToolBar->addButton(
-            new Button(
-                label: $translator->trans('AddUsers'), inlineGlyph: new FontAwesomeGlyph('plus-circle'),
-                action: $this->getGroupUrlGenerator()->getSubscribeUrl($group),
-                display: DisplayTypeEnum::ICON_AND_LABEL, classes: ['btn-link']
-            )
-        );
-
-        $subscribedUserCount =
-            $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifier($group->getId());
-
-        $visible = ($subscribedUserCount > 0);
-
-        if ($visible) {
-            $buttonToolBar->addButton(
-                new Button(
-                    label: $translator->trans('Truncate'), inlineGlyph: new FontAwesomeGlyph('trash-alt'),
-                    action: $this->getGroupUrlGenerator()->getTruncateUrl($group),
-                    display: DisplayTypeEnum::ICON_AND_LABEL, classes: ['btn-link']
-                )
-            );
-        }
-        else {
-            $buttonToolBar->addButton(
-                new Button(
-                    label: $translator->trans('TruncateNA'), inlineGlyph: new FontAwesomeGlyph(
-                    'trash-alt', ['text-muted']
-                ), display: DisplayTypeEnum::ICON_AND_LABEL, classes: ['btn-link']
-                )
-            );
-        }
-
-        $html[] = '<b>' . $translator->trans('Code') . '</b>: ' . $group->getCode() . '<br />';
-
-        $description = $group->getDescription();
-
-        if ($description) {
-            $html[] =
-                '<b>' . $translator->trans('Description', [], StringUtilities::LIBRARIES) . '</b>: ' . $description .
-                '<br />';
-        }
-
-        $html[] = '<br />';
-        $html[] = $this->getMiniButtonToolBarRenderer()->render($buttonToolBar);
 
         return implode(PHP_EOL, $html);
     }
@@ -321,6 +256,34 @@ class BrowseComponent extends Manager
         return $this->rootGroup;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
+    public function getSubGroupsToolBar(): ButtonToolBar
+    {
+        $translator = $this->getTranslator();
+
+        $buttonToolBar = new ButtonToolBar(
+            $this->getUrlGenerator()->fromParameters(
+                [
+                    self::PARAM_CONTEXT => Manager::CONTEXT,
+                    self::PARAM_ACTION => self::ACTION_BROWSE,
+                    self::PARAM_GROUP_ID => $this->getGroupIdentifier()
+                ]
+            )
+        );
+
+        $buttonToolBar->addButton(
+            new Button(
+                $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
+                $this->getGroupUrlGenerator()->getCreateUrl($this->getGroup()), DisplayTypeEnum::ICON_AND_LABEL
+            )
+        );
+
+        return $buttonToolBar;
+    }
+
     public function getSubscribedUserTableRenderer(): SubscribedUserTableRenderer
     {
         return $this->getService(SubscribedUserTableRenderer::class);
@@ -329,6 +292,33 @@ class BrowseComponent extends Manager
     public function getSubscribedUsersCondition(): ?AndCondition
     {
         return $this->getButtonToolBarSearchCondition(SubscribedUser::class);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
+    public function getSubscribedUsersToolBar(): ButtonToolBar
+    {
+        $buttonToolBar = new ButtonToolBar(
+            $this->getUrlGenerator()->fromParameters(
+                [
+                    self::PARAM_CONTEXT => Manager::CONTEXT,
+                    self::PARAM_ACTION => self::ACTION_BROWSE,
+                    self::PARAM_GROUP_ID => $this->getGroupIdentifier()
+                ]
+            )
+        );
+
+        $buttonToolBar->addButton(
+            new Button(
+                label: $this->getTranslator()->trans('AddUsers'), inlineGlyph: new FontAwesomeGlyph('plus-circle'),
+                action: $this->getGroupUrlGenerator()->getSubscribeUrl($this->getGroup()),
+                display: DisplayTypeEnum::ICON_AND_LABEL
+            )
+        );
+
+        return $buttonToolBar;
     }
 
     protected function getTabsRenderer(): TabsRenderer
@@ -356,9 +346,7 @@ class BrowseComponent extends Manager
      */
     protected function renderGroupTable(): string
     {
-        $groupTableCondition = $this->getGroupTableCondition();
-
-        $totalNumberOfItems = $this->getGroupService()->countGroups($groupTableCondition);
+        $totalNumberOfItems = $this->getGroupService()->countGroups($this->getGroupTableCondition());
         $groupTableRenderer = $this->getGroupTableRenderer();
 
         $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
@@ -367,11 +355,17 @@ class BrowseComponent extends Manager
         );
 
         $users = $this->getGroupService()->findGroups(
-            $groupTableCondition, $tableParameterValues->getOffset(), $tableParameterValues->getNumberOfItemsPerPage(),
+            $this->getGroupTableCondition(), $tableParameterValues->getOffset(),
+            $tableParameterValues->getNumberOfItemsPerPage(),
             $groupTableRenderer->determineOrderBy($tableParameterValues)
         );
 
-        return $groupTableRenderer->render($tableParameterValues, $users);
+        $html = [];
+
+        $html[] = $this->getButtonToolBarRenderer()->render($this->getSubGroupsToolBar());
+        $html[] = $groupTableRenderer->render($tableParameterValues, $users);
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -383,6 +377,9 @@ class BrowseComponent extends Manager
         $html = [];
 
         $html[] = parent::renderHeader();
+        $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = '<div class="row">';
         $html[] = '<div class="col-12 col-md-4 col-lg-3">';
         $html[] = $this->renderMenu();
         $html[] = '</div>';
@@ -423,10 +420,10 @@ class BrowseComponent extends Manager
      */
     protected function renderSubscribedUsertable(): string
     {
-        $subscribedUsersCondition = $this->getButtonToolBarSearchCondition(SubscribedUser::class);
+        $searchCondition = $this->getButtonToolBarSearchCondition(SubscribedUser::class);
 
         $totalNumberOfItems = $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifier(
-            $this->getGroupIdentifier(), $subscribedUsersCondition
+            $this->getGroupIdentifier(), $searchCondition
         );
         $subscribedUserTableRenderer = $this->getSubscribedUserTableRenderer();
 
@@ -436,12 +433,17 @@ class BrowseComponent extends Manager
         );
 
         $users = $this->getGroupMembershipService()->findSubscribedUsersForGroupIdentifier(
-            $this->getGroupIdentifier(), $subscribedUsersCondition, $tableParameterValues->getOffset(),
+            $this->getGroupIdentifier(), $searchCondition, $tableParameterValues->getOffset(),
             $tableParameterValues->getNumberOfItemsPerPage(),
             $subscribedUserTableRenderer->determineOrderBy($tableParameterValues)
         );
 
-        return $subscribedUserTableRenderer->render($tableParameterValues, $users);
+        $html = [];
+
+        $html[] = $this->getButtonToolBarRenderer()->render($this->getSubscribedUsersToolBar());
+        $html[] = $subscribedUserTableRenderer->render($tableParameterValues, $users);
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -454,36 +456,90 @@ class BrowseComponent extends Manager
      */
     public function renderTabs(): string
     {
-        $tabs = new TabsCollection();
         $translator = $this->getTranslator();
+        $group = $this->getGroup();
 
-        // Subgroups table tab
-        $tabs->add(
-            new ContentTab(
-                (string) self::TAB_SUBGROUPS, $translator->trans('Subgroups'), $this->renderGroupTable(),
-                new FontAwesomeGlyph(
-                    'users', ['fa-lg'], null, 'fas'
+        $tabs = new TabsCollection();
+        $selectedTab = self::TAB_DETAILS;
+
+        if ($this->countNumberOfGroups() > 0) {
+            $selectedTab = self::TAB_SUBGROUPS;
+            $tabs->add(
+                new ContentTab(
+                    self::TAB_SUBGROUPS, $translator->trans('Subgroups'), $this->renderGroupTable(),
+                    new FontAwesomeGlyph(
+                        'users', ['fa-lg'], null, 'fas'
+                    )
                 )
-            )
-        );
+            );
+        }
+        else {
+            $tabs->add(
+                new LinkTab(
+                    identifier: Manager::ACTION_CREATE, label: $translator->trans('AddGroup', [],
+                    StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph('plus'),
+                    link: $this->getGroupUrlGenerator()->getCreateUrl($this->getGroup()),
+                    display: DisplayTypeEnum::ICON_AND_LABEL
+                )
+            );
+        }
+
+        if ($this->countNumberOfSubscribedUsers() > 0) {
+            $tabs->add(
+                new ContentTab(
+                    self::TAB_USERS, $translator->trans('Users', [], \Chamilo\Core\User\Manager::CONTEXT),
+                    $this->renderSubscribedUsertable(), new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas')
+                )
+            );
+
+            $tabs->add(
+                new LinkTab(
+                    identifier: Manager::ACTION_TRUNCATE, label: $translator->trans('Truncate'),
+                    inlineGlyph: new FontAwesomeGlyph(
+                        'trash-alt'
+                    ), link: $this->getGroupUrlGenerator()->getTruncateUrl($group),
+                    display: DisplayTypeEnum::ICON_AND_LABEL, classes: ['text-danger']
+                )
+            );
+        }
+        else {
+            $tabs->add(
+                new LinkTab(
+                    identifier: Manager::ACTION_BROWSE_NON_SUBSCRIBED_USERS, label: $translator->trans('AddUsers'),
+                    inlineGlyph: new FontAwesomeGlyph('plus-circle'), link: $this->getGroupUrlGenerator()
+                        ->getSubscribeUrl($this->getGroup()), display: DisplayTypeEnum::ICON_AND_LABEL
+                )
+            );
+        }
 
         $tabs->add(
             new ContentTab(
-                (string) self::TAB_USERS, $translator->trans('Users', [], \Chamilo\Core\User\Manager::CONTEXT),
-                $this->renderSubscribedUsertable(), new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas')
-            )
-        );
-
-        // Group info tab
-        $tabs->add(
-            new ContentTab(
-                (string) self::TAB_DETAILS, $translator->trans('Details'), $this->getGroupDetails(),
-                new FontAwesomeGlyph(
+                self::TAB_DETAILS, $translator->trans('Details'), $this->getGroupDetails(), new FontAwesomeGlyph(
                     'info-circle', ['fa-lg'], null, 'fas'
                 )
             )
         );
 
-        return $this->getTabsRenderer()->renderNavigationAndContent('group_browser', $tabs);
+        $tabs->add(
+            new LinkTab(
+                identifier: Manager::ACTION_UPDATE, label: $translator->trans('Edit', [], StringUtilities::LIBRARIES),
+                inlineGlyph: new FontAwesomeGlyph('pencil-alt'), link: $this->getGroupUrlGenerator()->getUpdateUrl(
+                $group
+            ), display: DisplayTypeEnum::ICON_AND_LABEL
+            )
+        );
+
+        if ($this->getGroup()->getId() != $this->getRootGroup()->getId()) {
+            $deleteUrl = $this->getGroupUrlGenerator()->getDeleteUrl($group);
+            $tabs->add(
+                new LinkTab(
+                    identifier: 'Delete', label: $translator->trans('Delete', [], StringUtilities::LIBRARIES),
+                    inlineGlyph: new FontAwesomeGlyph('times'), link: $deleteUrl,
+                    display: DisplayTypeEnum::ICON_AND_LABEL, classes: ['text-danger']
+                )
+            );
+        }
+
+        return $this->getTabsRenderer()->renderNavigationAndContent('group_browser', $tabs, $selectedTab);
     }
 }

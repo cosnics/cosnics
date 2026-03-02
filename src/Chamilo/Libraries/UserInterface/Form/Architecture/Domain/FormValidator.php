@@ -129,6 +129,33 @@ class FormValidator extends HTML_QuickForm
     }
 
     /**
+     * @param string[] $attributes
+     *
+     * @return string[]
+     */
+    protected function addClassToAttributes(array $attributes = [], string $formClass = 'form-control'): array
+    {
+        if (!array_key_exists('class', $attributes)) {
+            $attributes['class'] = $formClass;
+        }
+        else {
+            $classAttributes = $attributes['class'];
+
+            if (!is_array($classAttributes)) {
+                $classAttributes = explode(' ', $classAttributes);
+            }
+
+            if (!in_array($formClass, $classAttributes)) {
+                array_unshift($classAttributes, $formClass);
+            }
+
+            $attributes['class'] = implode(' ', $classAttributes);
+        }
+
+        return $attributes;
+    }
+
+    /**
      * @throws \QuickformException
      */
     public function addDatepicker(string $name, string $label, bool $includeTimePicker = true
@@ -294,44 +321,17 @@ class FormValidator extends HTML_QuickForm
     }
 
     /**
-     * @param string[] $attributes
-     *
-     * @return string[]
-     */
-    protected function addFormControlToElementAttributes(array $attributes = []): array
-    {
-        if (!array_key_exists('class', $attributes)) {
-            $attributes['class'] = 'form-control';
-        }
-        else {
-            $classAttributes = $attributes['class'];
-
-            if (!is_array($classAttributes)) {
-                $classAttributes = explode(' ', $classAttributes);
-            }
-
-            if (!in_array('form-control', $classAttributes)) {
-                array_unshift($classAttributes, 'form-control');
-            }
-
-            $attributes['class'] = implode(' ', $classAttributes);
-        }
-
-        return $attributes;
-    }
-
-    /**
      * @param string[] $options
      * @param string[] $attributes
      *
      * @throws \QuickformException
      */
     public function addHtmlEditor(
-        string $name, string $label, bool $required = true, array $options = [], array $attributes = []
+        string $name, string $label, bool $isRequired = true, array $options = [], array $attributes = []
     ): void
     {
         $formValidatorHtmlEditorRenderer = $this->getFormValidatorHtmlEditorRenderer();
-        $formValidatorHtmlEditorRenderer->addHtmlEditor($this, $name, $label, $required, $options, $attributes);
+        $formValidatorHtmlEditorRenderer->addHtmlEditor($this, $name, $label, $isRequired, $options, $attributes);
     }
 
     /**
@@ -414,12 +414,12 @@ class FormValidator extends HTML_QuickForm
      *
      * @throws \QuickformException
      */
-    public function addPassword(string $name, string $label, bool $required = true, array $attributes = []
+    public function addPassword(string $name, string $label, bool $isRequired = true, array $attributes = []
     ): HTML_QuickForm_password
     {
         $element = $this->addElement($this->createPassword($name, $label, $attributes));
 
-        if ($required) {
+        if ($isRequired) {
             $this->addRule(
                 $name, $this->getTranslation('ThisFieldIsRequired'), HTML_QuickForm_Rule_Required::class
             );
@@ -460,12 +460,13 @@ class FormValidator extends HTML_QuickForm
      *
      * @throws \QuickformException
      */
-    public function addSelect(string $name, string $label, array $values, bool $required = true, array $attributes = []
+    public function addSelect(
+        string $name, string $label, array $values, bool $isRequired = true, array $attributes = []
     ): HTML_QuickForm_select
     {
         $element = $this->addElement($this->createSelect($name, $label, $values, $attributes));
 
-        if ($required) {
+        if ($isRequired) {
             $this->addRule(
                 $name, $this->getTranslation('ThisFieldIsRequired'), HTML_QuickForm_Rule_Required::class
             );
@@ -512,14 +513,14 @@ class FormValidator extends HTML_QuickForm
      *
      * @throws \QuickformException
      */
-    public function addTextfield(string $name, string $label, bool $required = true, array $attributes = []
+    public function addTextfield(string $name, string $label, bool $isRequired = true, array $attributes = []
     ): HTML_QuickForm_text
     {
         $element = $this->addElement($this->createTextfield($name, $label, $attributes));
 
         $this->applyFilter($name, 'trim');
 
-        if ($required) {
+        if ($isRequired) {
             $this->addRule(
                 $name, $this->getTranslation('ThisFieldIsRequired'), HTML_QuickForm_Rule_Required::class
             );
@@ -682,7 +683,7 @@ class FormValidator extends HTML_QuickForm
      */
     public function createPassword(string $name, string $label, array $attributes = []): HTML_QuickForm_password
     {
-        $attributes = $this->addFormControlToElementAttributes($attributes);
+        $attributes = $this->addClassToAttributes($attributes);
 
         return $this->createElement(HTML_QuickForm_password::class, $name, $label, $attributes);
     }
@@ -706,9 +707,16 @@ class FormValidator extends HTML_QuickForm
      */
     public function createSelect($name, $label, $values, $attributes = []): HTML_QuickForm_select
     {
-        $attributes = $this->addFormControlToElementAttributes($attributes);
+        $selectElement = $this->createElement(
+            HTML_QuickForm_select::class, $name, $label, $values,
+            $this->addClassToAttributes($attributes, 'form-select')
+        );
 
-        return $this->createElement(HTML_QuickForm_select::class, $name, $label, $values, $attributes);
+        if ($selectElement instanceof HTML_QuickForm_select) {
+            $this->getRenderer()->setElementTemplate($this->getSelectTemplate(), $name);
+        }
+
+        return $selectElement;
     }
 
     /**
@@ -736,7 +744,7 @@ class FormValidator extends HTML_QuickForm
      */
     public function createTextfield(string $name, string $label, array $attributes = []): HTML_QuickForm_text
     {
-        $attributes = $this->addFormControlToElementAttributes($attributes);
+        $attributes = $this->addClassToAttributes($attributes);
 
         return $this->createElement(HTML_QuickForm_text::class, $name, $label, $attributes);
     }
@@ -918,6 +926,27 @@ class FormValidator extends HTML_QuickForm
     private function getSecurity(): SecurityUtilities
     {
         return $this->getService(SecurityUtilities::class);
+    }
+
+    public function getSelectTemplate(): string
+    {
+        $html = [];
+        $glyph = new FontAwesomeGlyph('asterisk', ['text-danger', 'fa-2xs'], null, 'fas');
+
+        $html[] = '<div class="form-floating mb-3 clearfix">';
+        $html[] = '    {element}';
+        $html[] = '    <label>';
+        $html[] = '        {label}';
+        $html[] = '        <!-- BEGIN required -->';
+        $html[] = '        <span class="text-danger ms-1">' . $glyph->render() . '</span>';
+        $html[] = '        <!-- END required -->';
+        $html[] = '    </label>';
+        $html[] = '    <!-- BEGIN error -->';
+        $html[] = '    <div class="invalid-feedback">{error}</div>';
+        $html[] = '    <!-- END error -->';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     public function getStaticTemplate(): string

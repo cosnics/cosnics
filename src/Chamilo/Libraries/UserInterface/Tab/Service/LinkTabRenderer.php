@@ -30,17 +30,30 @@ class LinkTabRenderer implements TabRendererInterface, TabNavigationRendererInte
         return $this->translator;
     }
 
+    protected function renderClasses(TabNavigationInterface $tab, ?string $selectedTab = null): string
+    {
+        $isActive = $tab->getIdentifier() === $selectedTab;
+
+        $baseClasses = ['nav-link'];
+        if ($isActive) {
+            $baseClasses[] = 'active';
+        }
+
+        $classes = array_merge($baseClasses, $tab->getClasses());
+
+        return implode(' ', $classes);
+    }
+
     /**
      * @param \Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab $tab
      */
     public function renderNavigation(TabNavigationInterface $tab, ?string $selectedTab = null): string
     {
-        $isActive = $tab->getIdentifier() === $selectedTab;
-
         $html = [];
 
         $html[] = '<li class="nav-item" role="presentation">';
-        $html[] = '<a href="' . $tab->getLink() . '" class="nav-link' . ($isActive ? ' active' : '') . '" id="' .
+
+        $html[] = '<a href="' . $tab->getLink() . '" class="' . $this->renderClasses($tab, $selectedTab) . '" id="' .
             $tab->getIdentifier() . '-tab">';
 
         if ($tab->getInlineGlyph() && $tab->isIconVisible()) {

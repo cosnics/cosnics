@@ -7,8 +7,8 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedE
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_submit;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
+use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use HTML_QuickForm_html;
-use HTML_QuickForm_select;
 use HTML_Table;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ViewLogsComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
@@ -27,26 +26,23 @@ class ViewLogsComponent extends Manager
      */
     public function run(): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
         $form = $this->buildForm();
 
         $html[] = $this->renderHeader();
-        $html[] = $form->render() . '<br />';
+        $html[] = $form->render();
 
-        if ($form->validate())
-        {
+        if ($form->validate()) {
             $logFile = $form->exportValue('log_file');
             $lineCount = $form->exportValue('line_count');
         }
-        else
-        {
+        else {
             $phpErrorLogPath = ini_get('error_log');
             $logFile = basename($phpErrorLogPath);
-            $lineCount = '10';
+            $lineCount = 10;
         }
 
         $html[] = $this->displayLogfileTable($logFile, $lineCount);
@@ -64,14 +60,11 @@ class ViewLogsComponent extends Manager
             new FormValidator('logviewer', FormValidator::FORM_METHOD_POST, $this->getUrlGenerator()->fromRequest());
         $translator = $this->getTranslator();
 
-        $renderer = $form->defaultRenderer();
-        $renderer->setElementTemplate(' {element} ');
-
         $lines = [
-            '10' => '10 ' . $translator->trans('Lines', [], Manager::CONTEXT),
-            '20' => '20 ' . $translator->trans('Lines', [], Manager::CONTEXT),
-            '50' => '50 ' . $translator->trans('Lines', [], Manager::CONTEXT),
-            'all' => $translator->trans('AllLines', [], Manager::CONTEXT)
+            10 => '10 ' . $translator->trans('Lines', [], Manager::CONTEXT),
+            20 => '20 ' . $translator->trans('Lines', [], Manager::CONTEXT),
+            50 => '50 ' . $translator->trans('Lines', [], Manager::CONTEXT),
+            0 => $translator->trans('AllLines', [], Manager::CONTEXT)
         ];
 
         $dir = $this->getConfigurablePathBuilder()->getLogPath();
@@ -82,18 +75,30 @@ class ViewLogsComponent extends Manager
 
         $files = [$phpErrorFileName => $phpErrorFileName];
 
-        foreach ($content->name('*.log') as $file)
-        {
+        foreach ($content->name('*.log') as $file) {
             $files[$file->getFilename()] = $file->getFilename();
         }
 
-        $form->addElement(HTML_QuickForm_select::class, 'log_file', '', $files);
-        $form->addElement(HTML_QuickForm_select::class, 'line_count', '', $lines);
+        $form->addElement(HTML_QuickForm_html::class, '<div class="row">');
 
+        $form->addElement(HTML_QuickForm_html::class, '<div class="col-auto">');
+        $form->addSelect('log_file', $translator->trans('LogFile', [], Manager::CONTEXT), $files, false);
+        $form->getRenderer()->setElementTemplate($this->getSelectTemplate(), 'log_file');
+        $form->addElement(HTML_QuickForm_html::class, '</div>');
+
+        $form->addElement(HTML_QuickForm_html::class, '<div class="col-auto">');
+        $form->addSelect('line_count', $translator->trans('Linecount', [], Manager::CONTEXT), $lines, false);
+        $form->getRenderer()->setElementTemplate($this->getSelectTemplate(), 'line_count');
+        $form->addElement(HTML_QuickForm_html::class, '</div>');
+
+        $form->addElement(HTML_QuickForm_html::class, '<div class="col-auto">');
         $form->addElement(
             HTML_QuickForm_button_submit::class, 'submit', $translator->trans('Ok', [], StringUtilities::LIBRARIES),
             ['class' => 'positive finish']
         );
+        $form->addElement(HTML_QuickForm_html::class, '</div>');
+        $form->addElement(HTML_QuickForm_html::class, '</div>');
+
         $form->addElement(
             HTML_QuickForm_html::class, $this->getResourceManager()->getResourceHtml(
             $this->getWebPathBuilder()->getJavascriptPath() . 'LogViewer.js'
@@ -101,6 +106,27 @@ class ViewLogsComponent extends Manager
         );
 
         return $form;
+    }
+
+    public function getSelectTemplate(): string
+    {
+        $html = [];
+        $glyph = new FontAwesomeGlyph('asterisk', ['text-danger', 'fa-2xs'], null, 'fas');
+
+        $html[] = '<div class="mb-3 clearfix">';
+        $html[] = '    {element}';
+        $html[] = '    <label class="visually-hidden">';
+        $html[] = '        {label}';
+        $html[] = '        <!-- BEGIN required -->';
+        $html[] = '        <span class="text-danger ms-1">' . $glyph->render() . '</span>';
+        $html[] = '        <!-- END required -->';
+        $html[] = '    </label>';
+        $html[] = '    <!-- BEGIN error -->';
+        $html[] = '    <div class="invalid-feedback">{error}</div>';
+        $html[] = '    <!-- END error -->';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -114,42 +140,35 @@ class ViewLogsComponent extends Manager
         $phpErrorLogPath = ini_get('error_log');
         $phpErrorFileName = basename($phpErrorLogPath);
 
-        if ($logFile == $phpErrorFileName)
-        {
+        if ($logFile == $phpErrorFileName) {
             $logFilePath = $phpErrorLogPath;
         }
-        else
-        {
+        else {
             $logFilePath = $this->getConfigurablePathBuilder()->getLogPath() . $logFile;
 
-            if (!file_exists($logFilePath))
-            {
-                return '<div class="warning-message">' . $translator->trans('NoLogfilesFound', [], Manager::CONTEXT) .
-                    '</div>';
+            if (!file_exists($logFilePath)) {
+                return '<div class="alert alert-warning">' .
+                    $translator->trans('NoLogfilesFound', [], Manager::CONTEXT) . '</div>';
             }
         }
 
         $string = trim(file_get_contents($logFilePath));
 
-        $lines = explode(PHP_EOL, $string);
+        $lines = preg_split('[\n]', $string);
         $lines = array_reverse($lines);
 
-        if ($lineCount != 'all' || count($lines) < $lineCount)
-        {
+        if ($lineCount !== 0 || count($lines) < $lineCount) {
             $lines = array_slice($lines, 0, $lineCount);
         }
 
-        foreach ($lines as $i => $line)
-        {
+        foreach ($lines as $i => $line) {
             $lineClass = null;
 
-            if (str_contains($line, 'error') || str_contains($line, '[ERROR]') || str_contains($line, '[FATAL]'))
-            {
-                $lineClass = 'bg-danger';
+            if (str_contains($line, 'error') || str_contains($line, '[ERROR]') || str_contains($line, '[FATAL]')) {
+                $lineClass = 'text-bg-danger';
             }
-            elseif (str_contains($line, 'warning') || str_contains($line, '[WARNING]'))
-            {
-                $lineClass = 'bg-warning';
+            elseif (str_contains($line, 'warning') || str_contains($line, '[WARNING]')) {
+                $lineClass = 'text-bg-warning';
             }
 
             $table->setCellContents($i, 0, $line);

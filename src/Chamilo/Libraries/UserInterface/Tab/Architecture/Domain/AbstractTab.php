@@ -10,6 +10,11 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
  */
 abstract class AbstractTab
 {
+    /**
+     * @var string[]
+     */
+    protected array $classes;
+
     protected DisplayTypeEnum $display;
 
     protected string $identifier;
@@ -18,15 +23,37 @@ abstract class AbstractTab
 
     protected string $label;
 
+    /**
+     * @param string[] $classes
+     */
     public function __construct(
         string $identifier, string $label, ?InlineGlyph $inlineGlyph,
-        DisplayTypeEnum $display = DisplayTypeEnum::ICON_AND_LABEL
+        DisplayTypeEnum $display = DisplayTypeEnum::ICON_AND_LABEL, array $classes = []
     )
     {
         $this->identifier = $identifier;
         $this->label = $label;
         $this->inlineGlyph = $inlineGlyph;
         $this->display = $display;
+        $this->classes = $classes;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getClasses(): array
+    {
+        return $this->classes;
+    }
+
+    /**
+     * @param string[] $classes
+     */
+    public function setClasses(array $classes): static
+    {
+        $this->classes = $classes;
+
+        return $this;
     }
 
     public function getDisplay(): DisplayTypeEnum

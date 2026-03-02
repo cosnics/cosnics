@@ -573,7 +573,7 @@ abstract class AbstractHtmlTableRenderer
                 '" name="form_' . $tableName . '">';
         }
 
-        $html[] = '<div class="row mb-3">';
+        $html[] = '<div class="row mb-1">';
         $html[] = '<div class="col-12 d-flex justify-content-between">';
 
         if ($hasFormActions) {

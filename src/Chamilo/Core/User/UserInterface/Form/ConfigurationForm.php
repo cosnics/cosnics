@@ -151,7 +151,7 @@ class ConfigurationForm extends FormValidator
         }
         else {
             $this->addElement(
-                HTML_QuickForm_html::class, '<div class="warning-message">' .
+                HTML_QuickForm_html::class, '<div class="alert alert-warning">' .
                 $translator->trans('NoConfigurableSettings', [], StringUtilities::LIBRARIES) . '</div>'
             );
         }

@@ -103,14 +103,7 @@ class ConfigureComponent extends ProfileComponent
 
         $html = [];
 
-        if (!$this->getSelectedContext()) {
-            $html[] = '<div class="normal-message">' .
-                $translator->trans('SelectApplicationToConfigure', [], Manager::CONTEXT) . '</div><br />';
-        }
-
-        $html[] = $this->getTabsRenderer()->renderNavigation(
-            'package', $tabs, $this->getRequest()->query->get(self::PARAM_SELECTED_CONTEXT)
-        );
+        $html[] = $this->getTabsRenderer()->renderNavigation('package', $tabs, $this->getSelectedContext());
         $html[] = $this->form->render();
 
         return implode(PHP_EOL, $html);

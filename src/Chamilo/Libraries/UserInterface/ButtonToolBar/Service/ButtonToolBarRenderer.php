@@ -40,7 +40,7 @@ class ButtonToolBarRenderer extends AbstractButtonCollectionButtonRenderer imple
         $html = [];
 
         $html[] = '<div';
-        $html[] = 'class="' . $this->renderClasses($buttonToolBar, ['btn-toolbar'], ['justify-content-between']) .
+        $html[] = 'class="' . $this->renderClasses($buttonToolBar, ['btn-toolbar', 'mb-3'], ['justify-content-between']) .
             '" role="toolbar">';
 
         foreach ($buttonToolBar->getButtons() as $button) {

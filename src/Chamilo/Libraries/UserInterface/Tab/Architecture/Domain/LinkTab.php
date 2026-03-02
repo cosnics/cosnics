@@ -31,10 +31,10 @@ class LinkTab extends AbstractTab implements TabInterface, TabNavigationInterfac
     public function __construct(
         string $identifier, string $label, ?InlineGlyph $inlineGlyph, string $link, bool $isSelected = false,
         ?string $confirmationMessage = null, string $position = self::POSITION_LEFT,
-        DisplayTypeEnum $display = DisplayTypeEnum::ICON_AND_LABEL, $target = self::TARGET_WINDOW
+        DisplayTypeEnum $display = DisplayTypeEnum::ICON_AND_LABEL, $target = self::TARGET_WINDOW, array $classes = []
     )
     {
-        parent::__construct($identifier, $label, $inlineGlyph, $display);
+        parent::__construct($identifier, $label, $inlineGlyph, $display, $classes);
         $this->link = $link;
         $this->isSelected = $isSelected;
         $this->confirmationMessage = $confirmationMessage;

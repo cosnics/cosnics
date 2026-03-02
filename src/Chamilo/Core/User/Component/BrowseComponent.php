@@ -42,7 +42,7 @@ class BrowseComponent extends Manager
         $html = [];
 
         $html[] = $this->renderHeader();
-        $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar()) . '<br />';
+        $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar());
         $html[] = $this->renderTable();
         $html[] = $this->renderFooter();
 

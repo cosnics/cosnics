@@ -25,10 +25,10 @@ class FormTab extends GenericTab
      */
     public function __construct(
         string $identifier, string $label, ?InlineGlyph $inlineGlyph, $method, array $parameters = [],
-        DisplayTypeEnum $display = DisplayTypeEnum::ICON_AND_LABEL
+        DisplayTypeEnum $display = DisplayTypeEnum::ICON_AND_LABEL, array $classes = []
     )
     {
-        parent::__construct($identifier, $label, $inlineGlyph, $display);
+        parent::__construct($identifier, $label, $inlineGlyph, $display, $classes);
         $this->method = $method;
         $this->parameters = $parameters;
     }

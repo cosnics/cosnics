@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\UserInterface\Tab\Service;
 use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabRendererRegistry;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabContentInterface;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Tab\Service
@@ -34,8 +35,10 @@ class TabsRenderer
 
         foreach ($tabs as $tab) {
             try {
-                $tabRenderer = $this->tabRendererRegistry->getTabRendererForTab($tab);
-                $html[] = $tabRenderer->renderContent($tab, $selectedTab);
+                if ($tab instanceof TabContentInterface) {
+                    $tabRenderer = $this->tabRendererRegistry->getTabRendererForTab($tab);
+                    $html[] = $tabRenderer->renderContent($tab, $selectedTab);
+                }
             }
             catch (ClassNotExistException) {
             }
@@ -65,7 +68,6 @@ class TabsRenderer
         }
 
         $html[] = '</ul>';
-        $html[] = '<div class="tab-content">';
 
         return implode(PHP_EOL, $html);
     }
