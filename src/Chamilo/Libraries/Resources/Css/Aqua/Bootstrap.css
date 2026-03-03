@@ -5,6 +5,10 @@ a:not([class]) {
     text-decoration: none;
 }
 
+.btn-toolbar-mini .btn {
+    padding: 0px 4px;
+}
+
 /************************
  * DROPZONE FILE UPLOAD *
  ************************/

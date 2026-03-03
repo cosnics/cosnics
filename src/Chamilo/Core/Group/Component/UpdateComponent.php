@@ -63,7 +63,7 @@ class UpdateComponent extends Manager
                 return $this->redirectWithMessage(
                     $message, !$success, [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => self::ACTION_VIEW,
+                        Application::PARAM_ACTION => self::ACTION_BROWSE,
                         self::PARAM_GROUP_ID => $group->getId()
                     ]
                 );

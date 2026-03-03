@@ -95,6 +95,6 @@ class GroupUrlGenerator
 
     public function getViewUrl(Group $group): string
     {
-        return $this->getGroupActionUrl(Manager::ACTION_VIEW, $group);
+        return $this->getGroupActionUrl(Manager::ACTION_BROWSE, $group);
     }
 }

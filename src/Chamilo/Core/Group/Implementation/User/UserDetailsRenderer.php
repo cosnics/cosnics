@@ -95,7 +95,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
                 $viewUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_VIEW,
+                        Application::PARAM_ACTION => Manager::ACTION_BROWSE,
                         Manager::PARAM_GROUP_ID => $group->getId()
                     ]
                 );

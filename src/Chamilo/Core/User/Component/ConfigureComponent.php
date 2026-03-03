@@ -68,6 +68,7 @@ class ConfigureComponent extends ProfileComponent
         $tabs = new TabsCollection();
 
         $packages = $this->getPackageBundlesCacheService()->getPackages();
+        $packageNames = [];
 
         foreach ($packages as $package) {
             $packageContext = $package->getContext();

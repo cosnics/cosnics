@@ -152,27 +152,19 @@ class BrowseComponent extends Manager
         $html[] = '<table class="table table-striped table-bordered table-hover">';
         $html[] = ' <tbody>';
         $html[] = '<tr>';
-        $html[] = '<th scope="row">'. $translator->trans('Name', [], Manager::CONTEXT) .'</th>';
-        $html[] = '<td>'. $group->getName() .'</td>';
+        $html[] = '<th class="w-25" scope="row">' . $translator->trans('Name', [], Manager::CONTEXT) . '</th>';
+        $html[] = '<td>' . $group->getName() . '</td>';
         $html[] = '</tr>';
         $html[] = '<tr>';
-        $html[] = '<th scope="row">'. $translator->trans('Code', [], Manager::CONTEXT) .'</th>';
-        $html[] = '<td>'. $group->getCode() .'</td>';
+        $html[] = '<th class="w-25" scope="row">' . $translator->trans('Code', [], Manager::CONTEXT) . '</th>';
+        $html[] = '<td>' . $group->getCode() . '</td>';
         $html[] = '</tr>';
         $html[] = '<tr>';
-        $html[] = '<th scope="row">'. $translator->trans('Description', [], Manager::CONTEXT) .'</th>';
-        $html[] = '<td>'. $group->getDescription() .'</td>';
+        $html[] = '<th class="w-25" scope="row">' . $translator->trans('Description', [], Manager::CONTEXT) . '</th>';
+        $html[] = '<td>' . ($group->getDescription() ? $group->getDescription() : '-') . '</td>';
         $html[] = '</tr>';
         $html[] = '</tbody>';
         $html[] = '</table>';
-
-        $html[] = '<h5>' . $translator->trans('Code', [], Manager::CONTEXT) . ':</h5>';
-        $html[] = $group->getCode();
-
-        if ($group->getDescription()) {
-            $html[] = '<h5>' . $translator->trans('Description', [], Manager::CONTEXT) . ':</h5>';
-            $html[] = $group->getDescription();
-        }
 
         return implode(PHP_EOL, $html);
     }
@@ -466,8 +458,8 @@ class BrowseComponent extends Manager
             $selectedTab = self::TAB_SUBGROUPS;
             $tabs->add(
                 new ContentTab(
-                    self::TAB_SUBGROUPS, $translator->trans('Subgroups'), $this->renderGroupTable(),
-                    new FontAwesomeGlyph(
+                    self::TAB_SUBGROUPS, $translator->trans('Subgroups', [], Manager::CONTEXT),
+                    $this->renderGroupTable(), new FontAwesomeGlyph(
                         'users', ['fa-lg'], null, 'fas'
                     )
                 )
@@ -476,10 +468,10 @@ class BrowseComponent extends Manager
         else {
             $tabs->add(
                 new LinkTab(
-                    identifier: Manager::ACTION_CREATE, label: $translator->trans('AddGroup', [],
-                    StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph('plus'),
-                    link: $this->getGroupUrlGenerator()->getCreateUrl($this->getGroup()),
-                    display: DisplayTypeEnum::ICON_AND_LABEL
+                    identifier: Manager::ACTION_CREATE, label: $translator->trans('AddGroup', [], Manager::CONTEXT),
+                    inlineGlyph: new FontAwesomeGlyph('plus'), link: $this->getGroupUrlGenerator()->getCreateUrl(
+                    $this->getGroup()
+                ), display: DisplayTypeEnum::ICON_AND_LABEL
                 )
             );
         }
@@ -505,9 +497,10 @@ class BrowseComponent extends Manager
         else {
             $tabs->add(
                 new LinkTab(
-                    identifier: Manager::ACTION_BROWSE_NON_SUBSCRIBED_USERS, label: $translator->trans('AddUsers'),
-                    inlineGlyph: new FontAwesomeGlyph('plus-circle'), link: $this->getGroupUrlGenerator()
-                        ->getSubscribeUrl($this->getGroup()), display: DisplayTypeEnum::ICON_AND_LABEL
+                    identifier: Manager::ACTION_BROWSE_NON_SUBSCRIBED_USERS, label: $translator->trans('AddUsers', [],
+                    Manager::CONTEXT), inlineGlyph: new FontAwesomeGlyph('plus-circle'),
+                    link: $this->getGroupUrlGenerator()->getSubscribeUrl($this->getGroup()),
+                    display: DisplayTypeEnum::ICON_AND_LABEL
                 )
             );
         }

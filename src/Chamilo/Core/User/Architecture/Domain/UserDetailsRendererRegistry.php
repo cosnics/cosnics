@@ -11,7 +11,6 @@ use OutOfBoundsException;
  */
 class UserDetailsRendererRegistry extends ArrayCollection
 {
-
     public function addUserDetailsRenderer(UserDetailsRendererInterface $userDetailsRenderer): void
     {
         $this->set(get_class($userDetailsRenderer), $userDetailsRenderer);
@@ -19,8 +18,7 @@ class UserDetailsRendererRegistry extends ArrayCollection
 
     public function getUserDetailsRenderer(string $userDetailsRendererType): UserDetailsRendererInterface
     {
-        if (!$this->containsKey($userDetailsRendererType))
-        {
+        if (!$this->containsKey($userDetailsRendererType)) {
             throw new OutOfBoundsException($userDetailsRendererType . ' is not a valid UserDetailsRenderer');
         }
 

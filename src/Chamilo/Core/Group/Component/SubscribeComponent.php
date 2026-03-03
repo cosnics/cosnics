@@ -42,7 +42,7 @@ class SubscribeComponent extends Manager
                 $this->getUrlGenerator()->fromParameters(
                     [
                         self::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => self::ACTION_VIEW,
+                        self::PARAM_ACTION => self::ACTION_BROWSE,
                         self::PARAM_GROUP_ID => $groupIdentifier
                     ]
                 ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
@@ -95,7 +95,7 @@ class SubscribeComponent extends Manager
             return $this->redirectWithMessage(
                 $translator->trans($message), (bool) $failures, [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => self::ACTION_VIEW,
+                    Application::PARAM_ACTION => self::ACTION_BROWSE,
                     self::PARAM_GROUP_ID => $groupIdentifier
                 ]
             );

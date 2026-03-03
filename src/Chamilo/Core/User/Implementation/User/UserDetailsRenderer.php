@@ -9,7 +9,6 @@ use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\NamespaceIdentGlyph;
 use HTML_Table;
@@ -59,62 +58,22 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
     public function hasContentForUser(User $user, User $requestingUser): bool
     {
+        if (!$requestingUser->isPlatformAdministrator()) {
+            return false;
+        }
+
         return true;
     }
 
     public function renderTitle(User $user, User $requestingUser): string
     {
-        return $this->getTranslator()->trans('TypeName', [], Manager::CONTEXT);
+        return $this->getTranslator()->trans('UserDetails', [], Manager::CONTEXT);
     }
 
     /**
      * @throws \TableException
      */
     public function renderUserDetails(User $user, User $requestingUser): string
-    {
-        $html = [];
-
-        $html[] = '<div class="panel panel-default">';
-
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title">';
-
-        $glyph = new FontAwesomeGlyph('user-circle', [], null, 'fas');
-        $html[] = $glyph->render() . '&nbsp;' . $user->getFullName();
-
-        $html[] = '</h3>';
-        $html[] = '</div>';
-
-        $userPicture = $this->getUserPictureProvider()->getUserPictureAsBase64String($user, $requestingUser);
-
-        $html[] = '<div class="panel-body">';
-
-        $html[] = '<img class="img-thumbnail float-end" src="' . $userPicture . '" alt="' . $user->getFullName() .
-            '" style="max-height: 150px;"/>';
-
-        $translator = $this->getTranslator();
-
-        $html[] = $translator->trans('Email', [], Manager::CONTEXT) . ': ' .
-            $this->getStringUtilities()->encryptMailLink($user->getEmail());
-        $html[] = '<br />' . $translator->trans('Username', [], Manager::CONTEXT) . ': ' . $user->getUsername();
-
-        if ($user->isPlatformAdministrator()) {
-            $html[] = ', ' . $translator->trans('PlatformAdministrator', [], Manager::CONTEXT);
-        }
-
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        $html[] = $this->renderUserProperties($user, $requestingUser);
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @throws \TableException
-     */
-    public function renderUserProperties(User $user, User $requestingUser): string
     {
         if (!$requestingUser->isPlatformAdministrator()) {
             return '';
@@ -126,25 +85,37 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         $table = new HTML_Table(['class' => 'table table-striped table-bordered table-hover table-responsive']);
 
         $attributes = [
-            'official_code',
-            'auth_source',
-            'language',
-            'active'
+            User::PROPERTY_PICTURE_URI,
+            User::PROPERTY_GIVEN_NAME,
+            User::PROPERTY_SURNAME,
+            User::PROPERTY_USERNAME,
+            User::PROPERTY_EMAIL,
+            User::PROPERTY_OFFICIAL_CODE,
+            User::PROPERTY_AUTHENTICATION_SOURCE,
+            User::PROPERTY_REGISTRATION_DATE,
+            User::PROPERTY_PLATFORM_ADMINISTRATOR,
+            User::PROPERTY_ACTIVE
         ];
+
+        $userPicture = $this->getUserPictureProvider()->getUserPictureAsBase64String($user, $requestingUser);
 
         foreach ($attributes as $i => $attribute) {
             $table->setCellContents(
                 $i, 0, $translator->trans(
                 $this->getStringUtilities()->createString($attribute)->upperCamelize()->toString(), [], Manager::CONTEXT
-            )
+            ), 'th'
             );
 
             $value = $user->getDefaultProperty($attribute);
 
             $value = match ($attribute) {
-                User::PROPERTY_ACTIVE => $translator->trans(($value ? 'ConfirmYes' : 'ConfirmNo'), [],
-                    StringUtilities::LIBRARIES),
-                User:: PROPERTY_REGISTRATION_DATE => $datetimeUtilities->formatLocaleDate($value),
+                User::PROPERTY_ACTIVE, User::PROPERTY_PLATFORM_ADMINISTRATOR => $translator->trans(
+                    ($value ? 'ConfirmYes' : 'ConfirmNo'), [], StringUtilities::LIBRARIES
+                ),
+                User::PROPERTY_PICTURE_URI => '<img class="img-thumbnail" src="' . $userPicture . '" alt="' .
+                    $user->getFullName() . '" style="max-height: 150px;"/>',
+                User::PROPERTY_REGISTRATION_DATE => $datetimeUtilities->formatLocaleDate($value),
+                User::PROPERTY_EMAIL => $this->getStringUtilities()->encryptMailLink($value),
                 default => $value,
             };
 

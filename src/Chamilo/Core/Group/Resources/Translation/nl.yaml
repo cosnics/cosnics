@@ -2,6 +2,7 @@
 # Language: nl
 
 Action: "Actie"
+AddGroup: "Groep toevoegen"
 AddRightsTemplates: "Templates toevoegen"
 AddUsers: "Gebruikers toevoegen"
 Admin: "Admin"

@@ -41,7 +41,7 @@ class UnsubscribeComponent extends Manager
                 $this->getUrlGenerator()->fromParameters(
                     [
                         self::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => self::ACTION_VIEW,
+                        self::PARAM_ACTION => self::ACTION_BROWSE,
                         self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
                     ]
                 ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
@@ -92,7 +92,7 @@ class UnsubscribeComponent extends Manager
             return $this->redirectWithMessage(
                 $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => self::ACTION_VIEW,
+                    Application::PARAM_ACTION => self::ACTION_BROWSE,
                     self::PARAM_GROUP_ID => $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID)
                 ]
             );

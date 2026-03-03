@@ -2,6 +2,7 @@
 # Language: en
 
 Action: "Action"
+AddGroup: "Add group"
 AddRightsTemplates: "Add templates"
 AddUsers: "Add users"
 Admin: "Admin"

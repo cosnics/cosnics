@@ -51,7 +51,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
                 $this->getUrlGenerator()->fromParameters(
                     [
                         self::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => self::ACTION_VIEW,
+                        self::PARAM_ACTION => self::ACTION_BROWSE,
                         self::PARAM_GROUP_ID => $this->getGroupIdentifier()
                     ]
                 ), $this->getTranslator()->trans('ViewerComponent', [], Manager::CONTEXT)

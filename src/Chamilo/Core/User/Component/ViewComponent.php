@@ -9,6 +9,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
@@ -46,12 +47,15 @@ class ViewComponent extends Manager
         $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
 
         if ($user instanceof User) {
+            $this->getBreadcrumbTrail()->add(new Breadcrumb('', $user->getFullName()));
+
             $html = [];
 
-            $html[] = $this->renderHeader();
+            $html[] = $this->getDefaultHeaderRenderer()->render($user);
             $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar($user));
-            $html[] = $this->getTabsRenderer()->renderNavigationAndContent('userDetails', $this->getTabsCollection($user));
-
+            $html[] = $this->getTabsRenderer()->renderNavigationAndContent(
+                'userDetails', $this->getTabsCollection($user), md5(UserDetailsRenderer::class)
+            );
             $html[] = $this->renderFooter();
 
             return new Response(implode(PHP_EOL, $html));
@@ -117,19 +121,18 @@ class ViewComponent extends Manager
     {
         $tabsCollection = new TabsCollection();
 
-        $userDetailsRendererCollection = $this->getUserDetailsRendererCollection();
-        $userDetailsRenderer = $userDetailsRendererCollection->getUserDetailsRenderer(UserDetailsRenderer::class);
-
-        $tabsCollection->add(
-            $this->initializeContentTab(UserDetailsRenderer::class, $userDetailsRenderer, $user)
-        );
+        //        $userDetailsRendererCollection = $this->getUserDetailsRendererCollection();
+        //        $userDetailsRenderer = $userDetailsRendererCollection->getUserDetailsRenderer(UserDetailsRenderer::class);
+        //
+        //        $tabsCollection->add(
+        //            $this->initializeContentTab(UserDetailsRenderer::class, $userDetailsRenderer, $user)
+        //        );
 
         foreach (
             $this->getUserDetailsRendererCollection()->getUserDetailsRenderers() as $userDetailsRendererClassName =>
             $userDetailsRenderer
         ) {
-            if ($userDetailsRendererClassName !== UserDetailsRenderer::class &&
-                $userDetailsRenderer->hasContentForUser($user, $this->getUser())) {
+            if ($userDetailsRenderer->hasContentForUser($user, $this->getUser())) {
                 $tabsCollection->add(
                     $this->initializeContentTab($userDetailsRendererClassName, $userDetailsRenderer, $user)
                 );

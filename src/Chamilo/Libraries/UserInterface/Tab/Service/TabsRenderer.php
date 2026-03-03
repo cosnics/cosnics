@@ -37,6 +37,7 @@ class TabsRenderer
             try {
                 if ($tab instanceof TabContentInterface) {
                     $tabRenderer = $this->tabRendererRegistry->getTabRendererForTab($tab);
+
                     $html[] = $tabRenderer->renderContent($tab, $selectedTab);
                 }
             }

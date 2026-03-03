@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\UserInterface\Form;
 
 use Chamilo\Core\Admin\Architecture\Domain\SettingsConnectorRegistry;
 use Chamilo\Core\Admin\Architecture\Interface\SettingsConnectorInterface;
+use Chamilo\Core\User\Service\UserSettingsParser;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_radio;
@@ -39,7 +40,8 @@ class ConfigurationForm extends FormValidator
 
         $this->user = $user;
         $this->context = $context;
-        $this->configuration = $this->parseSettings();
+        $this->configuration =
+            $this->getUserSettingsParser()->determineConfigurablePackageContextSettings($this->context);
 
         $this->build_form();
         $this->setDefaults();
@@ -55,10 +57,10 @@ class ConfigurationForm extends FormValidator
 
         $translator = $this->getTranslator();
 
-        if (is_array($configuration['settings']) && count($configuration['settings']) > 0) {
+        if (count($configuration) > 0) {
             $settingsConnector = $this->getSettingsConnectorFactory()->getSettingsConnectorForContext($context);
 
-            foreach ($configuration['settings'] as $categoryName => $settings) {
+            foreach ($configuration as $categoryName => $settings) {
                 $hasSettings = false;
 
                 foreach ($settings as $name => $setting) {
@@ -160,6 +162,11 @@ class ConfigurationForm extends FormValidator
     public function getSettingsConnectorFactory(): SettingsConnectorRegistry
     {
         return $this->getService(SettingsConnectorRegistry::class);
+    }
+
+    protected function getUserSettingsParser(): UserSettingsParser
+    {
+        return $this->getService(UserSettingsParser::class);
     }
 
     protected function isHidden($setting): bool
@@ -269,7 +276,7 @@ class ConfigurationForm extends FormValidator
     {
         $configuration = $this->configuration;
 
-        foreach ($configuration['settings'] as $settings) {
+        foreach ($configuration as $settings) {
             foreach ($settings as $name => $setting) {
                 $configurationValue = $this->getUserService()->findUserSetting($this->user, $name);
 
@@ -325,7 +332,7 @@ class ConfigurationForm extends FormValidator
         $values = $this->exportValues();
         $problems = 0;
 
-        foreach ($this->configuration['settings'] as $settings) {
+        foreach ($this->configuration as $settings) {
             foreach ($settings as $name => $setting) {
                 if (!$this->settingIsAvailable($setting)) {
                     continue;

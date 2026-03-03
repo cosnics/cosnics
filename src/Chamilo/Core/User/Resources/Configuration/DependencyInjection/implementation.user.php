@@ -5,6 +5,7 @@ use Chamilo\Core\User\Architecture\Interface\UserDetailsRendererInterface;
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Implementation\User\PlatformUserPictureProvider;
 use Chamilo\Core\User\Implementation\User\UserDetailsRenderer;
+use Chamilo\Core\User\Implementation\User\UserSettingsRenderer;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
@@ -19,4 +20,5 @@ return static function (ContainerConfigurator $container) {
     )->tag(UserPictureProviderInterface::class);
 
     $services->set(UserDetailsRenderer::class)->tag(UserDetailsRendererInterface::class);
+    $services->set(UserSettingsRenderer::class)->tag(UserDetailsRendererInterface::class);
 };

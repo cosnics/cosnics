@@ -66,6 +66,7 @@ class User extends DataClass implements ConfigurableDataClassInterface, UuidData
         $extendedPropertyNames[] = self::PROPERTY_REGISTRATION_DATE;
         $extendedPropertyNames[] = self::PROPERTY_ACTIVE;
         $extendedPropertyNames[] = self::PROPERTY_SECURITY_TOKEN;
+        $extendedPropertyNames[] = self::PROPERTY_CONFIGURATION;
 
         return parent::getDefaultPropertyNames($extendedPropertyNames);
     }

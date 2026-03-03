@@ -33,7 +33,7 @@ class DeleteComponent extends Manager
                 $this->getUrlGenerator()->fromParameters(
                     [
                         self::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => self::ACTION_VIEW,
+                        self::PARAM_ACTION => self::ACTION_BROWSE,
                         self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
                     ]
                 ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)

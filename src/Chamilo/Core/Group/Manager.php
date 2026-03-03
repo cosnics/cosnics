@@ -23,7 +23,6 @@ abstract class Manager extends Application
     public const ACTION_TRUNCATE = 'Truncate';
     public const ACTION_UNSUBSCRIBE = 'Unsubscribe';
     public const ACTION_UPDATE = 'Update';
-    public const ACTION_VIEW = 'View';
     public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
     public const PARAM_GROUP_ID = 'group_id';
