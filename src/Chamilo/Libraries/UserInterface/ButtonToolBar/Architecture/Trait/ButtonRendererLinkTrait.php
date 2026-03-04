@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait;
 
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonActionInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonAttributesInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonDisplayInterface;
 
 /**
@@ -13,9 +14,10 @@ trait ButtonRendererLinkTrait
     use ButtonRendererClassesTrait;
     use ButtonRendererActionTrait;
     use ButtonRendererDisplayTrait;
+    use ButtonRendererAttributesTrait;
 
     public function renderLink(
-        ButtonActionInterface&ButtonDisplayInterface $button, array $baseClassesBefore = [],
+        ButtonActionInterface&ButtonDisplayInterface&ButtonAttributesInterface $button, array $baseClassesBefore = [],
         array $baseClassesAfter = []
     ): string
     {
@@ -29,6 +31,7 @@ trait ButtonRendererLinkTrait
         $html[] = 'class="' . $this->renderClasses($button, $baseClassesBefore, $baseClassesAfter) . '"';
         $html[] = 'title="' . $this->getTitle($button) . '"';
         $html[] = $this->renderAction($button);
+        $html[] = $this->renderAttributes($button);
         $html[] = '>';
         $html[] = $this->renderInlineGlyphAndLabel($button);
         $html[] = '</a>';

@@ -39,7 +39,7 @@ abstract class UserForm extends FormValidator
 
         if ($isLockoutRisk) {
             $this->addWarningMessage(
-                'admin_lockout_message', null, $translator->trans('LockOutWarningMessage', [], Manager::CONTEXT)
+                $translator->trans('LockOutWarningMessage', [], Manager::CONTEXT)
             );
         }
 

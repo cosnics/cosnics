@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Service;
 
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SplitDropdownButtonCollection;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererActionInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererAttributesInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererDropDownInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererInterface;
@@ -18,7 +19,7 @@ use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait\ButtonRende
  */
 class SplitDropdownButtonRenderer extends AbstractButtonCollectionButtonRenderer
     implements ButtonRendererInterface, ButtonRendererDisplayInterface, ButtonRendererDropDownInterface,
-    ButtonRendererActionInterface
+    ButtonRendererActionInterface, ButtonRendererAttributesInterface
 {
     use ButtonRendererDisplayTrait;
     use ButtonRendererDropDownTrait;

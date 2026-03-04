@@ -175,10 +175,9 @@ class FormValidator extends HTML_QuickForm
     /**
      * @throws \QuickformException
      */
-    public function addErrorMessage(string $name, ?string $label, string $message, bool $noMargin = false
-    ): HTML_QuickForm_html
+    public function addErrorMessage(string $message, ?string $label = null): HTML_QuickForm_html
     {
-        return $this->addMessage('danger', $name, $label, $message, $noMargin);
+        return $this->addMessage('danger', $message, $label);
     }
 
     /**
@@ -368,41 +367,25 @@ class FormValidator extends HTML_QuickForm
     /**
      * @throws \QuickformException
      */
-    public function addInformationMessage(string $name, ?string $label, string $message, bool $noMargin = false
-    ): HTML_QuickForm_html
+    public function addInformationMessage(string $message, ?string $label = null): HTML_QuickForm_html
     {
-        return $this->addMessage('info', $name, $label, $message, $noMargin);
+        return $this->addMessage('info', $message, $label);
     }
 
     /**
      * @throws \QuickformException
      */
-    protected function addMessage(string $type, string $name, ?string $label, string $message, bool $noMargin = false
-    ): HTML_QuickForm_html
+    protected function addMessage(string $type, string $message, ?string $label): HTML_QuickForm_html
     {
         $html = [];
 
-        $html[] = '<div id="' . $name . '" class="row">';
-
-        if ($noMargin) {
-            $html[] = '<div class="col-12">';
-        }
-        else {
-            $html[] = '<div class="col-12 col-sm-4 col-md-3 col-lg-2 form-label">';
-            $html[] = '</div>';
-            $html[] = '<div class="col-12 col-sm-8 col-md-9 col-lg-10">';
-        }
-
-        $html[] = '<div role="alert" class="alert alert-' . $type . '">';
+        $html[] = '<div role="alert" class="callout callout-' . $type . '">';
 
         if ($label) {
-            $html[] = '<b>' . $label . '</b><br />';
+            $html[] = '<h4 class="callout-heading">' . $label . '</h4>';
         }
 
-        $html[] = $message;
-
-        $html[] = '</div>';
-        $html[] = '</div>';
+        $html[] = '<p>' . $message . '</p>';
 
         $html[] = '</div>';
 
@@ -603,10 +586,9 @@ class FormValidator extends HTML_QuickForm
     /**
      * @throws \QuickformException
      */
-    public function addWarningMessage(string $name, ?string $label, string $message, bool $noMargin = false
-    ): HTML_QuickForm_html
+    public function addWarningMessage(string $message, ?string $label = null): HTML_QuickForm_html
     {
-        return $this->addMessage('warning', $name, $label, $message, $noMargin);
+        return $this->addMessage('warning', $message, $label);
     }
 
     /**

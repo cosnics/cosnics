@@ -87,6 +87,7 @@ class UserSettingsRenderer implements UserDetailsRendererInterface
         $translator = $this->getTranslator();
 
         $html = [];
+
         $configurableSettings = $this->getUserSettingsParser()->determineConfigurableSettings();
 
         foreach ($configurableSettings as $packageContext => $packageSettings) {

@@ -37,4 +37,55 @@ trait ButtonClassesTrait
 
         return $this;
     }
+
+    public function isDanger(): bool
+    {
+        return in_array('btn-danger', $this->classes);
+    }
+
+    public function isDark(): bool
+    {
+        return in_array('btn-dark', $this->classes);
+    }
+
+    public function isInfo(): bool
+    {
+        return in_array('btn-info', $this->classes);
+    }
+
+    public function isLight(): bool
+    {
+        return in_array('btn-light', $this->classes);
+    }
+
+    public function isLink(): bool
+    {
+        return in_array('btn-link', $this->classes);
+    }
+
+    public function isPrimary(): bool
+    {
+        return in_array('btn-primary', $this->classes);
+    }
+
+    public function isSecondary(): bool
+    {
+        return in_array('btn-secondary', $this->classes);
+    }
+
+    public function isSpecial(): bool
+    {
+        return $this->isPrimary() || $this->isSecondary() || $this->isSuccess() || $this->isWarning() ||
+            $this->isDanger() || $this->isDark() || $this->isInfo() || $this->isLight() || $this->isLink();
+    }
+
+    public function isSuccess(): bool
+    {
+        return in_array('btn-success', $this->classes);
+    }
+
+    public function isWarning(): bool
+    {
+        return in_array('btn-warning', $this->classes);
+    }
 }

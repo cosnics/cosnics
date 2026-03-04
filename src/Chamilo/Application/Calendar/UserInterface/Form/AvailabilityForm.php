@@ -16,7 +16,6 @@ use HTML_QuickForm_static;
  */
 class AvailabilityForm extends FormValidator
 {
-
     private AvailabilityService $availabilityService;
 
     /**
@@ -47,18 +46,15 @@ class AvailabilityForm extends FormValidator
     public function build(): void
     {
         $this->addInformationMessage(
-            'calendar_availability', '', $this->getTranslation('CalendarAvailabilityInformation', [], Manager::CONTEXT),
-            true
+            $this->getTranslation('CalendarAvailabilityInformation', [], Manager::CONTEXT)
         );
 
         $availableCalendars = $this->getAvailableCalendars();
 
-        foreach ($availableCalendars as $ownedCalendarType => $ownedCalendars)
-        {
+        foreach ($availableCalendars as $ownedCalendarType => $ownedCalendars) {
             $calendarElements = [];
 
-            foreach ($ownedCalendars as $ownedCalendar)
-            {
+            foreach ($ownedCalendars as $ownedCalendar) {
                 $calendarElements[] = $this->createElement(
                     HTML_QuickForm_checkbox::class,
                     AvailabilityService::PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
@@ -87,8 +83,7 @@ class AvailabilityForm extends FormValidator
      */
     public function getAvailableCalendars(): array
     {
-        if (!isset($this->availableCalendars))
-        {
+        if (!isset($this->availableCalendars)) {
             $this->availableCalendars = $this->getAvailabilityService()->getAvailableCalendars($this->getUser());
         }
 
@@ -109,8 +104,7 @@ class AvailabilityForm extends FormValidator
         $defaultValues = [];
         $calendarAvailabilities = $this->getAvailabilityService()->getAvailabilitiesForUser($this->getUser());
 
-        foreach ($calendarAvailabilities as $calendarAvailability)
-        {
+        foreach ($calendarAvailabilities as $calendarAvailability) {
             $defaultValues[AvailabilityService::PROPERTY_CALENDAR][$calendarAvailability->getCalendarType(
             )][$calendarAvailability->getCalendarId()][AvailabilityService::PROPERTY_AVAILABLE] =
                 $calendarAvailability->getAvailability();
@@ -119,17 +113,14 @@ class AvailabilityForm extends FormValidator
                 $calendarAvailability->getColour();
         }
 
-        foreach ($this->getAvailableCalendars() as $ownedCalendars)
-        {
-            foreach ($ownedCalendars as $ownedCalendar)
-            {
+        foreach ($this->getAvailableCalendars() as $ownedCalendars) {
+            foreach ($ownedCalendars as $ownedCalendar) {
                 $calendarType = $ownedCalendar->getType();
                 $calendarIdentifier = $ownedCalendar->getIdentifier();
 
                 if (!isset(
                     $defaultValues[AvailabilityService::PROPERTY_CALENDAR][$calendarType][$calendarIdentifier][AvailabilityService::PROPERTY_AVAILABLE]
-                ))
-                {
+                )) {
                     $defaultValues[AvailabilityService::PROPERTY_CALENDAR][$calendarType][$calendarIdentifier][AvailabilityService::PROPERTY_AVAILABLE] =
                         1;
                 }

@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Service;
 
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererActionInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererAttributesInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait\ButtonRendererActionTrait;
@@ -14,7 +15,8 @@ use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait\ButtonRende
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class SubButtonRenderer
-    implements ButtonRendererInterface, ButtonRendererDisplayInterface, ButtonRendererActionInterface
+    implements ButtonRendererInterface, ButtonRendererDisplayInterface, ButtonRendererActionInterface,
+    ButtonRendererAttributesInterface
 {
     use ButtonRendererDisplayTrait;
     use ButtonRendererActionTrait;

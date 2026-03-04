@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Service;
 
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererActionInterface;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererAttributesInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererDisplayInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait\ButtonRendererActionTrait;
@@ -13,7 +14,8 @@ use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait\ButtonRende
  * @package Chamilo\Libraries\UserInterface\ButtonToolBar\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ButtonRenderer implements ButtonRendererInterface, ButtonRendererDisplayInterface, ButtonRendererActionInterface
+class ButtonRenderer implements ButtonRendererInterface, ButtonRendererDisplayInterface, ButtonRendererActionInterface,
+    ButtonRendererAttributesInterface
 {
     use ButtonRendererDisplayTrait;
     use ButtonRendererActionTrait;
@@ -21,7 +23,7 @@ class ButtonRenderer implements ButtonRendererInterface, ButtonRendererDisplayIn
 
     public function render(Button $button): string
     {
-        return $this->renderLink($button, $this->getDefaultButtonClasses());
+        return $this->renderLink($button, $this->getDefaultButtonClasses(!$button->isSpecial() ? ['btn-light'] : []));
     }
 
     public function getButtonClassName(): string

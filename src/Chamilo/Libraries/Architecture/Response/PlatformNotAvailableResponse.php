@@ -2,8 +2,9 @@
 namespace Chamilo\Libraries\Architecture\Response;
 
 use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjectionContainerTrait;
-use Chamilo\Libraries\UserInterface\Layout\Service\BaseFooterRenderer;
-use Chamilo\Libraries\UserInterface\Layout\Service\BaseHeaderRenderer;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultHeaderRenderer;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -18,24 +19,35 @@ class PlatformNotAvailableResponse extends Response
 
     public function __construct()
     {
+        $translator = $this->getTranslator();
+
         $html = [];
+
         $html[] = $this->getHeaderRenderer()->render();
-        $html[] = '<br />';
-        $html[] = '<div class="alert alert-danger text-center">';
-        $html[] = $this->getTranslator()->trans('PlatformNotAvailableMessage');
+
+        $html[] = '<div class="card text-bg-danger mt-3 w-50 mx-auto">';
+        $html[] = '<div class="card-header">';
+        $html[] = $translator->trans('PlatformNotAvailableTitle', [], StringUtilities::LIBRARIES);
         $html[] = '</div>';
+        $html[] = '<div class="card-body">';
+        $html[] = '<p class="card-text">';
+        $html[] = $translator->trans('PlatformNotAvailableMessage', [], StringUtilities::LIBRARIES);
+        $html[] = '</p>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
         $html[] = $this->getFooterRenderer()->render();
 
         parent::__construct(implode(PHP_EOL, $html));
     }
 
-    protected function getFooterRenderer(): BaseFooterRenderer
+    protected function getFooterRenderer(): DefaultFooterRenderer
     {
-        return $this->getService(BaseFooterRenderer::class);
+        return $this->getService(DefaultFooterRenderer::class);
     }
 
-    protected function getHeaderRenderer(): BaseHeaderRenderer
+    protected function getHeaderRenderer(): DefaultHeaderRenderer
     {
-        return $this->getService(BaseHeaderRenderer::class);
+        return $this->getService(DefaultHeaderRenderer::class);
     }
 }
