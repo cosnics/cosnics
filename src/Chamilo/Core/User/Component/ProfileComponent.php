@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
@@ -15,10 +16,6 @@ use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
  */
 abstract class ProfileComponent extends Manager
 {
-    protected function getAction(): string
-    {
-        return $this->getRequest()->query->get(self::PARAM_ACTION);
-    }
 
     /**
      * @return \Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab[]
@@ -58,18 +55,18 @@ abstract class ProfileComponent extends Manager
         return $tabs;
     }
 
-    abstract public function getContent(): string;
+    abstract public function getContent(User $user): string;
 
     public function getTabsRenderer(): TabsRenderer
     {
         return $this->getService(TabsRenderer::class);
     }
 
-    public function renderPage(): string
+    public function renderPage(?User $user = null): string
     {
         $html = [];
 
-        $html[] = $this->renderHeader();
+        $html[] = $this->renderHeader($user);
 
         $availableTabs = $this->getAvailableTabs();
 
@@ -83,7 +80,7 @@ abstract class ProfileComponent extends Manager
             $html[] = $this->getTabsRenderer()->renderNavigation('profile', $tabs, $this->getAction());
         }
 
-        $html[] = $this->getContent();
+        $html[] = $this->getContent($user);
         $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);

@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -18,13 +19,13 @@ class DeleteComponent extends Manager
      * @throws \Exception
      * @throws \Throwable
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         $translator = $this->getTranslator();
         $groupService = $this->getGroupService();
         $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID);
 
-        if (!$this->getUser()->isPlatformAdministrator()) {
+        if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 

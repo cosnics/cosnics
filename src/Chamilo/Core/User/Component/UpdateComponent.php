@@ -28,11 +28,11 @@ class UpdateComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
+        $this->checkAuthorization(Manager::CONTEXT, $currentUser, 'ManageUsers');
 
-        if (!$this->getUser()->isPlatformAdministrator()) {
+        if (!$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -42,8 +42,9 @@ class UpdateComponent extends Manager
         $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
 
         if ($userIdentifier) {
-            $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
-            $isLockoutRisk = $this->getUser()->getId() == $user->getId() && $user->isPlatformAdministrator();
+            $userToUpdate = $this->getUserService()->findUserByIdentifier($userIdentifier);
+            $isLockoutRisk =
+                $currentUser->getId() == $userToUpdate->getId() && $userToUpdate->isPlatformAdministrator();
 
             $updateUrl = $urlGenerator->fromParameters([
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
@@ -51,14 +52,14 @@ class UpdateComponent extends Manager
                 self::PARAM_USER_ID => $userIdentifier
             ]);
 
-            $form = new UserUpdateForm($user, $isLockoutRisk, $updateUrl);
+            $form = new UserUpdateForm($userToUpdate, $isLockoutRisk, $updateUrl);
 
             if ($form->validate()) {
                 try {
                     $formValues = $form->exportValues();
 
                     $this->getUserService()->updateUserFromParameters(
-                        $user, $formValues[User::PROPERTY_GIVEN_NAME], $formValues[User::PROPERTY_SURNAME],
+                        $userToUpdate, $formValues[User::PROPERTY_GIVEN_NAME], $formValues[User::PROPERTY_SURNAME],
                         $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
                         $formValues[User::PROPERTY_EMAIL], (bool) $formValues[UserForm::PROPERTY_GENERATE_PASSWORD],
                         $formValues[User::PROPERTY_PASSWORD], (bool) $formValues[User::PROPERTY_PLATFORM_ADMINISTRATOR],
@@ -72,7 +73,7 @@ class UpdateComponent extends Manager
 
                         if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid()) {
                             if (!$userPictureProvider->updateUserPictureFromParameters(
-                                $user, $this->getUser(), $pictureInformation
+                                $userToUpdate, $currentUser, $pictureInformation
                             )) {
                                 $this->getNotificationMessageManager()->addMessage(
                                     new NotificationMessage(
@@ -108,7 +109,7 @@ class UpdateComponent extends Manager
 
             $html = [];
 
-            $html[] = $this->renderHeader();
+            $html[] = $this->renderHeader($currentUser);
             $html[] = $form->render();
             $html[] = $this->renderFooter();
 

@@ -13,21 +13,19 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class DiagnoseComponent extends Manager
 {
-
     /**
      * @throws \TableException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator())
-        {
+        if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
         $html = [];
 
-        $html[] = $this->renderHeader();
+        $html[] = $this->renderHeader($currentUser);
         $html[] = $this->getDiagnoser()->render();
         $html[] = $this->renderFooter();
 

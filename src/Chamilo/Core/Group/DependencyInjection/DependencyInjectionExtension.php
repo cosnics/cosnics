@@ -23,6 +23,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
     {
         return [
             'Chamilo\Core\Group' => [
+                'application.php',
                 'architecture.php',
                 'implementation.admin.php',
                 'implementation.user.php',

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Component;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Manager;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -20,7 +21,7 @@ class UploadTemporaryFileComponent extends Manager
     /**
      * @throws \Exception
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         $file = $this->getFile();
 

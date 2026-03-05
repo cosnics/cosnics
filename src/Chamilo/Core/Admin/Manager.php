@@ -18,4 +18,14 @@ abstract class Manager extends Application
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
     public const PARAM_SELECTED_CONTEXT = 'context';
     public const PARAM_USER_ID = 'user_id';
+
+    public function getContext(): string
+    {
+        return self::CONTEXT;
+    }
+
+    public function getDefaultAction(): string
+    {
+        return self::DEFAULT_ACTION;
+    }
 }

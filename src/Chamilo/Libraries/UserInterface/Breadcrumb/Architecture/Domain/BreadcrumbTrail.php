@@ -18,4 +18,29 @@ use Doctrine\Common\Collections\Selectable;
  */
 class BreadcrumbTrail extends ArrayCollection
 {
+    public function prepend(Breadcrumb $breadcrumb): void
+    {
+        $breadcrumbs = $this->toArray();
+        array_unshift($breadcrumbs, $breadcrumb);
+        $this->clear();
+
+        foreach ($breadcrumbs as $breadcrumb) {
+            $this->add($breadcrumb);
+        }
+    }
+
+    /**
+     * @param \Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb[] $breadcrumbs
+     */
+    public function prependMultiple(array $breadcrumbs, bool $reverseOrder = true): void
+    {
+        if($reverseOrder)
+        {
+            $breadcrumbs = array_reverse($breadcrumbs);
+        }
+
+        foreach ($breadcrumbs as $breadcrumb) {
+            $this->prepend($breadcrumb);
+        }
+    }
 }

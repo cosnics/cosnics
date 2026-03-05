@@ -25,7 +25,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         $translator = $this->getTranslator();
 
@@ -46,7 +46,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
             try {
                 $formValues = $form->exportValues();
 
-                $user = $this->getUserService()->registerUserFromParameters(
+                $registeredUser = $this->getUserService()->registerUserFromParameters(
                     $formValues[User::PROPERTY_GIVEN_NAME], $formValues[User::PROPERTY_SURNAME],
                     $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
                     $formValues[User::PROPERTY_EMAIL], (bool) $formValues[UserForm::PROPERTY_GENERATE_PASSWORD],
@@ -61,7 +61,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
 
                     if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid()) {
                         if (!$userPictureProvider->updateUserPictureFromParameters(
-                            $user, $this->getUser(), $pictureInformation
+                            $registeredUser, $currentUser, $pictureInformation
                         )) {
                             $this->getNotificationMessageManager()->addMessage(
                                 new NotificationMessage(
@@ -84,7 +84,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
 
         $html = [];
 
-        $html[] = $this->renderHeader();
+        $html[] = $this->renderHeader($currentUser);
         $html[] = $form->render();
         $html[] = $this->renderFooter();
 

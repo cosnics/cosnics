@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\DependencyInjection;
 use Chamilo\Libraries\DependencyInjection\Architecture\Domain\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Architecture\Interface\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Architecture\Trait\ExtensionTrait;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\ApplicationCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\AuthenticationCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ButtonRendererCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheAdapterCompilerPass;
@@ -39,6 +40,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         return [
             'Chamilo\Libraries' => [
+                'application.php',
                 'architecture.php',
                 'calendar.php',
                 'filesystem.php',
@@ -77,6 +79,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
 
     public function registerCompilerPasses(ContainerBuilder $container): void
     {
+        $container->addCompilerPass(new ApplicationCompilerPass());
         $container->addCompilerPass(new ConsoleCompilerPass());
         $container->addCompilerPass(new HashingCompilerPass());
         $container->addCompilerPass(new MailerCompilerPass());

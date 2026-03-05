@@ -32,7 +32,7 @@ class CalendarRepository
 
     protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    protected User $currentUser;
+    protected ?User $currentUser;
 
     protected ?string $developerKey;
 
@@ -46,7 +46,7 @@ class CalendarRepository
 
     public function __construct(
         ConfigurablePathBuilder $configurablePathBuilder, UrlGenerator $urlGenerator, UserService $userService,
-        User $currentUser, ?string $clientId = null, ?string $clientSecret = null, ?string $developerKey = null
+        ?User $currentUser = null, ?string $clientId = null, ?string $clientSecret = null, ?string $developerKey = null
     )
     {
         $this->urlGenerator = $urlGenerator;

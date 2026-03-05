@@ -230,10 +230,10 @@ class Kernel
         try {
             $this->configureTimezone()->handleOAuth2()->checkAuthentication()->checkPlatformAvailability();
 
-            $application = $this->getApplicationFactory()->getApplication($this->getContext(), $this->getUser());
+            $application = $this->getApplicationFactory()->getApplication($this->getContext());
             $this->traceVisit($application);
 
-            $response = $application->run();
+            $response = $application->run($this->getUser());
         }
         catch (NotAuthenticatedException) {
             $response = $this->getNotAuthenticatedResponse();

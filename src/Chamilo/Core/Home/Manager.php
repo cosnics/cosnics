@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Home;
 
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 
 /**
@@ -25,15 +24,13 @@ abstract class Manager extends Application
     public const TYPE_ROW = 'row';
     public const TYPE_TAB = 'tab';
 
-    /**
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     */
-    public function __construct(?User $user = null)
+    public function getContext(): string
     {
-        parent::__construct($user);
+        return self::CONTEXT;
+    }
 
-        if ($this->getUser() instanceof User) {
-            $this->checkAuthorization(Manager::CONTEXT);
-        }
+    public function getDefaultAction(): string
+    {
+        return self::DEFAULT_ACTION;
     }
 }

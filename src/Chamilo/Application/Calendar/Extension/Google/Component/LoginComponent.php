@@ -3,6 +3,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Component;
 
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,10 +20,10 @@ class LoginComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         $isSuccessful = $this->getCalendarService()->login(
-            $this->getUser(), $this->getRequest()->query->get(CalendarService::PARAM_AUTHORIZATION_CODE)
+            $currentUser, $this->getRequest()->query->get(CalendarService::PARAM_AUTHORIZATION_CODE)
         );
 
         if ($isSuccessful)

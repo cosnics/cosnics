@@ -180,7 +180,7 @@ class Diagnoser
 
     public function getDatetimeUtilities(): DatetimeUtilities
     {
-        return $this->getDatetimeUtilities();
+        return $this->datetimeUtilities;
     }
 
     public function getDiagnoserTableRenderer(): SimpleTableRenderer

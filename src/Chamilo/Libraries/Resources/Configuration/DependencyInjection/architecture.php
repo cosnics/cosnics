@@ -1,6 +1,7 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Chamilo\Libraries\Architecture\Domain\ApplicationRegistry;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
 use Chamilo\Libraries\Protocol\Error\Factory\ExceptionLoggerFactory;
@@ -54,4 +55,5 @@ return static function (ContainerConfigurator $container) {
     $services->set(UrlGenerator::class);
     $services->set(ResourceGenerator::class);
     $services->set(ActionResultRenderer::class);
+    $services->set(ApplicationRegistry::class);
 };

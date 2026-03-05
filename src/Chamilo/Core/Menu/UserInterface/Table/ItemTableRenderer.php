@@ -66,7 +66,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     public function getItemEditingUrl(Item $item): string
     {
-        return $this->getItemUrl($item, [Application::PARAM_ACTION => Manager::ACTION_EDIT]);
+        return $this->getItemUrl($item, [Application::PARAM_ACTION => Manager::ACTION_UPDATE]);
     }
 
     public function getItemMovingUrl(Item $item, int $sortDirection): string

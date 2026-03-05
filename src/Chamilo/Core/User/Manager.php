@@ -50,6 +50,16 @@ abstract class Manager extends Application
         return $this->getService(AuthenticationValidator::class);
     }
 
+    public function getContext(): string
+    {
+        return self::CONTEXT;
+    }
+
+    public function getDefaultAction(): string
+    {
+        return self::DEFAULT_ACTION;
+    }
+
     protected function getUserUrlGenerator(): UserUrlGenerator
     {
         return $this->getService(UserUrlGenerator::class);

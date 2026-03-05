@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Service\Bootstrap;
 
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Domain\ApplicationRegistry;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
 use Chamilo\Libraries\Architecture\Exception\UserException;
@@ -16,14 +16,19 @@ use Symfony\Component\Translation\Translator;
  */
 class ApplicationFactory
 {
-    private ChamiloRequest $request;
+    protected ApplicationRegistry $applicationRegistry;
 
-    private Translator $translator;
+    protected ChamiloRequest $request;
 
-    public function __construct(ChamiloRequest $request, Translator $translator)
+    protected Translator $translator;
+
+    public function __construct(
+        ChamiloRequest $request, Translator $translator, ApplicationRegistry $applicationRegistry
+    )
     {
         $this->request = $request;
         $this->translator = $translator;
+        $this->applicationRegistry = $applicationRegistry;
     }
 
     /**
@@ -41,36 +46,19 @@ class ApplicationFactory
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
-     */
-    protected function createApplication(string $context, ?User $user = null): Application
-    {
-        $action = $this->getAction($context);
-        $className = $this->getClassName($context, $action);
-
-        /**
-         * @var \Chamilo\Libraries\Architecture\Domain\Application $application
-         */
-        return new $className($user);
-    }
-
-    /**
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      */
     protected function getAction(string $context): string
     {
-        $actionParameter = $this->getActionParameter($context);
-
         $request = $this->getRequest();
 
-        $getAction = $request->query->get($actionParameter);
+        $getAction = $request->query->get(Application::PARAM_ACTION);
 
         if ($getAction) {
             return $getAction;
         }
 
-        $postAction = $request->request->get($actionParameter);
+        $postAction = $request->request->get(Application::PARAM_ACTION);
 
         if ($postAction) {
             return $postAction;
@@ -80,22 +68,20 @@ class ApplicationFactory
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
-     */
-    protected function getActionParameter(string $context): string
-    {
-        $managerClass = $this->getManagerClass($context);
-
-        return $managerClass::PARAM_ACTION;
-    }
-
-    /**
      * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      */
-    public function getApplication(string $context, ?User $user = null): Application
+    public function getApplication(string $context): Application
     {
-        return $this->createApplication($context, $user);
+        $action = $this->getAction($context);
+        $className = $this->getClassName($context, $action);
+
+        return $this->getApplicationRegistry()->getApplication($className);
+    }
+
+    public function getApplicationRegistry(): ApplicationRegistry
+    {
+        return $this->applicationRegistry;
     }
 
     /**

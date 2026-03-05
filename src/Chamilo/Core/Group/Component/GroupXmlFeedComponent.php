@@ -3,6 +3,8 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -17,10 +19,15 @@ use Symfony\Component\HttpFoundation\Response;
 class GroupXmlFeedComponent extends Manager
 {
     /**
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
+        if (!$currentUser instanceof User) {
+            throw new NotAllowedException();
+        }
+
         $groupsTree = $this->getGroupService()->findGroupsForParentIdentifier(
             $this->getRequest()->query->get(NestedSet::PROPERTY_PARENT_ID)
         );

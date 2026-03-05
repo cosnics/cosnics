@@ -3,6 +3,7 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\UserInterface\Form\GroupMoveForm;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -22,9 +23,9 @@ class MoveComponent extends Manager
      * @throws \QuickformException
      * @throws \Throwable
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        if (!$this->getUser()->isPlatformAdministrator()) {
+        if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -63,7 +64,7 @@ class MoveComponent extends Manager
         else {
             $html = [];
 
-            $html[] = $this->renderHeader();
+            $html[] = $this->renderHeader($currentUser);
             $html[] = $translator->trans('Group') . ': ' . $group->getName();
             $html[] = $form->render();
             $html[] = $this->renderFooter();

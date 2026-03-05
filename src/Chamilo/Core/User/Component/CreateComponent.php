@@ -24,11 +24,10 @@ class CreateComponent extends Manager
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
+        $this->checkAuthorization(Manager::CONTEXT, $currentUser, 'ManageUsers');
 
-        $currentUser = $this->getUser();
         $translator = $this->getTranslator();
 
         if (!$currentUser->isPlatformAdministrator()) {
@@ -41,7 +40,7 @@ class CreateComponent extends Manager
             try {
                 $formValues = $form->exportValues();
 
-                $user = $this->getUserService()->createUserFromParameters(
+                $createdUser = $this->getUserService()->createUserFromParameters(
                     $formValues[User::PROPERTY_GIVEN_NAME], $formValues[User::PROPERTY_SURNAME],
                     $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
                     $formValues[User::PROPERTY_EMAIL], (bool) $formValues[UserForm::PROPERTY_GENERATE_PASSWORD],
@@ -57,7 +56,7 @@ class CreateComponent extends Manager
 
                     if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid()) {
                         if (!$userPictureProvider->updateUserPictureFromParameters(
-                            $user, $this->getUser(), $pictureInformation
+                            $createdUser, $currentUser, $pictureInformation
                         )) {
                             $this->getNotificationMessageManager()->addMessage(
                                 new NotificationMessage(
@@ -93,7 +92,7 @@ class CreateComponent extends Manager
 
         $html = [];
 
-        $html[] = $this->renderHeader();
+        $html[] = $this->renderHeader($currentUser);
         $html[] = $form->render();
         $html[] = $this->renderFooter();
 

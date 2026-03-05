@@ -11,8 +11,16 @@ abstract class Manager extends Application
 {
     public const ACTION_LOGIN = 'Login';
     public const ACTION_LOGOUT = 'Logout';
-
     public const CONTEXT = __NAMESPACE__;
-
     public const DEFAULT_ACTION = self::ACTION_LOGIN;
+
+    public function getContext(): string
+    {
+        return self::CONTEXT;
+    }
+
+    public function getDefaultAction(): string
+    {
+        return self::DEFAULT_ACTION;
+    }
 }

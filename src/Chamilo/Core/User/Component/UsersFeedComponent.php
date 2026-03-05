@@ -35,7 +35,7 @@ class UsersFeedComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         $result = new JsonAjaxResult();
 

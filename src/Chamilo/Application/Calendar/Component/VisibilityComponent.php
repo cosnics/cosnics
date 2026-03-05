@@ -10,8 +10,6 @@ class VisibilityComponent extends Manager
 {
     use VisibilityComponentTrait;
 
-    public const CONTEXT = Manager::CONTEXT;
-
     public function getVisibilityService(): VisibilityServiceInterface
     {
         return $this->getService(VisibilityService::class);

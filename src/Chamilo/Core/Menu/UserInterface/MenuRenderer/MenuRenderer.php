@@ -165,6 +165,11 @@ class MenuRenderer
         return $this->webPathBuilder;
     }
 
+    protected function isLoggedInAs(): bool
+    {
+        return !is_null($this->getSession()->get('_as_admin'));
+    }
+
     public function renderBrand(): string
     {
         $brandContext = $this->getBrandPath('context', StringUtilities::LIBRARIES);
@@ -195,7 +200,7 @@ class MenuRenderer
     {
         $html = [];
 
-        if (!is_null($this->getSession()->get('_as_admin'))) {
+        if ($this->isLoggedInAs()) {
             $colour = 'bg-danger';
         }
         else {
@@ -226,7 +231,7 @@ class MenuRenderer
 
         $html = [];
 
-        if (!is_null($this->getSession()->get('_as_admin'))) {
+        if ($this->isLoggedInAs()) {
             $link = $this->getUrlGenerator()->fromParameters([
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => Manager::ACTION_LOGIN_AS

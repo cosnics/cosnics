@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\Admin\Service\PackageBundlesCacheService;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Form\ConfigurationForm;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -31,15 +32,15 @@ class ConfigureComponent extends ProfileComponent
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        $this->checkAuthorization(Manager::CONTEXT, 'ManageAccount');
+        $this->checkAuthorization(Manager::CONTEXT, $currentUser, 'ManageAccount');
 
         $this->form = new ConfigurationForm(
             $this->getSelectedContext(), 'config', FormValidator::FORM_METHOD_POST,
             $this->getUrlGenerator()->fromParameters(
                 [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_SELECTED_CONTEXT => $this->getSelectedContext()]
-            ), $this->getUser()
+            ), $currentUser
         );
 
         if ($this->form->validate()) {
@@ -55,14 +56,14 @@ class ConfigureComponent extends ProfileComponent
             );
         }
         else {
-            return new Response($this->renderPage());
+            return new Response($this->renderPage($currentUser));
         }
     }
 
     /**
      * @throws \QuickformException
      */
-    public function getContent(): string
+    public function getContent(User $user): string
     {
         $translator = $this->getTranslator();
         $tabs = new TabsCollection();

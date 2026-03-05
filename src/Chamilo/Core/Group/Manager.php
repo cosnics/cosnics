@@ -3,7 +3,6 @@ namespace Chamilo\Core\Group;
 
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 
 /**
@@ -29,14 +28,14 @@ abstract class Manager extends Application
     public const PARAM_RELATION_ID = 'relation_id';
     public const PARAM_USER_ID = 'user_id';
 
-    /**
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     */
-    public function __construct(?User $user = null)
+    public function getContext(): string
     {
-        parent::__construct($user);
+        return self::CONTEXT;
+    }
 
-        $this->checkAuthorization(Manager::CONTEXT);
+    public function getDefaultAction(): string
+    {
+        return self::DEFAULT_ACTION;
     }
 
     protected function getGroupMembershipService(): GroupMembershipService

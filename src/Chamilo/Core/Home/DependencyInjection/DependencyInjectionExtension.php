@@ -26,6 +26,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         return [
             'Chamilo\Core\Home' => [
+                'application.php',
                 'architecture.php',
                 'service.php',
                 'storage.php',

@@ -22,6 +22,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
     {
         return [
             'Chamilo\Application\Calendar\Extension\Google' => [
+                'application.php',
                 'implementation.calendar.php',
                 'service.php',
                 'storage.php'

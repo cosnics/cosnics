@@ -26,17 +26,15 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      * @throws \Exception
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         $authenticationValidator = $this->getAuthenticationValidator();
 
         if (!$authenticationValidator->isAuthenticated()) {
             $authenticationValidator->validateForAuthentication($this->getSecurityTokenAuthentication(), false, false);
 
-            $user = $this->getUser();
-
-            if ($user instanceof User) {
-                return $this->renderCalendar($user);
+            if ($currentUser instanceof User) {
+                return $this->renderCalendar($currentUser);
             }
             else {
                 $response = new Response();
@@ -46,15 +44,15 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
             }
         }
         else {
-            if (!$this->getUser() instanceof User) {
+            if (!$currentUser instanceof User) {
                 $response = new Response();
-                $response->setStatusCode(401);
+                $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
 
                 return $response;
             }
 
             if ($this->getRequest()->query->has(self::PARAM_DOWNLOAD)) {
-                return ($this->renderCalendar($this->getUser()));
+                return ($this->renderCalendar($currentUser));
             }
             else {
                 $icalDownloadUrl = $this->getUrlGenerator()->fromParameters(
@@ -69,7 +67,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
                         self::PARAM_ACTION => Manager::ACTION_ICAL,
-                        User::PROPERTY_SECURITY_TOKEN => $this->getUser()->getSecurityToken()
+                        User::PROPERTY_SECURITY_TOKEN => $currentUser->getSecurityToken()
                     ]
                 );
 
@@ -78,7 +76,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
                 $translator = $this->getTranslator();
                 $html = [];
 
-                $html[] = $this->renderHeader();
+                $html[] = $this->renderHeader($currentUser);
 
                 $notificationMessages = [];
 

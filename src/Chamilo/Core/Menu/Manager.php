@@ -4,7 +4,6 @@ namespace Chamilo\Core\Menu;
 use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\ItemService;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 
 /**
@@ -15,12 +14,12 @@ use Chamilo\Libraries\Architecture\Domain\Application;
  */
 abstract class Manager extends Application
 {
-    public const ACTION_BROWSE = 'Browser';
-    public const ACTION_CREATE = 'Creator';
-    public const ACTION_DELETE = 'Deleter';
-    public const ACTION_EDIT = 'Editor';
+    public const ACTION_BROWSE = 'Browse';
+    public const ACTION_CREATE = 'Create';
+    public const ACTION_DELETE = 'Delete';
     public const ACTION_ITEM_TREE_DATA = 'ItemTreeData';
-    public const ACTION_MOVE = 'Mover';
+    public const ACTION_MOVE = 'Move';
+    public const ACTION_UPDATE = 'Update';
     public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_BROWSE;
     public const PARAM_DIRECTION = 'direction';
@@ -30,19 +29,19 @@ abstract class Manager extends Application
     public const PARAM_PARENT = 'parent';
     public const PARAM_TYPE = 'type';
 
-    /**
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     */
-    public function __construct(?User $user = null)
-    {
-        parent::__construct($user);
-
-        $this->checkAuthorization(Manager::CONTEXT);
-    }
-
     public function getCachedItemService(): CachedItemService
     {
         return $this->getService(CachedItemService::class);
+    }
+
+    public function getContext(): string
+    {
+        return self::CONTEXT;
+    }
+
+    public function getDefaultAction(): string
+    {
+        return self::DEFAULT_ACTION;
     }
 
     public function getHomeUrl(): string

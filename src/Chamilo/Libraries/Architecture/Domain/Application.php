@@ -2,13 +2,13 @@
 namespace Chamilo\Libraries\Architecture\Domain;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Service\BreadcrumbGenerator;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Libraries\Architecture\Domain
@@ -16,31 +16,20 @@ use Symfony\Component\HttpFoundation\Response;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Application
+abstract class Application implements ApplicationInterface
 {
     use DependencyInjectionContainerTrait;
 
-    public const PARAM_ACTION = 'go';
-    public const PARAM_CONTEXT = 'application';
-
-    protected ?User $user;
-
-    public function __construct(?User $user = null)
-    {
-        $this->user = $user;
-
-        $this->getBreadcrumbGenerator()->addDefaultBreadcrumbs();
-    }
-
-    abstract public function run(): Response;
+    public const PARAM_ACTION = 'action';
+    public const PARAM_CONTEXT = 'context';
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      */
-    public function checkAuthorization(string $context, ?string $action = null): void
+    public function checkAuthorization(string $context, ?User $user = null, ?string $action = null): void
     {
         if (!$this instanceof NoAuthenticationSupportInterface) {
-            if (!$this->getUser() instanceof User) {
+            if (!$user instanceof User) {
                 throw new NotAllowedException();
             }
         }
@@ -51,11 +40,11 @@ abstract class Application
         return $this->getNotificationMessageRenderer()->renderOne(NotificationMessage::error($message));
     }
 
-    public function displayErrorPage(string $message): string
+    public function displayErrorPage(string $message, ?User $user = null): string
     {
         $html = [];
 
-        $html[] = $this->renderHeader();
+        $html[] = $this->renderHeader($user);
         $html[] = $this->displayErrorMessage($message);
         $html[] = $this->renderFooter();
 
@@ -83,15 +72,20 @@ abstract class Application
         return $this->getNotificationMessageRenderer()->renderOne(NotificationMessage::warning($message));
     }
 
-    public function displayWarningPage(string $message): string
+    public function displayWarningPage(string $message, ?User $user = null): string
     {
         $html = [];
 
-        $html[] = $this->renderHeader();
+        $html[] = $this->renderHeader($user);
         $html[] = $this->displayWarningMessage($message);
         $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getAction(): string
+    {
+        return $this->getRequest()->query->get(self::PARAM_ACTION, $this->getDefaultAction());
     }
 
     public function getBreadcrumbGenerator(): BreadcrumbGenerator
@@ -122,11 +116,6 @@ abstract class Application
         return $this->getTranslator()->trans($message, [], $context ?: static::CONTEXT);
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
     /**
      * @param string[] $parameters
      */
@@ -146,8 +135,12 @@ abstract class Application
         return $this->getDefaultFooterRenderer()->render();
     }
 
-    public function renderHeader(): string
+    public function renderHeader(?User $user = null): string
     {
-        return $this->getApplicationHeaderRenderer()->render($this, $this->getUser());
+        $this->getBreadcrumbGenerator()->addDefaultBreadcrumbs(
+            $this->getContext(), $this->getAction(), $this->getDefaultAction()
+        );
+
+        return $this->getDefaultHeaderRenderer()->render($user);
     }
 }

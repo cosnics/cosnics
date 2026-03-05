@@ -31,18 +31,18 @@ class BrowseComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
+        $this->checkAuthorization(Manager::CONTEXT, $currentUser, 'ManageUsers');
 
-        if (!$this->getUser()->isPlatformAdministrator()) {
+        if (!$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
         $html = [];
 
-        $html[] = $this->renderHeader();
-        $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar());
+        $html[] = $this->renderHeader($currentUser);
+        $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar($currentUser));
         $html[] = $this->renderTable();
         $html[] = $this->renderFooter();
 
@@ -54,7 +54,7 @@ class BrowseComponent extends Manager
         return $this->getService(UserTableRenderer::class);
     }
 
-    public function getButtonToolBar(): ButtonToolBar
+    public function getButtonToolBar(User $user): ButtonToolBar
     {
         $buttonToolBar = new ButtonToolBar(
             $this->getUrlGenerator()->fromParameters(
@@ -65,7 +65,7 @@ class BrowseComponent extends Manager
         $commonActions = new ButtonGroup();
         $translator = $this->getTranslator();
 
-        if ($this->getUser()->isPlatformAdministrator()) {
+        if ($user->isPlatformAdministrator()) {
             $commonActions->addButton(
                 new Button(
                     $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),

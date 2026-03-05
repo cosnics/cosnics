@@ -4,6 +4,7 @@ namespace Chamilo\Application\Calendar\Component;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\UserInterface\Form\AvailabilityForm;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Service\Utilities\ActionResultRenderer;
 use Exception;
@@ -18,28 +19,25 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AvailabilityComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
      * @throws \Exception
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         $this->checkAuthorization(Manager::CONTEXT);
 
         $availabilityService = $this->getAvailabilityService();
-        $form = $this->getAvailabilityForm($availabilityService);
+        $form = $this->getAvailabilityForm($availabilityService, $currentUser);
 
-        if ($form->validate())
-        {
+        if ($form->validate()) {
             $values = $form->exportValues();
             $result = $availabilityService->setAvailabilities(
-                $this->getUser(), $values[AvailabilityService::PROPERTY_CALENDAR]
+                $currentUser, $values[AvailabilityService::PROPERTY_CALENDAR]
             );
 
-            if ($result->hasFailed())
-            {
+            if ($result->hasFailed()) {
                 throw new Exception($this->getActionResultRenderer()->getMessage($result));
             }
 
@@ -49,11 +47,10 @@ class AvailabilityComponent extends Manager
                 )
             );
         }
-        else
-        {
+        else {
             $html = [];
 
-            $html[] = $this->renderHeader();
+            $html[] = $this->renderHeader($currentUser);
             $html[] = $form->render();
             $html[] = $this->renderFooter();
 
@@ -70,9 +67,9 @@ class AvailabilityComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      */
-    public function getAvailabilityForm(AvailabilityService $availabilityService): AvailabilityForm
+    public function getAvailabilityForm(AvailabilityService $availabilityService, User $user): AvailabilityForm
     {
-        return new AvailabilityForm($this->getUrlGenerator()->fromRequest(), $this->getUser(), $availabilityService);
+        return new AvailabilityForm($this->getUrlGenerator()->fromRequest(), $user, $availabilityService);
     }
 
     /**

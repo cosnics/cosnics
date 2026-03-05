@@ -17,21 +17,19 @@ class BrowseComponent extends Manager
 {
     public const PARAM_TAB = 'tab';
 
-    private string $currentTab;
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator()) {
+        if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
         $html = [];
 
-        $html[] = $this->renderHeader();
+        $html[] = $this->renderHeader($currentUser);
         $html[] = $this->renderTabs();
         $html[] = $this->renderFooter();
 

@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\UserInterface\Layout\Service\BaseFooterRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\BaseHeaderRenderer;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PrinterComponent extends BrowserComponent
 {
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         $this->checkAuthorization(Manager::CONTEXT);
 

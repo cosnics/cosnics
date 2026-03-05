@@ -3,6 +3,7 @@ namespace Chamilo\Core\Home\Component;
 
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\HomeRenderer;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,11 +16,21 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class HomeComponent extends Manager implements NoAuthenticationSupportInterface
 {
+    protected AuthenticationValidator $authenticationValidator;
+
+    protected HomeRenderer $homeRenderer;
+
+    public function __construct(AuthenticationValidator $authenticationValidator, HomeRenderer $homeRenderer)
+    {
+        $this->authenticationValidator = $authenticationValidator;
+        $this->homeRenderer = $homeRenderer;
+    }
+
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         /**
          * TODO: Rights
@@ -37,8 +48,8 @@ class HomeComponent extends Manager implements NoAuthenticationSupportInterface
 
         $html = [];
 
-        $html[] = $this->renderHeader();
-        $html[] = $this->getHomeRenderer()->render($currentTabIdentifier, $this->getUser());
+        $html[] = $this->renderHeader($currentUser);
+        $html[] = $this->getHomeRenderer()->render($currentTabIdentifier, $currentUser);
         $html[] = $this->renderFooter();
 
         return new Response(implode(PHP_EOL, $html));
@@ -46,11 +57,11 @@ class HomeComponent extends Manager implements NoAuthenticationSupportInterface
 
     protected function getAuthenticationValidator(): AuthenticationValidator
     {
-        return $this->getService(AuthenticationValidator::class);
+        return $this->authenticationValidator;
     }
 
     protected function getHomeRenderer(): HomeRenderer
     {
-        return $this->getService(HomeRenderer::class);
+        return $this->homeRenderer;
     }
 }

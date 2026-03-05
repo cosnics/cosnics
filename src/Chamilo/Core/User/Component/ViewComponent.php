@@ -35,26 +35,26 @@ class ViewComponent extends Manager
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        $this->checkAuthorization(Manager::CONTEXT, 'ManageUsers');
+        $this->checkAuthorization(Manager::CONTEXT, $currentUser, 'ManageUsers');
 
-        if (!$this->getUser()->isPlatformAdministrator()) {
+        if (!$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
         $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
-        $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
+        $userToRender = $this->getUserService()->findUserByIdentifier($userIdentifier);
 
-        if ($user instanceof User) {
-            $this->getBreadcrumbTrail()->add(new Breadcrumb('', $user->getFullName()));
+        if ($userToRender instanceof User) {
+            $this->getBreadcrumbTrail()->add(new Breadcrumb('', $userToRender->getFullName()));
 
             $html = [];
 
-            $html[] = $this->getDefaultHeaderRenderer()->render($user);
-            $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar($user));
+            $html[] = $this->renderHeader($currentUser);
+            $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar($userToRender));
             $html[] = $this->getTabsRenderer()->renderNavigationAndContent(
-                'userDetails', $this->getTabsCollection($user), md5(UserDetailsRenderer::class)
+                'userDetails', $this->getTabsCollection($userToRender, $currentUser), md5(UserDetailsRenderer::class)
             );
             $html[] = $this->renderFooter();
 
@@ -76,7 +76,7 @@ class ViewComponent extends Manager
         }
     }
 
-    public function getButtonToolBar($user): ButtonToolBar
+    public function getButtonToolBar(User $userToRender): ButtonToolBar
     {
         $translator = $this->getTranslator();
 
@@ -84,7 +84,7 @@ class ViewComponent extends Manager
         $commonActions = new ButtonGroup();
         $toolActions = new ButtonGroup();
 
-        $editUrl = $this->getUserUrlGenerator()->getUpdateUrl($user);
+        $editUrl = $this->getUserUrlGenerator()->getUpdateUrl($userToRender);
 
         $commonActions->addButton(
             new Button(
@@ -93,7 +93,7 @@ class ViewComponent extends Manager
             )
         );
 
-        $deleteUrl = $this->getUserUrlGenerator()->getDeleteUrl($user);
+        $deleteUrl = $this->getUserUrlGenerator()->getDeleteUrl($userToRender);
 
         $commonActions->addButton(
             new Button(
@@ -102,7 +102,7 @@ class ViewComponent extends Manager
             )
         );
 
-        $changeUserUrl = $this->getUserUrlGenerator()->getChangeUserUrl($user);
+        $changeUserUrl = $this->getUserUrlGenerator()->getChangeUserUrl($userToRender);
 
         $toolActions->addButton(
             new Button(
@@ -117,24 +117,19 @@ class ViewComponent extends Manager
         return $buttonToolBar;
     }
 
-    protected function getTabsCollection(User $user): TabsCollection
+    protected function getTabsCollection(User $userToView, User $currentUser): TabsCollection
     {
         $tabsCollection = new TabsCollection();
-
-        //        $userDetailsRendererCollection = $this->getUserDetailsRendererCollection();
-        //        $userDetailsRenderer = $userDetailsRendererCollection->getUserDetailsRenderer(UserDetailsRenderer::class);
-        //
-        //        $tabsCollection->add(
-        //            $this->initializeContentTab(UserDetailsRenderer::class, $userDetailsRenderer, $user)
-        //        );
 
         foreach (
             $this->getUserDetailsRendererCollection()->getUserDetailsRenderers() as $userDetailsRendererClassName =>
             $userDetailsRenderer
         ) {
-            if ($userDetailsRenderer->hasContentForUser($user, $this->getUser())) {
+            if ($userDetailsRenderer->hasContentForUser($userToView, $currentUser)) {
                 $tabsCollection->add(
-                    $this->initializeContentTab($userDetailsRendererClassName, $userDetailsRenderer, $user)
+                    $this->initializeContentTab(
+                        $userDetailsRendererClassName, $userDetailsRenderer, $userToView, $currentUser
+                    )
                 );
             }
         }
@@ -152,20 +147,14 @@ class ViewComponent extends Manager
         return $this->getService(UserDetailsRendererRegistry::class);
     }
 
-    /**
-     * @param int|string $userDetailsRendererClassName
-     * @param \Chamilo\Core\User\Architecture\Interface\UserDetailsRendererInterface $userDetailsRenderer
-     * @param \Chamilo\Core\User\Storage\DataClass\User|null $user
-     *
-     * @return \Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ContentTab
-     */
     protected function initializeContentTab(
-        int|string $userDetailsRendererClassName, UserDetailsRendererInterface $userDetailsRenderer, ?User $user
+        string $userDetailsRendererClassName, UserDetailsRendererInterface $userDetailsRenderer, User $userToRender,
+        User $currentUser
     ): ContentTab
     {
         return new ContentTab(
-            md5($userDetailsRendererClassName), $userDetailsRenderer->renderTitle($user, $this->getUser()),
-            $userDetailsRenderer->renderUserDetails($user, $this->getUser()), $userDetailsRenderer->getGlyph()
+            md5($userDetailsRendererClassName), $userDetailsRenderer->renderTitle($userToRender, $currentUser),
+            $userDetailsRenderer->renderUserDetails($userToRender, $currentUser), $userDetailsRenderer->getGlyph()
         );
     }
 }

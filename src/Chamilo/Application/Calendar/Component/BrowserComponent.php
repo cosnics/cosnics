@@ -40,9 +40,9 @@ class BrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        $this->checkAuthorization(Manager::CONTEXT);
+        $this->checkAuthorization(Manager::CONTEXT, $currentUser);
         $this->checkLoggedInAs();
 
         $this->getPageConfiguration()->addCss(
@@ -52,9 +52,9 @@ class BrowserComponent extends Manager
 
         $html = [];
 
-        $html[] = $this->renderHeader();
+        $html[] = $this->renderHeader($currentUser);
         $html[] = '<div class="row">';
-        $html[] = $this->renderCalendar();
+        $html[] = $this->renderCalendar($currentUser);
         $html[] = '</div>';
         $html[] = $this->renderFooter();
 
@@ -112,13 +112,13 @@ class BrowserComponent extends Manager
         return $this->currentTime;
     }
 
-    public function getCurrentRendererType(): string
+    public function getCurrentRendererType(User $user): string
     {
         $rendererType = $this->getRequest()->query->get(HtmlCalendarRenderer::PARAM_TYPE);
 
         if (!$rendererType) {
             $rendererType = $this->getUserService()->findUserSetting(
-                $this->getUser(), 'cosnics.libraries.calendar.defaultView',
+                $user, 'cosnics.libraries.calendar.defaultView',
                 $this->getContainer()->getParameter('cosnics.libraries.calendar.defaultView')
             );
 
@@ -138,7 +138,7 @@ class BrowserComponent extends Manager
         return $rendererType;
     }
 
-    protected function getGeneralActions(): ButtonGroup
+    protected function getGeneralActions(User $user): ButtonGroup
     {
         $translator = $this->getTranslator();
         $buttonGroup = new ButtonGroup();
@@ -147,7 +147,7 @@ class BrowserComponent extends Manager
             [
                 self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => self::ACTION_PRINT,
-                HtmlCalendarRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
+                HtmlCalendarRenderer::PARAM_TYPE => $this->getCurrentRendererType($user),
                 HtmlCalendarRenderer::PARAM_TIME => $this->getCurrentRendererTime()
             ]
         );
@@ -200,7 +200,7 @@ class BrowserComponent extends Manager
     /**
      * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface[]
      */
-    protected function getViewActions(): array
+    protected function getViewActions(User $user): array
     {
         $actions = [];
 
@@ -209,17 +209,16 @@ class BrowserComponent extends Manager
 
         foreach ($this->getCalendarExtensionActionProvider()->getCalendarExtenstionActionProviders() as $actionProvider)
         {
-            $primaryExtensionActions =
-                array_merge($primaryExtensionActions, $actionProvider->getPrimary($this->getUser()));
+            $primaryExtensionActions = array_merge($primaryExtensionActions, $actionProvider->getPrimary($user));
             $additionalExtensionActions = array_merge(
-                $additionalExtensionActions, $actionProvider->getAdditional($this->getUser())
+                $additionalExtensionActions, $actionProvider->getAdditional($user)
             );
         }
 
         $actions = array_merge($actions, $primaryExtensionActions);
         $actions = array_merge($actions, $additionalExtensionActions);
 
-        $actions[] = $this->getGeneralActions();
+        $actions[] = $this->getGeneralActions($user);
 
         return $actions;
     }
@@ -228,25 +227,25 @@ class BrowserComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Exception
      */
-    protected function renderCalendar(): string
+    protected function renderCalendar(User $user): string
     {
-        $renderer = $this->getCalendarRendererFactory()->getRenderer($this->getCurrentRendererType());
+        $renderer = $this->getCalendarRendererFactory()->getRenderer($this->getCurrentRendererType($user));
 
         $displayParameters = [
             self::PARAM_CONTEXT => Manager::CONTEXT,
             self::PARAM_ACTION => self::ACTION_BROWSE,
-            HtmlCalendarRenderer::PARAM_TYPE => $this->getCurrentRendererType(),
+            HtmlCalendarRenderer::PARAM_TYPE => $this->getCurrentRendererType($user),
             HtmlCalendarRenderer::PARAM_TIME => $this->getCurrentRendererTime()
         ];
 
         $events = $this->getCalendarDataProvider()->getEvents(
-            $this->getUser(), $renderer->getEventsStartTime($this->getCurrentRendererTime()),
+            $user, $renderer->getEventsStartTime($this->getCurrentRendererTime()),
             $renderer->getEventsEndTime($this->getCurrentRendererTime())
         );
 
         return $renderer->render(
-            $events, $displayParameters, $this->getCurrentRendererTime(), $this->getViewActions(),
-            $this->getCalendarDataProvider()->getVisibilities($this->getUser()->getId()), Manager::CONTEXT
+            $events, $displayParameters, $this->getCurrentRendererTime(), $this->getViewActions($user),
+            $this->getCalendarDataProvider()->getVisibilities($user->getId()), Manager::CONTEXT
         );
     }
 

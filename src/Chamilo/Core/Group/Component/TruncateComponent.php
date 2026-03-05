@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -20,9 +21,9 @@ class TruncateComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        if (!$this->getUser()->isPlatformAdministrator())
+        if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator())
         {
             throw new NotAllowedException();
         }

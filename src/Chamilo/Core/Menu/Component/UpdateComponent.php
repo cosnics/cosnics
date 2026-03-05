@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Architecture\Exception\ObjectNotExistException;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,86 +19,96 @@ use Symfony\Component\HttpFoundation\Response;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CreatorComponent extends Manager
+class UpdateComponent extends Manager
 {
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectNotExistException
      * @throws \Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator()) {
+        if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
-        $itemType = $this->getRequest()->query->get(self::PARAM_TYPE);
-
-        if (is_null($itemType)) {
-            throw new ParameterNotDefinedException(self::PARAM_TYPE);
-        }
-
-        $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($itemType);
+        $item = $this->getItem();
+        $itemRenderer = $this->getItemRendererFactory()->getItemRendererForItem($item);
 
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
                 $this->getUrlGenerator()->fromRequest(), $this->getTranslator()->trans(
-                'AddMenuItemComponentTitle', ['%ItemType%' => $itemRenderer->getRendererTypeName()], Manager::CONTEXT
+                'EditMenuItemComponentTitle', ['%ItemName%' => $itemRenderer->renderTitleForCurrentLanguage($item)],
+                Manager::CONTEXT
             )
             )
         );
 
         $itemForm = new ItemForm(
-            $itemType, $this->getUrlGenerator()->fromParameters(
+            $item->getType(), $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_CREATE,
-                self::PARAM_TYPE => $itemType
+                Application::PARAM_ACTION => Manager::ACTION_UPDATE,
+                self::PARAM_TYPE => $item->getType(),
+                self::PARAM_ITEM => $item->getId()
             ]
         )
         );
 
+        $itemForm->setItemDefaults($item);
+
         if ($itemForm->validate()) {
-            $item = $this->getCachedItemService()->createItemForTypeFromValues(
-                $itemType, $itemForm->exportValues()
+            $success = $this->getCachedItemService()->saveItemFromValues($item, $itemForm->exportValues());
+
+            $message = $this->getTranslator()->trans(
+                $success ? 'ObjectCreated' : 'ObjectNotCreated',
+                ['%Object%' => $this->getTranslator()->trans('ManagerItem', [], 'Chamilo\Core\Menu')],
+                StringUtilities::LIBRARIES
             );
-
-            $success = $item instanceof Item;
-
-            if ($success) {
-                $message = $this->getTranslator()->trans(
-                    'ObjectCreated', ['%Object%' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)],
-                    StringUtilities::LIBRARIES
-                );
-            }
-            else {
-                $message = $this->getTranslator()->trans(
-                    'ObjectNotCreated',
-                    ['%Object%' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)],
-                    StringUtilities::LIBRARIES
-                );
-            }
 
             return $this->redirectWithMessage(
                 $message, !$success, [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => Manager::ACTION_BROWSE,
-                    Manager::PARAM_PARENT => $item->getParentId()
+                    Manager::PARAM_ITEM => $item->getParentId()
                 ]
             );
         }
 
         $html = [];
 
-        $html[] = $this->renderHeader();
+        $html[] = $this->renderHeader($currentUser);
         $html[] = $itemForm->render();
         $html[] = $this->renderFooter();
 
         return new Response(implode(PHP_EOL, $html));
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
+    protected function getItem(): Item
+    {
+        $itemIdentifier = $this->getRequest()->query->get(self::PARAM_ITEM);
+
+        if (is_null($itemIdentifier)) {
+            throw new ParameterNotDefinedException(self::PARAM_ITEM);
+        }
+
+        $item = $this->getItemService()->findItemByIdentifier($itemIdentifier);
+
+        if (!$item instanceof Item) {
+            throw new ObjectNotExistException($this->getTranslator()->trans('MenuItem'), $itemIdentifier);
+        }
+
+        return $item;
     }
 }

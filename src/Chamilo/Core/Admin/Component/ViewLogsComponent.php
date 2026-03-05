@@ -24,15 +24,15 @@ class ViewLogsComponent extends Manager
      * @throws \QuickformException
      * @throws \TableException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator()) {
+        if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
         $form = $this->buildForm();
 
-        $html[] = $this->renderHeader();
+        $html[] = $this->renderHeader($currentUser);
         $html[] = $form->render();
 
         if ($form->validate()) {

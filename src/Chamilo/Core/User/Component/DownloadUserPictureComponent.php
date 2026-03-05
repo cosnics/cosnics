@@ -23,7 +23,7 @@ class DownloadUserPictureComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         return $this->getUserPictureProvider()->downloadUserPicture($this->getUserFromRequest());
     }

@@ -18,53 +18,44 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UpdateUserPictureComponent extends ProfileComponent
 {
-
     protected PictureForm $pictureForm;
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        $this->checkAuthorization(Manager::CONTEXT, 'ManageAccount');
+        $this->checkAuthorization(Manager::CONTEXT, $currentUser, 'ManageAccount');
         $translator = $this->getTranslator();
         $userPictureProvider = $this->getUserPictureProvider();
 
-        if ($userPictureProvider instanceof UserPictureUpdateProviderInterface)
-        {
+        if ($userPictureProvider instanceof UserPictureUpdateProviderInterface) {
             $pictureForm = $this->getPictureForm();
 
-            if ($pictureForm->validate())
-            {
-                try
-                {
+            if ($pictureForm->validate()) {
+                try {
                     $removeExistingPicture = (bool) $pictureForm->exportValue('remove_picture');
                 }
-                catch (Exception)
-                {
+                catch (Exception) {
                     $removeExistingPicture = false;
                 }
 
                 $pictureInformation = $this->getRequest()->files->get(User::PROPERTY_PICTURE_URI);
 
                 $success = $userPictureProvider->updateUserPictureFromParameters(
-                    $this->getUser(), $this->getUser(), $pictureInformation, $removeExistingPicture
+                    $currentUser, $currentUser, $pictureInformation, $removeExistingPicture
                 );
 
-                if (!$success)
-                {
-                    if ($pictureInformation instanceof UploadedFile && !$pictureInformation->isValid())
-                    {
+                if (!$success) {
+                    if ($pictureInformation instanceof UploadedFile && !$pictureInformation->isValid()) {
                         $errorMessage = $pictureInformation->getErrorMessage();
                     }
-                    else
-                    {
+                    else {
                         $errorMessage = 'UserProfileNotUpdated';
                     }
                 }
-                else
-                {
+                else {
                     $errorMessage = 'UserProfileNotUpdated';
                     $successMessage = 'UserProfileUpdated';
                 }
@@ -76,13 +67,11 @@ class UpdateUserPictureComponent extends ProfileComponent
                     ]
                 );
             }
-            else
-            {
-                return new Response($this->renderPage());
+            else {
+                return new Response($this->renderPage($currentUser));
             }
         }
-        else
-        {
+        else {
             return new Response(
                 $this->displayErrorPage(
                     $translator->trans('UserPictureProviderDoesNotSuportUpdates', [], Manager::CONTEXT)
@@ -94,19 +83,18 @@ class UpdateUserPictureComponent extends ProfileComponent
     /**
      * @throws \QuickformException
      */
-    public function getContent(): string
+    public function getContent(User $user): string
     {
-        return $this->getPictureForm()->render();
+        return $this->getPictureForm($user)->render();
     }
 
     /**
      * @throws \QuickformException
      */
-    public function getPictureForm(): PictureForm
+    public function getPictureForm(User $user): PictureForm
     {
-        if (!isset($this->pictureForm))
-        {
-            $this->pictureForm = new PictureForm($this->getUser(), $this->getUrlGenerator()->fromRequest());
+        if (!isset($this->pictureForm)) {
+            $this->pictureForm = new PictureForm($user, $this->getUrlGenerator()->fromRequest());
         }
 
         return $this->pictureForm;

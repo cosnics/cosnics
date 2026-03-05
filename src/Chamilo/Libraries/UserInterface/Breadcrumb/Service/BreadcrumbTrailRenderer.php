@@ -27,7 +27,6 @@ class BreadcrumbTrailRenderer
 
         $html = [];
 
-
         $html[] = '<nav class="bg-body-tertiary" aria-label="breadcrumb">';
         $html[] = '<div class="container-xxl">';
         $html[] = $this->renderBreadcrumbs($breadcrumbTrail);

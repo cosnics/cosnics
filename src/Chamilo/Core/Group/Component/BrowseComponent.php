@@ -63,9 +63,9 @@ class BrowseComponent extends Manager
      * @throws \QuickformException
      * @throws \TableException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        if (!$this->getUser()->isPlatformAdministrator()) {
+        if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -73,7 +73,7 @@ class BrowseComponent extends Manager
 
         $html = [];
 
-        $html[] = $this->renderHeader();
+        $html[] = $this->renderHeader($currentUser);
         $html[] = $this->renderTabs();
         $html[] = $this->renderFooter();
 
@@ -364,11 +364,11 @@ class BrowseComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function renderHeader(): string
+    public function renderHeader(?User $user = null): string
     {
         $html = [];
 
-        $html[] = parent::renderHeader();
+        $html[] = parent::renderHeader($user);
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<div class="row">';

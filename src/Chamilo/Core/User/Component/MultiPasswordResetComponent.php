@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
@@ -20,12 +21,12 @@ class MultiPasswordResetComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         $userIdentifiers = (array) $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_ID, []);
         $translator = $this->getTranslator();
 
-        if (!$this->getUser()->isPlatformAdministrator())
+        if (!$currentUser->isPlatformAdministrator())
         {
             throw new NotAllowedException();
         }
@@ -38,9 +39,9 @@ class MultiPasswordResetComponent extends Manager
 
             foreach ($userIdentifiers as $userIdentifier)
             {
-                $user = $userService->findUserByIdentifier($userIdentifier);
+                $userToReset = $userService->findUserByIdentifier($userIdentifier);
 
-                if (!$userService->createNewPasswordForUser($user))
+                if (!$userService->createNewPasswordForUser($userToReset))
                 {
                     $failures ++;
                 }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Component;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Manager;
 use Chamilo\Libraries\UserInterface\Form\Service\FormValidatorHtmlEditorRenderer;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,7 @@ class HtmlEditorInstanceComponent extends Manager
     /**
      * @throws \QuickformException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         $request = $this->getRequest();
         $name = $request->request->get('name');

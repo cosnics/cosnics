@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Component;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Manager;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -18,7 +19,7 @@ class DeleteTemporaryFileComponent extends Manager
     // Input parameters
     public const PARAM_FILE = 'file';
 
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         $temporaryFileName = $this->getRequest()->getFromQueryOrRequest(self::PARAM_FILE);
         $temporaryPath = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__);

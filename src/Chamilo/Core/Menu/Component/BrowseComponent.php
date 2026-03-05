@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BrowserComponent extends Manager
+class BrowseComponent extends Manager
 {
     protected string $parentIdentifier;
 
@@ -33,15 +33,15 @@ class BrowserComponent extends Manager
      * @throws \TableException
      * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator()) {
+        if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
         $html = [];
 
-        $html[] = $this->renderHeader();
+        $html[] = $this->renderHeader($currentUser);
 
         $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar());
 

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -21,11 +22,9 @@ class UnsubscribeComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        $user = $this->getUser();
-
-        if (!$user->isPlatformAdministrator()) {
+        if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -64,10 +63,10 @@ class UnsubscribeComponent extends Manager
                 }
 
                 $group = $groupService->findGroupByIdentifier($groupUserRelation->getGroupId());
-                $user = $userService->findUserByIdentifier($groupUserRelation->getUserId());
+                $userToUnsubscribe = $userService->findUserByIdentifier($groupUserRelation->getUserId());
 
                 try {
-                    $groupMembershipService->unsubscribeUserFromGroup($group, $user);
+                    $groupMembershipService->unsubscribeUserFromGroup($group, $userToUnsubscribe);
                 }
                 catch (RuntimeException) {
                     $failures ++;

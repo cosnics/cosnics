@@ -20,8 +20,6 @@ class BaseHeaderRenderer
 
     protected Translator $translator;
 
-    private BannerRenderer $bannerRenderer;
-
     private PageHeaders $pageConfiguration;
 
     private ThemePathBuilder $themeWebPathBuilder;
@@ -30,13 +28,12 @@ class BaseHeaderRenderer
 
     public function __construct(
         PageHeaders $pageConfiguration, WebPathBuilder $webPathBuilder, ThemePathBuilder $themeWebPathBuilder,
-        BannerRenderer $bannerRenderer, Translator $translator, string $siteName, string $institutionName
+        Translator $translator, string $siteName, string $institutionName
     )
     {
         $this->pageConfiguration = $pageConfiguration;
         $this->webPathBuilder = $webPathBuilder;
         $this->themeWebPathBuilder = $themeWebPathBuilder;
-        $this->bannerRenderer = $bannerRenderer;
         $this->translator = $translator;
         $this->siteName = $siteName;
         $this->institutionName = $institutionName;
@@ -84,11 +81,6 @@ class BaseHeaderRenderer
         $pageConfiguration->addJavascript($javascriptPath . 'cosnics.common.min.js');
 
         $pageConfiguration->addHtml('<title>' . $this->getPageTitle() . '</title>');
-    }
-
-    public function getBannerRenderer(): BannerRenderer
-    {
-        return $this->bannerRenderer;
     }
 
     public function getInstitutionName(): string

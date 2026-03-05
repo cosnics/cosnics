@@ -3,6 +3,7 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -22,11 +23,11 @@ class SubscribeComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         $groupIdentifier = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
 
-        if (!$this->getUser()->isPlatformAdministrator()) {
+        if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -59,14 +60,15 @@ class SubscribeComponent extends Manager
             $group = $groupService->findGroupByIdentifier($groupIdentifier);
             $containsDuplicates = false;
 
-            foreach ($userIdentifiers as $user) {
-                $user = $userService->findUserByIdentifier($user);
+            foreach ($userIdentifiers as $userIdentifier) {
+                $userToSubscribe = $userService->findUserByIdentifier($userIdentifier);
 
-                $groupUserRelation = $groupMembershipService->getGroupUserRelationByGroupAndUser($group, $user);
+                $groupUserRelation =
+                    $groupMembershipService->getGroupUserRelationByGroupAndUser($group, $userToSubscribe);
 
                 if (!$groupUserRelation instanceof GroupRelUser) {
                     try {
-                        $groupMembershipService->subscribeUserToGroup($group, $user);
+                        $groupMembershipService->subscribeUserToGroup($group, $userToSubscribe);
                     }
                     catch (RuntimeException) {
                         $failures ++;

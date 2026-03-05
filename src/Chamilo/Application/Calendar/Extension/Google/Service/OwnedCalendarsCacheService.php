@@ -19,15 +19,15 @@ class OwnedCalendarsCacheService
 
     protected int $defaultLifetime;
 
-    protected User $user;
+    protected ?User $user;
 
     protected UserService $userService;
 
     private CalendarRepository $calendarRepository;
 
     public function __construct(
-        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository, User $user, UserService $userService,
-        int $defaultLifetime = 3600
+        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository, UserService $userService,
+        ?User $user = null, int $defaultLifetime = 3600
     )
     {
         $this->cacheAdapter = $cacheAdapter;
@@ -52,8 +52,12 @@ class OwnedCalendarsCacheService
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function getOwnedCalendars(User $user): array
+    public function getOwnedCalendars(?User $user = null): array
     {
+        if (!$user instanceof User) {
+            return [];
+        }
+
         $cacheIdentifier = $this->getCacheKeyForParts([__METHOD__, $user->getId()]);
 
         if (!$this->hasCacheDataForKey($cacheIdentifier)) {
@@ -70,7 +74,7 @@ class OwnedCalendarsCacheService
         return $this->readCacheDataForKey($cacheIdentifier);
     }
 
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }

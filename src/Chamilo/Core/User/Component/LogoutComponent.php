@@ -2,6 +2,8 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -10,11 +12,18 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class LogoutComponent extends Manager
 {
-
-    public function run(): Response
+    /**
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
+     */
+    public function run(?User $currentUser = null): Response
     {
-        $authenticationHandler = $this->getAuthenticationValidator();
-        $authenticationHandler->logout($this->getUser());
-        exit();
+        if ($currentUser instanceof User) {
+            $authenticationHandler = $this->getAuthenticationValidator();
+            $authenticationHandler->logout($currentUser);
+            exit();
+        }
+        else {
+            throw new NotAllowedException();
+        }
     }
 }

@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\Admin\Service\Consulter\LanguageConsulter;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,9 +16,9 @@ class LanguageComponent extends Manager
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        $this->checkAuthorization(Manager::CONTEXT, 'ChangeLanguage');
+        $this->checkAuthorization(Manager::CONTEXT, $currentUser, 'ChangeLanguage');
 
         if ($this->getContainer()->getParameter('cosnics.application.user.rights.changeLanguage')) {
             $choice = $this->getRequest()->query->get(self::PARAM_LANGUAGE);
@@ -25,7 +26,7 @@ class LanguageComponent extends Manager
 
             if ($choice && in_array($choice, $languages)) {
                 $this->getUserService()->updateUserSetting(
-                    $this->getUser(), 'cosnics.libraries.userInterface.translation.language.default', $choice
+                    $currentUser, 'cosnics.libraries.userInterface.translation.language.default', $choice
                 );
             }
         }

@@ -14,4 +14,14 @@ abstract class Manager extends Application
     public const ACTION_UTILITIES = 'Utilities';
     public const CONTEXT = __NAMESPACE__;
     public const DEFAULT_ACTION = self::ACTION_UTILITIES;
+
+    public function getContext(): string
+    {
+        return self::CONTEXT;
+    }
+
+    public function getDefaultAction(): string
+    {
+        return self::DEFAULT_ACTION;
+    }
 }

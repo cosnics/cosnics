@@ -40,9 +40,9 @@ class BrowseNonSubscribedUsersComponent extends Manager
      * @throws \QuickformException
      * @throws \TableException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        if (!$this->getUser()->isPlatformAdministrator()) {
+        if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -62,7 +62,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
 
         $html = [];
 
-        $html[] = $this->renderHeader();
+        $html[] = $this->renderHeader($currentUser);
         $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar());
         $html[] = $output;
         $html[] = $this->renderFooter();

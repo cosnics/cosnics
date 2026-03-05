@@ -26,6 +26,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         return [
             'Chamilo\Core\Menu' => [
+                'application.php',
                 'architecture.php',
                 'implementation.admin.php',
                 'implementation.menu.php',

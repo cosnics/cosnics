@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Component;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interface\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Manager;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
@@ -15,8 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterface
 {
-    public const PARAM_ACTION = 'action';
-    public const PARAM_CONTEXT = 'context';
     public const PARAM_PARAMETERS = 'parameters';
     public const PARAM_PATH = 'path';
     public const PARAM_STRING = 'string';
@@ -28,7 +27,7 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
     /**
      * @throws \Exception
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         $request = $this->getRequest();
         $type = $request->getFromQueryOrRequest(self::PARAM_TYPE);

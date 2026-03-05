@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Layout\Service;
 
+use Chamilo\Core\Menu\UserInterface\MenuRenderer\MenuRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
+use Chamilo\Libraries\UserInterface\Breadcrumb\Service\BreadcrumbTrailRenderer;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageManager;
 
 /**
@@ -15,19 +17,23 @@ class DefaultHeaderRenderer
 
     protected BreadcrumbTrail $breadcrumbTrail;
 
-    protected NotificationMessageManager $notificationMessageManager;
+    protected BreadcrumbTrailRenderer $breadcrumbTrailRenderer;
 
-    private BannerRenderer $bannerRenderer;
+    protected MenuRenderer $menuRenderer;
+
+    protected NotificationMessageManager $notificationMessageManager;
 
     public function __construct(
         BaseHeaderRenderer $baseHeaderRenderer, BreadcrumbTrail $breadcrumbTrail,
-        NotificationMessageManager $notificationMessageManager, BannerRenderer $bannerRenderer
+        NotificationMessageManager $notificationMessageManager, BreadcrumbTrailRenderer $breadcrumbTrailRenderer,
+        MenuRenderer $menuRenderer
     )
     {
         $this->baseHeaderRenderer = $baseHeaderRenderer;
         $this->breadcrumbTrail = $breadcrumbTrail;
         $this->notificationMessageManager = $notificationMessageManager;
-        $this->bannerRenderer = $bannerRenderer;
+        $this->breadcrumbTrailRenderer = $breadcrumbTrailRenderer;
+        $this->menuRenderer = $menuRenderer;
     }
 
     public function render(?User $user = null): string
@@ -35,7 +41,18 @@ class DefaultHeaderRenderer
         $html = [];
 
         $html[] = $this->getBaseHeaderRenderer()->renderHeader();
-        $html[] = $this->getBannerRenderer()->render($user);
+
+        $html[] = '<header>';
+
+        $html[] = $this->getMenuRenderer()->render($user);
+
+        $breadcrumbtrail = $this->getBreadcrumbTrail();
+
+        if ($breadcrumbtrail->count() > 0) {
+            $html[] = $this->getBreadcrumbTrailRenderer()->render($breadcrumbtrail);
+        }
+
+        $html[] = '</header>';
 
         $html[] = '<main class="container-xxl">';
 
@@ -48,11 +65,6 @@ class DefaultHeaderRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function getBannerRenderer(): BannerRenderer
-    {
-        return $this->bannerRenderer;
-    }
-
     public function getBaseHeaderRenderer(): BaseHeaderRenderer
     {
         return $this->baseHeaderRenderer;
@@ -61,6 +73,16 @@ class DefaultHeaderRenderer
     public function getBreadcrumbTrail(): BreadcrumbTrail
     {
         return $this->breadcrumbTrail;
+    }
+
+    public function getBreadcrumbTrailRenderer(): BreadcrumbTrailRenderer
+    {
+        return $this->breadcrumbTrailRenderer;
+    }
+
+    public function getMenuRenderer(): MenuRenderer
+    {
+        return $this->menuRenderer;
     }
 
     public function getNotificationMessageManager(): NotificationMessageManager

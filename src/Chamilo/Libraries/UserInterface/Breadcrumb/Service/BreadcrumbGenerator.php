@@ -51,58 +51,18 @@ class BreadcrumbGenerator
         $this->siteName = $siteName;
     }
 
-    public function addComponentBreadcrumb(Application $application): void
+    public function addDefaultBreadcrumbs(string $context, ?string $action, string $defaultAction): void
     {
-        $request = $this->getRequest();
-        $context = $request->query->get(Application::PARAM_CONTEXT);
+        $breadcrumbs = [];
 
-        $componentUrl = $this->getUrlGenerator()->fromParameters(
-            [
-                Application::PARAM_CONTEXT => $context,
-                Application::PARAM_ACTION => $request->query->get(Application::PARAM_ACTION)
-            ]
-        );
+        $breadcrumbs[] = $this->getRootBreadcrumb();
+        $breadcrumbs[] = $this->getPackageBreadcrumb($context);
 
-        $variable = $this->getClassnameUtilities()->getClassnameFromNamespace($application::class);
+        if ($action && $action !== $defaultAction) {
+            $breadcrumbs[] = $this->getComponentBreadcrumb($context, $action);
+        }
 
-        $this->getBreadcrumbTrail()->add(
-            new Breadcrumb(
-                $componentUrl, $this->getTranslator()->trans($variable, [], $context)
-            )
-        );
-    }
-
-    public function addDefaultBreadcrumbs(): void
-    {
-        $this->generateRootBreadcrumb();
-        $this->generatePackageBreadcrumb();
-    }
-
-    protected function generatePackageBreadcrumb(): void
-    {
-        $request = $this->getRequest();
-
-        $packageUrl = $this->getUrlGenerator()->fromParameters(
-            [
-                Application::PARAM_CONTEXT => $request->query->get(Application::PARAM_CONTEXT)
-            ]
-        );
-
-        $this->getBreadcrumbTrail()->add(
-            new Breadcrumb(
-                $packageUrl,
-                $this->getTranslator()->trans('TypeName', [], $request->query->get(Application::PARAM_CONTEXT))
-            )
-        );
-    }
-
-    protected function generateRootBreadcrumb(): void
-    {
-        $this->getBreadcrumbTrail()->add(
-            new Breadcrumb(
-                $this->getWebPathBuilder()->getBasePath(), $this->getSiteName(), new FontAwesomeGlyph('home')
-            )
-        );
+        $this->getBreadcrumbTrail()->prependMultiple($breadcrumbs);
     }
 
     public function getBreadcrumbTrail(): BreadcrumbTrail
@@ -120,9 +80,43 @@ class BreadcrumbGenerator
         return $this->classnameUtilities;
     }
 
+    public function getComponentBreadcrumb(string $context, string $action): Breadcrumb
+    {
+        $componentUrl = $this->getUrlGenerator()->fromParameters(
+            [
+                Application::PARAM_CONTEXT => $context,
+                Application::PARAM_ACTION => $action
+            ]
+        );
+
+        return new Breadcrumb(
+            $componentUrl, $this->getTranslator()->trans($action . 'Component', [], $context)
+        );
+    }
+
+    protected function getPackageBreadcrumb(string $context): Breadcrumb
+    {
+        $packageUrl = $this->getUrlGenerator()->fromParameters(
+            [
+                Application::PARAM_CONTEXT => $context
+            ]
+        );
+
+        return new Breadcrumb(
+            $packageUrl, $this->getTranslator()->trans('TypeName', [], $context)
+        );
+    }
+
     public function getRequest(): ChamiloRequest
     {
         return $this->request;
+    }
+
+    protected function getRootBreadcrumb(): Breadcrumb
+    {
+        return new Breadcrumb(
+            $this->getWebPathBuilder()->getBasePath(), $this->getSiteName(), new FontAwesomeGlyph('home')
+        );
     }
 
     public function getSiteName(): string

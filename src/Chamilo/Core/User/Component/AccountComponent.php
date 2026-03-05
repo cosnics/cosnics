@@ -26,18 +26,18 @@ class AccountComponent extends ProfileComponent
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        $this->checkAuthorization(Manager::CONTEXT, 'ManageAccount');
+        $this->checkAuthorization(Manager::CONTEXT, $currentUser, 'ManageAccount');
         $translator = $this->getTranslator();
 
-        $accountForm = $this->getAccountForm();
+        $accountForm = $this->getAccountForm($currentUser);
 
         if ($accountForm->validate()) {
             $formValues = $accountForm->exportValues();
 
             $success = $this->getUserService()->updateAccountFromParameters(
-                $this->getUser(), $formValues[User::PROPERTY_GIVEN_NAME], $formValues[User::PROPERTY_SURNAME],
+                $currentUser, $formValues[User::PROPERTY_GIVEN_NAME], $formValues[User::PROPERTY_SURNAME],
                 $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
                 $formValues[User::PROPERTY_EMAIL], $formValues[UserForm::PROPERTY_CURRENT_PASSWORD],
                 $formValues[User::PROPERTY_PASSWORD]
@@ -50,7 +50,7 @@ class AccountComponent extends ProfileComponent
 
                 if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid()) {
                     if (!$userPictureProvider->updateUserPictureFromParameters(
-                        $this->getUser(), $this->getUser(), $pictureInformation
+                        $currentUser, $currentUser, $pictureInformation
                     )) {
                         $this->getNotificationMessageManager()->addMessage(
                             new NotificationMessage(
@@ -72,18 +72,18 @@ class AccountComponent extends ProfileComponent
             );
         }
         else {
-            return new Response($this->renderPage());
+            return new Response($this->renderPage($currentUser));
         }
     }
 
     /**
      * @throws \QuickformException
      */
-    public function getAccountForm(): AccountForm
+    public function getAccountForm(User $user): AccountForm
     {
         if (!isset($this->accountForm)) {
             $this->accountForm = new AccountForm(
-                $this->getUser(), $this->getUrlGenerator()->fromRequest(), $this->getAuthenticationValidator()
+                $user, $this->getUrlGenerator()->fromRequest(), $this->getAuthenticationValidator()
             );
         }
 
@@ -93,9 +93,9 @@ class AccountComponent extends ProfileComponent
     /**
      * @throws \QuickformException
      */
-    public function getContent(): string
+    public function getContent(User $user): string
     {
-        return $this->getAccountForm()->render();
+        return $this->getAccountForm($user)->render();
     }
 
     public function getUserPictureProvider(): ?UserPictureUpdateProviderInterface

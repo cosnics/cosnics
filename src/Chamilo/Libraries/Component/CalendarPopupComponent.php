@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Component;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Manager;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CalendarPopupComponent extends Manager implements NoAuthenticationSupportInterface
 {
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         $translator = $this->getTranslator();
 
@@ -32,7 +33,7 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
         ];
 
         $startOfWeek = $this->getUserService()->findUserSetting(
-            $this->getUser(), 'cosnics.libraries.calendar.firstDayOfWeek',
+            $currentUser, 'cosnics.libraries.calendar.firstDayOfWeek',
             $this->getContainer()->getParameter('cosnics.libraries.calendar.firstDayOfWeek')
         );
 

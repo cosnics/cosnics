@@ -27,6 +27,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         return [
             'Chamilo\Application\Calendar' => [
+                'application.php',
                 'architecture.domain.php',
                 'implementation.home.php',
                 'service.php',

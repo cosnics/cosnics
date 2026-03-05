@@ -30,20 +30,20 @@ class OnlineComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        if (!$this->getUser() instanceof User || !$this->getUser()->isPlatformAdministrator()) {
+        if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
         $html = [];
 
-        $html[] = $this->renderHeader();
+        $html[] = $this->renderHeader($currentUser);
 
         $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
 
         if (isset($userIdentifier)) {
-            $html[] = $this->renderUserInformation($userIdentifier);
+            $html[] = $this->renderUserInformation($userIdentifier, $currentUser);
         }
         else {
             $html[] = $this->renderOnlineTable();
@@ -119,8 +119,8 @@ class OnlineComponent extends Manager
         return $onlineTableRenderer->render($tableParameterValues, $users);
     }
 
-    private function renderUserInformation(string $userIdentifier): string
+    private function renderUserInformation(string $userIdentifier, User $user): string
     {
-        return $this->getUserDetailsRenderer()->renderUserDetailsForUserIdentifier($userIdentifier, $this->getUser());
+        return $this->getUserDetailsRenderer()->renderUserDetailsForUserIdentifier($userIdentifier, $user);
     }
 }

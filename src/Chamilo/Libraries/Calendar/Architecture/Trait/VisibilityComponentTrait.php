@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Architecture\Trait;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Calendar\Architecture\Interface\VisibilityServiceInterface;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
@@ -16,11 +17,11 @@ trait VisibilityComponentTrait
 {
     public const PARAM_SOURCE = 'source';
 
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
         $source = $this->getRequest()->getFromQueryOrRequest(self::PARAM_SOURCE);
 
-        if ($this->getVisibilityService()->changeVisibility($this->getUser()->getId(), $source)) {
+        if ($this->getVisibilityService()->changeVisibility($currentUser->getId(), $source)) {
             return JsonAjaxResult::success();
         }
         else {

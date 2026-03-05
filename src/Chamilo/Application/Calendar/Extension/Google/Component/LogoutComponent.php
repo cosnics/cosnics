@@ -3,6 +3,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Component;
 
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,9 +20,9 @@ class LogoutComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Google_Auth_Exception
      */
-    public function run(): Response
+    public function run(?User $currentUser = null): Response
     {
-        $isSuccessful = $this->getCalendarService()->logout($this->getUser());
+        $isSuccessful = $this->getCalendarService()->logout($currentUser);
 
         if ($isSuccessful) {
             $this->getAvailabilityService()->deleteAvailabilityByCalendarType(Manager::CONTEXT);
