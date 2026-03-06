@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @package Chamilo\Core\Admin\Component
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class OnlineComponent extends Manager
+class ViewOnlineComponent extends Manager
 {
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException

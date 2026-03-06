@@ -4,7 +4,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Component\CalendarPopupComponent;
 use Chamilo\Libraries\Component\DeleteTemporaryFileComponent;
-use Chamilo\Libraries\Component\GroupsFeedComponent;
 use Chamilo\Libraries\Component\HtmlEditorInstanceComponent;
 use Chamilo\Libraries\Component\UploadTemporaryFileComponent;
 use Chamilo\Libraries\Component\UtilitiesComponent;

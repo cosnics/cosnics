@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BrowserComponent extends Manager
+class BrowseComponent extends Manager
 {
     protected CalendarDataProvider $calendarRendererProvider;
 

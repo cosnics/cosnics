@@ -83,14 +83,14 @@ abstract class Application implements ApplicationInterface
         return implode(PHP_EOL, $html);
     }
 
-    public function getAction(): string
-    {
-        return $this->getRequest()->query->get(self::PARAM_ACTION, $this->getDefaultAction());
-    }
-
     public function getBreadcrumbGenerator(): BreadcrumbGenerator
     {
         return $this->getService(BreadcrumbGenerator::class);
+    }
+
+    public function getCurrentAction(): string
+    {
+        return $this->getRequest()->query->get(self::PARAM_ACTION, $this->getDefaultApplicationAction());
     }
 
     public function getResult(
@@ -138,7 +138,7 @@ abstract class Application implements ApplicationInterface
     public function renderHeader(?User $user = null): string
     {
         $this->getBreadcrumbGenerator()->addDefaultBreadcrumbs(
-            $this->getContext(), $this->getAction(), $this->getDefaultAction()
+            $this->getApplicationContext(), $this->getCurrentAction(), $this->getDefaultApplicationAction()
         );
 
         return $this->getDefaultHeaderRenderer()->render($user);

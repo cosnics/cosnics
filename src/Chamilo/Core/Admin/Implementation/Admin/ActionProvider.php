@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Admin\Implementation\Admin;
 
 use Chamilo\Core\Admin\Architecture\Domain\AbstractActionProvider;
+use Chamilo\Core\Admin\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Admin\Architecture\Interface\ActionProviderInterface;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -26,7 +27,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_DIAGNOSE
+            Application::PARAM_ACTION => ActionEnum::DIAGNOSE->value
         ];
 
         $links[] = new Action(
@@ -37,7 +38,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_VIEW_LOGS
+            Application::PARAM_ACTION => ActionEnum::VIEW_LOGS->value
         ];
 
         $links[] = new Action(
@@ -48,7 +49,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_ONLINE
+            Application::PARAM_ACTION => ActionEnum::VIEW_ONLINE->value
         ];
 
         $links[] = new Action(

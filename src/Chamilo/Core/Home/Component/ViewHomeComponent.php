@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class HomeComponent extends Manager implements NoAuthenticationSupportInterface
+class ViewHomeComponent extends Manager implements NoAuthenticationSupportInterface
 {
     protected AuthenticationValidator $authenticationValidator;
 

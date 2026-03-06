@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin;
 
+use Chamilo\Core\Admin\Architecture\Enum\ActionEnum;
 use Chamilo\Libraries\Architecture\Domain\Application;
 
 /**
@@ -10,22 +11,22 @@ use Chamilo\Libraries\Architecture\Domain\Application;
  */
 abstract class Manager extends Application
 {
-    public const ACTION_BROWSE = 'Browse';
-    public const ACTION_DIAGNOSE = 'Diagnose';
-    public const ACTION_ONLINE = 'Online';
-    public const ACTION_VIEW_LOGS = 'ViewLogs';
     public const CONTEXT = __NAMESPACE__;
-    public const DEFAULT_ACTION = self::ACTION_BROWSE;
     public const PARAM_SELECTED_CONTEXT = 'context';
     public const PARAM_USER_ID = 'user_id';
 
-    public function getContext(): string
+    public function getApplicationAction(): string
+    {
+        return ActionEnum::getActionValue(static::class);
+    }
+
+    public function getApplicationContext(): string
     {
         return self::CONTEXT;
     }
 
-    public function getDefaultAction(): string
+    public function getDefaultApplicationAction(): string
     {
-        return self::DEFAULT_ACTION;
+        return ActionEnum::BROWSE->value;
     }
 }

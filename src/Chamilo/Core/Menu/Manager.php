@@ -2,6 +2,12 @@
 namespace Chamilo\Core\Menu;
 
 use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
+use Chamilo\Core\Menu\Component\BrowseComponent;
+use Chamilo\Core\Menu\Component\CreateComponent;
+use Chamilo\Core\Menu\Component\DeleteComponent;
+use Chamilo\Core\Menu\Component\ItemTreeDataComponent;
+use Chamilo\Core\Menu\Component\MoveComponent;
+use Chamilo\Core\Menu\Component\UpdateComponent;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -21,7 +27,6 @@ abstract class Manager extends Application
     public const ACTION_MOVE = 'Move';
     public const ACTION_UPDATE = 'Update';
     public const CONTEXT = __NAMESPACE__;
-    public const DEFAULT_ACTION = self::ACTION_BROWSE;
     public const PARAM_DIRECTION = 'direction';
     public const PARAM_DIRECTION_DOWN = 'down';
     public const PARAM_DIRECTION_UP = 'up';
@@ -29,19 +34,31 @@ abstract class Manager extends Application
     public const PARAM_PARENT = 'parent';
     public const PARAM_TYPE = 'type';
 
+    public function getApplicationAction(): string
+    {
+        return match (static::class) {
+            BrowseComponent::class => self::ACTION_BROWSE,
+            CreateComponent::class => self::ACTION_CREATE,
+            DeleteComponent::class => self::ACTION_DELETE,
+            ItemTreeDataComponent::class => self::ACTION_ITEM_TREE_DATA,
+            MoveComponent::class => self::ACTION_MOVE,
+            UpdateComponent::class => self::ACTION_UPDATE
+        };
+    }
+
+    public function getApplicationContext(): string
+    {
+        return self::CONTEXT;
+    }
+
     public function getCachedItemService(): CachedItemService
     {
         return $this->getService(CachedItemService::class);
     }
 
-    public function getContext(): string
+    public function getDefaultApplicationAction(): string
     {
-        return self::CONTEXT;
-    }
-
-    public function getDefaultAction(): string
-    {
-        return self::DEFAULT_ACTION;
+        return self::ACTION_BROWSE;
     }
 
     public function getHomeUrl(): string

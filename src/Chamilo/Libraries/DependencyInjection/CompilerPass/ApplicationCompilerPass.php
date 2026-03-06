@@ -1,10 +1,8 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection\CompilerPass;
 
-use Chamilo\Libraries\Architecture\Domain\ApplicationRegistry;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
-use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
-use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\Service\Bootstrap\ApplicationFactory;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -19,12 +17,12 @@ class ApplicationCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if ($container->hasDefinition(ApplicationRegistry::class)) {
+        if ($container->hasDefinition(ApplicationFactory::class)) {
             $taggedServices = $container->findTaggedServiceIds(ApplicationInterface::class);
-            $definition = $container->getDefinition(ApplicationRegistry::class);
+            $definition = $container->getDefinition(ApplicationFactory::class);
 
             foreach ($taggedServices as $taggedServiceId => $tags) {
-                $definition->addMethodCall('addApplication', [new Reference($taggedServiceId)]);
+                $definition->addMethodCall('addApplicationComponent', [new Reference($taggedServiceId)]);
             }
         }
     }

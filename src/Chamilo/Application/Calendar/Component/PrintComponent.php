@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PrinterComponent extends BrowserComponent
+class PrintComponent extends BrowseComponent
 {
     public function run(?User $currentUser = null): Response
     {

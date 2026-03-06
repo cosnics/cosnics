@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
+use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
@@ -29,6 +30,11 @@ class GroupFeedComponent extends GroupsFeedComponent
     public const FILTER_PREFIX_LENGTH = 2;
     public const PARAM_GROUP = 'group';
     public const PARAM_USER = 'user';
+
+    public function getApplicationAction(): string
+    {
+        return Manager::ACTION_GROUP_FEED;
+    }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException

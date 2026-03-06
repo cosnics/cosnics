@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home;
 
+use Chamilo\Core\Home\Component\ViewHomeComponent;
 use Chamilo\Libraries\Architecture\Domain\Application;
 
 /**
@@ -9,9 +10,8 @@ use Chamilo\Libraries\Architecture\Domain\Application;
  */
 abstract class Manager extends Application
 {
-    public const ACTION_VIEW_HOME = 'Home';
+    public const ACTION_VIEW_HOME = 'ViewHome';
     public const CONTEXT = __NAMESPACE__;
-    public const DEFAULT_ACTION = self::ACTION_VIEW_HOME;
     public const PARAM_DIRECTION = 'direction';
     public const PARAM_HOME_ID = 'id';
     public const PARAM_HOME_TYPE = 'type';
@@ -24,13 +24,20 @@ abstract class Manager extends Application
     public const TYPE_ROW = 'row';
     public const TYPE_TAB = 'tab';
 
-    public function getContext(): string
+    public function getApplicationAction(): string
+    {
+        return match (static::class) {
+            ViewHomeComponent::class => self::ACTION_VIEW_HOME
+        };
+    }
+
+    public function getApplicationContext(): string
     {
         return self::CONTEXT;
     }
 
-    public function getDefaultAction(): string
+    public function getDefaultApplicationAction(): string
     {
-        return self::DEFAULT_ACTION;
+        return self::ACTION_VIEW_HOME;
     }
 }

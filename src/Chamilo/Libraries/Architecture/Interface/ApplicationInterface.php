@@ -12,9 +12,9 @@ interface ApplicationInterface
 {
     public function run(?User $currentUser = null): Response;
 
-    public function getAction(): string;
+    public function getApplicationAction(): string;
 
-    public function getContext(): string;
+    public function getApplicationContext(): string;
 
-    public function getDefaultAction(): string;
+    public function getDefaultApplicationAction(): string;
 }

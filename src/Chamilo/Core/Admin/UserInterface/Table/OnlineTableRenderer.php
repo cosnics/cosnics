@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\UserInterface\Table;
 
+use Chamilo\Core\Admin\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -86,7 +87,7 @@ class OnlineTableRenderer extends DataClassListTableRenderer
 
                     $profileUrl = $this->getUrlGenerator()->fromParameters([
                         Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
-                        Application::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ONLINE,
+                        Application::PARAM_ACTION => ActionEnum::VIEW_ONLINE->value,
                         \Chamilo\Core\Admin\Manager::PARAM_USER_ID => $result->getId()
                     ]);
 

@@ -47,10 +47,8 @@ class NotificationMessageRenderer
         $html = [];
 
         $html[] = '<div class="alert alert-' . $notificationMessage->getType() . ' alert-dismissible" role="alert">';
-        $html[] = '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
-        $html[] = '<span aria-hidden="true">&times;</span>';
-        $html[] = '</button>';
         $html[] = $notificationMessage->getMessage();
+        $html[] = '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

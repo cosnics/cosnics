@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Exception\PlatformNotAvailableException;
 use Chamilo\Libraries\Architecture\Exception\UserException;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Architecture\Interface\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Architecture\Response\PlatformNotAvailableResponse;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
@@ -73,18 +74,14 @@ class Kernel
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
-     * @throws \Exception
      */
     protected function checkAuthentication(): static
     {
-        $applicationClassName = $this->getApplicationFactory()->getClassName($this->getContext());
-        $applicationRequiresAuthentication =
-            !is_subclass_of($applicationClassName, NoAuthenticationSupportInterface::class);
+        $application = $this->getApplicationFactory()->getApplicationComponent($this->getContext(), $this->getAction());
 
-        if ($applicationRequiresAuthentication) {
+        if (!$application instanceof NoAuthenticationSupportInterface) {
             $this->getAuthenticationValidator()->validate();
         }
 
@@ -112,6 +109,25 @@ class Kernel
         date_default_timezone_set($this->getTimezone());
 
         return $this;
+    }
+
+    protected function getAction(): ?string
+    {
+        $request = $this->getRequest();
+
+        $getAction = $request->query->get(Application::PARAM_ACTION);
+
+        if ($getAction) {
+            return $getAction;
+        }
+
+        $postAction = $request->request->get(Application::PARAM_ACTION);
+
+        if ($postAction) {
+            return $postAction;
+        }
+
+        return null;
     }
 
     public function getApplicationFactory(): ApplicationFactory
@@ -230,7 +246,8 @@ class Kernel
         try {
             $this->configureTimezone()->handleOAuth2()->checkAuthentication()->checkPlatformAvailability();
 
-            $application = $this->getApplicationFactory()->getApplication($this->getContext());
+            $application =
+                $this->getApplicationFactory()->getApplicationComponent($this->getContext(), $this->getAction());
             $this->traceVisit($application);
 
             $response = $application->run($this->getUser());
@@ -255,7 +272,7 @@ class Kernel
         $response->send();
     }
 
-    protected function traceVisit(Application $application): static
+    protected function traceVisit(ApplicationInterface $application): static
     {
         if (!$application instanceof NoVisitTraceComponentInterface && $this->getUser() instanceof User) {
             $this->getEventDispatcher()->dispatch(

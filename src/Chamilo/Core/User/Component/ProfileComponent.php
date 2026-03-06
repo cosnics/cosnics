@@ -22,7 +22,7 @@ abstract class ProfileComponent extends Manager
      */
     public function getAvailableTabs(): array
     {
-        $action = $this->getAction();
+        $action = $this->getCurrentAction();
         $translator = $this->getTranslator();
         $tabs = [];
 
@@ -77,7 +77,7 @@ abstract class ProfileComponent extends Manager
                 $tabs->add($availableTab);
             }
 
-            $html[] = $this->getTabsRenderer()->renderNavigation('profile', $tabs, $this->getAction());
+            $html[] = $this->getTabsRenderer()->renderNavigation('profile', $tabs, $this->getCurrentAction());
         }
 
         $html[] = $this->getContent($user);

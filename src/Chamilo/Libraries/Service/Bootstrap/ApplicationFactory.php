@@ -1,12 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Service\Bootstrap;
 
-use Chamilo\Libraries\Architecture\Domain\Application;
-use Chamilo\Libraries\Architecture\Domain\ApplicationRegistry;
-use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
-use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
 use Chamilo\Libraries\Architecture\Exception\UserException;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -16,120 +14,90 @@ use Symfony\Component\Translation\Translator;
  */
 class ApplicationFactory
 {
-    protected ApplicationRegistry $applicationRegistry;
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection<string,\Doctrine\Common\Collections\ArrayCollection<string,\Chamilo\Libraries\Architecture\Interface\ApplicationInterface>>
+     */
+    protected ArrayCollection $contextComponents;
 
-    protected ChamiloRequest $request;
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection<string>
+     */
+    protected ArrayCollection $contextDefaults;
 
     protected Translator $translator;
 
-    public function __construct(
-        ChamiloRequest $request, Translator $translator, ApplicationRegistry $applicationRegistry
-    )
+    public function __construct(Translator $translator)
     {
-        $this->request = $request;
         $this->translator = $translator;
-        $this->applicationRegistry = $applicationRegistry;
+
+        $this->contextComponents = new ArrayCollection();
+        $this->contextDefaults = new ArrayCollection();
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
-     */
-    private function buildClassName(string $context, string $action): string
+    public function addApplicationComponent(ApplicationInterface $application): void
     {
-        $className = $context . '\Component\\' . $action . 'Component';
+        $applicationComponents = $this->getContextComponents();
+        $defaultContextActions = $this->getContextDefaults();
+        $context = $application->getApplicationContext();
 
-        if (!class_exists($className)) {
-            throw new ClassNotExistException($className);
+        if (!$applicationComponents->containsKey($context)) {
+            $applicationComponents->set($context, new ArrayCollection());
         }
 
-        return $className;
+        $applicationComponents->get($context)->set($application->getApplicationAction(), $application);
+
+        if (!$defaultContextActions->containsKey($context)) {
+            $defaultContextActions->set($context, $application->getDefaultApplicationAction());
+        }
     }
 
     /**
      * @throws \Chamilo\Libraries\Architecture\Exception\UserException
      */
-    protected function getAction(string $context): string
+    public function getApplicationComponent(string $context, ?string $action = null): ApplicationInterface
     {
-        $request = $this->getRequest();
-
-        $getAction = $request->query->get(Application::PARAM_ACTION);
-
-        if ($getAction) {
-            return $getAction;
+        if (!isset($action)) {
+            $action = $this->getContextDefaults()->get($context);
         }
 
-        $postAction = $request->request->get(Application::PARAM_ACTION);
+        $applicationComponents = $this->getContextComponents();
 
-        if ($postAction) {
-            return $postAction;
-        }
-
-        return $this->getDefaultAction($context);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
-     */
-    public function getApplication(string $context): Application
-    {
-        $action = $this->getAction($context);
-        $className = $this->getClassName($context, $action);
-
-        return $this->getApplicationRegistry()->getApplication($className);
-    }
-
-    public function getApplicationRegistry(): ApplicationRegistry
-    {
-        return $this->applicationRegistry;
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
-     */
-    public function getClassName(
-        string $context, ?string $action = null
-    ): string
-    {
-        if (is_null($action)) {
-            $action = $this->getAction($context);
-        }
-
-        return $this->buildClassName($context, $action);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
-     */
-    protected function getDefaultAction(string $context): string
-    {
-        $managerClass = $this->getManagerClass($context);
-
-        return $managerClass::DEFAULT_ACTION;
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
-     */
-    protected function getManagerClass(string $context): string
-    {
-        $managerClass = $context . '\Manager';
-
-        if (!class_exists($managerClass)) {
+        if (!$applicationComponents->containsKey($context)) {
             throw new UserException(
                 $this->getTranslator()->trans(
-                    'InvalidApplication', ['%Context%' => $context], StringUtilities::LIBRARIES
+                    'InvalidApplicationContext', ['%Context%' => $context], StringUtilities::LIBRARIES
                 )
             );
         }
 
-        return $managerClass;
+        $contextComponents = $applicationComponents->get($context);
+
+        if (!$contextComponents->containsKey($action)) {
+            throw new UserException(
+                $this->getTranslator()->trans(
+                    'InvalidApplicationAction', ['%Context%' => $context, '%Action%' => $action],
+                    StringUtilities::LIBRARIES
+                )
+            );
+        }
+
+        return $contextComponents->get($action);
     }
 
-    public function getRequest(): ChamiloRequest
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<string,\Doctrine\Common\Collections\ArrayCollection<string,\Chamilo\Libraries\Architecture\Interface\ApplicationInterface>>
+     */
+    public function getContextComponents(): ArrayCollection
     {
-        return $this->request;
+        return $this->contextComponents;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<string>
+     */
+    public function getContextDefaults(): ArrayCollection
+    {
+        return $this->contextDefaults;
     }
 
     public function getTranslator(): Translator
