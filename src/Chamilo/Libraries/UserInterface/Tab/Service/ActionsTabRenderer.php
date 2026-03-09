@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\UserInterface\Tab\Service;
 
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ActionsTab;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabContentInterface;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabContentRendererInterface;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabNavigationRendererInterface;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabRendererInterface;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Trait\TabNavigatonRendererTrait;
@@ -10,7 +12,7 @@ use Chamilo\Libraries\UserInterface\Tab\Architecture\Trait\TabNavigatonRendererT
  * @package Chamilo\Libraries\UserInterface\Tab\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ActionsTabRenderer implements TabRendererInterface, TabNavigationRendererInterface
+class ActionsTabRenderer implements TabRendererInterface, TabNavigationRendererInterface, TabContentRendererInterface
 {
     use TabNavigatonRendererTrait;
 
@@ -31,7 +33,10 @@ class ActionsTabRenderer implements TabRendererInterface, TabNavigationRendererI
         return ActionsTab::class;
     }
 
-    public function renderContent(ActionsTab $tab, ?string $selectedTab = null): string
+    /**
+     * @param \Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ActionsTab $tab
+     */
+    public function renderContent(TabContentInterface $tab, ?string $selectedTab = null): string
     {
         $isActive = $tab->getIdentifier() === $selectedTab;
 
