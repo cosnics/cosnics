@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Home;
 
-use Chamilo\Core\Home\Component\ViewHomeComponent;
+use Chamilo\Core\Home\Architecture\Enum\ActionEnum;
 use Chamilo\Libraries\Architecture\Domain\Application;
 
 /**
@@ -10,7 +10,6 @@ use Chamilo\Libraries\Architecture\Domain\Application;
  */
 abstract class Manager extends Application
 {
-    public const ACTION_VIEW_HOME = 'ViewHome';
     public const CONTEXT = __NAMESPACE__;
     public const PARAM_DIRECTION = 'direction';
     public const PARAM_HOME_ID = 'id';
@@ -26,9 +25,7 @@ abstract class Manager extends Application
 
     public function getApplicationAction(): string
     {
-        return match (static::class) {
-            ViewHomeComponent::class => self::ACTION_VIEW_HOME
-        };
+        return ActionEnum::getActionValue(static::class);
     }
 
     public function getApplicationContext(): string
@@ -38,6 +35,6 @@ abstract class Manager extends Application
 
     public function getDefaultApplicationAction(): string
     {
-        return self::ACTION_VIEW_HOME;
+        return ActionEnum::VIEW_HOME->value;
     }
 }

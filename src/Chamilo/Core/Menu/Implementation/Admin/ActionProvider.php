@@ -3,6 +3,7 @@ namespace Chamilo\Core\Menu\Implementation\Admin;
 
 use Chamilo\Core\Admin\Architecture\Domain\AbstractActionProvider;
 use Chamilo\Core\Admin\Architecture\Interface\ActionProviderInterface;
+use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
@@ -25,7 +26,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_BROWSE
+            Application::PARAM_ACTION => ActionEnum::BROWSE->value
         ];
 
         $links[] = new Action(

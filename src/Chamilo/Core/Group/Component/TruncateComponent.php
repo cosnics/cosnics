@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
+use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -15,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class TruncateComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -23,8 +23,7 @@ class TruncateComponent extends Manager
      */
     public function run(?User $currentUser = null): Response
     {
-        if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator())
-        {
+        if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
@@ -36,69 +35,56 @@ class TruncateComponent extends Manager
 
         $failures = 0;
 
-        if (!empty($groupIdentifiers))
-        {
-            if (!is_array($groupIdentifiers))
-            {
+        if (!empty($groupIdentifiers)) {
+            if (!is_array($groupIdentifiers)) {
                 $groupIdentifiers = [$groupIdentifiers];
             }
 
-            foreach ($groupIdentifiers as $groupIdentifier)
-            {
+            foreach ($groupIdentifiers as $groupIdentifier) {
                 $group = $groupService->findGroupByIdentifier($groupIdentifier);
 
-                try
-                {
+                try {
                     $groupMembershipService->emptyGroup($group);
                 }
-                catch (RuntimeException)
-                {
+                catch (RuntimeException) {
                     $failures ++;
                 }
             }
 
-            if ($failures)
-            {
-                if (count($groupIdentifiers) == 1)
-                {
+            if ($failures) {
+                if (count($groupIdentifiers) == 1) {
                     $message = 'SelectedGroupNotEmptied';
                 }
-                else
-                {
+                else {
                     $message = 'SelectedGroupsNotEmptied';
                 }
             }
-            elseif (count($groupIdentifiers) == 1)
-            {
+            elseif (count($groupIdentifiers) == 1) {
                 $message = 'SelectedGroupEmptied';
             }
-            else
-            {
+            else {
                 $message = 'SelectedGroupsEmptied';
             }
 
-            if (count($groupIdentifiers) == 1)
-            {
+            if (count($groupIdentifiers) == 1) {
                 return $this->redirectWithMessage(
                     $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => self::ACTION_BROWSE,
+                        Application::PARAM_ACTION => ActionEnum::BROWSE->value,
                         self::PARAM_GROUP_ID => $groupIdentifiers[0]
                     ]
                 );
             }
-            else
-            {
+            else {
                 return $this->redirectWithMessage(
                     $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => self::ACTION_BROWSE
+                        Application::PARAM_ACTION => ActionEnum::BROWSE->value
                     ]
                 );
             }
         }
-        else
-        {
+        else {
             return new Response(
                 $this->displayErrorPage(
                     htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
@@ -48,7 +49,7 @@ class UpdateComponent extends Manager
 
             $updateUrl = $urlGenerator->fromParameters([
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_UPDATE,
+                Application::PARAM_ACTION => ActionEnum::UPDATE->value,
                 self::PARAM_USER_ID => $userIdentifier
             ]);
 
@@ -95,7 +96,7 @@ class UpdateComponent extends Manager
                         $urlGenerator->fromParameters(
                             [
                                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                                Application::PARAM_ACTION => Manager::ACTION_BROWSE
+                                Application::PARAM_ACTION => ActionEnum::BROWSE->value
                             ]
                         )
                     );

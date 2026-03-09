@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
@@ -16,7 +17,6 @@ use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
  */
 abstract class ProfileComponent extends Manager
 {
-
     /**
      * @return \Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab[]
      */
@@ -27,29 +27,29 @@ abstract class ProfileComponent extends Manager
         $tabs = [];
 
         $tabs[] = new LinkTab(
-            self::ACTION_ACCOUNT,
-            htmlentities($translator->trans(self::ACTION_ACCOUNT . 'Title', [], Manager::CONTEXT)),
+            ActionEnum::ACCOUNT->value,
+            htmlentities($translator->trans(ActionEnum::ACCOUNT->value . 'Title', [], Manager::CONTEXT)),
             new FontAwesomeGlyph('user', ['fa-lg'], null, 'fas'), $this->getUrlGenerator()->fromParameters(
-            [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_ACCOUNT]
-        ), self::ACTION_ACCOUNT == $action
+            [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => ActionEnum::ACCOUNT->value]
+        ), ActionEnum::ACCOUNT->value == $action
         );
 
         if ($this->getContainer()->getParameter('cosnics.application.user.rights.changeUserPicture')) {
             $tabs[] = new LinkTab(
-                self::ACTION_UPDATE_USER_PICTURE,
-                htmlentities($translator->trans(self::ACTION_UPDATE_USER_PICTURE . 'Title', [], Manager::CONTEXT)),
-                new FontAwesomeGlyph('image', ['fa-lg'], null, 'fas'), $this->getUrlGenerator()->fromParameters(
-                [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_UPDATE_USER_PICTURE]
-            ), self::ACTION_UPDATE_USER_PICTURE == $action
+                ActionEnum::UPDATE_USER_PICTURE->value,
+                htmlentities($translator->trans(ActionEnum::UPDATE_USER_PICTURE->value . 'Title', [], Manager::CONTEXT)
+                ), new FontAwesomeGlyph('image', ['fa-lg'], null, 'fas'), $this->getUrlGenerator()->fromParameters(
+                [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => ActionEnum::UPDATE_USER_PICTURE->value]
+            ), ActionEnum::UPDATE_USER_PICTURE->value == $action
             );
         }
 
         $tabs[] = new LinkTab(
-            self::ACTION_CONFIGURE,
-            htmlentities($translator->trans(self::ACTION_CONFIGURE . 'Title', [], Manager::CONTEXT)),
+            ActionEnum::CONFIGURE->value,
+            htmlentities($translator->trans(ActionEnum::CONFIGURE->value . 'Title', [], Manager::CONTEXT)),
             new FontAwesomeGlyph('cog', ['fa-lg'], null, 'fas'), $this->getUrlGenerator()->fromParameters(
-            [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_CONFIGURE]
-        ), self::ACTION_CONFIGURE == $action
+            [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => ActionEnum::CONFIGURE->value]
+        ), ActionEnum::CONFIGURE->value == $action
         );
 
         return $tabs;

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
+use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
@@ -33,7 +34,7 @@ class GroupFeedComponent extends GroupsFeedComponent
 
     public function getApplicationAction(): string
     {
-        return Manager::ACTION_GROUP_FEED;
+        return ActionEnum::GROUP_FEED->value;
     }
 
     /**

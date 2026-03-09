@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Menu\UserInterface\Table;
 
 use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
+use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -61,18 +62,18 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     public function getItemDeletingUrl(Item $item): string
     {
-        return $this->getItemUrl($item, [Application::PARAM_ACTION => Manager::ACTION_DELETE]);
+        return $this->getItemUrl($item, [Application::PARAM_ACTION => ActionEnum::DELETE->value]);
     }
 
     public function getItemEditingUrl(Item $item): string
     {
-        return $this->getItemUrl($item, [Application::PARAM_ACTION => Manager::ACTION_UPDATE]);
+        return $this->getItemUrl($item, [Application::PARAM_ACTION => ActionEnum::UPDATE->value]);
     }
 
     public function getItemMovingUrl(Item $item, int $sortDirection): string
     {
         return $this->getItemUrl(
-            $item, [Application::PARAM_ACTION => Manager::ACTION_MOVE, Manager::PARAM_DIRECTION => $sortDirection]
+            $item, [Application::PARAM_ACTION => ActionEnum::MOVE->value, Manager::PARAM_DIRECTION => $sortDirection]
         );
     }
 
@@ -102,7 +103,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
     public function getTableActions(): TableActions
     {
         $deleteUrl = $this->getUrlGenerator()->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_DELETE]
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => ActionEnum::DELETE->value]
         );
 
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);

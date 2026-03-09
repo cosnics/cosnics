@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\UserInterface\Table;
 
+use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
@@ -102,7 +103,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
         $removeUrl = $urlGenerator->fromParameters([
             Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => Manager::ACTION_TRUNCATE
+            Application::PARAM_ACTION => ActionEnum::DELETE->value
         ]);
 
         $actions->addAction(
@@ -113,7 +114,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
         $truncateUrl = $urlGenerator->fromParameters([
             Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => Manager::ACTION_TRUNCATE
+            Application::PARAM_ACTION => ActionEnum::TRUNCATE->value
         ]);
 
         $actions->addAction(
@@ -174,7 +175,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
                 $viewUrl = $urlGenerator->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_BROWSE,
+                        Application::PARAM_ACTION => ActionEnum::BROWSE->value,
                         Manager::PARAM_GROUP_ID => $result->getId()
                     ]
                 );
@@ -240,9 +241,9 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
                     label: $translator->trans('Truncate', [], 'Chamilo\Core\Group'), inlineGlyph: new FontAwesomeGlyph(
                     'trash-alt'
                 ), action: $truncateUrl, display: DisplayTypeEnum::ICON, confirmationMessage: $this->getTranslator()
-                        ->trans(
-                            'ConfirmChosenAction', [], StringUtilities::LIBRARIES
-                        ), classes: ['btn-link']
+                    ->trans(
+                        'ConfirmChosenAction', [], StringUtilities::LIBRARIES
+                    ), classes: ['btn-link']
                 )
             );
         }
@@ -263,8 +264,8 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
                 label: $translator->trans('Delete', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
                 'times'
             ), action: $deleteUrl, display: DisplayTypeEnum::ICON, confirmationMessage: $this->getTranslator()->trans(
-                    'ConfirmChosenAction', [], StringUtilities::LIBRARIES
-                ), classes: ['btn-link']
+                'ConfirmChosenAction', [], StringUtilities::LIBRARIES
+            ), classes: ['btn-link']
             )
         );
 

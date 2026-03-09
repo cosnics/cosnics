@@ -2,12 +2,7 @@
 namespace Chamilo\Core\Menu;
 
 use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
-use Chamilo\Core\Menu\Component\BrowseComponent;
-use Chamilo\Core\Menu\Component\CreateComponent;
-use Chamilo\Core\Menu\Component\DeleteComponent;
-use Chamilo\Core\Menu\Component\ItemTreeDataComponent;
-use Chamilo\Core\Menu\Component\MoveComponent;
-use Chamilo\Core\Menu\Component\UpdateComponent;
+use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -20,12 +15,6 @@ use Chamilo\Libraries\Architecture\Domain\Application;
  */
 abstract class Manager extends Application
 {
-    public const ACTION_BROWSE = 'Browse';
-    public const ACTION_CREATE = 'Create';
-    public const ACTION_DELETE = 'Delete';
-    public const ACTION_ITEM_TREE_DATA = 'ItemTreeData';
-    public const ACTION_MOVE = 'Move';
-    public const ACTION_UPDATE = 'Update';
     public const CONTEXT = __NAMESPACE__;
     public const PARAM_DIRECTION = 'direction';
     public const PARAM_DIRECTION_DOWN = 'down';
@@ -36,14 +25,7 @@ abstract class Manager extends Application
 
     public function getApplicationAction(): string
     {
-        return match (static::class) {
-            BrowseComponent::class => self::ACTION_BROWSE,
-            CreateComponent::class => self::ACTION_CREATE,
-            DeleteComponent::class => self::ACTION_DELETE,
-            ItemTreeDataComponent::class => self::ACTION_ITEM_TREE_DATA,
-            MoveComponent::class => self::ACTION_MOVE,
-            UpdateComponent::class => self::ACTION_UPDATE
-        };
+        return ActionEnum::getActionValue(static::class);
     }
 
     public function getApplicationContext(): string
@@ -58,12 +40,7 @@ abstract class Manager extends Application
 
     public function getDefaultApplicationAction(): string
     {
-        return self::ACTION_BROWSE;
-    }
-
-    public function getHomeUrl(): string
-    {
-        return $this->getUrlGenerator()->fromParameters([Application::PARAM_ACTION => Manager::ACTION_BROWSE]);
+        return ActionEnum::BROWSE->value;
     }
 
     public function getItemRendererFactory(): ItemRendererRegistry

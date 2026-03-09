@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -78,7 +79,7 @@ class CreateComponent extends Manager
                     $this->getUrlGenerator()->fromParameters(
                         [
                             Application::PARAM_CONTEXT => Manager::CONTEXT,
-                            Application::PARAM_ACTION => Manager::ACTION_BROWSE
+                            Application::PARAM_ACTION => ActionEnum::BROWSE->value
                         ]
                     )
                 );

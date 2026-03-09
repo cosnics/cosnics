@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Error\Service;
 
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
@@ -58,7 +59,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
                         $profilePageUrl = $urlGenerator->fromParameters(
                             [
                                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                                Application::PARAM_ACTION => Manager::ACTION_VIEW,
+                                Application::PARAM_ACTION => ActionEnum::VIEW->value,
                                 Manager::PARAM_USER_ID => $userId
                             ]
                         );

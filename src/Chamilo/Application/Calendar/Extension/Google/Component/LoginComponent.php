@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Google\Component;
 
+use Chamilo\Application\Calendar\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -26,24 +27,22 @@ class LoginComponent extends Manager
             $currentUser, $this->getRequest()->query->get(CalendarService::PARAM_AUTHORIZATION_CODE)
         );
 
-        if ($isSuccessful)
-        {
+        if ($isSuccessful) {
             return new RedirectResponse(
                 $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
-                        Application::PARAM_ACTION => \Chamilo\Application\Calendar\Manager::ACTION_AVAILABILITY
+                        Application::PARAM_ACTION => ActionEnum::AVAILABILITY->value
                     ]
                 )
             );
         }
-        else
-        {
+        else {
             return new RedirectResponse(
                 $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
-                        Application::PARAM_ACTION => \Chamilo\Application\Calendar\Manager::ACTION_BROWSE
+                        Application::PARAM_ACTION => ActionEnum::BROWSE->value
                     ]
                 )
             );

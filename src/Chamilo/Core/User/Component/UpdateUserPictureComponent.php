@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -63,7 +64,7 @@ class UpdateUserPictureComponent extends ProfileComponent
                 return $this->redirectWithMessage(
                     $this->getTranslator()->trans($success ? $successMessage : $errorMessage), !$success, [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => self::ACTION_UPDATE_USER_PICTURE
+                        Application::PARAM_ACTION => ActionEnum::UPDATE_USER_PICTURE->value
                     ]
                 );
             }

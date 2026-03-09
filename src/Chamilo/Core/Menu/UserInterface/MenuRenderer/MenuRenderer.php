@@ -5,6 +5,7 @@ use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
 use Chamilo\Core\Menu\Implementation\Menu\LinkItemRenderer;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -234,7 +235,7 @@ class MenuRenderer
         if ($this->isLoggedInAs()) {
             $link = $this->getUrlGenerator()->fromParameters([
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_LOGIN_AS
+                Application::PARAM_ACTION => ActionEnum::LOGIN_AS->value
             ]);
 
             $linkItem = new Item();

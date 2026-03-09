@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Implementation\Menu;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
@@ -13,7 +14,6 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
  */
 class LogoutItemRenderer extends MenuItemRenderer
 {
-
     public function getRendererTypeGlyph(): InlineGlyph
     {
         return new FontAwesomeGlyph('sign-out-alt');
@@ -27,7 +27,7 @@ class LogoutItemRenderer extends MenuItemRenderer
     public function getUrl(): string
     {
         return $this->getUrlGenerator()->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_LOGOUT]
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => ActionEnum::LOGOUT->value]
         );
     }
 

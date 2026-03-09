@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
+use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
@@ -260,7 +261,7 @@ class BrowseComponent extends Manager
             $this->getUrlGenerator()->fromParameters(
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
-                    self::PARAM_ACTION => self::ACTION_BROWSE,
+                    self::PARAM_ACTION => ActionEnum::BROWSE->value,
                     self::PARAM_GROUP_ID => $this->getGroupIdentifier()
                 ]
             )
@@ -296,7 +297,7 @@ class BrowseComponent extends Manager
             $this->getUrlGenerator()->fromParameters(
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
-                    self::PARAM_ACTION => self::ACTION_BROWSE,
+                    self::PARAM_ACTION => ActionEnum::BROWSE->value,
                     self::PARAM_GROUP_ID => $this->getGroupIdentifier()
                 ]
             )
@@ -389,7 +390,7 @@ class BrowseComponent extends Manager
         $dataUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => 'Chamilo\\\Core\\\Group',
-                Application::PARAM_ACTION => Manager::ACTION_GROUP_TREE_DATA,
+                Application::PARAM_ACTION => ActionEnum::GROUP_TREE_DATA->value,
             ]
 
         );
@@ -468,7 +469,7 @@ class BrowseComponent extends Manager
         else {
             $tabs->add(
                 new LinkTab(
-                    identifier: Manager::ACTION_CREATE, label: $translator->trans('AddGroup', [], Manager::CONTEXT),
+                    identifier: ActionEnum::CREATE->value, label: $translator->trans('AddGroup', [], Manager::CONTEXT),
                     inlineGlyph: new FontAwesomeGlyph('plus'), link: $this->getGroupUrlGenerator()->getCreateUrl(
                     $this->getGroup()
                 ), display: DisplayTypeEnum::ICON_AND_LABEL
@@ -486,7 +487,7 @@ class BrowseComponent extends Manager
 
             $tabs->add(
                 new LinkTab(
-                    identifier: Manager::ACTION_TRUNCATE, label: $translator->trans('Truncate'),
+                    identifier: ActionEnum::TRUNCATE->value, label: $translator->trans('Truncate'),
                     inlineGlyph: new FontAwesomeGlyph(
                         'trash-alt'
                     ), link: $this->getGroupUrlGenerator()->getTruncateUrl($group),
@@ -497,10 +498,10 @@ class BrowseComponent extends Manager
         else {
             $tabs->add(
                 new LinkTab(
-                    identifier: Manager::ACTION_BROWSE_NON_SUBSCRIBED_USERS, label: $translator->trans('AddUsers', [],
-                    Manager::CONTEXT), inlineGlyph: new FontAwesomeGlyph('plus-circle'),
-                    link: $this->getGroupUrlGenerator()->getSubscribeUrl($this->getGroup()),
-                    display: DisplayTypeEnum::ICON_AND_LABEL
+                    identifier: ActionEnum::BROWSE_NON_SUBSCRIBED_USERS->value, label: $translator->trans(
+                    'AddUsers', [], Manager::CONTEXT
+                ), inlineGlyph: new FontAwesomeGlyph('plus-circle'), link: $this->getGroupUrlGenerator()
+                    ->getSubscribeUrl($this->getGroup()), display: DisplayTypeEnum::ICON_AND_LABEL
                 )
             );
         }
@@ -515,8 +516,8 @@ class BrowseComponent extends Manager
 
         $tabs->add(
             new LinkTab(
-                identifier: Manager::ACTION_UPDATE, label: $translator->trans('Edit', [], StringUtilities::LIBRARIES),
-                inlineGlyph: new FontAwesomeGlyph('pencil-alt'), link: $this->getGroupUrlGenerator()->getUpdateUrl(
+                identifier: ActionEnum::UPDATE->value, label: $translator->trans('Edit', [], StringUtilities::LIBRARIES
+            ), inlineGlyph: new FontAwesomeGlyph('pencil-alt'), link: $this->getGroupUrlGenerator()->getUpdateUrl(
                 $group
             ), display: DisplayTypeEnum::ICON_AND_LABEL
             )

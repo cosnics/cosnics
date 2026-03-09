@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Service;
 
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -21,7 +22,7 @@ class UserUrlGenerator
 
     public function getChangeUserUrl(User $user): string
     {
-        return $this->getUserActionUrl(Manager::ACTION_LOGIN_AS, $user);
+        return $this->getUserActionUrl(ActionEnum::LOGIN_AS->value, $user);
     }
 
     public function getDataClassUrlGenerator(): DataClassUrlGenerator
@@ -31,17 +32,17 @@ class UserUrlGenerator
 
     public function getDeleteUrl(User $user): string
     {
-        return $this->getUserActionUrl(Manager::ACTION_DELETE, $user);
+        return $this->getUserActionUrl(ActionEnum::DELETE->value, $user);
     }
 
     public function getDetailUrl(User $user): string
     {
-        return $this->getUserActionUrl(Manager::ACTION_VIEW, $user);
+        return $this->getUserActionUrl(ActionEnum::VIEW->value, $user);
     }
 
     public function getUpdateUrl(User $user): string
     {
-        return $this->getUserActionUrl(Manager::ACTION_UPDATE, $user);
+        return $this->getUserActionUrl(ActionEnum::UPDATE->value, $user);
     }
 
     /**

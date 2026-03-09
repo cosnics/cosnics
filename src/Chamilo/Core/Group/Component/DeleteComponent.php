@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
+use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -34,7 +35,7 @@ class DeleteComponent extends Manager
                 $this->getUrlGenerator()->fromParameters(
                     [
                         self::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => self::ACTION_BROWSE,
+                        self::PARAM_ACTION => ActionEnum::BROWSE->value,
                         self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
                     ]
                 ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
@@ -86,7 +87,7 @@ class DeleteComponent extends Manager
             return $this->redirectWithMessage(
                 $message, (bool) $failures, [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => self::ACTION_BROWSE
+                    Application::PARAM_ACTION => ActionEnum::BROWSE->value
                 ]
             );
         }

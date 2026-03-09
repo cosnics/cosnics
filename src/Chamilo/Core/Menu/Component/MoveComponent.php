@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Component;
 
+use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -56,7 +57,7 @@ class MoveComponent extends Manager
         return $this->redirectWithMessage(
             $message, !$success, [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_BROWSE,
+                Application::PARAM_ACTION => ActionEnum::BROWSE->value,
                 Manager::PARAM_PARENT => $item->getParentId()
             ]
         );

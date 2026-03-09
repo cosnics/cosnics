@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Service;
 
+use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
@@ -27,7 +28,7 @@ class GroupUrlGenerator
 
     public function getCreateUrl(Group $parentGroup): string
     {
-        return $this->getGroupActionUrl(Manager::ACTION_CREATE, $parentGroup);
+        return $this->getGroupActionUrl(ActionEnum::CREATE->value, $parentGroup);
     }
 
     public function getDataClassUrlGenerator(): DataClassUrlGenerator
@@ -37,7 +38,7 @@ class GroupUrlGenerator
 
     public function getDeleteUrl(Group $group): string
     {
-        return $this->getGroupActionUrl(Manager::ACTION_DELETE, $group);
+        return $this->getGroupActionUrl(ActionEnum::DELETE->value, $group);
     }
 
     /**
@@ -52,24 +53,24 @@ class GroupUrlGenerator
 
     public function getMoveUrl(Group $group): string
     {
-        return $this->getGroupActionUrl(Manager::ACTION_MOVE, $group);
+        return $this->getGroupActionUrl(ActionEnum::MOVE->value, $group);
     }
 
     public function getSubscribeUrl(Group $group): string
     {
-        return $this->getGroupActionUrl(Manager::ACTION_BROWSE_NON_SUBSCRIBED_USERS, $group);
+        return $this->getGroupActionUrl(ActionEnum::BROWSE_NON_SUBSCRIBED_USERS->value, $group);
     }
 
     public function getSubscribeUserUrl(Group $group, User $user): string
     {
         return $this->getGroupActionUrl(
-            Manager::ACTION_SUBSCRIBE, $group, [Manager::PARAM_USER_ID => $user->getId()]
+            ActionEnum::SUBSCRIBE->value, $group, [Manager::PARAM_USER_ID => $user->getId()]
         );
     }
 
     public function getTruncateUrl(Group $group): string
     {
-        return $this->getGroupActionUrl(Manager::ACTION_TRUNCATE, $group);
+        return $this->getGroupActionUrl(ActionEnum::TRUNCATE->value, $group);
     }
 
     public function getUnsubscribeUserUrl(SubscribedUser $subscribedUser): string
@@ -77,7 +78,7 @@ class GroupUrlGenerator
         return $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_UNSUBSCRIBE,
+                Application::PARAM_ACTION => ActionEnum::UNSUBSCRIBE->value,
                 Manager::PARAM_RELATION_ID => $subscribedUser->getRelationId()
             ]
         );
@@ -85,7 +86,7 @@ class GroupUrlGenerator
 
     public function getUpdateUrl(Group $group): string
     {
-        return $this->getGroupActionUrl(Manager::ACTION_UPDATE, $group);
+        return $this->getGroupActionUrl(ActionEnum::UPDATE->value, $group);
     }
 
     public function getUrlGenerator(): UrlGenerator
@@ -95,6 +96,6 @@ class GroupUrlGenerator
 
     public function getViewUrl(Group $group): string
     {
-        return $this->getGroupActionUrl(Manager::ACTION_BROWSE, $group);
+        return $this->getGroupActionUrl(ActionEnum::BROWSE->value, $group);
     }
 }

@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Implementation\Menu;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -118,17 +119,17 @@ class WidgetItemRenderer extends ItemRenderer
 
     public function getAccountUrl(): string
     {
-        return $this->getUserUrl(Manager::ACTION_ACCOUNT);
+        return $this->getUserUrl(ActionEnum::ACCOUNT->value);
     }
 
     public function getLogoutUrl(): string
     {
-        return $this->getUserUrl(Manager::ACTION_LOGOUT);
+        return $this->getUserUrl(ActionEnum::LOGOUT->value);
     }
 
     public function getPictureUrl(): string
     {
-        return $this->getUserUrl(Manager::ACTION_UPDATE_USER_PICTURE);
+        return $this->getUserUrl(ActionEnum::UPDATE_USER_PICTURE->value);
     }
 
     public function getRendererTypeGlyph(): InlineGlyph
@@ -143,7 +144,7 @@ class WidgetItemRenderer extends ItemRenderer
 
     public function getSettingsUrl(): string
     {
-        return $this->getUserUrl(Manager::ACTION_CONFIGURE);
+        return $this->getUserUrl(ActionEnum::CONFIGURE->value);
     }
 
     public function getUrlGenerator(): UrlGenerator

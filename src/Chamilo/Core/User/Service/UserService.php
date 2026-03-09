@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Service;
 
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserCreateEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserPasswordResetEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserRegistrationEvent;
@@ -651,7 +652,7 @@ class UserService
             $resetLink = $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD,
+                    Application::PARAM_ACTION => ActionEnum::RESET_PASSWORD->value,
                     Manager::PARAM_RESET_KEY => $this->determineUserKey($user),
                     DataClass::PROPERTY_ID => $user->getId()
                 ]

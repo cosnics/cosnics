@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\UserInterface\Table;
 
+use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
@@ -72,7 +73,7 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
 
         $unsubscribeUrl = $urlGenerator->fromParameters([
             Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => Manager::ACTION_UNSUBSCRIBE
+            Application::PARAM_ACTION => ActionEnum::UNSUBSCRIBE->value
         ]);
 
         $actions->addAction(

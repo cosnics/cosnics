@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
+use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\UserInterface\Form\GroupForm;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -40,7 +41,7 @@ class UpdateComponent extends Manager
                 GroupForm::TYPE_EDIT, $group, $this->getUrlGenerator()->fromParameters(
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
-                    self::PARAM_ACTION => self::ACTION_UPDATE,
+                    self::PARAM_ACTION => ActionEnum::UPDATE->value,
                     self::PARAM_GROUP_ID => $groupIdentifier
                 ]
             )
@@ -60,7 +61,7 @@ class UpdateComponent extends Manager
                 return $this->redirectWithMessage(
                     $message, !$success, [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => self::ACTION_BROWSE,
+                        Application::PARAM_ACTION => ActionEnum::BROWSE->value,
                         self::PARAM_GROUP_ID => $group->getId()
                     ]
                 );

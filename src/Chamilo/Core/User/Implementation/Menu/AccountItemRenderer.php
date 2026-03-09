@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Implementation\Menu;
 
 use Chamilo\Core\Menu\Architecture\Interface\SelectableItemInterface;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -15,7 +16,6 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
  */
 class AccountItemRenderer extends MenuItemRenderer implements SelectableItemInterface
 {
-
     public function getRendererTypeGlyph(): InlineGlyph
     {
         return new FontAwesomeGlyph('user', ['fa-fw']);
@@ -31,7 +31,7 @@ class AccountItemRenderer extends MenuItemRenderer implements SelectableItemInte
         return $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_ACCOUNT
+                Application::PARAM_ACTION => ActionEnum::ACCOUNT->value
             ]
         );
     }
@@ -41,7 +41,7 @@ class AccountItemRenderer extends MenuItemRenderer implements SelectableItemInte
         $currentContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
         $currentAction = $this->getRequest()->query->get(Application::PARAM_ACTION);
 
-        return $currentContext == Manager::CONTEXT && $currentAction == Manager::ACTION_ACCOUNT;
+        return $currentContext == Manager::CONTEXT && $currentAction == ActionEnum::ACCOUNT->value;
     }
 
     public function renderTitleForCurrentLanguage(Item $item): string

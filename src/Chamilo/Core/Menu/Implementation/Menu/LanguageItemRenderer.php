@@ -6,6 +6,7 @@ use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -53,7 +54,7 @@ class LanguageItemRenderer extends ItemRenderer
                 $languageUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_LANGUAGE,
+                        Application::PARAM_ACTION => ActionEnum::LANGUAGE->value,
                         Manager::PARAM_LANGUAGE => $isocode,
                         Manager::PARAM_REFER => $this->getRequest()->getUri()
                     ]
@@ -156,7 +157,7 @@ class LanguageItemRenderer extends ItemRenderer
                 $languageUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_LANGUAGE,
+                        Application::PARAM_ACTION => ActionEnum::LANGUAGE->value,
                         Manager::PARAM_LANGUAGE => $isocode,
                         Manager::PARAM_REFER => $currentUrl
                     ]

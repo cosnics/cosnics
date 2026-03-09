@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\UserInterface\Table;
 
+use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -61,7 +62,7 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
 
         $unsubscribeUrl = $urlGenerator->fromRequest([
             Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => Manager::ACTION_SUBSCRIBE
+            Application::PARAM_ACTION => ActionEnum::SUBSCRIBE->value
         ]);
 
         $actions->addAction(
@@ -110,7 +111,7 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
         $buttonToolBar = new MiniButtonToolBar();
 
         $subscribeUrl = $urlGenerator->fromRequest([
-            Application::PARAM_ACTION => Manager::ACTION_SUBSCRIBE,
+            Application::PARAM_ACTION => ActionEnum::SUBSCRIBE->value,
             Manager::PARAM_USER_ID => $result->getId()
 
         ]);

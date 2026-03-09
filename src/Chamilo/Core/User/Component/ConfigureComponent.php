@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\Admin\Service\PackageBundlesCacheService;
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Form\ConfigurationForm;
@@ -50,7 +51,7 @@ class ConfigureComponent extends ProfileComponent
                 $this->getTranslator()->trans($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'), !$success,
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
-                    self::PARAM_ACTION => self::ACTION_CONFIGURE,
+                    self::PARAM_ACTION => ActionEnum::CONFIGURE->value,
                     self::PARAM_SELECTED_CONTEXT => $this->getSelectedContext()
                 ]
             );
@@ -87,7 +88,7 @@ class ConfigureComponent extends ProfileComponent
             $packageUrl = $this->getUrlGenerator()->fromParameters(
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => self::ACTION_CONFIGURE,
+                    Application::PARAM_ACTION => ActionEnum::CONFIGURE->value,
                     self::PARAM_SELECTED_CONTEXT => $package
                 ]
             );

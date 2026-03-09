@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Component;
 
+use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\UserInterface\Table\ItemTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -76,7 +77,7 @@ class BrowseComponent extends Manager
                     $itemRenderer->getRendererTypeName(), $itemRenderer->getRendererTypeGlyph(),
                     $this->getUrlGenerator()->fromParameters([
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => self::ACTION_CREATE,
+                        self::PARAM_ACTION => ActionEnum::CREATE->value,
                         self::PARAM_TYPE => $itemRenderer::class
                     ])
                 )
@@ -120,7 +121,7 @@ class BrowseComponent extends Manager
         $dataUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => 'Chamilo\\\Core\\\Menu',
-                Application::PARAM_ACTION => Manager::ACTION_ITEM_TREE_DATA,
+                Application::PARAM_ACTION => ActionEnum::ITEM_TREE_DATA->value,
             ]
         );
 

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
+use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -27,7 +28,7 @@ class GroupTreeDataComponent extends Manager
         $urlFormat = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_BROWSE,
+                Application::PARAM_ACTION => ActionEnum::BROWSE->value,
                 Manager::PARAM_GROUP_ID => '%s'
             ]
         );

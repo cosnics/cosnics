@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Implementation\Home;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -75,7 +76,7 @@ class LoginBlockRenderer extends BlockRenderer
             $profilePhotoUrl = $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => Manager::ACTION_DOWNLOAD_USER_PICTURE,
+                    Application::PARAM_ACTION => ActionEnum::DOWNLOAD_USER_PICTURE->value,
                     Manager::PARAM_USER_ID => $user->getId()
                 ]
             );
@@ -83,7 +84,7 @@ class LoginBlockRenderer extends BlockRenderer
             $logoutLink = $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => Manager::ACTION_LOGOUT
+                    Application::PARAM_ACTION => ActionEnum::LOGOUT->value
                 ]
             );
 
@@ -130,15 +131,15 @@ class LoginBlockRenderer extends BlockRenderer
 
         $buttons = [];
         $buttons[] = $form->createElement(
-            HTML_QuickForm_button_submit::class, 'submitAuth', $translator->trans('Login', [], Manager::CONTEXT),
-            null, null, new FontAwesomeGlyph('sign-in-alt')
+            HTML_QuickForm_button_submit::class, 'submitAuth', $translator->trans('Login', [], Manager::CONTEXT), null,
+            null, new FontAwesomeGlyph('sign-in-alt')
         );
 
         if ($this->canRegister()) {
             $link = $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => Manager::ACTION_REGISTER
+                    Application::PARAM_ACTION => ActionEnum::REGISTER->value
                 ]
             );
 
@@ -157,7 +158,7 @@ class LoginBlockRenderer extends BlockRenderer
             $link = $this->getUrlGenerator()->fromParameters(
                 [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD
+                    Application::PARAM_ACTION => ActionEnum::RESET_PASSWORD->value
                 ]
             );
 

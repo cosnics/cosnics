@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\Component;
 
+use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\Form\ItemForm;
@@ -56,7 +57,7 @@ class CreateComponent extends Manager
             $itemType, $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_CREATE,
+                Application::PARAM_ACTION => ActionEnum::CREATE->value,
                 self::PARAM_TYPE => $itemType
             ]
         )
@@ -86,7 +87,7 @@ class CreateComponent extends Manager
             return $this->redirectWithMessage(
                 $message, !$success, [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => Manager::ACTION_BROWSE,
+                    Application::PARAM_ACTION => ActionEnum::BROWSE->value,
                     Manager::PARAM_PARENT => $item->getParentId()
                 ]
             );

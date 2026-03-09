@@ -3,6 +3,7 @@ namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionActionProviderRegistry;
 use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProviderRegistry;
+use Chamilo\Application\Calendar\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Core\User\Component\ConfigureComponent;
@@ -146,7 +147,7 @@ class BrowseComponent extends Manager
         $printUrl = $this->getUrlGenerator()->fromParameters(
             [
                 self::PARAM_CONTEXT => Manager::CONTEXT,
-                self::PARAM_ACTION => self::ACTION_PRINT,
+                self::PARAM_ACTION => ActionEnum::PRINT->value,
                 HtmlCalendarRenderer::PARAM_TYPE => $this->getCurrentRendererType($user),
                 HtmlCalendarRenderer::PARAM_TIME => $this->getCurrentRendererTime()
             ]
@@ -159,7 +160,7 @@ class BrowseComponent extends Manager
         );
 
         $iCalUrl = $this->getUrlGenerator()->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => Manager::ACTION_ICAL]
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => ActionEnum::ICAL->value]
         );
 
         $buttonGroup->addButton(
@@ -171,7 +172,7 @@ class BrowseComponent extends Manager
         $settingsUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::CONTEXT,
-                Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_CONFIGURE,
+                Application::PARAM_ACTION => \Chamilo\Core\User\Architecture\Enum\ActionEnum::CONFIGURE->value,
                 ConfigureComponent::PARAM_SELECTED_CONTEXT => StringUtilities::LIBRARIES
             ]
         );
@@ -182,7 +183,7 @@ class BrowseComponent extends Manager
         );
 
         $availabilityUrl = $this->getUrlGenerator()->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => Manager::ACTION_AVAILABILITY]
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => ActionEnum::AVAILABILITY->value]
         );
 
         $splitDropdownButton->addButton(
@@ -233,7 +234,7 @@ class BrowseComponent extends Manager
 
         $displayParameters = [
             self::PARAM_CONTEXT => Manager::CONTEXT,
-            self::PARAM_ACTION => self::ACTION_BROWSE,
+            self::PARAM_ACTION => ActionEnum::BROWSE->value,
             HtmlCalendarRenderer::PARAM_TYPE => $this->getCurrentRendererType($user),
             HtmlCalendarRenderer::PARAM_TIME => $this->getCurrentRendererTime()
         ];

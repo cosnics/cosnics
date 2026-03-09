@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -67,7 +68,7 @@ class AccountComponent extends ProfileComponent
             return $this->redirectWithMessage(
                 $translator->trans($message, [], Manager::CONTEXT), !$success, [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => self::ACTION_ACCOUNT
+                    Application::PARAM_ACTION => ActionEnum::ACCOUNT->value
                 ]
             );
         }

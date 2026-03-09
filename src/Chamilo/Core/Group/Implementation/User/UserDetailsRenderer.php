@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Implementation\User;
 
+use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\User\Architecture\Interface\UserDetailsRendererInterface;
@@ -81,21 +82,18 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
         $groups = $this->getGroupsTreeTraverser()->findAllSubscribedGroupsForUserIdentifier($user->getId());
 
-        if ($groups->count() == 0)
-        {
+        if ($groups->count() == 0) {
             $table->setCellContents(2, 0, $translator->trans('NoGroups', [], Manager::CONTEXT));
             $table->setCellAttributes(2, 0, ['colspan' => 2, 'style' => 'text-align: center;']);
         }
-        else
-        {
+        else {
             $i = 2;
 
-            foreach ($groups as $group)
-            {
+            foreach ($groups as $group) {
                 $viewUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => Manager::ACTION_BROWSE,
+                        Application::PARAM_ACTION => ActionEnum::BROWSE->value,
                         Manager::PARAM_GROUP_ID => $group->getId()
                     ]
                 );

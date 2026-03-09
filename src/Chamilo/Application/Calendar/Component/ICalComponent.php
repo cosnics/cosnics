@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Component;
 
+use Chamilo\Application\Calendar\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -58,7 +59,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
                 $icalDownloadUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => Manager::ACTION_ICAL,
+                        self::PARAM_ACTION => ActionEnum::ICAL->value,
                         self::PARAM_DOWNLOAD => 1
                     ]
                 );
@@ -66,7 +67,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
                 $icalExternalUrl = $this->getUrlGenerator()->fromParameters(
                     [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => Manager::ACTION_ICAL,
+                        self::PARAM_ACTION => ActionEnum::ICAL->value,
                         User::PROPERTY_SECURITY_TOKEN => $currentUser->getSecurityToken()
                     ]
                 );

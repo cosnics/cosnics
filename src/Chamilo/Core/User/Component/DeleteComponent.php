@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -53,7 +54,7 @@ class DeleteComponent extends Manager
             return $this->redirectWithMessage(
                 $message, ($failures > 0), [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => self::ACTION_BROWSE
+                    Application::PARAM_ACTION => ActionEnum::BROWSE->value
                 ]
             );
         }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
+use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -43,7 +44,7 @@ class SubscribeComponent extends Manager
                 $this->getUrlGenerator()->fromParameters(
                     [
                         self::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => self::ACTION_BROWSE,
+                        self::PARAM_ACTION => ActionEnum::BROWSE->value,
                         self::PARAM_GROUP_ID => $groupIdentifier
                     ]
                 ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
@@ -97,7 +98,7 @@ class SubscribeComponent extends Manager
             return $this->redirectWithMessage(
                 $translator->trans($message), (bool) $failures, [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => self::ACTION_BROWSE,
+                    Application::PARAM_ACTION => ActionEnum::BROWSE->value,
                     self::PARAM_GROUP_ID => $groupIdentifier
                 ]
             );

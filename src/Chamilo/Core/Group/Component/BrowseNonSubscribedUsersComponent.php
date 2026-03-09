@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
+use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\UserInterface\Table\NonSubscribedUserTableRenderer;
@@ -51,7 +52,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
                 $this->getUrlGenerator()->fromParameters(
                     [
                         self::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => self::ACTION_BROWSE,
+                        self::PARAM_ACTION => ActionEnum::BROWSE->value,
                         self::PARAM_GROUP_ID => $this->getGroupIdentifier()
                     ]
                 ), $this->getTranslator()->trans('ViewerComponent', [], Manager::CONTEXT)
@@ -82,7 +83,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
             $this->getUrlGenerator()->fromParameters(
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
-                    self::PARAM_ACTION => self::ACTION_BROWSE_NON_SUBSCRIBED_USERS,
+                    self::PARAM_ACTION => ActionEnum::BROWSE_NON_SUBSCRIBED_USERS->value,
                     self::PARAM_GROUP_ID => $group->getId()
                 ]
             )
@@ -95,7 +96,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
                 new FontAwesomeGlyph('folder'), $this->getUrlGenerator()->fromParameters(
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
-                    self::PARAM_ACTION => self::ACTION_BROWSE_NON_SUBSCRIBED_USERS,
+                    self::PARAM_ACTION => ActionEnum::BROWSE_NON_SUBSCRIBED_USERS->value,
                     self::PARAM_GROUP_ID => $group->getId()
                 ]
             ), DisplayTypeEnum::ICON_AND_LABEL

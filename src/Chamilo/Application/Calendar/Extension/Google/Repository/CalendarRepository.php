@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Repository;
 
 use Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar;
+use Chamilo\Application\Calendar\Extension\Google\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Extension\Google\Implementation\Calendar\CalendarExtensionDataProvider;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Core\User\Service\UserService;
@@ -244,7 +245,7 @@ class CalendarRepository
         $redirectUrl = $this->getUrlGenerator()->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_LOGIN
+                Application::PARAM_ACTION => ActionEnum::LOGIN->value
             ]
         );
 

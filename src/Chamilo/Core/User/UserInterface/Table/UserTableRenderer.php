@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\UserInterface\Table;
 
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -69,7 +70,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
         $deleteUrl = $urlGenerator->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_DELETE]
+            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => ActionEnum::DELETE->value]
         );
 
         $actions->addAction(
@@ -81,7 +82,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
         $activateUrl = $urlGenerator->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_ACTIVE,
+                Application::PARAM_ACTION => ActionEnum::ACTIVE->value,
                 Manager::PARAM_ACTIVE => 1
             ]
         );
@@ -95,7 +96,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
         $deactivateUrl = $urlGenerator->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_ACTIVE,
+                Application::PARAM_ACTION => ActionEnum::ACTIVE->value,
                 Manager::PARAM_ACTIVE => 0
             ]
         );
@@ -109,7 +110,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
         $resetPasswordUrl = $urlGenerator->fromParameters(
             [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD_MULTI
+                Application::PARAM_ACTION => ActionEnum::RESET_PASSWORD_MULTI->value
             ]
         );
 

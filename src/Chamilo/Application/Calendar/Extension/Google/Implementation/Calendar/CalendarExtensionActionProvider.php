@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Implementation\Calendar;
 
 use Chamilo\Application\Calendar\Architecture\Interface\CalendarExtensionActionProviderInterface;
+use Chamilo\Application\Calendar\Extension\Google\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Core\User\Service\UserService;
@@ -60,7 +61,7 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
 
         if (!$accessToken) {
             $link = $this->getUrlGenerator()->fromParameters(
-                [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_LOGIN]
+                [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => ActionEnum::LOGIN->value]
             );
 
             $dropdownButton->addButton(
@@ -72,7 +73,7 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
         }
         else {
             $link = $this->getUrlGenerator()->fromParameters(
-                [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => Manager::ACTION_LOGOUT]
+                [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => ActionEnum::LOGOUT->value]
             );
 
             $dropdownButton->addButton(

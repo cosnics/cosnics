@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Implementation\Admin;
 
 use Chamilo\Core\Admin\Architecture\Domain\AbstractActionProvider;
 use Chamilo\Core\Admin\Architecture\Interface\ActionProviderInterface;
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -22,7 +23,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_BROWSE
+            Application::PARAM_ACTION => ActionEnum::BROWSE->value
         ];
 
         $links[] = new Action(
@@ -32,7 +33,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_CREATE
+            Application::PARAM_ACTION => ActionEnum::CREATE->value
         ];
 
         $links[] = new Action(
@@ -43,7 +44,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => Manager::ACTION_BROWSE
+            Application::PARAM_ACTION => ActionEnum::BROWSE->value
         ];
 
         return new Actions($context, $links, $urlGenerator->fromParameters($parameters));

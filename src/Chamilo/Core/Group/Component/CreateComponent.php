@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
+use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\UserInterface\Form\GroupForm;
@@ -40,7 +41,7 @@ class CreateComponent extends Manager
             GroupForm::TYPE_CREATE, $group, $this->getUrlGenerator()->fromParameters(
             [
                 self::PARAM_CONTEXT => Manager::CONTEXT,
-                self::PARAM_ACTION => self::ACTION_CREATE,
+                self::PARAM_ACTION => ActionEnum::CREATE->value,
                 self::PARAM_GROUP_ID => $parentGroupIdentifier
             ]
         )
@@ -58,7 +59,7 @@ class CreateComponent extends Manager
                         StringUtilities::LIBRARIES
                     ), (false), [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => self::ACTION_BROWSE,
+                        Application::PARAM_ACTION => ActionEnum::BROWSE->value,
                         self::PARAM_GROUP_ID => $group->getId()
                     ]
                 );
@@ -70,7 +71,7 @@ class CreateComponent extends Manager
                         StringUtilities::LIBRARIES
                     ), (true), [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => self::ACTION_BROWSE,
+                        Application::PARAM_ACTION => ActionEnum::BROWSE->value,
                         self::PARAM_GROUP_ID => $parentGroupIdentifier
                     ]
                 );

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
@@ -15,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class MultiPasswordResetComponent extends Manager
 {
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -26,23 +26,19 @@ class MultiPasswordResetComponent extends Manager
         $userIdentifiers = (array) $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_ID, []);
         $translator = $this->getTranslator();
 
-        if (!$currentUser->isPlatformAdministrator())
-        {
+        if (!$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
-        if (count($userIdentifiers) > 0)
-        {
+        if (count($userIdentifiers) > 0) {
             $userService = $this->getUserService();
 
             $failures = 0;
 
-            foreach ($userIdentifiers as $userIdentifier)
-            {
+            foreach ($userIdentifiers as $userIdentifier) {
                 $userToReset = $userService->findUserByIdentifier($userIdentifier);
 
-                if (!$userService->createNewPasswordForUser($userToReset))
-                {
+                if (!$userService->createNewPasswordForUser($userToReset)) {
                     $failures ++;
                 }
             }
@@ -55,12 +51,11 @@ class MultiPasswordResetComponent extends Manager
             return $this->redirectWithMessage(
                 $message, ($failures > 0), [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => self::ACTION_BROWSE
+                    Application::PARAM_ACTION => ActionEnum::BROWSE->value
                 ]
             );
         }
-        else
-        {
+        else {
             return new Response(
                 $this->displayErrorPage(
                     htmlentities(

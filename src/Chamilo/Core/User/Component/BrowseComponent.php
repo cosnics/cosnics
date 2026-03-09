@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Table\UserTableRenderer;
@@ -58,7 +59,7 @@ class BrowseComponent extends Manager
     {
         $buttonToolBar = new ButtonToolBar(
             $this->getUrlGenerator()->fromParameters(
-                [self::PARAM_CONTEXT => self::CONTEXT, self::PARAM_ACTION => self::ACTION_BROWSE]
+                [self::PARAM_CONTEXT => self::CONTEXT, self::PARAM_ACTION => ActionEnum::BROWSE->value]
             )
         );
 
@@ -70,7 +71,7 @@ class BrowseComponent extends Manager
                 new Button(
                     $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
                     $this->getUrlGenerator()->fromParameters(
-                        [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => self::ACTION_CREATE]
+                        [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => ActionEnum::CREATE->value]
                     ), DisplayTypeEnum::ICON_AND_LABEL
                 )
             );

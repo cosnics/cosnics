@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Component;
 
+use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\UserInterface\Form\GroupMoveForm;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -39,7 +40,7 @@ class MoveComponent extends Manager
             $group, $this->getUrlGenerator()->fromParameters(
             [
                 self::PARAM_CONTEXT => Manager::CONTEXT,
-                self::PARAM_ACTION => self::ACTION_MOVE,
+                self::PARAM_ACTION => ActionEnum::MOVE->value,
                 self::PARAM_GROUP_ID => $groupIdentifier
             ]
         )
@@ -56,7 +57,7 @@ class MoveComponent extends Manager
             return $this->redirectWithMessage(
                 $message, !$success, [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => self::ACTION_BROWSE,
+                    Application::PARAM_ACTION => ActionEnum::BROWSE->value,
                     self::PARAM_GROUP_ID => $parent
                 ]
             );
