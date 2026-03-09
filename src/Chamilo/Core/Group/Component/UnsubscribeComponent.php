@@ -9,7 +9,9 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -89,13 +91,18 @@ class UnsubscribeComponent extends Manager
                 $message = 'SelectedGroupRelUsersDeleted';
             }
 
-            return $this->getRedirectResponseWithMessage(
-                $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => ActionEnum::BROWSE->value,
-                    self::PARAM_GROUP_ID => $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID)
-                ]
+            $this->getNotificationMessageManager()->addMessage(
+                new NotificationMessage(
+                    $translator->trans($message, [], Manager::CONTEXT),
+                    $failures ? NotificationMessage::TYPE_DANGER : NotificationMessage::TYPE_SUCCESS
+                )
             );
+
+            return new RedirectResponse($this->getUrlGenerator()->fromParameters([
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => ActionEnum::BROWSE->value,
+                self::PARAM_GROUP_ID => $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID)
+            ]));
         }
         else {
             return new Response(

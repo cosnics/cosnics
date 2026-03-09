@@ -11,6 +11,8 @@ use Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -84,13 +86,17 @@ class CreateComponent extends Manager
                 );
             }
 
-            return $this->getRedirectResponseWithMessage(
-                $message, !$success, [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => ActionEnum::BROWSE->value,
-                    Manager::PARAM_PARENT => $item->getParentId()
-                ]
+            $this->getNotificationMessageManager()->addMessage(
+                new NotificationMessage(
+                    $message, $success ? NotificationMessage::TYPE_SUCCESS : NotificationMessage::TYPE_DANGER
+                )
             );
+
+            return new RedirectResponse($this->getUrlGenerator()->fromParameters([
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => ActionEnum::BROWSE->value,
+                Manager::PARAM_PARENT => $item->getParentId()
+            ]));
         }
 
         $html = [];

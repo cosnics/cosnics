@@ -10,6 +10,7 @@ use Chamilo\Core\User\UserInterface\Form\UserForm;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -65,12 +66,17 @@ class AccountComponent extends ProfileComponent
 
             $message = !$success ? 'UserProfileNotUpdated' : 'UserProfileUpdated';
 
-            return $this->getRedirectResponseWithMessage(
-                $translator->trans($message, [], Manager::CONTEXT), !$success, [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => ActionEnum::ACCOUNT->value
-                ]
+            $this->getNotificationMessageManager()->addMessage(
+                new NotificationMessage(
+                    $translator->trans($message, [], Manager::CONTEXT),
+                    $success ? NotificationMessage::TYPE_SUCCESS : NotificationMessage::TYPE_DANGER
+                )
             );
+
+            return new RedirectResponse($this->getUrlGenerator()->fromParameters([
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => ActionEnum::ACCOUNT->value
+            ]));
         }
         else {
             return new Response($this->renderPage($currentUser));

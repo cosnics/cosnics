@@ -12,6 +12,8 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedE
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Exception\ObjectNotExistException;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -72,13 +74,17 @@ class UpdateComponent extends Manager
                 StringUtilities::LIBRARIES
             );
 
-            return $this->getRedirectResponseWithMessage(
-                $message, !$success, [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => ActionEnum::BROWSE->value,
-                    Manager::PARAM_ITEM => $item->getParentId()
-                ]
+            $this->getNotificationMessageManager()->addMessage(
+                new NotificationMessage(
+                    $message, $success ? NotificationMessage::TYPE_SUCCESS : NotificationMessage::TYPE_DANGER
+                )
             );
+
+            return new RedirectResponse($this->getUrlGenerator()->fromParameters([
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => ActionEnum::BROWSE->value,
+                Manager::PARAM_ITEM => $item->getParentId()
+            ]));
         }
 
         $html = [];

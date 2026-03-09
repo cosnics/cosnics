@@ -7,6 +7,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -70,12 +72,16 @@ class DeleteComponent extends Manager
                 );
             }
 
-            return $this->getRedirectResponseWithMessage(
-                $message, ($failures > 0), [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => ActionEnum::BROWSE->value
-                ]
+            $this->getNotificationMessageManager()->addMessage(
+                new NotificationMessage(
+                    $message, $failures ? NotificationMessage::TYPE_DANGER : NotificationMessage::TYPE_SUCCESS
+                )
             );
+
+            return new RedirectResponse($this->getUrlGenerator()->fromParameters([
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => ActionEnum::BROWSE->value
+            ]));
         }
         else {
             return new Response(

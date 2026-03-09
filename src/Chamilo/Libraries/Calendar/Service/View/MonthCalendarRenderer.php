@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Service\View;
 
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
+use Chamilo\Libraries\Calendar\Architecture\Enum\HtmlCalendarRendererTypeEnum;
 use Chamilo\Libraries\Calendar\Service\Event\EventMonthRenderer;
 use Chamilo\Libraries\Calendar\Service\JumpBarRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
@@ -42,7 +43,7 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
     public function getDayUrlTemplate(array $displayParameters): string
     {
         $displayParameters[self::PARAM_TIME] = MonthCalendarTableBuilder::TIME_PLACEHOLDER;
-        $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
+        $displayParameters[self::PARAM_TYPE] = HtmlCalendarRendererTypeEnum::DAY->value;
 
         return $this->getUrlGenerator()->fromParameters($displayParameters);
     }

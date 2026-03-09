@@ -14,6 +14,7 @@ use Chamilo\Libraries\DependencyInjection\CompilerPass\ConditionVariableTranslat
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\EventDispatcherCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\HashingCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\HtmlCalendarRendererCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\MailerCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\TabRendererCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -91,5 +92,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         $container->addCompilerPass(new EventDispatcherCompilerPass());
         $container->addCompilerPass(new ButtonRendererCompilerPass());
         $container->addCompilerPass(new TabRendererCompilerPass());
+        $container->addCompilerPass(new HtmlCalendarRendererCompilerPass());
     }
 }

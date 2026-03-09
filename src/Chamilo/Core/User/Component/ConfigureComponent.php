@@ -10,8 +10,10 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\NamespaceIdentGlyph;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -47,14 +49,18 @@ class ConfigureComponent extends ProfileComponent
         if ($this->form->validate()) {
             $success = $this->form->updateUserSettings();
 
-            return $this->getRedirectResponseWithMessage(
-                $this->getTranslator()->trans($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'), !$success,
-                [
-                    self::PARAM_CONTEXT => Manager::CONTEXT,
-                    self::PARAM_ACTION => ActionEnum::CONFIGURE->value,
-                    self::PARAM_SELECTED_CONTEXT => $this->getSelectedContext()
-                ]
+            $this->getNotificationMessageManager()->addMessage(
+                new NotificationMessage(
+                    $this->getTranslator()->trans($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'),
+                    !$success ? NotificationMessage::TYPE_DANGER : NotificationMessage::TYPE_SUCCESS
+                )
             );
+
+            return new RedirectResponse($this->getUrlGenerator()->fromParameters([
+                self::PARAM_CONTEXT => Manager::CONTEXT,
+                self::PARAM_ACTION => ActionEnum::CONFIGURE->value,
+                self::PARAM_SELECTED_CONTEXT => $this->getSelectedContext()
+            ]));
         }
         else {
             return new Response($this->renderPage($currentUser));

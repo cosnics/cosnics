@@ -10,6 +10,7 @@ use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Calendar\Architecture\Enum\HtmlCalendarRendererTypeEnum;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Calendar\Service\View\MiniMonthCalendarRenderer;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
@@ -55,7 +56,7 @@ class MonthBlockRenderer extends BlockRenderer
     {
         $displayParameters = [
             Application::PARAM_CONTEXT => Manager::CONTEXT,
-            HtmlCalendarRenderer::PARAM_TYPE => HtmlCalendarRenderer::TYPE_DAY
+            HtmlCalendarRenderer::PARAM_TYPE => HtmlCalendarRendererTypeEnum::DAY->value
         ];
 
         $miniMonthCalendarRenderer = $this->getMiniMonthCalendarRenderer();

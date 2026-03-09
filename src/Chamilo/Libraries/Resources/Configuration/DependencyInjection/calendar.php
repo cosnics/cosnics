@@ -13,6 +13,7 @@ use Chamilo\Libraries\Calendar\Service\TableBuilder\MiniMonthCalendarTableBuilde
 use Chamilo\Libraries\Calendar\Service\TableBuilder\MonthCalendarTableBuilder;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\WeekCalendarTableBuilder;
 use Chamilo\Libraries\Calendar\Service\View\DayCalendarRenderer;
+use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Calendar\Service\View\ICalCalendarRenderer;
 use Chamilo\Libraries\Calendar\Service\View\ListCalendarRenderer;
 use Chamilo\Libraries\Calendar\Service\View\MiniDayCalendarRenderer;
@@ -63,12 +64,12 @@ return static function (ContainerConfigurator $container) {
         ]
     );
 
-    $services->set(DayCalendarRenderer::class);
+    $services->set(DayCalendarRenderer::class)->tag(HtmlCalendarRenderer::class);
     $services->set(ICalCalendarRenderer::class);
-    $services->set(ListCalendarRenderer::class);
-    $services->set(MiniDayCalendarRenderer::class);
-    $services->set(MiniListCalendarRenderer::class);
-    $services->set(MiniMonthCalendarRenderer::class);
-    $services->set(MonthCalendarRenderer::class);
-    $services->set(WeekCalendarRenderer::class);
+    $services->set(ListCalendarRenderer::class)->tag(HtmlCalendarRenderer::class);
+    $services->set(MiniDayCalendarRenderer::class)->tag(HtmlCalendarRenderer::class);
+    $services->set(MiniListCalendarRenderer::class)->tag(HtmlCalendarRenderer::class);
+    $services->set(MiniMonthCalendarRenderer::class)->tag(HtmlCalendarRenderer::class);
+    $services->set(MonthCalendarRenderer::class)->tag(HtmlCalendarRenderer::class);
+    $services->set(WeekCalendarRenderer::class)->tag(HtmlCalendarRenderer::class);
 };

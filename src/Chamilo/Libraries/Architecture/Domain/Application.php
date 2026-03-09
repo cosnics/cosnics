@@ -6,9 +6,6 @@ use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
-use Chamilo\Libraries\UserInterface\Breadcrumb\Service\BreadcrumbGenerator;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * @package Chamilo\Libraries\Architecture\Domain
@@ -32,29 +29,9 @@ abstract class Application implements ApplicationInterface
         }
     }
 
-    public function getBreadcrumbGenerator(): BreadcrumbGenerator
-    {
-        return $this->getService(BreadcrumbGenerator::class);
-    }
-
     public function getCurrentAction(): string
     {
         return $this->getRequest()->query->get(self::PARAM_ACTION, $this->getDefaultApplicationAction());
-    }
-
-    /**
-     * @param string[] $parameters
-     */
-    public function getRedirectResponseWithMessage(
-        ?string $message = null, bool $errorMessage = false, array $parameters = []
-    ): RedirectResponse
-    {
-        if ($message) {
-            $messageType = (!$errorMessage) ? NotificationMessage::TYPE_INFO : NotificationMessage::TYPE_DANGER;
-            $this->getNotificationMessageManager()->addMessage(new NotificationMessage($message, $messageType));
-        }
-
-        return new RedirectResponse($this->getUrlGenerator()->fromParameters($parameters));
     }
 
     public function renderFooter(): string

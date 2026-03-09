@@ -8,7 +8,9 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -70,13 +72,18 @@ class DeleteComponent extends Manager
             );
         }
 
-        return $this->getRedirectResponseWithMessage(
-            $message, (bool) $failures, [
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => ActionEnum::BROWSE->value,
-                Manager::PARAM_PARENT => $parentIdentifier
-            ]
+        $this->getNotificationMessageManager()->addMessage(
+            new NotificationMessage(
+                $translator->trans($message, [], \Chamilo\Core\Group\Manager::CONTEXT),
+                $failures ? NotificationMessage::TYPE_DANGER : NotificationMessage::TYPE_SUCCESS
+            )
         );
+
+        return new RedirectResponse($this->getUrlGenerator()->fromParameters([
+            Application::PARAM_CONTEXT => Manager::CONTEXT,
+            Application::PARAM_ACTION => ActionEnum::BROWSE->value,
+            Manager::PARAM_PARENT => $parentIdentifier
+        ]));
     }
 
     /**

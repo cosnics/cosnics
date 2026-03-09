@@ -2,26 +2,26 @@
 namespace Chamilo\Libraries\Calendar\Factory;
 
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
-use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjectionContainerTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use OutOfBoundsException;
 
 /**
  * @package Chamilo\Libraries\Calendar\Factory
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class HtmlCalendarRendererFactory
+class HtmlCalendarRendererFactory extends ArrayCollection
 {
-    use DependencyInjectionContainerTrait;
-
-    /**
-     * @throws \Exception
-     */
-    public function getRenderer(string $rendererType): HtmlCalendarRenderer
+    public function addHtmlCalendarRenderer(HtmlCalendarRenderer $htmlCalendarRenderer): void
     {
-        /**
-         * @var class-string<\Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer> $className
-         */
-        $className = 'Chamilo\Libraries\Calendar\Service\View\\' . $rendererType . 'CalendarRenderer';
+        $this->set($htmlCalendarRenderer->getType(), $htmlCalendarRenderer);
+    }
 
-        return $this->getService($className);
+    public function getHtmlCalendarRenderer(string $rendererType): HtmlCalendarRenderer
+    {
+        if (!$this->containsKey($rendererType)) {
+            throw new OutOfBoundsException($rendererType . ' is not a valid HtmlCalendarRenderer');
+        }
+
+        return $this->get($rendererType);
     }
 }

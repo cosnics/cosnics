@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Calendar\Service\View;
 
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
+use Chamilo\Libraries\Calendar\Architecture\Enum\HtmlCalendarRendererTypeEnum;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\CalendarTableBuilder;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
@@ -23,10 +24,6 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
 {
     public const PARAM_TIME = 'time';
     public const PARAM_TYPE = 'type';
-    public const TYPE_DAY = 'Day';
-    public const TYPE_LIST = 'List';
-    public const TYPE_MONTH = 'Month';
-    public const TYPE_WEEK = 'Week';
 
     protected ButtonToolBarRenderer $buttonToolBarRenderer;
 
@@ -82,6 +79,11 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
         return $this->translator;
     }
 
+    public function getType(): string
+    {
+        return HtmlCalendarRendererTypeEnum::getTypeValue(static::class);
+    }
+
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
@@ -124,10 +126,10 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
     public function renderTypeButton(array $displayParameters): DropDownButtonCollection
     {
         $rendererTypes = [
-            HtmlCalendarRenderer::TYPE_MONTH,
-            HtmlCalendarRenderer::TYPE_WEEK,
-            HtmlCalendarRenderer::TYPE_DAY,
-            HtmlCalendarRenderer::TYPE_LIST
+            HtmlCalendarRendererTypeEnum::MONTH->value,
+            HtmlCalendarRendererTypeEnum::WEEK->value,
+            HtmlCalendarRendererTypeEnum::DAY->value,
+            HtmlCalendarRendererTypeEnum::LIST->value
         ];
 
         $currentRendererType = $displayParameters[self::PARAM_TYPE];

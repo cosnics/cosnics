@@ -10,6 +10,7 @@ use Chamilo\Core\User\Component\ConfigureComponent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
+use Chamilo\Libraries\Calendar\Architecture\Enum\HtmlCalendarRendererTypeEnum;
 use Chamilo\Libraries\Calendar\Factory\HtmlCalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
@@ -123,12 +124,12 @@ class BrowseComponent extends Manager
                 $this->getContainer()->getParameter('cosnics.libraries.calendar.defaultView')
             );
 
-            if ($rendererType == HtmlCalendarRenderer::TYPE_MONTH) {
+            if ($rendererType == HtmlCalendarRendererTypeEnum::MONTH->value) {
                 $detect = new MobileDetect();
 
                 try {
                     if ($detect->isMobile() && !$detect->isTablet()) {
-                        $rendererType = HtmlCalendarRenderer::TYPE_LIST;
+                        $rendererType = HtmlCalendarRendererTypeEnum::LIST->value;
                     }
                 }
                 catch (Exception) {
@@ -230,7 +231,7 @@ class BrowseComponent extends Manager
      */
     protected function renderCalendar(User $user): string
     {
-        $renderer = $this->getCalendarRendererFactory()->getRenderer($this->getCurrentRendererType($user));
+        $renderer = $this->getCalendarRendererFactory()->getHtmlCalendarRenderer($this->getCurrentRendererType($user));
 
         $displayParameters = [
             self::PARAM_CONTEXT => Manager::CONTEXT,

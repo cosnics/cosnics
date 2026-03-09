@@ -7,6 +7,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -59,58 +61,47 @@ class ActiveComponent extends Manager
             if ($active == 0) {
                 if ($failures) {
                     if (count($ids) == 1) {
-                        $message = $translator->trans(
-                            'UserNotDeactivated', [], Manager::CONTEXT
-                        );
+                        $message = 'UserNotDeactivated';
                     }
                     else {
-                        $message = $translator->trans(
-                            'UsersNotDeactivated', [], Manager::CONTEXT
-                        );
+                        $message = 'UsersNotDeactivated';
                     }
                 }
                 elseif (count($ids) == 1) {
-                    $message = $translator->trans(
-                        'UserDeactivated', [], Manager::CONTEXT
-                    );
+                    $message = 'UserDeactivated';
                 }
                 else {
-                    $message = $translator->trans(
-                        'UsersDeactivated', [], Manager::CONTEXT
-                    );
+                    $message = 'UsersDeactivated';
                 }
             }
             else {
                 if ($failures) {
                     if (count($ids) == 1) {
-                        $message = $translator->trans(
-                            'UserNotActivated', [], Manager::CONTEXT
-                        );
+                        $message = 'UserNotActivated';
                     }
                     else {
-                        $message = $translator->trans(
-                            'UsersNotActivated', [], Manager::CONTEXT
-                        );
+                        $message = 'UsersNotActivated';
                     }
                 }
                 elseif (count($ids) == 1) {
-                    $message = $translator->trans(
-                        'UserActivated', [], Manager::CONTEXT
-                    );
+                    $message = 'UserActivated';
                 }
                 else {
-                    $message = $translator->trans(
-                        'UsersActivated', [], Manager::CONTEXT
-                    );
+                    $message = 'UsersActivated';
                 }
             }
 
-            return $this->getRedirectResponseWithMessage(
-                $message, ($failures > 0), [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => ActionEnum::BROWSE->value
-                ]
+            $this->getNotificationMessageManager()->addMessage(
+                new NotificationMessage(
+                    $translator->trans($message, [], \Chamilo\Core\Group\Manager::CONTEXT),
+                    $failures ? NotificationMessage::TYPE_DANGER : NotificationMessage::TYPE_SUCCESS
+                )
             );
+
+            return new RedirectResponse($this->getUrlGenerator()->fromParameters([
+                Application::PARAM_CONTEXT => Manager::CONTEXT,
+                Application::PARAM_ACTION => ActionEnum::BROWSE->value
+            ]));
         }
         else {
             return new Response(
