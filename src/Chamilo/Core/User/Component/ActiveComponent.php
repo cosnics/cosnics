@@ -57,18 +57,55 @@ class ActiveComponent extends Manager
             }
 
             if ($active == 0) {
-                $message = $this->getResult(
-                    $failures, count($ids), 'UserNotDeactivated', 'UsersNotDeactivated', 'UserDeactivated',
-                    'UsersDeactivated'
-                );
+                if ($failures) {
+                    if (count($ids) == 1) {
+                        $message = $translator->trans(
+                            'UserNotDeactivated', [], Manager::CONTEXT
+                        );
+                    }
+                    else {
+                        $message = $translator->trans(
+                            'UsersNotDeactivated', [], Manager::CONTEXT
+                        );
+                    }
+                }
+                elseif (count($ids) == 1) {
+                    $message = $translator->trans(
+                        'UserDeactivated', [], Manager::CONTEXT
+                    );
+                }
+                else {
+                    $message = $translator->trans(
+                        'UsersDeactivated', [], Manager::CONTEXT
+                    );
+                }
             }
             else {
-                $message = $this->getResult(
-                    $failures, count($ids), 'UserNotActivated', 'UsersNotActivated', 'UserActivated', 'UsersActivated'
-                );
+                if ($failures) {
+                    if (count($ids) == 1) {
+                        $message = $translator->trans(
+                            'UserNotActivated', [], Manager::CONTEXT
+                        );
+                    }
+                    else {
+                        $message = $translator->trans(
+                            'UsersNotActivated', [], Manager::CONTEXT
+                        );
+                    }
+                }
+                elseif (count($ids) == 1) {
+                    $message = $translator->trans(
+                        'UserActivated', [], Manager::CONTEXT
+                    );
+                }
+                else {
+                    $message = $translator->trans(
+                        'UsersActivated', [], Manager::CONTEXT
+                    );
+                }
             }
 
-            return $this->redirectWithMessage(
+            return $this->getRedirectResponseWithMessage(
                 $message, ($failures > 0), [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => ActionEnum::BROWSE->value
@@ -77,13 +114,13 @@ class ActiveComponent extends Manager
         }
         else {
             return new Response(
-                $this->displayErrorPage(
-                    htmlentities(
-                        $translator->trans(
-                            'NoObjectSelected', ['%Object%' => $translator->trans('User', [], Manager::CONTEXT)],
-                            StringUtilities::LIBRARIES
-                        )
+                $this->getErrorPageRenderer()->render(
+                    $this, htmlentities(
+                    $translator->trans(
+                        'NoObjectSelected', ['%Object%' => $translator->trans('User', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
                     )
+                ), $currentUser
                 )
             );
         }

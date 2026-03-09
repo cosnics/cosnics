@@ -95,7 +95,7 @@ class SubscribeComponent extends Manager
                 $message = 'SelectedUsersAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
             }
 
-            return $this->redirectWithMessage(
+            return $this->getRedirectResponseWithMessage(
                 $translator->trans($message), (bool) $failures, [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => ActionEnum::BROWSE->value,
@@ -105,8 +105,9 @@ class SubscribeComponent extends Manager
         }
         else {
             return new Response(
-                $this->displayErrorPage(
-                    htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
+                $this->getErrorPageRenderer()->render(
+                    $this, htmlentities($translator->trans('NoObjectsSelected', [], StringUtilities::LIBRARIES)),
+                    $currentUser
                 )
             );
         }

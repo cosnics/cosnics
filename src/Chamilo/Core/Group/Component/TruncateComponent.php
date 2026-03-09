@@ -67,7 +67,7 @@ class TruncateComponent extends Manager
             }
 
             if (count($groupIdentifiers) == 1) {
-                return $this->redirectWithMessage(
+                return $this->getRedirectResponseWithMessage(
                     $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => ActionEnum::BROWSE->value,
@@ -76,7 +76,7 @@ class TruncateComponent extends Manager
                 );
             }
             else {
-                return $this->redirectWithMessage(
+                return $this->getRedirectResponseWithMessage(
                     $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => ActionEnum::BROWSE->value
@@ -86,8 +86,9 @@ class TruncateComponent extends Manager
         }
         else {
             return new Response(
-                $this->displayErrorPage(
-                    htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
+                $this->getErrorPageRenderer()->render(
+                    $this, htmlentities($translator->trans('NoObjectsSelected', [], StringUtilities::LIBRARIES)),
+                    $currentUser
                 )
             );
         }

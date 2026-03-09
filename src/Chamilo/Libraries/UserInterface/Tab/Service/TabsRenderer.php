@@ -5,6 +5,9 @@ use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabRendererRegistry;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabContentInterface;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabContentRendererInterface;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabNavigationInterface;
+use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabNavigationRendererInterface;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Tab\Service
@@ -38,7 +41,9 @@ class TabsRenderer
                 if ($tab instanceof TabContentInterface) {
                     $tabRenderer = $this->tabRendererRegistry->getTabRendererForTab($tab);
 
-                    $html[] = $tabRenderer->renderContent($tab, $selectedTab);
+                    if ($tabRenderer instanceof TabContentRendererInterface) {
+                        $html[] = $tabRenderer->renderContent($tab, $selectedTab);
+                    }
                 }
             }
             catch (ClassNotExistException) {
@@ -61,8 +66,13 @@ class TabsRenderer
 
         foreach ($tabs as $tab) {
             try {
-                $tabRenderer = $this->tabRendererRegistry->getTabRendererForTab($tab);
-                $html[] = $tabRenderer->renderNavigation($tab, $selectedTab);
+                if ($tab instanceof TabNavigationInterface) {
+                    $tabRenderer = $this->tabRendererRegistry->getTabRendererForTab($tab);
+
+                    if ($tabRenderer instanceof TabNavigationRendererInterface) {
+                        $html[] = $tabRenderer->renderNavigation($tab, $selectedTab);
+                    }
+                }
             }
             catch (ClassNotExistException) {
             }

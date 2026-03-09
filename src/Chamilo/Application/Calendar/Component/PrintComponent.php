@@ -27,7 +27,7 @@ class PrintComponent extends BrowseComponent
         $html = [];
 
         $html[] = $this->getHeaderRenderer()->render();
-        $html[] = $this->renderCalendar();
+        $html[] = $this->renderCalendar($currentUser);
         $html[] = '<script>';
         $html[] = 'window.print();';
         $html[] = '</script>';

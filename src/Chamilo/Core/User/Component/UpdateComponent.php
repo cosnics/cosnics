@@ -118,13 +118,13 @@ class UpdateComponent extends Manager
         }
         else {
             return new Response(
-                $this->displayErrorPage(
-                    htmlentities(
-                        $translator->trans(
-                            'NoObjectSelected', ['%Object%' => $translator->trans('User', [], Manager::CONTEXT)],
-                            StringUtilities::LIBRARIES
-                        )
+                $this->getErrorPageRenderer()->render(
+                    $this, htmlentities(
+                    $translator->trans(
+                        'NoObjectSelected', ['%Object%' => $translator->trans('User', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
                     )
+                ), $currentUser
                 )
             );
         }

@@ -72,7 +72,6 @@ class MenuRenderer
     {
         $html = [];
 
-        $numberOfItems = 0;
         $itemRenditions = [];
 
         $itemRenditions[] = $this->renderLoggedInAs($user);
@@ -81,18 +80,16 @@ class MenuRenderer
             foreach ($this->findRootItems() as $item) {
                 if (!$item->isHidden()) {
                     $itemRenderer = $this->getItemRendererFactory()->getItemRendererForItem($item);
-
                     $itemHtml = $itemRenderer->render($item, $user);
 
                     if (!empty($itemHtml)) {
-                        $numberOfItems ++;
                         $itemRenditions[] = $itemHtml;
                     }
                 }
             }
         }
 
-        $html[] = $this->renderHeader($numberOfItems);
+        $html[] = $this->renderHeader();
         $html[] = implode(PHP_EOL, $itemRenditions);
         $html[] = $this->renderFooter();
 
@@ -197,7 +194,7 @@ class MenuRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function renderHeader(int $numberOfItems = 0): string
+    public function renderHeader(): string
     {
         $html = [];
 
@@ -241,7 +238,6 @@ class MenuRenderer
             $linkItem = new Item();
             $linkItem->setDisplay(DisplayTypeEnum::ICON_AND_LABEL);
             $linkItem->setType(LinkItemRenderer::class);
-            $linkItem->setHidden(0);
             $linkItem->setIconClass('mask');
             $linkItem->setParentId(DataClass::EMPTY_UUID);
             $linkItem->setTitleForIsoCode(

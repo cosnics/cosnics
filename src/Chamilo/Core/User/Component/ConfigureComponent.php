@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ConfigureComponent extends ProfileComponent
 {
-    public const PARAM_SELECTED_CONTEXT = 'context';
+    public const PARAM_SELECTED_CONTEXT = 'selected_context';
 
     private ConfigurationForm $form;
 
@@ -47,7 +47,7 @@ class ConfigureComponent extends ProfileComponent
         if ($this->form->validate()) {
             $success = $this->form->updateUserSettings();
 
-            return $this->redirectWithMessage(
+            return $this->getRedirectResponseWithMessage(
                 $this->getTranslator()->trans($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'), !$success,
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,

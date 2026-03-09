@@ -89,7 +89,7 @@ class UnsubscribeComponent extends Manager
                 $message = 'SelectedGroupRelUsersDeleted';
             }
 
-            return $this->redirectWithMessage(
+            return $this->getRedirectResponseWithMessage(
                 $translator->trans($message, [], Manager::CONTEXT), (bool) $failures, [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => ActionEnum::BROWSE->value,
@@ -99,8 +99,9 @@ class UnsubscribeComponent extends Manager
         }
         else {
             return new Response(
-                $this->displayErrorPage(
-                    htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
+                $this->getErrorPageRenderer()->render(
+                    $this, htmlentities($translator->trans('NoObjectsSelected', [], StringUtilities::LIBRARIES)),
+                    $currentUser
                 )
             );
         }

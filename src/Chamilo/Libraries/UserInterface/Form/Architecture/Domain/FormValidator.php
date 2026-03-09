@@ -21,7 +21,6 @@ use Chamilo\Libraries\UserInterface\Form\Factory\FormValidatorHtmlEditorOptionsF
 use Chamilo\Libraries\UserInterface\Form\Service\FormValidatorHtmlEditorRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
-use Chamilo\Libraries\UserInterface\Tab\Service\FormTabsGenerator;
 use HTML_QuickForm;
 use HTML_QuickForm_element;
 use HTML_QuickForm_group;
@@ -813,11 +812,6 @@ class FormValidator extends HTML_QuickForm
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    protected function getFormTabsGenerator(): FormTabsGenerator
-    {
-        return $this->getService(FormTabsGenerator::class);
     }
 
     public function getFormTemplate(): string

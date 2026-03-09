@@ -6,7 +6,7 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\UserInterface\Form\GroupForm;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
@@ -53,25 +53,25 @@ class CreateComponent extends Manager
             if ($success) {
                 $group = $form->getGroup();
 
-                return $this->redirectWithMessage(
+                return $this->getRedirectResponseWithMessage(
                     $translator->trans(
                         'ObjectCreated', ['%Object%' => $translator->trans('Group', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
-                    ), (false), [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => ActionEnum::BROWSE->value,
+                    ), false, [
+                        ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                        ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
                         self::PARAM_GROUP_ID => $group->getId()
                     ]
                 );
             }
             else {
-                return $this->redirectWithMessage(
+                return $this->getRedirectResponseWithMessage(
                     $translator->trans(
                         'ObjectNotCreated', ['%Object%' => $translator->trans('Group', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
-                    ), (true), [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => ActionEnum::BROWSE->value,
+                    ), true, [
+                        ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                        ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
                         self::PARAM_GROUP_ID => $parentGroupIdentifier
                     ]
                 );

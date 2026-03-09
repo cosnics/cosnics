@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 interface ApplicationInterface
 {
+    public const PARAM_ACTION = 'action';
+    public const PARAM_CONTEXT = 'context';
+
     public function run(?User $currentUser = null): Response;
 
     public function getApplicationAction(): string;

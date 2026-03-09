@@ -72,7 +72,7 @@ class UpdateComponent extends Manager
                 StringUtilities::LIBRARIES
             );
 
-            return $this->redirectWithMessage(
+            return $this->getRedirectResponseWithMessage(
                 $message, !$success, [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => ActionEnum::BROWSE->value,

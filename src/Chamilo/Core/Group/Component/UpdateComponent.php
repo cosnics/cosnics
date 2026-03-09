@@ -58,7 +58,7 @@ class UpdateComponent extends Manager
                     StringUtilities::LIBRARIES
                 );
 
-                return $this->redirectWithMessage(
+                return $this->getRedirectResponseWithMessage(
                     $message, !$success, [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => ActionEnum::BROWSE->value,
@@ -78,8 +78,9 @@ class UpdateComponent extends Manager
         }
         else {
             return new Response(
-                $this->displayErrorPage(
-                    htmlentities($translator->trans('NoObjectSelected', [], StringUtilities::LIBRARIES))
+                $this->getErrorPageRenderer()->render(
+                    $this, htmlentities($translator->trans('NoObjectsSelected', [], StringUtilities::LIBRARIES)),
+                    $currentUser
                 )
             );
         }

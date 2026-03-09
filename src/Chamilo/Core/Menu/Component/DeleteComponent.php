@@ -7,6 +7,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -44,12 +45,32 @@ class DeleteComponent extends Manager
             $parentIdentifier = $item->getParentId();
         }
 
-        $message = $this->getResult(
-            $failures, count($items), 'SelectedItemNotDeleted', 'SelectedItemsNotDeleted', 'SelectedItemDeleted',
-            'SelectedItemsDeleted'
-        );
+        $translator = $this->getTranslator();
 
-        return $this->redirectWithMessage(
+        if ($failures) {
+            if (count($items) == 1) {
+                $message = $translator->trans(
+                    'SelectedItemNotDeleted', [], StringUtilities::LIBRARIES
+                );
+            }
+            else {
+                $message = $translator->trans(
+                    'SelectedItemsNotDeleted', [], StringUtilities::LIBRARIES
+                );
+            }
+        }
+        elseif (count($items) == 1) {
+            $message = $translator->trans(
+                'SelectedItemDeleted', [], StringUtilities::LIBRARIES
+            );
+        }
+        else {
+            $message = $translator->trans(
+                'SelectedItemsDeleted', [], StringUtilities::LIBRARIES
+            );
+        }
+
+        return $this->getRedirectResponseWithMessage(
             $message, (bool) $failures, [
                 Application::PARAM_CONTEXT => Manager::CONTEXT,
                 Application::PARAM_ACTION => ActionEnum::BROWSE->value,

@@ -65,7 +65,7 @@ class AccountComponent extends ProfileComponent
 
             $message = !$success ? 'UserProfileNotUpdated' : 'UserProfileUpdated';
 
-            return $this->redirectWithMessage(
+            return $this->getRedirectResponseWithMessage(
                 $translator->trans($message, [], Manager::CONTEXT), !$success, [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => ActionEnum::ACCOUNT->value

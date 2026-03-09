@@ -20,8 +20,10 @@ use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageHeaders;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\ErrorPageRenderer;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageManager;
 use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageRenderer;
 use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
@@ -45,6 +47,11 @@ trait DependencyInjectionContainerTrait
     public function getApplicationFactory(): ApplicationFactory
     {
         return $this->getService(ApplicationFactory::class);
+    }
+
+    public function getApplicationHeaderRenderer(): ApplicationHeaderRenderer
+    {
+        return $this->getService(ApplicationHeaderRenderer::class);
     }
 
     public function getBreadcrumbTrail(): BreadcrumbTrail
@@ -149,6 +156,11 @@ trait DependencyInjectionContainerTrait
     public function getNotificationMessageRenderer(): NotificationMessageRenderer
     {
         return $this->getService(NotificationMessageRenderer::class);
+    }
+
+    public function getErrorPageRenderer(): ErrorPageRenderer
+    {
+        return $this->getService(ErrorPageRenderer::class);
     }
 
     public function getPageConfiguration(): PageHeaders

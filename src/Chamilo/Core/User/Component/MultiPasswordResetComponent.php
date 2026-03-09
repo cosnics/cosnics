@@ -43,12 +43,30 @@ class MultiPasswordResetComponent extends Manager
                 }
             }
 
-            $message = $this->getResult(
-                $failures, count($userIdentifiers), 'UserPasswordNotResetted', 'UserPasswordsNotResetted',
-                'UserPasswordResetted', 'UserPasswordsResetted'
-            );
+            if ($failures) {
+                if (count($userIdentifiers) == 1) {
+                    $message = $translator->trans(
+                        'UserPasswordNotResetted', [], Manager::CONTEXT
+                    );
+                }
+                else {
+                    $message = $translator->trans(
+                        'UserPasswordsNotResetted', [], Manager::CONTEXT
+                    );
+                }
+            }
+            elseif (count($userIdentifiers) == 1) {
+                $message = $translator->trans(
+                    'UserPasswordResetted', [], Manager::CONTEXT
+                );
+            }
+            else {
+                $message = $translator->trans(
+                    'UserPasswordResetted', [], Manager::CONTEXT
+                );
+            }
 
-            return $this->redirectWithMessage(
+            return $this->getRedirectResponseWithMessage(
                 $message, ($failures > 0), [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => ActionEnum::BROWSE->value
@@ -57,13 +75,13 @@ class MultiPasswordResetComponent extends Manager
         }
         else {
             return new Response(
-                $this->displayErrorPage(
-                    htmlentities(
-                        $translator->trans(
-                            'NoObjectSelected', ['%Object%' => $translator->trans('User', [], Manager::CONTEXT)],
-                            StringUtilities::LIBRARIES
-                        )
+                $this->getErrorPageRenderer()->render(
+                    $this, htmlentities(
+                    $translator->trans(
+                        'NoObjectSelected', ['%Object%' => $translator->trans('User', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
                     )
+                ), $currentUser
                 )
             );
         }

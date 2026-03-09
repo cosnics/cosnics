@@ -20,9 +20,6 @@ abstract class Application implements ApplicationInterface
 {
     use DependencyInjectionContainerTrait;
 
-    public const PARAM_ACTION = 'action';
-    public const PARAM_CONTEXT = 'context';
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      */
@@ -35,54 +32,6 @@ abstract class Application implements ApplicationInterface
         }
     }
 
-    public function displayErrorMessage(string $message): string
-    {
-        return $this->getNotificationMessageRenderer()->renderOne(NotificationMessage::error($message));
-    }
-
-    public function displayErrorPage(string $message, ?User $user = null): string
-    {
-        $html = [];
-
-        $html[] = $this->renderHeader($user);
-        $html[] = $this->displayErrorMessage($message);
-        $html[] = $this->renderFooter();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    public function displayMessage(string $message, string $type = NotificationMessage::TYPE_INFO): string
-    {
-        return $this->getNotificationMessageRenderer()->renderOne(new NotificationMessage($message, $type));
-    }
-
-    public function displayMessages(array $messages, array $types): string
-    {
-        $notificationMessages = [];
-
-        foreach ($types as $key => $type) {
-            $notificationMessages[] = new NotificationMessage($messages[$key], $type);
-        }
-
-        return $this->getNotificationMessageRenderer()->render($notificationMessages);
-    }
-
-    public function displayWarningMessage(string $message): string
-    {
-        return $this->getNotificationMessageRenderer()->renderOne(NotificationMessage::warning($message));
-    }
-
-    public function displayWarningPage(string $message, ?User $user = null): string
-    {
-        $html = [];
-
-        $html[] = $this->renderHeader($user);
-        $html[] = $this->displayWarningMessage($message);
-        $html[] = $this->renderFooter();
-
-        return implode(PHP_EOL, $html);
-    }
-
     public function getBreadcrumbGenerator(): BreadcrumbGenerator
     {
         return $this->getService(BreadcrumbGenerator::class);
@@ -93,33 +42,11 @@ abstract class Application implements ApplicationInterface
         return $this->getRequest()->query->get(self::PARAM_ACTION, $this->getDefaultApplicationAction());
     }
 
-    public function getResult(
-        int $failures, int $count, string $failMessageSingle, string $failMessageMultiple, string $succesMessageSingle,
-        string $succesMessageMultiple, ?string $context = null
-    ): string
-    {
-        if ($failures) {
-            if ($count == 1) {
-                $message = $failMessageSingle;
-            }
-            else {
-                $message = $failMessageMultiple;
-            }
-        }
-        elseif ($count == 1) {
-            $message = $succesMessageSingle;
-        }
-        else {
-            $message = $succesMessageMultiple;
-        }
-
-        return $this->getTranslator()->trans($message, [], $context ?: static::CONTEXT);
-    }
-
     /**
      * @param string[] $parameters
      */
-    public function redirectWithMessage(?string $message = null, bool $errorMessage = false, array $parameters = []
+    public function getRedirectResponseWithMessage(
+        ?string $message = null, bool $errorMessage = false, array $parameters = []
     ): RedirectResponse
     {
         if ($message) {
@@ -137,10 +64,6 @@ abstract class Application implements ApplicationInterface
 
     public function renderHeader(?User $user = null): string
     {
-        $this->getBreadcrumbGenerator()->addDefaultBreadcrumbs(
-            $this->getApplicationContext(), $this->getCurrentAction(), $this->getDefaultApplicationAction()
-        );
-
-        return $this->getDefaultHeaderRenderer()->render($user);
+        return $this->getApplicationHeaderRenderer()->render($this, $user);
     }
 }

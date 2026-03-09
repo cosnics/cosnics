@@ -32,7 +32,7 @@ class UpdateUserPictureComponent extends ProfileComponent
         $userPictureProvider = $this->getUserPictureProvider();
 
         if ($userPictureProvider instanceof UserPictureUpdateProviderInterface) {
-            $pictureForm = $this->getPictureForm();
+            $pictureForm = $this->getPictureForm($currentUser);
 
             if ($pictureForm->validate()) {
                 try {
@@ -61,7 +61,7 @@ class UpdateUserPictureComponent extends ProfileComponent
                     $successMessage = 'UserProfileUpdated';
                 }
 
-                return $this->redirectWithMessage(
+                return $this->getRedirectResponseWithMessage(
                     $this->getTranslator()->trans($success ? $successMessage : $errorMessage), !$success, [
                         Application::PARAM_CONTEXT => Manager::CONTEXT,
                         Application::PARAM_ACTION => ActionEnum::UPDATE_USER_PICTURE->value
@@ -74,8 +74,12 @@ class UpdateUserPictureComponent extends ProfileComponent
         }
         else {
             return new Response(
-                $this->displayErrorPage(
-                    $translator->trans('UserPictureProviderDoesNotSuportUpdates', [], Manager::CONTEXT)
+                $this->getErrorPageRenderer()->render(
+                    $this, htmlentities(
+                    $translator->trans(
+                        'UserPictureProviderDoesNotSuportUpdates', [], Manager::CONTEXT
+                    )
+                ), $currentUser
                 )
             );
         }

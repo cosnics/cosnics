@@ -64,13 +64,13 @@ class ViewComponent extends Manager
             $translator = $this->getTranslator();
 
             return new Response(
-                $this->displayErrorPage(
-                    htmlentities(
-                        $translator->trans(
-                            'NoObjectSelected', ['%Object%' => $translator->trans('User', [], Manager::CONTEXT)],
-                            StringUtilities::LIBRARIES
-                        )
+                $this->getErrorPageRenderer()->render(
+                    $this, htmlentities(
+                    $translator->trans(
+                        'NoObjectSelected', ['%Object%' => $translator->trans('User', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
                     )
+                ), $currentUser
                 )
             );
         }

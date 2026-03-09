@@ -47,11 +47,30 @@ class DeleteComponent extends Manager
                 }
             }
 
-            $message = $this->getResult(
-                $failures, count($userIdentifiers), 'UserNotDeleted', 'UsersNotDeleted', 'UserDeleted', 'UsersDeleted'
-            );
+            if ($failures) {
+                if (count($userIdentifiers) == 1) {
+                    $message = $translator->trans(
+                        'UserNotDeleted', [], Manager::CONTEXT
+                    );
+                }
+                else {
+                    $message = $translator->trans(
+                        'UsersNotDeleted', [], Manager::CONTEXT
+                    );
+                }
+            }
+            elseif (count($userIdentifiers) == 1) {
+                $message = $translator->trans(
+                    'UserDeleted', [], Manager::CONTEXT
+                );
+            }
+            else {
+                $message = $translator->trans(
+                    'UsersDeleted', [], Manager::CONTEXT
+                );
+            }
 
-            return $this->redirectWithMessage(
+            return $this->getRedirectResponseWithMessage(
                 $message, ($failures > 0), [
                     Application::PARAM_CONTEXT => Manager::CONTEXT,
                     Application::PARAM_ACTION => ActionEnum::BROWSE->value
@@ -60,13 +79,13 @@ class DeleteComponent extends Manager
         }
         else {
             return new Response(
-                $this->displayErrorPage(
-                    htmlentities(
-                        $translator->trans(
-                            'NoObjectSelected', ['%Object%' => $translator->trans('User', [], Manager::CONTEXT)],
-                            StringUtilities::LIBRARIES
-                        )
+                $this->getErrorPageRenderer()->render(
+                    $this, htmlentities(
+                    $translator->trans(
+                        'NoObjectSelected', ['%Object%' => $translator->trans('User', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
                     )
+                ), $currentUser
                 )
             );
         }
