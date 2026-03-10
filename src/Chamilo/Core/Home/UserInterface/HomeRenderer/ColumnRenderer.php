@@ -33,6 +33,7 @@ class ColumnRenderer
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      */
     public function render(Element $column, ?User $user = null): string
     {

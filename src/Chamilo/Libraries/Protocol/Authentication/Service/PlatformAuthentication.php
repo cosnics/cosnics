@@ -3,9 +3,9 @@ namespace Chamilo\Libraries\Protocol\Authentication\Service;
 
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
-use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeablePasswordInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeableUsernameInterface;
@@ -87,9 +87,9 @@ class PlatformAuthentication extends Authentication
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      */
     public function login(bool $checkIfAuthenticationSourceIsEnabled = true): ?User
     {
@@ -107,7 +107,7 @@ class PlatformAuthentication extends Authentication
             return $user;
         }
 
-        throw new AuthenticationException(
+        throw new NotAuthenticatedException(
             $this->getTranslator()->trans('UsernameOrPasswordIncorrect', [], StringUtilities::LIBRARIES)
         );
     }
@@ -115,7 +115,8 @@ class PlatformAuthentication extends Authentication
     public function logout(User $user): void
     {
         $redirect = new RedirectResponse(
-            $this->getUrlGenerator()->fromParameters([], [Application::PARAM_ACTION, Application::PARAM_CONTEXT])
+            $this->getUrlGenerator()->fromParameters([],
+                [ApplicationInterface::PARAM_ACTION, ApplicationInterface::PARAM_CONTEXT])
         );
 
         $redirect->send();

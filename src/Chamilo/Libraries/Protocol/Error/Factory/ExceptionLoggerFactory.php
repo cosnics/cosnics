@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Error\Factory;
 
+use Chamilo\Libraries\Protocol\Error\Architecture\Domain\UserExceptionRendererRegistry;
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerBuilderInterface;
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
 use Chamilo\Libraries\Protocol\Error\Service\ExceptionLoggerChain;
@@ -24,13 +25,17 @@ class ExceptionLoggerFactory
 
     protected UrlGenerator $urlGenerator;
 
+    protected UserExceptionRendererRegistry $userExceptionRendererRegistry;
+
     public function __construct(
-        SessionInterface $session, UrlGenerator $urlGenerator, array $errorHandlingConfiguration
+        SessionInterface $session, UrlGenerator $urlGenerator,
+        UserExceptionRendererRegistry $userExceptionRendererRegistry, array $errorHandlingConfiguration
     )
     {
         $this->errorHandlingConfiguration = $errorHandlingConfiguration;
         $this->session = $session;
         $this->urlGenerator = $urlGenerator;
+        $this->userExceptionRendererRegistry = $userExceptionRendererRegistry;
     }
 
     /**
@@ -41,7 +46,7 @@ class ExceptionLoggerFactory
         $errorHandlingConfiguration = $this->getErrorHandlingConfiguration();
 
         $fileExceptionLoggerBuilder = new FileExceptionLoggerBuilder(
-            $this->getSession(), $this->getUrlGenerator(),
+            $this->getSession(), $this->getUrlGenerator(), $this->getUserExceptionRendererRegistry(),
             $errorHandlingConfiguration['instances']['Chamilo\Libraries\Protocol\Error\Service\FileExceptionLoggerBuilder']
         );
 
@@ -97,7 +102,7 @@ class ExceptionLoggerFactory
                 }
 
                 $exceptionLoggerBuilder = new $exceptionLoggerBuilderClass(
-                    $this->getSession(), $this->getUrlGenerator(),
+                    $this->getSession(), $this->getUrlGenerator(), $this->getUserExceptionRendererRegistry(),
                     $errorHandlingConfiguration['instances'][$exceptionLoggerBuilderClass]
                 );
 
@@ -148,5 +153,10 @@ class ExceptionLoggerFactory
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
+    }
+
+    public function getUserExceptionRendererRegistry(): UserExceptionRendererRegistry
+    {
+        return $this->userExceptionRendererRegistry;
     }
 }

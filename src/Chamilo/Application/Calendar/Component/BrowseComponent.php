@@ -8,8 +8,8 @@ use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Core\User\Component\ConfigureComponent;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Calendar\Architecture\Enum\HtmlCalendarRendererTypeEnum;
 use Chamilo\Libraries\Calendar\Factory\HtmlCalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
@@ -161,7 +161,7 @@ class BrowseComponent extends Manager
         );
 
         $iCalUrl = $this->getUrlGenerator()->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => ActionEnum::ICAL->value]
+            [ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => ActionEnum::ICAL->value]
         );
 
         $buttonGroup->addButton(
@@ -172,8 +172,8 @@ class BrowseComponent extends Manager
 
         $settingsUrl = $this->getUrlGenerator()->fromParameters(
             [
-                Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::CONTEXT,
-                Application::PARAM_ACTION => \Chamilo\Core\User\Architecture\Enum\ActionEnum::CONFIGURE->value,
+                ApplicationInterface::PARAM_CONTEXT => \Chamilo\Core\User\Manager::CONTEXT,
+                ApplicationInterface::PARAM_ACTION => \Chamilo\Core\User\Architecture\Enum\ActionEnum::CONFIGURE->value,
                 ConfigureComponent::PARAM_SELECTED_CONTEXT => StringUtilities::LIBRARIES
             ]
         );
@@ -184,7 +184,10 @@ class BrowseComponent extends Manager
         );
 
         $availabilityUrl = $this->getUrlGenerator()->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => ActionEnum::AVAILABILITY->value]
+            [
+                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                self::PARAM_ACTION => ActionEnum::AVAILABILITY->value
+            ]
         );
 
         $splitDropdownButton->addButton(

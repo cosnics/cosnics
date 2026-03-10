@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Google\DependencyInjection;
 
+use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Libraries\DependencyInjection\Architecture\Domain\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Architecture\Trait\ExtensionTrait;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -21,7 +22,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
     public function getConfigurationFiles(): array
     {
         return [
-            'Chamilo\Application\Calendar\Extension\Google' => [
+            Manager::CONTEXT => [
                 'application.php',
                 'implementation.calendar.php',
                 'service.php',

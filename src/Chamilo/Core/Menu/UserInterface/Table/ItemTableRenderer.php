@@ -6,8 +6,8 @@ use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -62,18 +62,19 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     public function getItemDeletingUrl(Item $item): string
     {
-        return $this->getItemUrl($item, [Application::PARAM_ACTION => ActionEnum::DELETE->value]);
+        return $this->getItemUrl($item, [ApplicationInterface::PARAM_ACTION => ActionEnum::DELETE->value]);
     }
 
     public function getItemEditingUrl(Item $item): string
     {
-        return $this->getItemUrl($item, [Application::PARAM_ACTION => ActionEnum::UPDATE->value]);
+        return $this->getItemUrl($item, [ApplicationInterface::PARAM_ACTION => ActionEnum::UPDATE->value]);
     }
 
     public function getItemMovingUrl(Item $item, int $sortDirection): string
     {
         return $this->getItemUrl(
-            $item, [Application::PARAM_ACTION => ActionEnum::MOVE->value, Manager::PARAM_DIRECTION => $sortDirection]
+            $item,
+            [ApplicationInterface::PARAM_ACTION => ActionEnum::MOVE->value, Manager::PARAM_DIRECTION => $sortDirection]
         );
     }
 
@@ -89,7 +90,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     public function getItemUrl(Item $item, array $parameters = []): string
     {
-        $parameters[Application::PARAM_CONTEXT] = Manager::CONTEXT;
+        $parameters[ApplicationInterface::PARAM_CONTEXT] = Manager::CONTEXT;
         $parameters[Manager::PARAM_ITEM] = $item->getId();
 
         return $this->getUrlGenerator()->fromParameters($parameters);
@@ -103,7 +104,10 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
     public function getTableActions(): TableActions
     {
         $deleteUrl = $this->getUrlGenerator()->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => ActionEnum::DELETE->value]
+            [
+                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                ApplicationInterface::PARAM_ACTION => ActionEnum::DELETE->value
+            ]
         );
 
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
@@ -135,6 +139,8 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $result
+     *
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, mixed $result): string
     {
@@ -152,7 +158,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $result
      *
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      */

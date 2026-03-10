@@ -5,7 +5,7 @@ use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\UserInterface\Table\ItemTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
@@ -32,7 +32,7 @@ class BrowseComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -76,7 +76,7 @@ class BrowseComponent extends Manager
                 new SubButton(
                     $itemRenderer->getRendererTypeName(), $itemRenderer->getRendererTypeGlyph(),
                     $this->getUrlGenerator()->fromParameters([
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
+                        ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                         self::PARAM_ACTION => ActionEnum::CREATE->value,
                         self::PARAM_TYPE => $itemRenderer::class
                     ])
@@ -120,8 +120,8 @@ class BrowseComponent extends Manager
     {
         $dataUrl = $this->getUrlGenerator()->fromParameters(
             [
-                Application::PARAM_CONTEXT => 'Chamilo\\\Core\\\Menu',
-                Application::PARAM_ACTION => ActionEnum::ITEM_TREE_DATA->value,
+                ApplicationInterface::PARAM_CONTEXT => 'Chamilo\\\Core\\\Menu',
+                ApplicationInterface::PARAM_ACTION => ActionEnum::ITEM_TREE_DATA->value,
             ]
         );
 
@@ -141,7 +141,7 @@ class BrowseComponent extends Manager
      * @throws \QuickformException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     protected function renderTable(): string
     {

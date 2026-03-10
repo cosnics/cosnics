@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Security\Factory;
 
-use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
 
 /**
@@ -28,14 +28,16 @@ class HashingAlgorithmFactory
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function getActiveHashingAlgorithm(): HashingAlgorithm
     {
         $className = $this->getConfiguredHashingAlgorithm();
 
         if (!isset($this->hashingAlgorithms[$className])) {
-            throw new ClassNotExistException($className);
+            throw new NoSuchClassException(
+                $className, HashingAlgorithm::class
+            );
         }
 
         return $this->hashingAlgorithms[$className];

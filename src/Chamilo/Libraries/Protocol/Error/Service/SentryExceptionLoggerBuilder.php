@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Error\Service;
 
+use Chamilo\Libraries\Protocol\Error\Architecture\Domain\UserExceptionRendererRegistry;
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerBuilderInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Exception;
@@ -20,13 +21,17 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 
     protected UrlGenerator $urlGenerator;
 
+    protected UserExceptionRendererRegistry $userExceptionRendererRegistry;
+
     public function __construct(
-        SessionInterface $session, UrlGenerator $urlGenerator, array $errorHandlingConfiguration = []
+        SessionInterface $session, UrlGenerator $urlGenerator,
+        UserExceptionRendererRegistry $userExceptionRendererRegistry, array $errorHandlingConfiguration = []
     )
     {
         $this->errorHandlingConfiguration = $errorHandlingConfiguration;
         $this->session = $session;
         $this->urlGenerator = $urlGenerator;
+        $this->userExceptionRendererRegistry = $userExceptionRendererRegistry;
     }
 
     /**

@@ -212,22 +212,6 @@ class HomeService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function tabCanBeDeleted(Element $tab): bool
-    {
-        $tabBlocks = $this->findBlocksForTabIdentifier($tab->getId());
-
-        foreach ($tabBlocks as $tabBlock) {
-            if ($tabBlock->getContext() == 'Chamilo\Core\Admin' || $tabBlock->getContext() == 'Chamilo\Core\User') {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException

@@ -21,7 +21,7 @@ class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function translate(
         QueryBuilder $querybuilder, DateFormatConditionVariable $dateFormatConditionVariable,

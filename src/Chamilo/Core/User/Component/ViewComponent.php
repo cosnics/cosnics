@@ -33,7 +33,7 @@ class ViewComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -47,7 +47,7 @@ class ViewComponent extends Manager
         $userToRender = $this->getUserService()->findUserByIdentifier($userIdentifier);
 
         if ($userToRender instanceof User) {
-            $this->getBreadcrumbTrail()->add(new Breadcrumb('', $userToRender->getFullName()));
+            $this->getBreadcrumbTrail()->add(new Breadcrumb($userToRender->getFullName()));
 
             $html = [];
 

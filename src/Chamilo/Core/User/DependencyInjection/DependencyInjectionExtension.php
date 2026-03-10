@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\DependencyInjection;
 
 use Chamilo\Core\User\DependencyInjection\CompilerPass\UserDetailsRendererCompilerPass;
 use Chamilo\Core\User\DependencyInjection\CompilerPass\UserPictureProviderCompilerPass;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\DependencyInjection\Architecture\Domain\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Architecture\Interface\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Architecture\Trait\ExtensionTrait;
@@ -26,7 +27,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     public function getConfigurationFiles(): array
     {
         return [
-            'Chamilo\Core\User' => [
+            Manager::CONTEXT => [
                 'application.php',
                 'architecture.php',
                 'implementation.admin.php',

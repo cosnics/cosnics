@@ -5,7 +5,7 @@ use Chamilo\Core\Admin\Architecture\Domain\AbstractActionProvider;
 use Chamilo\Core\Admin\Architecture\Interface\ActionProviderInterface;
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\Action;
@@ -22,8 +22,8 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
         $links = [];
 
         $parameters = [
-            Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => ActionEnum::BROWSE->value
+            ApplicationInterface::PARAM_CONTEXT => $context,
+            ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value
         ];
 
         $links[] = new Action(
@@ -32,8 +32,8 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
         );
 
         $parameters = [
-            Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => ActionEnum::CREATE->value
+            ApplicationInterface::PARAM_CONTEXT => $context,
+            ApplicationInterface::PARAM_ACTION => ActionEnum::CREATE->value
         ];
 
         $links[] = new Action(
@@ -43,8 +43,8 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
         );
 
         $parameters = [
-            Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => ActionEnum::BROWSE->value
+            ApplicationInterface::PARAM_CONTEXT => $context,
+            ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value
         ];
 
         return new Actions($context, $links, $urlGenerator->fromParameters($parameters));

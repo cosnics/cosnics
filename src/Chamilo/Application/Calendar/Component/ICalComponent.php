@@ -5,12 +5,13 @@ use Chamilo\Application\Calendar\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Calendar\Service\View\ICalCalendarRenderer;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\Authentication\Service\SecurityTokenAuthentication;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -58,7 +59,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
             else {
                 $icalDownloadUrl = $this->getUrlGenerator()->fromParameters(
                     [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
+                        ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                         self::PARAM_ACTION => ActionEnum::ICAL->value,
                         self::PARAM_DOWNLOAD => 1
                     ]
@@ -66,7 +67,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
 
                 $icalExternalUrl = $this->getUrlGenerator()->fromParameters(
                     [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
+                        ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                         self::PARAM_ACTION => ActionEnum::ICAL->value,
                         User::PROPERTY_SECURITY_TOKEN => $currentUser->getSecurityToken()
                     ]
@@ -81,21 +82,22 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
 
                 $notificationMessages = [];
 
-                $notificationMessages[] = new NotificationMessage(
+                $notificationMessages[] = new Alert(
                     $translator->trans('ICalExternalMessage', ['%Url%' => $icalExternalUrl], Manager::CONTEXT)
                 );
 
-                $notificationMessages[] = new NotificationMessage(
+                $notificationMessages[] = new Alert(
                     $translator->trans('ICalDownloadMessage', ['%Url%' => $icalDownloadUrl], Manager::CONTEXT)
                 );
 
-                $notificationMessages[] = new NotificationMessage(
+                $notificationMessages[] = new Alert(
                     $translator->trans('ICalWarningMessage', ['%IncludedCalendars%' => $includedCalendars],
-                        Manager::CONTEXT), NotificationMessage::TYPE_WARNING
+                        Manager::CONTEXT), AlertEnum::WARNING
                 );
 
-                $html[] = $this->getNotificationMessageRenderer()->render($notificationMessages, false);
-
+                foreach ($notificationMessages as $notificationMessage) {
+                    $html[] = $this->getAlertRenderer()->render($notificationMessage);
+                }
                 $html[] = $this->renderFooter();
 
                 return new Response(implode(PHP_EOL, $html));

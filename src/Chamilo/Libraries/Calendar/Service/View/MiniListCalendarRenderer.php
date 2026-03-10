@@ -5,8 +5,8 @@ use Chamilo\Libraries\Calendar\Architecture\Trait\AgendaCalendarTrait;
 use Chamilo\Libraries\Calendar\Service\Event\EventListRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertRenderer;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageRenderer;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -17,19 +17,18 @@ class MiniListCalendarRenderer extends MiniCalendarRenderer
 {
     use AgendaCalendarTrait;
 
-    protected EventListRenderer $eventListRenderer;
+    protected AlertRenderer $alertRenderer;
 
-    protected NotificationMessageRenderer $notificationMessageRenderer;
+    protected EventListRenderer $eventListRenderer;
 
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        EventListRenderer $eventListRenderer, NotificationMessageRenderer $notificationMessageRenderer,
-        ButtonToolBarRenderer $buttonToolBarRenderer
+        EventListRenderer $eventListRenderer, AlertRenderer $alertRenderer, ButtonToolBarRenderer $buttonToolBarRenderer
     )
     {
         parent::__construct($legendRenderer, $urlGenerator, $translator, $buttonToolBarRenderer);
         $this->eventListRenderer = $eventListRenderer;
-        $this->notificationMessageRenderer = $notificationMessageRenderer;
+        $this->alertRenderer = $alertRenderer;
     }
 
     /**
@@ -57,6 +56,11 @@ class MiniListCalendarRenderer extends MiniCalendarRenderer
         return implode(PHP_EOL, $html);
     }
 
+    public function getAlertRenderer(): AlertRenderer
+    {
+        return $this->alertRenderer;
+    }
+
     protected function getEndTime(int $displayTime): int
     {
         return strtotime('+3 Days', $displayTime);
@@ -65,10 +69,5 @@ class MiniListCalendarRenderer extends MiniCalendarRenderer
     public function getEventListRenderer(): EventListRenderer
     {
         return $this->eventListRenderer;
-    }
-
-    public function getNotificationMessageRenderer(): NotificationMessageRenderer
-    {
-        return $this->notificationMessageRenderer;
     }
 }

@@ -4,11 +4,12 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,15 +69,15 @@ class MultiPasswordResetComponent extends Manager
                 );
             }
 
-            $this->getNotificationMessageManager()->addMessage(
-                new NotificationMessage(
-                    $message, $failures ? NotificationMessage::TYPE_DANGER : NotificationMessage::TYPE_SUCCESS
+            $this->getNotificationMessageManager()->addAlert(
+                new Alert(
+                    $message, $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS
                 )
             );
 
             return new RedirectResponse($this->getUrlGenerator()->fromParameters([
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => ActionEnum::BROWSE->value
+                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value
             ]));
         }
         else {

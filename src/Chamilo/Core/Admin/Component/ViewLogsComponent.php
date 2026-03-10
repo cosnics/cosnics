@@ -108,27 +108,6 @@ class ViewLogsComponent extends Manager
         return $form;
     }
 
-    public function getSelectTemplate(): string
-    {
-        $html = [];
-        $glyph = new FontAwesomeGlyph('asterisk', ['text-danger', 'fa-2xs'], null, 'fas');
-
-        $html[] = '<div class="mb-3 clearfix">';
-        $html[] = '    {element}';
-        $html[] = '    <label class="visually-hidden">';
-        $html[] = '        {label}';
-        $html[] = '        <!-- BEGIN required -->';
-        $html[] = '        <span class="text-danger ms-1">' . $glyph->render() . '</span>';
-        $html[] = '        <!-- END required -->';
-        $html[] = '    </label>';
-        $html[] = '    <!-- BEGIN error -->';
-        $html[] = '    <div class="invalid-feedback">{error}</div>';
-        $html[] = '    <!-- END error -->';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
     /**
      * @throws \TableException
      */
@@ -176,5 +155,26 @@ class ViewLogsComponent extends Manager
         }
 
         return $table->toHtml();
+    }
+
+    public function getSelectTemplate(): string
+    {
+        $html = [];
+        $glyph = new FontAwesomeGlyph('asterisk', ['text-danger', 'fa-2xs'], null, 'fas');
+
+        $html[] = '<div class="mb-3 clearfix">';
+        $html[] = '    {element}';
+        $html[] = '    <label class="visually-hidden">';
+        $html[] = '        {label}';
+        $html[] = '        <!-- BEGIN required -->';
+        $html[] = '        <span class="text-danger ms-1">' . $glyph->render() . '</span>';
+        $html[] = '        <!-- END required -->';
+        $html[] = '    </label>';
+        $html[] = '    <!-- BEGIN error -->';
+        $html[] = '    <div class="invalid-feedback">{error}</div>';
+        $html[] = '    <!-- END error -->';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 }

@@ -8,8 +8,8 @@ use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Calendar\Architecture\Enum\HtmlCalendarRendererTypeEnum;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Calendar\Service\View\MiniMonthCalendarRenderer;
@@ -55,7 +55,7 @@ class MonthBlockRenderer extends BlockRenderer
     public function displayContent(Element $block, ?User $user = null): string
     {
         $displayParameters = [
-            Application::PARAM_CONTEXT => Manager::CONTEXT,
+            ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
             HtmlCalendarRenderer::PARAM_TYPE => HtmlCalendarRendererTypeEnum::DAY->value
         ];
 

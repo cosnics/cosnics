@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\Service;
 
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException;
 use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDisplayOrderSupport;
 use Chamilo\Libraries\Storage\Repository\DisplayOrderRepository;
@@ -99,8 +98,7 @@ class DisplayOrderHandler
 
         $displayOrderContext = [];
 
-        foreach ($displayOrderContextProperties as $displayOrderContextProperty => $displayOrderContextPropertyValue)
-        {
+        foreach ($displayOrderContextProperties as $displayOrderContextProperty => $displayOrderContextPropertyValue) {
             $displayOrderContext[] = $displayOrderContextProperty . ' = ' . $displayOrderContextPropertyValue;
         }
 
@@ -138,15 +136,12 @@ class DisplayOrderHandler
      */
     protected function handleAddedDataClassInContext(DataClassDisplayOrderSupport $dataClass): bool
     {
-        if ($this->hasDisplayOrder($dataClass))
-        {
-            if (!$this->addDisplayOrderToContext($dataClass))
-            {
+        if ($this->hasDisplayOrder($dataClass)) {
+            if (!$this->addDisplayOrderToContext($dataClass)) {
                 return false;
             }
         }
-        else
-        {
+        else {
             $this->setDisplayOrderToNextValueInContext($dataClass);
         }
 
@@ -186,19 +181,16 @@ class DisplayOrderHandler
             $this->hasDisplayOrderContextChanged($dataClass, $displayOrderPropertiesRecord);
         $hasDisplayOrderChanged = $this->hasDisplayOrderChanged($dataClass, $displayOrderPropertiesRecord);
 
-        if ($hasDisplayOrderContextChanged || $hasDisplayOrderChanged)
-        {
+        if ($hasDisplayOrderContextChanged || $hasDisplayOrderChanged) {
             $this->validateDisplayOrder($dataClass);
 
             if (!$this->deletePreviousDisplayOrderFromPreviousContext(
                 $dataClass, $displayOrderPropertiesRecord
-            ))
-            {
+            )) {
                 return false;
             }
 
-            if (!$this->handleAddedDataClassInContext($dataClass))
-            {
+            if (!$this->handleAddedDataClassInContext($dataClass)) {
                 return false;
             }
         }
@@ -229,10 +221,8 @@ class DisplayOrderHandler
         DataClassDisplayOrderSupport $dataClass, array $displayOrderPropertiesRecord
     ): bool
     {
-        foreach ($dataClass->getDisplayOrderContextPropertyNames() as $propertyName)
-        {
-            if ($dataClass->getDefaultProperty($propertyName) != $displayOrderPropertiesRecord[$propertyName])
-            {
+        foreach ($dataClass->getDisplayOrderContextPropertyNames() as $propertyName) {
+            if ($dataClass->getDefaultProperty($propertyName) != $displayOrderPropertiesRecord[$propertyName]) {
                 return true;
             }
         }
@@ -267,18 +257,10 @@ class DisplayOrderHandler
         $displayOrderTooLow = $displayOrder < 1;
         $displayOrderTooHigh = $displayOrder > ($numberOfOtherDisplayOrdersInContext + 1);
 
-        if ($hasDisplayOrder && ($displayOrderTooLow || $displayOrderTooHigh))
-        {
+        if ($hasDisplayOrder && ($displayOrderTooLow || $displayOrderTooHigh)) {
             throw new DisplayOrderException(
-                $this->getTranslator()->trans(
-                    'InvalidDisplayOrderExceptionMessage', [
-                    '%Type%' => get_class($dataClass),
-                    '%Id%' => $dataClass->getId(),
-                    '%Context%' => $this->getDisplayOrderContextAsString($dataClass),
-                    '%DisplayOrder%' => $displayOrder,
-                    '%Count%' => $numberOfOtherDisplayOrdersInContext
-                ], StringUtilities::LIBRARIES
-                )
+                get_class($dataClass), $dataClass->getId(), $this->getDisplayOrderContextAsString($dataClass),
+                $displayOrder, $numberOfOtherDisplayOrdersInContext
             );
         }
 

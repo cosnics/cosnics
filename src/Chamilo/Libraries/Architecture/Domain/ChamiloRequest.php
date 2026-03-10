@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Domain;
 
-use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

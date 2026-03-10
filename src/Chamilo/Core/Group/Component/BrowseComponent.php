@@ -10,8 +10,8 @@ use Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider;
 use Chamilo\Core\Group\UserInterface\Table\GroupTableRenderer;
 use Chamilo\Core\Group\UserInterface\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
@@ -56,7 +56,7 @@ class BrowseComponent extends Manager
     private ?Group $rootGroup;
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
@@ -335,7 +335,7 @@ class BrowseComponent extends Manager
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     protected function renderGroupTable(): string
     {
@@ -389,8 +389,8 @@ class BrowseComponent extends Manager
     {
         $dataUrl = $this->getUrlGenerator()->fromParameters(
             [
-                Application::PARAM_CONTEXT => 'Chamilo\\\Core\\\Group',
-                Application::PARAM_ACTION => ActionEnum::GROUP_TREE_DATA->value,
+                ApplicationInterface::PARAM_CONTEXT => 'Chamilo\\\Core\\\Group',
+                ApplicationInterface::PARAM_ACTION => ActionEnum::GROUP_TREE_DATA->value,
             ]
 
         );
@@ -409,7 +409,7 @@ class BrowseComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     protected function renderSubscribedUsertable(): string
     {
@@ -445,7 +445,7 @@ class BrowseComponent extends Manager
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function renderTabs(): string
     {

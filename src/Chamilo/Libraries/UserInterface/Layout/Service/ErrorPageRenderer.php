@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\UserInterface\Layout\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageRenderer;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertRenderer;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Layout\Service
@@ -12,20 +12,20 @@ use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMess
  */
 class ErrorPageRenderer
 {
+    protected AlertRenderer $alertRenderer;
+
     protected ApplicationHeaderRenderer $applicationHeaderRenderer;
 
     protected DefaultFooterRenderer $defaultFooterRenderer;
 
-    protected NotificationMessageRenderer $notificationMessageRenderer;
-
     public function __construct(
         ApplicationHeaderRenderer $applicationHeaderRenderer, DefaultFooterRenderer $defaultFooterRenderer,
-        NotificationMessageRenderer $notificationMessageRenderer
+        AlertRenderer $alertRenderer
     )
     {
         $this->applicationHeaderRenderer = $applicationHeaderRenderer;
         $this->defaultFooterRenderer = $defaultFooterRenderer;
-        $this->notificationMessageRenderer = $notificationMessageRenderer;
+        $this->alertRenderer = $alertRenderer;
     }
 
     public function render(ApplicationInterface $application, string $message, ?User $user = null): string
@@ -33,10 +33,15 @@ class ErrorPageRenderer
         $html = [];
 
         $html[] = $this->getApplicationHeaderRenderer()->render($application, $user);
-        $html[] = $this->getNotificationMessageRenderer()->renderOne(NotificationMessage::error($message));
+        $html[] = $this->getAlertRenderer()->render(Alert::error($message));
         $html[] = $this->getDefaultFooterRenderer()->render();
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getAlertRenderer(): AlertRenderer
+    {
+        return $this->alertRenderer;
     }
 
     public function getApplicationHeaderRenderer(): ApplicationHeaderRenderer
@@ -47,10 +52,5 @@ class ErrorPageRenderer
     public function getDefaultFooterRenderer(): DefaultFooterRenderer
     {
         return $this->defaultFooterRenderer;
-    }
-
-    public function getNotificationMessageRenderer(): NotificationMessageRenderer
-    {
-        return $this->notificationMessageRenderer;
     }
 }

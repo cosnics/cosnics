@@ -31,6 +31,7 @@ class ItemForm extends FormValidator
 
     /**
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      */
     public function __construct(string $itemType, string $action)
     {
@@ -53,7 +54,7 @@ class ItemForm extends FormValidator
     {
         $translator = $this->getTranslator();
 
-        $this->addElement(HTML_QuickForm_category::class, $translator->trans('General', [], 'Chamilo\Core\Menu'));
+        $this->addElement(HTML_QuickForm_category::class, $translator->trans('General', [], Manager::CONTEXT));
 
         if ($this->getItemType() === CategoryItemRenderer::class) {
             $options[0] = $this->getTranslator()->trans('Home', [], Manager::CONTEXT);
@@ -63,7 +64,7 @@ class ItemForm extends FormValidator
         }
 
         $this->addElement(
-            HTML_QuickForm_select::class, Item::PROPERTY_PARENT, $translator->trans('Parent', [], 'Chamilo\Core\Menu'),
+            HTML_QuickForm_select::class, Item::PROPERTY_PARENT, $translator->trans('Parent', [], Manager::CONTEXT),
             $options, ['class' => 'form-control']
         );
 
@@ -73,12 +74,11 @@ class ItemForm extends FormValidator
         );
 
         $this->addElement(
-            HTML_QuickForm_checkbox::class, Item::PROPERTY_HIDDEN,
-            $translator->trans('Hidden', [], 'Chamilo\Core\Menu')
+            HTML_QuickForm_checkbox::class, Item::PROPERTY_HIDDEN, $translator->trans('Hidden', [], Manager::CONTEXT)
         );
         $this->addElement(
             HTML_QuickForm_text::class, Item::PROPERTY_ICON_CLASS,
-            $translator->trans('IconClass', [], 'Chamilo\Core\Menu'), ['class' => 'form-control']
+            $translator->trans('IconClass', [], Manager::CONTEXT), ['class' => 'form-control']
         );
     }
 
@@ -89,7 +89,7 @@ class ItemForm extends FormValidator
     {
         $translator = $this->getTranslator();
 
-        $this->addElement(HTML_QuickForm_category::class, $translator->trans('Titles', [], 'Chamilo\Core\Menu'));
+        $this->addElement(HTML_QuickForm_category::class, $translator->trans('Titles', [], Manager::CONTEXT));
 
         $activeLanguages = $this->getLanguageConsulter()->getLanguages();
         $platformLanguage =
@@ -111,6 +111,9 @@ class ItemForm extends FormValidator
         }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     */
     protected function buildSettingsForm(): void
     {
         $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($this->getItemType());
@@ -123,6 +126,7 @@ class ItemForm extends FormValidator
 
     /**
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      */
     protected function buildTitlesForm(): void
     {
@@ -153,19 +157,20 @@ class ItemForm extends FormValidator
         return $this->getService(LanguageConsulter::class);
     }
 
-    public function getMenuOptionsTreeRenderer(): OptionsTreeRenderer
+    /**
+     * @param class-string<\Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer> $className
+     */
+    public function getMenuOptionsTreeRenderer(
+        string $className = 'Chamilo\Core\Menu\UserInterface\Menu\ItemOptionsTreeRenderer'
+    ): OptionsTreeRenderer
     {
-        /**
-         * @var class-string<\Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer> $className
-         */
-        $className = 'Chamilo\Core\Menu\UserInterface\Menu\ItemOptionsTreeRenderer';
-
         return $this->getService($className);
     }
 
     /**
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      */
     protected function getParentItems(): array
     {
@@ -189,6 +194,7 @@ class ItemForm extends FormValidator
      * @param string[] $defaults
      *
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      */
     public function setItemDefaults(Item $item, array $defaults = []): void
     {

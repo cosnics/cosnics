@@ -1,23 +1,58 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Exception;
 
-use Chamilo\Libraries\Architecture\Exception\UserException;
+use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionInterface;
+use Chamilo\Libraries\Storage\Service\StorageLastInsertedIdentifierExceptionRenderer;
+use Exception;
 
 /**
  * @package Chamilo\Libraries\Storage\Architecture\Exception
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class StorageLastInsertedIdentifierException extends UserException
+class StorageLastInsertedIdentifierException extends Exception implements UserExceptionInterface
 {
     protected string $dataClassStorageUnitName;
 
-    public function __construct(string $dataClassStorageUnitName, string $exceptionMessage = '')
+    protected ?string $exceptionMessage;
+
+    public function __construct(
+        string $dataClassStorageUnitName, ?string $exceptionMessage, ?string $message = null, int $code = 0,
+        ?Exception $previousException = null
+    )
+    {
+        parent::__construct($message, $code, $previousException);
+
+        $this->dataClassStorageUnitName = $dataClassStorageUnitName;
+        $this->exceptionMessage = $exceptionMessage;
+    }
+
+    public function getDataClassStorageUnitName(): string
+    {
+        return $this->dataClassStorageUnitName;
+    }
+
+    public function setDataClassStorageUnitName(string $dataClassStorageUnitName
+    ): StorageLastInsertedIdentifierException
     {
         $this->dataClassStorageUnitName = $dataClassStorageUnitName;
 
-        parent::__construct(
-            'LastInsertedIdentifier for ' . $dataClassStorageUnitName . ' failed with the following message:' .
-            $exceptionMessage
-        );
+        return $this;
+    }
+
+    public function getExceptionMessage(): ?string
+    {
+        return $this->exceptionMessage;
+    }
+
+    public function setExceptionMessage(?string $exceptionMessage): StorageLastInsertedIdentifierException
+    {
+        $this->exceptionMessage = $exceptionMessage;
+
+        return $this;
+    }
+
+    public function getUserExceptionRendererClassName(): string
+    {
+        return StorageLastInsertedIdentifierExceptionRenderer::class;
     }
 }

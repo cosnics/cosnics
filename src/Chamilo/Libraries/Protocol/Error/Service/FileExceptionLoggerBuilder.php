@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Error\Service;
 
+use Chamilo\Libraries\Protocol\Error\Architecture\Domain\UserExceptionRendererRegistry;
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerBuilderInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -17,13 +18,17 @@ class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 
     protected UrlGenerator $urlGenerator;
 
+    protected UserExceptionRendererRegistry $userExceptionRendererRegistry;
+
     public function __construct(
-        SessionInterface $session, UrlGenerator $urlGenerator, array $errorHandlingConfiguration = []
+        SessionInterface $session, UrlGenerator $urlGenerator,
+        UserExceptionRendererRegistry $userExceptionRendererRegistry, array $errorHandlingConfiguration = []
     )
     {
         $this->session = $session;
         $this->urlGenerator = $urlGenerator;
         $this->errorHandlingConfiguration = $errorHandlingConfiguration;
+        $this->userExceptionRendererRegistry = $userExceptionRendererRegistry;
     }
 
     /**
@@ -33,7 +38,9 @@ class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
     {
         $errorHandlingConfiguration = $this->getErrorHandlingConfiguration();
 
-        return new FileExceptionLogger($errorHandlingConfiguration['logsPath']);
+        return new FileExceptionLogger(
+            $this->getUserExceptionRendererRegistry(), $errorHandlingConfiguration['logsPath']
+        );
     }
 
     public function getErrorHandlingConfiguration(): array
@@ -49,5 +56,10 @@ class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
+    }
+
+    public function getUserExceptionRendererRegistry(): UserExceptionRendererRegistry
+    {
+        return $this->userExceptionRendererRegistry;
     }
 }

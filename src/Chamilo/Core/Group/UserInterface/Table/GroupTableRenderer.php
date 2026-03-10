@@ -7,8 +7,8 @@ use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -102,8 +102,8 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
         $removeUrl = $urlGenerator->fromParameters([
-            Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => ActionEnum::DELETE->value
+            ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+            ApplicationInterface::PARAM_ACTION => ActionEnum::DELETE->value
         ]);
 
         $actions->addAction(
@@ -113,13 +113,13 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         );
 
         $truncateUrl = $urlGenerator->fromParameters([
-            Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => ActionEnum::TRUNCATE->value
+            ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+            ApplicationInterface::PARAM_ACTION => ActionEnum::TRUNCATE->value
         ]);
 
         $actions->addAction(
             new TableAction(
-                $truncateUrl, $translator->trans('TruncateSelected', [], 'Chamilo\Core\Group')
+                $truncateUrl, $translator->trans('TruncateSelected', [], Manager::CONTEXT)
             )
         );
 
@@ -141,12 +141,13 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         );
         $this->addColumn(
             new StaticTableColumn(
-                self::COLUMN_USERS, $translator->trans(self::COLUMN_USERS, [], 'Chamilo\Core\User\Manager')
+                self::COLUMN_USERS, $translator->trans(self::COLUMN_USERS, [], \Chamilo\Core\User\Manager::CONTEXT)
             )
         );
         $this->addColumn(
             new StaticTableColumn(
-                self::COLUMN_SUBGROUPS, $translator->trans(self::COLUMN_SUBGROUPS, [], 'Chamilo\Core\User\Manager')
+                self::COLUMN_SUBGROUPS,
+                $translator->trans(self::COLUMN_SUBGROUPS, [], \Chamilo\Core\User\Manager::CONTEXT)
             )
         );
     }
@@ -174,8 +175,8 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
                 $viewUrl = $urlGenerator->fromParameters(
                     [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => ActionEnum::BROWSE->value,
+                        ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                        ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
                         Manager::PARAM_GROUP_ID => $result->getId()
                     ]
                 );
@@ -189,9 +190,9 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
                 }
 
                 return $stringUtilities->truncate($description);
-            case $translator->trans(self::COLUMN_USERS, [], 'Chamilo\Core\User\Manager') :
+            case $translator->trans(self::COLUMN_USERS, [], \Chamilo\Core\User\Manager::CONTEXT) :
                 return (string) $groupsTreeTraverser->countUsersForGroup($result);
-            case $translator->trans(self::COLUMN_SUBGROUPS, [], 'Chamilo\Core\User\Manager') :
+            case $translator->trans(self::COLUMN_SUBGROUPS, [], \Chamilo\Core\User\Manager::CONTEXT) :
                 return (string) $groupsTreeTraverser->countSubGroupsForGroup($result, true);
         }
 
@@ -225,7 +226,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
         $buttonToolBar->addButton(
             new Button(
-                label: $translator->trans('AddUsers', [], 'Chamilo\Core\Group'), inlineGlyph: new FontAwesomeGlyph(
+                label: $translator->trans('AddUsers', [], Manager::CONTEXT), inlineGlyph: new FontAwesomeGlyph(
                 'plus-circle'
             ), action: $subscribeUrl, display: DisplayTypeEnum::ICON, classes: ['btn-link']
             )
@@ -238,7 +239,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
             $buttonToolBar->addButton(
                 new Button(
-                    label: $translator->trans('Truncate', [], 'Chamilo\Core\Group'), inlineGlyph: new FontAwesomeGlyph(
+                    label: $translator->trans('Truncate', [], Manager::CONTEXT), inlineGlyph: new FontAwesomeGlyph(
                     'trash-alt'
                 ), action: $truncateUrl, display: DisplayTypeEnum::ICON, confirmationMessage: $this->getTranslator()
                     ->trans(
@@ -250,9 +251,9 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
         else {
             $buttonToolBar->addButton(
                 new Button(
-                    label: $translator->trans('TruncateNA', [], 'Chamilo\Core\Group'),
-                    inlineGlyph: new FontAwesomeGlyph('trash-alt', ['text-muted']), display: DisplayTypeEnum::ICON,
-                    classes: ['btn-link']
+                    label: $translator->trans('TruncateNA', [], Manager::CONTEXT), inlineGlyph: new FontAwesomeGlyph(
+                    'trash-alt', ['text-muted']
+                ), display: DisplayTypeEnum::ICON, classes: ['btn-link']
                 )
             );
         }

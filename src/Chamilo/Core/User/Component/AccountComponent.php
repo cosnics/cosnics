@@ -7,8 +7,9 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Form\AccountForm;
 use Chamilo\Core\User\UserInterface\Form\UserForm;
-use Chamilo\Libraries\Architecture\Domain\Application;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,7 @@ class AccountComponent extends ProfileComponent
     private AccountForm $accountForm;
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
      */
@@ -54,10 +55,9 @@ class AccountComponent extends ProfileComponent
                     if (!$userPictureProvider->updateUserPictureFromParameters(
                         $currentUser, $currentUser, $pictureInformation
                     )) {
-                        $this->getNotificationMessageManager()->addMessage(
-                            new NotificationMessage(
-                                $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
-                                NotificationMessage::TYPE_WARNING
+                        $this->getNotificationMessageManager()->addAlert(
+                            new Alert(
+                                $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT), AlertEnum::WARNING
                             )
                         );
                     }
@@ -66,16 +66,16 @@ class AccountComponent extends ProfileComponent
 
             $message = !$success ? 'UserProfileNotUpdated' : 'UserProfileUpdated';
 
-            $this->getNotificationMessageManager()->addMessage(
-                new NotificationMessage(
+            $this->getNotificationMessageManager()->addAlert(
+                new Alert(
                     $translator->trans($message, [], Manager::CONTEXT),
-                    $success ? NotificationMessage::TYPE_SUCCESS : NotificationMessage::TYPE_DANGER
+                    $success ? AlertEnum::SUCCESS : AlertEnum::DANGER
                 )
             );
 
             return new RedirectResponse($this->getUrlGenerator()->fromParameters([
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => ActionEnum::ACCOUNT->value
+                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                ApplicationInterface::PARAM_ACTION => ActionEnum::ACCOUNT->value
             ]));
         }
         else {

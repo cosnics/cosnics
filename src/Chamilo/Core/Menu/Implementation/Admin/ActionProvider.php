@@ -5,7 +5,7 @@ use Chamilo\Core\Admin\Architecture\Domain\AbstractActionProvider;
 use Chamilo\Core\Admin\Architecture\Interface\ActionProviderInterface;
 use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Manager;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\Action;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\Actions;
@@ -25,8 +25,8 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
         $links = [];
 
         $parameters = [
-            Application::PARAM_CONTEXT => $context,
-            Application::PARAM_ACTION => ActionEnum::BROWSE->value
+            ApplicationInterface::PARAM_CONTEXT => $context,
+            ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value
         ];
 
         $links[] = new Action(

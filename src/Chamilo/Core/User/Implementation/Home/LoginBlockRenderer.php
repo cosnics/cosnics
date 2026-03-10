@@ -7,8 +7,8 @@ use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -75,16 +75,16 @@ class LoginBlockRenderer extends BlockRenderer
         else {
             $profilePhotoUrl = $this->getUrlGenerator()->fromParameters(
                 [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => ActionEnum::DOWNLOAD_USER_PICTURE->value,
+                    ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                    ApplicationInterface::PARAM_ACTION => ActionEnum::DOWNLOAD_USER_PICTURE->value,
                     Manager::PARAM_USER_ID => $user->getId()
                 ]
             );
 
             $logoutLink = $this->getUrlGenerator()->fromParameters(
                 [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => ActionEnum::LOGOUT->value
+                    ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                    ApplicationInterface::PARAM_ACTION => ActionEnum::LOGOUT->value
                 ]
             );
 
@@ -138,8 +138,8 @@ class LoginBlockRenderer extends BlockRenderer
         if ($this->canRegister()) {
             $link = $this->getUrlGenerator()->fromParameters(
                 [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => ActionEnum::REGISTER->value
+                    ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                    ApplicationInterface::PARAM_ACTION => ActionEnum::REGISTER->value
                 ]
             );
 
@@ -157,8 +157,8 @@ class LoginBlockRenderer extends BlockRenderer
         if ($this->canRetrievePassword()) {
             $link = $this->getUrlGenerator()->fromParameters(
                 [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => ActionEnum::RESET_PASSWORD->value
+                    ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                    ApplicationInterface::PARAM_ACTION => ActionEnum::RESET_PASSWORD->value
                 ]
             );
 

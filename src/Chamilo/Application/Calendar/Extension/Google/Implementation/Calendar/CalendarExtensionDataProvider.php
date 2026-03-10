@@ -148,7 +148,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
 
     public function getName(): string
     {
-        return $this->getTranslator()->trans('TypeName', [], 'Chamilo\Application\Calendar\Extension\Google');
+        return $this->getTranslator()->trans('TypeName', [], Manager::CONTEXT);
     }
 
     public function getTranslator(): Translator

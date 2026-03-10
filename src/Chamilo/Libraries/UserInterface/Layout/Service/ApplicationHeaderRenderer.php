@@ -27,9 +27,12 @@ class ApplicationHeaderRenderer
         $this->request = $request;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     */
     public function render(ApplicationInterface $application, ?User $user = null): string
     {
-        $this->getBreadcrumbGenerator()->addDefaultBreadcrumbs(
+        $this->getBreadcrumbGenerator()->addDefaultApplicationBreadcrumbs(
             $application->getApplicationContext(), $this->getCurrentAction($application),
             $application->getDefaultApplicationAction()
         );

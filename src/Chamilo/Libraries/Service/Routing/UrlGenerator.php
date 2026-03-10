@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Service\Routing;
 
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -33,11 +33,11 @@ class UrlGenerator
     ): string
     {
         if ($context) {
-            $parameters[Application::PARAM_CONTEXT] = $context;
+            $parameters[ApplicationInterface::PARAM_CONTEXT] = $context;
         }
 
         if ($component) {
-            $parameters[Application::PARAM_ACTION] = $component;
+            $parameters[ApplicationInterface::PARAM_ACTION] = $component;
         }
 
         return $this->fromRequest($parameters, $filters, $anchor);

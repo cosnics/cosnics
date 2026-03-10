@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Protocol\Authentication\Service;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
-use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -37,13 +37,13 @@ abstract class Authentication
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      */
     public function checkAuthenticationSource(bool $checkIfAuthenticationSourceIsEnabled = true): void
     {
         if ($checkIfAuthenticationSourceIsEnabled &&
             !$this->getAuthenticationValidator()->isSourceEnabled(static::class)) {
-            throw new AuthenticationException(
+            throw new NotAuthenticatedException(
                 $this->getTranslator()->trans('AuthSourceNotActive', [], StringUtilities::LIBRARIES)
             );
         }
@@ -65,9 +65,9 @@ abstract class Authentication
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      */
     protected function getUserFromCredentialsRequest(): ?User
     {
@@ -82,7 +82,7 @@ abstract class Authentication
         $user = $this->getUserService()->getUserByUsernameOrEmail($username);
 
         if (!$user instanceof User) {
-            throw new AuthenticationException(
+            throw new NotAuthenticatedException(
                 $translator->trans('InvalidUsername', [], StringUtilities::LIBRARIES)
             );
         }

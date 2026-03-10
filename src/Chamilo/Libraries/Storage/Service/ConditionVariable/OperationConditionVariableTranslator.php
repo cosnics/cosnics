@@ -22,7 +22,7 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function translate(
         QueryBuilder $querybuilder, OperationConditionVariable $operationConditionVariable, ?bool $enableAliasing = true

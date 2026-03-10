@@ -1,9 +1,13 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionRendererInterface;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Factory\GraphServiceClientFactory;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\NoSuchCalendarExceptionRenderer;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\NoSuchGroupExceptionRenderer;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\NoSuchUserExceptionRenderer;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\CalendarRepository;
@@ -37,4 +41,8 @@ return static function (ContainerConfigurator $container) {
         ['$groupBaseUri' => '%cosnics.libraries.protocol.microsoft.graph.baseUri.group%']
     );
     $services->set(TeamService::class);
+
+    $services->set(NoSuchCalendarExceptionRenderer::class)->tag(UserExceptionRendererInterface::class);
+    $services->set(NoSuchUserExceptionRenderer::class)->tag(UserExceptionRendererInterface::class);
+    $services->set(NoSuchGroupExceptionRenderer::class)->tag(UserExceptionRendererInterface::class);
 };

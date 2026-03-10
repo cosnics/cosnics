@@ -124,13 +124,13 @@ class GroupForm extends FormValidator
         return $this->group;
     }
 
-    public function getGroupOptionsTreeRenderer(): OptionsTreeRenderer
+    /**
+     * @param class-string<\Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer> $className
+     */
+    public function getGroupOptionsTreeRenderer(
+        string $className = 'Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeRenderer'
+    ): OptionsTreeRenderer
     {
-        /**
-         * @var class-string<\Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer> $className
-         */
-        $className = 'Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeRenderer';
-
         return $this->getService($className);
     }
 

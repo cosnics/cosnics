@@ -4,7 +4,7 @@ namespace Chamilo\Core\Admin\UserInterface\Table;
 use Chamilo\Core\Admin\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn;
@@ -79,15 +79,15 @@ class OnlineTableRenderer extends DataClassListTableRenderer
                 if ($this->getUser()->isPlatformAdministrator()) {
                     $profilePhotoUrl = $urlGenerator->fromParameters(
                         [
-                            Application::PARAM_CONTEXT => Manager::CONTEXT,
-                            Application::PARAM_ACTION => \Chamilo\Core\User\Architecture\Enum\ActionEnum::DOWNLOAD_USER_PICTURE->value,
+                            ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                            ApplicationInterface::PARAM_ACTION => \Chamilo\Core\User\Architecture\Enum\ActionEnum::DOWNLOAD_USER_PICTURE->value,
                             Manager::PARAM_USER_ID => $result->getId()
                         ]
                     );
 
                     $profileUrl = $this->getUrlGenerator()->fromParameters([
-                        Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
-                        Application::PARAM_ACTION => ActionEnum::VIEW_ONLINE->value,
+                        ApplicationInterface::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::CONTEXT,
+                        ApplicationInterface::PARAM_ACTION => ActionEnum::VIEW_ONLINE->value,
                         \Chamilo\Core\Admin\Manager::PARAM_USER_ID => $result->getId()
                     ]);
 

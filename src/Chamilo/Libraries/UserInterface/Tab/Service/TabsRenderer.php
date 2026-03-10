@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Tab\Service;
 
-use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabRendererRegistry;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabContentInterface;
@@ -46,7 +46,7 @@ class TabsRenderer
                     }
                 }
             }
-            catch (ClassNotExistException) {
+            catch (NoSuchClassException) {
             }
         }
 
@@ -74,7 +74,7 @@ class TabsRenderer
                     }
                 }
             }
-            catch (ClassNotExistException) {
+            catch (NoSuchClassException) {
             }
         }
 

@@ -17,6 +17,9 @@ use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertRenderer;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsRenderer;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageHeaders;
@@ -24,8 +27,6 @@ use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\ErrorPageRenderer;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageManager;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageRenderer;
 use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -43,6 +44,11 @@ use Symfony\Component\Translation\Translator;
 trait DependencyInjectionContainerTrait
 {
     protected ContainerInterface $container;
+
+    public function getAlertRenderer(): AlertRenderer
+    {
+        return $this->getService(AlertRenderer::class);
+    }
 
     public function getApplicationFactory(): ApplicationFactory
     {
@@ -115,6 +121,11 @@ trait DependencyInjectionContainerTrait
         return $this->getService(DefaultHeaderRenderer::class);
     }
 
+    public function getErrorPageRenderer(): ErrorPageRenderer
+    {
+        return $this->getService(ErrorPageRenderer::class);
+    }
+
     /**
      * @param class-string<\Symfony\Component\EventDispatcher\EventDispatcherInterface> $className
      */
@@ -148,19 +159,14 @@ trait DependencyInjectionContainerTrait
         return $this->getService(GroupService::class);
     }
 
-    public function getNotificationMessageManager(): NotificationMessageManager
+    public function getNotificationMessageManager(): AlertsManager
     {
-        return $this->getService(NotificationMessageManager::class);
+        return $this->getService(AlertsManager::class);
     }
 
-    public function getNotificationMessageRenderer(): NotificationMessageRenderer
+    public function getNotificationMessageRenderer(): AlertsRenderer
     {
-        return $this->getService(NotificationMessageRenderer::class);
-    }
-
-    public function getErrorPageRenderer(): ErrorPageRenderer
-    {
-        return $this->getService(ErrorPageRenderer::class);
+        return $this->getService(AlertsRenderer::class);
     }
 
     public function getPageConfiguration(): PageHeaders

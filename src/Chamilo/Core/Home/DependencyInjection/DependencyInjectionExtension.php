@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Home\DependencyInjection;
 
 use Chamilo\Core\Home\DependencyInjection\CompilerPass\AvailableBlockRendererCompilerPass;
+use Chamilo\Core\Home\Manager;
 use Chamilo\Libraries\DependencyInjection\Architecture\Domain\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Architecture\Interface\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Architecture\Trait\ExtensionTrait;
@@ -25,7 +26,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     public function getConfigurationFiles(): array
     {
         return [
-            'Chamilo\Core\Home' => [
+            Manager::CONTEXT => [
                 'application.php',
                 'architecture.php',
                 'service.php',

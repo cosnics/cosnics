@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Error\Service;
 
+use Chamilo\Libraries\Protocol\Error\Architecture\Domain\UserExceptionRendererRegistry;
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
+use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionInterface;
 use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageHeaders;
 use Exception;
 use Throwable;
@@ -14,10 +16,12 @@ class FileExceptionLogger implements ExceptionLoggerInterface
 {
     protected string $logPath;
 
+    protected UserExceptionRendererRegistry $userExceptionRendererRegistry;
+
     /**
      * @throws \Exception
      */
-    public function __construct(string $logPath)
+    public function __construct(UserExceptionRendererRegistry $userExceptionRendererRegistry, string $logPath)
     {
         if (empty($logPath)) {
             throw new Exception('The given log path can not be empty');
@@ -30,6 +34,7 @@ class FileExceptionLogger implements ExceptionLoggerInterface
         }
 
         $this->logPath = $logPath;
+        $this->userExceptionRendererRegistry = $userExceptionRendererRegistry;
     }
 
     public function addJavascriptExceptionLogger(PageHeaders $pageConfiguration)
@@ -50,6 +55,16 @@ class FileExceptionLogger implements ExceptionLoggerInterface
         }
     }
 
+    public function getLogPath(): string
+    {
+        return $this->logPath;
+    }
+
+    public function getUserExceptionRendererRegistry(): UserExceptionRendererRegistry
+    {
+        return $this->userExceptionRendererRegistry;
+    }
+
     public function logException(
         Throwable $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
     ): void
@@ -58,12 +73,21 @@ class FileExceptionLogger implements ExceptionLoggerInterface
             return;
         }
 
-        $logFile = $this->logPath . DIRECTORY_SEPARATOR . 'cosnics.error.fatal.log';
+        $logFile = $this->getLogPath() . DIRECTORY_SEPARATOR . 'cosnics.error.fatal.log';
         $fileHandler = fopen($logFile, 'a');
 
         $type = $this->determineExceptionLevelString($exceptionLevel);
 
-        $message = date('[d/m/Y - H:i:s] ', time()) . ' - [' . $type . '] ' . $exception->getMessage();
+        if ($exception instanceof UserExceptionInterface) {
+            $userExceptionRenderer =
+                $this->getUserExceptionRendererRegistry()->getUserExceptionRendererForUserException($exception);
+            $exceptionMessage = $userExceptionRenderer->renderMessage($exception);
+        }
+        else {
+            $exceptionMessage = $exception->getMessage();
+        }
+
+        $message = date('[d/m/Y - H:i:s] ', time()) . ' - [' . $type . '] ' . $exceptionMessage;
 
         if (!is_null($file)) {
             $message .= ' - FILE: ' . $file . ' - LINE: ' . $line;

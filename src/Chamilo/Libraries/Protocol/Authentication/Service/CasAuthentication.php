@@ -2,8 +2,9 @@
 namespace Chamilo\Libraries\Protocol\Authentication\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Libraries\Protocol\Authentication\Service
@@ -37,9 +38,9 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
      * @param string[] $casUserAttributes
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      */
     protected function registerUser(string $casUser, array $casUserAttributes = []): User
     {
@@ -55,7 +56,9 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
         $user->setOfficialCode($casUserAttributes['person_number']);
 
         if (!$this->getUserService()->createUser($user)) {
-            throw new AuthenticationException('CasUserRegistrationFailed');
+            throw new NotAuthenticatedException(
+                $this->getTranslator()->trans('CasUserRegistrationFailed', [], StringUtilities::LIBRARIES)
+            );
         }
         else {
             return $user;

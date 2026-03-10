@@ -4,11 +4,12 @@ namespace Chamilo\Core\Group\Component;
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -33,15 +34,14 @@ class DeleteComponent extends Manager
         }
 
         $this->getBreadcrumbTrail()->add(
-            new Breadcrumb(
+            new Breadcrumb($translator->trans('ViewerComponent', [], Manager::CONTEXT),
                 $this->getUrlGenerator()->fromParameters(
                     [
                         self::PARAM_CONTEXT => Manager::CONTEXT,
                         self::PARAM_ACTION => ActionEnum::BROWSE->value,
                         self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
                     ]
-                ), $translator->trans('ViewerComponent', [], Manager::CONTEXT)
-            )
+                ))
         );
 
         $failures = 0;
@@ -86,15 +86,15 @@ class DeleteComponent extends Manager
                 );
             }
 
-            $this->getNotificationMessageManager()->addMessage(
-                new NotificationMessage(
-                    $message, $failures ? NotificationMessage::TYPE_DANGER : NotificationMessage::TYPE_SUCCESS
+            $this->getNotificationMessageManager()->addAlert(
+                new Alert(
+                    $message, $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS
                 )
             );
 
             return new RedirectResponse($this->getUrlGenerator()->fromParameters([
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => ActionEnum::BROWSE->value
+                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value
             ]));
         }
         else {

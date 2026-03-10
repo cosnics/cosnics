@@ -4,7 +4,7 @@ namespace Chamilo\Core\Menu\Component;
 use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\UserInterface\Tree\Service\JsTreeMenuDataProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,8 +27,8 @@ class ItemTreeDataComponent extends Manager
 
         $urlFormat = $this->getUrlGenerator()->fromParameters(
             [
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => ActionEnum::BROWSE->value,
+                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
                 Manager::PARAM_PARENT => '%s'
             ]
         );

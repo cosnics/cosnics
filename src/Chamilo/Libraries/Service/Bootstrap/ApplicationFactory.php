@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Service\Bootstrap;
 
-use Chamilo\Libraries\Architecture\Exception\UserException;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
@@ -52,7 +52,7 @@ class ApplicationFactory
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      */
     public function getApplicationComponent(string $context, ?string $action = null): ApplicationInterface
     {

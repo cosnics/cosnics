@@ -8,8 +8,8 @@ use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
@@ -47,7 +47,7 @@ class WidgetItemRenderer extends ItemRenderer
 
         $html = [];
 
-        $title = $this->getTranslator()->trans('MyAccount', [], 'Chamilo\Core\User');
+        $title = $this->getTranslator()->trans('MyAccount', [], Manager::CONTEXT);
 
         $html[] = '<li class="nav-item dropdown">';
         $html[] = '<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">';
@@ -76,7 +76,7 @@ class WidgetItemRenderer extends ItemRenderer
         if ($this->canChangeUserPicture()) {
             $html[] = '<li>';
             $html[] = '<a class="dropdown-item" href="' . $this->getPictureUrl() . '">';
-            $html[] = '<div>' . $translator->trans('EditProfilePicture', [], 'Chamilo\Core\User') . '</div>';
+            $html[] = '<div>' . $translator->trans('EditProfilePicture', [], Manager::CONTEXT) . '</div>';
             $html[] = '</a>';
             $html[] = '</li>';
         }
@@ -84,14 +84,14 @@ class WidgetItemRenderer extends ItemRenderer
         // Account
         $html[] = '<li>';
         $html[] = '<a class="dropdown-item" href="' . $this->getAccountUrl() . '">';
-        $html[] = '<div>' . $translator->trans('MyAccount', [], 'Chamilo\Core\User') . '</div>';
+        $html[] = '<div>' . $translator->trans('MyAccount', [], Manager::CONTEXT) . '</div>';
         $html[] = '</a>';
         $html[] = '</li>';
 
         // Settings
         $html[] = '<li>';
         $html[] = '<a class="dropdown-item" href="' . $this->getSettingsUrl() . '">';
-        $html[] = '<div>' . $translator->trans('Settings', [], 'Chamilo\Core\User') . '</div>';
+        $html[] = '<div>' . $translator->trans('Settings', [], Manager::CONTEXT) . '</div>';
         $html[] = '</a>';
         $html[] = '</li>';
 
@@ -101,7 +101,7 @@ class WidgetItemRenderer extends ItemRenderer
         // Logout
         $html[] = '<li>';
         $html[] = '<a class="dropdown-item" href="' . $this->getLogoutUrl() . '">';
-        $html[] = '<div>' . $translator->trans('Logout', [], 'Chamilo\Core\User') . '</div>';
+        $html[] = '<div>' . $translator->trans('Logout', [], Manager::CONTEXT) . '</div>';
         $html[] = '</a>';
         $html[] = '</li>';
 
@@ -160,7 +160,7 @@ class WidgetItemRenderer extends ItemRenderer
     public function getUserUrl(string $action): string
     {
         return $this->getUrlGenerator()->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => $action]
+            [ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT, ApplicationInterface::PARAM_ACTION => $action]
         );
     }
 

@@ -4,8 +4,8 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Exception\NoObjectSelectedException;
-use Chamilo\Libraries\Storage\Architecture\Exception\ObjectNotExistException;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchParameterException;
+use Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -16,10 +16,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class DownloadUserPictureComponent extends Manager
 {
-
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\NoObjectSelectedException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchParameterException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
@@ -29,28 +28,24 @@ class DownloadUserPictureComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\NoObjectSelectedException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectNotExistException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchParameterException
      */
     protected function getUserFromRequest(): User
     {
         $translator = $this->getTranslator();
         $userIdentifier = $this->getRequest()->query->get(Manager::PARAM_USER_ID);
 
-        if (empty($userIdentifier))
-        {
-            throw new NoObjectSelectedException(
-                $translator->trans('User', [], Manager::CONTEXT)
-            );
+        if (empty($userIdentifier)) {
+            throw new NoSuchParameterException(Manager::PARAM_USER_ID);
         }
 
         $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
 
-        if (empty($user))
-        {
-            throw new ObjectNotExistException(
+        if (empty($user)) {
+            throw new NoSuchObjectException(
                 $translator->trans('User', [], Manager::CONTEXT), $userIdentifier
             );
         }

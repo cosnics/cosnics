@@ -6,11 +6,12 @@ use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Form\ConfigurationForm;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\NamespaceIdentGlyph;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -49,10 +50,10 @@ class ConfigureComponent extends ProfileComponent
         if ($this->form->validate()) {
             $success = $this->form->updateUserSettings();
 
-            $this->getNotificationMessageManager()->addMessage(
-                new NotificationMessage(
+            $this->getNotificationMessageManager()->addAlert(
+                new Alert(
                     $this->getTranslator()->trans($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'),
-                    !$success ? NotificationMessage::TYPE_DANGER : NotificationMessage::TYPE_SUCCESS
+                    !$success ? AlertEnum::DANGER : AlertEnum::SUCCESS
                 )
             );
 
@@ -94,7 +95,7 @@ class ConfigureComponent extends ProfileComponent
             $packageUrl = $this->getUrlGenerator()->fromParameters(
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => ActionEnum::CONFIGURE->value,
+                    ApplicationInterface::PARAM_ACTION => ActionEnum::CONFIGURE->value,
                     self::PARAM_SELECTED_CONTEXT => $package
                 ]
             );

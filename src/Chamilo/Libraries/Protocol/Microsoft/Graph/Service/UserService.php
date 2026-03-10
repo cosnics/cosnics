@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
 use Chamilo\Core\User\Service\UserService as PlatformUserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository;
 
 /**
@@ -26,7 +26,7 @@ class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getAndSaveUserIdentifier(User $user): ?string
@@ -50,7 +50,7 @@ class UserService
      * @param \Chamilo\Core\User\Storage\DataClass\User[] $users
      *
      * @return string[]
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      */
     public function getAzureUserIdentifiers(array $users): array
     {
@@ -67,7 +67,7 @@ class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      */
     public function getUser(User $user): \Microsoft\Graph\Generated\Models\User
     {
@@ -75,14 +75,14 @@ class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      */
     public function getUserIdentifier(User $user): string
     {
         $graphUser = $this->getUser($user);
 
         if (!$graphUser->getId()) {
-            throw new UserNotFoundException($user);
+            throw new NoSuchUserException($user);
         }
 
         return $graphUser->getId();

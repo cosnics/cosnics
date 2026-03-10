@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Implementation\User;
 use Chamilo\Core\User\Architecture\Exception\NoPictureForUserException;
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
+use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
@@ -53,10 +54,8 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
 
     public function deleteUserPicture(User $targetUser, User $requestUser): bool
     {
-        try
-        {
-            if ($this->doesUserHavePicture($targetUser))
-            {
+        try {
+            if ($this->doesUserHavePicture($targetUser)) {
                 $path = $this->getUserPicturePath($targetUser, false);
                 $this->getFilesystem()->remove($path);
 
@@ -67,12 +66,10 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
 
             return true;
         }
-        catch (NoPictureForUserException)
-        {
+        catch (NoPictureForUserException) {
             return true;
         }
-        catch (StorageMethodException)
-        {
+        catch (StorageMethodException) {
             return false;
         }
     }
@@ -88,8 +85,7 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
 
     public function downloadUserPicture(User $user): Response
     {
-        try
-        {
+        try {
             $file = $this->getUserPicturePath($user);
 
             $type = exif_imagetype($file);
@@ -112,8 +108,7 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
 
             return $response;
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             $response = new Response();
             $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
 
@@ -170,17 +165,15 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
 
     private function getUnknownUserPicturePath(): string
     {
-        return $this->getThemeSystemPathBuilder()->getImagePath('Chamilo\Core\User', 'Unknown');
+        return $this->getThemeSystemPathBuilder()->getImagePath(Manager::CONTEXT, 'Unknown');
     }
 
     public function getUserPictureAsBase64String(User $targetUser, User $requestUser): string
     {
-        try
-        {
+        try {
             return $this->getPictureAsBase64String($this->getUserPicturePath($targetUser));
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             return '';
         }
     }
@@ -190,16 +183,13 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
      */
     private function getUserPicturePath(User $user, bool $useFallback = true): string
     {
-        if ($this->doesUserHavePicture($user))
-        {
+        if ($this->doesUserHavePicture($user)) {
             return $this->getConfigurablePathBuilder()->getProfilePicturePath() . $user->getPictureUri();
         }
-        elseif ($useFallback)
-        {
+        elseif ($useFallback) {
             return $this->getUnknownUserPicturePath();
         }
-        else
-        {
+        else {
             throw new NoPictureForUserException();
         }
     }
@@ -219,8 +209,7 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
      */
     public function setUserPicture(User $targetUser, User $requestUser, ?UploadedFile $fileInformation = null): bool
     {
-        if (!$this->deleteUserPicture($targetUser, $requestUser))
-        {
+        if (!$this->deleteUserPicture($targetUser, $requestUser)) {
             return false;
         }
 
@@ -233,18 +222,15 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
 
         move_uploaded_file($fileInformation->getPathname(), $path . $imageFile);
 
-        try
-        {
+        try {
             $imageManipulation = ImageManipulation::factory($path . $imageFile);
             $imageManipulation->scale(400, 400);
 
-            if (!$imageManipulation->writeToFile())
-            {
+            if (!$imageManipulation->writeToFile()) {
                 return false;
             }
         }
-        catch (Exception)
-        {
+        catch (Exception) {
             return false;
         }
 
@@ -257,27 +243,22 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
         User $targetUser, User $requestUser, ?UploadedFile $fileInformation = null, bool $removeExistingPicture = false
     ): bool
     {
-        try
-        {
-            if ($removeExistingPicture)
-            {
-                if (!$this->deleteUserPicture($targetUser, $requestUser))
-                {
+        try {
+            if ($removeExistingPicture) {
+                if (!$this->deleteUserPicture($targetUser, $requestUser)) {
                     return false;
                 }
             }
-            elseif (!is_null($fileInformation) && strlen($fileInformation->getClientOriginalName()) > 0)
-            {
-                if (!$fileInformation->isValid() || !$this->setUserPicture($targetUser, $requestUser, $fileInformation))
-                {
+            elseif (!is_null($fileInformation) && strlen($fileInformation->getClientOriginalName()) > 0) {
+                if (!$fileInformation->isValid() ||
+                    !$this->setUserPicture($targetUser, $requestUser, $fileInformation)) {
                     return false;
                 }
             }
 
             return true;
         }
-        catch (StorageMethodException)
-        {
+        catch (StorageMethodException) {
             return false;
         }
     }

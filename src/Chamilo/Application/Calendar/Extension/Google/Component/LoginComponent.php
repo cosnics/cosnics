@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,8 +31,8 @@ class LoginComponent extends Manager
             return new RedirectResponse(
                 $this->getUrlGenerator()->fromParameters(
                     [
-                        Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
-                        Application::PARAM_ACTION => ActionEnum::AVAILABILITY->value
+                        ApplicationInterface::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
+                        ApplicationInterface::PARAM_ACTION => ActionEnum::AVAILABILITY->value
                     ]
                 )
             );
@@ -41,8 +41,8 @@ class LoginComponent extends Manager
             return new RedirectResponse(
                 $this->getUrlGenerator()->fromParameters(
                     [
-                        Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
-                        Application::PARAM_ACTION => ActionEnum::BROWSE->value
+                        ApplicationInterface::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT,
+                        ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value
                     ]
                 )
             );

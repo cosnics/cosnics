@@ -7,8 +7,8 @@ use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
@@ -61,7 +61,10 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
 
         if (!$accessToken) {
             $link = $this->getUrlGenerator()->fromParameters(
-                [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => ActionEnum::LOGIN->value]
+                [
+                    ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                    ApplicationInterface::PARAM_ACTION => ActionEnum::LOGIN->value
+                ]
             );
 
             $dropdownButton->addButton(
@@ -73,7 +76,10 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
         }
         else {
             $link = $this->getUrlGenerator()->fromParameters(
-                [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => ActionEnum::LOGOUT->value]
+                [
+                    ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                    ApplicationInterface::PARAM_ACTION => ActionEnum::LOGOUT->value
+                ]
             );
 
             $dropdownButton->addButton(

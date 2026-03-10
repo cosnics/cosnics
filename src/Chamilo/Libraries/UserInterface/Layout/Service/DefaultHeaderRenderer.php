@@ -3,9 +3,9 @@ namespace Chamilo\Libraries\UserInterface\Layout\Service;
 
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\MenuRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Service\BreadcrumbTrailRenderer;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageManager;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Layout\Service
@@ -21,11 +21,11 @@ class DefaultHeaderRenderer
 
     protected MenuRenderer $menuRenderer;
 
-    protected NotificationMessageManager $notificationMessageManager;
+    protected AlertsManager $notificationMessageManager;
 
     public function __construct(
         BaseHeaderRenderer $baseHeaderRenderer, BreadcrumbTrail $breadcrumbTrail,
-        NotificationMessageManager $notificationMessageManager, BreadcrumbTrailRenderer $breadcrumbTrailRenderer,
+        AlertsManager $notificationMessageManager, BreadcrumbTrailRenderer $breadcrumbTrailRenderer,
         MenuRenderer $menuRenderer
     )
     {
@@ -36,6 +36,9 @@ class DefaultHeaderRenderer
         $this->menuRenderer = $menuRenderer;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     */
     public function render(?User $user = null): string
     {
         $html = [];
@@ -60,7 +63,7 @@ class DefaultHeaderRenderer
         $html[] = '<div class="col-12 clearfix">';
         $html[] = $this->renderPageTitle();
 
-        $html[] = $this->getNotificationMessageManager()->renderMessages();
+        $html[] = $this->getNotificationMessageManager()->render();
 
         return implode(PHP_EOL, $html);
     }
@@ -85,7 +88,7 @@ class DefaultHeaderRenderer
         return $this->menuRenderer;
     }
 
-    public function getNotificationMessageManager(): NotificationMessageManager
+    public function getNotificationMessageManager(): AlertsManager
     {
         return $this->notificationMessageManager;
     }

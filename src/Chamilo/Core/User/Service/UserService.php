@@ -9,11 +9,11 @@ use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserUpdateEvent;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
-use Chamilo\Libraries\Architecture\Domain\Application;
-use Chamilo\Libraries\Architecture\Exception\UserException;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeablePasswordInterface;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Domain\Mail;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
 use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
@@ -200,7 +200,8 @@ class UserService
      */
     public function createUserFromParameters(
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
-        bool $generatePassword, ?string $password, ?string $authSource = 'Chamilo\Libraries\Authentication\Platform',
+        bool $generatePassword, ?string $password,
+        ?string $authSource = 'Chamilo\Libraries\Protocol\Authentication\Service\PlatformAuthentication',
         bool $isPlatformAdmin = false, bool $active = true, bool $sendEmail = false
     ): User
     {
@@ -561,7 +562,7 @@ class UserService
         $user = $this->findUserByIdentifier($identifier);
 
         if (!$user instanceof User) {
-            return $unknownUserTranslation ?: $this->getTranslator()->trans('UserUnknown', [], 'Chamilo\Core\User');
+            return $unknownUserTranslation ?: $this->getTranslator()->trans('UserUnknown', [], Manager::CONTEXT);
         }
 
         return $user->getFullName();
@@ -621,7 +622,7 @@ class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      */
     public function sendPasswordResetLinkforUser(User $user): bool
     {
@@ -651,8 +652,8 @@ class UserService
         try {
             $resetLink = $this->getUrlGenerator()->fromParameters(
                 [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => ActionEnum::RESET_PASSWORD->value,
+                    ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                    ApplicationInterface::PARAM_ACTION => ActionEnum::RESET_PASSWORD->value,
                     Manager::PARAM_RESET_KEY => $this->determineUserKey($user),
                     DataClass::PROPERTY_ID => $user->getId()
                 ]

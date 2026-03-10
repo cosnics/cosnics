@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain;
 
-use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionTranslatorInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -44,12 +44,14 @@ class ConditionTranslatorCollection extends ArrayCollection
      * @param class-string<tGetTranslator> $conditionTranslatorClassName
      *
      * @return tGetTranslator|ConditionTranslatorInterface
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function getTranslator(string $conditionTranslatorClassName): ConditionTranslatorInterface
     {
         if (!$this->hasConditionTranslator($conditionTranslatorClassName)) {
-            throw new ClassNotExistException($conditionTranslatorClassName);
+            throw new NoSuchClassException(
+                $conditionTranslatorClassName, ConditionTranslatorInterface::class
+            );
         }
 
         return $this->get($conditionTranslatorClassName);
@@ -61,7 +63,7 @@ class ConditionTranslatorCollection extends ArrayCollection
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function translate(QueryBuilder $querybuilder, ConditionInterface $condition, ?bool $enableAliasing = true)
     {

@@ -9,8 +9,8 @@ use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
@@ -53,8 +53,8 @@ class LanguageItemRenderer extends ItemRenderer
             foreach ($languages as $isocode => $language) {
                 $languageUrl = $this->getUrlGenerator()->fromParameters(
                     [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => ActionEnum::LANGUAGE->value,
+                        ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                        ApplicationInterface::PARAM_ACTION => ActionEnum::LANGUAGE->value,
                         Manager::PARAM_LANGUAGE => $isocode,
                         Manager::PARAM_REFER => $this->getRequest()->getUri()
                     ]
@@ -156,8 +156,8 @@ class LanguageItemRenderer extends ItemRenderer
             foreach ($languages as $isocode => $language) {
                 $languageUrl = $this->getUrlGenerator()->fromParameters(
                     [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => ActionEnum::LANGUAGE->value,
+                        ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                        ApplicationInterface::PARAM_ACTION => ActionEnum::LANGUAGE->value,
                         Manager::PARAM_LANGUAGE => $isocode,
                         Manager::PARAM_REFER => $currentUrl
                     ]

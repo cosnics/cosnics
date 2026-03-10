@@ -15,6 +15,7 @@ use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 use Symfony\Component\Translation\Translator;
+use Throwable;
 
 /**
  * @package Chamilo\Core\Menu\Implementation\Menu
@@ -37,6 +38,9 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
         $this->fallbackIsoCodes = $fallbackIsoCodes;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     */
     public function render(Item $item, User $user): string
     {
         $html = [];
@@ -95,19 +99,27 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
 
     public function isSelected(Item $item, User $user): bool
     {
-        $childItems = $this->getItemCacheService()->findItemsByParentIdentifier($item->getId());
+        try {
+            $childItems = $this->getItemCacheService()->findItemsByParentIdentifier($item->getId());
 
-        foreach ($childItems as $childItem) {
-            $itemRenderer = $this->getItemRendererFactory()->getItemRendererForItem($childItem);
+            foreach ($childItems as $childItem) {
+                $itemRenderer = $this->getItemRendererFactory()->getItemRendererForItem($childItem);
 
-            if ($itemRenderer instanceof SelectableItemInterface && $itemRenderer->isSelected($childItem, $user)) {
-                return true;
+                if ($itemRenderer instanceof SelectableItemInterface && $itemRenderer->isSelected($childItem, $user)) {
+                    return true;
+                }
             }
-        }
 
-        return false;
+            return false;
+        }
+        catch (Throwable) {
+            return false;
+        }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     */
     public function renderChildren(Item $item, User $user): string
     {
         $childItems = $this->getItemCacheService()->findItemsByParentIdentifier($item->getId());

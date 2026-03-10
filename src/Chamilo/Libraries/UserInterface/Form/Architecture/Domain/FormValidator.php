@@ -4,6 +4,8 @@ namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain;
 use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Protocol\Security\Service\SecurityUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_advanced_element_finder;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_radio;
@@ -20,7 +22,6 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule\HTML_QuickForm
 use Chamilo\Libraries\UserInterface\Form\Factory\FormValidatorHtmlEditorOptionsFactory;
 use Chamilo\Libraries\UserInterface\Form\Service\FormValidatorHtmlEditorRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use HTML_QuickForm;
 use HTML_QuickForm_element;
 use HTML_QuickForm_group;
@@ -107,10 +108,10 @@ class FormValidator extends HTML_QuickForm
         $html = [];
 
         if ($error) {
-            $html[] = $this->getNotificationMessageRenderer()->renderOne(
-                new NotificationMessage(
-                    $this->getTranslation('FormHasErrorsPleaseComplete'), NotificationMessage::TYPE_DANGER
-                ), false
+            $html[] = $this->getAlertRenderer()->render(
+                new Alert(
+                    $this->getTranslation('FormHasErrorsPleaseComplete'), AlertEnum::DANGER
+                )
             );
         }
 

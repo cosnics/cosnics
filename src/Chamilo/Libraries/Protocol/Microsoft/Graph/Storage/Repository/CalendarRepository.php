@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\CalendarNotFoundException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchCalendarException;
 use Exception;
 use Microsoft\Graph\Generated\Models\Calendar;
 use Microsoft\Graph\Generated\Users\Item\Calendars\Item\CalendarView\CalendarViewRequestBuilderGetQueryParameters;
@@ -47,7 +47,7 @@ class CalendarRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\CalendarNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchCalendarException
      */
     public function getCalendarByIdentifier(string $userIdentifier, string $calendarIdentifier): Calendar
     {
@@ -57,13 +57,13 @@ class CalendarRepository
             )->get()->wait();
 
             if (!$calendar instanceof Calendar) {
-                throw new CalendarNotFoundException($userIdentifier, $calendarIdentifier);
+                throw new NoSuchCalendarException($userIdentifier, $calendarIdentifier);
             }
 
             return $calendar;
         }
         catch (Exception) {
-            throw new CalendarNotFoundException($userIdentifier, $calendarIdentifier);
+            throw new NoSuchCalendarException($userIdentifier, $calendarIdentifier);
         }
     }
 

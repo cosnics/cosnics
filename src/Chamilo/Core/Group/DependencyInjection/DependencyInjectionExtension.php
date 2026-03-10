@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\DependencyInjection;
 
+use Chamilo\Core\Group\Manager;
 use Chamilo\Libraries\DependencyInjection\Architecture\Domain\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Architecture\Trait\ExtensionTrait;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -22,7 +23,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension 
     public function getConfigurationFiles(): array
     {
         return [
-            'Chamilo\Core\Group' => [
+            Manager::CONTEXT => [
                 'application.php',
                 'architecture.php',
                 'implementation.admin.php',

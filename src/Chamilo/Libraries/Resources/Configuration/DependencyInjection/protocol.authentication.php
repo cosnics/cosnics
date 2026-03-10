@@ -4,8 +4,11 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\Authentication\Service\CasAuthentication;
+use Chamilo\Libraries\Protocol\Authentication\Service\NotAllowedExceptionRenderer;
+use Chamilo\Libraries\Protocol\Authentication\Service\NotAuthenticatedExceptionRenderer;
 use Chamilo\Libraries\Protocol\Authentication\Service\PlatformAuthentication;
 use Chamilo\Libraries\Protocol\Authentication\Service\SecurityTokenAuthentication;
+use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionRendererInterface;
 use Chamilo\Libraries\Protocol\Log\Factory\MonologStreamHandlerFactory;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -40,4 +43,7 @@ return static function (ContainerConfigurator $container) {
     $services->set('Chamilo\Libraries\Protocol\Authentication\Service\CasStreamHandler', StreamHandler::class)->args(
         ['%cosnics.libraries.protocol.authentication.cas.logPath%']
     )->factory([service(MonologStreamHandlerFactory::class), 'createStreamHandler']);
+
+    $services->set(NotAllowedExceptionRenderer::class)->tag(UserExceptionRendererInterface::class);
+    $services->set(NotAuthenticatedExceptionRenderer::class)->tag(UserExceptionRendererInterface::class);
 };

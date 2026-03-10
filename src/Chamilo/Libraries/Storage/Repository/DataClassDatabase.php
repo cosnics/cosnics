@@ -40,6 +40,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     protected StorageAliasGenerator $storageAliasGenerator;
 
+
     public function __construct(
         Connection $connection, StorageAliasGenerator $storageAliasGenerator, ExceptionLoggerInterface $exceptionLogger,
         ConditionTranslatorCollection $conditionPartTranslatorService, QueryBuilderConfigurator $parametersProcessor
@@ -53,7 +54,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     protected function __retrieve(string $dataClassStorageUnitName, StorageParameters $parameters): Result
@@ -83,7 +84,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     protected function buildFromQuery(string $dataClassStorageUnitName, StorageParameters $parameters): QueryBuilder
     {
@@ -99,7 +100,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function count(string $dataClassStorageUnitName, StorageParameters $parameters): int
     {
@@ -158,7 +159,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         catch (Throwable $throwable) {
             $this->handleError($throwable);
 
-            throw new StorageMethodException(__FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage());
+            throw new StorageMethodException(
+                __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage()
+            );
         }
     }
 
@@ -175,7 +178,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         catch (Throwable $throwable) {
             $this->handleError($throwable);
 
-            throw new StorageMethodException(__FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage());
+            throw new StorageMethodException(
+                __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage()
+            );
         }
     }
 
@@ -202,14 +207,16 @@ class DataClassDatabase implements DataClassDatabaseInterface
         catch (Throwable $throwable) {
             $this->handleError($throwable);
 
-            throw new StorageMethodException(__FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage());
+            throw new StorageMethodException(
+                __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage()
+            );
         }
     }
 
     /**
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function distinct(string $dataClassStorageUnitName, StorageParameters $parameters): array
     {
@@ -330,7 +337,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function retrieve(string $dataClassStorageUnitName, StorageParameters $parameters): ?array
     {
@@ -341,16 +348,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
                 $record = $queryBuilder->fetchAssociative();
 
                 if ($record === false) {
-                    throw new StorageNoResultException(
-                        __FUNCTION__, $dataClassStorageUnitName, $parameters,
-                        'No result for query: ' . $queryBuilder->getSQL()
-                    );
+                    throw new StorageNoResultException($dataClassStorageUnitName, $parameters, $queryBuilder->getSQL());
                 }
 
                 return $record;
             }
-            catch (StorageNoResultException $exception) {
-                throw $exception;
+            catch (StorageNoResultException $storageNoResultException) {
+                throw $storageNoResultException;
             }
             catch (Throwable $throwable) {
                 $this->handleError($throwable);
@@ -370,7 +374,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function retrieves(string $dataClassStorageUnitName, StorageParameters $parameters): array
     {
@@ -429,7 +433,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Doctrine\DBAL\Exception
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function update(string $dataClassStorageUnitName, UpdateProperties $properties, ConditionInterface $condition
     ): bool

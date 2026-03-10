@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Table\Service;
 
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
@@ -113,7 +113,7 @@ class PageNavigationRenderer
      * @param string[] $translationVariables
      *
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function renderItemsPerPageSelector(
         TableParameterValues $parameterValues, string $itemsPerPageParameterName, array $translationVariables = []
@@ -122,7 +122,7 @@ class PageNavigationRenderer
         $buttonToolBar = new ButtonToolBar();
         $translator = $this->getTranslator();
 
-        $defaultTranslationVariables[Application::PARAM_CONTEXT] = StringUtilities::LIBRARIES;
+        $defaultTranslationVariables[ApplicationInterface::PARAM_CONTEXT] = StringUtilities::LIBRARIES;
         $defaultTranslationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE] = 'ShowNumberOfItemsPerPage';
         $defaultTranslationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW] = 'ShowNumberOfItemsPerPage';
         $defaultTranslationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL] = 'ShowAllItems';
@@ -134,13 +134,13 @@ class PageNavigationRenderer
         if ($numberOfItemsPerPage >= $parameterValues->getTotalNumberOfItems()) {
             $dropDownButtonLabel = $translator->trans(
                 $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL], [],
-                $translationVariables[Application::PARAM_CONTEXT]
+                $translationVariables[ApplicationInterface::PARAM_CONTEXT]
             );
         }
         else {
             $dropDownButtonLabel = $translator->trans(
                 $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE], ['%Number%' => $numberOfItemsPerPage],
-                $translationVariables[Application::PARAM_CONTEXT]
+                $translationVariables[ApplicationInterface::PARAM_CONTEXT]
             );
         }
 
@@ -159,7 +159,7 @@ class PageNavigationRenderer
                 new SubButton(
                     $translator->trans(
                         $translationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW], ['%Number%' => $nr],
-                        $translationVariables[Application::PARAM_CONTEXT]
+                        $translationVariables[ApplicationInterface::PARAM_CONTEXT]
                     ), null, $this->getUrlGenerator()->fromRequest(
                     [$itemsPerPageParameterName => $numberrOfRowsOption]
                 ), DisplayTypeEnum::LABEL, null, [], null,
@@ -173,7 +173,7 @@ class PageNavigationRenderer
                 new SubButton(
                     $translator->trans(
                         $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL], [],
-                        $translationVariables[Application::PARAM_CONTEXT]
+                        $translationVariables[ApplicationInterface::PARAM_CONTEXT]
                     ), null, $this->getUrlGenerator()->fromRequest(
                     [$itemsPerPageParameterName => PageNavigationCalculator::DISPLAY_ALL]
                 ), DisplayTypeEnum::LABEL, null, [], null,

@@ -8,10 +8,11 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Form\RegisterForm;
 use Chamilo\Core\User\UserInterface\Form\UserForm;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -37,8 +38,8 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
         $form = new RegisterForm(
             $this->getUrlGenerator()->fromParameters(
                 [
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => ActionEnum::REGISTER->value
+                    ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                    ApplicationInterface::PARAM_ACTION => ActionEnum::REGISTER->value
                 ]
             )
         );
@@ -64,10 +65,10 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
                         if (!$userPictureProvider->updateUserPictureFromParameters(
                             $registeredUser, $currentUser, $pictureInformation
                         )) {
-                            $this->getNotificationMessageManager()->addMessage(
-                                new NotificationMessage(
+                            $this->getNotificationMessageManager()->addAlert(
+                                new Alert(
                                     $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
-                                    NotificationMessage::TYPE_WARNING
+                                    AlertEnum::WARNING
                                 )
                             );
                         }
@@ -77,8 +78,8 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
                 return new RedirectResponse($this->getUrlGenerator()->fromParameters());
             }
             catch (Exception $exception) {
-                $this->getNotificationMessageManager()->addMessage(
-                    new NotificationMessage($exception->getMessage(), NotificationMessage::TYPE_DANGER)
+                $this->getNotificationMessageManager()->addAlert(
+                    new Alert($exception->getMessage(), AlertEnum::DANGER)
                 );
             }
         }

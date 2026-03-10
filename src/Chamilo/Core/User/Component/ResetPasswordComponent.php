@@ -3,14 +3,14 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Exception\UserException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_submit;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
 use HTML_QuickForm_Rule_Email;
 use HTML_QuickForm_Rule_Required;
 use HTML_QuickForm_text;
@@ -26,7 +26,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -56,10 +56,10 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
                     throw new UserException($translator->trans('CreationOfNewPasswordFailed', [], Manager::CONTEXT));
                 }
                 else {
-                    $html[] = $this->getNotificationMessageRenderer()->renderOne(
-                        new NotificationMessage(
+                    $html[] = $this->getAlertRenderer()->render(
+                        new Alert(
                             $translator->trans('YourNewPasswordHasBeenMailedToYou', [], Manager::CONTEXT)
-                        ), false
+                        )
                     );
                 }
             }
@@ -77,9 +77,9 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
                 if ($userService->sendPasswordResetLinkforUser($userToResetPasswordFor)) {
                     $html[] = '<div class="alert alert-success">' . $translator->trans(
                             'ResetLinkSendForUser', [
-                                '%User%' => $userToResetPasswordFor->getFullName() . ' (' .
-                                    $userToResetPasswordFor->getUsername() . ')'
-                            ], Manager::CONTEXT
+                            '%User%' => $userToResetPasswordFor->getFullName() . ' (' .
+                                $userToResetPasswordFor->getUsername() . ')'
+                        ], Manager::CONTEXT
                         ) . '</div>';
                 }
             }

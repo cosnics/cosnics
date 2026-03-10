@@ -4,8 +4,9 @@ namespace Chamilo\Libraries\Protocol\Authentication\Service;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
-use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Exception;
 use Monolog\Logger;
 use phpCAS;
@@ -40,8 +41,8 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
     public function __construct(
         Translator $translator, ChamiloRequest $request, UserService $userService,
-        AuthenticationValidator $authenticationValidator, SessionInterface $session, Logger $logger,
-        string $host = '', bool $enableLog = false, bool $checkCertificate = false, ?string $certificatePath = null,
+        AuthenticationValidator $authenticationValidator, SessionInterface $session, Logger $logger, string $host = '',
+        bool $enableLog = false, bool $checkCertificate = false, ?string $certificatePath = null,
         ?string $logPath = null, int $port = 443, string $uri = ''
     )
     {
@@ -159,7 +160,6 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
      * @throws \Exception
      */
     public function login(bool $checkIfAuthenticationSourceIsEnabled = true): ?User
@@ -167,7 +167,9 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
         $this->checkAuthenticationSource($checkIfAuthenticationSourceIsEnabled);
         $this->initializeClient();
 
-        $authenticationException = new AuthenticationException($this->getTranslator()->trans('CasAuthenticationError'));
+        $authenticationException = new NotAuthenticatedException(
+            $this->getTranslator()->trans('CasAuthenticationError', [], StringUtilities::LIBRARIES)
+        );
 
         try {
             phpCAS::forceAuthentication();
@@ -214,7 +216,6 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
      * @param string[] $casUserAttributes
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
      * @throws \Exception
      */
     abstract protected function registerUser(string $casUser, array $casUserAttributes = []): User;

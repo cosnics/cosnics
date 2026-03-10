@@ -4,8 +4,8 @@ namespace Chamilo\Core\Group\UserInterface\Table;
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
@@ -61,8 +61,8 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
         $unsubscribeUrl = $urlGenerator->fromRequest([
-            Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => ActionEnum::SUBSCRIBE->value
+            ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+            ApplicationInterface::PARAM_ACTION => ActionEnum::SUBSCRIBE->value
         ]);
 
         $actions->addAction(
@@ -100,7 +100,7 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $result
      *
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      * @throws \QuickformException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
@@ -111,7 +111,7 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
         $buttonToolBar = new MiniButtonToolBar();
 
         $subscribeUrl = $urlGenerator->fromRequest([
-            Application::PARAM_ACTION => ActionEnum::SUBSCRIBE->value,
+            ApplicationInterface::PARAM_ACTION => ActionEnum::SUBSCRIBE->value,
             Manager::PARAM_USER_ID => $result->getId()
 
         ]);

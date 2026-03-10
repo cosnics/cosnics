@@ -7,7 +7,7 @@ use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\User\Architecture\Interface\UserDetailsRendererInterface;
 use Chamilo\Core\User\Architecture\Trait\UserDetailsRendererTrait;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\NamespaceIdentGlyph;
@@ -92,8 +92,8 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
             foreach ($groups as $group) {
                 $viewUrl = $this->getUrlGenerator()->fromParameters(
                     [
-                        Application::PARAM_CONTEXT => Manager::CONTEXT,
-                        Application::PARAM_ACTION => ActionEnum::BROWSE->value,
+                        ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                        ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
                         Manager::PARAM_GROUP_ID => $group->getId()
                     ]
                 );

@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Authentication\Architecture\Exception;
 
-use Chamilo\Libraries\Architecture\Exception\UserException;
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Protocol\Authentication\Service\NotAllowedExceptionRenderer;
+use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionInterface;
+use Exception;
 
 /**
  * This class represents a parameter not defined exception.
@@ -11,12 +12,10 @@ use Chamilo\Libraries\Service\Utilities\StringUtilities;
  *
  * @package Chamilo\Libraries\Protocol\Authentication\Architecture\Exception
  */
-class NotAllowedException extends UserException
+class NotAllowedException extends Exception implements UserExceptionInterface
 {
-    public function __construct()
+    public function getUserExceptionRendererClassName(): string
     {
-        $this->getSession()->set('request_uri', $_SERVER['REQUEST_URI']);
-
-        parent::__construct($this->getTranslator()->trans('NotAllowed', [], StringUtilities::LIBRARIES));
+        return NotAllowedExceptionRenderer::class;
     }
 }

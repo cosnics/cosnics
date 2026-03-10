@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\GroupNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchGroupException;
 use Exception;
 use Microsoft\Graph\Generated\Models\Group;
 use Microsoft\Graph\Generated\Models\PlannerPlan;
@@ -87,7 +87,7 @@ class GroupRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchGroupException
      */
     public function getGroup(string $groupIdentifier): Group
     {
@@ -95,13 +95,13 @@ class GroupRepository
             $group = $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->get()->wait();
 
             if (!$group instanceof Group) {
-                throw new GroupNotExistsException('Group not found: ' . $groupIdentifier);
+                throw new NoSuchGroupException('Group not found: ' . $groupIdentifier);
             }
 
             return $group;
         }
         catch (Exception) {
-            throw new GroupNotExistsException('Group not found: ' . $groupIdentifier);
+            throw new NoSuchGroupException('Group not found: ' . $groupIdentifier);
         }
     }
 

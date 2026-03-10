@@ -2,8 +2,8 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\GroupNotExistsException;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchGroupException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
 use Exception;
 use Microsoft\Graph\Generated\Models\Group;
@@ -32,8 +32,8 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      */
     public function addMemberToGroup(string $groupId, User $user): bool
     {
@@ -41,7 +41,7 @@ class GroupService
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
 
             if (empty($azureUserIdentifier)) {
-                throw new UserNotFoundException($user);
+                throw new NoSuchUserException($user);
             }
 
             return $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
@@ -51,8 +51,8 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      */
     public function addOwnerToGroup(string $groupId, User $user): bool
     {
@@ -60,7 +60,7 @@ class GroupService
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
 
             if (empty($azureUserIdentifier)) {
-                throw new UserNotFoundException($user);
+                throw new NoSuchUserException($user);
             }
 
             return $this->getGroupRepository()->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
@@ -70,8 +70,8 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      * @throws \Exception
      */
     public function createGroupByName(User $owner, string $groupName): ?string
@@ -79,7 +79,7 @@ class GroupService
         $azureUserIdentifier = $this->getAzureUserIdentifier($owner);
 
         if (empty($azureUserIdentifier)) {
-            throw new UserNotFoundException($owner);
+            throw new NoSuchUserException($owner);
         }
 
         $group = $this->getGroupRepository()->createGroup($groupName);
@@ -104,8 +104,8 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      */
     protected function getAzureUserIdentifier(User $user): ?string
     {
@@ -127,7 +127,7 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchGroupException
      * @throws \Exception
      */
     public function getGroup(string $groupId): Group
@@ -193,7 +193,7 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchGroupException
      */
     public function getGroupUrl(string $groupId): string
     {
@@ -222,8 +222,8 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      * @throws \Exception
      */
     public function isMemberOfGroup(string $groupId, User $user): bool
@@ -293,8 +293,8 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      */
     public function removeMemberFromGroup(string $groupId, User $user): bool
     {
@@ -308,8 +308,8 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      */
     public function removeOwnerFromGroup(string $groupId, User $user): bool
     {
@@ -327,7 +327,7 @@ class GroupService
      * @param array<\Chamilo\Core\User\Storage\DataClass\User> $users
      * @param ?array<\Chamilo\Core\User\Storage\DataClass\User> $excludedUsersForRemoval
      *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      * @throws \Exception
      */
     public function syncUsersToGroup(string $groupId, array $users = [], ?array $excludedUsersForRemoval = []): void
@@ -368,7 +368,7 @@ class GroupService
                 $this->groupRepository->removeMemberFromGroup($groupId, $userToRemove);
             }
         }
-        catch (GroupNotExistsException) {
+        catch (NoSuchGroupException) {
             throw new RuntimeException(
                 'The group with identifier ' . $groupId . ' could not be found'
             );

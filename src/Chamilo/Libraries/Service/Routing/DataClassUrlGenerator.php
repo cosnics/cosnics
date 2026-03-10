@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Service\Routing;
 
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 
 /**
@@ -26,7 +26,7 @@ class DataClassUrlGenerator
     ): string
     {
         $parameters = [
-            Application::PARAM_CONTEXT => $context,
+            ApplicationInterface::PARAM_CONTEXT => $context,
             $actionParameterName => $action,
             $dataClassParameterName => $dataClass->getId()
         ];

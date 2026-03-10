@@ -50,10 +50,7 @@ class DefaultFooterRenderer
     {
         $html = [];
 
-        $html[] = '<div class="clearfix"></div>';
         $html[] = '</div>';
-
-        $html[] = '<div class="clearfix"></div>';
         $html[] = '</div>';
 
         $html[] = $this->getBaseFooterRenderer()->renderHeader();

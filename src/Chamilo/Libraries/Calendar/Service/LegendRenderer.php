@@ -3,8 +3,9 @@ namespace Chamilo\Libraries\Calendar\Service;
 
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageManager;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Exception;
 use Symfony\Component\Translation\Translator;
 
@@ -14,7 +15,7 @@ use Symfony\Component\Translation\Translator;
  */
 class LegendRenderer
 {
-    protected NotificationMessageManager $notificationMessageManager;
+    protected AlertsManager $notificationMessageManager;
 
     protected ResourceManager $resourceManager;
 
@@ -28,8 +29,8 @@ class LegendRenderer
     protected WebPathBuilder $webPathBuilder;
 
     public function __construct(
-        NotificationMessageManager $notificationMessageManager, Translator $translator,
-        ResourceManager $resourceManager, WebPathBuilder $webPathBuilder
+        AlertsManager $notificationMessageManager, Translator $translator, ResourceManager $resourceManager,
+        WebPathBuilder $webPathBuilder
     )
     {
         $this->notificationMessageManager = $notificationMessageManager;
@@ -98,10 +99,10 @@ class LegendRenderer
                 );
 
                 if ($visibleSources == 0) {
-                    $this->getNotificationMessageManager()->addMessage(
-                        new NotificationMessage(
+                    $this->getNotificationMessageManager()->addAlert(
+                        new Alert(
                             $translator->trans('AllEventSourcesHidden', [], 'Chamilo\Libraries\Calendar'),
-                            NotificationMessage::TYPE_WARNING
+                            AlertEnum::WARNING
                         )
                     );
                 }
@@ -123,7 +124,7 @@ class LegendRenderer
         return $this->getSourceKey($source);
     }
 
-    public function getNotificationMessageManager(): NotificationMessageManager
+    public function getNotificationMessageManager(): AlertsManager
     {
         return $this->notificationMessageManager;
     }

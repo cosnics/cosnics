@@ -4,19 +4,15 @@ namespace Chamilo\Libraries\Service\Bootstrap;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserEnterPageEvent;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
-use Chamilo\Libraries\Architecture\Exception\PlatformNotAvailableException;
-use Chamilo\Libraries\Architecture\Exception\UserException;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Architecture\Interface\NoVisitTraceComponentInterface;
-use Chamilo\Libraries\Architecture\Response\PlatformNotAvailableResponse;
-use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
-use Chamilo\Libraries\Protocol\Authentication\Architecture\Response\NotAuthenticatedResponse;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\PlatformNotAvailableException;
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
-use Chamilo\Libraries\Protocol\Error\Architecture\Response\ExceptionResponse;
+use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionInterface;
+use Chamilo\Libraries\Protocol\Error\Service\UserExceptionResponseRenderer;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -30,9 +26,9 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 class Kernel
 {
-    public const PARAM_CODE = 'code';
-    public const PARAM_SESSION_STATE = 'session_state';
-    public const PARAM_STATE = 'state';
+    public const string PARAM_CODE = 'code';
+    public const string PARAM_SESSION_STATE = 'session_state';
+    public const string PARAM_STATE = 'state';
 
     protected AuthenticationValidator $authenticationValidator;
 
@@ -43,6 +39,8 @@ class Kernel
     protected SessionInterface $session;
 
     protected ?string $timezone;
+
+    protected UserExceptionResponseRenderer $userExceptionResponseRenderer;
 
     private ApplicationFactory $applicationFactory;
 
@@ -57,7 +55,8 @@ class Kernel
     public function __construct(
         ChamiloRequest $request, SessionInterface $session, ApplicationFactory $applicationFactory,
         ExceptionLoggerInterface $exceptionLogger, AuthenticationValidator $authenticationValidator,
-        UrlGenerator $urlGenerator, EventDispatcherInterface $eventDispatcher, string $timezone, User $user = null,
+        UrlGenerator $urlGenerator, EventDispatcherInterface $eventDispatcher,
+        UserExceptionResponseRenderer $userExceptionResponseRenderer, string $timezone, User $user = null,
         bool $maintenanceMode = false
     )
     {
@@ -71,10 +70,11 @@ class Kernel
         $this->eventDispatcher = $eventDispatcher;
         $this->maintenanceMode = $maintenanceMode;
         $this->timezone = $timezone;
+        $this->userExceptionResponseRenderer = $userExceptionResponseRenderer;
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      */
     protected function checkAuthentication(): static
@@ -89,7 +89,7 @@ class Kernel
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\PlatformNotAvailableException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\PlatformNotAvailableException
      */
     protected function checkPlatformAvailability(): static
     {
@@ -97,7 +97,7 @@ class Kernel
             $asAdmin = $this->getSession()->get('_as_admin');
 
             if ($this->getUser() instanceof User && !$this->getUser()->isPlatformAdministrator() && !$asAdmin) {
-                throw new PlatformNotAvailableException('Platform temporarily unavailable due to maintenance.');
+                throw new PlatformNotAvailableException();
             }
         }
 
@@ -115,13 +115,13 @@ class Kernel
     {
         $request = $this->getRequest();
 
-        $getAction = $request->query->get(Application::PARAM_ACTION);
+        $getAction = $request->query->get(ApplicationInterface::PARAM_ACTION);
 
         if ($getAction) {
             return $getAction;
         }
 
-        $postAction = $request->request->get(Application::PARAM_ACTION);
+        $postAction = $request->request->get(ApplicationInterface::PARAM_ACTION);
 
         if ($postAction) {
             return $postAction;
@@ -142,7 +142,7 @@ class Kernel
 
     public function getContext(): ?string
     {
-        return $this->getRequest()->getFromQueryOrRequest(Application::PARAM_CONTEXT, Manager::CONTEXT);
+        return $this->getRequest()->getFromQueryOrRequest(ApplicationInterface::PARAM_CONTEXT, Manager::CONTEXT);
     }
 
     public function getEventDispatcher(): EventDispatcherInterface
@@ -153,16 +153,6 @@ class Kernel
     public function getExceptionLogger(): ExceptionLoggerInterface
     {
         return $this->exceptionLogger;
-    }
-
-    protected function getNotAuthenticatedResponse(): NotAuthenticatedResponse
-    {
-        return new NotAuthenticatedResponse();
-    }
-
-    protected function getPlatformNotAvailableResponse(): PlatformNotAvailableResponse
-    {
-        return new PlatformNotAvailableResponse();
     }
 
     public function getRequest(): ChamiloRequest
@@ -188,6 +178,11 @@ class Kernel
     public function getUser(): ?User
     {
         return $this->user;
+    }
+
+    public function getUserExceptionResponseRenderer(): UserExceptionResponseRenderer
+    {
+        return $this->userExceptionResponseRenderer;
     }
 
     /**
@@ -252,16 +247,10 @@ class Kernel
 
             $response = $application->run($this->getUser());
         }
-        catch (NotAuthenticatedException) {
-            $response = $this->getNotAuthenticatedResponse();
-        }
-        catch (PlatformNotAvailableException) {
-            $response = $this->getPlatformNotAvailableResponse();
-        }
-        catch (UserException $exception) {
+        catch (UserExceptionInterface $exception) {
             $this->getExceptionLogger()->logException($exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING);
 
-            $response = new ExceptionResponse($exception);
+            $response = new Response($this->getUserExceptionResponseRenderer()->render($exception));
         }
 
         $this->sendResponse($response);

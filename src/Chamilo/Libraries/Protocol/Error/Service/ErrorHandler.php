@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Error\Service;
 
+use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
 use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use Exception;
@@ -33,7 +34,7 @@ class ErrorHandler
 
     protected function displayGeneralErrorPage(): void
     {
-        $path = $this->getThemeSystemPathBuilder()->getTemplatePath('Chamilo\Core\Admin', false) . 'Error.html.tpl';
+        $path = $this->getThemeSystemPathBuilder()->getTemplatePath(Manager::CONTEXT, false) . 'Error.html.tpl';
 
         $template = file_get_contents($path);
 
@@ -62,7 +63,7 @@ class ErrorHandler
     }
 
     protected function getTranslation(
-        string $variable, array $parameters = [], string $context = 'Chamilo\Core\Admin'
+        string $variable, array $parameters = [], string $context = Manager::CONTEXT
     ): string
     {
         return $this->getTranslator()->trans($variable, $parameters, $context);

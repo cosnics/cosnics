@@ -10,7 +10,8 @@ use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,7 +24,6 @@ class CreateComponent extends Manager
     /**
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectNotExistException
      * @throws \Throwable
      */
     public function run(?User $currentUser = null): Response
@@ -55,8 +55,8 @@ class CreateComponent extends Manager
             if ($success) {
                 $group = $form->getGroup();
 
-                $this->getNotificationMessageManager()->addMessage(
-                    new NotificationMessage(
+                $this->getNotificationMessageManager()->addAlert(
+                    new Alert(
                         $translator->trans(
                             'ObjectCreated', ['%Object%' => $translator->trans('Group', [], Manager::CONTEXT)],
                             StringUtilities::LIBRARIES
@@ -64,23 +64,23 @@ class CreateComponent extends Manager
                     )
                 );
 
-                new RedirectResponse($this->getUrlGenerator()->fromParameters([
+                return new RedirectResponse($this->getUrlGenerator()->fromParameters([
                     ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                     ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
                     self::PARAM_GROUP_ID => $group->getId()
                 ]));
             }
             else {
-                $this->getNotificationMessageManager()->addMessage(
-                    new NotificationMessage(
+                $this->getNotificationMessageManager()->addAlert(
+                    new Alert(
                         $translator->trans(
                             'ObjectNotCreated', ['%Object%' => $translator->trans('Group', [], Manager::CONTEXT)],
                             StringUtilities::LIBRARIES
-                        ), NotificationMessage::TYPE_DANGER
+                        ), AlertEnum::DANGER
                     )
                 );
 
-                new RedirectResponse($this->getUrlGenerator()->fromParameters([
+                return new RedirectResponse($this->getUrlGenerator()->fromParameters([
                     ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                     ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
                     self::PARAM_GROUP_ID => $parentGroupIdentifier

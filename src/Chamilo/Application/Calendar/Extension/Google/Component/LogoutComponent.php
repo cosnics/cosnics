@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Component;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,7 +30,7 @@ class LogoutComponent extends Manager
 
         return new RedirectResponse(
             $this->getUrlGenerator()->fromParameters(
-                [Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT]
+                [ApplicationInterface::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT]
             )
         );
     }

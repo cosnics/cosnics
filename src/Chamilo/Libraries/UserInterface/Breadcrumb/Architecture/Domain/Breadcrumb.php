@@ -9,14 +9,13 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
  */
 class Breadcrumb
 {
-
     private ?InlineGlyph $inlineGlyph;
 
     private string $name;
 
-    private string $url;
+    private ?string $url;
 
-    public function __construct(string $url, string $name, ?InlineGlyph $inlineGlyph = null)
+    public function __construct(string $name, ?string $url = null, ?InlineGlyph $inlineGlyph = null)
     {
         $this->url = $url;
         $this->name = $name;
@@ -47,7 +46,7 @@ class Breadcrumb
         return $this;
     }
 
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
         return $this->url;
     }

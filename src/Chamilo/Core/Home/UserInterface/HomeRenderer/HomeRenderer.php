@@ -40,6 +40,7 @@ class HomeRenderer
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      */
     public function render(?int $currentTabIdentifier = null, ?User $user = null): string
     {
@@ -75,6 +76,7 @@ class HomeRenderer
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      */
     public function renderContent(?int $currentTabIdentifier = null, ?User $user = null): string
     {

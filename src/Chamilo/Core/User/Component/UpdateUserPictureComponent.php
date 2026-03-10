@@ -6,8 +6,9 @@ use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Form\PictureForm;
-use Chamilo\Libraries\Architecture\Domain\Application;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -63,16 +64,16 @@ class UpdateUserPictureComponent extends ProfileComponent
                     $successMessage = 'UserProfileUpdated';
                 }
 
-                $this->getNotificationMessageManager()->addMessage(
-                    new NotificationMessage(
+                $this->getNotificationMessageManager()->addAlert(
+                    new Alert(
                         $this->getTranslator()->trans($success ? $successMessage : $errorMessage),
-                        !$success ? NotificationMessage::TYPE_DANGER : NotificationMessage::TYPE_SUCCESS
+                        !$success ? AlertEnum::DANGER : AlertEnum::SUCCESS
                     )
                 );
 
                 return new RedirectResponse($this->getUrlGenerator()->fromParameters([
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => ActionEnum::UPDATE_USER_PICTURE->value
+                    ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                    ApplicationInterface::PARAM_ACTION => ActionEnum::UPDATE_USER_PICTURE->value
                 ]));
             }
             else {

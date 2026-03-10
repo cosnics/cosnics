@@ -7,9 +7,10 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Form\UserCreationForm;
 use Chamilo\Core\User\UserInterface\Form\UserForm;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -59,34 +60,34 @@ class CreateComponent extends Manager
                         if (!$userPictureProvider->updateUserPictureFromParameters(
                             $createdUser, $currentUser, $pictureInformation
                         )) {
-                            $this->getNotificationMessageManager()->addMessage(
-                                new NotificationMessage(
+                            $this->getNotificationMessageManager()->addAlert(
+                                new Alert(
                                     $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
-                                    NotificationMessage::TYPE_WARNING
+                                    AlertEnum::WARNING
                                 )
                             );
                         }
                     }
                 }
 
-                $this->getNotificationMessageManager()->addMessage(
-                    new NotificationMessage(
-                        $translator->trans('UserCreated', [], Manager::CONTEXT), NotificationMessage::TYPE_SUCCESS
+                $this->getNotificationMessageManager()->addAlert(
+                    new Alert(
+                        $translator->trans('UserCreated', [], Manager::CONTEXT), AlertEnum::SUCCESS
                     )
                 );
 
                 return new RedirectResponse(
                     $this->getUrlGenerator()->fromParameters(
                         [
-                            Application::PARAM_CONTEXT => Manager::CONTEXT,
-                            Application::PARAM_ACTION => ActionEnum::BROWSE->value
+                            ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                            ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value
                         ]
                     )
                 );
             }
             catch (Exception $exception) {
-                $this->getNotificationMessageManager()->addMessage(
-                    new NotificationMessage($exception->getMessage(), NotificationMessage::TYPE_DANGER)
+                $this->getNotificationMessageManager()->addAlert(
+                    new Alert($exception->getMessage(), AlertEnum::DANGER)
                 );
             }
         }

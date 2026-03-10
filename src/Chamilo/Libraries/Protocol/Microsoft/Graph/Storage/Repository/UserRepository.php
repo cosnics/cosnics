@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException;
 use Exception;
 use Microsoft\Graph\GraphServiceClient;
 
@@ -26,7 +26,7 @@ class UserRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      */
     public function getUser(User $user): ?\Microsoft\Graph\Generated\Models\User
     {
@@ -37,11 +37,11 @@ class UserRepository
                 return $graphUser;
             }
 
-            throw new UserNotFoundException($user);
+            throw new NoSuchUserException($user);
         }
         catch (Exception $exception) {
             if ($exception->getCode() == 404) {
-                throw new UserNotFoundException($user);
+                throw new NoSuchUserException($user);
             }
 
             throw $exception;

@@ -6,7 +6,7 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\DataClassUrlGenerator;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 
@@ -47,7 +47,8 @@ class GroupUrlGenerator
     protected function getGroupActionUrl(string $action, Group $group, array $additionalParameters = []): string
     {
         return $this->getDataClassUrlGenerator()->getActionUrl(
-            Manager::CONTEXT, Application::PARAM_ACTION, Manager::PARAM_GROUP_ID, $action, $group, $additionalParameters
+            Manager::CONTEXT, ApplicationInterface::PARAM_ACTION, Manager::PARAM_GROUP_ID, $action, $group,
+            $additionalParameters
         );
     }
 
@@ -77,8 +78,8 @@ class GroupUrlGenerator
     {
         return $this->getUrlGenerator()->fromParameters(
             [
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => ActionEnum::UNSUBSCRIBE->value,
+                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                ApplicationInterface::PARAM_ACTION => ActionEnum::UNSUBSCRIBE->value,
                 Manager::PARAM_RELATION_ID => $subscribedUser->getRelationId()
             ]
         );

@@ -11,11 +11,11 @@ use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertRenderer;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageRenderer;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -26,15 +26,15 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
 {
     use AgendaCalendarTrait;
 
-    protected EventListRenderer $eventListRenderer;
+    protected AlertRenderer $alertRenderer;
 
-    protected NotificationMessageRenderer $notificationMessageRenderer;
+    protected EventListRenderer $eventListRenderer;
 
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
         MiniMonthCalendarRenderer $miniMonthCalendarRenderer, EventListRenderer $eventListRenderer,
         WebPathBuilder $webPathBuilder, ResourceManager $resourceManager, JumpBarRenderer $jumpBarRenderer,
-        NotificationMessageRenderer $notificationMessageRenderer, ButtonToolBarRenderer $buttonToolBarRenderer
+        AlertRenderer $alertRenderer, ButtonToolBarRenderer $buttonToolBarRenderer
     )
     {
         parent::__construct(
@@ -43,7 +43,12 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
         );
 
         $this->eventListRenderer = $eventListRenderer;
-        $this->notificationMessageRenderer = $notificationMessageRenderer;
+        $this->alertRenderer = $alertRenderer;
+    }
+
+    public function getAlertRenderer(): AlertRenderer
+    {
+        return $this->alertRenderer;
     }
 
     protected function getEndTime(int $displayTime): int
@@ -56,14 +61,9 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
         return $this->eventListRenderer;
     }
 
-    public function getNotificationMessageRenderer(): NotificationMessageRenderer
-    {
-        return $this->notificationMessageRenderer;
-    }
-
     /**
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function renderNavigation(array $displayParameters, int $displayTime): string
     {

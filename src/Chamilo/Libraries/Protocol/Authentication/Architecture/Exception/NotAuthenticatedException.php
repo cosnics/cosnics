@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Authentication\Architecture\Exception;
 
-use Chamilo\Libraries\Architecture\Exception\UserException;
+use Chamilo\Libraries\Protocol\Authentication\Service\NotAuthenticatedExceptionRenderer;
+use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionInterface;
+use Exception;
 
 /**
  * Exception to be thrown when the user is not authenticated
@@ -9,6 +11,10 @@ use Chamilo\Libraries\Architecture\Exception\UserException;
  * @package Chamilo\Libraries\Protocol\Authentication\Architecture\Exception
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class NotAuthenticatedException extends UserException
+class NotAuthenticatedException extends Exception implements UserExceptionInterface
 {
+    public function getUserExceptionRendererClassName(): string
+    {
+        return NotAuthenticatedExceptionRenderer::class;
+    }
 }

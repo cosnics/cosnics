@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\UserInterface\Form\AvailabilityForm;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Utilities\ActionResultRenderer;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -43,7 +43,7 @@ class AvailabilityComponent extends Manager
 
             return new RedirectResponse(
                 $this->getUrlGenerator()->fromParameters(
-                    [Application::PARAM_CONTEXT => Manager::CONTEXT]
+                    [ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT]
                 )
             );
         }

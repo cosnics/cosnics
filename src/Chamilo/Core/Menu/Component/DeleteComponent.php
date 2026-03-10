@@ -4,11 +4,12 @@ namespace Chamilo\Core\Menu\Component;
 use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
-use Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchParameterException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +24,7 @@ class DeleteComponent extends Manager
 {
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     * @throws \Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchParameterException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -72,23 +73,23 @@ class DeleteComponent extends Manager
             );
         }
 
-        $this->getNotificationMessageManager()->addMessage(
-            new NotificationMessage(
+        $this->getNotificationMessageManager()->addAlert(
+            new Alert(
                 $translator->trans($message, [], \Chamilo\Core\Group\Manager::CONTEXT),
-                $failures ? NotificationMessage::TYPE_DANGER : NotificationMessage::TYPE_SUCCESS
+                $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS
             )
         );
 
         return new RedirectResponse($this->getUrlGenerator()->fromParameters([
-            Application::PARAM_CONTEXT => Manager::CONTEXT,
-            Application::PARAM_ACTION => ActionEnum::BROWSE->value,
+            ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+            ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
             Manager::PARAM_PARENT => $parentIdentifier
         ]));
     }
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
-     * @throws \Chamilo\Libraries\Architecture\Exception\ParameterNotDefinedException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchParameterException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     protected function getItems(): ArrayCollection
@@ -96,7 +97,7 @@ class DeleteComponent extends Manager
         $itemIdentifiers = $this->getRequest()->query->get(self::PARAM_ITEM);
 
         if (is_null($itemIdentifiers)) {
-            throw new ParameterNotDefinedException(self::PARAM_ITEM);
+            throw new NoSuchParameterException(self::PARAM_ITEM);
         }
 
         if (!is_array($itemIdentifiers)) {

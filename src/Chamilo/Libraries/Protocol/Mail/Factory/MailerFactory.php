@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Mail\Factory;
 
-use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
 use Chamilo\Libraries\Protocol\Mail\Service\Platform;
 use Symfony\Component\Translation\Translator;
@@ -42,7 +42,7 @@ class MailerFactory
         try {
             return $this->getMailer($this->getConfiguredMailerClass());
         }
-        catch (ClassNotExistException) {
+        catch (NoSuchClassException) {
             return $this->getDefaultMailer();
         }
     }
@@ -58,12 +58,14 @@ class MailerFactory
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function getMailer(string $mailerClass): MailerInterface
     {
         if (!isset($this->mailers[$mailerClass])) {
-            throw new ClassNotExistException($mailerClass);
+            throw new NoSuchClassException(
+                $mailerClass, MailerInterface::class
+            );
         }
 
         return $this->mailers[$mailerClass];

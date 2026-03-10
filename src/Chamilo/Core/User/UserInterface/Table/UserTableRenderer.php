@@ -5,8 +5,8 @@ use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -70,7 +70,10 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
         $deleteUrl = $urlGenerator->fromParameters(
-            [Application::PARAM_CONTEXT => Manager::CONTEXT, Application::PARAM_ACTION => ActionEnum::DELETE->value]
+            [
+                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                ApplicationInterface::PARAM_ACTION => ActionEnum::DELETE->value
+            ]
         );
 
         $actions->addAction(
@@ -81,8 +84,8 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         $activateUrl = $urlGenerator->fromParameters(
             [
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => ActionEnum::ACTIVE->value,
+                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                ApplicationInterface::PARAM_ACTION => ActionEnum::ACTIVE->value,
                 Manager::PARAM_ACTIVE => 1
             ]
         );
@@ -95,8 +98,8 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         $deactivateUrl = $urlGenerator->fromParameters(
             [
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => ActionEnum::ACTIVE->value,
+                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                ApplicationInterface::PARAM_ACTION => ActionEnum::ACTIVE->value,
                 Manager::PARAM_ACTIVE => 0
             ]
         );
@@ -109,8 +112,8 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         $resetPasswordUrl = $urlGenerator->fromParameters(
             [
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => ActionEnum::RESET_PASSWORD_MULTI->value
+                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                ApplicationInterface::PARAM_ACTION => ActionEnum::RESET_PASSWORD_MULTI->value
             ]
         );
 
@@ -180,7 +183,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $result
      *
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      * @throws \QuickformException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string

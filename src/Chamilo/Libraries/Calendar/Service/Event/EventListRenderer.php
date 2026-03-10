@@ -132,7 +132,7 @@ class EventListRenderer extends EventRenderer
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      * @throws \QuickformException
      */
     public function renderActions(array $eventActions = []): string

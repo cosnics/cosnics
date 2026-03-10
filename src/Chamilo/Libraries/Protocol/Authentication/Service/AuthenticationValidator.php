@@ -1,14 +1,15 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Authentication\Service;
 
+use Chamilo\Core\Home\Manager;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserLoginEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserLogoutEvent;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
-use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -124,6 +125,9 @@ class AuthenticationValidator
         return in_array($authenticationSource, $this->getEnabledSources());
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     */
     public function logout(User $user): void
     {
         $this->getEventDispatcher()->dispatch(new BeforeUserLogoutEvent($user, $this->request->getClientIp()));
@@ -135,18 +139,20 @@ class AuthenticationValidator
                 $authentication->logout($user);
             }
         }
+
+        throw new UserException($this->getTranslator()->trans('LogoutFailed', [], StringUtilities::LIBRARIES));
     }
 
     protected function redirectAfterLogin(): void
     {
-        $context = $this->request->query->get(Application::PARAM_CONTEXT);
+        $context = $this->request->query->get(ApplicationInterface::PARAM_CONTEXT);
 
-        if ($this->request->query->count() > 0 && $context != 'Chamilo\Core\Home') {
+        if ($this->request->query->count() > 0 && $context != Manager::CONTEXT) {
             $parameters = $this->request->query->all();
         }
         else {
             $parameters = [
-                Application::PARAM_CONTEXT => 'Chamilo\Core\Home'
+                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT
             ];
         }
 
@@ -180,7 +186,9 @@ class AuthenticationValidator
             }
         }
 
-        throw new NotAuthenticatedException('Authentication validation failed');
+        throw new NotAuthenticatedException(
+            $this->getTranslator()->trans('AuthenticationValidationFailed', [], StringUtilities::LIBRARIES)
+        );
     }
 
     /**
@@ -191,39 +199,23 @@ class AuthenticationValidator
         bool $redirectAfterLogin = true
     ): void
     {
-        try {
-            $user = $authentication->login($checkIfAuthenticationSourceIsEnabled);
+        $user = $authentication->login($checkIfAuthenticationSourceIsEnabled);
 
-            if (!$user instanceof User) {
-                return;
-            }
-
-            $this->validateUser($user);
-            $this->setAuthenticatedUser($user);
-            $this->getEventDispatcher()->dispatch(new AfterUserLoginEvent($user, $this->request->getClientIp()));
-
-            if ($redirectAfterLogin) {
-                $this->redirectAfterLogin();
-            }
-
+        if (!$user instanceof User) {
             return;
         }
-        catch (AuthenticationException) {
+
+        if (!$user->getActive() && !$user->isPlatformAdministrator()) {
             throw new NotAuthenticatedException(
-                'Authentication validation failed for authentication: ' . get_class($authentication)
+                $this->getTranslator()->trans('AccountNotActive', [], StringUtilities::LIBRARIES)
             );
         }
-    }
 
-    /**
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
-     */
-    protected function validateUser(User $user): void
-    {
-        if (!$user->getActive() && !$user->isPlatformAdministrator()) {
-            throw new AuthenticationException(
-                $this->translator->trans('AccountNotActive', [], StringUtilities::LIBRARIES)
-            );
+        $this->setAuthenticatedUser($user);
+        $this->getEventDispatcher()->dispatch(new AfterUserLoginEvent($user, $this->request->getClientIp()));
+
+        if ($redirectAfterLogin) {
+            $this->redirectAfterLogin();
         }
     }
 }

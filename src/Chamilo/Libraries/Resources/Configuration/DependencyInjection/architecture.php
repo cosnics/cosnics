@@ -2,9 +2,6 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
-use Chamilo\Libraries\Protocol\Error\Factory\ExceptionLoggerFactory;
-use Chamilo\Libraries\Protocol\Error\Service\ErrorHandler;
 use Chamilo\Libraries\Service\Bootstrap\ApplicationFactory;
 use Chamilo\Libraries\Service\Bootstrap\Bootstrap;
 use Chamilo\Libraries\Service\Bootstrap\Kernel;
@@ -34,20 +31,6 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(EventDispatcher::class);
     $services->alias(EventDispatcherInterface::class, EventDispatcher::class);
-
-    $services->set(ErrorHandler::class)->args(
-        ['$themeSystemPathBuilder' => service('Chamilo\Libraries\UserInterface\Theme\Service\ThemeSystemPathBuilder')]
-    );
-
-    $services->set('Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger')->factory(
-        [service(ExceptionLoggerFactory::class), 'createExceptionLogger']
-    );
-
-    $services->alias(ExceptionLoggerInterface::class, 'Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger');
-
-    $services->set(ExceptionLoggerFactory::class)->args(
-        ['$errorHandlingConfiguration' => '%cosnics.libraries.protocol.error.handling%']
-    );
 
     $services->set(ClassnameUtilities::class);
     $services->set(DataClassUrlGenerator::class);

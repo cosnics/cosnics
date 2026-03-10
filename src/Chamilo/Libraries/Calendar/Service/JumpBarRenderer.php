@@ -31,7 +31,7 @@ class JumpBarRenderer
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function render(string $navigationUrl, int $currentTime): string
     {

@@ -8,9 +8,9 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -68,6 +68,9 @@ class MenuRenderer
         $this->linkItemRenderer = $linkItemRenderer;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     */
     public function render(?User $user = null): string
     {
         $html = [];
@@ -231,8 +234,8 @@ class MenuRenderer
 
         if ($this->isLoggedInAs()) {
             $link = $this->getUrlGenerator()->fromParameters([
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => ActionEnum::LOGIN_AS->value
+                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                ApplicationInterface::PARAM_ACTION => ActionEnum::LOGIN_AS->value
             ]);
 
             $linkItem = new Item();

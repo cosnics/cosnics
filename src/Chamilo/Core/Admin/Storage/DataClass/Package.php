@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Admin\Storage\DataClass;
 
+use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use stdClass;
 
@@ -10,7 +11,7 @@ use stdClass;
  */
 class Package extends DataClass
 {
-    public const CONTEXT = 'Chamilo\Core\Admin';
+    public const CONTEXT = Manager::CONTEXT;
     public const PROPERTY_COMPOSER_JSON_OBJECT = 'extra';
     public const PROPERTY_CONTEXT = 'context';
     public const PROPERTY_NAME = 'name';

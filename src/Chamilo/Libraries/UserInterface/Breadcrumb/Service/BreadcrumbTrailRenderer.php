@@ -65,7 +65,7 @@ class BreadcrumbTrailRenderer
     {
         $html = [];
 
-        $html[] = '<ol class="breadcrumb breadcrumb-chevron py-3">';
+        $html[] = '<ol class="breadcrumb breadcrumb-chevron py-2">';
 
         foreach ($breadcrumbTrail->toArray() as $breadcrumb) {
             $html[] = $this->renderBreadcrumb($breadcrumb);

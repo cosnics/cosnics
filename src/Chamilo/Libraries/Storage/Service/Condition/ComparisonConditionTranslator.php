@@ -20,7 +20,7 @@ class ComparisonConditionTranslator extends ConditionTranslator implements Condi
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function translate(
         QueryBuilder $querybuilder, ComparisonCondition $comparisonCondition, ?bool $enableAliasing = true

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Theme\Service;
 
+use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\Filesystem\Service\AbstractPathBuilder;
 use Chamilo\Libraries\Filesystem\Service\FilesystemTools;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -38,7 +39,7 @@ class ThemePathBuilder
     {
         $availableThemes = [];
 
-        $path = $this->getCssPath('Chamilo\Core\Admin', false);
+        $path = $this->getCssPath(Manager::CONTEXT, false);
         $directories =
             $this->getFilesystemTools()->getDirectoryContent($path, FileTypeFilterIterator::ONLY_FILES, false);
 

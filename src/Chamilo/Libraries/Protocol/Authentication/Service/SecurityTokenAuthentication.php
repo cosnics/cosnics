@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Protocol\Authentication\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 
@@ -20,9 +20,9 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\AuthenticationException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      */
     public function login(bool $checkIfAuthenticationSourceIsEnabled = true): ?User
     {
@@ -35,7 +35,7 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
             $user = $this->getUserService()->getUserBySecurityToken($securityToken);
 
             if (!$user instanceof User) {
-                throw new AuthenticationException(
+                throw new NotAuthenticatedException(
                     $translator->trans('InvalidSecurityToken', [], StringUtilities::LIBRARIES)
                 );
             }
@@ -43,7 +43,7 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
             return $user;
         }
         else {
-            throw new AuthenticationException(
+            throw new NotAuthenticatedException(
                 $translator->trans('NoSecurityToken', [], StringUtilities::LIBRARIES)
             );
         }

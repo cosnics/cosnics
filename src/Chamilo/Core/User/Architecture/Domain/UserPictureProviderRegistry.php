@@ -2,8 +2,8 @@
 namespace Chamilo\Core\User\Architecture\Domain;
 
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
 use Doctrine\Common\Collections\ArrayCollection;
-use Exception;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -16,7 +16,9 @@ class UserPictureProviderRegistry extends ArrayCollection
 
     protected Translator $translator;
 
-    public function __construct(Translator $translator, string $activePictureProviderClass)
+    public function __construct(
+        Translator $translator, string $activePictureProviderClass
+    )
     {
         parent::__construct();
 
@@ -30,15 +32,14 @@ class UserPictureProviderRegistry extends ArrayCollection
     }
 
     /**
-     * @return \Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function getActivePictureProvider(): UserPictureProviderInterface
     {
         $configuredPictureProvider = $this->getActivePictureProviderClass();
 
         if (!$this->containsKey($configuredPictureProvider)) {
-            throw new Exception($this->getTranslator()->trans('InvalidUserPictureProvider'));
+            throw new NoSuchClassException($configuredPictureProvider, UserPictureProviderInterface::class);
         }
 
         return $this->get($configuredPictureProvider);

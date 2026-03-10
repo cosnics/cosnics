@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain;
 
-use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,19 +22,19 @@ class ButtonRendererRegistry extends ArrayCollection
      * @param class-string<tGetButtonRenderer> $buttonRendererClassName
      *
      * @return tGetButtonRenderer|ButtonRendererInterface
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function getButtonRenderer(string $buttonRendererClassName): ButtonRendererInterface
     {
         if (!$this->hasButtonRenderer($buttonRendererClassName)) {
-            throw new ClassNotExistException($buttonRendererClassName);
+            throw new NoSuchClassException($buttonRendererClassName, ButtonRendererInterface::class);
         }
 
         return $this->get($buttonRendererClassName);
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function getButtonRendererForButton(ButtonInterface $button): ButtonRendererInterface
     {

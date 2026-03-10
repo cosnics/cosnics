@@ -2,8 +2,9 @@
 namespace Chamilo\Core\User\Architecture\Domain;
 
 use Chamilo\Core\User\Architecture\Interface\UserDetailsRendererInterface;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
 use Doctrine\Common\Collections\ArrayCollection;
-use OutOfBoundsException;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\User\Architecture\Domain
@@ -11,15 +12,32 @@ use OutOfBoundsException;
  */
 class UserDetailsRendererRegistry extends ArrayCollection
 {
+    protected Translator $translator;
+
+    public function __construct(Translator $translator)
+    {
+        parent::__construct();
+
+        $this->translator = $translator;
+    }
+
     public function addUserDetailsRenderer(UserDetailsRendererInterface $userDetailsRenderer): void
     {
         $this->set(get_class($userDetailsRenderer), $userDetailsRenderer);
     }
 
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     */
     public function getUserDetailsRenderer(string $userDetailsRendererType): UserDetailsRendererInterface
     {
         if (!$this->containsKey($userDetailsRendererType)) {
-            throw new OutOfBoundsException($userDetailsRendererType . ' is not a valid UserDetailsRenderer');
+            throw new NoSuchClassException($userDetailsRendererType, UserDetailsRendererInterface::class);
         }
 
         return $this->get($userDetailsRendererType);

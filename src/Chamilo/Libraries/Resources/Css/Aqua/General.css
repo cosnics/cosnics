@@ -31,25 +31,6 @@ footer.chamilo-footer {
 /*****************
  *  MAIN STYLES  *
  *****************/
-.notifications {
-    left: 15px;
-    position: fixed;
-    right: 15px;
-    text-align: justify;
-    top: 15px;
-    z-index: 9999999;
-}
-
-@media ( min-width: 768px) {
-    .notifications {
-        left: auto;
-    }
-}
-
-.notifications .alert {
-    margin-bottom: 10px;
-}
-
 .panel.panel-attachments {
     margin-bottom: 0px;
     margin-top: 20px;

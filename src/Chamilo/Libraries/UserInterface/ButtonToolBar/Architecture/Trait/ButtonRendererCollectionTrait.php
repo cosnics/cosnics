@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait;
 
-use Chamilo\Libraries\Architecture\Exception\ClassNotExistException;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonRendererRegistry;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -33,7 +33,7 @@ trait ButtonRendererCollectionTrait
             try {
                 $html[] = $this->getButtonRendererCollection()->getButtonRendererForButton($button)->render($button);
             }
-            catch (ClassNotExistException) {
+            catch (NoSuchClassException) {
             }
         }
 

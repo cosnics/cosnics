@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\CalendarRepository;
 use Microsoft\Graph\Generated\Models\Calendar;
 
@@ -36,14 +36,14 @@ class CalendarService
                 $this->getUserIdentifier($user), $calendarIdentifier, $fromDate, $toDate
             );
         }
-        catch (UserNotFoundException) {
+        catch (NoSuchUserException) {
             return [];
         }
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\CalendarNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchCalendarException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getCalendarByIdentifier(string $calendarIdentifier, User $user): Calendar
@@ -59,7 +59,7 @@ class CalendarService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\UserNotFoundException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     protected function getUserIdentifier(User $user): ?string
@@ -85,7 +85,7 @@ class CalendarService
         try {
             return $this->getCalendarRepository()->listOwnedCalendars($this->getUserIdentifier($user));
         }
-        catch (UserNotFoundException) {
+        catch (NoSuchUserException) {
             return [];
         }
     }

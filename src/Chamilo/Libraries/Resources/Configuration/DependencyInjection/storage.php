@@ -1,6 +1,7 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionRendererInterface;
 use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorCollection;
 use Chamilo\Libraries\Storage\Architecture\Domain\ConditionVariableTranslatorCollection;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClassRepositoryCache;
@@ -33,11 +34,16 @@ use Chamilo\Libraries\Storage\Service\ConditionVariable\OperationConditionVariab
 use Chamilo\Libraries\Storage\Service\ConditionVariable\PropertiesConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Service\ConditionVariable\PropertyConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Service\ConditionVariable\StaticConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Service\DisplayOrderExceptionRenderer;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
+use Chamilo\Libraries\Storage\Service\NoSuchObjectExceptionRenderer;
 use Chamilo\Libraries\Storage\Service\PropertyMapper;
 use Chamilo\Libraries\Storage\Service\QueryBuilderConfigurator;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
+use Chamilo\Libraries\Storage\Service\StorageLastInsertedIdentifierExceptionRenderer;
+use Chamilo\Libraries\Storage\Service\StorageMethodExceptionRenderer;
+use Chamilo\Libraries\Storage\Service\StorageNoResultExceptionRenderer;
 use Chamilo\Libraries\Storage\Service\SymfonyCacheAdapterManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
@@ -113,4 +119,10 @@ return static function (ContainerConfigurator $container) {
     $services->set(CacheDataPreLoaderManager::class);
     $services->set(SymfonyCacheAdapterManager::class);
     $services->set(SymfonyCacheAdapterFactory::class);
+
+    $services->set(DisplayOrderExceptionRenderer::class)->tag(UserExceptionRendererInterface::class);
+    $services->set(NoSuchObjectExceptionRenderer::class)->tag(UserExceptionRendererInterface::class);
+    $services->set(StorageLastInsertedIdentifierExceptionRenderer::class)->tag(UserExceptionRendererInterface::class);
+    $services->set(StorageMethodExceptionRenderer::class)->tag(UserExceptionRendererInterface::class);
+    $services->set(StorageNoResultExceptionRenderer::class)->tag(UserExceptionRendererInterface::class);
 };

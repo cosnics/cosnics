@@ -5,10 +5,11 @@ use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\UserInterface\Form\GroupForm;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,7 +21,6 @@ class UpdateComponent extends Manager
 {
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectNotExistException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
@@ -60,15 +60,15 @@ class UpdateComponent extends Manager
                     StringUtilities::LIBRARIES
                 );
 
-                $this->getNotificationMessageManager()->addMessage(
-                    new NotificationMessage(
-                        $message, $success ? NotificationMessage::TYPE_SUCCESS : NotificationMessage::TYPE_DANGER
+                $this->getNotificationMessageManager()->addAlert(
+                    new Alert(
+                        $message, $success ? AlertEnum::SUCCESS : AlertEnum::DANGER
                     )
                 );
 
                 return new RedirectResponse($this->getUrlGenerator()->fromParameters([
-                    Application::PARAM_CONTEXT => Manager::CONTEXT,
-                    Application::PARAM_ACTION => ActionEnum::BROWSE->value,
+                    ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                    ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
                     self::PARAM_GROUP_ID => $group->getId()
                 ]));
             }

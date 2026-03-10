@@ -11,8 +11,8 @@ use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_category;
@@ -99,12 +99,12 @@ class ApplicationItemRenderer extends ItemRenderer
         $translator = $this->getTranslator();
 
         $formValidator->addElement(
-            HTML_QuickForm_category::class, $translator->trans('Properties', [], 'Chamilo\Core\Menu')
+            HTML_QuickForm_category::class, $translator->trans('Properties', [], Manager::CONTEXT)
         );
 
         $formValidator->addElement(
             HTML_QuickForm_select::class, Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_APPLICATION . ']',
-            $translator->trans('Application', [], 'Chamilo\Core\Menu'), $this->getApplicationOptions(),
+            $translator->trans('Application', [], Manager::CONTEXT), $this->getApplicationOptions(),
             ['class' => 'form-control']
         );
 
@@ -117,16 +117,16 @@ class ApplicationItemRenderer extends ItemRenderer
         $formValidator->addElement(
             HTML_QuickForm_checkbox::class,
             Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_USE_TRANSLATION . ']',
-            $translator->trans('UseTranslation', [], 'Chamilo\Core\Menu')
+            $translator->trans('UseTranslation', [], Manager::CONTEXT)
         );
 
         $formValidator->addTextfield(
             Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_COMPONENT . ']',
-            $translator->trans('Component', [], 'Chamilo\Core\Menu'), false
+            $translator->trans('Component', [], Manager::CONTEXT), false
         );
         $formValidator->addTextfield(
             Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_EXTRA_PARAMETERS . ']',
-            $translator->trans('ExtraParameters', [], 'Chamilo\Core\Menu'), false
+            $translator->trans('ExtraParameters', [], Manager::CONTEXT), false
         );
     }
 
@@ -140,12 +140,12 @@ class ApplicationItemRenderer extends ItemRenderer
 
         $parameters = [];
 
-        $parameters[Application::PARAM_CONTEXT] = $application;
+        $parameters[ApplicationInterface::PARAM_CONTEXT] = $application;
 
         $component = $item->getSetting(self::CONFIGURATION_COMPONENT);
 
         if ($component) {
-            $parameters[Application::PARAM_ACTION] = $component;
+            $parameters[ApplicationInterface::PARAM_ACTION] = $component;
         }
 
         $extraParameters = $item->getSetting(self::CONFIGURATION_EXTRA_PARAMETERS);
@@ -219,8 +219,8 @@ class ApplicationItemRenderer extends ItemRenderer
     {
         $request = $this->getRequest();
 
-        $currentContext = $request->query->get(Application::PARAM_CONTEXT);
-        $currentAction = $request->query->get(Application::PARAM_ACTION);
+        $currentContext = $request->query->get(ApplicationInterface::PARAM_CONTEXT);
+        $currentAction = $request->query->get(ApplicationInterface::PARAM_ACTION);
 
         if ($currentContext != $item->getSetting(self::CONFIGURATION_APPLICATION)) {
             return false;

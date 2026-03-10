@@ -33,7 +33,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
     private ?Group $group;
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
@@ -48,15 +48,14 @@ class BrowseNonSubscribedUsersComponent extends Manager
         }
 
         $this->getBreadcrumbTrail()->add(
-            new Breadcrumb(
+            new Breadcrumb($this->getTranslator()->trans('ViewerComponent', [], Manager::CONTEXT),
                 $this->getUrlGenerator()->fromParameters(
                     [
                         self::PARAM_CONTEXT => Manager::CONTEXT,
                         self::PARAM_ACTION => ActionEnum::BROWSE->value,
                         self::PARAM_GROUP_ID => $this->getGroupIdentifier()
                     ]
-                ), $this->getTranslator()->trans('ViewerComponent', [], Manager::CONTEXT)
-            )
+                ))
         );
 
         $output = $this->renderNonSubscribedUserTable();
@@ -175,7 +174,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function renderNonSubscribedUserTable(): string
     {

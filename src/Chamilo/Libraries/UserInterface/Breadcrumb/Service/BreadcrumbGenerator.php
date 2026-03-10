@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Breadcrumb\Service;
 
-use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
@@ -51,90 +51,101 @@ class BreadcrumbGenerator
         $this->siteName = $siteName;
     }
 
-    public function addDefaultBreadcrumbs(string $context, ?string $action, string $defaultAction): void
+    public function addDefaultApplicationBreadcrumbs(string $context, ?string $action, string $defaultAction): void
     {
         $breadcrumbs = [];
 
-        $breadcrumbs[] = $this->getRootBreadcrumb();
-        $breadcrumbs[] = $this->getPackageBreadcrumb($context);
+        $breadcrumbs[] = $this->getContextBreadcrumb($context);
 
         if ($action && $action !== $defaultAction) {
-            $breadcrumbs[] = $this->getComponentBreadcrumb($context, $action);
+            $breadcrumbs[] = $this->getApplicationBreadcrumb($context, $action);
         }
 
         $this->getBreadcrumbTrail()->prependMultiple($breadcrumbs);
+        $this->addRootBreadcrumb();
     }
 
-    public function getBreadcrumbTrail(): BreadcrumbTrail
+    public function addRootAndTitleBreadcrumbs(string $title): void
+    {
+        $this->getBreadcrumbTrail()->prepend(
+            new Breadcrumb($title)
+        );
+
+        $this->addRootBreadcrumb();
+    }
+
+    public function addRootBreadcrumb(): void
+    {
+        $this->getBreadcrumbTrail()->prepend(
+            new Breadcrumb(
+                $this->getSiteName(), $this->getWebPathBuilder()->getBasePath(), new FontAwesomeGlyph('home')
+            )
+        );
+    }
+
+    protected function getApplicationBreadcrumb(string $context, string $action): Breadcrumb
+    {
+        $componentUrl = $this->getUrlGenerator()->fromParameters(
+            [
+                ApplicationInterface::PARAM_CONTEXT => $context,
+                ApplicationInterface::PARAM_ACTION => $action
+            ]
+        );
+
+        return new Breadcrumb(
+            $this->getTranslator()->trans($action . 'Component', [], $context), $componentUrl
+        );
+    }
+
+    protected function getBreadcrumbTrail(): BreadcrumbTrail
     {
         return $this->breadcrumbTrail;
     }
 
-    public function setBreadcrumbTrail(BreadcrumbTrail $breadcrumbTrail): void
+    protected function setBreadcrumbTrail(BreadcrumbTrail $breadcrumbTrail): void
     {
         $this->breadcrumbTrail = $breadcrumbTrail;
     }
 
-    public function getClassnameUtilities(): ClassnameUtilities
+    protected function getClassnameUtilities(): ClassnameUtilities
     {
         return $this->classnameUtilities;
     }
 
-    public function getComponentBreadcrumb(string $context, string $action): Breadcrumb
-    {
-        $componentUrl = $this->getUrlGenerator()->fromParameters(
-            [
-                Application::PARAM_CONTEXT => $context,
-                Application::PARAM_ACTION => $action
-            ]
-        );
-
-        return new Breadcrumb(
-            $componentUrl, $this->getTranslator()->trans($action . 'Component', [], $context)
-        );
-    }
-
-    protected function getPackageBreadcrumb(string $context): Breadcrumb
+    protected function getContextBreadcrumb(string $context): Breadcrumb
     {
         $packageUrl = $this->getUrlGenerator()->fromParameters(
             [
-                Application::PARAM_CONTEXT => $context
+                ApplicationInterface::PARAM_CONTEXT => $context
             ]
         );
 
         return new Breadcrumb(
-            $packageUrl, $this->getTranslator()->trans('TypeName', [], $context)
+            $this->getTranslator()->trans('TypeName', [], $context), $packageUrl
         );
     }
 
-    public function getRequest(): ChamiloRequest
+    protected function getRequest(): ChamiloRequest
     {
         return $this->request;
     }
 
-    protected function getRootBreadcrumb(): Breadcrumb
-    {
-        return new Breadcrumb(
-            $this->getWebPathBuilder()->getBasePath(), $this->getSiteName(), new FontAwesomeGlyph('home')
-        );
-    }
-
-    public function getSiteName(): string
+    protected function getSiteName(): string
     {
         return $this->siteName;
     }
 
-    public function getTranslator(): Translator
+    protected function getTranslator(): Translator
     {
         return $this->translator;
     }
 
-    public function getUrlGenerator(): UrlGenerator
+    protected function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
     }
 
-    public function getWebPathBuilder(): WebPathBuilder
+    protected function getWebPathBuilder(): WebPathBuilder
     {
         return $this->webPathBuilder;
     }

@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\Calendar\Architecture\Trait;
 
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
 use Chamilo\Libraries\Calendar\Service\Event\EventListRenderer;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Architecture\Domain\NotificationMessage;
-use Chamilo\Libraries\UserInterface\NotificationMessage\Service\NotificationMessageRenderer;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertRenderer;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -59,7 +59,7 @@ trait AgendaCalendarTrait
         return $displayTime;
     }
 
-    abstract public function getNotificationMessageRenderer(): NotificationMessageRenderer;
+    abstract public function getAlertRenderer(): AlertRenderer;
 
     abstract public function getTranslator(): Translator;
 
@@ -126,10 +126,10 @@ trait AgendaCalendarTrait
             $html[] = '</div>';
         }
         else {
-            $html[] = $this->getNotificationMessageRenderer()->renderOne(
-                new NotificationMessage(
+            $html[] = $this->getAlertRenderer()->render(
+                new Alert(
                     $this->getTranslator()->trans('NoUpcomingEvents', [], 'Chamilo\Libraries')
-                ), false
+                )
             );
         }
 

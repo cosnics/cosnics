@@ -6,7 +6,7 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 
@@ -30,16 +30,16 @@ class AccountItemRenderer extends MenuItemRenderer implements SelectableItemInte
     {
         return $this->getUrlGenerator()->fromParameters(
             [
-                Application::PARAM_CONTEXT => Manager::CONTEXT,
-                Application::PARAM_ACTION => ActionEnum::ACCOUNT->value
+                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                ApplicationInterface::PARAM_ACTION => ActionEnum::ACCOUNT->value
             ]
         );
     }
 
     public function isSelected(Item $item, User $user): bool
     {
-        $currentContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
-        $currentAction = $this->getRequest()->query->get(Application::PARAM_ACTION);
+        $currentContext = $this->getRequest()->query->get(ApplicationInterface::PARAM_CONTEXT);
+        $currentAction = $this->getRequest()->query->get(ApplicationInterface::PARAM_ACTION);
 
         return $currentContext == Manager::CONTEXT && $currentAction == ActionEnum::ACCOUNT->value;
     }

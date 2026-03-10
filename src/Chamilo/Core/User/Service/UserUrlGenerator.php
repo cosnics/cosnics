@@ -4,7 +4,7 @@ namespace Chamilo\Core\User\Service;
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\DataClassUrlGenerator;
 
 /**
@@ -51,7 +51,8 @@ class UserUrlGenerator
     protected function getUserActionUrl(string $action, User $user, array $additionalParameters = []): string
     {
         return $this->getDataClassUrlGenerator()->getActionUrl(
-            Manager::CONTEXT, Application::PARAM_ACTION, Manager::PARAM_USER_ID, $action, $user, $additionalParameters
+            Manager::CONTEXT, ApplicationInterface::PARAM_ACTION, Manager::PARAM_USER_ID, $action, $user,
+            $additionalParameters
         );
     }
 }

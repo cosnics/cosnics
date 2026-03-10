@@ -17,6 +17,7 @@ use Chamilo\Libraries\DependencyInjection\CompilerPass\HashingCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\HtmlCalendarRendererCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\MailerCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\TabRendererCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\UserExceptionRendererCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
@@ -48,17 +49,18 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'implementation.admin.php',
                 'protocol.authentication.php',
                 'protocol.console.php',
+                'protocol.error.php',
                 'protocol.mail.php',
                 'protocol.microsoft.php',
                 'protocol.security.php',
                 'protocol.session.php',
                 'service.php',
                 'storage.php',
+                'userInterface.alert.php',
                 'userInterface.breadcrumb.php',
                 'userInterface.buttonToolBar.php',
                 'userInterface.form.php',
                 'userInterface.layout.php',
-                'userInterface.notificationMessage.php',
                 'userInterface.tab.php',
                 'userInterface.table.php',
                 'userInterface.theme.php',
@@ -93,5 +95,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         $container->addCompilerPass(new ButtonRendererCompilerPass());
         $container->addCompilerPass(new TabRendererCompilerPass());
         $container->addCompilerPass(new HtmlCalendarRendererCompilerPass());
+        $container->addCompilerPass(new UserExceptionRendererCompilerPass());
     }
 }

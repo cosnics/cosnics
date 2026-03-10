@@ -21,7 +21,7 @@ abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
 
     /**
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Architecture\Exception\ClassNotExistException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function renderNavigation(array $displayParameters, int $displayTime): string
     {
