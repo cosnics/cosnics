@@ -21,8 +21,6 @@ use Symfony\Component\Translation\Translator;
  */
 class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInterface
 {
-    public const string CONTEXT = Manager::CONTEXT;
-
     private AvailabilityService $availabilityService;
 
     private CalendarService $calendarService;
@@ -56,7 +54,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
 
         try {
             $calendar = $this->getCalendarService()->getCalendarByIdentifier($calendarIdentifier, $user);
-            $availableCalendar->setType(self::CONTEXT);
+            $availableCalendar->setType(Manager::CONTEXT);
             $availableCalendar->setIdentifier($calendar->getId());
             $availableCalendar->setName($calendar->getName());
         }
@@ -99,7 +97,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
     protected function getCalendarIdentifiers(User $user): array
     {
         $availabilities = $this->getAvailabilityService()->getAvailabilitiesForUserAndCalendarType(
-            $user, self::CONTEXT
+            $user, Manager::CONTEXT
         );
 
         $calendarIdentifiers = [];
@@ -149,7 +147,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
                     foreach ($ownedCalendars as $ownedCalendar) {
                         $availableCalendar = new AvailableCalendar();
 
-                        $availableCalendar->setType(self::CONTEXT);
+                        $availableCalendar->setType(Manager::CONTEXT);
                         $availableCalendar->setIdentifier($ownedCalendar->getId());
                         $availableCalendar->setName($ownedCalendar->getName());
 

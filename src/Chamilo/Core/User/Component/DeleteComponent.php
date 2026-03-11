@@ -73,7 +73,7 @@ class DeleteComponent extends Manager
                 );
             }
 
-            $this->getNotificationMessageManager()->addAlert(
+            $this->getAlertsManager()->addAlert(
                 new Alert(
                     $message, $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS
                 )

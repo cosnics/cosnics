@@ -3,8 +3,15 @@ namespace Chamilo\Core\Group;
 
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Service\GroupMembershipService;
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
+use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Group
@@ -16,6 +23,37 @@ abstract class Manager extends Application
     public const string PARAM_RELATION_ID = 'relation_id';
     public const string PARAM_USER_ID = 'user_id';
 
+    protected AlertsManager $alertsManager;
+
+    protected BreadcrumbTrail $breadcrumbTrail;
+
+    protected GroupMembershipService $groupMembershipService;
+
+    protected GroupService $groupService;
+
+    protected GroupUrlGenerator $groupUrlGenerator;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        GroupMembershipService $groupMembershipService, GroupUrlGenerator $groupUrlGenerator,
+        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupService $groupService
+    )
+    {
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+
+        $this->groupMembershipService = $groupMembershipService;
+        $this->groupUrlGenerator = $groupUrlGenerator;
+        $this->alertsManager = $alertsManager;
+        $this->breadcrumbTrail = $breadcrumbTrail;
+        $this->groupService = $groupService;
+    }
+
+    public function getAlertsManager(): AlertsManager
+    {
+        return $this->alertsManager;
+    }
+
     public function getApplicationAction(): string
     {
         return ActionEnum::getActionValue(static::class);
@@ -26,6 +64,11 @@ abstract class Manager extends Application
         return self::CONTEXT;
     }
 
+    public function getBreadcrumbTrail(): BreadcrumbTrail
+    {
+        return $this->breadcrumbTrail;
+    }
+
     public function getDefaultApplicationAction(): string
     {
         return ActionEnum::BROWSE->value;
@@ -33,11 +76,16 @@ abstract class Manager extends Application
 
     protected function getGroupMembershipService(): GroupMembershipService
     {
-        return $this->getService(GroupMembershipService::class);
+        return $this->groupMembershipService;
+    }
+
+    public function getGroupService(): GroupService
+    {
+        return $this->groupService;
     }
 
     public function getGroupUrlGenerator(): GroupUrlGenerator
     {
-        return $this->getService(GroupUrlGenerator::class);
+        return $this->groupUrlGenerator;
     }
 }

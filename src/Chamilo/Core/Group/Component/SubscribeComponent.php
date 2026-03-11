@@ -97,7 +97,7 @@ class SubscribeComponent extends Manager
                 $message = 'SelectedUsersAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
             }
 
-            $this->getNotificationMessageManager()->addAlert(
+            $this->getAlertsManager()->addAlert(
                 new Alert(
                     $translator->trans($message, [], Manager::CONTEXT),
                     $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS

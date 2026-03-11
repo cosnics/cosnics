@@ -10,6 +10,8 @@ return static function (ContainerConfigurator $container) {
     $services = $container->services();
     $services->defaults()->public()->autowire()->autoconfigure();
 
+    $services->alias(MailerInterface::class, 'Chamilo\Libraries\Protocol\Mail\ActiveMailer');
+
     $services->set('Chamilo\Libraries\Protocol\Mail\ActiveMailer')->factory(
         [service(MailerFactory::class), 'getActiveMailer']
     );

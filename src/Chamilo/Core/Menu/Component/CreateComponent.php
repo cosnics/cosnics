@@ -1,20 +1,29 @@
 <?php
 namespace Chamilo\Core\Menu\Component;
 
+use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
 use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Manager;
+use Chamilo\Core\Menu\Service\CachedItemService;
+use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\Form\ItemForm;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
+use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu\Component
@@ -24,6 +33,23 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CreateComponent extends Manager
 {
+    protected BreadcrumbTrail $breadcrumbTrail;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, CachedItemService $cachedItemService,
+        ItemRendererRegistry $itemRendererRegistry, ItemService $itemService, AlertsManager $alertsManager,
+        BreadcrumbTrail $breadcrumbTrail
+    )
+    {
+        parent::__construct(
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $cachedItemService,
+            $itemRendererRegistry, $itemService, $alertsManager
+        );
+
+        $this->breadcrumbTrail = $breadcrumbTrail;
+    }
+
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
@@ -89,7 +115,7 @@ class CreateComponent extends Manager
                 );
             }
 
-            $this->getNotificationMessageManager()->addAlert(
+            $this->getAlertsManager()->addAlert(
                 new Alert(
                     $message, $success ? AlertEnum::SUCCESS : AlertEnum::DANGER
                 )
@@ -109,5 +135,10 @@ class CreateComponent extends Manager
         $html[] = $this->renderFooter();
 
         return new Response(implode(PHP_EOL, $html));
+    }
+
+    public function getBreadcrumbTrail(): BreadcrumbTrail
+    {
+        return $this->breadcrumbTrail;
     }
 }

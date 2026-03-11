@@ -6,6 +6,11 @@ use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu
@@ -23,6 +28,33 @@ abstract class Manager extends Application
     public const string PARAM_PARENT = 'parent';
     public const string PARAM_TYPE = 'type';
 
+    protected AlertsManager $alertsManager;
+
+    protected CachedItemService $cachedItemService;
+
+    protected ItemRendererRegistry $itemRendererRegistry;
+
+    protected ItemService $itemService;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, CachedItemService $cachedItemService,
+        ItemRendererRegistry $itemRendererRegistry, ItemService $itemService, AlertsManager $alertsManager
+    )
+    {
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+
+        $this->cachedItemService = $cachedItemService;
+        $this->itemRendererRegistry = $itemRendererRegistry;
+        $this->itemService = $itemService;
+        $this->alertsManager = $alertsManager;
+    }
+
+    public function getAlertsManager(): AlertsManager
+    {
+        return $this->alertsManager;
+    }
+
     public function getApplicationAction(): string
     {
         return ActionEnum::getActionValue(static::class);
@@ -35,7 +67,7 @@ abstract class Manager extends Application
 
     public function getCachedItemService(): CachedItemService
     {
-        return $this->getService(CachedItemService::class);
+        return $this->cachedItemService;
     }
 
     public function getDefaultApplicationAction(): string
@@ -45,11 +77,11 @@ abstract class Manager extends Application
 
     public function getItemRendererFactory(): ItemRendererRegistry
     {
-        return $this->getService(ItemRendererRegistry::class);
+        return $this->itemRendererRegistry;
     }
 
     public function getItemService(): ItemService
     {
-        return $this->getService(ItemService::class);
+        return $this->itemService;
     }
 }

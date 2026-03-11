@@ -57,7 +57,7 @@ class MoveComponent extends Manager
             StringUtilities::LIBRARIES
         );
 
-        $this->getNotificationMessageManager()->addAlert(
+        $this->getAlertsManager()->addAlert(
             new Alert(
                 $message, $success ? AlertEnum::SUCCESS : AlertEnum::DANGER
             )

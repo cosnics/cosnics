@@ -2,12 +2,17 @@
 namespace Chamilo\Libraries\Component;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Manager;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
+use Chamilo\Libraries\Service\Resource\ResourceManager;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\BaseFooterRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\BaseHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Component
@@ -17,6 +22,18 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CalendarPopupComponent extends Manager implements NoAuthenticationSupportInterface
 {
+    protected ResourceManager $resourceManager;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, ResourceManager $resourceManager
+    )
+    {
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+
+        $this->resourceManager = $resourceManager;
+    }
+
     public function run(?User $currentUser = null): Response
     {
         $translator = $this->getTranslator();
@@ -104,5 +121,10 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
     protected function getHeaderRenderer(): BaseHeaderRenderer
     {
         return $this->getService(BaseHeaderRenderer::class);
+    }
+
+    public function getResourceManager(): ResourceManager
+    {
+        return $this->resourceManager;
     }
 }

@@ -16,5 +16,7 @@ return static function (ContainerConfigurator $container) {
     $services->set(DeleteTemporaryFileComponent::class)->tag(ApplicationInterface::class);
     $services->set(HtmlEditorInstanceComponent::class)->tag(ApplicationInterface::class);
     $services->set(UploadTemporaryFileComponent::class)->tag(ApplicationInterface::class);
-    $services->set(UtilitiesComponent::class)->tag(ApplicationInterface::class);
+    $services->set(UtilitiesComponent::class)->args(
+        ['$themeWebPathBuilder' => service('Chamilo\Libraries\UserInterface\Theme\Service\ThemeWebPathBuilder')]
+    )->tag(ApplicationInterface::class);
 };

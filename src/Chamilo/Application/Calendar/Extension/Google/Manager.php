@@ -4,6 +4,10 @@ namespace Chamilo\Application\Calendar\Extension\Google;
 use Chamilo\Application\Calendar\Extension\Google\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Google
@@ -12,6 +16,18 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 abstract class Manager extends Application
 {
     public const string CONTEXT = __NAMESPACE__;
+
+    protected CalendarService $calendarService;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, CalendarService $calendarService
+    )
+    {
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+
+        $this->calendarService = $calendarService;
+    }
 
     public function getApplicationAction(): string
     {
@@ -25,7 +41,7 @@ abstract class Manager extends Application
 
     public function getCalendarService(): CalendarService
     {
-        return $this->getService(CalendarService::class);
+        return $this->calendarService;
     }
 
     public function getDefaultApplicationAction(): string

@@ -55,7 +55,7 @@ class CreateComponent extends Manager
             if ($success) {
                 $group = $form->getGroup();
 
-                $this->getNotificationMessageManager()->addAlert(
+                $this->getAlertsManager()->addAlert(
                     new Alert(
                         $translator->trans(
                             'ObjectCreated', ['%Object%' => $translator->trans('Group', [], Manager::CONTEXT)],
@@ -71,7 +71,7 @@ class CreateComponent extends Manager
                 ]));
             }
             else {
-                $this->getNotificationMessageManager()->addAlert(
+                $this->getAlertsManager()->addAlert(
                     new Alert(
                         $translator->trans(
                             'ObjectNotCreated', ['%Object%' => $translator->trans('Group', [], Manager::CONTEXT)],

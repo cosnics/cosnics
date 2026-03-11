@@ -5,6 +5,7 @@ use Chamilo\Application\Calendar\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Calendar\Service\View\ICalCalendarRenderer;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
@@ -12,7 +13,11 @@ use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\Authentication\Service\SecurityTokenAuthentication;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Calendar\Component
@@ -23,6 +28,18 @@ use Symfony\Component\HttpFoundation\Response;
 class ICalComponent extends Manager implements NoAuthenticationSupportInterface
 {
     public const string PARAM_DOWNLOAD = 'download';
+
+    protected AlertRenderer $alertRenderer;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, AlertRenderer $alertRenderer
+    )
+    {
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+
+        $this->alertRenderer = $alertRenderer;
+    }
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
@@ -103,6 +120,11 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
                 return new Response(implode(PHP_EOL, $html));
             }
         }
+    }
+
+    public function getAlertRenderer(): AlertRenderer
+    {
+        return $this->alertRenderer;
     }
 
     protected function getAuthenticationValidator(): AuthenticationValidator

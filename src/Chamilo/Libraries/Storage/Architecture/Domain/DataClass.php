@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain;
 
-use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjectionContainerTrait;
-
 /**
  * @package Chamilo\Libraries\Storage\Architecture\Domain
  * @author  Hans De Bisschop - Erasmus Hogeschool Brussel
@@ -10,8 +8,6 @@ use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjection
  */
 abstract class DataClass
 {
-    use DependencyInjectionContainerTrait;
-
     public const string EMPTY_UUID = '00000000-0000-0000-0000-000000000000';
     public const string PROPERTIES_DEFAULT = 'default_properties';
     public const string PROPERTIES_OPTIONAL = 'optional_properties';

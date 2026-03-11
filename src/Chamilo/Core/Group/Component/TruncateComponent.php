@@ -69,7 +69,7 @@ class TruncateComponent extends Manager
                 $message = 'SelectedGroupsEmptied';
             }
 
-            $this->getNotificationMessageManager()->addAlert(
+            $this->getAlertsManager()->addAlert(
                 new Alert(
                     $translator->trans($message, [], Manager::CONTEXT),
                     $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS

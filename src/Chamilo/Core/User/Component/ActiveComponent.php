@@ -74,7 +74,7 @@ class ActiveComponent extends Manager
                 $message = $active ? 'UsersActivated' : 'UsersDeactivated';
             }
 
-            $this->getNotificationMessageManager()->addAlert(
+            $this->getAlertsManager()->addAlert(
                 new Alert(
                     $translator->trans($message, [], \Chamilo\Core\Group\Manager::CONTEXT),
                     $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS

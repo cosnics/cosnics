@@ -55,7 +55,7 @@ class AccountComponent extends ProfileComponent
                     if (!$userPictureProvider->updateUserPictureFromParameters(
                         $currentUser, $currentUser, $pictureInformation
                     )) {
-                        $this->getNotificationMessageManager()->addAlert(
+                        $this->getAlertsManager()->addAlert(
                             new Alert(
                                 $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT), AlertEnum::WARNING
                             )
@@ -66,7 +66,7 @@ class AccountComponent extends ProfileComponent
 
             $message = !$success ? 'UserProfileNotUpdated' : 'UserProfileUpdated';
 
-            $this->getNotificationMessageManager()->addAlert(
+            $this->getAlertsManager()->addAlert(
                 new Alert(
                     $translator->trans($message, [], Manager::CONTEXT),
                     $success ? AlertEnum::SUCCESS : AlertEnum::DANGER

@@ -59,7 +59,7 @@ class BrowseComponent extends Manager
     {
         $buttonToolBar = new ButtonToolBar(
             $this->getUrlGenerator()->fromParameters(
-                [self::PARAM_CONTEXT => self::CONTEXT, self::PARAM_ACTION => ActionEnum::BROWSE->value]
+                [self::PARAM_CONTEXT => Manager::CONTEXT, self::PARAM_ACTION => ActionEnum::BROWSE->value]
             )
         );
 

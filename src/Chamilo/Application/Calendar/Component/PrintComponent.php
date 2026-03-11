@@ -19,7 +19,7 @@ class PrintComponent extends BrowseComponent
     {
         $this->checkAuthorization(Manager::CONTEXT);
 
-        $this->getPageConfiguration()->addCss(
+        $this->getPageHeaders()->addCss(
             $this->getWebPathBuilder()->getCssPath(Manager::CONTEXT) . 'print.' .
             $this->getThemeWebPathBuilder()->getTheme() . '.min.css', 'print'
         );

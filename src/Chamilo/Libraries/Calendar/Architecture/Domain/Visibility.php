@@ -11,7 +11,6 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
  */
 abstract class Visibility extends DataClass
 {
-    public const string CONTEXT = 'Chamilo\Libraries\Calendar';
     public const string PROPERTY_SOURCE = 'source';
     public const string PROPERTY_USER_ID = 'user_id';
 

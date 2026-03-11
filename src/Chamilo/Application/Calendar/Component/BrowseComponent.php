@@ -6,8 +6,10 @@ use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProvid
 use Chamilo\Application\Calendar\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\CalendarDataProvider;
+use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Core\User\Component\ConfigureComponent;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Calendar\Architecture\Enum\HtmlCalendarRendererTypeEnum;
@@ -20,10 +22,15 @@ use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGrou
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SplitDropdownButtonCollection;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageHeaders;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
+use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use DateTime;
 use Detection\MobileDetect;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Calendar\Component
@@ -35,7 +42,25 @@ class BrowseComponent extends Manager
 {
     protected CalendarDataProvider $calendarRendererProvider;
 
+    protected PageHeaders $pageHeaders;
+
+    protected ThemePathBuilder $themeWebPathBuilder;
+
     private int $currentTime;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        VisibilityRepository $visibilityRepository, ThemePathBuilder $themeWebPathBuilder, PageHeaders $pageHeaders
+    )
+    {
+        parent::__construct(
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $visibilityRepository
+        );
+
+        $this->themeWebPathBuilder = $themeWebPathBuilder;
+        $this->pageHeaders = $pageHeaders;
+    }
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
@@ -47,7 +72,7 @@ class BrowseComponent extends Manager
         $this->checkAuthorization(Manager::CONTEXT, $currentUser);
         $this->checkLoggedInAs();
 
-        $this->getPageConfiguration()->addCss(
+        $this->getPageHeaders()->addCss(
             $this->getWebPathBuilder()->getCssPath(Manager::CONTEXT) . 'print.' .
             $this->getThemeWebPathBuilder()->getTheme() . '.min.css', 'print'
         );
@@ -200,6 +225,16 @@ class BrowseComponent extends Manager
         $buttonGroup->addButton($splitDropdownButton);
 
         return $buttonGroup;
+    }
+
+    public function getPageHeaders(): PageHeaders
+    {
+        return $this->pageHeaders;
+    }
+
+    public function getThemeWebPathBuilder(): ThemePathBuilder
+    {
+        return $this->themeWebPathBuilder;
     }
 
     /**

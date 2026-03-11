@@ -65,7 +65,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
                         if (!$userPictureProvider->updateUserPictureFromParameters(
                             $registeredUser, $currentUser, $pictureInformation
                         )) {
-                            $this->getNotificationMessageManager()->addAlert(
+                            $this->getAlertsManager()->addAlert(
                                 new Alert(
                                     $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
                                     AlertEnum::WARNING
@@ -78,7 +78,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
                 return new RedirectResponse($this->getUrlGenerator()->fromParameters());
             }
             catch (Exception $exception) {
-                $this->getNotificationMessageManager()->addAlert(
+                $this->getAlertsManager()->addAlert(
                     new Alert($exception->getMessage(), AlertEnum::DANGER)
                 );
             }

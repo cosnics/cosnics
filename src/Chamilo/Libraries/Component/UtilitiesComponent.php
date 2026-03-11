@@ -2,11 +2,16 @@
 namespace Chamilo\Libraries\Component;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Manager;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
+use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Component
@@ -23,6 +28,18 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
     public const string PARAM_VALUE = 'value';
     public const string PARAM_VARIABLE = 'variable';
     public const string PROPERTY_RESULT = 'result';
+
+    protected ThemePathBuilder $themeWebPathBuilder;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, ThemePathBuilder $themeWebPathBuilder
+    )
+    {
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+
+        $this->themeWebPathBuilder = $themeWebPathBuilder;
+    }
 
     /**
      * @throws \Exception
@@ -86,5 +103,10 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
         $result->setProperties($properties);
 
         return $result->getResponse();
+    }
+
+    public function getThemeWebPathBuilder(): ThemePathBuilder
+    {
+        return $this->themeWebPathBuilder;
     }
 }

@@ -60,7 +60,7 @@ class CreateComponent extends Manager
                         if (!$userPictureProvider->updateUserPictureFromParameters(
                             $createdUser, $currentUser, $pictureInformation
                         )) {
-                            $this->getNotificationMessageManager()->addAlert(
+                            $this->getAlertsManager()->addAlert(
                                 new Alert(
                                     $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
                                     AlertEnum::WARNING
@@ -70,7 +70,7 @@ class CreateComponent extends Manager
                     }
                 }
 
-                $this->getNotificationMessageManager()->addAlert(
+                $this->getAlertsManager()->addAlert(
                     new Alert(
                         $translator->trans('UserCreated', [], Manager::CONTEXT), AlertEnum::SUCCESS
                     )
@@ -86,7 +86,7 @@ class CreateComponent extends Manager
                 );
             }
             catch (Exception $exception) {
-                $this->getNotificationMessageManager()->addAlert(
+                $this->getAlertsManager()->addAlert(
                     new Alert($exception->getMessage(), AlertEnum::DANGER)
                 );
             }

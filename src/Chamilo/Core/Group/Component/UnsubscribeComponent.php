@@ -91,7 +91,7 @@ class UnsubscribeComponent extends Manager
                 $message = 'SelectedGroupRelUsersDeleted';
             }
 
-            $this->getNotificationMessageManager()->addAlert(
+            $this->getAlertsManager()->addAlert(
                 new Alert(
                     $translator->trans($message, [], Manager::CONTEXT),
                     $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS

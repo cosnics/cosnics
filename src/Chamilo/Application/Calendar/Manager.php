@@ -4,6 +4,10 @@ namespace Chamilo\Application\Calendar;
 use Chamilo\Application\Calendar\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Libraries\Architecture\Domain\Application;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Calendar
@@ -12,6 +16,18 @@ use Chamilo\Libraries\Architecture\Domain\Application;
 abstract class Manager extends Application
 {
     public const string CONTEXT = __NAMESPACE__;
+
+    protected VisibilityRepository $visibilityRepository;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, VisibilityRepository $visibilityRepository
+    )
+    {
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+
+        $this->visibilityRepository = $visibilityRepository;
+    }
 
     public function getApplicationAction(): string
     {
@@ -30,6 +46,6 @@ abstract class Manager extends Application
 
     public function getVisibilityRepository(): VisibilityRepository
     {
-        return $this->getService(VisibilityRepository::class);
+        return $this->visibilityRepository;
     }
 }

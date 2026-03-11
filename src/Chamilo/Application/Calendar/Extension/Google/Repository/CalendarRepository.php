@@ -3,7 +3,6 @@ namespace Chamilo\Application\Calendar\Extension\Google\Repository;
 
 use Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar;
 use Chamilo\Application\Calendar\Extension\Google\Architecture\Enum\ActionEnum;
-use Chamilo\Application\Calendar\Extension\Google\Implementation\Calendar\CalendarExtensionDataProvider;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -108,7 +107,7 @@ class CalendarRepository
         foreach ($calendarItems as $calendarItem) {
             $availableCalendar = new AvailableCalendar();
 
-            $availableCalendar->setType(CalendarExtensionDataProvider::CONTEXT);
+            $availableCalendar->setType(Manager::CONTEXT);
             $availableCalendar->setIdentifier($calendarItem->id);
             $availableCalendar->setName($calendarItem->summary);
             $availableCalendar->setDescription($calendarItem->description);

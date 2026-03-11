@@ -64,7 +64,7 @@ class UpdateUserPictureComponent extends ProfileComponent
                     $successMessage = 'UserProfileUpdated';
                 }
 
-                $this->getNotificationMessageManager()->addAlert(
+                $this->getAlertsManager()->addAlert(
                     new Alert(
                         $this->getTranslator()->trans($success ? $successMessage : $errorMessage),
                         !$success ? AlertEnum::DANGER : AlertEnum::SUCCESS

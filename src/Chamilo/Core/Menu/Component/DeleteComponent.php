@@ -73,7 +73,7 @@ class DeleteComponent extends Manager
             );
         }
 
-        $this->getNotificationMessageManager()->addAlert(
+        $this->getAlertsManager()->addAlert(
             new Alert(
                 $translator->trans($message, [], \Chamilo\Core\Group\Manager::CONTEXT),
                 $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS

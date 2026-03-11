@@ -3,15 +3,21 @@ namespace Chamilo\Core\Admin\Component;
 
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Resource\ResourceManager;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_submit;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use HTML_QuickForm_html;
 use HTML_Table;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Admin\Component
@@ -19,6 +25,22 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ViewLogsComponent extends Manager
 {
+    protected ConfigurablePathBuilder $configurablePathBuilder;
+
+    protected ResourceManager $resourceManager;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, ResourceManager $resourceManager,
+        ConfigurablePathBuilder $configurablePathBuilder
+    )
+    {
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+
+        $this->resourceManager = $resourceManager;
+        $this->configurablePathBuilder = $configurablePathBuilder;
+    }
+
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
@@ -155,6 +177,16 @@ class ViewLogsComponent extends Manager
         }
 
         return $table->toHtml();
+    }
+
+    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
+    {
+        return $this->configurablePathBuilder;
+    }
+
+    public function getResourceManager(): ResourceManager
+    {
+        return $this->resourceManager;
     }
 
     public function getSelectTemplate(): string

@@ -13,11 +13,11 @@ return static function (ContainerConfigurator $container) {
         ['$themeSystemPathBuilder' => service('Chamilo\Libraries\UserInterface\Theme\Service\ThemeSystemPathBuilder')]
     );
 
-    $services->set('Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger')->factory(
+    $services->set('Chamilo\Libraries\Protocol\ErrorHandling\Service\ExceptionLogger')->factory(
         [service(ExceptionLoggerFactory::class), 'createExceptionLogger']
     );
 
-    $services->alias(ExceptionLoggerInterface::class, 'Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger');
+    $services->alias(ExceptionLoggerInterface::class, 'Chamilo\Libraries\Protocol\ErrorHandling\Service\ExceptionLogger');
 
     $services->set(ExceptionLoggerFactory::class)->args(
         ['$errorHandlingConfiguration' => '%cosnics.libraries.protocol.error.handling%']

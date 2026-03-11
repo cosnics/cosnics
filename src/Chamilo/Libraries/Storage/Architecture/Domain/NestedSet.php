@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain;
 
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
-
 /**
  * This class extends Dataclass to provide auxiliary methods which allows using its subclasses as tree-structured data.
  * It is aimed to replace nested_tree_node and all ad hoc implementations.
@@ -15,7 +13,6 @@ abstract class NestedSet extends DataClass
     public const int AS_LAST_CHILD_OF = 2;
     public const int AS_NEXT_SIBLING_OF = 4;
     public const int AS_PREVIOUS_SIBLING_OF = 3;
-    public const string CONTEXT = StringUtilities::LIBRARIES;
     public const string PROPERTY_LEFT_VALUE = 'left_value';
     public const string PROPERTY_PARENT_ID = 'parent_id';
     public const string PROPERTY_RIGHT_VALUE = 'right_value';

@@ -14,7 +14,6 @@ use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
 class Group extends NestedSet implements UuidDataClassInterface
 {
     public const string CONTEXT = Manager::CONTEXT;
-
     public const string PROPERTY_CODE = 'code';
     public const string PROPERTY_DESCRIPTION = 'description';
     public const string PROPERTY_NAME = 'name';
