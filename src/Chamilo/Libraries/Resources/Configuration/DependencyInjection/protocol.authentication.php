@@ -8,7 +8,7 @@ use Chamilo\Libraries\Protocol\Authentication\Service\NotAllowedExceptionRendere
 use Chamilo\Libraries\Protocol\Authentication\Service\NotAuthenticatedExceptionRenderer;
 use Chamilo\Libraries\Protocol\Authentication\Service\PlatformAuthentication;
 use Chamilo\Libraries\Protocol\Authentication\Service\SecurityTokenAuthentication;
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionRendererInterface;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Interface\UserExceptionRendererInterface;
 use Chamilo\Libraries\Protocol\Log\Factory\MonologStreamHandlerFactory;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;

@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Factory;
 
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
@@ -27,7 +27,7 @@ class HtmlCalendarRendererFactory extends ArrayCollection
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function getHtmlCalendarRenderer(string $rendererType): HtmlCalendarRenderer
     {

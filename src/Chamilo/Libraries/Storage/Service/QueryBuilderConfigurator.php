@@ -38,7 +38,7 @@ class QueryBuilderConfigurator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function applyParameters(
         QueryBuilder $queryBuilder, StorageParameters $parameters, string $dataClassStorageUnitName
@@ -54,7 +54,7 @@ class QueryBuilderConfigurator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function applyUpdate(
         QueryBuilder $queryBuilder, UpdateProperties $properties, ConditionInterface $condition
@@ -91,7 +91,7 @@ class QueryBuilderConfigurator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processCondition(
         QueryBuilder $queryBuilder, ?ConditionInterface $condition = null, ?bool $enableAliasing = true
@@ -103,7 +103,7 @@ class QueryBuilderConfigurator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processGroupBy(
         QueryBuilder $queryBuilder, GroupBy $groupBy = new GroupBy()
@@ -115,7 +115,7 @@ class QueryBuilderConfigurator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processHavingCondition(
         QueryBuilder $queryBuilder, ?ConditionInterface $condition = null
@@ -127,7 +127,7 @@ class QueryBuilderConfigurator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processJoins(
         QueryBuilder $queryBuilder, string $dataClassStorageUnitName, Joins $joins = new Joins()
@@ -173,7 +173,7 @@ class QueryBuilderConfigurator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processOrderBy(
         QueryBuilder $queryBuilder, OrderBy $orderBy = new OrderBy()
@@ -188,7 +188,7 @@ class QueryBuilderConfigurator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processRetrieveProperties(
         QueryBuilder $queryBuilder, RetrieveProperties $properties = new RetrieveProperties()
@@ -200,7 +200,7 @@ class QueryBuilderConfigurator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function translateCondition(
         QueryBuilder $queryBuilder, ConditionInterface $condition, ?bool $enableAliasing = true
@@ -212,7 +212,7 @@ class QueryBuilderConfigurator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function translateConditionVariable(
         QueryBuilder $queryBuilder, ConditionVariableInterface $conditionVariable, ?bool $enableAliasing = true

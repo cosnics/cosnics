@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Architecture\Domain;
 
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
@@ -32,7 +32,7 @@ class UserPictureProviderRegistry extends ArrayCollection
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function getActivePictureProvider(): UserPictureProviderInterface
     {

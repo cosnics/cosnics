@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionInterface;
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionRendererInterface;
-use Chamilo\Libraries\Protocol\Error\Service\AbstractUserExceptionRenderer;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Interface\UserExceptionInterface;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Interface\UserExceptionRendererInterface;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Service\AbstractUserExceptionRenderer;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchCalendarException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 

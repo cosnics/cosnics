@@ -13,7 +13,7 @@ use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeablePasswordInterface;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Domain\Mail;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
 use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
@@ -622,7 +622,7 @@ class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException
      */
     public function sendPasswordResetLinkforUser(User $user): bool
     {

@@ -1,7 +1,7 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionRendererInterface;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Interface\UserExceptionRendererInterface;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Factory\GraphServiceClientFactory;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\GroupService;

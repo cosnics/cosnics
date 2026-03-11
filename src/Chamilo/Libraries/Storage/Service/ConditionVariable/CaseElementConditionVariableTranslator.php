@@ -23,7 +23,7 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function translate(
         QueryBuilder $querybuilder, CaseElementConditionVariable $caseElementConditionVariable,

@@ -28,7 +28,7 @@ class PatternMatchConditionTranslator extends ConditionTranslator implements Con
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function translate(
         QueryBuilder $querybuilder, PatternMatchCondition $patternMatchCondition, ?bool $enableAliasing = true

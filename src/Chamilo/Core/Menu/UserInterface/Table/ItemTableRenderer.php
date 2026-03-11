@@ -140,7 +140,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $result
      *
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, mixed $result): string
     {
@@ -158,7 +158,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $result
      *
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      */

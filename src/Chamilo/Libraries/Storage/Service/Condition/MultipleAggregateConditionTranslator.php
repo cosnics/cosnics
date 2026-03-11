@@ -13,7 +13,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 abstract class MultipleAggregateConditionTranslator extends ConditionTranslator
 {
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function translate(
         QueryBuilder $querybuilder, MultipleAggregateCondition $multipleAggregateCondition, ?bool $enableAliasing = true

@@ -4,7 +4,7 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchParameterException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
 use Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 class DownloadUserPictureComponent extends Manager
 {
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchParameterException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
@@ -31,7 +31,7 @@ class DownloadUserPictureComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchParameterException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
      */
     protected function getUserFromRequest(): User
     {

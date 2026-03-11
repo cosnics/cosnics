@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Tab\Architecture\Domain;
 
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabInterface;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabRendererInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,7 +22,7 @@ class TabRendererRegistry extends ArrayCollection
      * @param class-string<tGetTabRenderer> $tabRendererClassName
      *
      * @return tGetTabRenderer|TabRendererInterface
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function getTabRenderer(string $tabRendererClassName): TabRendererInterface
     {
@@ -34,7 +34,7 @@ class TabRendererRegistry extends ArrayCollection
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function getTabRendererForTab(TabInterface $tab): TabRendererInterface
     {

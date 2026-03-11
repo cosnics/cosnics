@@ -260,7 +260,7 @@ abstract class AbstractHtmlTableRenderer
 
     /**
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function renderActions(string $tableName, TableActions $tableActions): string
     {
@@ -288,7 +288,7 @@ abstract class AbstractHtmlTableRenderer
 
     /**
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function renderNumberOfItemsPerPageSelector(
         TableParameterValues $parameterValues, array $parameterNames
@@ -345,7 +345,7 @@ abstract class AbstractHtmlTableRenderer
      * @param \Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn[] $tableColumns
      *
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function renderPropertySorting(
         array $tableColumns, TableParameterValues $parameterValues, array $parameterNames
@@ -438,7 +438,7 @@ abstract class AbstractHtmlTableRenderer
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
      * @throws \TableException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function renderTable(
         HTML_Table $htmlTable, array $tableColumns, ArrayCollection $tableRows, string $tableName,
@@ -483,7 +483,7 @@ abstract class AbstractHtmlTableRenderer
     /**
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function renderTableFooter(
         string $tableName, TableParameterValues $parameterValues, array $parameterNames,
@@ -527,7 +527,7 @@ abstract class AbstractHtmlTableRenderer
      * @param \Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn[] $tableColumns
      *
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function renderTableHeader(
         array $tableColumns, string $tableName, array $parameterNames, TableParameterValues $parameterValues,
@@ -556,7 +556,7 @@ abstract class AbstractHtmlTableRenderer
 
     /**
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function renderTableHeaderStart(string $tableName, ?TableActions $tableActions = null): string
     {

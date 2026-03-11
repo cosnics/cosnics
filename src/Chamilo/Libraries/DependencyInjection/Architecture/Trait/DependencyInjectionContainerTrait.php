@@ -9,7 +9,7 @@ use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
 use Chamilo\Libraries\Filesystem\Service\FilesystemTools;
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
+use Chamilo\Libraries\Protocol\ErrorHandling\Architecture\Interface\ExceptionLoggerInterface;
 use Chamilo\Libraries\Service\Bootstrap\ApplicationFactory;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
@@ -135,7 +135,7 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface> $className
+     * @param class-string<\Chamilo\Libraries\Protocol\ErrorHandling\Architecture\Interface\ExceptionLoggerInterface> $className
      */
     protected function getExceptionLogger(
         string $className = 'Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger'

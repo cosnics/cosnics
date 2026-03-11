@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Mail\Factory;
 
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
 use Chamilo\Libraries\Protocol\Mail\Service\Platform;
 use Symfony\Component\Translation\Translator;
@@ -58,7 +58,7 @@ class MailerFactory
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function getMailer(string $mailerClass): MailerInterface
     {

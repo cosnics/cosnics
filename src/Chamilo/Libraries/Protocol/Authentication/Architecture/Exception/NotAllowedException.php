@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Protocol\Authentication\Architecture\Exception;
 
 use Chamilo\Libraries\Protocol\Authentication\Service\NotAllowedExceptionRenderer;
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionInterface;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Interface\UserExceptionInterface;
 use Exception;
 
 /**

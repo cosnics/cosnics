@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;

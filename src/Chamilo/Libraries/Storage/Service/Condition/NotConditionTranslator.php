@@ -19,7 +19,7 @@ class NotConditionTranslator extends ConditionTranslator implements ConditionTra
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function translate(
         QueryBuilder $querybuilder, NotCondition $notCondition, ?bool $enableAliasing = true

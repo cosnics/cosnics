@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionInterface;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Interface\UserExceptionInterface;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\NoSuchUserExceptionRenderer;
 use Exception;
 use Throwable;

@@ -3,7 +3,7 @@ namespace Chamilo\Core\Menu\Architecture\Domain;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
@@ -28,7 +28,7 @@ class ItemRendererRegistry extends ArrayCollection
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function getItemRenderer(string $itemRendererType): ItemRenderer
     {
@@ -40,7 +40,7 @@ class ItemRendererRegistry extends ArrayCollection
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function getItemRendererForItem(Item $item): ItemRenderer
     {

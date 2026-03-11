@@ -9,10 +9,10 @@ use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Architecture\Interface\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\PlatformNotAvailableException;
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionInterface;
-use Chamilo\Libraries\Protocol\Error\Service\UserExceptionResponseRenderer;
+use Chamilo\Libraries\Protocol\ErrorHandling\Architecture\Interface\ExceptionLoggerInterface;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\PlatformNotAvailableException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Interface\UserExceptionInterface;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Service\UserExceptionResponseRenderer;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -74,7 +74,7 @@ class Kernel
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      */
     protected function checkAuthentication(): static
@@ -89,7 +89,7 @@ class Kernel
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\PlatformNotAvailableException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\PlatformNotAvailableException
      */
     protected function checkPlatformAvailability(): static
     {

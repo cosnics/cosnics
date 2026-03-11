@@ -1,7 +1,7 @@
 <?php
 
 use Chamilo\Libraries\DependencyInjection\Service\DependencyInjectionContainerBuilder;
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
+use Chamilo\Libraries\Protocol\ErrorHandling\Architecture\Interface\ExceptionLoggerInterface;
 use Chamilo\Libraries\Service\Bootstrap\Bootstrap;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -11,7 +11,7 @@ $container = DependencyInjectionContainerBuilder::getInstance()->createContainer
 $container->get(Bootstrap::class)->setup();
 
 /**
- * @var \Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface $exceptionLogger
+ * @var \Chamilo\Libraries\Protocol\ErrorHandling\Architecture\Interface\ExceptionLoggerInterface $exceptionLogger
  */
 $exceptionLogger = $container->get('Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger');
 

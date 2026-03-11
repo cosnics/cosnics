@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Service;
 
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionInterface;
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionRendererInterface;
-use Chamilo\Libraries\Protocol\Error\Service\AbstractUserExceptionRenderer;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Interface\UserExceptionInterface;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Interface\UserExceptionRendererInterface;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Service\AbstractUserExceptionRenderer;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
 

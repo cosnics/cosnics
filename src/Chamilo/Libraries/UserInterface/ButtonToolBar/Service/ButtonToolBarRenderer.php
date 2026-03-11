@@ -33,7 +33,7 @@ class ButtonToolBarRenderer extends AbstractButtonCollectionButtonRenderer imple
 
     /**
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function render(ButtonToolBar $buttonToolBar): string
     {

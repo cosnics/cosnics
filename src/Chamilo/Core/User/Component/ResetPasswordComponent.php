@@ -5,7 +5,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
@@ -25,7 +25,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException

@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Service\Bootstrap;
 
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
-use Chamilo\Libraries\Protocol\Error\Service\ErrorHandler;
+use Chamilo\Libraries\Protocol\ErrorHandling\Service\ErrorHandler;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
@@ -12,13 +12,13 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 class Bootstrap
 {
-    private ErrorHandler $errorHandler;
+    protected ErrorHandler $errorHandler;
 
-    private ChamiloRequest $request;
+    protected ChamiloRequest $request;
 
-    private SessionInterface $session;
+    protected SessionInterface $session;
 
-    private bool $showErrors;
+    protected bool $showErrors;
 
     public function __construct(
         ChamiloRequest $request, ErrorHandler $errorHandler, SessionInterface $session, bool $showErrors = false
@@ -30,22 +30,22 @@ class Bootstrap
         $this->showErrors = $showErrors;
     }
 
-    public function getErrorHandler(): ErrorHandler
+    protected function getErrorHandler(): ErrorHandler
     {
         return $this->errorHandler;
     }
 
-    public function getRequest(): ChamiloRequest
+    protected function getRequest(): ChamiloRequest
     {
         return $this->request;
     }
 
-    public function getSession(): SessionInterface
+    protected function getSession(): SessionInterface
     {
         return $this->session;
     }
 
-    public function getShowErrors(): bool
+    protected function getShowErrors(): bool
     {
         return $this->showErrors;
     }

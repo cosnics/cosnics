@@ -3,7 +3,7 @@ namespace Chamilo\Core\Home\Architecture\Domain;
 
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
 
@@ -30,7 +30,7 @@ class BlockRendererRegistry extends ArrayCollection
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function getBlockRenderer(string $blockRendererType): BlockRenderer
     {
@@ -58,7 +58,7 @@ class BlockRendererRegistry extends ArrayCollection
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function getRendererForElement(Element $block): BlockRenderer
     {

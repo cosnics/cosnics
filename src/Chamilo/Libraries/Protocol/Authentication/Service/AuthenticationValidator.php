@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -126,7 +126,7 @@ class AuthenticationValidator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException
      */
     public function logout(User $user): void
     {

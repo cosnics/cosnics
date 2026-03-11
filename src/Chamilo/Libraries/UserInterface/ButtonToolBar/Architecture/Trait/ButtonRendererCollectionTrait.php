@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait;
 
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonRendererRegistry;
 use Doctrine\Common\Collections\ArrayCollection;
 

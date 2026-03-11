@@ -20,7 +20,7 @@ class InConditionTranslator extends ConditionTranslator implements ConditionTran
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function translate(
         QueryBuilder $querybuilder, InCondition $inCondition, ?bool $enableAliasing = true

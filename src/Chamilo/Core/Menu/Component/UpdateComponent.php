@@ -8,7 +8,7 @@ use Chamilo\Core\Menu\UserInterface\Form\ItemForm;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchParameterException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
@@ -27,13 +27,13 @@ class UpdateComponent extends Manager
 {
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchParameterException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
      */
     public function run(?User $currentUser = null): Response
@@ -100,7 +100,7 @@ class UpdateComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchParameterException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */

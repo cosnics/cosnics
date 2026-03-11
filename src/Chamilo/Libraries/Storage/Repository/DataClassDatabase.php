@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Repository;
 
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\ExceptionLoggerInterface;
+use Chamilo\Libraries\Protocol\ErrorHandling\Architecture\Interface\ExceptionLoggerInterface;
 use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorCollection;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
@@ -54,7 +54,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     protected function __retrieve(string $dataClassStorageUnitName, StorageParameters $parameters): Result
@@ -84,7 +84,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function buildFromQuery(string $dataClassStorageUnitName, StorageParameters $parameters): QueryBuilder
     {
@@ -100,7 +100,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function count(string $dataClassStorageUnitName, StorageParameters $parameters): int
     {
@@ -216,7 +216,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function distinct(string $dataClassStorageUnitName, StorageParameters $parameters): array
     {
@@ -337,7 +337,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function retrieve(string $dataClassStorageUnitName, StorageParameters $parameters): ?array
     {
@@ -374,7 +374,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function retrieves(string $dataClassStorageUnitName, StorageParameters $parameters): array
     {
@@ -433,7 +433,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Doctrine\DBAL\Exception
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function update(string $dataClassStorageUnitName, UpdateProperties $properties, ConditionInterface $condition
     ): bool

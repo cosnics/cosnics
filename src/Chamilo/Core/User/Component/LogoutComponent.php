@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 class LogoutComponent extends Manager
 {
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      */
     public function run(?User $currentUser = null): Response

@@ -1,7 +1,7 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionRendererInterface;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Interface\UserExceptionRendererInterface;
 use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorCollection;
 use Chamilo\Libraries\Storage\Architecture\Domain\ConditionVariableTranslatorCollection;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClassRepositoryCache;

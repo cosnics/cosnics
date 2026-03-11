@@ -98,7 +98,7 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\SubscribedUser $result
      *
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      * @throws \QuickformException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Tab\Service;
 
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabRendererRegistry;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabContentInterface;

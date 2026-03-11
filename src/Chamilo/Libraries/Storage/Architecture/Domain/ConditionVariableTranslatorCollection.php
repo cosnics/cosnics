@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Domain;
 
-use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -45,7 +45,7 @@ class ConditionVariableTranslatorCollection extends ArrayCollection
      * @param class-string<tGetTranslator> $conditionVariableTranslatorClassName
      *
      * @return tGetTranslator|ConditionVariableTranslatorInterface
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function getTranslator(string $conditionVariableTranslatorClassName): ConditionVariableTranslatorInterface
     {
@@ -64,7 +64,7 @@ class ConditionVariableTranslatorCollection extends ArrayCollection
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function translate(
         QueryBuilder $querybuilder, ConditionVariableInterface $conditionVariable, ?bool $enableAliasing = true

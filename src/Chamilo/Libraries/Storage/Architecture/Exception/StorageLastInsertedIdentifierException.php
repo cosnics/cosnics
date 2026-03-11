@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Architecture\Exception;
 
-use Chamilo\Libraries\Protocol\Error\Architecture\Interface\UserExceptionInterface;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Interface\UserExceptionInterface;
 use Chamilo\Libraries\Storage\Service\StorageLastInsertedIdentifierExceptionRenderer;
 use Exception;
 

@@ -26,7 +26,7 @@ class TabRenderer
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function render(
         Element $tab, int $tabKey, ?int $currentTabIdentifier = null, ?User $user = null
