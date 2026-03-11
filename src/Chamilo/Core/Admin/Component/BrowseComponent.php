@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class BrowseComponent extends Manager
 {
-    public const PARAM_TAB = 'tab';
+    public const string PARAM_TAB = 'tab';
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException

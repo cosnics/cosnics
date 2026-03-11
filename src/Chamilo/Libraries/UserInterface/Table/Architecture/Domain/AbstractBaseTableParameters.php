@@ -9,11 +9,11 @@ use Symfony\Component\HttpFoundation\ParameterBag;
  */
 abstract class AbstractBaseTableParameters extends ParameterBag
 {
-    public const PARAM_NUMBER_OF_ITEMS_PER_PAGE = 'items_per_page';
-    public const PARAM_ORDER_COLUMN_DIRECTION = 'direction';
-    public const PARAM_ORDER_COLUMN_INDEX = 'column';
-    public const PARAM_PAGE_NUMBER = 'page_nr';
-    public const PARAM_TOTAL_NUMBER_OF_ITEMS = 'total';
+    public const string PARAM_NUMBER_OF_ITEMS_PER_PAGE = 'items_per_page';
+    public const string PARAM_ORDER_COLUMN_DIRECTION = 'direction';
+    public const string PARAM_ORDER_COLUMN_INDEX = 'column';
+    public const string PARAM_PAGE_NUMBER = 'page_nr';
+    public const string PARAM_TOTAL_NUMBER_OF_ITEMS = 'total';
 
     public function getNumberOfItemsPerPage(): int
     {

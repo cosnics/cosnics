@@ -15,7 +15,7 @@ use Symfony\Component\Translation\Translator;
  */
 trait VisibilityComponentTrait
 {
-    public const PARAM_SOURCE = 'source';
+    public const string PARAM_SOURCE = 'source';
 
     public function run(?User $currentUser = null): Response
     {

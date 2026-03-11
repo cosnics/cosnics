@@ -20,7 +20,7 @@ use Symfony\Component\Translation\Translator;
  */
 class HomeService
 {
-    public const PARAM_TAB_ID = 'tab';
+    public const string PARAM_TAB_ID = 'tab';
 
     protected BlockRendererRegistry $blockRendererFactory;
 

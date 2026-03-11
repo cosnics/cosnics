@@ -11,15 +11,15 @@ use stdClass;
  */
 class Package extends DataClass
 {
-    public const CONTEXT = Manager::CONTEXT;
-    public const PROPERTY_COMPOSER_JSON_OBJECT = 'extra';
-    public const PROPERTY_CONTEXT = 'context';
-    public const PROPERTY_NAME = 'name';
-    public const PROPERTY_RESOURCES = 'resources';
-    public const PROPERTY_TYPE = 'type';
-    public const PROPERTY_VERSION = 'version';
-    public const TYPE_APPLICATION = 'Chamilo\Application';
-    public const TYPE_CORE = 'Chamilo\Core';
+    public const string CONTEXT = Manager::CONTEXT;
+    public const string PROPERTY_COMPOSER_JSON_OBJECT = 'extra';
+    public const string PROPERTY_CONTEXT = 'context';
+    public const string PROPERTY_NAME = 'name';
+    public const string PROPERTY_RESOURCES = 'resources';
+    public const string PROPERTY_TYPE = 'type';
+    public const string PROPERTY_VERSION = 'version';
+    public const string TYPE_APPLICATION = 'Chamilo\Application';
+    public const string TYPE_CORE = 'Chamilo\Core';
 
     public function getComposerJsonObject(): stdClass
     {

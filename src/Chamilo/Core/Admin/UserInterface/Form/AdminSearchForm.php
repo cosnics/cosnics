@@ -15,8 +15,8 @@ use HTML_QuickForm_text;
  */
 class AdminSearchForm extends FormValidator
 {
-    public const FORM_NAME = 'search';
-    public const PARAM_SIMPLE_SEARCH_QUERY = 'query';
+    public const string FORM_NAME = 'search';
+    public const string PARAM_SIMPLE_SEARCH_QUERY = 'query';
 
     /**
      * @param string $url

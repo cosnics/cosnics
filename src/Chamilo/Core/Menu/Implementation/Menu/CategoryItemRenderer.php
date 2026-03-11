@@ -39,7 +39,7 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function render(Item $item, User $user): string
     {
@@ -118,7 +118,7 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function renderChildren(Item $item, User $user): string
     {

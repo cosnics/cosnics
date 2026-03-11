@@ -12,12 +12,12 @@ use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
  */
 abstract class Manager extends Application
 {
-    public const CONTEXT = __NAMESPACE__;
-    public const PARAM_ACTIVE = 'active';
-    public const PARAM_LANGUAGE = 'language';
-    public const PARAM_REFER = 'refer';
-    public const PARAM_RESET_KEY = 'key';
-    public const PARAM_USER_ID = 'user_id';
+    public const string CONTEXT = __NAMESPACE__;
+    public const string PARAM_ACTIVE = 'active';
+    public const string PARAM_LANGUAGE = 'language';
+    public const string PARAM_REFER = 'refer';
+    public const string PARAM_RESET_KEY = 'key';
+    public const string PARAM_USER_ID = 'user_id';
 
     /**
      * @param class-string<\Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface> $className

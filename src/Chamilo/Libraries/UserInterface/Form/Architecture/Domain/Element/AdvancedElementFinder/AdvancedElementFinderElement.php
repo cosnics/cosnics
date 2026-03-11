@@ -10,16 +10,16 @@ namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\Advan
  */
 class AdvancedElementFinderElement
 {
-    public const PROPERTY_CHILDREN = 'children';
-    public const PROPERTY_CLASS = 'classes';
-    public const PROPERTY_DESCRIPTION = 'description';
-    public const PROPERTY_ID = 'id';
-    public const PROPERTY_TITLE = 'title';
-    public const PROPERTY_TYPE = 'type';
-    public const TYPE_FILTER = 3;
-    public const TYPE_SELECTABLE = 1;
-    public const TYPE_SELECTABLE_AND_FILTER = 2;
-    public const TYPE_VISUAL = 4;
+    public const string PROPERTY_CHILDREN = 'children';
+    public const string PROPERTY_CLASS = 'classes';
+    public const string PROPERTY_DESCRIPTION = 'description';
+    public const string PROPERTY_ID = 'id';
+    public const string PROPERTY_TITLE = 'title';
+    public const string PROPERTY_TYPE = 'type';
+    public const int TYPE_FILTER = 3;
+    public const int TYPE_SELECTABLE = 1;
+    public const int TYPE_SELECTABLE_AND_FILTER = 2;
+    public const int TYPE_VISUAL = 4;
 
     private array $properties;
 

@@ -25,9 +25,9 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class AbstractTableRenderer
 {
-    public const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_ASC;
-    public const DEFAULT_ORDER_COLUMN_INDEX = 0;
-    public const TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
+    public const int DEFAULT_ORDER_COLUMN_DIRECTION = SORT_ASC;
+    public const int DEFAULT_ORDER_COLUMN_INDEX = 0;
+    public const string TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
 
     protected ClassnameUtilities $classnameUtilities;
 
@@ -47,8 +47,9 @@ abstract class AbstractTableRenderer
     protected UrlGenerator $urlGenerator;
 
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, AbstractHtmlTableRenderer $htmlTableRenderer, PageNavigationCalculator $pager,
-        DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory, ClassnameUtilities $classnameUtilities
+        Translator $translator, UrlGenerator $urlGenerator, AbstractHtmlTableRenderer $htmlTableRenderer,
+        PageNavigationCalculator $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
+        ClassnameUtilities $classnameUtilities
     )
     {
         $this->translator = $translator;

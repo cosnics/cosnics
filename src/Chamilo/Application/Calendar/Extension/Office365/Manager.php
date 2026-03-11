@@ -7,5 +7,5 @@ namespace Chamilo\Application\Calendar\Extension\Office365;
  */
 abstract class Manager
 {
-    public const CONTEXT = __NAMESPACE__;
+    public const string CONTEXT = __NAMESPACE__;
 }

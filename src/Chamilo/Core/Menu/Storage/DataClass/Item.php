@@ -22,14 +22,14 @@ class Item extends DataClass
 {
     use ConfigurableDataClassTrait;
 
-    public const CONTEXT = Manager::CONTEXT;
-    public const PROPERTY_DISPLAY = 'display';
-    public const PROPERTY_HIDDEN = 'hidden';
-    public const PROPERTY_ICON_CLASS = 'icon_class';
-    public const PROPERTY_PARENT = 'parent_id';
-    public const PROPERTY_SORT = 'sort';
-    public const PROPERTY_TITLES = 'titles';
-    public const PROPERTY_TYPE = 'type';
+    public const string CONTEXT = Manager::CONTEXT;
+    public const string PROPERTY_DISPLAY = 'display';
+    public const string PROPERTY_HIDDEN = 'hidden';
+    public const string PROPERTY_ICON_CLASS = 'icon_class';
+    public const string PROPERTY_PARENT = 'parent_id';
+    public const string PROPERTY_SORT = 'sort';
+    public const string PROPERTY_TITLES = 'titles';
+    public const string PROPERTY_TYPE = 'type';
 
     /**
      * @param string[] $extendedPropertyNames

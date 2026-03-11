@@ -25,9 +25,9 @@ use Symfony\Component\Translation\Translator;
  */
 class AuthenticationValidator
 {
-    public const PARAM_AS_ADMIN = '_as_admin';
-    public const PARAM_AUTHENTICATION_ERROR = 'authentication_error';
-    public const SESSION_USER_ID = '_uid';
+    public const string PARAM_AS_ADMIN = '_as_admin';
+    public const string PARAM_AUTHENTICATION_ERROR = 'authentication_error';
+    public const string SESSION_USER_ID = '_uid';
 
     /**
      * @var \Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface[]

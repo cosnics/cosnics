@@ -22,11 +22,11 @@ use Symfony\Component\Translation\Translator;
  */
 class DayBlockRenderer extends BlockRenderer
 {
-    public const CONFIGURATION_HOUR_STEP = 'hour_step';
-    public const CONFIGURATION_TIME_END = 'time_end';
-    public const CONFIGURATION_TIME_HIDE = 'time_hide';
-    public const CONFIGURATION_TIME_START = 'time_start';
-    public const CONTEXT = Manager::CONTEXT;
+    public const string CONFIGURATION_HOUR_STEP = 'hour_step';
+    public const string CONFIGURATION_TIME_END = 'time_end';
+    public const string CONFIGURATION_TIME_HIDE = 'time_hide';
+    public const string CONFIGURATION_TIME_START = 'time_start';
+    public const string CONTEXT = Manager::CONTEXT;
 
     protected CalendarDataProvider $calendarDataProvider;
 

@@ -13,12 +13,12 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class BlockRenderer
 {
-    public const BLOCK_PROPERTY_ID = 'id';
-    public const BLOCK_PROPERTY_IMAGE = 'image';
-    public const BLOCK_PROPERTY_NAME = 'name';
-    public const PARAM_ACTION = 'block_action';
-    public const SOURCE_AJAX = 2;
-    public const SOURCE_DEFAULT = 1;
+    public const string BLOCK_PROPERTY_ID = 'id';
+    public const string BLOCK_PROPERTY_IMAGE = 'image';
+    public const string BLOCK_PROPERTY_NAME = 'name';
+    public const string PARAM_ACTION = 'block_action';
+    public const int SOURCE_AJAX = 2;
+    public const int SOURCE_DEFAULT = 1;
 
     protected HomeService $homeService;
 

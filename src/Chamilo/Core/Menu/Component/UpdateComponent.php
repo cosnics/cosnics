@@ -35,7 +35,6 @@ class UpdateComponent extends Manager
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      */
     public function run(?User $currentUser = null): Response
     {

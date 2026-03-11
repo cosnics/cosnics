@@ -11,14 +11,14 @@ use Chamilo\Libraries\Service\Utilities\StringUtilities;
  */
 abstract class NestedSet extends DataClass
 {
-    public const AS_FIRST_CHILD_OF = 1;
-    public const AS_LAST_CHILD_OF = 2;
-    public const AS_NEXT_SIBLING_OF = 4;
-    public const AS_PREVIOUS_SIBLING_OF = 3;
-    public const CONTEXT = StringUtilities::LIBRARIES;
-    public const PROPERTY_LEFT_VALUE = 'left_value';
-    public const PROPERTY_PARENT_ID = 'parent_id';
-    public const PROPERTY_RIGHT_VALUE = 'right_value';
+    public const int AS_FIRST_CHILD_OF = 1;
+    public const int AS_LAST_CHILD_OF = 2;
+    public const int AS_NEXT_SIBLING_OF = 4;
+    public const int AS_PREVIOUS_SIBLING_OF = 3;
+    public const string CONTEXT = StringUtilities::LIBRARIES;
+    public const string PROPERTY_LEFT_VALUE = 'left_value';
+    public const string PROPERTY_PARENT_ID = 'parent_id';
+    public const string PROPERTY_RIGHT_VALUE = 'right_value';
 
     /**
      * @param string[] $extendedPropertyNames

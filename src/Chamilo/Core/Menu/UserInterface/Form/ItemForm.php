@@ -31,7 +31,7 @@ class ItemForm extends FormValidator
 
     /**
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function __construct(string $itemType, string $action)
     {
@@ -112,7 +112,7 @@ class ItemForm extends FormValidator
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     protected function buildSettingsForm(): void
     {
@@ -126,7 +126,7 @@ class ItemForm extends FormValidator
 
     /**
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     protected function buildTitlesForm(): void
     {
@@ -170,7 +170,7 @@ class ItemForm extends FormValidator
     /**
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     protected function getParentItems(): array
     {
@@ -194,7 +194,7 @@ class ItemForm extends FormValidator
      * @param string[] $defaults
      *
      * @throws \QuickformException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function setItemDefaults(Item $item, array $defaults = []): void
     {

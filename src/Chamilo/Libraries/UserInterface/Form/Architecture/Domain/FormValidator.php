@@ -44,14 +44,14 @@ class FormValidator extends HTML_QuickForm
 {
     use DependencyInjectionContainerTrait;
 
-    public const FORM_METHOD_GET = 'get';
-    public const FORM_METHOD_POST = 'post';
-    public const PARAM_RESET = 'reset';
-    public const PARAM_SUBMIT = 'submit';
-    public const PROPERTY_HTML_EDITORS = 'html_editors';
-    public const PROPERTY_TIME_PERIOD_FOREVER = 'forever';
-    public const PROPERTY_TIME_PERIOD_FROM_DATE = 'from_date';
-    public const PROPERTY_TIME_PERIOD_TO_DATE = 'to_date';
+    public const string FORM_METHOD_GET = 'get';
+    public const string FORM_METHOD_POST = 'post';
+    public const string PARAM_RESET = 'reset';
+    public const string PARAM_SUBMIT = 'submit';
+    public const string PROPERTY_HTML_EDITORS = 'html_editors';
+    public const string PROPERTY_TIME_PERIOD_FOREVER = 'forever';
+    public const string PROPERTY_TIME_PERIOD_FROM_DATE = 'from_date';
+    public const string PROPERTY_TIME_PERIOD_TO_DATE = 'to_date';
 
     /**
      * @var string[]

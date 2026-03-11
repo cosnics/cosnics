@@ -23,8 +23,8 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 {
     use DependencyInjectionContainerTrait;
 
-    public const DEFAULT_HEIGHT = 300;
-    public const DEFAULT_WIDTH = 292;
+    public const int DEFAULT_HEIGHT = 300;
+    public const int DEFAULT_WIDTH = 292;
 
     /**
      * An array of configuration values for the elementfinder (eg.

@@ -14,8 +14,8 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class Authentication
 {
-    public const PARAM_LOGIN = 'login';
-    public const PARAM_PASSWORD = 'password';
+    public const string PARAM_LOGIN = 'login';
+    public const string PARAM_PASSWORD = 'password';
 
     protected AuthenticationValidator $authenticationValidator;
 

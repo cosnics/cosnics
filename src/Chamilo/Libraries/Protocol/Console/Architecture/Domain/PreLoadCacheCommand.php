@@ -16,11 +16,11 @@ use Symfony\Component\Translation\Translator;
  */
 class PreLoadCacheCommand extends ChamiloCommand
 {
-    public const ARG_CACHE_DATA_PRELOADER_SERVICES = 'cache_data_preloader_services';
-    public const OPT_LIST = 'list';
-    public const OPT_LIST_SHORT = 'l';
-    public const OPT_PRELOAD = 'preload';
-    public const OPT_PRELOAD_SHORT = 'p';
+    public const string ARG_CACHE_DATA_PRELOADER_SERVICES = 'cache_data_preloader_services';
+    public const string OPT_LIST = 'list';
+    public const string OPT_LIST_SHORT = 'l';
+    public const string OPT_PRELOAD = 'preload';
+    public const string OPT_PRELOAD_SHORT = 'p';
 
     protected CacheDataPreLoaderManager $cacheDataPreLoaderManager;
 

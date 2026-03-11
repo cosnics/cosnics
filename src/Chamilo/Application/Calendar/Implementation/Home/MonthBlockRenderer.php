@@ -25,7 +25,7 @@ use Symfony\Component\Translation\Translator;
  */
 class MonthBlockRenderer extends BlockRenderer
 {
-    public const CONTEXT = Manager::CONTEXT;
+    public const string CONTEXT = Manager::CONTEXT;
 
     protected CalendarDataProvider $calendarDataProvider;
 

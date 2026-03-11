@@ -9,19 +9,19 @@ abstract class ImageManipulation
     /**
      * When cropping an image, use this offset value to get the exacte centre of the image
      */
-    public const CROP_CENTER = - 1;
-    public const DIMENSION_HEIGHT = 1;
-    public const DIMENSION_WIDTH = 0;
+    public const int CROP_CENTER = - 1;
+    public const int DIMENSION_HEIGHT = 1;
+    public const int DIMENSION_WIDTH = 0;
     /**
      * Final dimensions will be less than or equal to the entered width and height. Useful for ensuring a maximum
      * height and/or width.
      */
-    public const SCALE_INSIDE = 0;
+    public const int SCALE_INSIDE = 0;
     /**
      * Final dimensions will be greater than or equal to the entered width and height. Ideal for cropping the result to
      * a square.
      */
-    public const SCALE_OUTSIDE = 1;
+    public const int SCALE_OUTSIDE = 1;
 
     protected int $height;
 

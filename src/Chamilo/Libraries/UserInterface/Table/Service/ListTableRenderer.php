@@ -21,8 +21,8 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class ListTableRenderer extends AbstractTableRenderer
 {
-    public const DEFAULT_NUMBER_OF_COLUMNS_PER_PAGE = 1;
-    public const DEFAULT_NUMBER_OF_ROWS_PER_PAGE = 20;
+    public const int DEFAULT_NUMBER_OF_COLUMNS_PER_PAGE = 1;
+    public const int DEFAULT_NUMBER_OF_ROWS_PER_PAGE = 20;
 
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, PageNavigationCalculator $pager,

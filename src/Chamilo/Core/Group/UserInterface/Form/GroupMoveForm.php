@@ -14,7 +14,7 @@ use HTML_QuickForm_select;
  */
 class GroupMoveForm extends FormValidator
 {
-    public const PROPERTY_LOCATION = 'location';
+    public const string PROPERTY_LOCATION = 'location';
 
     private Group $group;
 

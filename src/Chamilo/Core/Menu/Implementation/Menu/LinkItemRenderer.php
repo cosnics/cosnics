@@ -31,12 +31,12 @@ class LinkItemRenderer extends ItemRenderer
 {
     use TranslatableItemTrait;
 
-    public const CONFIGURATION_TARGET = 'target';
-    public const CONFIGURATION_URL = 'url';
-    public const TARGET_BLANK = '_blank';
-    public const TARGET_PARENT = '_parent';
-    public const TARGET_SELF = '_self';
-    public const TARGET_TOP = '_top';
+    public const string CONFIGURATION_TARGET = 'target';
+    public const string CONFIGURATION_URL = 'url';
+    public const string TARGET_BLANK = '_blank';
+    public const string TARGET_PARENT = '_parent';
+    public const string TARGET_SELF = '_self';
+    public const string TARGET_TOP = '_top';
 
     protected WebPathBuilder $webPathBuilder;
 

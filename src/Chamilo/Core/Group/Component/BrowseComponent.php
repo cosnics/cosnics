@@ -41,9 +41,9 @@ class BrowseComponent extends Manager
 {
     use ButtonToolBarSearchFormTrait;
 
-    public const TAB_DETAILS = 'details';
-    public const TAB_SUBGROUPS = 'subgroups';
-    public const TAB_USERS = 'users';
+    public const string TAB_DETAILS = 'details';
+    public const string TAB_SUBGROUPS = 'subgroups';
+    public const string TAB_USERS = 'users';
 
     protected int $numberOfGroups;
 

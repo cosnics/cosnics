@@ -25,8 +25,8 @@ class AccountComponent extends ProfileComponent
     private AccountForm $accountForm;
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      */
     public function run(?User $currentUser = null): Response

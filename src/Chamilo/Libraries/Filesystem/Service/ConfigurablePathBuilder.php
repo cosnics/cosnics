@@ -9,13 +9,13 @@ namespace Chamilo\Libraries\Filesystem\Service;
  */
 class ConfigurablePathBuilder
 {
-    public const ARCHIVE = 4;
-    public const CACHE = 2;
-    public const GARBAGE = 7;
-    public const LOG = 3;
-    public const PROFILE_PICTURE = 6;
-    public const TEMPORARY = 1;
-    public const USER_PICTURES = 8;
+    public const int ARCHIVE = 4;
+    public const int CACHE = 2;
+    public const int GARBAGE = 7;
+    public const int LOG = 3;
+    public const int PROFILE_PICTURE = 6;
+    public const int TEMPORARY = 1;
+    public const int USER_PICTURES = 8;
 
     /**
      * @var string[]

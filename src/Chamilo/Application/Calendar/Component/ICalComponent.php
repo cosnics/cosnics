@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ICalComponent extends Manager implements NoAuthenticationSupportInterface
 {
-    public const PARAM_DOWNLOAD = 'download';
+    public const string PARAM_DOWNLOAD = 'download';
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException

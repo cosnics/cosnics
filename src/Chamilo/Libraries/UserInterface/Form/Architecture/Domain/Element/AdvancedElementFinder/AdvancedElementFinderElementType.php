@@ -8,11 +8,11 @@ namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\Advan
  */
 class AdvancedElementFinderElementType
 {
-    public const PROPERTY_CONTEXT = 'application';
-    public const PROPERTY_ID = 'id';
-    public const PROPERTY_METHOD = 'go';
-    public const PROPERTY_NAME = 'name';
-    public const PROPERTY_PARAMETERS = 'parameters';
+    public const string PROPERTY_CONTEXT = 'application';
+    public const string PROPERTY_ID = 'id';
+    public const string PROPERTY_METHOD = 'go';
+    public const string PROPERTY_NAME = 'name';
+    public const string PROPERTY_PARAMETERS = 'parameters';
 
     private array $properties;
 

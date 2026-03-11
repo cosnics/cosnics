@@ -9,11 +9,11 @@ use Chamilo\Core\Admin\Architecture\Enum\LanguageCodeEnum;
  */
 class Language
 {
-    public const CODE_TYPE_GLOTTOLOG = 'glottolog';
-    public const CODE_TYPE_ISO_639_1 = 'iso_639_1';
-    public const CODE_TYPE_ISO_639_2 = 'iso_639_2';
-    public const CODE_TYPE_ISO_639_3 = 'iso_639_3';
-    public const CODE_TYPE_LINGUASPHERE = 'linguasphere';
+    public const string CODE_TYPE_GLOTTOLOG = 'glottolog';
+    public const string CODE_TYPE_ISO_639_1 = 'iso_639_1';
+    public const string CODE_TYPE_ISO_639_2 = 'iso_639_2';
+    public const string CODE_TYPE_ISO_639_3 = 'iso_639_3';
+    public const string CODE_TYPE_LINGUASPHERE = 'linguasphere';
 
     /**
      * @string[] array

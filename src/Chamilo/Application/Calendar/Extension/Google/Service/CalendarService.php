@@ -16,7 +16,7 @@ use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
  */
 class CalendarService
 {
-    public const PARAM_AUTHORIZATION_CODE = 'code';
+    public const string PARAM_AUTHORIZATION_CODE = 'code';
 
     private CalendarRepository $calendarRepository;
 

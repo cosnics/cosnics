@@ -16,11 +16,11 @@ use Symfony\Component\Translation\Translator;
  */
 class ClearCacheCommand extends ChamiloCommand
 {
-    public const ARG_CACHE_ADAPTERS = 'cache_adapters';
-    public const OPT_CLEAR = 'clear';
-    public const OPT_CLEAR_SHORT = 'c';
-    public const OPT_LIST = 'list';
-    public const OPT_LIST_SHORT = 'l';
+    public const string ARG_CACHE_ADAPTERS = 'cache_adapters';
+    public const string OPT_CLEAR = 'clear';
+    public const string OPT_CLEAR_SHORT = 'c';
+    public const string OPT_LIST = 'list';
+    public const string OPT_LIST_SHORT = 'l';
 
     protected SymfonyCacheAdapterManager $symfonyCacheAdapterManager;
 

@@ -22,9 +22,9 @@ use Symfony\Component\Translation\Translator;
  */
 class PageNavigationRenderer
 {
-    public const PAGE_SELECTOR_TRANSLATION_ROW = 'row';
-    public const PAGE_SELECTOR_TRANSLATION_TITLE = 'title';
-    public const PAGE_SELECTOR_TRANSLATION_TITLE_ALL = 'title_all';
+    public const string PAGE_SELECTOR_TRANSLATION_ROW = 'row';
+    public const string PAGE_SELECTOR_TRANSLATION_TITLE = 'title';
+    public const string PAGE_SELECTOR_TRANSLATION_TITLE_ALL = 'title_all';
 
     protected ButtonToolBarRenderer $buttonToolBarRenderer;
 

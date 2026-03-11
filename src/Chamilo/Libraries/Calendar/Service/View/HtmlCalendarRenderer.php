@@ -22,8 +22,8 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class HtmlCalendarRenderer extends CalendarRenderer
 {
-    public const PARAM_TIME = 'time';
-    public const PARAM_TYPE = 'type';
+    public const string PARAM_TIME = 'time';
+    public const string PARAM_TYPE = 'type';
 
     protected ButtonToolBarRenderer $buttonToolBarRenderer;
 

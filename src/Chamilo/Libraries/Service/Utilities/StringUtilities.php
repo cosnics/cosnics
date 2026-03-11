@@ -11,7 +11,7 @@ use Stringy\Stringy;
  */
 class StringUtilities
 {
-    public const LIBRARIES = 'Chamilo\Libraries';
+    public const string LIBRARIES = 'Chamilo\Libraries';
 
     private string $encoding;
 

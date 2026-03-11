@@ -17,7 +17,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
 {
     use HourBasedCalendarTrait;
 
-    public const TIME_PLACEHOLDER = '__TIME__';
+    public const string TIME_PLACEHOLDER = '__TIME__';
 
     protected string $defaultFirstDayOfWeek;
 

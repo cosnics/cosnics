@@ -9,7 +9,7 @@ trait ConfigurableDataClassTrait
 {
     use DataClassSerializedPropertyTrait;
 
-    public const PROPERTY_CONFIGURATION = 'configuration';
+    public const string PROPERTY_CONFIGURATION = 'configuration';
 
     public function getConfiguration(): array
     {

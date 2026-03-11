@@ -12,10 +12,10 @@ abstract class DataClass
 {
     use DependencyInjectionContainerTrait;
 
-    public const EMPTY_UUID = '00000000-0000-0000-0000-000000000000';
-    public const PROPERTIES_DEFAULT = 'default_properties';
-    public const PROPERTIES_OPTIONAL = 'optional_properties';
-    public const PROPERTY_ID = 'id';
+    public const string EMPTY_UUID = '00000000-0000-0000-0000-000000000000';
+    public const string PROPERTIES_DEFAULT = 'default_properties';
+    public const string PROPERTIES_OPTIONAL = 'optional_properties';
+    public const string PROPERTY_ID = 'id';
 
     /**
      * @var string[][]

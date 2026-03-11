@@ -17,7 +17,7 @@ use Symfony\Component\Translation\Translator;
  */
 class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInterface
 {
-    public const CONTEXT = Manager::CONTEXT;
+    public const string CONTEXT = Manager::CONTEXT;
 
     private AvailabilityService $availabilityService;
 

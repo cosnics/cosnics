@@ -34,7 +34,6 @@ class CreateComponent extends Manager
      * @throws \QuickformException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      */
     public function run(?User $currentUser = null): Response
     {

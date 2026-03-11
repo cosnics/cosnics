@@ -11,10 +11,10 @@ use Chamilo\Libraries\Architecture\Domain\Application;
  */
 abstract class Manager extends Application
 {
-    public const CONTEXT = __NAMESPACE__;
-    public const PARAM_GROUP_ID = 'group_id';
-    public const PARAM_RELATION_ID = 'relation_id';
-    public const PARAM_USER_ID = 'user_id';
+    public const string CONTEXT = __NAMESPACE__;
+    public const string PARAM_GROUP_ID = 'group_id';
+    public const string PARAM_RELATION_ID = 'relation_id';
+    public const string PARAM_USER_ID = 'user_id';
 
     public function getApplicationAction(): string
     {

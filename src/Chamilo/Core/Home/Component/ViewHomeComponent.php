@@ -29,7 +29,7 @@ class ViewHomeComponent extends Manager implements NoAuthenticationSupportInterf
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     public function run(?User $currentUser = null): Response
     {

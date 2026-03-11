@@ -13,7 +13,7 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class PackageFactory
 {
-    public const PACKAGE_DESCRIPTOR = 'composer.json';
+    public const string PACKAGE_DESCRIPTOR = 'composer.json';
 
     protected Filesystem $filesystem;
 

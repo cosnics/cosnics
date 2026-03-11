@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
  */
 class Visibility extends \Chamilo\Libraries\Calendar\Architecture\Domain\Visibility implements UuidDataClassInterface
 {
-    public const CONTEXT = Manager::CONTEXT;
+    public const string CONTEXT = Manager::CONTEXT;
 
     public static function getStorageUnitName(): string
     {

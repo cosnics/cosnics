@@ -33,7 +33,7 @@ use Symfony\Component\Uid\Uuid;
  */
 class DataClassRepository
 {
-    public const ALIAS_MAX_SORT = 'max_sort';
+    public const string ALIAS_MAX_SORT = 'max_sort';
 
     private DataClassDatabaseInterface $dataClassDatabase;
 

@@ -20,7 +20,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
 {
     use SingleCacheAdapterHandlerTrait;
 
-    public const KEY_ITEMS = 'items';
+    public const string KEY_ITEMS = 'items';
 
     private ItemService $itemService;
 

@@ -12,8 +12,8 @@ use HTML_QuickForm_textarea;
  */
 class RegisterForm extends UserForm
 {
-    public const PROPERTY_ACCEPT_CONDITIONS = 'accept_conditions';
-    public const PROPERTY_CONDITIONS = 'conditions';
+    public const string PROPERTY_ACCEPT_CONDITIONS = 'accept_conditions';
+    public const string PROPERTY_CONDITIONS = 'conditions';
 
     /**
      * @throws \QuickformException

@@ -32,7 +32,7 @@ use Symfony\Component\Translation\Translator;
 class SubscribedUserTableRenderer extends DataClassListTableRenderer
     implements TableRowActionsSupport, TableActionsSupport
 {
-    public const TABLE_IDENTIFIER = Manager::PARAM_RELATION_ID;
+    public const string TABLE_IDENTIFIER = Manager::PARAM_RELATION_ID;
 
     protected GroupUrlGenerator $groupUrlGenerator;
 

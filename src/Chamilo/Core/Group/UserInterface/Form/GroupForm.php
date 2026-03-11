@@ -18,10 +18,10 @@ use HTML_QuickForm_text;
  */
 class GroupForm extends FormValidator
 {
-    public const RESULT_ERROR = 'GroupUpdateFailed';
-    public const RESULT_SUCCESS = 'GroupUpdated';
-    public const TYPE_CREATE = 'create';
-    public const TYPE_EDIT = 'edit';
+    public const string RESULT_ERROR = 'GroupUpdateFailed';
+    public const string RESULT_SUCCESS = 'GroupUpdated';
+    public const string TYPE_CREATE = 'create';
+    public const string TYPE_EDIT = 'edit';
 
     private string $formType;
 

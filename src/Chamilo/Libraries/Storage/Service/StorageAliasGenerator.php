@@ -12,8 +12,8 @@ use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
  */
 class StorageAliasGenerator
 {
-    public const TYPE_CONSTRAINT = 2;
-    public const TYPE_TABLE = 1;
+    public const int TYPE_CONSTRAINT = 2;
+    public const int TYPE_TABLE = 1;
 
     /**
      *

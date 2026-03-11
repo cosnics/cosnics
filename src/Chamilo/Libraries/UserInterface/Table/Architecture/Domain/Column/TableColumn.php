@@ -8,8 +8,8 @@ namespace Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column;
  */
 abstract class TableColumn
 {
-    public const CSS_CLASSES_COLUMN_CONTENT = 'content';
-    public const CSS_CLASSES_COLUMN_HEADER = 'header';
+    public const string CSS_CLASSES_COLUMN_CONTENT = 'content';
+    public const string CSS_CLASSES_COLUMN_HEADER = 'header';
 
     /**
      * @var string[][]

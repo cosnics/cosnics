@@ -16,13 +16,13 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterface
 {
-    public const PARAM_PARAMETERS = 'parameters';
-    public const PARAM_PATH = 'path';
-    public const PARAM_STRING = 'string';
-    public const PARAM_TYPE = 'type';
-    public const PARAM_VALUE = 'value';
-    public const PARAM_VARIABLE = 'variable';
-    public const PROPERTY_RESULT = 'result';
+    public const string PARAM_PARAMETERS = 'parameters';
+    public const string PARAM_PATH = 'path';
+    public const string PARAM_STRING = 'string';
+    public const string PARAM_TYPE = 'type';
+    public const string PARAM_VALUE = 'value';
+    public const string PARAM_VARIABLE = 'variable';
+    public const string PROPERTY_RESULT = 'result';
 
     /**
      * @throws \Exception

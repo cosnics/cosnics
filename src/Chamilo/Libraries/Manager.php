@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\Enum\ActionEnum;
  */
 abstract class Manager extends Application
 {
-    public const CONTEXT = __NAMESPACE__;
+    public const string CONTEXT = __NAMESPACE__;
 
     public function getApplicationAction(): string
     {

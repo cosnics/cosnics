@@ -12,6 +12,7 @@ use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
+use Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
@@ -68,9 +69,6 @@ class MenuRenderer
         $this->linkItemRenderer = $linkItemRenderer;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
-     */
     public function render(?User $user = null): string
     {
         $html = [];
@@ -82,11 +80,15 @@ class MenuRenderer
         if ($user instanceof User) {
             foreach ($this->findRootItems() as $item) {
                 if (!$item->isHidden()) {
-                    $itemRenderer = $this->getItemRendererFactory()->getItemRendererForItem($item);
-                    $itemHtml = $itemRenderer->render($item, $user);
+                    try {
+                        $itemRenderer = $this->getItemRendererFactory()->getItemRendererForItem($item);
+                        $itemHtml = $itemRenderer->render($item, $user);
 
-                    if (!empty($itemHtml)) {
-                        $itemRenditions[] = $itemHtml;
+                        if (!empty($itemHtml)) {
+                            $itemRenditions[] = $itemHtml;
+                        }
+                    }
+                    catch (NoSuchClassException) {
                     }
                 }
             }

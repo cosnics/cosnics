@@ -11,10 +11,10 @@ use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
  */
 class Online extends DataClass implements UuidDataClassInterface
 {
-    public const CONTEXT = Manager::CONTEXT;
-    public const PARAM_TIME = 'time';
-    public const PROPERTY_LAST_ACCESS_DATE = 'last_access_date';
-    public const PROPERTY_USER_ID = 'user_id';
+    public const string CONTEXT = Manager::CONTEXT;
+    public const string PARAM_TIME = 'time';
+    public const string PROPERTY_LAST_ACCESS_DATE = 'last_access_date';
+    public const string PROPERTY_USER_ID = 'user_id';
 
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {

@@ -22,8 +22,8 @@ use Symfony\Component\Translation\Translator;
  */
 class ItemService implements ItemServiceInterface
 {
-    public const PARAM_DIRECTION_DOWN = 2;
-    public const PARAM_DIRECTION_UP = 1;
+    public const int PARAM_DIRECTION_DOWN = 2;
+    public const int PARAM_DIRECTION_UP = 1;
 
     /**
      * @var string[]

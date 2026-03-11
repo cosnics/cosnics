@@ -19,17 +19,17 @@ use Symfony\Component\Translation\Translator;
  */
 class FormValidatorHtmlEditorRenderer
 {
-    public const SETTING_COLLAPSE_TOOLBAR = 'collapse_toolbar';
-    public const SETTING_CONFIGURATION = 'configuration';
-    public const SETTING_ENTER_MODE = 'enter_mode';
-    public const SETTING_FULL_PAGE = 'full_page';
-    public const SETTING_HEIGHT = 'height';
-    public const SETTING_LANGUAGE = 'language';
-    public const SETTING_SHIFT_ENTER_MODE = 'shift_enter_mode';
-    public const SETTING_TEMPLATES = 'templates';
-    public const SETTING_THEME = 'theme';
-    public const SETTING_TOOLBAR = 'toolbar';
-    public const SETTING_WIDTH = 'width';
+    public const string SETTING_COLLAPSE_TOOLBAR = 'collapse_toolbar';
+    public const string SETTING_CONFIGURATION = 'configuration';
+    public const string SETTING_ENTER_MODE = 'enter_mode';
+    public const string SETTING_FULL_PAGE = 'full_page';
+    public const string SETTING_HEIGHT = 'height';
+    public const string SETTING_LANGUAGE = 'language';
+    public const string SETTING_SHIFT_ENTER_MODE = 'shift_enter_mode';
+    public const string SETTING_TEMPLATES = 'templates';
+    public const string SETTING_THEME = 'theme';
+    public const string SETTING_TOOLBAR = 'toolbar';
+    public const string SETTING_WIDTH = 'width';
 
     protected FormValidatorHtmlEditorOptionsFactory $formValidatorHtmlEditorOptionsFactory;
 

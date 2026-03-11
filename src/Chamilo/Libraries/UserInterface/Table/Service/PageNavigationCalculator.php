@@ -11,9 +11,9 @@ use Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumb
  */
 class PageNavigationCalculator
 {
-    public const DISPLAY_ALL = 'all';
-    public const DISPLAY_PER_INCREMENT = 20;
-    public const DISPLAY_PER_PAGE_LIMIT = 500;
+    public const string DISPLAY_ALL = 'all';
+    public const int DISPLAY_PER_INCREMENT = 20;
+    public const int DISPLAY_PER_PAGE_LIMIT = 500;
 
     /**
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException

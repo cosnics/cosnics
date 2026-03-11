@@ -32,7 +32,7 @@ use Symfony\Component\Translation\Translator;
  */
 class UserTableRenderer extends DataClassListTableRenderer implements TableRowActionsSupport, TableActionsSupport
 {
-    public const TABLE_IDENTIFIER = Manager::PARAM_USER_ID;
+    public const string TABLE_IDENTIFIER = Manager::PARAM_USER_ID;
 
     protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
 

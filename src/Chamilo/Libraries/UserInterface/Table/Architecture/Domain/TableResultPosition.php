@@ -7,8 +7,8 @@ namespace Chamilo\Libraries\UserInterface\Table\Architecture\Domain;
  */
 class TableResultPosition extends AbstractBaseTableParameters
 {
-    public const PARAM_POSITION = 'position';
-    public const PARAM_TOTAL_NUMBER_OF_PAGES = 'total_pages';
+    public const string PARAM_POSITION = 'position';
+    public const string PARAM_TOTAL_NUMBER_OF_PAGES = 'total_pages';
 
     public function getPosition(): int
     {

@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Service\Condition\AndConditionTranslator;
  */
 class AndCondition extends MultipleAggregateCondition implements ConditionInterface
 {
-    public const OPERATOR = ' AND ';
+    public const string OPERATOR = ' AND ';
 
     public function getConditionTranslatorClass(): string
     {

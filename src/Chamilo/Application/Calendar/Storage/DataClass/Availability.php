@@ -13,13 +13,13 @@ use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
  */
 class Availability extends DataClass implements UuidDataClassInterface
 {
-    public const CONTEXT = Manager::CONTEXT;
+    public const string CONTEXT = Manager::CONTEXT;
 
-    public const PROPERTY_AVAILABILITY = 'availability';
-    public const PROPERTY_CALENDAR_ID = 'calendar_id';
-    public const PROPERTY_CALENDAR_TYPE = 'calendar_type';
-    public const PROPERTY_COLOUR = 'colour';
-    public const PROPERTY_USER_ID = 'user_id';
+    public const string PROPERTY_AVAILABILITY = 'availability';
+    public const string PROPERTY_CALENDAR_ID = 'calendar_id';
+    public const string PROPERTY_CALENDAR_TYPE = 'calendar_type';
+    public const string PROPERTY_COLOUR = 'colour';
+    public const string PROPERTY_USER_ID = 'user_id';
 
     public function getAvailability(): bool
     {

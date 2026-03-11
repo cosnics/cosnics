@@ -12,7 +12,7 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class CalendarTableBuilder
 {
-    public const TIME_PLACEHOLDER = '__TIME__';
+    public const string TIME_PLACEHOLDER = '__TIME__';
 
     protected Translator $translator;
 

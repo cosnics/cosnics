@@ -36,9 +36,6 @@ class DefaultHeaderRenderer
         $this->menuRenderer = $menuRenderer;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
-     */
     public function render(?User $user = null): string
     {
         $html = [];

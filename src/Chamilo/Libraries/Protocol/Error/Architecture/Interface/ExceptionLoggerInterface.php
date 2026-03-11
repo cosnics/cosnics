@@ -11,9 +11,9 @@ use Throwable;
  */
 interface ExceptionLoggerInterface
 {
-    public const EXCEPTION_LEVEL_ERROR = 2;
-    public const EXCEPTION_LEVEL_FATAL_ERROR = 3;
-    public const EXCEPTION_LEVEL_WARNING = 1;
+    public const int EXCEPTION_LEVEL_ERROR = 2;
+    public const int EXCEPTION_LEVEL_FATAL_ERROR = 3;
+    public const int EXCEPTION_LEVEL_WARNING = 1;
 
     /**
      * Adds an exception logger for javascript to the header

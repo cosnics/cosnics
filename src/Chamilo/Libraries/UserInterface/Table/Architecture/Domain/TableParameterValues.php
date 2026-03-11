@@ -7,10 +7,10 @@ namespace Chamilo\Libraries\UserInterface\Table\Architecture\Domain;
  */
 class TableParameterValues extends AbstractBaseTableParameters
 {
-    public const PARAM_NUMBER_OF_COLUMNS_PER_PAGE = 'columns_per_page';
-    public const PARAM_NUMBER_OF_ROWS_PER_PAGE = 'per_page';
-    public const PARAM_OFFSET = 'offset';
-    public const PARAM_SELECT_ALL = 'selectall';
+    public const string PARAM_NUMBER_OF_COLUMNS_PER_PAGE = 'columns_per_page';
+    public const string PARAM_NUMBER_OF_ROWS_PER_PAGE = 'per_page';
+    public const string PARAM_OFFSET = 'offset';
+    public const string PARAM_SELECT_ALL = 'selectall';
 
     public function getNumberOfColumnsPerPage(): int
     {

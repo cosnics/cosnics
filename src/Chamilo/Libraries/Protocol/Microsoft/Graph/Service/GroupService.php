@@ -32,13 +32,13 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function addMemberToGroup(string $groupId, User $user): bool
     {
         if (!$this->isMemberOfGroup($groupId, $user)) {
-            $azureUserIdentifier = $this->getAzureUserIdentifier($user);
+            $azureUserIdentifier = $this->getEntraUserIdentifier($user);
 
             if (empty($azureUserIdentifier)) {
                 throw new NoSuchUserException($user);
@@ -51,13 +51,13 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function addOwnerToGroup(string $groupId, User $user): bool
     {
         if (!$this->isOwnerOfGroup($groupId, $user)) {
-            $azureUserIdentifier = $this->getAzureUserIdentifier($user);
+            $azureUserIdentifier = $this->getEntraUserIdentifier($user);
 
             if (empty($azureUserIdentifier)) {
                 throw new NoSuchUserException($user);
@@ -70,13 +70,12 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      * @throws \Exception
      */
     public function createGroupByName(User $owner, string $groupName): ?string
     {
-        $azureUserIdentifier = $this->getAzureUserIdentifier($owner);
+        $azureUserIdentifier = $this->getEntraUserIdentifier($owner);
 
         if (empty($azureUserIdentifier)) {
             throw new NoSuchUserException($owner);
@@ -104,15 +103,6 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
-     */
-    protected function getAzureUserIdentifier(User $user): ?string
-    {
-        return $this->getUserService()->getAndSaveUserIdentifier($user);
-    }
-
-    /**
      * @throws \Exception
      */
     public function getDefaultGroupPlanId(string $groupId): ?string
@@ -124,6 +114,15 @@ class GroupService
         }
 
         return $groupPlans[0]->getId();
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    protected function getEntraUserIdentifier(User $user): ?string
+    {
+        return $this->getUserService()->getAndSaveUserIdentifier($user);
     }
 
     /**
@@ -223,12 +222,11 @@ class GroupService
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function isMemberOfGroup(string $groupId, User $user): bool
     {
-        $azureUserIdentifier = $this->getAzureUserIdentifier($user);
+        $azureUserIdentifier = $this->getEntraUserIdentifier($user);
         if (empty($azureUserIdentifier)) {
             return false;
         }
@@ -246,7 +244,7 @@ class GroupService
     public function isOwnerOfGroup(string $groupId, User $user): bool
     {
         try {
-            $azureUserIdentifier = $this->getAzureUserIdentifier($user);
+            $azureUserIdentifier = $this->getEntraUserIdentifier($user);
 
             if (empty($azureUserIdentifier)) {
                 return false;
@@ -294,12 +292,12 @@ class GroupService
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function removeMemberFromGroup(string $groupId, User $user): bool
     {
         if ($this->isMemberOfGroup($groupId, $user)) {
-            $azureUserIdentifier = $this->getAzureUserIdentifier($user);
+            $azureUserIdentifier = $this->getEntraUserIdentifier($user);
 
             return $this->getGroupRepository()->removeMemberFromGroup($groupId, $azureUserIdentifier);
         }
@@ -309,12 +307,12 @@ class GroupService
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function removeOwnerFromGroup(string $groupId, User $user): bool
     {
         if ($this->isOwnerOfGroup($groupId, $user)) {
-            $azureUserIdentifier = $this->getAzureUserIdentifier($user);
+            $azureUserIdentifier = $this->getEntraUserIdentifier($user);
 
             return $this->getGroupRepository()->removeOwnerFromGroup($groupId, $azureUserIdentifier);
         }

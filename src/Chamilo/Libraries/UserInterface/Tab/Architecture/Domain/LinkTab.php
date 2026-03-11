@@ -13,10 +13,10 @@ use Chamilo\Libraries\UserInterface\Tab\Service\LinkTabRenderer;
  */
 class LinkTab extends AbstractTab implements TabInterface, TabNavigationInterface
 {
-    public const POSITION_LEFT = 'left';
-    public const POSITION_RIGHT = 'right';
-    public const TARGET_POPUP = 2;
-    public const TARGET_WINDOW = 1;
+    public const string POSITION_LEFT = 'left';
+    public const string POSITION_RIGHT = 'right';
+    public const int TARGET_POPUP = 2;
+    public const int TARGET_WINDOW = 1;
 
     private ?string $confirmationMessage;
 

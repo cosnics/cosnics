@@ -19,18 +19,18 @@ class Element extends DataClass
 {
     use ConfigurableDataClassTrait;
 
-    public const CONFIGURATION_BLOCK_TYPE = 'block_type';
-    public const CONFIGURATION_CONTEXT = 'context';
-    public const CONFIGURATION_VISIBILITY = 'visibility';
-    public const CONFIGURATION_WIDTH = 'width';
-    public const CONTEXT = Manager::CONTEXT;
-    public const PROPERTY_PARENT_ID = 'parent_id';
-    public const PROPERTY_SORT = 'sort';
-    public const PROPERTY_TITLE = 'title';
-    public const PROPERTY_TYPE = 'type';
-    public const TYPE_BLOCK = 'Chamilo\Core\Home\Storage\DataClass\Block';
-    public const TYPE_COLUMN = 'Chamilo\Core\Home\Storage\DataClass\Column';
-    public const TYPE_TAB = 'Chamilo\Core\Home\Storage\DataClass\Tab';
+    public const string CONFIGURATION_BLOCK_TYPE = 'block_type';
+    public const string CONFIGURATION_CONTEXT = 'context';
+    public const string CONFIGURATION_VISIBILITY = 'visibility';
+    public const string CONFIGURATION_WIDTH = 'width';
+    public const string CONTEXT = Manager::CONTEXT;
+    public const string PROPERTY_PARENT_ID = 'parent_id';
+    public const string PROPERTY_SORT = 'sort';
+    public const string PROPERTY_TITLE = 'title';
+    public const string PROPERTY_TYPE = 'type';
+    public const string TYPE_BLOCK = 'Chamilo\Core\Home\Storage\DataClass\Block';
+    public const string TYPE_COLUMN = 'Chamilo\Core\Home\Storage\DataClass\Column';
+    public const string TYPE_TAB = 'Chamilo\Core\Home\Storage\DataClass\Tab';
 
     public function getBlockType(): ?string
     {

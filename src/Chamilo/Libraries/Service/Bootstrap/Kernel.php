@@ -30,27 +30,27 @@ class Kernel
     public const string PARAM_SESSION_STATE = 'session_state';
     public const string PARAM_STATE = 'state';
 
+    protected ApplicationFactory $applicationFactory;
+
     protected AuthenticationValidator $authenticationValidator;
 
     protected EventDispatcherInterface $eventDispatcher;
 
+    protected ExceptionLoggerInterface $exceptionLogger;
+
     protected bool $maintenanceMode;
+
+    protected ChamiloRequest $request;
 
     protected SessionInterface $session;
 
     protected ?string $timezone;
 
+    protected UrlGenerator $urlGenerator;
+
+    protected ?User $user;
+
     protected UserExceptionResponseRenderer $userExceptionResponseRenderer;
-
-    private ApplicationFactory $applicationFactory;
-
-    private ExceptionLoggerInterface $exceptionLogger;
-
-    private ChamiloRequest $request;
-
-    private UrlGenerator $urlGenerator;
-
-    private ?User $user;
 
     public function __construct(
         ChamiloRequest $request, SessionInterface $session, ApplicationFactory $applicationFactory,
@@ -130,57 +130,57 @@ class Kernel
         return null;
     }
 
-    public function getApplicationFactory(): ApplicationFactory
+    protected function getApplicationFactory(): ApplicationFactory
     {
         return $this->applicationFactory;
     }
 
-    public function getAuthenticationValidator(): AuthenticationValidator
+    protected function getAuthenticationValidator(): AuthenticationValidator
     {
         return $this->authenticationValidator;
     }
 
-    public function getContext(): ?string
+    protected function getContext(): ?string
     {
         return $this->getRequest()->getFromQueryOrRequest(ApplicationInterface::PARAM_CONTEXT, Manager::CONTEXT);
     }
 
-    public function getEventDispatcher(): EventDispatcherInterface
+    protected function getEventDispatcher(): EventDispatcherInterface
     {
         return $this->eventDispatcher;
     }
 
-    public function getExceptionLogger(): ExceptionLoggerInterface
+    protected function getExceptionLogger(): ExceptionLoggerInterface
     {
         return $this->exceptionLogger;
     }
 
-    public function getRequest(): ChamiloRequest
+    protected function getRequest(): ChamiloRequest
     {
         return $this->request;
     }
 
-    public function getSession(): SessionInterface
+    protected function getSession(): SessionInterface
     {
         return $this->session;
     }
 
-    public function getTimezone(): ?string
+    protected function getTimezone(): ?string
     {
         return $this->timezone;
     }
 
-    public function getUrlGenerator(): UrlGenerator
+    protected function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
     }
 
-    public function getUser(): ?User
+    protected function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function getUserExceptionResponseRenderer(): UserExceptionResponseRenderer
+    protected function getUserExceptionResponseRenderer(): UserExceptionResponseRenderer
     {
         return $this->userExceptionResponseRenderer;
     }
@@ -191,7 +191,7 @@ class Kernel
      *
      * @see MicrosoftClientService::login(...)
      */
-    public function handleOAuth2(): static
+    protected function handleOAuth2(): static
     {
         $code = $this->getRequest()->query->get(self::PARAM_CODE);
         $state = $this->getRequest()->query->get(self::PARAM_STATE);
@@ -228,7 +228,7 @@ class Kernel
         exit;
     }
 
-    public function isMaintenanceMode(): bool
+    protected function isMaintenanceMode(): bool
     {
         return $this->maintenanceMode;
     }

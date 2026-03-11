@@ -24,11 +24,11 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class UsersFeedComponent extends Manager
 {
-    public const PARAM_OFFSET = 'offset';
-    public const PARAM_SEARCH_QUERY = 'query';
+    public const string PARAM_OFFSET = 'offset';
+    public const string PARAM_SEARCH_QUERY = 'query';
 
-    public const PROPERTY_ELEMENTS = 'elements';
-    public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
+    public const string PROPERTY_ELEMENTS = 'elements';
+    public const string PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
     private int $userCount = 0;
 

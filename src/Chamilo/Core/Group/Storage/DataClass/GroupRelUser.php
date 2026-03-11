@@ -12,9 +12,9 @@ use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
  */
 class GroupRelUser extends DataClass implements UuidDataClassInterface
 {
-    public const CONTEXT = Manager::CONTEXT;
-    public const PROPERTY_GROUP_ID = 'group_id';
-    public const PROPERTY_USER_ID = 'user_id';
+    public const string CONTEXT = Manager::CONTEXT;
+    public const string PROPERTY_GROUP_ID = 'group_id';
+    public const string PROPERTY_USER_ID = 'user_id';
 
     /**
      * @return string[]

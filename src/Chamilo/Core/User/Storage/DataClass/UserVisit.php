@@ -10,10 +10,10 @@ use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
  */
 class UserVisit extends DataClass implements UuidDataClassInterface
 {
-    public const PROPERTY_ENTER_DATE = 'enter_date';
-    public const PROPERTY_LEAVE_DATE = 'leave_date';
-    public const PROPERTY_LOCATION = 'location';
-    public const PROPERTY_USER_ID = 'user_id';
+    public const string PROPERTY_ENTER_DATE = 'enter_date';
+    public const string PROPERTY_LEAVE_DATE = 'leave_date';
+    public const string PROPERTY_LOCATION = 'location';
+    public const string PROPERTY_USER_ID = 'user_id';
 
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {

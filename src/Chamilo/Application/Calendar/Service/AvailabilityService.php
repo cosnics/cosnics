@@ -18,9 +18,9 @@ use Exception;
  */
 class AvailabilityService
 {
-    public const PROPERTY_AVAILABLE = 'available';
-    public const PROPERTY_CALENDAR = 'calendar';
-    public const PROPERTY_COLOUR = 'colour';
+    public const string PROPERTY_AVAILABLE = 'available';
+    public const string PROPERTY_CALENDAR = 'calendar';
+    public const string PROPERTY_COLOUR = 'colour';
 
     private AvailabilityRepository $availabilityRepository;
 

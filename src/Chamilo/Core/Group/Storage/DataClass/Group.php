@@ -13,11 +13,11 @@ use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
  */
 class Group extends NestedSet implements UuidDataClassInterface
 {
-    public const CONTEXT = Manager::CONTEXT;
+    public const string CONTEXT = Manager::CONTEXT;
 
-    public const PROPERTY_CODE = 'code';
-    public const PROPERTY_DESCRIPTION = 'description';
-    public const PROPERTY_NAME = 'name';
+    public const string PROPERTY_CODE = 'code';
+    public const string PROPERTY_DESCRIPTION = 'description';
+    public const string PROPERTY_NAME = 'name';
 
     public function getCode(): ?string
     {

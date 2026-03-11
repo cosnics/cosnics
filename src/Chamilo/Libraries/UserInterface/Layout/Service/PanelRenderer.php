@@ -9,12 +9,12 @@ use InvalidArgumentException;
  */
 class PanelRenderer
 {
-    public const MODE_DANGER = 'danger';
-    public const MODE_DEFAULT = 'default';
-    public const MODE_INFO = 'info';
-    public const MODE_PRIMARY = 'primary';
-    public const MODE_SUCCESS = 'success';
-    public const MODE_WARNING = 'warning';
+    public const string MODE_DANGER = 'danger';
+    public const string MODE_DEFAULT = 'default';
+    public const string MODE_INFO = 'info';
+    public const string MODE_PRIMARY = 'primary';
+    public const string MODE_SUCCESS = 'success';
+    public const string MODE_WARNING = 'warning';
 
     public function render(string $content, ?string $title = null, string $mode = self::MODE_DEFAULT): string
     {

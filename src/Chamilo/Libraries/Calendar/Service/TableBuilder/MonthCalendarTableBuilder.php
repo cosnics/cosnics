@@ -14,7 +14,7 @@ use Symfony\Component\Translation\Translator;
  */
 class MonthCalendarTableBuilder extends CalendarTableBuilder
 {
-    public const TIME_PLACEHOLDER = '__TIME__';
+    public const string TIME_PLACEHOLDER = '__TIME__';
 
     protected string $defaultFirstDayOfWeek;
 

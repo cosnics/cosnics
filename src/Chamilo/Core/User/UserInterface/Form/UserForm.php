@@ -14,10 +14,10 @@ use HTML_QuickForm_Rule_Email;
 
 abstract class UserForm extends FormValidator
 {
-    public const PROPERTY_CONFIRM_PASSWORD = 'confirm_password';
-    public const PROPERTY_CURRENT_PASSWORD = 'current_password';
-    public const PROPERTY_GENERATE_PASSWORD = 'generate_password';
-    public const PROPERTY_SEND_MAIL = 'send_mail';
+    public const string PROPERTY_CONFIRM_PASSWORD = 'confirm_password';
+    public const string PROPERTY_CURRENT_PASSWORD = 'current_password';
+    public const string PROPERTY_GENERATE_PASSWORD = 'generate_password';
+    public const string PROPERTY_SEND_MAIL = 'send_mail';
 
     /**
      * @throws \QuickformException

@@ -13,27 +13,27 @@ use Chamilo\Libraries\Service\Utilities\StringUtilities;
  */
 abstract class AbstractPathBuilder
 {
-    public const ARCHIVE = 8;
-    public const BASE = 2;
-    public const CACHE = 6;
-    public const CONFIGURATION = 12;
-    public const CONFIGURATION_STORAGE = 99;
-    public const CSS = 19;
-    public const FULL = 1;
-    public const IMAGES = 20;
-    public const JAVASCRIPT = 14;
-    public const LOG = 7;
-    public const PLUGIN = 11;
-    public const PROFILE_PICTURE = 10;
-    public const PUBLIC_STORAGE = 17;
-    public const RELATIVE = 3;
-    public const RESOURCE = 13;
-    public const ROOT = 21;
-    public const STORAGE = 4;
-    public const TEMPLATES = 18;
-    public const TEMPORARY = 5;
-    public const TRANSLATION = 15;
-    public const VENDOR = 16;
+    public const int ARCHIVE = 8;
+    public const int BASE = 2;
+    public const int CACHE = 6;
+    public const int CONFIGURATION = 12;
+    public const int CONFIGURATION_STORAGE = 99;
+    public const int CSS = 19;
+    public const int FULL = 1;
+    public const int IMAGES = 20;
+    public const int JAVASCRIPT = 14;
+    public const int LOG = 7;
+    public const int PLUGIN = 11;
+    public const int PROFILE_PICTURE = 10;
+    public const int PUBLIC_STORAGE = 17;
+    public const int RELATIVE = 3;
+    public const int RESOURCE = 13;
+    public const int ROOT = 21;
+    public const int STORAGE = 4;
+    public const int TEMPLATES = 18;
+    public const int TEMPORARY = 5;
+    public const int TRANSLATION = 15;
+    public const int VENDOR = 16;
 
     /**
      * @var string[]

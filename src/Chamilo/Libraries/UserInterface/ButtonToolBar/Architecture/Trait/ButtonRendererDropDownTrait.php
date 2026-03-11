@@ -11,8 +11,8 @@ trait ButtonRendererDropDownTrait
 {
     use ButtonRendererCollectionTrait;
 
-    protected const DROPDOWN_CLASS = 'dropdown-toggle dropdown-toggle-split';
-    protected const DROPDOWN_TOGGLE_ATTRIBUTES = ' data-bs-toggle="dropdown" aria-expanded="false" ';
+    protected const string DROPDOWN_CLASS = 'dropdown-toggle dropdown-toggle-split';
+    protected const string DROPDOWN_TOGGLE_ATTRIBUTES = ' data-bs-toggle="dropdown" aria-expanded="false" ';
 
     /**
      * @return string[]

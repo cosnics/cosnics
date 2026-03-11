@@ -15,13 +15,13 @@ use Chamilo\Libraries\Architecture\Domain\Application;
  */
 abstract class Manager extends Application
 {
-    public const CONTEXT = __NAMESPACE__;
-    public const PARAM_DIRECTION = 'direction';
-    public const PARAM_DIRECTION_DOWN = 'down';
-    public const PARAM_DIRECTION_UP = 'up';
-    public const PARAM_ITEM = 'item';
-    public const PARAM_PARENT = 'parent';
-    public const PARAM_TYPE = 'type';
+    public const string CONTEXT = __NAMESPACE__;
+    public const string PARAM_DIRECTION = 'direction';
+    public const string PARAM_DIRECTION_DOWN = 'down';
+    public const string PARAM_DIRECTION_UP = 'up';
+    public const string PARAM_ITEM = 'item';
+    public const string PARAM_PARENT = 'parent';
+    public const string PARAM_TYPE = 'type';
 
     public function getApplicationAction(): string
     {

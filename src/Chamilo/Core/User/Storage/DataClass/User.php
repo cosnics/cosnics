@@ -18,20 +18,20 @@ class User extends DataClass implements ConfigurableDataClassInterface, UuidData
 {
     use ConfigurableDataClassTrait;
 
-    public const CONTEXT = Manager::CONTEXT;
-    public const PROPERTY_ACTIVE = 'active';
-    public const PROPERTY_AUTHENTICATION_SOURCE = 'auth_source';
-    public const PROPERTY_CREATOR_IDENTIFIER = 'creator_id';
-    public const PROPERTY_EMAIL = 'email';
-    public const PROPERTY_GIVEN_NAME = 'firstname';
-    public const PROPERTY_OFFICIAL_CODE = 'official_code';
-    public const PROPERTY_PASSWORD = 'password';
-    public const PROPERTY_PICTURE_URI = 'picture_uri';
-    public const PROPERTY_PLATFORM_ADMINISTRATOR = 'admin';
-    public const PROPERTY_REGISTRATION_DATE = 'registration_date';
-    public const PROPERTY_SECURITY_TOKEN = 'security_token';
-    public const PROPERTY_SURNAME = 'lastname';
-    public const PROPERTY_USERNAME = 'username';
+    public const string CONTEXT = Manager::CONTEXT;
+    public const string PROPERTY_ACTIVE = 'active';
+    public const string PROPERTY_AUTHENTICATION_SOURCE = 'auth_source';
+    public const string PROPERTY_CREATOR_IDENTIFIER = 'creator_id';
+    public const string PROPERTY_EMAIL = 'email';
+    public const string PROPERTY_GIVEN_NAME = 'firstname';
+    public const string PROPERTY_OFFICIAL_CODE = 'official_code';
+    public const string PROPERTY_PASSWORD = 'password';
+    public const string PROPERTY_PICTURE_URI = 'picture_uri';
+    public const string PROPERTY_PLATFORM_ADMINISTRATOR = 'admin';
+    public const string PROPERTY_REGISTRATION_DATE = 'registration_date';
+    public const string PROPERTY_SECURITY_TOKEN = 'security_token';
+    public const string PROPERTY_SURNAME = 'lastname';
+    public const string PROPERTY_USERNAME = 'username';
 
     public function getActive(): bool
     {

@@ -35,10 +35,10 @@ class ApplicationItemRenderer extends ItemRenderer
 {
     use TranslatableItemTrait;
 
-    public const CONFIGURATION_APPLICATION = 'application';
-    public const CONFIGURATION_COMPONENT = 'component';
-    public const CONFIGURATION_EXTRA_PARAMETERS = 'extra_parameters';
-    public const CONFIGURATION_USE_TRANSLATION = 'use_translation';
+    public const string CONFIGURATION_APPLICATION = 'application';
+    public const string CONFIGURATION_COMPONENT = 'component';
+    public const string CONFIGURATION_EXTRA_PARAMETERS = 'extra_parameters';
+    public const string CONFIGURATION_USE_TRANSLATION = 'use_translation';
 
     private PackageBundlesCacheService $packageBundlesCacheService;
 

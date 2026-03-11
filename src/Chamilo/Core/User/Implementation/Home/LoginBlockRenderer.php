@@ -24,7 +24,7 @@ use Symfony\Component\Translation\Translator;
 
 class LoginBlockRenderer extends BlockRenderer
 {
-    public const CONTEXT = Manager::CONTEXT;
+    public const string CONTEXT = Manager::CONTEXT;
 
     protected bool $canRegister;
 

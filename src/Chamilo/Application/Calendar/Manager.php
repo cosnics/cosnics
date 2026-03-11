@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\Domain\Application;
  */
 abstract class Manager extends Application
 {
-    public const CONTEXT = __NAMESPACE__;
+    public const string CONTEXT = __NAMESPACE__;
 
     public function getApplicationAction(): string
     {

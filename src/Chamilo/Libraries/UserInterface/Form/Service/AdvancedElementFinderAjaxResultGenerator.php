@@ -15,8 +15,8 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Interface\AdvancedElementF
  */
 class AdvancedElementFinderAjaxResultGenerator
 {
-    public const PROPERTY_ELEMENTS = 'elements';
-    public const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
+    public const string PROPERTY_ELEMENTS = 'elements';
+    public const string PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
     protected AdvancedElementFinderAjaxResultDataProviderInterface $ajaxResultDataProvider;
 

@@ -27,9 +27,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class GroupFeedComponent extends GroupsFeedComponent
 {
-    public const FILTER_PREFIX_LENGTH = 2;
-    public const PARAM_GROUP = 'group';
-    public const PARAM_USER = 'user';
+    public const int FILTER_PREFIX_LENGTH = 2;
+    public const string PARAM_GROUP = 'group';
+    public const string PARAM_USER = 'user';
 
     public function getApplicationAction(): string
     {

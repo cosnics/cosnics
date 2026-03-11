@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\TeamRepository;
 use Exception;
 use GuzzleHttp\Exception\ClientException;
@@ -45,8 +44,7 @@ class TeamService
     }
 
     /**
-     * @throws NoSuchUserException
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      */
     public function createTeamByName(User $owner, string $teamName): string
     {

@@ -65,6 +65,9 @@ class FileExceptionLogger implements ExceptionLoggerInterface
         return $this->userExceptionRendererRegistry;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function logException(
         Throwable $exception, int $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, ?string $file = null, int $line = 0
     ): void

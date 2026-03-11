@@ -35,9 +35,9 @@ use Symfony\Component\Translation\Translator;
  */
 class GroupTableRenderer extends DataClassListTableRenderer implements TableRowActionsSupport, TableActionsSupport
 {
-    public const COLUMN_SUBGROUPS = 'Subgroups';
-    public const COLUMN_USERS = 'Users';
-    public const TABLE_IDENTIFIER = Manager::PARAM_GROUP_ID;
+    public const string COLUMN_SUBGROUPS = 'Subgroups';
+    public const string COLUMN_USERS = 'Users';
+    public const string TABLE_IDENTIFIER = Manager::PARAM_GROUP_ID;
 
     protected GroupMembershipService $groupMembershipService;
 

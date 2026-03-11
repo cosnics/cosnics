@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Service\Condition\OrConditionTranslator;
  */
 class OrCondition extends MultipleAggregateCondition implements ConditionInterface
 {
-    public const OPERATOR = ' OR ';
+    public const string OPERATOR = ' OR ';
 
     public function getConditionTranslatorClass(): string
     {

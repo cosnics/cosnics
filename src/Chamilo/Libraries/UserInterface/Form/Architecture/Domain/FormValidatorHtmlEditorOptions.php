@@ -13,38 +13,38 @@ class FormValidatorHtmlEditorOptions
     /**
      * Whether the toolbar should be collapse by default
      */
-    public const OPTION_COLLAPSE_TOOLBAR = 'toolbarStartupExpanded';
+    public const string OPTION_COLLAPSE_TOOLBAR = 'toolbarStartupExpanded';
     /**
      * Path to the editors configuration file
      */
-    public const OPTION_CONFIGURATION = 'customConfig';
+    public const string OPTION_CONFIGURATION = 'customConfig';
     /**
      * Whether the content of the editor should be treated as a standalone page
      */
-    public const OPTION_FULL_PAGE = 'fullPage';
+    public const string OPTION_FULL_PAGE = 'fullPage';
     /**
      * The height of the editor in pixels
      */
-    public const OPTION_HEIGHT = 'height';
+    public const string OPTION_HEIGHT = 'height';
     /**
      * Name of the language to be used for the editor
      */
-    public const OPTION_LANGUAGE = 'language';
-    public const OPTION_RENDER_RESOURCE_INLINE = 'render_resource_inline';
-    public const OPTION_SKIN = 'skin';
+    public const string OPTION_LANGUAGE = 'language';
+    public const string OPTION_RENDER_RESOURCE_INLINE = 'render_resource_inline';
+    public const string OPTION_SKIN = 'skin';
     /**
      * Path to available templates for the editor
      */
-    public const OPTION_TEMPLATES = 'templates_files';
+    public const string OPTION_TEMPLATES = 'templates_files';
     /**
      * The name of the toolbar set e.g.
      * Basic, Wiki, Assessment
      */
-    public const OPTION_TOOLBAR = 'toolbar';
+    public const string OPTION_TOOLBAR = 'toolbar';
     /**
      * The width of the editor in pixels or per cent
      */
-    public const OPTION_WIDTH = 'width';
+    public const string OPTION_WIDTH = 'width';
 
     /**
      * @var string[]

@@ -59,37 +59,19 @@ class ActiveComponent extends Manager
                 }
             }
 
-            if ($active == 0) {
-                if ($failures) {
-                    if (count($ids) == 1) {
-                        $message = 'UserNotDeactivated';
-                    }
-                    else {
-                        $message = 'UsersNotDeactivated';
-                    }
-                }
-                elseif (count($ids) == 1) {
-                    $message = 'UserDeactivated';
+            if ($failures) {
+                if (count($ids) == 1) {
+                    $message = $active ? 'UserNotActivated' : 'UserNotDeactivated';
                 }
                 else {
-                    $message = 'UsersDeactivated';
+                    $message = $active ? 'UsersNotActivated' : 'UsersNotDeactivated';
                 }
             }
+            elseif (count($ids) == 1) {
+                $message = $active ? 'UserActivated' : 'UserDeactivated';
+            }
             else {
-                if ($failures) {
-                    if (count($ids) == 1) {
-                        $message = 'UserNotActivated';
-                    }
-                    else {
-                        $message = 'UsersNotActivated';
-                    }
-                }
-                elseif (count($ids) == 1) {
-                    $message = 'UserActivated';
-                }
-                else {
-                    $message = 'UsersActivated';
-                }
+                $message = $active ? 'UsersActivated' : 'UsersDeactivated';
             }
 
             $this->getNotificationMessageManager()->addAlert(

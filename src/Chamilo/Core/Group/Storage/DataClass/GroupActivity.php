@@ -11,11 +11,11 @@ use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
  */
 class GroupActivity extends DataClass implements UuidDataClassInterface
 {
-    public const PROPERTY_ACTION = 'action';
-    public const PROPERTY_DATE = 'date';
-    public const PROPERTY_GROUP_ID = 'reference_id';
-    public const PROPERTY_TARGET_USER_ID = 'target_user_id';
-    public const PROPERTY_USER_ID = 'user_id';
+    public const string PROPERTY_ACTION = 'action';
+    public const string PROPERTY_DATE = 'date';
+    public const string PROPERTY_GROUP_ID = 'reference_id';
+    public const string PROPERTY_TARGET_USER_ID = 'target_user_id';
+    public const string PROPERTY_USER_ID = 'user_id';
 
     public function getAction(): GroupActivityTypeEnum
     {

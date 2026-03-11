@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 class DeleteTemporaryFileComponent extends Manager
 {
     // Input parameters
-    public const PARAM_FILE = 'file';
+    public const string PARAM_FILE = 'file';
 
     public function run(?User $currentUser = null): Response
     {

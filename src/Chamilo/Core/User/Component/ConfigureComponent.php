@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ConfigureComponent extends ProfileComponent
 {
-    public const PARAM_SELECTED_CONTEXT = 'selected_context';
+    public const string PARAM_SELECTED_CONTEXT = 'selected_context';
 
     private ConfigurationForm $form;
 

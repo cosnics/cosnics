@@ -10,12 +10,12 @@ use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
  */
 class UserAuthenticationActivity extends DataClass implements UuidDataClassInterface
 {
-    public const ACTIVITY_LOGIN = 1;
-    public const ACTIVITY_LOGOUT = 2;
-    public const PROPERTY_ACTION = 'action';
-    public const PROPERTY_DATE = 'date';
-    public const PROPERTY_IP = 'ip';
-    public const PROPERTY_USER_ID = 'user_id';
+    public const int ACTIVITY_LOGIN = 1;
+    public const int ACTIVITY_LOGOUT = 2;
+    public const string PROPERTY_ACTION = 'action';
+    public const string PROPERTY_DATE = 'date';
+    public const string PROPERTY_IP = 'ip';
+    public const string PROPERTY_USER_ID = 'user_id';
 
     public function getAction(): int
     {

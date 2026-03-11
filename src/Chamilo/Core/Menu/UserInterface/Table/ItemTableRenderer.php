@@ -34,8 +34,8 @@ use Symfony\Component\Translation\Translator;
  */
 class ItemTableRenderer extends DataClassListTableRenderer implements TableRowActionsSupport, TableActionsSupport
 {
-    public const PROPERTY_TYPE = 'Type';
-    public const TABLE_IDENTIFIER = Manager::PARAM_ITEM;
+    public const string PROPERTY_TYPE = 'Type';
+    public const string TABLE_IDENTIFIER = Manager::PARAM_ITEM;
 
     protected ItemRendererRegistry $itemRendererFactory;
 
@@ -140,7 +140,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
     /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $result
      *
-     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\Error\Architecture\Exception\NoSuchClassException
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, mixed $result): string
     {
