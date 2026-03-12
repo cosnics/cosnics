@@ -5,13 +5,16 @@ use Chamilo\Core\User\Architecture\Domain\UserDetailsRendererRegistry;
 use Chamilo\Core\User\Architecture\Interface\UserDetailsRendererInterface;
 use Chamilo\Core\User\Implementation\User\UserDetailsRenderer;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
@@ -19,6 +22,7 @@ use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTra
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
@@ -36,19 +40,30 @@ class ViewComponent extends Manager
 {
     protected BreadcrumbTrail $breadcrumbTrail;
 
+    protected ButtonToolBarRenderer $buttonToolBarRenderer;
+
+    protected TabsRenderer $tabsRenderer;
+
+    protected UserDetailsRendererRegistry $userDetailsRendererCollection;
+
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
-        MailerInterface $activeMailer, AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail
+        MailerInterface $activeMailer, AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail,
+        UserService $userService, ButtonToolBarRenderer $buttonToolBarRenderer, UrlGenerator $urlGenerator,
+        TabsRenderer $tabsRenderer, UserDetailsRendererRegistry $userDetailsRendererCollection
     )
     {
         parent::__construct(
             $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager
+            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
         );
 
         $this->breadcrumbTrail = $breadcrumbTrail;
+        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
+        $this->tabsRenderer = $tabsRenderer;
+        $this->userDetailsRendererCollection = $userDetailsRendererCollection;
     }
 
     /**
@@ -57,6 +72,7 @@ class ViewComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -84,18 +100,7 @@ class ViewComponent extends Manager
             return new Response(implode(PHP_EOL, $html));
         }
         else {
-            $translator = $this->getTranslator();
-
-            return new Response(
-                $this->getErrorPageRenderer()->render(
-                    $this, htmlentities(
-                    $translator->trans(
-                        'NoObjectSelected', ['%Object%' => $translator->trans('User', [], Manager::CONTEXT)],
-                        StringUtilities::LIBRARIES
-                    )
-                ), $currentUser
-                )
-            );
+            throw new NoSuchParameterException(self::PARAM_USER_ID);
         }
     }
 
@@ -145,6 +150,11 @@ class ViewComponent extends Manager
         return $buttonToolBar;
     }
 
+    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
+    {
+        return $this->buttonToolBarRenderer;
+    }
+
     protected function getTabsCollection(User $userToView, User $currentUser): TabsCollection
     {
         $tabsCollection = new TabsCollection();
@@ -167,12 +177,12 @@ class ViewComponent extends Manager
 
     public function getTabsRenderer(): TabsRenderer
     {
-        return $this->getService(TabsRenderer::class);
+        return $this->tabsRenderer;
     }
 
     public function getUserDetailsRendererCollection(): UserDetailsRendererRegistry
     {
-        return $this->getService(UserDetailsRendererRegistry::class);
+        return $this->userDetailsRendererCollection;
     }
 
     protected function initializeContentTab(

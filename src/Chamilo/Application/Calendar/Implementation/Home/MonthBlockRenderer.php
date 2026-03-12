@@ -11,6 +11,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Calendar\Architecture\Enum\HtmlCalendarRendererTypeEnum;
+use Chamilo\Libraries\Calendar\Service\CalendarTableConfigurationBuilder;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Calendar\Service\View\MiniMonthCalendarRenderer;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
@@ -31,6 +32,8 @@ class MonthBlockRenderer extends BlockRenderer
 
     protected VisibilityRepository $calendarRendererProviderRepository;
 
+    protected CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder;
+
     protected MiniMonthCalendarRenderer $miniMonthCalendarRenderer;
 
     protected ChamiloRequest $request;
@@ -38,7 +41,8 @@ class MonthBlockRenderer extends BlockRenderer
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         MiniMonthCalendarRenderer $miniMonthCalendarRenderer, ChamiloRequest $request,
-        VisibilityRepository $calendarRendererProviderRepository, CalendarDataProvider $calendarDataProvider
+        VisibilityRepository $calendarRendererProviderRepository, CalendarDataProvider $calendarDataProvider,
+        CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder
     )
     {
         parent::__construct($homeService, $urlGenerator, $translator);
@@ -47,6 +51,7 @@ class MonthBlockRenderer extends BlockRenderer
         $this->request = $request;
         $this->calendarRendererProviderRepository = $calendarRendererProviderRepository;
         $this->calendarDataProvider = $calendarDataProvider;
+        $this->calendarTableConfigurationBuilder = $calendarTableConfigurationBuilder;
     }
 
     /**
@@ -62,15 +67,18 @@ class MonthBlockRenderer extends BlockRenderer
         $miniMonthCalendarRenderer = $this->getMiniMonthCalendarRenderer();
         $events = [];
 
+        $calendarTableConfiguration = $this->getCalendarTableConfigurationBuilder()->buildConfiguration($user);
+
         if ($user instanceof User) {
             $events = $this->getCalendarDataProvider()->getEvents(
-                $user, $miniMonthCalendarRenderer->getEventsStartTime($this->getDisplayTime()),
-                $miniMonthCalendarRenderer->getEventsEndTime($this->getDisplayTime())
+                $user,
+                $miniMonthCalendarRenderer->getEventsStartTime($calendarTableConfiguration, $this->getDisplayTime()),
+                $miniMonthCalendarRenderer->getEventsEndTime($calendarTableConfiguration, $this->getDisplayTime())
             );
         }
 
         return $this->getMiniMonthCalendarRenderer()->renderCalendar(
-            $events, $displayParameters, $this->getDisplayTime()
+            $calendarTableConfiguration, $events, $displayParameters, $this->getDisplayTime()
         );
     }
 
@@ -82,6 +90,11 @@ class MonthBlockRenderer extends BlockRenderer
     public function getCalendarRendererProviderRepository(): VisibilityRepository
     {
         return $this->calendarRendererProviderRepository;
+    }
+
+    public function getCalendarTableConfigurationBuilder(): CalendarTableConfigurationBuilder
+    {
+        return $this->calendarTableConfigurationBuilder;
     }
 
     protected function getDisplayTime(): int

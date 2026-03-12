@@ -8,6 +8,7 @@ use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Calendar\Service\CalendarTableConfigurationBuilder;
 use Chamilo\Libraries\Calendar\Service\View\MiniDayCalendarRenderer;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
@@ -30,6 +31,8 @@ class DayBlockRenderer extends BlockRenderer
 
     protected CalendarDataProvider $calendarDataProvider;
 
+    protected CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder;
+
     protected DatetimeUtilities $datetimeUtilities;
 
     protected MiniDayCalendarRenderer $miniDayCalendarRenderer;
@@ -39,7 +42,7 @@ class DayBlockRenderer extends BlockRenderer
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
         DatetimeUtilities $datetimeUtilities, MiniDayCalendarRenderer $miniDayCalendarRenderer, ChamiloRequest $request,
-        CalendarDataProvider $calendarDataProvider
+        CalendarDataProvider $calendarDataProvider, CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder
     )
     {
         parent::__construct($homeService, $urlGenerator, $translator);
@@ -48,6 +51,7 @@ class DayBlockRenderer extends BlockRenderer
         $this->miniDayCalendarRenderer = $miniDayCalendarRenderer;
         $this->request = $request;
         $this->calendarDataProvider = $calendarDataProvider;
+        $this->calendarTableConfigurationBuilder = $calendarTableConfigurationBuilder;
     }
 
     /**
@@ -58,20 +62,29 @@ class DayBlockRenderer extends BlockRenderer
         $miniDayCalendarRenderer = $this->getMiniDayCalendarRenderer();
         $events = [];
 
+        $calendarTableConfiguration = $this->getCalendarTableConfigurationBuilder()->buildConfiguration($user);
+
         if ($user instanceof User) {
             $events = $this->getCalendarDataProvider()->getEvents(
-                $user, $miniDayCalendarRenderer->getEventsStartTime($this->getDisplayTime()),
-                $miniDayCalendarRenderer->getEventsEndTime($this->getDisplayTime())
+                $user,
+                $miniDayCalendarRenderer->getEventsStartTime($calendarTableConfiguration, $this->getDisplayTime()),
+                $miniDayCalendarRenderer->getEventsEndTime($calendarTableConfiguration, $this->getDisplayTime())
             );
         }
 
-        return '<div style="max-height: 500px; overflow: auto;">' .
-            $miniDayCalendarRenderer->renderFullCalendar($events, $this->getDisplayTime()) . '</div>';
+        return '<div style="max-height: 500px; overflow: auto;">' . $miniDayCalendarRenderer->renderFullCalendar(
+                $calendarTableConfiguration, $events, $this->getDisplayTime()
+            ) . '</div>';
     }
 
     protected function getCalendarDataProvider(): CalendarDataProvider
     {
         return $this->calendarDataProvider;
+    }
+
+    public function getCalendarTableConfigurationBuilder(): CalendarTableConfigurationBuilder
+    {
+        return $this->calendarTableConfigurationBuilder;
     }
 
     public function getDatetimeUtilities(): DatetimeUtilities

@@ -32,8 +32,6 @@ class CalendarRepository
 
     protected ConfigurablePathBuilder $configurablePathBuilder;
 
-    protected ?User $currentUser;
-
     protected ?string $developerKey;
 
     protected UrlGenerator $urlGenerator;
@@ -52,7 +50,6 @@ class CalendarRepository
         $this->urlGenerator = $urlGenerator;
         $this->configurablePathBuilder = $configurablePathBuilder;
         $this->userService = $userService;
-        $this->currentUser = $currentUser;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->developerKey = $developerKey;

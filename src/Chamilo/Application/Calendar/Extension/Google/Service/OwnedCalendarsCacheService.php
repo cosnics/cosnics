@@ -19,20 +19,17 @@ class OwnedCalendarsCacheService
 
     protected int $defaultLifetime;
 
-    protected ?User $user;
-
     protected UserService $userService;
 
     private CalendarRepository $calendarRepository;
 
     public function __construct(
         AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository, UserService $userService,
-        ?User $user = null, int $defaultLifetime = 3600
+        int $defaultLifetime = 3600
     )
     {
         $this->cacheAdapter = $cacheAdapter;
         $this->calendarRepository = $calendarRepository;
-        $this->user = $user;
         $this->userService = $userService;
         $this->defaultLifetime = $defaultLifetime;
     }
@@ -62,8 +59,7 @@ class OwnedCalendarsCacheService
 
         if (!$this->hasCacheDataForKey($cacheIdentifier)) {
             $lifetime = $this->getUserService()->findUserSetting(
-                $this->getUser(), 'cosnics.libraries.storage.cache.external.defaultLifetime',
-                $this->getDefaultLifetime()
+                $user, 'cosnics.libraries.storage.cache.external.defaultLifetime', $this->getDefaultLifetime()
             );
 
             $this->saveCacheDataForKey(
@@ -72,11 +68,6 @@ class OwnedCalendarsCacheService
         }
 
         return $this->readCacheDataForKey($cacheIdentifier);
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
     }
 
     public function getUserService(): UserService

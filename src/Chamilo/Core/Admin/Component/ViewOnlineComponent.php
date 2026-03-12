@@ -5,16 +5,22 @@ use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Service\OnlineService;
 use Chamilo\Core\Admin\UserInterface\Table\OnlineTableRenderer;
 use Chamilo\Core\User\Implementation\User\UserDetailsRenderer;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Admin\Component
@@ -22,6 +28,33 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ViewOnlineComponent extends Manager
 {
+    protected OnlineService $onlineService;
+
+    protected OnlineTableRenderer $onlineTableRenderer;
+
+    protected RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler;
+
+    protected UserDetailsRenderer $userDetailsRenderer;
+
+    protected UserService $userService;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UserService $userService,
+        UrlGenerator $urlGenerator, OnlineService $onlineService, OnlineTableRenderer $onlineTableRenderer,
+        UserDetailsRenderer $userDetailsRenderer,
+        RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler
+    )
+    {
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
+
+        $this->userService = $userService;
+        $this->onlineService = $onlineService;
+        $this->onlineTableRenderer = $onlineTableRenderer;
+        $this->userDetailsRenderer = $userDetailsRenderer;
+        $this->requestTableParameterValuesCompiler = $requestTableParameterValuesCompiler;
+    }
+
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
@@ -56,7 +89,7 @@ class ViewOnlineComponent extends Manager
 
     public function getOnlineService(): OnlineService
     {
-        return $this->getService(OnlineService::class);
+        return $this->onlineService;
     }
 
     /**
@@ -80,17 +113,22 @@ class ViewOnlineComponent extends Manager
 
     public function getOnlineTableRenderer(): OnlineTableRenderer
     {
-        return $this->getService(OnlineTableRenderer::class);
+        return $this->onlineTableRenderer;
     }
 
     public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        return $this->getService(RequestTableParameterValuesCompiler::class);
+        return $this->requestTableParameterValuesCompiler;
     }
 
     public function getUserDetailsRenderer(): UserDetailsRenderer
     {
-        return $this->getService(UserDetailsRenderer::class);
+        return $this->userDetailsRenderer;
+    }
+
+    public function getUserService(): UserService
+    {
+        return $this->userService;
     }
 
     /**

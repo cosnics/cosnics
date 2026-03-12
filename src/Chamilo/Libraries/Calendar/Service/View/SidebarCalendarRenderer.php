@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
+use Chamilo\Libraries\Calendar\Architecture\Domain\CalendarTableConfiguration;
 use Chamilo\Libraries\Calendar\Service\JumpBarRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
@@ -44,8 +45,8 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
      * @throws \Exception
      */
     public function render(
-        array $events, array $displayParameters, int $displayTime, array $viewActions = [],
-        array $invisibleSources = [], ?string $invisibilityContext = null
+        array $events, CalendarTableConfiguration $calendarTableConfiguration, array $displayParameters,
+        int $displayTime, array $viewActions = [], array $invisibleSources = [], ?string $invisibilityContext = null
     ): string
     {
         $html = [];
@@ -60,7 +61,7 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
 
         $html[] = '<div class="table-calendar-current-time float-start">';
         $html[] = '<h4>';
-        $html[] = $this->renderTitle($displayTime);
+        $html[] = $this->renderTitle($calendarTableConfiguration, $displayTime);
         $html[] = '</h4>';
         $html[] = '</div>';
         $html[] = '</div>';
@@ -73,13 +74,15 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
         $html[] = '</div>';
 
         $html[] = $this->renderFullCalendar(
-            $events, $displayParameters, $displayTime, $invisibleSources, $invisibilityContext
+            $calendarTableConfiguration, $events, $displayParameters, $displayTime, $invisibleSources,
+            $invisibilityContext
         );
         $html[] = '</div>';
 
         $html[] = '<div class="col-12 col-lg-3 table-calendar-sidebar">';
         $html[] = $this->renderMiniMonth(
-            $events, $displayParameters, $displayTime, $viewActions, $invisibleSources, $invisibilityContext
+            $calendarTableConfiguration, $events, $displayParameters, $displayTime, $viewActions, $invisibleSources,
+            $invisibilityContext
         );
         $html[] = $this->getLegendRenderer()->render($invisibleSources, $invisibilityContext);
         $html[] = $this->getJumpBarRenderer()->render(
@@ -122,8 +125,8 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
      * @throws \Exception
      */
     abstract public function renderFullCalendar(
-        array $events, array $displayParameters, int $displayTime, array $invisibleSources = [],
-        ?string $invisibilityContext = null
+        CalendarTableConfiguration $calendarTableConfiguration, array $events, array $displayParameters,
+        int $displayTime, array $invisibleSources = [], ?string $invisibilityContext = null
     ): string;
 
     /**
@@ -133,12 +136,13 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
      * @throws \Exception
      */
     public function renderMiniMonth(
-        array $events, array $displayParameters, int $displayTime, array $viewActions = [],
-        ?array $visibleSources = null, ?string $invisibilityContext = null
+        CalendarTableConfiguration $calendarTableConfiguration, array $events, array $displayParameters,
+        int $displayTime, array $viewActions = [], ?array $visibleSources = null, ?string $invisibilityContext = null
     ): string
     {
         return $this->getMiniMonthCalendarRenderer()->render(
-            $events, $displayParameters, $displayTime, $viewActions, $visibleSources, $invisibilityContext
+            $events, $calendarTableConfiguration, $displayParameters, $displayTime, $viewActions, $visibleSources,
+            $invisibilityContext
         );
     }
 
@@ -147,5 +151,6 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
      */
     abstract public function renderNavigation(array $displayParameters, int $displayTime): string;
 
-    abstract public function renderTitle(int $displayTime): string;
+    abstract public function renderTitle(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime
+    ): string;
 }

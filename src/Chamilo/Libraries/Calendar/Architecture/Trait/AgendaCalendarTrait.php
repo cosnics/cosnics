@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Architecture\Trait;
 
+use Chamilo\Libraries\Calendar\Architecture\Domain\CalendarTableConfiguration;
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
 use Chamilo\Libraries\Calendar\Service\Event\EventListRenderer;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
@@ -45,21 +46,21 @@ trait AgendaCalendarTrait
         return $structuredEvents;
     }
 
+    abstract public function getAlertRenderer(): AlertRenderer;
+
     abstract protected function getEndTime(int $displayTime): int;
 
     abstract public function getEventListRenderer(): EventListRenderer;
 
-    public function getEventsEndTime(int $displayTime): int
+    public function getEventsEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
         return $this->getEndTime($displayTime);
     }
 
-    public function getEventsStartTime(int $displayTime): int
+    public function getEventsStartTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
         return $displayTime;
     }
-
-    abstract public function getAlertRenderer(): AlertRenderer;
 
     abstract public function getTranslator(): Translator;
 
@@ -78,8 +79,8 @@ trait AgendaCalendarTrait
      * @throws \Exception
      */
     public function renderFullCalendar(
-        array $events, array $displayParameters, int $displayTime, array $invisibleSources = [],
-        ?string $invisibilityContext = null
+        CalendarTableConfiguration $calendarTableConfiguration, array $events, array $displayParameters,
+        int $displayTime, array $invisibleSources = [], ?string $invisibilityContext = null
     ): string
     {
         $events = $this->getAgendaEvents($events);
@@ -136,7 +137,7 @@ trait AgendaCalendarTrait
         return implode('', $html);
     }
 
-    public function renderTitle(int $displayTime): string
+    public function renderTitle(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): string
     {
         return date('d M Y', $displayTime) . ' - ' . date('d M Y', $this->getEndTime($displayTime));
     }

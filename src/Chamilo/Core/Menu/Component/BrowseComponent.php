@@ -1,20 +1,30 @@
 <?php
 namespace Chamilo\Core\Menu\Component;
 
+use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
 use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Manager;
+use Chamilo\Core\Menu\Service\CachedItemService;
+use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\UserInterface\Table\ItemTableRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\UserInterface\Tree\Service\JsTreeRenderer;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu\Component
@@ -24,7 +34,34 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class BrowseComponent extends Manager
 {
+    protected ButtonToolBarRenderer $buttonToolBarRenderer;
+
+    protected ItemTableRenderer $itemTableRenderer;
+
+    protected JsTreeRenderer $jsTreeRenderer;
+
     protected string $parentIdentifier;
+
+    protected RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, CachedItemService $cachedItemService,
+        ItemRendererRegistry $itemRendererRegistry, ItemService $itemService, AlertsManager $alertsManager,
+        ButtonToolBarRenderer $buttonToolBarRenderer, UrlGenerator $urlGenerator, ItemTableRenderer $itemTableRenderer,
+        JsTreeRenderer $jsTreeRenderer, RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler
+    )
+    {
+        parent::__construct(
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $cachedItemService,
+            $itemRendererRegistry, $itemService, $alertsManager, $urlGenerator
+        );
+
+        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
+        $this->itemTableRenderer = $itemTableRenderer;
+        $this->jsTreeRenderer = $jsTreeRenderer;
+        $this->requestTableParameterValuesCompiler = $requestTableParameterValuesCompiler;
+    }
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
@@ -92,14 +129,19 @@ class BrowseComponent extends Manager
         return $buttonToolBar;
     }
 
+    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
+    {
+        return $this->buttonToolBarRenderer;
+    }
+
     public function getItemTableRenderer(): ItemTableRenderer
     {
-        return $this->getService(ItemTableRenderer::class);
+        return $this->itemTableRenderer;
     }
 
     public function getJsTreeRenderer(): JsTreeRenderer
     {
-        return $this->getService(JsTreeRenderer::class);
+        return $this->jsTreeRenderer;
     }
 
     public function getParentIdentifier(): string
@@ -113,7 +155,7 @@ class BrowseComponent extends Manager
 
     public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        return $this->getService(RequestTableParameterValuesCompiler::class);
+        return $this->requestTableParameterValuesCompiler;
     }
 
     public function renderMenu(): string

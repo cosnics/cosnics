@@ -24,7 +24,9 @@ return static function (ContainerConfigurator $container) {
     $services->set(CreateComponent::class)->tag(ApplicationInterface::class);
     $services->set(DeleteComponent::class)->tag(ApplicationInterface::class);
     $services->set(GroupFeedComponent::class)->tag(ApplicationInterface::class);
-    $services->set(GroupTreeDataComponent::class)->tag(ApplicationInterface::class);
+    $services->set(GroupTreeDataComponent::class)->args(
+        ['$jsTreeMenuDataProvider' => service('Chamilo\Core\Group\UserInterface\Menu\GroupJsTreeMenuDataProvider')]
+    )->tag(ApplicationInterface::class);
     $services->set(GroupXmlFeedComponent::class)->tag(ApplicationInterface::class);
     $services->set(MoveComponent::class)->tag(ApplicationInterface::class);
     $services->set(SubscribeComponent::class)->tag(ApplicationInterface::class);

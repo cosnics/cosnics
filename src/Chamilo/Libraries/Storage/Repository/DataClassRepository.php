@@ -579,9 +579,6 @@ class DataClassRepository
         }
     }
 
-    /**
-     * @throws \Throwable
-     */
     public function transactional(callable $function): mixed
     {
         return $this->getDataClassDatabase()->transactional($function);

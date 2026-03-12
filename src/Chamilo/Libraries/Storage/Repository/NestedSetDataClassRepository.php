@@ -500,7 +500,6 @@ class NestedSetDataClassRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     * @throws \Throwable
      */
     public function move(
         NestedSet $nestedSet, string $newParentId = DataClass::EMPTY_UUID, string $newPreviousId = '0',

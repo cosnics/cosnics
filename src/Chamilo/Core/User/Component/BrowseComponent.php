@@ -3,20 +3,31 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Table\UserTableRenderer;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Form\ButtonSearchForm;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -24,6 +35,31 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class BrowseComponent extends Manager
 {
+    protected ButtonToolBarRenderer $buttonToolBarRenderer;
+
+    protected RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler;
+
+    protected UserTableRenderer $userTableRenderer;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
+        MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
+        ButtonToolBarRenderer $buttonToolBarRenderer, UrlGenerator $urlGenerator,
+        RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler, UserTableRenderer $userTableRenderer
+    )
+    {
+        parent::__construct(
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
+            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+        );
+
+        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
+        $this->requestTableParameterValuesCompiler = $requestTableParameterValuesCompiler;
+        $this->userTableRenderer = $userTableRenderer;
+    }
+
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \TableException
@@ -52,7 +88,7 @@ class BrowseComponent extends Manager
 
     public function getAdminUserTableRenderer(): UserTableRenderer
     {
-        return $this->getService(UserTableRenderer::class);
+        return $this->userTableRenderer;
     }
 
     public function getButtonToolBar(User $user): ButtonToolBar
@@ -82,9 +118,14 @@ class BrowseComponent extends Manager
         return $buttonToolBar;
     }
 
+    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
+    {
+        return $this->buttonToolBarRenderer;
+    }
+
     public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        return $this->getService(RequestTableParameterValuesCompiler::class);
+        return $this->requestTableParameterValuesCompiler;
     }
 
     public function getUserTableCondition(): ?ConditionInterface

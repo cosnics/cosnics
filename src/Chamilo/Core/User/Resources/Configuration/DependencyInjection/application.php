@@ -30,17 +30,28 @@ return static function (ContainerConfigurator $container) {
     $services->set(DownloadUserPictureComponent::class)->tag(ApplicationInterface::class);
     $services->set(DeleteComponent::class)->tag(ApplicationInterface::class);
     $services->set(LeaveComponent::class)->tag(ApplicationInterface::class);
-    $services->set(ConfigureComponent::class)->tag(ApplicationInterface::class);
+    $services->set(ConfigureComponent::class)->args(
+        ['$userCanChangePicture' => '%cosnics.application.user.rights.changeUserPicture%']
+    )->tag(ApplicationInterface::class);
     $services->set(LogoutComponent::class)->tag(ApplicationInterface::class);
     $services->set(BrowseComponent::class)->tag(ApplicationInterface::class);
     $services->set(LoginAsComponent::class)->tag(ApplicationInterface::class);
     $services->set(UsersFeedComponent::class)->tag(ApplicationInterface::class);
-    $services->set(ResetPasswordComponent::class)->tag(ApplicationInterface::class);
+    $services->set(ResetPasswordComponent::class)->args(
+        ['$userCanRetrievePassword' => '%cosnics.application.user.rights.retrievePassword%']
+    )->tag(ApplicationInterface::class);
     $services->set(ActiveComponent::class)->tag(ApplicationInterface::class);
-    $services->set(UpdateUserPictureComponent::class)->tag(ApplicationInterface::class);
+    $services->set(UpdateUserPictureComponent::class)->args(
+        ['$userCanChangePicture' => '%cosnics.application.user.rights.changeUserPicture%']
+    )->tag(ApplicationInterface::class);
     $services->set(CreateComponent::class)->tag(ApplicationInterface::class);
-    $services->set(LanguageComponent::class)->tag(ApplicationInterface::class);
-    $services->set(RegisterComponent::class)->tag(ApplicationInterface::class);
+    $services->set(LanguageComponent::class)->args(
+        ['$userCanChangeLanguage' => '%cosnics.application.user.rights.changeLanguage%']
+    )->tag(ApplicationInterface::class);
+    $services->set(RegisterComponent::class)->args(['$userCanRegister' => '%cosnics.application.user.rights.register%'])
+        ->tag(ApplicationInterface::class);
     $services->set(ViewComponent::class)->tag(ApplicationInterface::class);
-    $services->set(AccountComponent::class)->tag(ApplicationInterface::class);
+    $services->set(AccountComponent::class)->args(
+        ['$userCanChangePicture' => '%cosnics.application.user.rights.changeUserPicture%']
+    )->tag(ApplicationInterface::class);
 };

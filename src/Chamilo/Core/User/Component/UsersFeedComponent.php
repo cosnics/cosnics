@@ -2,8 +2,14 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
+use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
@@ -11,11 +17,15 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\Static
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -26,11 +36,28 @@ class UsersFeedComponent extends Manager
 {
     public const string PARAM_OFFSET = 'offset';
     public const string PARAM_SEARCH_QUERY = 'query';
-
     public const string PROPERTY_ELEMENTS = 'elements';
     public const string PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
+    protected SearchQueryConditionGenerator $searchQueryConditionGenerator;
+
     private int $userCount = 0;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
+        MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
+        UrlGenerator $urlGenerator, SearchQueryConditionGenerator $searchQueryConditionGenerator
+    )
+    {
+        parent::__construct(
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
+            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+        );
+
+        $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
+    }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -55,8 +82,7 @@ class UsersFeedComponent extends Manager
         $conditions = [];
 
         // Set the conditions for the search query
-        if ($searchQuery && $searchQuery != '')
-        {
+        if ($searchQuery && $searchQuery != '') {
             $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
                 $searchQuery, [
                     new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
@@ -102,8 +128,7 @@ class UsersFeedComponent extends Manager
         );
         $elements->addElement($userCategory);
 
-        foreach ($this->retrieveUsers() as $user)
-        {
+        foreach ($this->retrieveUsers() as $user) {
             $userCategory->addChild($this->getElementForUser($user));
         }
 
@@ -117,7 +142,7 @@ class UsersFeedComponent extends Manager
 
     protected function getSearchQueryConditionGenerator(): SearchQueryConditionGenerator
     {
-        return $this->getService(SearchQueryConditionGenerator::class);
+        return $this->searchQueryConditionGenerator;
     }
 
     /**

@@ -3,10 +3,14 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Service\GroupMembershipService;
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Component\GroupsFeedComponent;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ContainsCondition;
@@ -16,9 +20,13 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\Proper
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -30,6 +38,30 @@ class GroupFeedComponent extends GroupsFeedComponent
     public const int FILTER_PREFIX_LENGTH = 2;
     public const string PARAM_GROUP = 'group';
     public const string PARAM_USER = 'user';
+
+    protected GroupMembershipService $groupMembershipService;
+
+    protected GroupService $groupService;
+
+    protected GroupsTreeTraverser $groupsTreeTraverser;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UserService $userService,
+        UrlGenerator $urlGenerator, SearchQueryConditionGenerator $searchQueryConditionGenerator,
+        GroupService $groupService, GroupsTreeTraverser $groupsTreeTraverser,
+        GroupMembershipService $groupMembershipService
+    )
+    {
+        parent::__construct(
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $userService, $urlGenerator,
+            $searchQueryConditionGenerator
+        );
+
+        $this->groupService = $groupService;
+        $this->groupsTreeTraverser = $groupsTreeTraverser;
+        $this->groupMembershipService = $groupMembershipService;
+    }
 
     public function getApplicationAction(): string
     {
@@ -54,12 +86,17 @@ class GroupFeedComponent extends GroupsFeedComponent
 
     public function getGroupMembershipService(): GroupMembershipService
     {
-        return $this->getService(GroupMembershipService::class);
+        return $this->groupMembershipService;
+    }
+
+    public function getGroupService(): GroupService
+    {
+        return $this->groupService;
     }
 
     public function getGroupsTreeTraverser(): GroupsTreeTraverser
     {
-        return $this->getService(GroupsTreeTraverser::class);
+        return $this->groupsTreeTraverser;
     }
 
     public function getUserElement(User $user): AdvancedElementFinderElement

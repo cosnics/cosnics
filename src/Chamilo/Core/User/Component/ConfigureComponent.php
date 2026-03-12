@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\Admin\Service\PackageBundlesCacheService;
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Form\ConfigurationForm;
@@ -12,6 +13,7 @@ use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
@@ -22,6 +24,7 @@ use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
+use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
@@ -36,6 +39,8 @@ class ConfigureComponent extends ProfileComponent
 {
     public const string PARAM_SELECTED_CONTEXT = 'selected_context';
 
+    protected PackageBundlesCacheService $packageBundlesCacheService;
+
     protected SystemPathBuilder $systemPathBuilder;
 
     private ConfigurationForm $form;
@@ -46,15 +51,19 @@ class ConfigureComponent extends ProfileComponent
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
-        MailerInterface $activeMailer, AlertsManager $alertsManager, SystemPathBuilder $systemPathBuilder
+        MailerInterface $activeMailer, AlertsManager $alertsManager, SystemPathBuilder $systemPathBuilder,
+        UserService $userService, UrlGenerator $urlGenerator, PackageBundlesCacheService $packageBundlesCacheService,
+        TabsRenderer $tabsRenderer, bool $userCanChangePicture
     )
     {
         parent::__construct(
             $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager
+            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator, $tabsRenderer,
+            $userCanChangePicture
         );
 
         $this->systemPathBuilder = $systemPathBuilder;
+        $this->packageBundlesCacheService = $packageBundlesCacheService;
     }
 
     /**
@@ -147,7 +156,7 @@ class ConfigureComponent extends ProfileComponent
 
     public function getPackageBundlesCacheService(): PackageBundlesCacheService
     {
-        return $this->getService(PackageBundlesCacheService::class);
+        return $this->packageBundlesCacheService;
     }
 
     public function getSelectedContext(): ?string

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
+use Chamilo\Libraries\Calendar\Architecture\Domain\CalendarTableConfiguration;
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
 use Chamilo\Libraries\Calendar\Architecture\Enum\HtmlCalendarRendererTypeEnum;
 use Chamilo\Libraries\Calendar\Service\Event\EventMonthRenderer;
@@ -53,14 +54,14 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
         return $this->eventMonthRenderer;
     }
 
-    public function getEventsEndTime(int $displayTime): int
+    public function getEventsEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getMonthCalendarTableBuilder()->getTableEndTime($displayTime);
+        return $this->getMonthCalendarTableBuilder()->getTableEndTime($calendarTableConfiguration, $displayTime);
     }
 
-    public function getEventsStartTime(int $displayTime): int
+    public function getEventsStartTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getMonthCalendarTableBuilder()->getTableStartTime($displayTime);
+        return $this->getMonthCalendarTableBuilder()->getTableStartTime($calendarTableConfiguration, $displayTime);
     }
 
     public function getMonthCalendarTableBuilder(): MonthCalendarTableBuilder
@@ -94,13 +95,13 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
      * @throws \Exception
      */
     public function renderFullCalendar(
-        array $events, array $displayParameters, int $displayTime, array $invisibleSources = [],
-        ?string $invisibilityContext = null
+        CalendarTableConfiguration $calendarTableConfiguration, array $events, array $displayParameters,
+        int $displayTime, array $invisibleSources = [], ?string $invisibilityContext = null
     ): string
     {
         $calendarTableBuilder = $this->getMonthCalendarTableBuilder();
-        $startTime = $this->getEventsStartTime($displayTime);
-        $endTime = $this->getEventsEndTime($displayTime);
+        $startTime = $this->getEventsStartTime($calendarTableConfiguration, $displayTime);
+        $endTime = $this->getEventsEndTime($calendarTableConfiguration, $displayTime);
 
         $events = $this->orderEvents($events);
         $tableDate = $startTime;
@@ -129,14 +130,16 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
         $html = [];
 
         $html[] = '<div class="month-calendar">';
-        $html[] = $calendarTableBuilder->render($displayTime, $eventsToShow, ['table-calendar-month'],
-            $this->getDayUrlTemplate($displayParameters));
+        $html[] = $calendarTableBuilder->render(
+            $calendarTableConfiguration, $displayTime, $eventsToShow, ['table-calendar-month'],
+            $this->getDayUrlTemplate($displayParameters)
+        );
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
 
-    public function renderTitle(int $displayTime): string
+    public function renderTitle(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): string
     {
         return $this->getTranslator()->trans(date('F', $displayTime) . 'Long', [], StringUtilities::LIBRARIES) . ' ' .
             date('Y', $displayTime);

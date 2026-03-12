@@ -3,26 +3,58 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
+use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
 use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\User\Component
  */
 class MultiPasswordResetComponent extends Manager
 {
+    protected HashingAlgorithm $hashingAlgorithm;
+
+    protected PasswordGeneratorInterface $passwordGenerator;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
+        MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
+        UrlGenerator $urlGenerator, HashingAlgorithm $hashingAlgorithm, PasswordGeneratorInterface $passwordGenerator
+    )
+    {
+        parent::__construct(
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
+            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+        );
+
+        $this->hashingAlgorithm = $hashingAlgorithm;
+        $this->passwordGenerator = $passwordGenerator;
+    }
+
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -81,26 +113,17 @@ class MultiPasswordResetComponent extends Manager
             ]));
         }
         else {
-            return new Response(
-                $this->getErrorPageRenderer()->render(
-                    $this, htmlentities(
-                    $translator->trans(
-                        'NoObjectSelected', ['%Object%' => $translator->trans('User', [], Manager::CONTEXT)],
-                        StringUtilities::LIBRARIES
-                    )
-                ), $currentUser
-                )
-            );
+            throw new NoSuchParameterException(self::PARAM_USER_ID);
         }
     }
 
     public function getHashingUtilities(): HashingAlgorithm
     {
-        return $this->getService(HashingAlgorithm::class);
+        return $this->hashingAlgorithm;
     }
 
     public function getPasswordGenerator(): PasswordGeneratorInterface
     {
-        return $this->getService(PasswordGeneratorInterface::class);
+        return $this->passwordGenerator;
     }
 }

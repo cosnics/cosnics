@@ -6,7 +6,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -21,6 +21,7 @@ class DeleteComponent extends Manager
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -85,16 +86,7 @@ class DeleteComponent extends Manager
             ]));
         }
         else {
-            return new Response(
-                $this->getErrorPageRenderer()->render(
-                    $this, htmlentities(
-                    $translator->trans(
-                        'NoObjectSelected', ['%Object%' => $translator->trans('User', [], Manager::CONTEXT)],
-                        StringUtilities::LIBRARIES
-                    )
-                ), $currentUser
-                )
-            );
+            throw new NoSuchParameterException(self::PARAM_USER_ID);
         }
     }
 }

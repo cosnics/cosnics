@@ -4,8 +4,11 @@ namespace Chamilo\Libraries\Component;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\NoVisitTraceComponentInterface;
+use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Manager;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
@@ -29,16 +32,23 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
     public const string PARAM_VARIABLE = 'variable';
     public const string PROPERTY_RESULT = 'result';
 
+    protected StringUtilities $stringUtilities;
+
     protected ThemePathBuilder $themeWebPathBuilder;
+
+    protected WebPathBuilder $webPathBuilder;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, ThemePathBuilder $themeWebPathBuilder
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, ThemePathBuilder $themeWebPathBuilder,
+        StringUtilities $stringUtilities, WebPathBuilder $webPathBuilder, UrlGenerator $urlGenerator
     )
     {
-        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
 
         $this->themeWebPathBuilder = $themeWebPathBuilder;
+        $this->stringUtilities = $stringUtilities;
+        $this->webPathBuilder = $webPathBuilder;
     }
 
     /**
@@ -79,7 +89,7 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
             // Get, set or clear a session variable
             case 'memory' :
                 $action = $request->request->get(self::PARAM_ACTION);
-                $session = $this->getSession();
+                $session = $request->getSession();
 
                 switch ($action) {
                     case 'set' :
@@ -105,8 +115,18 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
         return $result->getResponse();
     }
 
+    public function getStringUtilities(): StringUtilities
+    {
+        return $this->stringUtilities;
+    }
+
     public function getThemeWebPathBuilder(): ThemePathBuilder
     {
         return $this->themeWebPathBuilder;
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->webPathBuilder;
     }
 }

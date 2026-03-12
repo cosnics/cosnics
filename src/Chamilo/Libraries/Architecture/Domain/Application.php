@@ -3,9 +3,9 @@ namespace Chamilo\Libraries\Architecture\Domain;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
-use Chamilo\Libraries\DependencyInjection\Architecture\Trait\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Symfony\Component\Translation\Translator;
@@ -18,8 +18,6 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class Application implements ApplicationInterface
 {
-    use DependencyInjectionContainerTrait;
-
     protected ApplicationHeaderRenderer $applicationHeaderRenderer;
 
     protected DefaultFooterRenderer $defaultFooterRenderer;
@@ -28,9 +26,11 @@ abstract class Application implements ApplicationInterface
 
     protected Translator $translator;
 
+    protected UrlGenerator $urlGenerator;
+
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator
 
     )
     {
@@ -38,6 +38,7 @@ abstract class Application implements ApplicationInterface
         $this->applicationHeaderRenderer = $applicationHeaderRenderer;
         $this->defaultFooterRenderer = $defaultFooterRenderer;
         $this->translator = $translator;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -75,6 +76,11 @@ abstract class Application implements ApplicationInterface
     public function getTranslator(): Translator
     {
         return $this->translator;
+    }
+
+    public function getUrlGenerator(): UrlGenerator
+    {
+        return $this->urlGenerator;
     }
 
     protected function renderFooter(): string

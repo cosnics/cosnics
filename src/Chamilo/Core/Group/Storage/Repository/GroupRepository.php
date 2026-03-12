@@ -467,7 +467,6 @@ class GroupRepository
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     * @throws \Throwable
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function moveGroup(Group $group, string $parentGroupIdentifier): bool

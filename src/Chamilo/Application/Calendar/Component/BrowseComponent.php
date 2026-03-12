@@ -8,14 +8,18 @@ use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Core\User\Component\ConfigureComponent;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Calendar\Architecture\Enum\HtmlCalendarRendererTypeEnum;
 use Chamilo\Libraries\Calendar\Factory\HtmlCalendarRendererFactory;
+use Chamilo\Libraries\Calendar\Service\CalendarTableConfigurationBuilder;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
+use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
@@ -40,26 +44,58 @@ use Symfony\Component\Translation\Translator;
  */
 class BrowseComponent extends Manager
 {
+    protected CalendarDataProvider $calendarDataProvider;
+
+    protected CalendarExtensionActionProviderRegistry $calendarExtensionActionProviderRegistry;
+
+    protected CalendarExtensionDataProviderRegistry $calendarExtensionDataProviderRegistry;
+
     protected CalendarDataProvider $calendarRendererProvider;
+
+    protected CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder;
+
+    protected string $defaultView;
+
+    protected HtmlCalendarRendererFactory $htmlCalendarRendererFactory;
 
     protected PageHeaders $pageHeaders;
 
     protected ThemePathBuilder $themeWebPathBuilder;
+
+    protected UserService $userService;
+
+    protected WebPathBuilder $webPathBuilder;
 
     private int $currentTime;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        VisibilityRepository $visibilityRepository, ThemePathBuilder $themeWebPathBuilder, PageHeaders $pageHeaders
+        VisibilityRepository $visibilityRepository, ThemePathBuilder $themeWebPathBuilder, PageHeaders $pageHeaders,
+        WebPathBuilder $webPathBuilder, UserService $userService, UrlGenerator $urlGenerator,
+        CalendarDataProvider $calendarDataProvider,
+        CalendarExtensionActionProviderRegistry $calendarExtensionActionProviderRegistry,
+        CalendarExtensionDataProviderRegistry $calendarExtensionDataProviderRegistry,
+        HtmlCalendarRendererFactory $htmlCalendarRendererFactory,
+        CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder, string $defaultView
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $visibilityRepository
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $visibilityRepository,
+            $urlGenerator
         );
 
         $this->themeWebPathBuilder = $themeWebPathBuilder;
         $this->pageHeaders = $pageHeaders;
+        $this->webPathBuilder = $webPathBuilder;
+        $this->userService = $userService;
+        $this->calendarDataProvider = $calendarDataProvider;
+        $this->calendarExtensionActionProviderRegistry = $calendarExtensionActionProviderRegistry;
+        $this->calendarExtensionDataProviderRegistry = $calendarExtensionDataProviderRegistry;
+        $this->htmlCalendarRendererFactory = $htmlCalendarRendererFactory;
+        $this->calendarTableConfigurationBuilder = $calendarTableConfigurationBuilder;
+
+        $this->defaultView = $defaultView;
     }
 
     /**
@@ -95,7 +131,7 @@ class BrowseComponent extends Manager
      */
     protected function checkLoggedInAs(): void
     {
-        $asAdmin = $this->getSession()->get('_as_admin');
+        $asAdmin = $this->getRequest()->getSession()->get('_as_admin');
 
         if ($asAdmin && $asAdmin > 0) {
             $user = $this->getUserService()->findUserByIdentifier($asAdmin);
@@ -107,22 +143,27 @@ class BrowseComponent extends Manager
 
     protected function getCalendarDataProvider(): CalendarDataProvider
     {
-        return $this->getService(CalendarDataProvider::class);
+        return $this->calendarDataProvider;
     }
 
     protected function getCalendarExtensionActionProvider(): CalendarExtensionActionProviderRegistry
     {
-        return $this->getService(CalendarExtensionActionProviderRegistry::class);
+        return $this->calendarExtensionActionProviderRegistry;
     }
 
     protected function getCalendarExtensionDataProvider(): CalendarExtensionDataProviderRegistry
     {
-        return $this->getService(CalendarExtensionDataProviderRegistry::class);
+        return $this->calendarExtensionDataProviderRegistry;
     }
 
     protected function getCalendarRendererFactory(): HtmlCalendarRendererFactory
     {
-        return $this->getService(HtmlCalendarRendererFactory::class);
+        return $this->htmlCalendarRendererFactory;
+    }
+
+    public function getCalendarTableConfigurationBuilder(): CalendarTableConfigurationBuilder
+    {
+        return $this->calendarTableConfigurationBuilder;
     }
 
     public function getCurrentRendererTime(): int
@@ -145,8 +186,7 @@ class BrowseComponent extends Manager
 
         if (!$rendererType) {
             $rendererType = $this->getUserService()->findUserSetting(
-                $user, 'cosnics.libraries.calendar.defaultView',
-                $this->getContainer()->getParameter('cosnics.libraries.calendar.defaultView')
+                $user, 'cosnics.libraries.calendar.defaultView', $this->getDefaultView()
             );
 
             if ($rendererType == HtmlCalendarRendererTypeEnum::MONTH->value) {
@@ -163,6 +203,11 @@ class BrowseComponent extends Manager
         }
 
         return $rendererType;
+    }
+
+    public function getDefaultView(): string
+    {
+        return $this->defaultView;
     }
 
     protected function getGeneralActions(User $user): ButtonGroup
@@ -237,6 +282,11 @@ class BrowseComponent extends Manager
         return $this->themeWebPathBuilder;
     }
 
+    public function getUserService(): UserService
+    {
+        return $this->userService;
+    }
+
     /**
      * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface[]
      */
@@ -263,6 +313,11 @@ class BrowseComponent extends Manager
         return $actions;
     }
 
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->webPathBuilder;
+    }
+
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Exception
@@ -278,14 +333,17 @@ class BrowseComponent extends Manager
             HtmlCalendarRenderer::PARAM_TIME => $this->getCurrentRendererTime()
         ];
 
+        $calendarTableConfiguration = $this->getCalendarTableConfigurationBuilder()->buildConfiguration($user);
+
         $events = $this->getCalendarDataProvider()->getEvents(
-            $user, $renderer->getEventsStartTime($this->getCurrentRendererTime()),
-            $renderer->getEventsEndTime($this->getCurrentRendererTime())
+            $user, $renderer->getEventsStartTime($calendarTableConfiguration, $this->getCurrentRendererTime()),
+            $renderer->getEventsEndTime($calendarTableConfiguration, $this->getCurrentRendererTime())
         );
 
         return $renderer->render(
-            $events, $displayParameters, $this->getCurrentRendererTime(), $this->getViewActions($user),
-            $this->getCalendarDataProvider()->getVisibilities($user->getId()), Manager::CONTEXT
+            $events, $calendarTableConfiguration, $displayParameters, $this->getCurrentRendererTime(),
+            $this->getViewActions($user), $this->getCalendarDataProvider()->getVisibilities($user->getId()),
+            Manager::CONTEXT
         );
     }
 

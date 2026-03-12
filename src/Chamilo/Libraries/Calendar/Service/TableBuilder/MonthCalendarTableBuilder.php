@@ -1,12 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\TableBuilder;
 
-use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Calendar\Architecture\Domain\CalendarTableConfiguration;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Exception;
 use HTML_Table;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\TableBuilder
@@ -15,17 +13,6 @@ use Symfony\Component\Translation\Translator;
 class MonthCalendarTableBuilder extends CalendarTableBuilder
 {
     public const string TIME_PLACEHOLDER = '__TIME__';
-
-    protected string $defaultFirstDayOfWeek;
-
-    public function __construct(
-        Translator $translator, ?User $user, UserService $userService, string $defaultFirstDayOfWeek
-    )
-    {
-        parent::__construct($translator, $user, $userService);
-
-        $this->defaultFirstDayOfWeek = $defaultFirstDayOfWeek;
-    }
 
     protected function addEventItems(HTML_Table $table, $time, $row, $column, $items): void
     {
@@ -40,7 +27,10 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
         }
     }
 
-    protected function addEvents(int $displayTime, HTML_Table $table, array $cellMapping, array $events): void
+    protected function addEvents(
+        CalendarTableConfiguration $calendarTableConfiguration, int $displayTime, HTML_Table $table, array $cellMapping,
+        array $events
+    ): void
     {
         foreach ($events as $time => $items) {
             $cellMappingKey = date('Ymd', $time);
@@ -59,9 +49,12 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
     /**
      * @throws \Exception
      */
-    protected function buildTable(HTML_Table $table, int $displayTime, ?string $dayUrlTemplate = null): array
+    protected function buildTable(
+        CalendarTableConfiguration $calendarTableConfiguration, HTML_Table $table, int $displayTime,
+        ?string $dayUrlTemplate = null
+    ): array
     {
-        $tableDate = $this->getTableStartTime($displayTime);
+        $tableDate = $this->getTableStartTime($calendarTableConfiguration, $displayTime);
         $cell = 0;
         $cellMapping = [];
 
@@ -86,7 +79,7 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
             while ($cell % 7 != 0);
         }
 
-        $this->setHeader($table);
+        $this->setHeader($calendarTableConfiguration, $table);
 
         return $cellMapping;
     }
@@ -133,26 +126,9 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
         return str_replace(self::TIME_PLACEHOLDER, (string) $time, $dayUrlTemplate);
     }
 
-    public function getDefaultFirstDayOfWeek(): string
+    public function getTableEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->defaultFirstDayOfWeek;
-    }
-
-    protected function getFirstDayOfWeek(): ?string
-    {
-        if ($this->getUser() instanceof User) {
-            return $this->getUserService()->findUserSetting(
-                $this->getUser(), 'cosnics.libraries.calendar.firstDayOfWeek', $this->getDefaultFirstDayOfWeek()
-            );
-        }
-        else {
-            return $this->getDefaultFirstDayOfWeek();
-        }
-    }
-
-    public function getTableEndTime(int $displayTime): int
-    {
-        $endTime = $this->getTableStartTime($displayTime);
+        $endTime = $this->getTableStartTime($calendarTableConfiguration, $displayTime);
 
         while (date('Ym', $endTime) <= date('Ym', $displayTime)) {
             $endTime = strtotime('+1 Week', $endTime);
@@ -161,11 +137,11 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
         return $endTime;
     }
 
-    public function getTableStartTime(int $displayTime): int
+    public function getTableStartTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
         $firstDay = mktime(0, 0, 0, (int) date('m', $displayTime), 1, (int) date('Y', $displayTime));
 
-        if ($this->getFirstDayOfWeek() == 'sunday') {
+        if ($calendarTableConfiguration->getFirstDayOfWeek() == 'sunday') {
             return strtotime('Next Sunday', strtotime('-1 Week', $firstDay));
         }
 
@@ -175,12 +151,12 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
     /**
      * @throws \Exception
      */
-    public function setHeader(HTML_Table $table): void
+    public function setHeader(CalendarTableConfiguration $calendarTableConfiguration, HTML_Table $table): void
     {
         $translator = $this->getTranslator();
         $header = $table->getHeader();
 
-        $setting = $this->getFirstDayOfWeek();
+        $setting = $calendarTableConfiguration->getFirstDayOfWeek();
 
         if ($setting == 'sunday') {
             $header->addRow(

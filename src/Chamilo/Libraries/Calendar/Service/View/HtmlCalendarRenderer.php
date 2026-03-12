@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Service\View;
 
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
+use Chamilo\Libraries\Calendar\Architecture\Domain\CalendarTableConfiguration;
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
 use Chamilo\Libraries\Calendar\Architecture\Enum\HtmlCalendarRendererTypeEnum;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
@@ -49,7 +50,7 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
      * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Visibility[] $invisibleSources
      */
     abstract public function render(
-        array $events, array $displayParameters, int $displayTime, array $viewActions = [],
+        array $events, CalendarTableConfiguration $calendarTableConfiguration, array $displayParameters, int $displayTime, array $viewActions = [],
         array $invisibleSources = [], ?string $invisibilityContext = null
     ): string;
 
@@ -65,9 +66,9 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
         return $this->buttonToolBarRenderer;
     }
 
-    abstract public function getEventsEndTime(int $displayTime): int;
+    abstract public function getEventsEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int;
 
-    abstract public function getEventsStartTime(int $displayTime): int;
+    abstract public function getEventsStartTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int;
 
     public function getLegendRenderer(): LegendRenderer
     {

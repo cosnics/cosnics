@@ -7,5 +7,5 @@ return static function (ContainerConfigurator $container) {
     $services = $container->services();
     $services->defaults()->public()->autowire()->autoconfigure();
 
-    $services->set(OnlineTableRenderer::class)->args(['$user' => service('Chamilo\Core\User\CurrentUser')]);
+    $services->set(OnlineTableRenderer::class)->args(['$currentUser' => service('Chamilo\Core\User\CurrentUser')]);
 };

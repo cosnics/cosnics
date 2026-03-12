@@ -2,11 +2,13 @@
 namespace Chamilo\Core\User;
 
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
@@ -30,21 +32,25 @@ abstract class Manager extends Application
 
     protected AuthenticationValidator $authenticationValidator;
 
+    protected UserService $userService;
+
     protected UserUrlGenerator $userUrlGenerator;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
-        MailerInterface $activeMailer, AlertsManager $alertsManager
+        MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
+        UrlGenerator $urlGenerator
     )
     {
-        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
 
         $this->authenticationValidator = $authenticationValidator;
         $this->userUrlGenerator = $userUrlGenerator;
         $this->activeMailer = $activeMailer;
         $this->alertsManager = $alertsManager;
+        $this->userService = $userService;
     }
 
     protected function getActiveMailer(): MailerInterface
@@ -75,6 +81,11 @@ abstract class Manager extends Application
     public function getDefaultApplicationAction(): string
     {
         return ActionEnum::BROWSE->value;
+    }
+
+    public function getUserService(): UserService
+    {
+        return $this->userService;
     }
 
     protected function getUserUrlGenerator(): UserUrlGenerator

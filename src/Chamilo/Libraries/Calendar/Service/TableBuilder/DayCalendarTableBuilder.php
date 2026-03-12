@@ -1,13 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\TableBuilder;
 
-use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Calendar\Architecture\Trait\HourBasedCalendarTrait;
+use Chamilo\Libraries\Calendar\Architecture\Domain\CalendarTableConfiguration;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Exception;
 use HTML_Table;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\TableBuilder
@@ -15,35 +12,23 @@ use Symfony\Component\Translation\Translator;
  */
 class DayCalendarTableBuilder extends CalendarTableBuilder
 {
-    use HourBasedCalendarTrait;
-
-    public function __construct(
-        Translator $translator, ?User $user, UserService $userService, bool $defaultHideNonWorkingHours,
-        int $defaultHourStep, int $defaultWorkingHoursEnd, int $defaultWorkingHoursStart
-    )
-    {
-        parent::__construct($translator, $user, $userService);
-
-        $this->setDefaultHideNonWorkingHours($defaultHideNonWorkingHours);
-        $this->setDefaultHourStep($defaultHourStep);
-        $this->setDefaultWorkingHoursEnd($defaultWorkingHoursEnd);
-        $this->setDefaultWorkingHoursStart($defaultWorkingHoursStart);
-    }
-
-    protected function addEvents(int $displayTime, HTML_Table $table, array $cellMapping, array $events): void
+    protected function addEvents(
+        CalendarTableConfiguration $calendarTableConfiguration, int $displayTime, HTML_Table $table, array $cellMapping,
+        array $events
+    ): void
     {
         $start = 0;
 
-        if ($this->getHideNonWorkingHours()) {
-            $start = $this->getStartHour();
+        if ($calendarTableConfiguration->getHideNonWorkingHours()) {
+            $start = $calendarTableConfiguration->getStartHour();
         }
 
         foreach ($events as $time => $items) {
-            if ($time >= $this->getTableEndTime($displayTime)) {
+            if ($time >= $this->getTableEndTime($calendarTableConfiguration, $displayTime)) {
                 continue;
             }
 
-            $row = (date('H', $time) - $start) / $this->hourStep;
+            $row = (date('H', $time) - $start) / $calendarTableConfiguration->getHourStep();
 
             foreach ($items as $item) {
                 try {
@@ -60,7 +45,10 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
     /**
      * @throws \TableException
      */
-    protected function buildTable(HTML_Table $table, int $displayTime, ?string $dayUrlTemplate = null): array
+    protected function buildTable(
+        CalendarTableConfiguration $calendarTableConfiguration, HTML_Table $table, int $displayTime,
+        ?string $dayUrlTemplate = null
+    ): array
     {
         $header = $table->getHeader();
         $header->setRowType(0, 'th');
@@ -76,13 +64,13 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
         $startHour = 0;
         $endHour = 24;
 
-        if ($this->getHideNonWorkingHours()) {
-            $startHour = $this->getStartHour();
-            $endHour = $this->getEndHour();
+        if ($calendarTableConfiguration->getHideNonWorkingHours()) {
+            $startHour = $calendarTableConfiguration->getStartHour();
+            $endHour = $calendarTableConfiguration->getEndHour();
         }
 
-        for ($hour = $startHour; $hour < $endHour; $hour += $this->getHourStep()) {
-            $rowId = ($hour / $this->getHourStep()) - $startHour;
+        for ($hour = $startHour; $hour < $endHour; $hour += $calendarTableConfiguration->getHourStep()) {
+            $rowId = ($hour / $calendarTableConfiguration->getHourStep()) - $startHour;
             $cellContent = str_pad((string) $hour, 2, '0', STR_PAD_LEFT);
             $table->setCellContents($rowId, 0, $cellContent);
 
@@ -97,12 +85,12 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
             $table->setCellAttributes($rowId, 0, ['class' => $classes]);
         }
 
-        for ($hour = $startHour; $hour < $endHour; $hour += $this->getHourStep()) {
-            $rowId = ($hour / $this->getHourStep()) - $startHour;
+        for ($hour = $startHour; $hour < $endHour; $hour += $calendarTableConfiguration->getHourStep()) {
+            $rowId = ($hour / $calendarTableConfiguration->getHourStep()) - $startHour;
 
             $table->setCellContents($rowId, 1, '');
 
-            $classes = $this->determineCellClasses($hour, $displayTime);
+            $classes = $this->determineCellClasses($calendarTableConfiguration, $hour, $displayTime);
 
             if (count($classes) > 0) {
                 $table->setCellAttributes($rowId, 1, ['class' => $classes]);
@@ -115,19 +103,21 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
     /**
      * @return string[]
      */
-    protected function determineCellClasses(int $hour, int $displayTime): array
+    protected function determineCellClasses(
+        CalendarTableConfiguration $calendarTableConfiguration, int $hour, int $displayTime
+    ): array
     {
         $classes = [];
 
         // Highlight current hour
         if (date('Y-m-d') == date('Y-m-d', $displayTime)) {
-            if (date('H') >= $hour && date('H') < $hour + $this->getHourStep()) {
+            if (date('H') >= $hour && date('H') < $hour + $calendarTableConfiguration->getHourStep()) {
                 $classes[] = 'table-calendar-highlight';
             }
         }
 
         // Is current table hour during working hours?
-        if ($hour < $this->getStartHour() || $hour >= $this->getEndHour()) {
+        if ($hour < $calendarTableConfiguration->getStartHour() || $hour >= $calendarTableConfiguration->getEndHour()) {
             $classes[] = 'table-calendar-disabled';
         }
 
@@ -138,19 +128,19 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
         return $classes;
     }
 
-    public function getTableEndTime(int $displayTime): int
+    public function getTableEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        if ($this->getHideNonWorkingHours()) {
-            return strtotime(date('Y-m-d ' . ($this->getEndHour() - 1) . ':59:59', $displayTime));
+        if ($calendarTableConfiguration->getHideNonWorkingHours()) {
+            return strtotime(date('Y-m-d ' . ($calendarTableConfiguration->getEndHour() - 1) . ':59:59', $displayTime));
         }
 
-        return strtotime('+24 Hours', $this->getTableStartTime($displayTime));
+        return strtotime('+24 Hours', $this->getTableStartTime($calendarTableConfiguration, $displayTime));
     }
 
-    public function getTableStartTime(int $displayTime): int
+    public function getTableStartTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        if ($this->getHideNonWorkingHours()) {
-            return strtotime(date('Y-m-d ' . $this->getStartHour() . ':00:00', $displayTime));
+        if ($calendarTableConfiguration->getHideNonWorkingHours()) {
+            return strtotime(date('Y-m-d ' . $calendarTableConfiguration->getStartHour() . ':00:00', $displayTime));
         }
 
         return strtotime(date('Y-m-d 00:00:00', $displayTime));

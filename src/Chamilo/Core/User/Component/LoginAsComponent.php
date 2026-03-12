@@ -21,7 +21,7 @@ class LoginAsComponent extends Manager
     public function run(?User $currentUser = null): Response
     {
         if ($this->getAdminUserIdentifier()) {
-            $session = $this->getSession();
+            $session = $this->getRequest()->getSession();
 
             $session->clear();
             $session->set(AuthenticationValidator::SESSION_USER_ID, $this->getAdminUserIdentifier());
@@ -29,7 +29,7 @@ class LoginAsComponent extends Manager
             return new RedirectResponse($this->getUrlGenerator()->fromParameters());
         }
         elseif ($currentUser instanceof User && $currentUser->isPlatformAdministrator() && $this->getUserIdentifier()) {
-            $session = $this->getSession();
+            $session = $this->getRequest()->getSession();
 
             $session->clear();
             $session->set(AuthenticationValidator::SESSION_USER_ID, $this->getUserIdentifier());
@@ -48,7 +48,7 @@ class LoginAsComponent extends Manager
 
     protected function getAdminUserIdentifier(): ?string
     {
-        return $this->getSession()->get(AuthenticationValidator::PARAM_AS_ADMIN);
+        return $this->getRequest()->getSession()->get(AuthenticationValidator::PARAM_AS_ADMIN);
     }
 
     protected function getUserIdentifier(): ?string

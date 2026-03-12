@@ -155,7 +155,6 @@ class GroupForm extends FormValidator
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
-     * @throws \Throwable
      */
     public function updateGroup(): bool
     {

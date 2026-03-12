@@ -5,8 +5,10 @@ use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
@@ -33,20 +35,24 @@ abstract class Manager extends Application
 
     protected GroupUrlGenerator $groupUrlGenerator;
 
+    protected UserService $userService;
+
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
         GroupMembershipService $groupMembershipService, GroupUrlGenerator $groupUrlGenerator,
-        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupService $groupService
+        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupService $groupService,
+        UserService $userService, UrlGenerator $urlGenerator
     )
     {
-        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
 
         $this->groupMembershipService = $groupMembershipService;
         $this->groupUrlGenerator = $groupUrlGenerator;
         $this->alertsManager = $alertsManager;
         $this->breadcrumbTrail = $breadcrumbTrail;
         $this->groupService = $groupService;
+        $this->userService = $userService;
     }
 
     public function getAlertsManager(): AlertsManager
@@ -87,5 +93,10 @@ abstract class Manager extends Application
     public function getGroupUrlGenerator(): GroupUrlGenerator
     {
         return $this->groupUrlGenerator;
+    }
+
+    public function getUserService(): UserService
+    {
+        return $this->userService;
     }
 }

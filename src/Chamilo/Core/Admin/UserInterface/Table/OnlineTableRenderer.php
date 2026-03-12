@@ -21,15 +21,15 @@ use Symfony\Component\Translation\Translator;
  */
 class OnlineTableRenderer extends DataClassListTableRenderer
 {
-    protected User $user;
+    protected ?User $currentUser;
 
     public function __construct(
-        User $user, Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
         PageNavigationCalculator $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
-        ClassnameUtilities $classnameUtilities
+        ClassnameUtilities $classnameUtilities, ?User $currentUser = null
     )
     {
-        $this->user = $user;
+        $this->currentUser = $currentUser;
 
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
@@ -37,9 +37,9 @@ class OnlineTableRenderer extends DataClassListTableRenderer
         );
     }
 
-    public function getUser(): User
+    public function getCurrentUser(): ?User
     {
-        return $this->user;
+        return $this->currentUser;
     }
 
     protected function initializeColumns(): void
@@ -76,7 +76,8 @@ class OnlineTableRenderer extends DataClassListTableRenderer
                     return '';
                 }
             case User::PROPERTY_PICTURE_URI :
-                if ($this->getUser()->isPlatformAdministrator()) {
+                $user = $this->getCurrentUser();
+                if ($user instanceof User && $user->isPlatformAdministrator()) {
                     $profilePhotoUrl = $urlGenerator->fromParameters(
                         [
                             ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,

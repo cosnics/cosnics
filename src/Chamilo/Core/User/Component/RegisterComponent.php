@@ -2,27 +2,58 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
-use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Form\RegisterForm;
 use Chamilo\Core\User\UserInterface\Form\UserForm;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
+use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\User\Component
  */
 class RegisterComponent extends Manager implements NoAuthenticationSupportInterface
 {
+    protected bool $userCanRegister;
+
+    protected ?UserPictureUpdateProviderInterface $userPictureUpdateProvider;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
+        MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
+        UrlGenerator $urlGenerator, ?UserPictureUpdateProviderInterface $userPictureUpdateProvider,
+        bool $userCanRegister
+    )
+    {
+        parent::__construct(
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
+            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+        );
+
+        $this->userPictureUpdateProvider = $userPictureUpdateProvider;
+        $this->userCanRegister = $userCanRegister;
+    }
+
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \QuickformException
@@ -31,7 +62,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
     {
         $translator = $this->getTranslator();
 
-        if (!$this->getContainer()->getParameter('cosnics.application.user.rights.register')) {
+        if (!$this->canUserRegister()) {
             throw new NotAllowedException();
         }
 
@@ -93,10 +124,13 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
         return new Response(implode(PHP_EOL, $html));
     }
 
+    public function canUserRegister(): bool
+    {
+        return $this->userCanRegister;
+    }
+
     public function getUserPictureProvider(): ?UserPictureUpdateProviderInterface
     {
-        $service = $this->getService(UserPictureProviderInterface::class);
-
-        return $service instanceof UserPictureUpdateProviderInterface ? $service : null;
+        return $this->userPictureUpdateProvider;
     }
 }

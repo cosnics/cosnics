@@ -1,13 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\TableBuilder;
 
-use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Calendar\Architecture\Trait\HourBasedCalendarTrait;
+use Chamilo\Libraries\Calendar\Architecture\Domain\CalendarTableConfiguration;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Exception;
 use HTML_Table;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\TableBuilder
@@ -15,32 +12,16 @@ use Symfony\Component\Translation\Translator;
  */
 class WeekCalendarTableBuilder extends CalendarTableBuilder
 {
-    use HourBasedCalendarTrait;
-
     public const string TIME_PLACEHOLDER = '__TIME__';
 
-    protected string $defaultFirstDayOfWeek;
-
-    public function __construct(
-        Translator $translator, ?User $user, UserService $userService, string $defaultFirstDayOfWeek,
-        bool $defaultHideNonWorkingHours, int $defaultHourStep, int $defaultWorkingHoursEnd,
-        int $defaultWorkingHoursStart
-    )
+    protected function addEvents(
+        CalendarTableConfiguration $calendarTableConfiguration, int $displayTime, HTML_Table $table, array $cellMapping,
+        array $events
+    ): void
     {
-        parent::__construct($translator, $user, $userService);
-
-        $this->defaultFirstDayOfWeek = $defaultFirstDayOfWeek;
-        $this->setDefaultHideNonWorkingHours($defaultHideNonWorkingHours);
-        $this->setDefaultHourStep($defaultHourStep);
-        $this->setDefaultWorkingHoursEnd($defaultWorkingHoursEnd);
-        $this->setDefaultWorkingHoursStart($defaultWorkingHoursStart);
-    }
-
-    protected function addEvents(int $displayTime, HTML_Table $table, array $cellMapping, array $events): void
-    {
-        $workingStart = $this->getStartHour();
-        $workingEnd = $this->getEndHour();
-        $hide = $this->getHideNonWorkingHours();
+        $workingStart = $calendarTableConfiguration->getStartHour();
+        $workingEnd = $calendarTableConfiguration->getEndHour();
+        $hide = $calendarTableConfiguration->getHideNonWorkingHours();
         $start = 0;
         $end = 24;
 
@@ -50,7 +31,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
         }
 
         foreach ($events as $time => $items) {
-            $row = (date('H', $time) / $this->hourStep) - $start;
+            $row = (date('H', $time) / $calendarTableConfiguration->getHourStep()) - $start;
 
             if ($row > $end - $start - 1) {
                 continue;
@@ -77,7 +58,10 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
     /**
      * @throws \TableException
      */
-    protected function buildTable(HTML_Table $table, int $displayTime, ?string $dayUrlTemplate = null): array
+    protected function buildTable(
+        CalendarTableConfiguration $calendarTableConfiguration, HTML_Table $table, int $displayTime,
+        ?string $dayUrlTemplate = null
+    ): array
     {
         $header = $table->getHeader();
         $header->setRowType(0, 'th');
@@ -85,11 +69,11 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
         $header->setCellAttributes(0, 0, ['class' => 'table-calendar-week-hours']);
 
         // Go 1 week back end them jump to the next monday to reach the first day of this week
-        $firstDay = $this->getTableStartTime($displayTime);
+        $firstDay = $this->getTableStartTime($calendarTableConfiguration, $displayTime);
 
-        $workingStart = $this->getStartHour();
-        $workingEnd = $this->getEndHour();
-        $hide = $this->getHideNonWorkingHours();
+        $workingStart = $calendarTableConfiguration->getStartHour();
+        $workingEnd = $calendarTableConfiguration->getEndHour();
+        $hide = $calendarTableConfiguration->getHideNonWorkingHours();
         $start = 0;
         $end = 24;
 
@@ -98,8 +82,8 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
             $end = $workingEnd;
         }
 
-        for ($hour = $start; $hour < $end; $hour += $this->getHourStep()) {
-            $rowId = ($hour / $this->getHourStep()) - $start;
+        for ($hour = $start; $hour < $end; $hour += $calendarTableConfiguration->getHourStep()) {
+            $rowId = ($hour / $calendarTableConfiguration->getHourStep()) - $start;
             $cellContent = str_pad((string) $hour, 2, '0', STR_PAD_LEFT);
             $table->setCellContents($rowId, 0, $cellContent);
 
@@ -120,10 +104,12 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
             $weekDayTime = strtotime('+' . $day . ' days', $firstDay);
             $header->setHeaderContents(0, $day + 1, $this->getHeaderContent($weekDayTime, $dayUrlTemplate));
 
-            for ($hour = $start; $hour < $end; $hour += $this->getHourStep()) {
-                $row = ($hour / $this->getHourStep()) - $start;
+            for ($hour = $start; $hour < $end; $hour += $calendarTableConfiguration->getHourStep()) {
+                $row = ($hour / $calendarTableConfiguration->getHourStep()) - $start;
 
-                $classes = $this->determineCellClasses($today, $weekDayTime, $hour, $workingStart, $workingEnd);
+                $classes = $this->determineCellClasses(
+                    $calendarTableConfiguration, $today, $weekDayTime, $hour, $workingStart, $workingEnd
+                );
 
                 if (count($classes) > 0) {
                     $table->setCellAttributes($row, $day + 1, ['class' => $classes]);
@@ -139,13 +125,15 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
     /**
      * @return string[]
      */
-    protected function determineCellClasses(string $today, int $weekDay, int $hour, int $workingStart, int $workingEnd
+    protected function determineCellClasses(
+        CalendarTableConfiguration $calendarTableConfiguration, string $today, int $weekDay, int $hour,
+        int $workingStart, int $workingEnd
     ): array
     {
         $classes = [];
 
         if ($today == date('Y-m-d', $weekDay)) {
-            if (date('H') >= $hour && date('H') < $hour + $this->getHourStep()) {
+            if (date('H') >= $hour && date('H') < $hour + $calendarTableConfiguration->getHourStep()) {
                 $classes[] = 'table-calendar-highlight';
             }
         }
@@ -170,23 +158,6 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
         return str_replace(self::TIME_PLACEHOLDER, (string) $time, $dayUrlTemplate);
     }
 
-    public function getDefaultFirstDayOfWeek(): string
-    {
-        return $this->defaultFirstDayOfWeek;
-    }
-
-    protected function getFirstDayOfWeek(): ?string
-    {
-        if ($this->getUser() instanceof User) {
-            return $this->getUserService()->findUserSetting(
-                $this->getUser(), 'cosnics.libraries.calendar.firstDayOfWeek', $this->getDefaultFirstDayOfWeek()
-            );
-        }
-        else {
-            return $this->getDefaultFirstDayOfWeek();
-        }
-    }
-
     protected function getHeaderContent(int $weekDayTime, ?string $dayUrlTemplate = null): string
     {
         $dayLabel =
@@ -201,18 +172,18 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
         }
     }
 
-    public function getTableEndTime(int $displayTime): int
+    public function getTableEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        if ($this->getFirstDayOfWeek() == 'sunday') {
+        if ($calendarTableConfiguration->getFirstDayOfWeek() == 'sunday') {
             return strtotime('Next Saterday', strtotime('-1 Week', $displayTime));
         }
 
-        return strtotime('Next Sunday', $this->getTableStartTime($displayTime));
+        return strtotime('Next Sunday', $this->getTableStartTime($calendarTableConfiguration, $displayTime));
     }
 
-    public function getTableStartTime(int $displayTime): int
+    public function getTableStartTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        if ($this->getFirstDayOfWeek() == 'sunday') {
+        if ($calendarTableConfiguration->getFirstDayOfWeek() == 'sunday') {
             return strtotime('Next Sunday', strtotime('-1 Week', $displayTime));
         }
 

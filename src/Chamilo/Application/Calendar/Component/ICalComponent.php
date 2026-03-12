@@ -4,6 +4,7 @@ namespace Chamilo\Application\Calendar\Component;
 use Chamilo\Application\Calendar\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\CalendarDataProvider;
+use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
@@ -11,6 +12,7 @@ use Chamilo\Libraries\Calendar\Service\View\ICalCalendarRenderer;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\Authentication\Service\SecurityTokenAuthentication;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Chamilo\Libraries\UserInterface\Alert\Service\AlertRenderer;
@@ -31,14 +33,32 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
 
     protected AlertRenderer $alertRenderer;
 
+    protected AuthenticationValidator $authenticationValidator;
+
+    protected CalendarDataProvider $calendarDataProvider;
+
+    protected ICalCalendarRenderer $iCalCalendarRenderer;
+
+    protected SecurityTokenAuthentication $securityTokenAuthentication;
+
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, AlertRenderer $alertRenderer
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, AlertRenderer $alertRenderer,
+        VisibilityRepository $visibilityRepository, UrlGenerator $urlGenerator,
+        AuthenticationValidator $authenticationValidator, CalendarDataProvider $calendarDataProvider,
+        ICalCalendarRenderer $iCalCalendarRenderer, SecurityTokenAuthentication $securityTokenAuthentication,
     )
     {
-        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+        parent::__construct(
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $visibilityRepository,
+            $urlGenerator
+        );
 
         $this->alertRenderer = $alertRenderer;
+        $this->authenticationValidator = $authenticationValidator;
+        $this->calendarDataProvider = $calendarDataProvider;
+        $this->iCalCalendarRenderer = $iCalCalendarRenderer;
+        $this->securityTokenAuthentication = $securityTokenAuthentication;
     }
 
     /**
@@ -129,22 +149,22 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
 
     protected function getAuthenticationValidator(): AuthenticationValidator
     {
-        return $this->getService(AuthenticationValidator::class);
+        return $this->authenticationValidator;
     }
 
     private function getCalendarRendererProvider(): CalendarDataProvider
     {
-        return $this->getService(CalendarDataProvider::class);
+        return $this->calendarDataProvider;
     }
 
     public function getICalCalendarRenderer(): ICalCalendarRenderer
     {
-        return $this->getService(ICalCalendarRenderer::class);
+        return $this->iCalCalendarRenderer;
     }
 
     protected function getSecurityTokenAuthentication(): SecurityTokenAuthentication
     {
-        return $this->getService(SecurityTokenAuthentication::class);
+        return $this->securityTokenAuthentication;
     }
 
     /**

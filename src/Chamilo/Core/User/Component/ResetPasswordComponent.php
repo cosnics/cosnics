@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
@@ -10,10 +11,12 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthentic
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Service\AlertRenderer;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_submit;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
@@ -33,19 +36,23 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
 
     protected FormValidator $passwordResetForm;
 
+    protected bool $userCanRetrievePassword;
+
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
-        MailerInterface $activeMailer, AlertRenderer $alertRenderer
+        MailerInterface $activeMailer, AlertRenderer $alertRenderer, AlertsManager $alertsManager,
+        UserService $userService, UrlGenerator $urlGenerator, bool $userCanRetrievePassword
     )
     {
         parent::__construct(
             $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer
+            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
         );
 
         $this->alertRenderer = $alertRenderer;
+        $this->userCanRetrievePassword = $userCanRetrievePassword;
     }
 
     /**
@@ -57,7 +64,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
      */
     public function run(?User $currentUser = null): Response
     {
-        if (!$this->getContainer()->getParameter('cosnics.application.user.rights.retrievePassword')) {
+        if (!$this->canUserRetrievePassword()) {
             throw new NotAllowedException();
         }
 
@@ -118,6 +125,11 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
         $html[] = $this->renderFooter();
 
         return new Response(implode(PHP_EOL, $html));
+    }
+
+    public function canUserRetrievePassword(): bool
+    {
+        return $this->userCanRetrievePassword;
     }
 
     public function getAlertRenderer(): AlertRenderer

@@ -3,16 +3,22 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
+use Chamilo\Core\Group\Service\GroupMembershipService;
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
+use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
 use Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider;
 use Chamilo\Core\Group\UserInterface\Table\GroupTableRenderer;
 use Chamilo\Core\Group\UserInterface\Table\SubscribedUserTableRenderer;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
@@ -20,11 +26,16 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondit
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
+use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait\ButtonToolBarSearchFormTrait;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ContentTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
@@ -32,6 +43,7 @@ use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
 use Chamilo\Libraries\UserInterface\Tree\Service\JsTreeRenderer;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -45,15 +57,62 @@ class BrowseComponent extends Manager
     public const string TAB_SUBGROUPS = 'subgroups';
     public const string TAB_USERS = 'users';
 
+    protected ButtonToolBarRenderer $buttonToolBarRenderer;
+
+    protected GroupTableRenderer $groupTableRenderer;
+
+    protected GroupTreeMenuDataProvider $groupTreeMenuDataProvider;
+
+    protected GroupsTreeTraverser $groupsTreeTraverser;
+
+    protected JsTreeRenderer $jsTreeRenderer;
+
+    protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
+
     protected int $numberOfGroups;
 
     protected int $numberOfSubscribedUsers;
+
+    protected RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler;
+
+    protected SubscribedUserTableRenderer $subscribedUserTableRenderer;
+
+    protected TabsRenderer $tabsRenderer;
 
     private ?Group $group;
 
     private ?string $groupIdentifier = null;
 
     private ?Group $rootGroup;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        GroupMembershipService $groupMembershipService, GroupUrlGenerator $groupUrlGenerator,
+        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupService $groupService,
+        UserService $userService, UrlGenerator $urlGenerator, ButtonToolBarRenderer $buttonToolBarRenderer,
+        GroupTableRenderer $groupTableRenderer, GroupTreeMenuDataProvider $groupTreeMenuDataProvider,
+        GroupsTreeTraverser $groupsTreeTraverser, JsTreeRenderer $jsTreeRenderer,
+        MiniButtonToolBarRenderer $miniButtonToolBarRenderer, SubscribedUserTableRenderer $subscribedUserTableRenderer,
+        TabsRenderer $tabsRenderer, RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler
+    )
+    {
+        parent::__construct(
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $groupMembershipService,
+            $groupUrlGenerator, $alertsManager, $breadcrumbTrail, $groupService, $userService, $urlGenerator
+        );
+
+        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
+
+        $this->groupTableRenderer = $groupTableRenderer;
+        $this->groupTreeMenuDataProvider = $groupTreeMenuDataProvider;
+        $this->groupsTreeTraverser = $groupsTreeTraverser;
+        $this->jsTreeRenderer = $jsTreeRenderer;
+        $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
+        $this->subscribedUserTableRenderer = $subscribedUserTableRenderer;
+        $this->tabsRenderer = $tabsRenderer;
+        $this->requestTableParameterValuesCompiler = $requestTableParameterValuesCompiler;
+    }
 
     /**
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
@@ -106,6 +165,11 @@ class BrowseComponent extends Manager
         }
 
         return $this->numberOfSubscribedUsers;
+    }
+
+    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
+    {
+        return $this->buttonToolBarRenderer;
     }
 
     public function getButtonToolBarSearchProperties(?string $type = null): array
@@ -208,32 +272,32 @@ class BrowseComponent extends Manager
 
     public function getGroupTableRenderer(): GroupTableRenderer
     {
-        return $this->getService(GroupTableRenderer::class);
+        return $this->groupTableRenderer;
     }
 
     public function getGroupTreeMenuDataProvider(): GroupTreeMenuDataProvider
     {
-        return $this->getService(GroupTreeMenuDataProvider::class);
+        return $this->groupTreeMenuDataProvider;
     }
 
     public function getGroupsTreeTraverser(): GroupsTreeTraverser
     {
-        return $this->getService(GroupsTreeTraverser::class);
+        return $this->groupsTreeTraverser;
     }
 
     public function getJsTreeRenderer(): JsTreeRenderer
     {
-        return $this->getService(JsTreeRenderer::class);
+        return $this->jsTreeRenderer;
     }
 
     public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
     {
-        return $this->getService(MiniButtonToolBarRenderer::class);
+        return $this->miniButtonToolBarRenderer;
     }
 
     public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        return $this->getService(RequestTableParameterValuesCompiler::class);
+        return $this->requestTableParameterValuesCompiler;
     }
 
     /**
@@ -279,7 +343,7 @@ class BrowseComponent extends Manager
 
     public function getSubscribedUserTableRenderer(): SubscribedUserTableRenderer
     {
-        return $this->getService(SubscribedUserTableRenderer::class);
+        return $this->subscribedUserTableRenderer;
     }
 
     public function getSubscribedUsersCondition(): ?AndCondition
@@ -316,10 +380,10 @@ class BrowseComponent extends Manager
 
     protected function getTabsRenderer(): TabsRenderer
     {
-        return $this->getService(TabsRenderer::class);
+        return $this->tabsRenderer;
     }
 
-    public function renderFooter(): string
+    protected function renderFooter(): string
     {
         $html = [];
 
@@ -365,7 +429,7 @@ class BrowseComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function renderHeader(?User $user = null): string
+    protected function renderHeader(?User $user = null): string
     {
         $html = [];
 

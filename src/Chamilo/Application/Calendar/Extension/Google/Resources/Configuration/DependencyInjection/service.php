@@ -16,8 +16,7 @@ return static function (ContainerConfigurator $container) {
     $services->set(OwnedCalendarsCacheService::class)->args([
         '$cacheAdapter' => service(
             'Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheAdapter'
-        ),
-        '$user' => service('Chamilo\Core\User\CurrentUser'),
+        )
     ]);
 
     $services->set(

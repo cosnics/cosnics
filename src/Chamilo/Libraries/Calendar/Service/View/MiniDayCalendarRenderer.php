@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
+use Chamilo\Libraries\Calendar\Architecture\Domain\CalendarTableConfiguration;
 use Chamilo\Libraries\Calendar\Service\Event\EventDayRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
 use Chamilo\Libraries\Calendar\Service\TableBuilder\DayCalendarTableBuilder;
@@ -37,12 +38,12 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
      * @throws \Exception
      */
     public function render(
-        array $events, array $displayParameters, int $displayTime, array $viewActions = [],
-        array $invisibleSources = [], ?string $invisibilityContext = null
+        array $events, CalendarTableConfiguration $calendarTableConfiguration, array $displayParameters,
+        int $displayTime, array $viewActions = [], array $invisibleSources = [], ?string $invisibilityContext = null
     ): string
     {
         $html = [];
-        $html[] = $this->renderFullCalendar($events, $displayTime, $invisibleSources);
+        $html[] = $this->renderFullCalendar($calendarTableConfiguration, $events, $displayTime, $invisibleSources);
         $html[] = $this->getLegendRenderer()->render($invisibleSources, $invisibilityContext);
 
         return implode(PHP_EOL, $html);
@@ -58,14 +59,14 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
         return $this->eventDayRenderer;
     }
 
-    public function getEventsEndTime(int $displayTime): int
+    public function getEventsEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getDayCalendarTableBuilder()->getTableEndTime($displayTime);
+        return $this->getDayCalendarTableBuilder()->getTableEndTime($calendarTableConfiguration, $displayTime);
     }
 
-    public function getEventsStartTime(int $displayTime): int
+    public function getEventsStartTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getDayCalendarTableBuilder()->getTableStartTime($displayTime);
+        return $this->getDayCalendarTableBuilder()->getTableStartTime($calendarTableConfiguration, $displayTime);
     }
 
     /**
@@ -75,13 +76,14 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
      * @throws \Exception
      */
     public function renderFullCalendar(
-        array $events, int $displayTime, array $invisibleSources = []
+        CalendarTableConfiguration $calendarTableConfiguration, array $events, int $displayTime,
+        array $invisibleSources = []
     ): string
     {
         $calendarTableBuilder = $this->getDayCalendarTableBuilder();
 
-        $startTime = $this->getEventsStartTime($displayTime);
-        $endTime = $this->getEventsEndTime($displayTime);
+        $startTime = $this->getEventsStartTime($calendarTableConfiguration, $displayTime);
+        $endTime = $this->getEventsEndTime($calendarTableConfiguration, $displayTime);
 
         $events = $this->orderEvents($events);
 
@@ -89,7 +91,7 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
         $eventsToShow = [];
 
         while ($tableDate <= $endTime) {
-            $nextTableDate = strtotime('+' . $calendarTableBuilder->getHourStep() . ' Hours', $tableDate);
+            $nextTableDate = strtotime('+' . $calendarTableConfiguration->getHourStep() . ' Hours', $tableDate);
 
             foreach ($events as $event) {
                 $startDate = $event->getStartDate();
@@ -108,6 +110,8 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
             $tableDate = $nextTableDate;
         }
 
-        return $calendarTableBuilder->render($displayTime, $eventsToShow, ['table-calendar-mini']);
+        return $calendarTableBuilder->render(
+            $calendarTableConfiguration, $displayTime, $eventsToShow, ['table-calendar-mini']
+        );
     }
 }

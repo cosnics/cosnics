@@ -34,6 +34,8 @@ class Kernel
 
     protected AuthenticationValidator $authenticationValidator;
 
+    protected ?User $currentUser;
+
     protected EventDispatcherInterface $eventDispatcher;
 
     protected ExceptionLoggerInterface $exceptionLogger;
@@ -48,15 +50,13 @@ class Kernel
 
     protected UrlGenerator $urlGenerator;
 
-    protected ?User $user;
-
     protected UserExceptionResponseRenderer $userExceptionResponseRenderer;
 
     public function __construct(
         ChamiloRequest $request, SessionInterface $session, ApplicationFactory $applicationFactory,
         ExceptionLoggerInterface $exceptionLogger, AuthenticationValidator $authenticationValidator,
         UrlGenerator $urlGenerator, EventDispatcherInterface $eventDispatcher,
-        UserExceptionResponseRenderer $userExceptionResponseRenderer, string $timezone, User $user = null,
+        UserExceptionResponseRenderer $userExceptionResponseRenderer, string $timezone, User $currentUser = null,
         bool $maintenanceMode = false
     )
     {
@@ -65,7 +65,7 @@ class Kernel
         $this->session = $session;
         $this->exceptionLogger = $exceptionLogger;
         $this->urlGenerator = $urlGenerator;
-        $this->user = $user;
+        $this->currentUser = $currentUser;
         $this->authenticationValidator = $authenticationValidator;
         $this->eventDispatcher = $eventDispatcher;
         $this->maintenanceMode = $maintenanceMode;
@@ -96,7 +96,8 @@ class Kernel
         if ($this->isMaintenanceMode()) {
             $asAdmin = $this->getSession()->get('_as_admin');
 
-            if ($this->getUser() instanceof User && !$this->getUser()->isPlatformAdministrator() && !$asAdmin) {
+            if ($this->getCurrentUser() instanceof User && !$this->getCurrentUser()->isPlatformAdministrator() &&
+                !$asAdmin) {
                 throw new PlatformNotAvailableException();
             }
         }
@@ -145,6 +146,11 @@ class Kernel
         return $this->getRequest()->getFromQueryOrRequest(ApplicationInterface::PARAM_CONTEXT, Manager::CONTEXT);
     }
 
+    protected function getCurrentUser(): ?User
+    {
+        return $this->currentUser;
+    }
+
     protected function getEventDispatcher(): EventDispatcherInterface
     {
         return $this->eventDispatcher;
@@ -173,11 +179,6 @@ class Kernel
     protected function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
-    }
-
-    protected function getUser(): ?User
-    {
-        return $this->user;
     }
 
     protected function getUserExceptionResponseRenderer(): UserExceptionResponseRenderer
@@ -245,7 +246,7 @@ class Kernel
                 $this->getApplicationFactory()->getApplicationComponent($this->getContext(), $this->getAction());
             $this->traceVisit($application);
 
-            $response = $application->run($this->getUser());
+            $response = $application->run($this->getCurrentUser());
         }
         catch (UserExceptionInterface $exception) {
             $this->getExceptionLogger()->logException($exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING);
@@ -263,9 +264,9 @@ class Kernel
 
     protected function traceVisit(ApplicationInterface $application): static
     {
-        if (!$application instanceof NoVisitTraceComponentInterface && $this->getUser() instanceof User) {
+        if (!$application instanceof NoVisitTraceComponentInterface && $this->getCurrentUser() instanceof User) {
             $this->getEventDispatcher()->dispatch(
-                new AfterUserEnterPageEvent($this->getUser(), $this->getRequest()->getRequestUri())
+                new AfterUserEnterPageEvent($this->getCurrentUser(), $this->getRequest()->getRequestUri())
             );
         }
 

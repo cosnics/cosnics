@@ -304,7 +304,6 @@ class GroupService
     }
 
     /**
-     * @throws \Throwable
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */

@@ -34,20 +34,20 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 {
     public const string TABLE_IDENTIFIER = Manager::PARAM_USER_ID;
 
-    protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
+    protected ?User $currentUser;
 
-    protected User $user;
+    protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
 
     protected UserUrlGenerator $userUrlGenerator;
 
     public function __construct(
-        User $user, Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
+        Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
         PageNavigationCalculator $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
         UserUrlGenerator $userUrlGenerator, ClassnameUtilities $classnameUtilities,
-        MiniButtonToolBarRenderer $miniButtonToolBarRenderer
+        MiniButtonToolBarRenderer $miniButtonToolBarRenderer, ?User $currentUser = null
     )
     {
-        $this->user = $user;
+        $this->currentUser = $currentUser;
         $this->userUrlGenerator = $userUrlGenerator;
         $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
 
@@ -55,6 +55,11 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
             $classnameUtilities
         );
+    }
+
+    public function getCurrentUser(): ?User
+    {
+        return $this->currentUser;
     }
 
     public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
@@ -126,11 +131,6 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
         return $actions;
     }
 
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
     public function getUserUrlGenerator(): UserUrlGenerator
     {
         return $this->userUrlGenerator;
@@ -189,10 +189,12 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
     public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
     {
         $translator = $this->getTranslator();
+        $currentUser = $this->getCurrentUser();
+        $isPlatformAdministrator = $currentUser instanceof User && $currentUser->isPlatformAdministrator();
 
         $buttonToolBar = new MiniButtonToolBar();
 
-        if ($this->getUser()->isPlatformAdministrator()) {
+        if ($isPlatformAdministrator) {
             $editUrl = $this->getUserUrlGenerator()->getUpdateUrl($result);
 
             $buttonToolBar->addButton(
@@ -214,8 +216,8 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
             );
         }
 
-        if ($result->getId() != $this->getUser()->getId()) {
-            if ($this->getUser()->isPlatformAdministrator()) {
+        if ($currentUser instanceof User && $result->getId() != $currentUser->getId()) {
+            if ($isPlatformAdministrator) {
                 $deleteUrl = $this->getUserUrlGenerator()->getDeleteUrl($result);
 
                 $buttonToolBar->addButton(
@@ -227,18 +229,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
                         ), classes: ['btn-link']
                     )
                 );
-            }
-            else {
-                $buttonToolBar->addButton(
-                    new Button(
-                        label: $translator->trans('DeleteNA', [], StringUtilities::LIBRARIES),
-                        inlineGlyph: new FontAwesomeGlyph('times', ['text-muted']), display: DisplayTypeEnum::ICON,
-                        classes: ['btn-link']
-                    )
-                );
-            }
 
-            if ($this->getUser()->isPlatformAdministrator()) {
                 $changeUserUrl = $this->getUserUrlGenerator()->getChangeUserUrl($result);
 
                 $buttonToolBar->addButton(
@@ -246,6 +237,15 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
                         label: $translator->trans('LoginAsUser', [], Manager::CONTEXT),
                         inlineGlyph: new FontAwesomeGlyph('mask'), action: $changeUserUrl,
                         display: DisplayTypeEnum::ICON, classes: ['btn-link']
+                    )
+                );
+            }
+            else {
+                $buttonToolBar->addButton(
+                    new Button(
+                        label: $translator->trans('DeleteNA', [], StringUtilities::LIBRARIES),
+                        inlineGlyph: new FontAwesomeGlyph('times', ['text-muted']), display: DisplayTypeEnum::ICON,
+                        classes: ['btn-link']
                     )
                 );
             }

@@ -3,15 +3,52 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\Admin\Service\Consulter\LanguageConsulter;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\User\Component
  */
 class LanguageComponent extends Manager
 {
+    protected LanguageConsulter $languageConsulter;
+    protected bool $userCanChangeLanguage;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
+        MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
+        UrlGenerator $urlGenerator, LanguageConsulter $languageConsulter, bool $userCanChangeLanguage
+    )
+    {
+        parent::__construct(
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
+            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+        );
+
+        $this->languageConsulter = $languageConsulter;
+        $this->userCanChangeLanguage = $userCanChangeLanguage;
+    }
+
+    public function canUserChangeLanguage(): bool
+    {
+        return $this->userCanChangeLanguage;
+    }
+
+
+
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -20,7 +57,7 @@ class LanguageComponent extends Manager
     {
         $this->checkAuthorization(Manager::CONTEXT, $currentUser, 'ChangeLanguage');
 
-        if ($this->getContainer()->getParameter('cosnics.application.user.rights.changeLanguage')) {
+        if ($this->canUserChangeLanguage()) {
             $choice = $this->getRequest()->query->get(self::PARAM_LANGUAGE);
             $languages = array_keys($this->getLanguages());
 
@@ -34,9 +71,9 @@ class LanguageComponent extends Manager
         return new RedirectResponse($this->getRequest()->query->get(self::PARAM_REFER));
     }
 
-    private function getLanguageConsulter(): LanguageConsulter
+    protected function getLanguageConsulter(): LanguageConsulter
     {
-        return $this->getService(LanguageConsulter::class);
+        return $this->languageConsulter;
     }
 
     /**

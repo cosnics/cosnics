@@ -3,11 +3,17 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
+use Chamilo\Core\Group\Service\GroupMembershipService;
+use Chamilo\Core\Group\Service\GroupService;
+use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\UserInterface\Table\NonSubscribedUserTableRenderer;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
@@ -16,13 +22,19 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
+use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -30,7 +42,33 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class BrowseNonSubscribedUsersComponent extends Manager
 {
+    protected ButtonToolBarRenderer $buttonToolBarRenderer;
+
+    protected NonSubscribedUserTableRenderer $nonSubscribedUserTableRenderer;
+
+    protected RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler;
+
     private ?Group $group;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        GroupMembershipService $groupMembershipService, GroupUrlGenerator $groupUrlGenerator,
+        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupService $groupService,
+        UserService $userService, ButtonToolBarRenderer $buttonToolBarRenderer, UrlGenerator $urlGenerator,
+        NonSubscribedUserTableRenderer $nonSubscribedUserTableRenderer,
+        RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler
+    )
+    {
+        parent::__construct(
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $groupMembershipService,
+            $groupUrlGenerator, $alertsManager, $breadcrumbTrail, $groupService, $userService, $urlGenerator
+        );
+
+        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
+        $this->nonSubscribedUserTableRenderer = $nonSubscribedUserTableRenderer;
+        $this->requestTableParameterValuesCompiler = $requestTableParameterValuesCompiler;
+    }
 
     /**
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
@@ -107,6 +145,11 @@ class BrowseNonSubscribedUsersComponent extends Manager
         return $buttonToolBar;
     }
 
+    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
+    {
+        return $this->buttonToolBarRenderer;
+    }
+
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
@@ -161,12 +204,12 @@ class BrowseNonSubscribedUsersComponent extends Manager
 
     public function getNonSubscribedUserTableRenderer(): NonSubscribedUserTableRenderer
     {
-        return $this->getService(NonSubscribedUserTableRenderer::class);
+        return $this->nonSubscribedUserTableRenderer;
     }
 
     public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
     {
-        return $this->getService(RequestTableParameterValuesCompiler::class);
+        return $this->requestTableParameterValuesCompiler;
     }
 
     /**

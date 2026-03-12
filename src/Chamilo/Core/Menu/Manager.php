@@ -7,6 +7,7 @@ use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
@@ -39,10 +40,11 @@ abstract class Manager extends Application
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, CachedItemService $cachedItemService,
-        ItemRendererRegistry $itemRendererRegistry, ItemService $itemService, AlertsManager $alertsManager
+        ItemRendererRegistry $itemRendererRegistry, ItemService $itemService, AlertsManager $alertsManager,
+        UrlGenerator $urlGenerator
     )
     {
-        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
 
         $this->cachedItemService = $cachedItemService;
         $this->itemRendererRegistry = $itemRendererRegistry;

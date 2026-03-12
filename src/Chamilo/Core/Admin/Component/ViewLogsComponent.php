@@ -5,8 +5,11 @@ use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
+use Chamilo\Libraries\Filesystem\Service\FilesystemTools;
+use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_submit;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
@@ -27,18 +30,25 @@ class ViewLogsComponent extends Manager
 {
     protected ConfigurablePathBuilder $configurablePathBuilder;
 
+    protected FilesystemTools $filesystemTools;
+
     protected ResourceManager $resourceManager;
+
+    protected WebPathBuilder $webPathBuilder;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, ResourceManager $resourceManager,
-        ConfigurablePathBuilder $configurablePathBuilder
+        ConfigurablePathBuilder $configurablePathBuilder, FilesystemTools $filesystemTools,
+        WebPathBuilder $webPathBuilder, UrlGenerator $urlGenerator
     )
     {
-        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
 
         $this->resourceManager = $resourceManager;
         $this->configurablePathBuilder = $configurablePathBuilder;
+        $this->filesystemTools = $filesystemTools;
+        $this->webPathBuilder = $webPathBuilder;
     }
 
     /**
@@ -184,6 +194,11 @@ class ViewLogsComponent extends Manager
         return $this->configurablePathBuilder;
     }
 
+    public function getFilesystemTools(): FilesystemTools
+    {
+        return $this->filesystemTools;
+    }
+
     public function getResourceManager(): ResourceManager
     {
         return $this->resourceManager;
@@ -208,5 +223,10 @@ class ViewLogsComponent extends Manager
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->webPathBuilder;
     }
 }

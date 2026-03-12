@@ -5,6 +5,7 @@ use Chamilo\Core\User\Architecture\Domain\UserDetailsRendererRegistry;
 use Chamilo\Core\User\Architecture\Domain\UserPictureProviderRegistry;
 use Chamilo\Core\User\Architecture\EventDispatcher\Subscriber\ActivityUserEventSubscriber;
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
+use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Service\UserFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -21,6 +22,7 @@ return static function (ContainerConfigurator $container) {
     $services->set('Chamilo\Core\User\CurrentUser', User::class)->factory([service(UserFactory::class), 'getUser']);
 
     $services->alias(UserPictureProviderInterface::class, 'Chamilo\Core\User\Service\UserPictureProvider');
+    $services->alias(UserPictureUpdateProviderInterface::class, 'Chamilo\Core\User\Service\UserPictureProvider');
 
     $services->set('Chamilo\Core\User\Service\UserPictureProvider', UserPictureProviderInterface::class)->factory(
         [service(UserPictureProviderRegistry::class), 'getActivePictureProvider']

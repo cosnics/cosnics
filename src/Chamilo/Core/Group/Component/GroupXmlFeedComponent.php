@@ -2,13 +2,24 @@
 namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Manager;
+use Chamilo\Core\Group\Service\GroupMembershipService;
+use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
+use Chamilo\Core\Group\Service\GroupUrlGenerator;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
+use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -18,6 +29,24 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class GroupXmlFeedComponent extends Manager
 {
+    protected GroupsTreeTraverser $groupsTreeTraverser;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        GroupMembershipService $groupMembershipService, GroupUrlGenerator $groupUrlGenerator,
+        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupService $groupService,
+        UserService $userService, UrlGenerator $urlGenerator, GroupsTreeTraverser $groupsTreeTraverser
+    )
+    {
+        parent::__construct(
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $groupMembershipService,
+            $groupUrlGenerator, $alertsManager, $breadcrumbTrail, $groupService, $userService, $urlGenerator
+        );
+
+        $this->groupsTreeTraverser = $groupsTreeTraverser;
+    }
+
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -44,7 +73,7 @@ class GroupXmlFeedComponent extends Manager
 
     public function getGroupsTreeTraverser(): GroupsTreeTraverser
     {
-        return $this->getService(GroupsTreeTraverser::class);
+        return $this->groupsTreeTraverser;
     }
 
     /**

@@ -2,10 +2,13 @@
 namespace Chamilo\Libraries\Component;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Manager;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
@@ -17,8 +20,11 @@ use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @author  Sven Vanpoucke
@@ -32,7 +38,23 @@ abstract class GroupsFeedComponent extends Manager
     public const string PROPERTY_ELEMENTS = 'elements';
     public const string PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
+    protected SearchQueryConditionGenerator $searchQueryConditionGenerator;
+
     protected int $userCount = 0;
+
+    protected UserService $userService;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UserService $userService,
+        UrlGenerator $urlGenerator, SearchQueryConditionGenerator $searchQueryConditionGenerator
+    )
+    {
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
+
+        $this->userService = $userService;
+        $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
+    }
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
@@ -117,7 +139,7 @@ abstract class GroupsFeedComponent extends Manager
 
     protected function getSearchQueryConditionGenerator(): SearchQueryConditionGenerator
     {
-        return $this->getService(SearchQueryConditionGenerator::class);
+        return $this->searchQueryConditionGenerator;
     }
 
     abstract public function getUserElement(User $user): AdvancedElementFinderElement;
@@ -126,6 +148,11 @@ abstract class GroupsFeedComponent extends Manager
      * @return int[]
      */
     abstract public function getUserIdentifiers(): array;
+
+    public function getUserService(): UserService
+    {
+        return $this->userService;
+    }
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>

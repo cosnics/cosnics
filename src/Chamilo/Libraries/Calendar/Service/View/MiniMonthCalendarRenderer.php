@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
+use Chamilo\Libraries\Calendar\Architecture\Domain\CalendarTableConfiguration;
 use Chamilo\Libraries\Calendar\Architecture\Domain\Event;
 use Chamilo\Libraries\Calendar\Service\Event\EventMiniMonthRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
@@ -49,8 +50,8 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
      * @throws \Exception
      */
     public function render(
-        array $events, array $displayParameters, int $displayTime, array $viewActions = [],
-        array $invisibleSources = [], ?string $invisibilityContext = null
+        array $events, CalendarTableConfiguration $calendarTableConfiguration, array $displayParameters,
+        int $displayTime, array $viewActions = [], array $invisibleSources = [], ?string $invisibilityContext = null
     ): string
     {
         $html = [];
@@ -59,7 +60,9 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
         $html[] = $this->renderNavigation($displayParameters, $displayTime);
 
         $html[] = '<div class="table-calendar-mini-container">';
-        $html[] = $this->renderCalendar($events, $displayParameters, $displayTime, $invisibleSources);
+        $html[] = $this->renderCalendar(
+            $calendarTableConfiguration, $events, $displayParameters, $displayTime, $invisibleSources
+        );
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
 
@@ -73,14 +76,14 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
         return $this->eventMiniMonthRenderer;
     }
 
-    public function getEventsEndTime(int $displayTime): int
+    public function getEventsEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getMiniMonthCalendarTableBuilder()->getTableEndTime($displayTime);
+        return $this->getMiniMonthCalendarTableBuilder()->getTableEndTime($calendarTableConfiguration, $displayTime);
     }
 
-    public function getEventsStartTime(int $displayTime): int
+    public function getEventsStartTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getMiniMonthCalendarTableBuilder()->getTableStartTime($displayTime);
+        return $this->getMiniMonthCalendarTableBuilder()->getTableStartTime($calendarTableConfiguration, $displayTime);
     }
 
     public function getMiniMonthCalendarTableBuilder(): MiniMonthCalendarTableBuilder
@@ -114,13 +117,14 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
      * @throws \Exception
      */
     public function renderCalendar(
-        array $events, array $displayParameters, int $displayTime, array $invisibleSources = []
+        CalendarTableConfiguration $calendarTableConfiguration, array $events, array $displayParameters,
+        int $displayTime, array $invisibleSources = []
     ): string
     {
         $calendarTableBuilder = $this->getMiniMonthCalendarTableBuilder();
 
-        $startTime = $this->getEventsStartTime($displayTime);
-        $endTime = $this->getEventsEndTime($displayTime);
+        $startTime = $this->getEventsStartTime($calendarTableConfiguration, $displayTime);
+        $endTime = $this->getEventsEndTime($calendarTableConfiguration, $displayTime);
 
         $events = $this->orderEvents($events);
         $tableDate = $startTime;
@@ -151,8 +155,10 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
         $html = [];
 
         $html[] = '<div class="table-calendar-mini-container">';
-        $html[] = $calendarTableBuilder->render($displayTime, $eventsToShow, ['table-calendar-mini'],
-            $this->determineNavigationUrl($displayParameters));
+        $html[] = $calendarTableBuilder->render(
+            $calendarTableConfiguration, $displayTime, $eventsToShow, ['table-calendar-mini'],
+            $this->determineNavigationUrl($displayParameters)
+        );
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
 

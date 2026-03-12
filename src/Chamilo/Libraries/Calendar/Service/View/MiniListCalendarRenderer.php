@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\View;
 
+use Chamilo\Libraries\Calendar\Architecture\Domain\CalendarTableConfiguration;
 use Chamilo\Libraries\Calendar\Architecture\Trait\AgendaCalendarTrait;
 use Chamilo\Libraries\Calendar\Service\Event\EventListRenderer;
 use Chamilo\Libraries\Calendar\Service\LegendRenderer;
@@ -38,17 +39,17 @@ class MiniListCalendarRenderer extends MiniCalendarRenderer
      * @throws \Exception
      */
     public function render(
-        array $events, array $displayParameters, int $displayTime, array $viewActions = [],
-        array $invisibleSources = [], ?string $invisibilityContext = null
+        array $events, CalendarTableConfiguration $calendarTableConfiguration, array $displayParameters,
+        int $displayTime, array $viewActions = [], array $invisibleSources = [], ?string $invisibilityContext = null
     ): string
     {
         $html = [];
 
         $html[] = '<h4>';
-        $html[] = $this->renderTitle($displayTime);
+        $html[] = $this->renderTitle($calendarTableConfiguration, $displayTime);
         $html[] = '</h4>';
 
-        $html[] = $this->renderFullCalendar($events, $displayParameters, $displayTime);
+        $html[] = $this->renderFullCalendar($calendarTableConfiguration, $events, $displayParameters, $displayTime);
         $html[] = $this->getLegendRenderer()->render($invisibleSources, $invisibilityContext);
 
         $html[] = '<div class="clearfix"></div>';

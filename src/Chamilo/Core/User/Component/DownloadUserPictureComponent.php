@@ -3,10 +3,20 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
+use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -16,6 +26,24 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class DownloadUserPictureComponent extends Manager
 {
+    protected UserPictureProviderInterface $userPictureProvider;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
+        MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
+        UrlGenerator $urlGenerator, UserPictureProviderInterface $userPictureProvider
+    )
+    {
+        parent::__construct(
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
+            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+        );
+
+        $this->userPictureProvider = $userPictureProvider;
+    }
+
     /**
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
@@ -53,12 +81,8 @@ class DownloadUserPictureComponent extends Manager
         return $user;
     }
 
-    /**
-     * @param class-string<\Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface> $className
-     */
-    public function getUserPictureProvider(string $className = 'Chamilo\Core\User\Service\UserPictureProvider'
-    ): UserPictureProviderInterface
+    public function getUserPictureProvider(): UserPictureProviderInterface
     {
-        return $this->getService($className);
+        return $this->userPictureProvider;
     }
 }

@@ -12,7 +12,9 @@ return static function (ContainerConfigurator $container) {
     $services = $container->services();
     $services->defaults()->public()->autowire()->autoconfigure();
 
-    $services->set(CalendarPopupComponent::class)->tag(ApplicationInterface::class);
+    $services->set(CalendarPopupComponent::class)->args(
+        ['$defaultFirstDayOfWeek' => '%cosnics.libraries.calendar.firstDayOfWeek%']
+    )->tag(ApplicationInterface::class);
     $services->set(DeleteTemporaryFileComponent::class)->tag(ApplicationInterface::class);
     $services->set(HtmlEditorInstanceComponent::class)->tag(ApplicationInterface::class);
     $services->set(UploadTemporaryFileComponent::class)->tag(ApplicationInterface::class);

@@ -3,11 +3,21 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
+use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -17,6 +27,34 @@ use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
  */
 abstract class ProfileComponent extends Manager
 {
+    protected TabsRenderer $tabsRenderer;
+
+    protected bool $userCanChangePicture;
+
+    public function __construct(
+        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
+        MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
+        UrlGenerator $urlGenerator, TabsRenderer $tabsRenderer, bool $userCanChangePicture
+    )
+    {
+        parent::__construct(
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
+            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+        );
+
+        $this->tabsRenderer = $tabsRenderer;
+        $this->userCanChangePicture = $userCanChangePicture;
+    }
+
+    public function canUserChangePicture(): bool
+    {
+        return $this->userCanChangePicture;
+    }
+
+
+
     /**
      * @return \Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab[]
      */
@@ -34,7 +72,7 @@ abstract class ProfileComponent extends Manager
         ), ActionEnum::ACCOUNT->value == $action
         );
 
-        if ($this->getContainer()->getParameter('cosnics.application.user.rights.changeUserPicture')) {
+        if ($this->canUserChangePicture()) {
             $tabs[] = new LinkTab(
                 ActionEnum::UPDATE_USER_PICTURE->value,
                 htmlentities($translator->trans(ActionEnum::UPDATE_USER_PICTURE->value . 'Title', [], Manager::CONTEXT)
@@ -59,7 +97,7 @@ abstract class ProfileComponent extends Manager
 
     public function getTabsRenderer(): TabsRenderer
     {
-        return $this->getService(TabsRenderer::class);
+        return $this->tabsRenderer;
     }
 
     public function renderPage(?User $user = null): string

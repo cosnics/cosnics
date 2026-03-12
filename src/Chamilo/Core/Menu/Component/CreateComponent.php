@@ -13,6 +13,7 @@ use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
@@ -39,12 +40,12 @@ class CreateComponent extends Manager
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, CachedItemService $cachedItemService,
         ItemRendererRegistry $itemRendererRegistry, ItemService $itemService, AlertsManager $alertsManager,
-        BreadcrumbTrail $breadcrumbTrail
+        BreadcrumbTrail $breadcrumbTrail, UrlGenerator $urlGenerator
     )
     {
         parent::__construct(
             $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $cachedItemService,
-            $itemRendererRegistry, $itemService, $alertsManager
+            $itemRendererRegistry, $itemService, $alertsManager, $urlGenerator
         );
 
         $this->breadcrumbTrail = $breadcrumbTrail;

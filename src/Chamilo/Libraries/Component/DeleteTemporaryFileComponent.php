@@ -6,10 +6,12 @@ use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
 use Chamilo\Libraries\Manager;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Exception;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
 
@@ -25,18 +27,19 @@ class DeleteTemporaryFileComponent extends Manager
 
     protected ConfigurablePathBuilder $configurablePathBuilder;
 
+    protected Filesystem $filesystem;
+
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        ConfigurablePathBuilder $configurablePathBuilder
+        ConfigurablePathBuilder $configurablePathBuilder, Filesystem $filesystem, UrlGenerator $urlGenerator
     )
     {
-        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
 
         $this->configurablePathBuilder = $configurablePathBuilder;
+        $this->filesystem = $filesystem;
     }
-
-    // Input parameters
 
     public function run(?User $currentUser = null): Response
     {
@@ -56,8 +59,15 @@ class DeleteTemporaryFileComponent extends Manager
         }
     }
 
+    // Input parameters
+
     public function getConfigurablePathBuilder(): ConfigurablePathBuilder
     {
         return $this->configurablePathBuilder;
+    }
+
+    public function getFilesystem(): Filesystem
+    {
+        return $this->filesystem;
     }
 }

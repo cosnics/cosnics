@@ -1,11 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Component;
 
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
+use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Manager;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\BaseFooterRenderer;
@@ -22,16 +25,34 @@ use Symfony\Component\Translation\Translator;
  */
 class CalendarPopupComponent extends Manager implements NoAuthenticationSupportInterface
 {
+    protected BaseFooterRenderer $baseFooterRenderer;
+
+    protected BaseHeaderRenderer $baseHeaderRenderer;
+
+    protected string $defaultFirstDayOfWeek;
+
     protected ResourceManager $resourceManager;
+
+    protected UserService $userService;
+
+    protected WebPathBuilder $webPathBuilder;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, ResourceManager $resourceManager
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, ResourceManager $resourceManager,
+        WebPathBuilder $webPathBuilder, UserService $userService, UrlGenerator $urlGenerator,
+        BaseFooterRenderer $baseFooterRenderer, BaseHeaderRenderer $baseHeaderRenderer, string $defaultFirstDayOfWeek
     )
     {
-        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator);
+        parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
 
         $this->resourceManager = $resourceManager;
+        $this->webPathBuilder = $webPathBuilder;
+        $this->userService = $userService;
+        $this->baseFooterRenderer = $baseFooterRenderer;
+        $this->baseHeaderRenderer = $baseHeaderRenderer;
+
+        $this->defaultFirstDayOfWeek = $defaultFirstDayOfWeek;
     }
 
     public function run(?User $currentUser = null): Response
@@ -50,8 +71,7 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
         ];
 
         $startOfWeek = $this->getUserService()->findUserSetting(
-            $currentUser, 'cosnics.libraries.calendar.firstDayOfWeek',
-            $this->getContainer()->getParameter('cosnics.libraries.calendar.firstDayOfWeek')
+            $currentUser, 'cosnics.libraries.calendar.firstDayOfWeek', $this->getDefaultFirstDayOfWeek()
         );
 
         if ($startOfWeek == 'sunday') {
@@ -113,18 +133,33 @@ class CalendarPopupComponent extends Manager implements NoAuthenticationSupportI
         return new Response(implode(PHP_EOL, $html));
     }
 
+    public function getDefaultFirstDayOfWeek(): string
+    {
+        return $this->defaultFirstDayOfWeek;
+    }
+
     protected function getFooterRenderer(): BaseFooterRenderer
     {
-        return $this->getService(BaseFooterRenderer::class);
+        return $this->baseFooterRenderer;
     }
 
     protected function getHeaderRenderer(): BaseHeaderRenderer
     {
-        return $this->getService(BaseHeaderRenderer::class);
+        return $this->baseHeaderRenderer;
     }
 
     public function getResourceManager(): ResourceManager
     {
         return $this->resourceManager;
+    }
+
+    public function getUserService(): UserService
+    {
+        return $this->userService;
+    }
+
+    public function getWebPathBuilder(): WebPathBuilder
+    {
+        return $this->webPathBuilder;
     }
 }
