@@ -44,7 +44,7 @@ class CalendarRepository
 
     public function __construct(
         ConfigurablePathBuilder $configurablePathBuilder, UrlGenerator $urlGenerator, UserService $userService,
-        ?User $currentUser = null, ?string $clientId = null, ?string $clientSecret = null, ?string $developerKey = null
+        ?string $clientId = null, ?string $clientSecret = null, ?string $developerKey = null
     )
     {
         $this->urlGenerator = $urlGenerator;

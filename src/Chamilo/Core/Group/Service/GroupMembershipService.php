@@ -68,7 +68,7 @@ class GroupMembershipService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function emptyGroup(Group $group): bool
+    public function emptyGroup(Group $group, ?User $executingUser = null): bool
     {
         $impactedUserIds = $this->groupsTreeTraverser->findUserIdentifiersForGroup($group);
 
@@ -78,7 +78,7 @@ class GroupMembershipService
             throw new RuntimeException('Could not empty the group with id ' . $group->getId());
         }
 
-        $this->getEventDispatcher()->dispatch(new AfterGroupEmptyEvent($group, $impactedUserIds));
+        $this->getEventDispatcher()->dispatch(new AfterGroupEmptyEvent($group, $impactedUserIds, $executingUser));
 
         return true;
     }
@@ -233,7 +233,7 @@ class GroupMembershipService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function subscribeUserToGroup(Group $group, User $user): GroupRelUser
+    public function subscribeUserToGroup(Group $group, User $user, ?User $executingUser = null): GroupRelUser
     {
         $groupRelation =
             $this->getGroupMembershipRepository()->findGroupRelUserByGroupAndUserId($group->getId(), $user->getId());
@@ -250,7 +250,7 @@ class GroupMembershipService
                 );
             }
 
-            $this->getEventDispatcher()->dispatch(new AfterGroupSubscribeEvent($group, $user));
+            $this->getEventDispatcher()->dispatch(new AfterGroupSubscribeEvent($group, $user, $executingUser));
         }
 
         return $groupRelation;
@@ -263,7 +263,7 @@ class GroupMembershipService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      */
-    public function synchronizeGroup(Group $group, array $userIdentifiers): bool
+    public function synchronizeGroup(Group $group, array $userIdentifiers, ?User $executingUser = null): bool
     {
         $currentUserIdentifiers = $this->findSubscribedUserIdentifiersForGroupIdentifier($group->getId());
 
@@ -273,13 +273,13 @@ class GroupMembershipService
         $newUsers = $this->getUserService()->findUsersByIdentifiers($newUserIdentifiers);
 
         foreach ($newUsers as $newUser) {
-            $this->subscribeUserToGroup($group, $newUser);
+            $this->subscribeUserToGroup($group, $newUser, $executingUser);
         }
 
         $oldUsers = $this->getUserService()->findUsersByIdentifiers($oldUserIdentifiers);
 
         foreach ($oldUsers as $oldUser) {
-            $this->unsubscribeUserFromGroup($group, $oldUser);
+            $this->unsubscribeUserFromGroup($group, $oldUser, $executingUser);
         }
 
         return true;
@@ -289,7 +289,7 @@ class GroupMembershipService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function unsubscribeAllUsersFromGroup(Group $group): bool
+    public function unsubscribeAllUsersFromGroup(Group $group, ?User $executingUser = null): bool
     {
         $groupUserRelations =
             $this->getGroupMembershipRepository()->getGroupUserRelationsByGroupIdentifier($group->getId());
@@ -306,7 +306,8 @@ class GroupMembershipService
 
             $this->getEventDispatcher()->dispatch(
                 new AfterGroupUnsubscribeEvent(
-                    $group, $this->getUserService()->findUserByIdentifier($groupUserRelation->getUserId())
+                    $group, $this->getUserService()->findUserByIdentifier($groupUserRelation->getUserId()),
+                    $executingUser
                 )
             );
         }
@@ -333,7 +334,7 @@ class GroupMembershipService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function unsubscribeUserFromGroup(Group $group, User $user): bool
+    public function unsubscribeUserFromGroup(Group $group, User $user, ?User $executingUser = null): bool
     {
         $groupRelation =
             $this->getGroupMembershipRepository()->findGroupRelUserByGroupAndUserId($group->getId(), $user->getId());
@@ -353,7 +354,7 @@ class GroupMembershipService
             );
         }
 
-        $this->getEventDispatcher()->dispatch(new AfterGroupUnsubscribeEvent($group, $user));
+        $this->getEventDispatcher()->dispatch(new AfterGroupUnsubscribeEvent($group, $user, $executingUser));
 
         return true;
     }

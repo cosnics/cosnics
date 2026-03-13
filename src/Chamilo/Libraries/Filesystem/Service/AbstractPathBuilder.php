@@ -108,7 +108,7 @@ abstract class AbstractPathBuilder
     public function getTemplatesPath(string $namespace = 'Chamilo\Libraries'): string
     {
         return $this->cache[self::TEMPLATES][$namespace] =
-            $this->getResourcesPath($namespace) . 'Templates' . $this->getDirectorySeparator();
+            $this->getResourcesPath($namespace) . 'Template' . $this->getDirectorySeparator();
     }
 
     public function getTranslationPath(string $namespace = 'Chamilo\Libraries'): string

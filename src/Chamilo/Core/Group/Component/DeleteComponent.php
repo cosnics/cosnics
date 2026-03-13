@@ -55,7 +55,7 @@ class DeleteComponent extends Manager
             foreach ($ids as $id) {
                 $group = $groupService->findGroupByIdentifier($id);
 
-                if (!$groupService->deleteGroup($group)) {
+                if (!$groupService->deleteGroup($group, $currentUser)) {
                     $failures ++;
                 }
             }

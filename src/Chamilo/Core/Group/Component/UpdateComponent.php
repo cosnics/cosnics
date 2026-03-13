@@ -52,7 +52,7 @@ class UpdateComponent extends Manager
             );
 
             if ($form->validate()) {
-                $success = $form->updateGroup();
+                $success = $form->updateGroup($currentUser);
                 $group = $form->getGroup();
                 $message = $success ? $translator->trans(
                     'ObjectUpdated', ['%Object%' => $translator->trans('Group', [], Manager::CONTEXT)],

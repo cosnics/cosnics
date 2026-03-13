@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Group\Architecture\EventDispatcher\Event;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * @package Chamilo\Core\Group\Architecture\EventDispatcher\Event
@@ -19,9 +20,9 @@ class AfterGroupDeleteEvent extends AbstractGroupEvent
      */
     protected array $subGroupIdentifiers = [];
 
-    public function __construct(Group $group, array $subGroupIdentifiers = [], array $impactUserIdentifiers = [])
+    public function __construct(Group $group, array $subGroupIdentifiers = [], array $impactUserIdentifiers = [], ?User $executingUser = null)
     {
-        parent::__construct($group);
+        parent::__construct($group, $executingUser);
 
         $this->subGroupIdentifiers = $subGroupIdentifiers;
         $this->impactUserIdentifiers = $impactUserIdentifiers;

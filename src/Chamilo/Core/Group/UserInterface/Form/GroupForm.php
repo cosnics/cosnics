@@ -3,6 +3,7 @@ namespace Chamilo\Core\Group\UserInterface\Form;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
@@ -116,7 +117,15 @@ class GroupForm extends FormValidator
         $group->setCode($values[Group::PROPERTY_CODE]);
         $group->setParentId($values[NestedSet::PROPERTY_PARENT_ID]);
 
-        return $this->getGroupService()->createGroup($group);
+        return $this->getGroupService()->createGroup($group, $this->getExecutingUser());
+    }
+
+    protected function getExecutingUser(): ?User
+    {
+        /**
+         * @var \Chamilo\Core\User\Storage\DataClass\User
+         */
+        return $this->getService('Chamilo\Core\User\CurrentUser');
     }
 
     public function getGroup(): Group
@@ -151,12 +160,11 @@ class GroupForm extends FormValidator
     }
 
     /**
-     * @return bool
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
      */
-    public function updateGroup(): bool
+    public function updateGroup(?User $executingUser = null): bool
     {
         $group = $this->group;
         $values = $this->exportValues();
@@ -165,14 +173,14 @@ class GroupForm extends FormValidator
         $group->setDescription($values[Group::PROPERTY_DESCRIPTION]);
         $group->setCode($values[Group::PROPERTY_CODE]);
 
-        if (!$this->getGroupService()->updateGroup($group)) {
+        if (!$this->getGroupService()->updateGroup($group, $executingUser)) {
             return false;
         }
 
         $newParentGroupIdentifier = $values[NestedSet::PROPERTY_PARENT_ID];
 
         if ($group->getParentId() != $newParentGroupIdentifier) {
-            return $this->getGroupService()->moveGroup($group, $newParentGroupIdentifier);
+            return $this->getGroupService()->moveGroup($group, $newParentGroupIdentifier, $this->getExecutingUser());
         }
 
         return true;

@@ -70,7 +70,7 @@ class UnsubscribeComponent extends Manager
                 $userToUnsubscribe = $userService->findUserByIdentifier($groupUserRelation->getUserId());
 
                 try {
-                    $groupMembershipService->unsubscribeUserFromGroup($group, $userToUnsubscribe);
+                    $groupMembershipService->unsubscribeUserFromGroup($group, $userToUnsubscribe, $currentUser);
                 }
                 catch (RuntimeException) {
                     $failures ++;

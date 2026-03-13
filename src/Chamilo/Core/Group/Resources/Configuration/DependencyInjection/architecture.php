@@ -9,9 +9,7 @@ return static function (ContainerConfigurator $container) {
     $services = $container->services();
     $services->defaults()->public()->autowire()->autoconfigure();
 
-    $services->set(ActivityGroupEventSubscriber::class)->args(
-        ['$currentUser' => service('Chamilo\Core\User\CurrentUser')]
-    )->tag(EventSubscriberInterface::class);
+    $services->set(ActivityGroupEventSubscriber::class)->tag(EventSubscriberInterface::class);
 
     $services->set(UserEventSubscriber::class)->tag(EventSubscriberInterface::class);
 };

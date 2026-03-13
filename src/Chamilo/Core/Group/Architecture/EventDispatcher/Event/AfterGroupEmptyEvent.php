@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Group\Architecture\EventDispatcher\Event;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * @package Chamilo\Core\Group\Architecture\EventDispatcher\Event
@@ -14,9 +15,9 @@ class AfterGroupEmptyEvent extends AbstractGroupEvent
      */
     protected array $impactUserIdentifiers = [];
 
-    public function __construct(Group $group, array $impactUserIdentifiers = [])
+    public function __construct(Group $group, array $impactUserIdentifiers = [], ?User $executingUser = null)
     {
-        parent::__construct($group);
+        parent::__construct($group, $executingUser);
 
         $this->impactUserIdentifiers = $impactUserIdentifiers;
     }

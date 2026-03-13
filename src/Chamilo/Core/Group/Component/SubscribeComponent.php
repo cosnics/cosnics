@@ -72,7 +72,7 @@ class SubscribeComponent extends Manager
 
                 if (!$groupUserRelation instanceof GroupRelUser) {
                     try {
-                        $groupMembershipService->subscribeUserToGroup($group, $userToSubscribe);
+                        $groupMembershipService->subscribeUserToGroup($group, $userToSubscribe, $currentUser);
                     }
                     catch (RuntimeException) {
                         $failures ++;

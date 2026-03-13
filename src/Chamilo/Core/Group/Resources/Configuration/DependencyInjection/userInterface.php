@@ -1,6 +1,7 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Chamilo\Core\Group\UserInterface\Form\GroupMoveType;
 use Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeDataProvider;
 use Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider;
 use Chamilo\Core\Group\UserInterface\Table\GroupTableRenderer;
@@ -26,4 +27,6 @@ return static function (ContainerConfigurator $container) {
     $services->set(GroupTableRenderer::class);
     $services->set(SubscribedUserTableRenderer::class);
     $services->set(NonSubscribedUserTableRenderer::class);
+
+    $services->set(GroupMoveType::class);
 };

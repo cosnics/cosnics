@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Group\UserInterface\Form;
 
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
 use Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer;
@@ -69,15 +68,6 @@ class GroupMoveForm extends FormValidator
     public function getNewParent()
     {
         return $this->exportValue(self::PROPERTY_LOCATION);
-    }
-
-    /**
-     * @throws \Throwable
-     * @throws \QuickformException
-     */
-    public function moveGroup(): bool
-    {
-        return $this->getService(GroupService::class)->moveGroup($this->group, $this->getNewParent());
     }
 
     public function setDefaults(array $defaultValues = [], $filter = null): void

@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Group\Architecture\EventDispatcher\Event;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * @package Chamilo\Core\Group\Architecture\EventDispatcher\Event
@@ -13,9 +14,9 @@ class AfterGroupMoveEvent extends AbstractGroupEvent
 
     protected Group $oldParentGroup;
 
-    public function __construct(Group $group, Group $oldParentGroup, Group $newParentGroup)
+    public function __construct(Group $group, Group $oldParentGroup, Group $newParentGroup, ?User $executingUser = null)
     {
-        parent::__construct($group);
+        parent::__construct($group, $executingUser);
 
         $this->oldParentGroup = $oldParentGroup;
         $this->newParentGroup = $newParentGroup;

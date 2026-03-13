@@ -12,9 +12,9 @@ abstract class AbstractGroupMembershipEvent extends AbstractGroupEvent
 {
     protected User $user;
 
-    public function __construct(Group $group, User $user)
+    public function __construct(Group $group, User $user, ?User $executingUser = null)
     {
-        parent::__construct($group);
+        parent::__construct($group, $executingUser);
 
         $this->user = $user;
     }

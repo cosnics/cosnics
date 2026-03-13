@@ -93,13 +93,13 @@ class GroupService
     /**
      * @throws \Throwable
      */
-    public function createGroup(Group $group): bool
+    public function createGroup(Group $group, ?User $executingUser = null): bool
     {
         if (!$this->getGroupRepository()->createGroup($group)) {
             return false;
         }
 
-        $this->getEventDispatcher()->dispatch(new AfterGroupCreateEvent($group));
+        $this->getEventDispatcher()->dispatch(new AfterGroupCreateEvent($group, $executingUser));
 
         return true;
     }
@@ -107,7 +107,7 @@ class GroupService
     /**
      * @throws \Throwable
      */
-    public function deleteGroup(Group $group): bool
+    public function deleteGroup(Group $group, ?User $executingUser = null): bool
     {
         $subGroupIds = [];
         $impactedUserIds = $this->groupsTreeTraverser->findUserIdentifiersForGroup($group, true, true);
@@ -122,7 +122,9 @@ class GroupService
             return false;
         }
 
-        $this->getEventDispatcher()->dispatch(new AfterGroupDeleteEvent($group, $subGroupIds, $impactedUserIds));
+        $this->getEventDispatcher()->dispatch(
+            new AfterGroupDeleteEvent($group, $subGroupIds, $impactedUserIds, $executingUser)
+        );
 
         return true;
     }
@@ -307,7 +309,7 @@ class GroupService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function moveGroup(Group $group, string $parentGroupIdentifier): bool
+    public function moveGroup(Group $group, string $parentGroupIdentifier, ?User $executingUser = null): bool
     {
         $oldParentGroup = $this->findGroupByIdentifier($group->getParentId());
         $newParentGroup = $this->findGroupByIdentifier($parentGroupIdentifier);
@@ -316,7 +318,9 @@ class GroupService
             return false;
         }
 
-        $this->getEventDispatcher()->dispatch(new AfterGroupMoveEvent($group, $oldParentGroup, $newParentGroup));
+        $this->getEventDispatcher()->dispatch(
+            new AfterGroupMoveEvent($group, $oldParentGroup, $newParentGroup, $executingUser)
+        );
 
         return true;
     }
@@ -324,36 +328,39 @@ class GroupService
     /**
      * @param string $groupCode
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param ?\Chamilo\Core\User\Storage\DataClass\User $executingUser
      *
      * @return \Chamilo\Core\Group\Storage\DataClass\GroupRelUser
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function subscribeUserToGroupByCode(string $groupCode, User $user): GroupRelUser
+    public function subscribeUserToGroupByCode(string $groupCode, User $user, ?User $executingUser = null): GroupRelUser
     {
-        return $this->getGroupMembershipService()->subscribeUserToGroup($this->findGroupByCode($groupCode), $user);
+        return $this->getGroupMembershipService()->subscribeUserToGroup(
+            $this->findGroupByCode($groupCode), $user, $executingUser
+        );
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function truncateGroup(Group $group): bool
+    public function truncateGroup(Group $group, ?User $executingUser = null): bool
     {
-        return $this->getGroupMembershipService()->unsubscribeAllUsersFromGroup($group);
+        return $this->getGroupMembershipService()->unsubscribeAllUsersFromGroup($group, $executingUser);
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updateGroup(Group $group): bool
+    public function updateGroup(Group $group, ?User $executingUser = null): bool
     {
         if (!$this->getGroupRepository()->updateGroup($group)) {
             return false;
         }
 
-        $this->getEventDispatcher()->dispatch(new AfterGroupUpdateEvent($group));
+        $this->getEventDispatcher()->dispatch(new AfterGroupUpdateEvent($group, $executingUser));
 
         return true;
     }

@@ -28,7 +28,9 @@ return static function (ContainerConfigurator $container) {
         ['$jsTreeMenuDataProvider' => service('Chamilo\Core\Group\UserInterface\Menu\GroupJsTreeMenuDataProvider')]
     )->tag(ApplicationInterface::class);
     $services->set(GroupXmlFeedComponent::class)->tag(ApplicationInterface::class);
-    $services->set(MoveComponent::class)->tag(ApplicationInterface::class);
+    $services->set(MoveComponent::class)->args(['$twigFormEnvironment' => service('Twig\Environment\Form')])->tag(
+        ApplicationInterface::class
+    );
     $services->set(SubscribeComponent::class)->tag(ApplicationInterface::class);
     $services->set(TruncateComponent::class)->tag(ApplicationInterface::class);
     $services->set(UnsubscribeComponent::class)->tag(ApplicationInterface::class);
