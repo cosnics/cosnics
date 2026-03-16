@@ -1,12 +1,15 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\ButtonsType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\SaveResetButtonType;
 use Chamilo\Libraries\UserInterface\Form\Factory\FormFactoryBuilder;
 use Chamilo\Libraries\UserInterface\Form\Factory\FormValidatorHtmlEditorOptionsFactory;
 use Chamilo\Libraries\UserInterface\Form\Factory\TwigFormRendererFactory;
 use Chamilo\Libraries\UserInterface\Form\Service\FormValidatorHtmlEditorRenderer;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Twig\Environment;
 
 return static function (ContainerConfigurator $container) {
@@ -34,4 +37,6 @@ return static function (ContainerConfigurator $container) {
     $services->set('Twig\Environment\Form', Environment::class)->factory(
         [service(TwigFormRendererFactory::class), 'getFormRenderer']
     );
+
+    $services->set(ButtonsType::class)->tag(FormTypeInterface::class);
 };

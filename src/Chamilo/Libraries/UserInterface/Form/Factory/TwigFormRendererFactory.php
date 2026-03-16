@@ -47,7 +47,7 @@ class TwigFormRendererFactory
         $twig->addExtension(new TranslationExtension($this->getTranslator()));
 
         $formEngine = new TwigRendererEngine(
-            ['bootstrap_5_layout.html.twig'], $twig
+            ['form.bootstrap.html.twig'], $twig
         );
 
         $twig->addExtension(new FormExtension());

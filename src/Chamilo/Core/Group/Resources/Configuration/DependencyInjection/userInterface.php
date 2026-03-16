@@ -9,6 +9,7 @@ use Chamilo\Core\Group\UserInterface\Table\NonSubscribedUserTableRenderer;
 use Chamilo\Core\Group\UserInterface\Table\SubscribedUserTableRenderer;
 use Chamilo\Libraries\UserInterface\Tree\Service\JsTreeMenuDataProvider;
 use Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer;
+use Symfony\Component\Form\FormTypeInterface;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
@@ -28,5 +29,7 @@ return static function (ContainerConfigurator $container) {
     $services->set(SubscribedUserTableRenderer::class);
     $services->set(NonSubscribedUserTableRenderer::class);
 
-    $services->set(GroupMoveType::class);
+    $services->set(GroupMoveType::class)->args(
+        ['$optionsTreeRenderer' => service('Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeRenderer')]
+    )->tag(FormTypeInterface::class);
 };

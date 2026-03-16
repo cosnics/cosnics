@@ -13,6 +13,7 @@ use Chamilo\Libraries\DependencyInjection\CompilerPass\ConditionTranslatorCompil
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConditionVariableTranslatorCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\EventDispatcherCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\FormTypeCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\HashingCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\HtmlCalendarRendererCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\MailerCompilerPass;
@@ -97,5 +98,6 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         $container->addCompilerPass(new TabRendererCompilerPass());
         $container->addCompilerPass(new HtmlCalendarRendererCompilerPass());
         $container->addCompilerPass(new UserExceptionRendererCompilerPass());
+        $container->addCompilerPass(new FormTypeCompilerPass());
     }
 }

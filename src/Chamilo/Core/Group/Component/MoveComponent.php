@@ -6,6 +6,7 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\UserInterface\Form\GroupMoveType;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -86,7 +87,11 @@ class MoveComponent extends Manager
             ]
         );
 
-        $form = $this->getFormFactory()->create(GroupMoveType::class, null, ['action' => $formUri]);
+        $form = $this->getFormFactory()->create(
+            GroupMoveType::class,
+            [NestedSet::PROPERTY_PARENT_ID => $group->getParentId(), Group::PROPERTY_NAME => $group->getName()],
+            ['action' => $formUri]
+        );
         $form->handleRequest($this->getRequest());
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -117,7 +122,6 @@ class MoveComponent extends Manager
             $html = [];
 
             $html[] = $this->renderHeader($currentUser);
-            $html[] = $translator->trans('Group') . ': ' . $group->getName();
             $html[] = $this->getTwigFormEnvironment()->render('form.html.twig', [
                 'form' => $form->createView(),
             ]);

@@ -42,7 +42,7 @@ class OptionsTreeRenderer
                 $prefix = '';
             }
 
-            $options[$treeNode->getIdentifier()] = $prefix . $treeNode->getText();
+            $options[$prefix . $treeNode->getText()] = $treeNode->getIdentifier();
 
             $this->processTreeNodes($options, $treeNode->getChildNodes(), $level + 1);
         }
