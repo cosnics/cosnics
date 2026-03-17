@@ -51,6 +51,7 @@ class TwigFormRendererFactory
         );
 
         $twig->addExtension(new FormExtension());
+
         $twig->addRuntimeLoader(new FactoryRuntimeLoader([
             FormRenderer::class => fn() => new FormRenderer($formEngine),
         ]));

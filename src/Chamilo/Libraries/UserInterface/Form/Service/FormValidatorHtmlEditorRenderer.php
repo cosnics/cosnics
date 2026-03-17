@@ -6,8 +6,8 @@ use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidatorHtmlEditorOptions;
-use Chamilo\Libraries\UserInterface\Form\Factory\FormValidatorHtmlEditorOptionsFactory;
+use Chamilo\Libraries\UserInterface\Form\Factory\HtmlEditorOptionsFactory;
+use Doctrine\Common\Collections\ArrayCollection;
 use HTML_QuickForm_html;
 use HTML_QuickForm_Rule_Required;
 use HTML_QuickForm_textarea;
@@ -31,7 +31,7 @@ class FormValidatorHtmlEditorRenderer
     public const string SETTING_TOOLBAR = 'toolbar';
     public const string SETTING_WIDTH = 'width';
 
-    protected FormValidatorHtmlEditorOptionsFactory $formValidatorHtmlEditorOptionsFactory;
+    protected HtmlEditorOptionsFactory $formValidatorHtmlEditorOptionsFactory;
 
     protected ResourceManager $resourceManager;
 
@@ -43,7 +43,7 @@ class FormValidatorHtmlEditorRenderer
 
     public function __construct(
         ResourceManager $resourceManager, SystemPathBuilder $systemPathBuilder, Translator $translator,
-        WebPathBuilder $webPathBuilder, FormValidatorHtmlEditorOptionsFactory $formValidatorHtmlEditorOptionsFactory
+        WebPathBuilder $webPathBuilder, HtmlEditorOptionsFactory $formValidatorHtmlEditorOptionsFactory
     )
     {
         $this->formValidatorHtmlEditorOptionsFactory = $formValidatorHtmlEditorOptionsFactory;
@@ -81,8 +81,8 @@ class FormValidatorHtmlEditorRenderer
      * @throws \QuickformException
      */
     public function createHtmlEditor(
-        FormValidator $formValidator, string $name, string $label,
-        FormValidatorHtmlEditorOptions $formValidatorHtmlOptions, array $attributes = []
+        FormValidator $formValidator, string $name, string $label, ArrayCollection $formValidatorHtmlOptions,
+        array $attributes = []
     ): HTML_QuickForm_textarea
     {
         $formValidator->addElement(HTML_QuickForm_html::class, implode(PHP_EOL, $this->getJavascriptForCreate()));
@@ -96,7 +96,7 @@ class FormValidatorHtmlEditorRenderer
         return $formValidator->createElement(HTML_QuickForm_textarea::class, $name, $label, $attributes);
     }
 
-    protected function getFormValidatorHtmlEditorOptionsFactory(): FormValidatorHtmlEditorOptionsFactory
+    protected function getFormValidatorHtmlEditorOptionsFactory(): HtmlEditorOptionsFactory
     {
         return $this->formValidatorHtmlEditorOptionsFactory;
     }
@@ -109,30 +109,13 @@ class FormValidatorHtmlEditorRenderer
         $webPathBuilder = $this->getWebPathBuilder();
         $resourceManager = $this->getResourceManager();
 
-        $configFile = $this->getSystemPathBuilder()->getBasePath() .
-            '../web/Chamilo/Libraries/Resources/Plugin/HtmlEditor/CkeditorInstanceConfig.js';
-
-        $timestamp = filemtime($configFile);
-
         $javascript = [];
 
-        $javascript[] = '<script>';
-        $javascript[] = 'window.CKEDITOR_BASEPATH = "' . $webPathBuilder->getPluginPath(StringUtilities::LIBRARIES) .
-            '" + "HtmlEditor/Ckeditor/"';
-        $javascript[] = '</script>';
-
         $javascript[] = $resourceManager->getResourceHtml(
-            $webPathBuilder->getPluginPath(StringUtilities::LIBRARIES) . 'HtmlEditor/Ckeditor/ckeditor.js'
-        );
-        $javascript[] = '<script>';
-        $javascript[] = 'CKEDITOR.timestamp = "' . $timestamp . '";';
-        $javascript[] = 'var web_path = \'' . $webPathBuilder->getBasePath() . '\';';
-        $javascript[] = '</script>';
-        $javascript[] = $resourceManager->getResourceHtml(
-            $webPathBuilder->getPluginPath(StringUtilities::LIBRARIES) . 'HtmlEditor/CkeditorGlobalConfig.js'
+            $webPathBuilder->getPluginPath(StringUtilities::LIBRARIES) . 'Quill/quill.js'
         );
         $javascript[] = $resourceManager->getResourceHtml(
-            $webPathBuilder->getPluginPath(StringUtilities::LIBRARIES) . 'HtmlEditor/Ckeditor/adapters/jquery.js'
+            $webPathBuilder->getPluginPath(StringUtilities::LIBRARIES) . 'Quill/quill.snow.css'
         );
 
         return $javascript;
@@ -141,25 +124,24 @@ class FormValidatorHtmlEditorRenderer
     /**
      * @return string[]
      */
-    protected function getJavascriptForRender(string $name, FormValidatorHtmlEditorOptions $formValidatorHtmlOptions
-    ): array
+    protected function getJavascriptForRender(string $name, ArrayCollection $formValidatorHtmlOptions): array
     {
         $javascript = [];
 
+        $javascript[] = '<div id="' . $name . '" class="form-control" name="' . $name . '"></div>';
         $javascript[] = '<script>';
-        $javascript[] = 'var web_path = \'' . $this->getWebPathBuilder()->getBasePath() . '\'';
-        $javascript[] = '$(function ()';
-        $javascript[] = '{';
-        $javascript[] = '	$(document).ready(function ()';
-        $javascript[] = '	{';
-        $javascript[] = '         if(typeof $el == \'undefined\'){';
-        $javascript[] = '           $el = new Array()';
-        $javascript[] = '         }';
-        $javascript[] = '	  $el.push($("textarea.html_editor[name=\'' . $name . '\']").ckeditor({';
-        $javascript[] = $formValidatorHtmlOptions->renderOptions();
-        $javascript[] = '		}, function(){ $(document).trigger(\'ckeditor_loaded\'); }));';
-        $javascript[] = '	}); ';
-        $javascript[] = '});';
+        $javascript[] = '  
+        
+        const quill = new Quill(\'#' . $name . '\', {
+    theme: \'snow\'
+  });
+  
+  const form = document.querySelector("form");
+  form.addEventListener("formdata", (event) => {
+          event.formData.append("' . $name . '", quill.root.innerHTML);
+        });
+  
+  ';
         $javascript[] = '</script>';
 
         return $javascript;

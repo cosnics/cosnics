@@ -12,3 +12,47 @@
         {%- endif -%}
     {% endfor %}
 {%- endblock choice_widget_options -%}
+
+{%- block html_row -%}
+    {{ block('html_widget') }}
+{%- endblock html_row -%}
+
+{%- block html_widget -%}
+    {{ html|raw }}
+{%- endblock html_widget -%}
+
+{%- block visual_content_widget -%}
+    <div class="form-control">{{ content|raw }}</div>
+{%- endblock visual_content_widget -%}
+
+{%- block message_row -%}
+    <div role="alert" class="callout callout-{{ form.vars.messageType }}">
+        {%- if label is defined -%}
+            <h4 class="callout-heading">{{ label|raw }}</h4>
+        {%- endif -%}
+
+        {{ block('message_widget') }}
+    </div>
+{%- endblock message_row -%}
+
+{%- block message_widget -%}
+    <p>{{ message|raw }}</p>
+{%- endblock message_widget -%}
+
+{%- block category_row -%}
+    <h4 class="form-category">{{ label|raw }}</h4>
+{%- endblock category_row -%}
+
+{%- block html_editor_widget -%}
+    <div id="{{ name }}" name="{{ name }}">{{ value|raw }}</div>
+    {{ javascript|raw }}
+    <script>
+        const quill_{{ name }} = new Quill('#{{ name }}', {
+            theme: 'snow'
+        });
+        const form = document.querySelector('form');
+        form.addEventListener('formdata', (event) => {
+            event.formData.append('{{ name }}', JSON.stringify(quill_{{ name }}.getContents().ops));
+        });
+    </script>
+{%- endblock html_editor_widget -%}

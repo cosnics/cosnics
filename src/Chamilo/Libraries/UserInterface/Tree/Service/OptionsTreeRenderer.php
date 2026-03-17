@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Tree\Service;
 
+use Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\OptionsTreeChoice;
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * @package Chamilo\Libraries\UserInterface\Tree\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -14,13 +17,19 @@ class OptionsTreeRenderer
         $this->optionsTreeDataProvider = $optionsTreeDataProvider;
     }
 
-    public function getOptions(?string $identifier = null): array
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\OptionsTreeChoice>
+     */
+    public function getOptions(
+        ?string $identifier = null, array $excludedIdentifiers = [], array $disabledIdentifiers = []
+    ): ArrayCollection
     {
-        $treeNodes = $this->getOptionsTreeDataProvider()->getData($identifier);
-        $options = [];
-        $this->processTreeNodes($options, $treeNodes);
+        $treeNodes = $this->getOptionsTreeDataProvider()->getData($identifier, $excludedIdentifiers);
 
-        return $options;
+        $optionTreeChoices = new ArrayCollection();
+        $this->processTreeNodes($optionTreeChoices, $treeNodes, 0, $disabledIdentifiers);
+
+        return $optionTreeChoices;
     }
 
     public function getOptionsTreeDataProvider(): OptionsTreeDataProvider
@@ -29,10 +38,12 @@ class OptionsTreeRenderer
     }
 
     /**
-     * @param string[] $options
+     * @param ArrayCollection<\Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\OptionsTreeChoice> $optionTreeChoices
      * @param \Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\TreeNode[] $treeNodes
      */
-    public function processTreeNodes(array &$options, array $treeNodes, int $level = 0): void
+    public function processTreeNodes(
+        ArrayCollection $optionTreeChoices, array $treeNodes, int $level = 0, array $disabledIdentifiers = []
+    ): void
     {
         foreach ($treeNodes as $treeNode) {
             if ($level > 0) {
@@ -42,9 +53,17 @@ class OptionsTreeRenderer
                 $prefix = '';
             }
 
-            $options[$prefix . $treeNode->getText()] = $treeNode->getIdentifier();
+            $attributes = [];
 
-            $this->processTreeNodes($options, $treeNode->getChildNodes(), $level + 1);
+            if (in_array($treeNode->getIdentifier(), $disabledIdentifiers)) {
+                $attributes['disabled'] = 'disabled';
+            }
+
+            $optionTreeChoices->add(
+                new OptionsTreeChoice($treeNode->getIdentifier(), $prefix . $treeNode->getText(), $attributes)
+            );
+
+            $this->processTreeNodes($optionTreeChoices, $treeNode->getChildNodes(), $level + 1, $disabledIdentifiers);
         }
     }
 }

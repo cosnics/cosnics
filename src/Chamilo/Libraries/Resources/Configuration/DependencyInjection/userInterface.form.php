@@ -2,9 +2,13 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\ButtonsType;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\SaveResetButtonType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\CategoryType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlEditorType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\MessageType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\VisualContentType;
 use Chamilo\Libraries\UserInterface\Form\Factory\FormFactoryBuilder;
-use Chamilo\Libraries\UserInterface\Form\Factory\FormValidatorHtmlEditorOptionsFactory;
+use Chamilo\Libraries\UserInterface\Form\Factory\HtmlEditorOptionsFactory;
 use Chamilo\Libraries\UserInterface\Form\Factory\TwigFormRendererFactory;
 use Chamilo\Libraries\UserInterface\Form\Service\FormValidatorHtmlEditorRenderer;
 use Symfony\Component\Form\FormFactory;
@@ -17,7 +21,7 @@ return static function (ContainerConfigurator $container) {
     $services->defaults()->public()->autowire()->autoconfigure();
 
     $services->set(FormValidatorHtmlEditorRenderer::class);
-    $services->set(FormValidatorHtmlEditorOptionsFactory::class);
+    $services->set(HtmlEditorOptionsFactory::class);
 
     $services->set(FormFactoryBuilder::class);
 
@@ -39,4 +43,9 @@ return static function (ContainerConfigurator $container) {
     );
 
     $services->set(ButtonsType::class)->tag(FormTypeInterface::class);
+    $services->set(HtmlType::class)->tag(FormTypeInterface::class);
+    $services->set(VisualContentType::class)->tag(FormTypeInterface::class);
+    $services->set(MessageType::class)->tag(FormTypeInterface::class);
+    $services->set(CategoryType::class)->tag(FormTypeInterface::class);
+    $services->set(HtmlEditorType::class)->tag(FormTypeInterface::class);
 };

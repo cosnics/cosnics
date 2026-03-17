@@ -33,7 +33,6 @@
         "econea/nusoap": "0.9.*",
         "ezyang/htmlpurifier": "4.*",
         "google/apiclient": "1.*",
-        "guzzlehttp/guzzle": "7.*",
         "hackzilla/password-generator": "1.*",
         "league/flysystem": "3.*",
         "league/flysystem-ftp": "3.*",
@@ -64,9 +63,9 @@
         "symfony/uid": "7.4.*",
         "symfony/validator": "7.4.*",
         "symfony/yaml": "7.4.*",
+        "friendsofsymfony/ckeditor-bundle": "2.*",
         "twig/twig": "3.21.*",
-        "voku/stringy": "6.*",
-        "gromnan/symfony-config-xml-to-php": "0.2.*"
+        "voku/stringy": "6.*"
     },
     "repositories": [
         {

@@ -19,7 +19,7 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule\HTML_QuickForm
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule\HTML_QuickForm_Rule_DateCompare;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule\HTML_QuickForm_Rule_Filetype;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule\HTML_QuickForm_Rule_Username;
-use Chamilo\Libraries\UserInterface\Form\Factory\FormValidatorHtmlEditorOptionsFactory;
+use Chamilo\Libraries\UserInterface\Form\Factory\HtmlEditorOptionsFactory;
 use Chamilo\Libraries\UserInterface\Form\Service\FormValidatorHtmlEditorRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use HTML_QuickForm;
@@ -827,9 +827,9 @@ class FormValidator extends HTML_QuickForm
         return implode(PHP_EOL, $html);
     }
 
-    protected function getFormValidatorHtmlEditorOptionsFactory(): FormValidatorHtmlEditorOptionsFactory
+    protected function getFormValidatorHtmlEditorOptionsFactory(): HtmlEditorOptionsFactory
     {
-        return $this->getService(FormValidatorHtmlEditorOptionsFactory::class);
+        return $this->getService(HtmlEditorOptionsFactory::class);
     }
 
     protected function getFormValidatorHtmlEditorRenderer(): FormValidatorHtmlEditorRenderer

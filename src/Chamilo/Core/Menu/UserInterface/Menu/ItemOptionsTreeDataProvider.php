@@ -58,7 +58,7 @@ class ItemOptionsTreeDataProvider extends OptionsTreeDataProvider
     /**
      * @return \Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\TreeNode[]
      */
-    public function getData(?string $identifier): array
+    public function getData(?string $identifier, array $excludedIdentifiers = []): array
     {
         $getIdentifier = function (Item $item) {
             return $item->getId();

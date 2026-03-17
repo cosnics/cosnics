@@ -21,6 +21,34 @@ use Symfony\Component\Security\Csrf\TokenStorage\SessionTokenStorage;
  */
 class FormFactoryBuilder
 {
+    /**
+     * HTML_QuickForm_advanced_element_finder   ?
+     * HTML_QuickForm_button                    ButtonType
+     * HTML_QuickForm_button_radio              RadioType
+     * HTML_QuickForm_button_reset              ResetType
+     * HTML_QuickForm_button_submit             SubmitType
+     * HTML_QuickForm_category                  CategoryType
+     * HTML_QuickForm_checkbox                  CheckboxType
+     * HTML_QuickForm_date                      DateType
+     *                                          TimeType
+     *                                          DateTimeType
+     * HTML_QuickForm_datepicker
+     * HTML_QuickForm_group                     ?
+     * HTML_QuickForm_hidden                    HiddenType
+     * HTML_QuickForm_html                      HtmlType
+     *                                          MessageType
+     * HTML_QuickForm_image                     ?
+     * HTML_QuickForm_link                      UrlType
+     * HTML_QuickForm_password                  PasswordType
+     * HTML_QuickForm_select                    ChoiceType
+     * HTML_QuickForm_static                    HiddenType
+     *                                          VisualContentType
+     * HTML_QuickForm_stylefile                 FileType
+     * HTML_QuickForm_text                      TextType
+     * HTML_QuickForm_textarea                  TextAreaType
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection<\Symfony\Component\Form\FormTypeInterface>
+     */
     protected ArrayCollection $additionalFormTypes;
 
     protected ChamiloRequest $request;

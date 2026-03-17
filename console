@@ -13,7 +13,7 @@ $container->get(Bootstrap::class)->setup();
 /**
  * @var \Chamilo\Libraries\Protocol\ErrorHandling\Architecture\Interface\ExceptionLoggerInterface $exceptionLogger
  */
-$exceptionLogger = $container->get('Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger');
+$exceptionLogger = $container->get('Chamilo\Libraries\Protocol\ErrorHandling\Service\ExceptionLogger');
 
 /** @var \Symfony\Component\Console\Application $console */
 $console = $container->get('Chamilo\Libraries\Protocol\Console\Console');

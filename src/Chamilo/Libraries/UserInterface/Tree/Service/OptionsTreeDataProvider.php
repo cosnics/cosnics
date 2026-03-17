@@ -33,7 +33,7 @@ abstract class OptionsTreeDataProvider
     /**
      * @return \Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\TreeNode[]
      */
-    abstract public function getData(?string $identifier): array;
+    abstract public function getData(?string $identifier, array $excludedIdentifiers = []): array;
 
     abstract protected function getDataClassByIdentifier(string $identifier): DataClass;
 

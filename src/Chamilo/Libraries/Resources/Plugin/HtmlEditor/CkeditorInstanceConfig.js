@@ -40,9 +40,6 @@ CKEDITOR.editorConfig = function (config) {
         ['Link', 'Unlink', 'Anchor', '-', 'TextColor', 'BGColor', '-', 'Table', 'Embed', 'Mathjax',
             'Smiley', 'Quickquestion', '-', 'Templates', 'SpecialChar', 'Footnotes', 'CodeSnippet', '-', 'Source']];
 
-    config.latexDialogUrl = web_path
-        + 'Chamilo/Libraries/Resources/Plugin/HtmlEditor/Ckeditor/plugins/latex/dialogs/latex.html?a=b';
-
     config.image2_captionedClass = 'image-captioned';
     config.image2_alignClasses = ['align-left', 'align-center', 'align-right'];
 

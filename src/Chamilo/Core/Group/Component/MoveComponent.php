@@ -89,8 +89,8 @@ class MoveComponent extends Manager
 
         $form = $this->getFormFactory()->create(
             GroupMoveType::class,
-            [NestedSet::PROPERTY_PARENT_ID => $group->getParentId(), Group::PROPERTY_NAME => $group->getName()],
-            ['action' => $formUri]
+            [NestedSet::PROPERTY_PARENT_ID => $group->getParentId(), Group::PROPERTY_NAME => $group->getName(), 'description' => '<p>Whiiiiiiiii</><p><strong>Bold</strong> Whiiiiiiiii</>'],
+            ['action' => $formUri, 'disabledGroupIdentifiers' => [$groupIdentifier]]
         );
         $form->handleRequest($this->getRequest());
 

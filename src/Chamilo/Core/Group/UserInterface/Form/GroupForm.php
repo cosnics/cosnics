@@ -53,30 +53,30 @@ class GroupForm extends FormValidator
      */
     public function buildBasicForm(): void
     {
-        $this->addElement(
-            HTML_QuickForm_text::class, Group::PROPERTY_NAME, $this->getTranslation('Name', [], Manager::CONTEXT),
-            ['size' => '50']
-        );
-        $this->addRule(
-            Group::PROPERTY_NAME, $this->getTranslation('ThisFieldIsRequired'), HTML_QuickForm_Rule_Required::class
-        );
-
-        $this->addElement(
-            HTML_QuickForm_text::class, Group::PROPERTY_CODE, $this->getTranslation('Code', [], Manager::CONTEXT),
-            ['size' => '50']
-        );
-        $this->addRule(
-            Group::PROPERTY_CODE, $this->getTranslation('ThisFieldIsRequired'), HTML_QuickForm_Rule_Required::class
-        );
-
-        $this->addElement(
-            HTML_QuickForm_select::class, NestedSet::PROPERTY_PARENT_ID,
-            $this->getTranslation('Location', [], Manager::CONTEXT), $this->getGroupOptionsTreeRenderer()->getOptions()
-        );
-        $this->addRule(
-            NestedSet::PROPERTY_PARENT_ID, $this->getTranslation('ThisFieldIsRequired'),
-            HTML_QuickForm_Rule_Required::class
-        );
+//        $this->addElement(
+//            HTML_QuickForm_text::class, Group::PROPERTY_NAME, $this->getTranslation('Name', [], Manager::CONTEXT),
+//            ['size' => '50']
+//        );
+//        $this->addRule(
+//            Group::PROPERTY_NAME, $this->getTranslation('ThisFieldIsRequired'), HTML_QuickForm_Rule_Required::class
+//        );
+//
+//        $this->addElement(
+//            HTML_QuickForm_text::class, Group::PROPERTY_CODE, $this->getTranslation('Code', [], Manager::CONTEXT),
+//            ['size' => '50']
+//        );
+//        $this->addRule(
+//            Group::PROPERTY_CODE, $this->getTranslation('ThisFieldIsRequired'), HTML_QuickForm_Rule_Required::class
+//        );
+//
+//        $this->addElement(
+//            HTML_QuickForm_select::class, NestedSet::PROPERTY_PARENT_ID,
+//            $this->getTranslation('Location', [], Manager::CONTEXT), $this->getGroupOptionsTreeRenderer()->getOptions()
+//        );
+//        $this->addRule(
+//            NestedSet::PROPERTY_PARENT_ID, $this->getTranslation('ThisFieldIsRequired'),
+//            HTML_QuickForm_Rule_Required::class
+//        );
 
         $this->addHtmlEditor(
             Group::PROPERTY_DESCRIPTION, $this->getTranslation('Description'), false

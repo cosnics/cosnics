@@ -155,52 +155,9 @@ figcaption {
     padding-top: 8px !important;
 }
 
-/**************
- *  CKEditor  *
- **************/
-.cke_chrome {
-    box-shadow: none !important;
-}
-
-body.cke_editable {
-    margin: 15px;
-}
-
-.image-captioned {
-    background: rgba(0, 0, 0, 0.05);
-    border: solid 1px #cccccc;
-    border-radius: 0;
-    color: #555555;
-    display: inline-block;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 0 0 10px !important;
-    text-align: center;
-}
-
-.align-left {
-    float: left;
-    margin-right: 1.5em;
-}
-
-.align-right {
-    float: right;
-    margin-left: 1.5em;
-}
-
-.align-center {
-    margin: 0 auto;
-    text-align: center;
-}
-
-.align-center div {
-    margin: 0 auto;
-}
-
-.align-center > figure {
-    display: inline-block;
-}
-
-span[lang] {
-    font-style: normal;
+/*****************
+ *  HTML Editor  *
+ *****************/
+.ql-editor {
+    height: 250px !important;
 }

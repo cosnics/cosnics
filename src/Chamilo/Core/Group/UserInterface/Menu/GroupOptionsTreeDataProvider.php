@@ -30,7 +30,7 @@ class GroupOptionsTreeDataProvider extends OptionsTreeDataProvider
     /**
      * @return \Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\TreeNode[]
      */
-    public function getData(?string $identifier): array
+    public function getData(?string $identifier, array $excludedIdentifiers = []): array
     {
         $getIdentifier = function (Group $group) {
             return $group->getId();
