@@ -1,6 +1,7 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Chamilo\Libraries\Protocol\Security\Factory\CsrfTokenManagerFactory;
 use Chamilo\Libraries\Protocol\Security\Factory\HashingAlgorithmFactory;
 use Chamilo\Libraries\Protocol\Security\Factory\PasswordGeneratorFactory;
 use Chamilo\Libraries\Protocol\Security\Service\Hashing\Haval256HashingAlgorithm;
@@ -11,6 +12,8 @@ use Chamilo\Libraries\Protocol\Security\Service\Hashing\WhirlpoolHashingAlgorith
 use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
 use Chamilo\Libraries\Protocol\Security\Service\SecurityUtilities;
 use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManager;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
@@ -39,4 +42,10 @@ return static function (ContainerConfigurator $container) {
     );
 
     $services->set(PasswordGeneratorFactory::class);
+
+    $services->set(CsrfTokenManagerFactory::class);
+    $services->set(CsrfTokenManager::class)->factory(
+        [service(CsrfTokenManagerFactory::class), 'buildCsrfTokenManager']
+    );
+    $services->alias(CsrfTokenManagerInterface::class, CsrfTokenManager::class);
 };

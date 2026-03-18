@@ -19,8 +19,6 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule\HTML_QuickForm
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule\HTML_QuickForm_Rule_DateCompare;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule\HTML_QuickForm_Rule_Filetype;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Rule\HTML_QuickForm_Rule_Username;
-use Chamilo\Libraries\UserInterface\Form\Factory\HtmlEditorOptionsFactory;
-use Chamilo\Libraries\UserInterface\Form\Service\FormValidatorHtmlEditorRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use HTML_QuickForm;
 use HTML_QuickForm_element;
@@ -71,8 +69,6 @@ class FormValidator extends HTML_QuickForm
         array $attributes = [], bool $trackSubmit = true
     )
     {
-        $attributes['onreset'] = 'resetElements()';
-
         parent::__construct($formName, $method, $action, $target, $attributes, $trackSubmit);
 
         $this->registerAdditionalElements();
@@ -320,17 +316,22 @@ class FormValidator extends HTML_QuickForm
     }
 
     /**
-     * @param string[] $options
      * @param string[] $attributes
      *
      * @throws \QuickformException
      */
     public function addHtmlEditor(
-        string $name, string $label, bool $isRequired = true, array $options = [], array $attributes = []
+        string $name, string $label, bool $isRequired = true, array $attributes = []
     ): void
     {
-        $formValidatorHtmlEditorRenderer = $this->getFormValidatorHtmlEditorRenderer();
-        $formValidatorHtmlEditorRenderer->addHtmlEditor($this, $name, $label, $isRequired, $options, $attributes);
+        $this->addElement($this->createHtmlEditor($name, $label, $attributes));
+
+        if ($isRequired) {
+            $this->addRule(
+                $name, $this->getTranslator()->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
+                HTML_QuickForm_Rule_Required::class
+            );
+        }
     }
 
     /**
@@ -642,20 +643,13 @@ class FormValidator extends HTML_QuickForm
     }
 
     /**
-     * @param string[] $options
      * @param string[] $attributes
      *
      * @throws \QuickformException
      */
-    public function createHtmlEditor(string $name, string $label, array $options = [], array $attributes = []
-    ): HTML_QuickForm_textarea
+    public function createHtmlEditor(string $name, string $label, array $attributes = []): HTML_QuickForm_textarea
     {
-        $htmlEditorOptionsFactory = $this->getFormValidatorHtmlEditorOptionsFactory();
-
-        return $this->getFormValidatorHtmlEditorRenderer()->createHtmlEditor(
-            $this, $name, $label, $htmlEditorOptionsFactory->getDefaultFormValidatorHtmlEditorOptions($options),
-            $attributes
-        );
+        return $this->createElement(HTML_QuickForm_textarea::class, $name, $label, $attributes);
     }
 
     /**
@@ -825,16 +819,6 @@ class FormValidator extends HTML_QuickForm
         $html[] = '</form>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    protected function getFormValidatorHtmlEditorOptionsFactory(): HtmlEditorOptionsFactory
-    {
-        return $this->getService(HtmlEditorOptionsFactory::class);
-    }
-
-    protected function getFormValidatorHtmlEditorRenderer(): FormValidatorHtmlEditorRenderer
-    {
-        return $this->getService(FormValidatorHtmlEditorRenderer::class);
     }
 
     public function getFrozenElementTemplate(): string

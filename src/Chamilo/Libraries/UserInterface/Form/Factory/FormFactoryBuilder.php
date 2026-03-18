@@ -1,19 +1,16 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Form\Factory;
 
-use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
-use Chamilo\Libraries\DependencyInjection\Service\DependencyInjectionContainerBuilder;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\Extension\Csrf\CsrfExtension;
-use Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension;
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
+use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Form\FormTypeInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Csrf\CsrfTokenManager;
-use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
-use Symfony\Component\Security\Csrf\TokenStorage\SessionTokenStorage;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Translation\Translator;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Form\Factory
@@ -51,12 +48,20 @@ class FormFactoryBuilder
      */
     protected ArrayCollection $additionalFormTypes;
 
-    protected ChamiloRequest $request;
+    protected CsrfTokenManagerInterface $csrfTokenManager;
 
-    public function __construct(ChamiloRequest $request)
+    protected Translator $translator;
+
+    protected ValidatorInterface $validator;
+
+    public function __construct(
+        ValidatorInterface $validator, CsrfTokenManagerInterface $csrfTokenManager, Translator $translator
+    )
     {
         $this->additionalFormTypes = new ArrayCollection();
-        $this->request = $request;
+        $this->validator = $validator;
+        $this->csrfTokenManager = $csrfTokenManager;
+        $this->translator = $translator;
     }
 
     public function addAdditionalFormType(FormTypeInterface $formType): FormFactoryBuilder
@@ -68,20 +73,12 @@ class FormFactoryBuilder
 
     public function createFormFactory(): FormFactoryInterface
     {
-        $requestStack = new RequestStack([$this->getRequest()]);
-
-        $csrfGenerator = new UriSafeTokenGenerator();
-        $csrfStorage = new SessionTokenStorage($requestStack);
-        $csrfManager = new CsrfTokenManager($csrfGenerator, $csrfStorage);
-
         $formFactoryBuilder = Forms::createFormFactoryBuilder();
 
         $formFactoryBuilder->addExtension(new HttpFoundationExtension());
-        $formFactoryBuilder->addExtension(new CsrfExtension($csrfManager));
+        $formFactoryBuilder->addExtension(new CsrfExtension($this->getCsrfTokenManager()));
         $formFactoryBuilder->addExtension(
-            new DependencyInjectionExtension(
-                DependencyInjectionContainerBuilder::getInstance()->createContainer(), [], []
-            )
+            new ValidatorExtension(validator: $this->getValidator(), translator: $this->getTranslator())
         );
         $formFactoryBuilder->addTypes($this->getAdditionalFormTypes()->toArray());
 
@@ -93,8 +90,18 @@ class FormFactoryBuilder
         return $this->additionalFormTypes;
     }
 
-    public function getRequest(): ChamiloRequest
+    public function getCsrfTokenManager(): CsrfTokenManagerInterface
     {
-        return $this->request;
+        return $this->csrfTokenManager;
+    }
+
+    public function getTranslator(): Translator
+    {
+        return $this->translator;
+    }
+
+    public function getValidator(): ValidatorInterface
+    {
+        return $this->validator;
     }
 }

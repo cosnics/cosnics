@@ -1,7 +1,8 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Chamilo\Core\Group\UserInterface\Form\GroupMoveType;
+use Chamilo\Core\Group\UserInterface\Form\GroupFormType;
+use Chamilo\Core\Group\UserInterface\Form\GroupMoveFormType;
 use Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeDataProvider;
 use Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider;
 use Chamilo\Core\Group\UserInterface\Table\GroupTableRenderer;
@@ -29,7 +30,10 @@ return static function (ContainerConfigurator $container) {
     $services->set(SubscribedUserTableRenderer::class);
     $services->set(NonSubscribedUserTableRenderer::class);
 
-    $services->set(GroupMoveType::class)->args(
+    $services->set(GroupMoveFormType::class)->args(
+        ['$optionsTreeRenderer' => service('Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeRenderer')]
+    )->tag(FormTypeInterface::class);
+    $services->set(GroupFormType::class)->args(
         ['$optionsTreeRenderer' => service('Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeRenderer')]
     )->tag(FormTypeInterface::class);
 };

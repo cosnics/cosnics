@@ -137,17 +137,6 @@ function renderHtmlEditor(editorName, editorOptions, editorLabel, editorAttribut
     return result;
 }
 
-// Destroy an HTML Editor
-function destroyHtmlEditor(editorName) {
-    if (typeof CKEDITOR != 'undefined') {
-        $('textarea.html_editor[name=\'' + editorName + '\']').ckeditorGet().destroy();
-    }
-
-    if (typeof tinyMCE != 'undefined') {
-        $('textarea.html_editor[name=\'' + editorName + '\']').tinymce().destroy();
-    }
-}
-
 // Popup window
 function openPopup(url, width, height) {
 

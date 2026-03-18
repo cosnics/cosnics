@@ -21,7 +21,9 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(BrowseComponent::class)->tag(ApplicationInterface::class);
     $services->set(BrowseNonSubscribedUsersComponent::class)->tag(ApplicationInterface::class);
-    $services->set(CreateComponent::class)->tag(ApplicationInterface::class);
+    $services->set(CreateComponent::class)->args(['$twigFormEnvironment' => service('Twig\Environment\Form')])->tag(
+        ApplicationInterface::class
+    );
     $services->set(DeleteComponent::class)->tag(ApplicationInterface::class);
     $services->set(GroupFeedComponent::class)->tag(ApplicationInterface::class);
     $services->set(GroupTreeDataComponent::class)->args(

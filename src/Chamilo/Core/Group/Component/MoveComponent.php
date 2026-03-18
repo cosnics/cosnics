@@ -7,7 +7,7 @@ use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\UserInterface\Form\GroupMoveType;
+use Chamilo\Core\Group\UserInterface\Form\GroupMoveFormType;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
@@ -36,7 +36,7 @@ class MoveComponent extends Manager
 {
     protected FormFactoryInterface $formFactory;
 
-    protected GroupMoveType $groupMoveType;
+    protected GroupMoveFormType $groupMoveFormType;
 
     protected Environment $twigFormEnvironment;
 
@@ -46,7 +46,7 @@ class MoveComponent extends Manager
         GroupMembershipService $groupMembershipService, GroupUrlGenerator $groupUrlGenerator,
         AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupService $groupService,
         UserService $userService, UrlGenerator $urlGenerator, FormFactoryInterface $formFactory,
-        Environment $twigFormEnvironment, GroupMoveType $groupMoveType
+        Environment $twigFormEnvironment, GroupMoveFormType $groupMoveFormType
     )
     {
         parent::__construct(
@@ -56,7 +56,7 @@ class MoveComponent extends Manager
 
         $this->formFactory = $formFactory;
         $this->twigFormEnvironment = $twigFormEnvironment;
-        $this->groupMoveType = $groupMoveType;
+        $this->groupMoveFormType = $groupMoveFormType;
     }
 
     /**
@@ -88,8 +88,8 @@ class MoveComponent extends Manager
         );
 
         $form = $this->getFormFactory()->create(
-            GroupMoveType::class,
-            [NestedSet::PROPERTY_PARENT_ID => $group->getParentId(), Group::PROPERTY_NAME => $group->getName(), 'description' => '<p>Whiiiiiiiii</><p><strong>Bold</strong> Whiiiiiiiii</>'],
+            GroupMoveFormType::class,
+            [NestedSet::PROPERTY_PARENT_ID => $group->getParentId(), Group::PROPERTY_NAME => $group->getName()],
             ['action' => $formUri, 'disabledGroupIdentifiers' => [$groupIdentifier]]
         );
         $form->handleRequest($this->getRequest());
@@ -136,9 +136,9 @@ class MoveComponent extends Manager
         return $this->formFactory;
     }
 
-    public function getGroupMoveType(): GroupMoveType
+    public function getGroupMoveFormType(): GroupMoveFormType
     {
-        return $this->groupMoveType;
+        return $this->groupMoveFormType;
     }
 
     public function getTwigFormEnvironment(): Environment

@@ -84,7 +84,8 @@ class NestedSetDataClassRepository
     }
 
     /**
-     * @throws \Throwable
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function create(NestedSet $nestedSet, string $previousNestedSetIdentifier = '0'): bool
     {

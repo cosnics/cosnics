@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Architecture\Enum;
 
 use Chamilo\Libraries\Component\CalendarPopupComponent;
 use Chamilo\Libraries\Component\DeleteTemporaryFileComponent;
-use Chamilo\Libraries\Component\HtmlEditorInstanceComponent;
 use Chamilo\Libraries\Component\UploadTemporaryFileComponent;
 use Chamilo\Libraries\Component\UtilitiesComponent;
 
@@ -15,7 +14,6 @@ enum ActionEnum: string
 {
     case CALENDAR_POPUP = 'CalendarPopup';
     case DELETE_TEMPORARY_FILE = 'DeleteTemporaryFile';
-    case HTML_EDITOR_INSTANCE = 'HtmlEditorInstance';
     case UPLOAD_TEMPORARY_FILE = 'UploadTemporaryFile';
     case UTILITIES = 'Utilities';
 
@@ -24,7 +22,6 @@ enum ActionEnum: string
         return match ($className) {
             CalendarPopupComponent::class => self::CALENDAR_POPUP,
             DeleteTemporaryFileComponent::class => self::DELETE_TEMPORARY_FILE,
-            HtmlEditorInstanceComponent::class => self::HTML_EDITOR_INSTANCE,
             UploadTemporaryFileComponent::class => self::UPLOAD_TEMPORARY_FILE,
             UtilitiesComponent::class => self::UTILITIES
         };

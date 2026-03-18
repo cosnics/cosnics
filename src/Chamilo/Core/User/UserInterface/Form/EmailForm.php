@@ -45,7 +45,7 @@ class EmailForm extends FormValidator
             HTML_QuickForm_Rule_Required::class);
 
         $this->addHtmlEditor(
-            'message', $translator->trans('EmailMessage', [], Manager::CONTEXT), true, ['height' => 500, 'width' => 750]
+            'message', $translator->trans('EmailMessage', [], Manager::CONTEXT)
         );
 
         $buttons[] = $this->createElement(

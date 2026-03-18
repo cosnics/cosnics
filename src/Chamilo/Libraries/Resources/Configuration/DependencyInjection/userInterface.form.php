@@ -1,16 +1,17 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\ButtonsType;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\CategoryType;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlEditorType;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlType;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\MessageType;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\VisualContentType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\ButtonsFormType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\CategoryFormType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\ElementFinderFormType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlEditorFormType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlFormType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\MessageFormType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\VisualContentFormType;
 use Chamilo\Libraries\UserInterface\Form\Factory\FormFactoryBuilder;
-use Chamilo\Libraries\UserInterface\Form\Factory\HtmlEditorOptionsFactory;
 use Chamilo\Libraries\UserInterface\Form\Factory\TwigFormRendererFactory;
-use Chamilo\Libraries\UserInterface\Form\Service\FormValidatorHtmlEditorRenderer;
+use Chamilo\Libraries\UserInterface\Form\Service\FormButtonTypeBuilder;
+use Chamilo\Libraries\UserInterface\Form\Service\FormTypeBuilder;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormTypeInterface;
@@ -19,9 +20,6 @@ use Twig\Environment;
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
     $services->defaults()->public()->autowire()->autoconfigure();
-
-    $services->set(FormValidatorHtmlEditorRenderer::class);
-    $services->set(HtmlEditorOptionsFactory::class);
 
     $services->set(FormFactoryBuilder::class);
 
@@ -42,10 +40,14 @@ return static function (ContainerConfigurator $container) {
         [service(TwigFormRendererFactory::class), 'getFormRenderer']
     );
 
-    $services->set(ButtonsType::class)->tag(FormTypeInterface::class);
-    $services->set(HtmlType::class)->tag(FormTypeInterface::class);
-    $services->set(VisualContentType::class)->tag(FormTypeInterface::class);
-    $services->set(MessageType::class)->tag(FormTypeInterface::class);
-    $services->set(CategoryType::class)->tag(FormTypeInterface::class);
-    $services->set(HtmlEditorType::class)->tag(FormTypeInterface::class);
+    $services->set(FormTypeBuilder::class);
+    $services->set(FormButtonTypeBuilder::class);
+
+    $services->set(ButtonsFormType::class)->tag(FormTypeInterface::class);
+    $services->set(HtmlFormType::class)->tag(FormTypeInterface::class);
+    $services->set(VisualContentFormType::class)->tag(FormTypeInterface::class);
+    $services->set(MessageFormType::class)->tag(FormTypeInterface::class);
+    $services->set(CategoryFormType::class)->tag(FormTypeInterface::class);
+    $services->set(HtmlEditorFormType::class)->tag(FormTypeInterface::class);
+    $services->set(ElementFinderFormType::class)->tag(FormTypeInterface::class);
 };

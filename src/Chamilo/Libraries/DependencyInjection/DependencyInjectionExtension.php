@@ -56,6 +56,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'protocol.microsoft.php',
                 'protocol.security.php',
                 'protocol.session.php',
+                'protocol.validation.php',
                 'service.php',
                 'storage.php',
                 'userInterface.alert.php',

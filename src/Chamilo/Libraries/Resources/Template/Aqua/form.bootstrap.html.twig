@@ -43,16 +43,108 @@
     <h4 class="form-category">{{ label|raw }}</h4>
 {%- endblock category_row -%}
 
+{%- block html_editor_row -%}
+    {%- set row_class = row_class|default(row_attr.class|default('mb-3')|trim) -%}
+    <div{% with {attr: row_attr|merge({class: row_class})} %}{{ block('attributes') }}{% endwith %}>
+        {%- if 'form-floating' in row_class -%}
+            {{ block('textarea_widget') }}
+            {{ block('html_editor_widget') }}
+            {{- form_label(form) -}}
+        {%- else -%}
+            {{- form_label(form) -}}
+            {{ block('textarea_widget') }}
+            {{ block('html_editor_widget') }}
+        {%- endif -%}
+        {{- form_help(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+{%- endblock html_editor_row -%}
+
 {%- block html_editor_widget -%}
-    <div id="{{ name }}" name="{{ name }}">{{ value|raw }}</div>
-    {{ javascript|raw }}
+    {{ javascriptSourceCode|raw }}
     <script>
-        const quill_{{ name }} = new Quill('#{{ name }}', {
-            theme: 'snow'
+        tinymce.init({
+            selector: 'textarea#{{ id }}',
+            license_key: 'gpl',
+            height: {{ height }},
+            max_height: {{ max_height }},
+            plugins: {{ plugins|json_encode|raw }},
+            toolbar: '{{ toolbar }}',
+            statusbar: {{ statusbar ? 'true' : 'false' }},
+            language: '{{ language }}',
+            language_url: '{{ languagePath }}'
         });
-        const form = document.querySelector('form');
-        form.addEventListener('formdata', (event) => {
-            event.formData.append('{{ name }}', JSON.stringify(quill_{{ name }}.getContents().ops));
+
+        document.querySelector('form').addEventListener('submit', function (e) {
+            //e.preventDefault();
+
+            var tinyInstance = tinymce.get('{{ id }}');
+            tinyInstance.save();
+            const content = tinyInstance.getContent();
+
+            // if (!content || content.trim() === '') {
+            //     alert('Please fill in the required field');
+            //     tinyInstance.focus();
+            //     return false;
+            // }
+
+            return true;
         });
     </script>
 {%- endblock html_editor_widget -%}
+
+{% block element_finder_widget %}
+    {% apply spaceless %}
+        <button id="{{ id }}_expand_button" class="normal select" {% if not collapsed %}style="display:none;"{% endif %}>{{ translations.show }}</button>
+        <div class="element_finder" id="{{ id }}" style="margin-top: 5px;">
+            <input type="hidden" name="{{ full_name }}" id="hidden_active_elements"/>
+            <div class="element_finder_types">
+                <select name="" id="element_types_selector">
+                    <option value="-1">-- {{ translations.selectElementType }} --</option>
+                    {% for option_value, option_label in elementTypesSelector %}
+                        <option value="{{ option_value }}">{{ option_label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="element_finder_container">
+                <div class="element_finder_search">
+                    <input type="text" class="element_query" id="search_field" name=""/>
+                    <button id="{{ id }}_collapse_button" class="normal hide mini" {% if collapsed %}style="display:none;"{% endif %}>{{ translations.hide }}</button>
+                </div>
+                <div class="clear"></div>
+                <div class="element_finder_elements">
+                    <div class="element_finder_inactive">
+                        <div id="inactive_elements" class="inactive_elements" style="height: {{ height }}px; width: {{ width }}px; overflow: auto;"></div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="element_finder_buttons" style="height: {{ height }}px;">
+                        <div class="element_finder_buttons_container">
+                            <input type="button" id="activate_button" class="activate_elements" name="{{ id }}_activate">
+                            <br/>
+                            <input type="button" id="deactivate_button" class="deactivate_elements" name="{{ id }}_deactivate">
+                        </div>
+                    </div>
+                    <div class="element_finder_active">
+                        <div id="active_elements" class="active_elements" style="height: {{ height }}px; width: {{ width }}px; overflow: auto;"></div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+
+        {{ element_finder_plugin|raw }}
+
+        {% set defaultValuesString = '' %}
+        {% if value %}
+            {% set defaultValuesString = 'defaultValues: ' ~ value %}
+        {% endif %}
+
+        <script type="text/javascript">
+            $("#{{ id }}").advelementfinder({
+                name: "{{ id }}",
+                elementTypes: {{ elementTypes|raw }}, {{ defaultValuesString|raw }}{{ configurationJson|raw }} });
+        </script>
+    {% endapply %}
+{% endblock %}

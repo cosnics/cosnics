@@ -63,7 +63,6 @@
         "symfony/uid": "7.4.*",
         "symfony/validator": "7.4.*",
         "symfony/yaml": "7.4.*",
-        "friendsofsymfony/ckeditor-bundle": "2.*",
         "twig/twig": "3.21.*",
         "voku/stringy": "6.*"
     },

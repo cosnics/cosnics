@@ -91,17 +91,33 @@ class GroupService
     }
 
     /**
-     * @throws \Throwable
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function createGroup(Group $group, ?User $executingUser = null): bool
+    public function createGroup(Group $group, ?User $executingUser = null): void
     {
-        if (!$this->getGroupRepository()->createGroup($group)) {
-            return false;
-        }
-
+        $this->getGroupRepository()->createGroup($group);
         $this->getEventDispatcher()->dispatch(new AfterGroupCreateEvent($group, $executingUser));
+    }
 
-        return true;
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
+    public function createGroupFromParameters(
+        string $name, string $parentIdentifier, ?string $description = null, ?string $code = null,
+        ?User $executingUser = null
+    ): Group
+    {
+        $group = new Group();
+        $group->setName($name);
+        $group->setDescription($description);
+        $group->setCode($code);
+        $group->setParentId($parentIdentifier);
+
+        $this->createGroup($group, $executingUser);
+
+        return $group;
     }
 
     /**

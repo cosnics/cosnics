@@ -63,11 +63,12 @@ class GroupRepository
     }
 
     /**
-     * @throws \Throwable
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function createGroup(Group $group): bool
+    public function createGroup(Group $group): void
     {
-        return $this->getNestedSetDataClassRepository()->create($group);
+        $this->getNestedSetDataClassRepository()->create($group);
     }
 
     /**
