@@ -15,6 +15,7 @@ use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
@@ -75,15 +76,15 @@ class MoveComponent extends Manager
 
         $translator = $this->getTranslator();
 
-        $groupIdentifier = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
+        $groupIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID);
 
-        $group = $this->getGroupService()->findGroupByIdentifier($this->getRequest()->query->get(self::PARAM_GROUP_ID));
+        $group = $this->getGroupService()->findGroupByIdentifier($groupIdentifier);
 
         $formUri = $this->getUrlGenerator()->fromParameters(
             [
                 self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => ActionEnum::MOVE->value,
-                self::PARAM_GROUP_ID => $groupIdentifier
+                DataClass::PROPERTY_ID => $groupIdentifier
             ]
         );
 
@@ -115,7 +116,7 @@ class MoveComponent extends Manager
             return new RedirectResponse($this->getUrlGenerator()->fromParameters([
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                self::PARAM_GROUP_ID => $submittedData[NestedSet::PROPERTY_PARENT_ID]
+                DataClass::PROPERTY_ID => $submittedData[NestedSet::PROPERTY_PARENT_ID]
             ]));
         }
         else {

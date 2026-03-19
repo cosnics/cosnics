@@ -12,6 +12,7 @@ use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
@@ -37,7 +38,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 {
     public const string COLUMN_SUBGROUPS = 'Subgroups';
     public const string COLUMN_USERS = 'Users';
-    public const string TABLE_IDENTIFIER = Manager::PARAM_GROUP_ID;
+    public const string TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
 
     protected GroupMembershipService $groupMembershipService;
 
@@ -177,7 +178,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
                     [
                         ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                         ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                        Manager::PARAM_GROUP_ID => $result->getId()
+                        DataClass::PROPERTY_ID => $result->getId()
                     ]
                 );
 

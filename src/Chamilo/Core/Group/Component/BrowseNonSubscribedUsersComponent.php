@@ -91,7 +91,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
                     [
                         self::PARAM_CONTEXT => Manager::CONTEXT,
                         self::PARAM_ACTION => ActionEnum::BROWSE->value,
-                        self::PARAM_GROUP_ID => $this->getGroupIdentifier()
+                        DataClass::PROPERTY_ID => $this->getGroupIdentifier()
                     ]
                 ))
         );
@@ -121,7 +121,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
                     self::PARAM_ACTION => ActionEnum::BROWSE_NON_SUBSCRIBED_USERS->value,
-                    self::PARAM_GROUP_ID => $group->getId()
+                    DataClass::PROPERTY_ID => $group->getId()
                 ]
             )
         );
@@ -134,7 +134,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
                     self::PARAM_ACTION => ActionEnum::BROWSE_NON_SUBSCRIBED_USERS->value,
-                    self::PARAM_GROUP_ID => $group->getId()
+                    DataClass::PROPERTY_ID => $group->getId()
                 ]
             ), DisplayTypeEnum::ICON_AND_LABEL
             )
@@ -165,7 +165,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
 
     protected function getGroupIdentifier(): string
     {
-        return $this->getRequest()->query->get(self::PARAM_GROUP_ID);
+        return $this->getRequest()->query->get(DataClass::PROPERTY_ID);
     }
 
     /**
@@ -177,7 +177,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
         $conditions = [];
 
         $userIdentifiers = $this->getGroupMembershipService()->findSubscribedUserIdentifiersForGroupIdentifier(
-            $this->getRequest()->query->get(Manager::PARAM_GROUP_ID)
+            $this->getGroupIdentifier()
         );
 
         $conditions[] = new NotCondition(

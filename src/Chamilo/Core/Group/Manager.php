@@ -5,6 +5,7 @@ use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\Domain\Application;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
@@ -21,9 +22,6 @@ use Symfony\Component\Translation\Translator;
 abstract class Manager extends Application
 {
     public const string CONTEXT = __NAMESPACE__;
-    public const string PARAM_GROUP_ID = 'group_id';
-    public const string PARAM_RELATION_ID = 'relation_id';
-    public const string PARAM_USER_ID = 'user_id';
 
     protected AlertsManager $alertsManager;
 
@@ -36,6 +34,8 @@ abstract class Manager extends Application
     protected GroupUrlGenerator $groupUrlGenerator;
 
     protected UserService $userService;
+
+    private ?Group $rootGroup;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
@@ -93,6 +93,19 @@ abstract class Manager extends Application
     public function getGroupUrlGenerator(): GroupUrlGenerator
     {
         return $this->groupUrlGenerator;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
+    public function getRootGroup(): Group
+    {
+        if (!isset($this->rootGroup)) {
+            $this->rootGroup = $this->getGroupService()->findRootGroup();
+        }
+
+        return $this->rootGroup;
     }
 
     public function getUserService(): UserService

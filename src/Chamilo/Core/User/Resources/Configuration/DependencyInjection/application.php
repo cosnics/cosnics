@@ -52,6 +52,9 @@ return static function (ContainerConfigurator $container) {
         ->tag(ApplicationInterface::class);
     $services->set(ViewComponent::class)->tag(ApplicationInterface::class);
     $services->set(AccountComponent::class)->args(
-        ['$userCanChangePicture' => '%cosnics.application.user.rights.changeUserPicture%']
+        [
+            '$userCanChangePicture' => '%cosnics.application.user.rights.changeUserPicture%',
+            '$twigFormEnvironment' => service('Twig\Environment\Form')
+        ]
     )->tag(ApplicationInterface::class);
 };

@@ -38,8 +38,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 
         $parameters = [
             ApplicationInterface::PARAM_CONTEXT => $context,
-            ApplicationInterface::PARAM_ACTION => ActionEnum::CREATE->value,
-            Manager::PARAM_GROUP_ID => 0
+            ApplicationInterface::PARAM_ACTION => ActionEnum::CREATE->value
         ];
 
         $links[] = new Action(

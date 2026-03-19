@@ -8,7 +8,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\UserInterface\Form\AccountForm;
+use Chamilo\Core\User\UserInterface\Form\AccountFormType;
 use Chamilo\Core\User\UserInterface\Form\UserForm;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
@@ -21,10 +21,13 @@ use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Throwable;
+use Twig\Environment;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -34,9 +37,13 @@ use Symfony\Component\Translation\Translator;
  */
 class AccountComponent extends ProfileComponent
 {
-    protected ?UserPictureProviderInterface $userPictureProvider;
+    protected AccountFormType $accountFormType;
 
-    private AccountForm $accountForm;
+    protected FormFactoryInterface $formFactory;
+
+    protected Environment $twigFormEnvironment;
+
+    protected ?UserPictureProviderInterface $userPictureProvider;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
@@ -44,6 +51,7 @@ class AccountComponent extends ProfileComponent
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
         UrlGenerator $urlGenerator, ?UserPictureProviderInterface $userPictureProvider, TabsRenderer $tabsRenderer,
+        FormFactoryInterface $formFactory, AccountFormType $accountFormType, Environment $twigFormEnvironment,
         bool $userCanChangePicture
     )
     {
@@ -54,87 +62,101 @@ class AccountComponent extends ProfileComponent
         );
 
         $this->userPictureProvider = $userPictureProvider;
+        $this->formFactory = $formFactory;
+        $this->accountFormType = $accountFormType;
+        $this->twigFormEnvironment = $twigFormEnvironment;
     }
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \QuickformException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function run(?User $currentUser = null): Response
     {
         $this->checkAuthorization(Manager::CONTEXT, $currentUser, 'ManageAccount');
         $translator = $this->getTranslator();
 
-        $accountForm = $this->getAccountForm($currentUser);
+        $form = $this->getFormFactory()->create(
+            AccountFormType::class, $currentUser->getDefaultProperties(), ['action' => $this->getUrlGenerator()->fromRequest(), 'user' => $currentUser]
+        );
+        $form->handleRequest($this->getRequest());
 
-        if ($accountForm->validate()) {
-            $formValues = $accountForm->exportValues();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $submittedData = $form->getData();
 
-            $success = $this->getUserService()->updateAccountFromParameters(
-                $currentUser, $formValues[User::PROPERTY_GIVEN_NAME], $formValues[User::PROPERTY_SURNAME],
-                $formValues[User::PROPERTY_USERNAME], $formValues[User::PROPERTY_OFFICIAL_CODE],
-                $formValues[User::PROPERTY_EMAIL], $formValues[UserForm::PROPERTY_CURRENT_PASSWORD],
-                $formValues[User::PROPERTY_PASSWORD]
-            );
+            try {
+                $this->getUserService()->updateAccountFromParameters(
+                    $currentUser, $submittedData[User::PROPERTY_GIVEN_NAME], $submittedData[User::PROPERTY_SURNAME],
+                    $submittedData[User::PROPERTY_USERNAME], $submittedData[User::PROPERTY_OFFICIAL_CODE],
+                    $submittedData[User::PROPERTY_EMAIL], $submittedData[UserForm::PROPERTY_CURRENT_PASSWORD],
+                    $submittedData[User::PROPERTY_PASSWORD]
+                );
 
-            $userPictureProvider = $this->getUserPictureProvider();
+                $userPictureProvider = $this->getUserPictureProvider();
 
-            if ($userPictureProvider instanceof UserPictureUpdateProviderInterface) {
-                $pictureInformation = $this->getRequest()->files->get(User::PROPERTY_PICTURE_URI);
+                if ($userPictureProvider instanceof UserPictureUpdateProviderInterface) {
+                    $pictureInformation = $this->getRequest()->files->get(User::PROPERTY_PICTURE_URI);
 
-                if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid()) {
-                    if (!$userPictureProvider->updateUserPictureFromParameters(
-                        $currentUser, $currentUser, $pictureInformation
-                    )) {
-                        $this->getAlertsManager()->addAlert(
-                            new Alert(
-                                $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT), AlertEnum::WARNING
-                            )
-                        );
+                    if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid()) {
+                        if (!$userPictureProvider->updateUserPictureFromParameters(
+                            $currentUser, $currentUser, $pictureInformation
+                        )) {
+                            $this->getAlertsManager()->addAlert(
+                                new Alert(
+                                    $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
+                                    AlertEnum::WARNING
+                                )
+                            );
+                        }
                     }
                 }
+
+                $this->getAlertsManager()->addAlert(
+                    new Alert(
+                        $translator->trans('UserProfileUpdated', [], Manager::CONTEXT), AlertEnum::SUCCESS
+                    )
+                );
+
+                return new RedirectResponse($this->getUrlGenerator()->fromParameters([
+                    ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                    ApplicationInterface::PARAM_ACTION => ActionEnum::ACCOUNT->value
+                ]));
             }
-
-            $message = !$success ? 'UserProfileNotUpdated' : 'UserProfileUpdated';
-
-            $this->getAlertsManager()->addAlert(
-                new Alert(
-                    $translator->trans($message, [], Manager::CONTEXT),
-                    $success ? AlertEnum::SUCCESS : AlertEnum::DANGER
-                )
-            );
-
-            return new RedirectResponse($this->getUrlGenerator()->fromParameters([
-                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
-                ApplicationInterface::PARAM_ACTION => ActionEnum::ACCOUNT->value
-            ]));
+            catch (Throwable) {
+                $this->getAlertsManager()->addAlert(
+                    new Alert(
+                        $translator->trans('UserProfileNotUpdated', [], Manager::CONTEXT), AlertEnum::DANGER
+                    )
+                );
+            }
         }
-        else {
-            return new Response($this->renderPage($currentUser));
-        }
+
+        $html = [];
+
+        $html[] = $this->renderHeader($currentUser);
+        $html[] = $this->getTwigFormEnvironment()->render('form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+        $html[] = $this->renderFooter();
+
+        return new Response(implode(PHP_EOL, $html));
     }
 
-    /**
-     * @throws \QuickformException
-     */
-    public function getAccountForm(User $user): AccountForm
+    public function getAccountFormType(): AccountFormType
     {
-        if (!isset($this->accountForm)) {
-            $this->accountForm = new AccountForm(
-                $user, $this->getUrlGenerator()->fromRequest(), $this->getAuthenticationValidator()
-            );
-        }
-
-        return $this->accountForm;
+        return $this->accountFormType;
     }
 
-    /**
-     * @throws \QuickformException
-     */
-    public function getContent(User $user): string
+    public function getFormFactory(): FormFactoryInterface
     {
-        return $this->getAccountForm($user)->render();
+        return $this->formFactory;
+    }
+
+    public function getTwigFormEnvironment(): Environment
+    {
+        return $this->twigFormEnvironment;
     }
 
     public function getUserPictureProvider(): ?UserPictureUpdateProviderInterface

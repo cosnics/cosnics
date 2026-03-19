@@ -62,9 +62,12 @@ class CreateComponent extends Manager
     }
 
     /**
-     * @throws \QuickformException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     * @throws \Throwable
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function run(?User $currentUser = null): Response
     {
@@ -74,29 +77,28 @@ class CreateComponent extends Manager
 
         $translator = $this->getTranslator();
 
-        $parentGroupIdentifier = $this->getRequest()->query->get(self::PARAM_GROUP_ID, DataClass::EMPTY_UUID);
+        $groupIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID, $this->getRootGroup()->getId());
 
         $formUri = $this->getUrlGenerator()->fromParameters(
             [
                 self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => ActionEnum::CREATE->value,
-                self::PARAM_GROUP_ID => $parentGroupIdentifier
+                DataClass::PROPERTY_ID => $groupIdentifier
             ]
         );
 
         $form = $this->getFormFactory()->create(
-            GroupFormType::class, [NestedSet::PROPERTY_PARENT_ID => $parentGroupIdentifier], ['action' => $formUri]
+            GroupFormType::class, [DataClass::PROPERTY_ID => $groupIdentifier], ['action' => $formUri]
         );
         $form->handleRequest($this->getRequest());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $submittedData = $form->getData();
-            dump($submittedData);
-            exit;
+
             try {
                 $group = $this->getGroupService()->createGroupFromParameters(
-                    $submittedData[Group::PROPERTY_NAME], $submittedData[Group::PROPERTY_NAME],
-                    $submittedData[Group::PROPERTY_NAME], $submittedData[Group::PROPERTY_NAME], $currentUser
+                    $submittedData[Group::PROPERTY_NAME], $submittedData[NestedSet::PROPERTY_PARENT_ID]->getValue(),
+                    $submittedData[Group::PROPERTY_DESCRIPTION], $submittedData[Group::PROPERTY_CODE], $currentUser
                 );
 
                 $this->getAlertsManager()->addAlert(
@@ -111,10 +113,12 @@ class CreateComponent extends Manager
                 return new RedirectResponse($this->getUrlGenerator()->fromParameters([
                     ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                     ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                    self::PARAM_GROUP_ID => $group->getId()
+                    DataClass::PROPERTY_ID => $group->getId()
                 ]));
             }
-            catch (Throwable) {
+            catch (Throwable $e) {
+                dump($e->getMessage(), $submittedData);
+                exit;
                 $this->getAlertsManager()->addAlert(
                     new Alert(
                         $translator->trans(
@@ -127,21 +131,20 @@ class CreateComponent extends Manager
                 return new RedirectResponse($this->getUrlGenerator()->fromParameters([
                     ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                     ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                    self::PARAM_GROUP_ID => $parentGroupIdentifier
+                    DataClass::PROPERTY_ID => $groupIdentifier
                 ]));
             }
         }
-        else {
-            $html = [];
 
-            $html[] = $this->renderHeader($currentUser);
-            $html[] = $this->getTwigFormEnvironment()->render('form.html.twig', [
-                'form' => $form->createView(),
-            ]);
-            $html[] = $this->renderFooter();
+        $html = [];
 
-            return new Response(implode(PHP_EOL, $html));
-        }
+        $html[] = $this->renderHeader($currentUser);
+        $html[] = $this->getTwigFormEnvironment()->render('form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+        $html[] = $this->renderFooter();
+
+        return new Response(implode(PHP_EOL, $html));
     }
 
     public function getFormFactory(): FormFactoryInterface

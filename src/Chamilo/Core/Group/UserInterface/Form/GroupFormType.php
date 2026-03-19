@@ -68,33 +68,6 @@ class GroupFormType extends AbstractType
             $builder, Group::PROPERTY_DESCRIPTION, $translator->trans('Description', [], Manager::CONTEXT)
         );
 
-        /*
-        $builder->add(
-            'visual', VisualContentType::class, [
-                'label' => $translator->trans('Visual', [], Manager::CONTEXT),
-                'content' => 'Just some visual content that looks like a form element',
-                'row_attr' => [
-                    'class' => 'form-floating mb-3'
-                ]
-            ]
-        );
-
-        $formTypeBuilderHelper->addCategory(
-            $builder, 'category', $translator->trans('CategoryTitle', [], Manager::CONTEXT)
-        );
-
-        $formTypeBuilderHelper->addDanger(
-            $builder, 'message', 'This is where the message content should go',
-            $translator->trans('MessageTitle', [], Manager::CONTEXT)
-        );
-
-        $formTypeBuilderHelper->addHtml(
-            $builder, 'test', '<div class="alert alert-danger mb-3">Sample Html Alert</div>'
-        );
-
-        $formTypeBuilderHelper->addHtmlEditor($builder, 'description', 'HtmlEditorLabel');
-         */
-
         $this->getFormButtonTypeBuilder()->addSaveAndResetButton($builder);
     }
 

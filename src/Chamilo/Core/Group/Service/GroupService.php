@@ -380,4 +380,27 @@ class GroupService
 
         return true;
     }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
+    public function updateGroupFromParameters(
+        Group $group, string $name, string $parentIdentifier, ?string $description = null, ?string $code = null,
+        ?User $executingUser = null
+    ): Group
+    {
+        $group->setName($name);
+        $group->setDescription($description);
+        $group->setCode($code);
+        $group->setParentId($parentIdentifier);
+
+        $this->updateGroup($group, $executingUser);
+
+        if ($group->getParentId() != $parentIdentifier) {
+            $this->moveGroup($group, $parentIdentifier, $executingUser);
+        }
+
+        return $group;
+    }
 }

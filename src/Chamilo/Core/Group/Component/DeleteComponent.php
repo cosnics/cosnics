@@ -8,9 +8,9 @@ use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
-use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,22 +28,11 @@ class DeleteComponent extends Manager
     {
         $translator = $this->getTranslator();
         $groupService = $this->getGroupService();
-        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID);
+        $ids = $this->getRequest()->getFromRequestOrQuery(DataClass::PROPERTY_ID);
 
         if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
-
-        $this->getBreadcrumbTrail()->add(
-            new Breadcrumb($translator->trans('ViewerComponent', [], Manager::CONTEXT),
-                $this->getUrlGenerator()->fromParameters(
-                    [
-                        self::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => ActionEnum::BROWSE->value,
-                        self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
-                    ]
-                ))
-        );
 
         $failures = 0;
 
@@ -99,7 +88,7 @@ class DeleteComponent extends Manager
             ]));
         }
         else {
-            throw new NoSuchParameterException(self::PARAM_GROUP_ID);
+            throw new NoSuchParameterException(DataClass::PROPERTY_ID);
         }
     }
 }

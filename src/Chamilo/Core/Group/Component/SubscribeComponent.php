@@ -8,6 +8,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
@@ -21,6 +22,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class SubscribeComponent extends Manager
 {
+    public const string PARAM_USER_ID = 'user_id';
+
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
@@ -30,7 +33,7 @@ class SubscribeComponent extends Manager
      */
     public function run(?User $currentUser = null): Response
     {
-        $groupIdentifier = $this->getRequest()->query->get(self::PARAM_GROUP_ID);
+        $groupIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID);
 
         if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
@@ -49,7 +52,7 @@ class SubscribeComponent extends Manager
                     [
                         self::PARAM_CONTEXT => Manager::CONTEXT,
                         self::PARAM_ACTION => ActionEnum::BROWSE->value,
-                        self::PARAM_GROUP_ID => $groupIdentifier
+                        DataClass::PROPERTY_ID => $groupIdentifier
                     ]
                 ))
         );
@@ -108,11 +111,11 @@ class SubscribeComponent extends Manager
             return new RedirectResponse($this->getUrlGenerator()->fromParameters([
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                self::PARAM_GROUP_ID => $groupIdentifier
+                DataClass::PROPERTY_ID => $groupIdentifier
             ]));
         }
         else {
-            throw new NoSuchParameterException(self::PARAM_GROUP_ID);
+            throw new NoSuchParameterException(DataClass::PROPERTY_ID);
         }
     }
 }

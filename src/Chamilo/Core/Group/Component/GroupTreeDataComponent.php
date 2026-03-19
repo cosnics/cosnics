@@ -12,6 +12,7 @@ use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
@@ -58,7 +59,7 @@ class GroupTreeDataComponent extends Manager
             [
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                Manager::PARAM_GROUP_ID => '%s'
+                DataClass::PROPERTY_ID => '%s'
             ]
         );
 
@@ -71,7 +72,7 @@ class GroupTreeDataComponent extends Manager
 
     public function getCurrentGroupIdentifier(): ?string
     {
-        return $this->getRequest()->query->get(Manager::PARAM_GROUP_ID);
+        return $this->getRequest()->query->get(DataClass::PROPERTY_ID);
     }
 
     public function getJsTreeDataProvider(): JsTreeMenuDataProvider

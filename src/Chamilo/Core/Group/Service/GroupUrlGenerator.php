@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Group\Service;
 
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
+use Chamilo\Core\Group\Component\SubscribeComponent;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
@@ -9,6 +10,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\DataClassUrlGenerator;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 
 /**
  * @package Chamilo\Core\Group\Service
@@ -47,7 +49,7 @@ class GroupUrlGenerator
     protected function getGroupActionUrl(string $action, Group $group, array $additionalParameters = []): string
     {
         return $this->getDataClassUrlGenerator()->getActionUrl(
-            Manager::CONTEXT, ApplicationInterface::PARAM_ACTION, Manager::PARAM_GROUP_ID, $action, $group,
+            Manager::CONTEXT, ApplicationInterface::PARAM_ACTION, DataClass::PROPERTY_ID, $action, $group,
             $additionalParameters
         );
     }
@@ -65,7 +67,7 @@ class GroupUrlGenerator
     public function getSubscribeUserUrl(Group $group, User $user): string
     {
         return $this->getGroupActionUrl(
-            ActionEnum::SUBSCRIBE->value, $group, [Manager::PARAM_USER_ID => $user->getId()]
+            ActionEnum::SUBSCRIBE->value, $group, [SubscribeComponent::PARAM_USER_ID => $user->getId()]
         );
     }
 
@@ -80,7 +82,7 @@ class GroupUrlGenerator
             [
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::UNSUBSCRIBE->value,
-                Manager::PARAM_RELATION_ID => $subscribedUser->getRelationId()
+                DataClass::PROPERTY_ID => $subscribedUser->getRelationId()
             ]
         );
     }

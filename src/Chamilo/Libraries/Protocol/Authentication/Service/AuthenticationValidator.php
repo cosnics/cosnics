@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
+use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -67,7 +68,10 @@ class AuthenticationValidator
         ksort($this->authentications);
     }
 
-    public function getAuthenticationByType(string $authenticationType): ?AuthenticationInterface
+    /**
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     */
+    public function getAuthenticationByType(string $authenticationType): AuthenticationInterface
     {
         foreach ($this->authentications as $authentication) {
             if ($authenticationType == get_class($authentication)) {
@@ -75,7 +79,7 @@ class AuthenticationValidator
             }
         }
 
-        return null;
+        throw new NoSuchClassException($authenticationType, AuthenticationInterface::class);
     }
 
     public function getAuthentications(): array

@@ -36,5 +36,7 @@ return static function (ContainerConfigurator $container) {
     $services->set(SubscribeComponent::class)->tag(ApplicationInterface::class);
     $services->set(TruncateComponent::class)->tag(ApplicationInterface::class);
     $services->set(UnsubscribeComponent::class)->tag(ApplicationInterface::class);
-    $services->set(UpdateComponent::class)->tag(ApplicationInterface::class);
+    $services->set(UpdateComponent::class)->args(['$twigFormEnvironment' => service('Twig\Environment\Form')])->tag(
+        ApplicationInterface::class
+    );
 };

@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
@@ -32,7 +33,7 @@ use Symfony\Component\Translation\Translator;
 class SubscribedUserTableRenderer extends DataClassListTableRenderer
     implements TableRowActionsSupport, TableActionsSupport
 {
-    public const string TABLE_IDENTIFIER = Manager::PARAM_RELATION_ID;
+    public const string TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
 
     protected GroupUrlGenerator $groupUrlGenerator;
 

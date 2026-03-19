@@ -623,6 +623,7 @@ class UserService
 
     /**
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function sendPasswordResetLinkforUser(User $user): bool
     {
@@ -729,6 +730,7 @@ class UserService
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function updateAccountFromParameters(
         User $user, ?string $firstName, ?string $lastName, string $username, ?string $officialCode,

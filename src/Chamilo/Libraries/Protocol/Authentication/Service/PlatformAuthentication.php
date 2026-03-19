@@ -122,4 +122,9 @@ class PlatformAuthentication extends Authentication
         $redirect->send();
         exit;
     }
+
+    public function verifyPassword(User $user, string $password): bool
+    {
+        return $user->getPassword() === $this->getHashingUtilities()->hashString($password);
+    }
 }

@@ -12,17 +12,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class VisualContentFormType extends AbstractType
 {
-    public function buildView(FormView $view, FormInterface $form, array $options): void
-    {
-        $view->vars['content'] = $options['content'];
-    }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'compound' => false,
-            'mapped' => false,
-            'content' => '',
+            'compound' => false
         ]);
     }
 

@@ -16,6 +16,8 @@ interface ChangeablePasswordInterface
 {
     public function changePassword(User $user, string $oldPassword, string $newPassword): bool;
 
+    public function verifyPassword(User $user, string $password): bool;
+
     /**
      * Get the password requirements for the authentication method
      */

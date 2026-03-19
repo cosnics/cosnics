@@ -53,8 +53,6 @@ abstract class ProfileComponent extends Manager
         return $this->userCanChangePicture;
     }
 
-
-
     /**
      * @return \Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab[]
      */
@@ -93,18 +91,16 @@ abstract class ProfileComponent extends Manager
         return $tabs;
     }
 
-    abstract public function getContent(User $user): string;
-
     public function getTabsRenderer(): TabsRenderer
     {
         return $this->tabsRenderer;
     }
 
-    public function renderPage(?User $user = null): string
+    protected function renderHeader(?User $user = null): string
     {
         $html = [];
 
-        $html[] = $this->renderHeader($user);
+        $html[] = parent::renderHeader($user);
 
         $availableTabs = $this->getAvailableTabs();
 
@@ -117,9 +113,6 @@ abstract class ProfileComponent extends Manager
 
             $html[] = $this->getTabsRenderer()->renderNavigation('profile', $tabs, $this->getCurrentAction());
         }
-
-        $html[] = $this->getContent($user);
-        $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
     }

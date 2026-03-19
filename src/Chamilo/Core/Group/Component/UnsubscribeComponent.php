@@ -3,14 +3,15 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
-use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,23 +34,12 @@ class UnsubscribeComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $groupUserRelationIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_RELATION_ID);
+        $groupUserRelationIdentifiers = $this->getRequest()->getFromRequestOrQuery(DataClass::PROPERTY_ID);
 
         $groupMembershipService = $this->getGroupMembershipService();
         $userService = $this->getUserService();
         $groupService = $this->getGroupService();
         $translator = $this->getTranslator();
-
-        $this->getBreadcrumbTrail()->add(
-            new Breadcrumb($translator->trans('ViewerComponent', [], Manager::CONTEXT),
-                $this->getUrlGenerator()->fromParameters(
-                    [
-                        self::PARAM_CONTEXT => Manager::CONTEXT,
-                        self::PARAM_ACTION => ActionEnum::BROWSE->value,
-                        self::PARAM_GROUP_ID => $this->getRequest()->query->get(self::PARAM_GROUP_ID)
-                    ]
-                ))
-        );
 
         $failures = 0;
 
@@ -99,14 +89,17 @@ class UnsubscribeComponent extends Manager
                 )
             );
 
+            $groupIdentifier =
+                isset($group) && $group instanceof Group ? $group->getId() : $this->getRootGroup()->getId();
+
             return new RedirectResponse($this->getUrlGenerator()->fromParameters([
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                self::PARAM_GROUP_ID => $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID)
+                DataClass::PROPERTY_ID => $groupIdentifier
             ]));
         }
         else {
-            throw new NoSuchParameterException(self::PARAM_RELATION_ID);
+            throw new NoSuchParameterException(DataClass::PROPERTY_ID);
         }
     }
 }

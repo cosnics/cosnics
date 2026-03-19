@@ -20,6 +20,7 @@ use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
@@ -82,8 +83,6 @@ class BrowseComponent extends Manager
     private ?Group $group;
 
     private ?string $groupIdentifier = null;
-
-    private ?Group $rootGroup;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
@@ -242,7 +241,7 @@ class BrowseComponent extends Manager
     {
         if (!isset($this->groupIdentifier)) {
             $this->groupIdentifier =
-                $this->getRequest()->query->get(self::PARAM_GROUP_ID, $this->getRootGroup()->getId());
+                $this->getRequest()->query->get(DataClass::PROPERTY_ID, $this->getRootGroup()->getId());
         }
 
         return $this->groupIdentifier;
@@ -304,19 +303,6 @@ class BrowseComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function getRootGroup(): Group
-    {
-        if (!isset($this->rootGroup)) {
-            $this->rootGroup = $this->getGroupService()->findRootGroup();
-        }
-
-        return $this->rootGroup;
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     */
     public function getSubGroupsToolBar(): ButtonToolBar
     {
         $translator = $this->getTranslator();
@@ -326,7 +312,7 @@ class BrowseComponent extends Manager
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
                     self::PARAM_ACTION => ActionEnum::BROWSE->value,
-                    self::PARAM_GROUP_ID => $this->getGroupIdentifier()
+                    DataClass::PROPERTY_ID => $this->getGroupIdentifier()
                 ]
             )
         );
@@ -362,7 +348,7 @@ class BrowseComponent extends Manager
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
                     self::PARAM_ACTION => ActionEnum::BROWSE->value,
-                    self::PARAM_GROUP_ID => $this->getGroupIdentifier()
+                    DataClass::PROPERTY_ID => $this->getGroupIdentifier()
                 ]
             )
         );
@@ -463,7 +449,7 @@ class BrowseComponent extends Manager
             $this->getGroupsTreeTraverser()->findParentGroupIdentifiersForGroup($this->getGroup());
 
         return $this->getJsTreeRenderer()->render(
-            'groupMenu', Manager::PARAM_GROUP_ID, $dataUrl, $selectedPathIdentifiers
+            'groupMenu', DataClass::PROPERTY_ID, $dataUrl, array_reverse($selectedPathIdentifiers)
         );
     }
 

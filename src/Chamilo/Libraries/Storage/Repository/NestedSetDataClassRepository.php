@@ -211,7 +211,7 @@ class NestedSetDataClassRepository
                 condition: $this->getAncestorsCondition($nestedSet, $includeSelf, $condition),
                 retrieveProperties: new RetrieveProperties(
                     [new PropertyConditionVariable(get_class($nestedSet), DataClass::PROPERTY_ID)]
-                )
+                ), orderBy: $this->getPostOrderBy($nestedSet)
             )
         );
     }

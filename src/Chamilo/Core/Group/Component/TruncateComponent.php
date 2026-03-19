@@ -7,6 +7,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use RuntimeException;
@@ -31,7 +32,7 @@ class TruncateComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $groupIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_GROUP_ID);
+        $groupIdentifiers = $this->getRequest()->getFromRequestOrQuery(DataClass::PROPERTY_ID);
 
         $groupMembershipService = $this->getGroupMembershipService();
         $groupService = $this->getGroupService();
@@ -81,7 +82,7 @@ class TruncateComponent extends Manager
                 $redirectUrl = $this->getUrlGenerator()->fromParameters([
                     ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                     ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                    self::PARAM_GROUP_ID => $groupIdentifiers[0]
+                    DataClass::PROPERTY_ID => $groupIdentifiers[0]
                 ]);
             }
             else {
@@ -94,7 +95,7 @@ class TruncateComponent extends Manager
             return new RedirectResponse($redirectUrl);
         }
         else {
-            throw new NoSuchParameterException(self::PARAM_GROUP_ID);
+            throw new NoSuchParameterException(DataClass::PROPERTY_ID);
         }
     }
 }

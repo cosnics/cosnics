@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Group\UserInterface\Table;
 
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
+use Chamilo\Core\Group\Component\SubscribeComponent;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
@@ -30,7 +31,7 @@ use Symfony\Component\Translation\Translator;
 class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
     implements TableRowActionsSupport, TableActionsSupport
 {
-    public const string TABLE_IDENTIFIER = Manager::PARAM_USER_ID;
+    public const string TABLE_IDENTIFIER = SubscribeComponent::PARAM_USER_ID;
 
     protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
 
@@ -112,7 +113,7 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
 
         $subscribeUrl = $urlGenerator->fromRequest([
             ApplicationInterface::PARAM_ACTION => ActionEnum::SUBSCRIBE->value,
-            Manager::PARAM_USER_ID => $result->getId()
+            SubscribeComponent::PARAM_USER_ID => $result->getId()
 
         ]);
 
