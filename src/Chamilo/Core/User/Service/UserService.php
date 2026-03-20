@@ -20,6 +20,7 @@ use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
+use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Service\PropertyMapper;
@@ -583,9 +584,7 @@ class UserService
         return $this->allowRegistration;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
+
     public function isUsernameAvailable(string $username): bool
     {
         try {
@@ -596,6 +595,18 @@ class UserService
         catch (StorageNoResultException) {
             return true;
         }
+        catch (StorageMethodException) {
+            return false;
+        }
+    }
+
+    public function isUsernameAvailableForUser(User $user, string $username): bool
+    {
+        if ($user->getUsername() == $username) {
+            return true;
+        }
+
+        return $this->isUsernameAvailable($username);
     }
 
     public function isValidKeyForUser(string $requestKey, User $user): bool

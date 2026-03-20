@@ -10,6 +10,8 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\VisualContentFormTy
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -50,6 +52,22 @@ class FormTypeBuilder
     ): FormBuilderInterface
     {
         return $builder->add($this->createDanger($builder, $name, $message, $label, $options));
+    }
+
+    public function addEmail(
+        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $constraints = [],
+        array $options = []
+    ): FormBuilderInterface
+    {
+        return $builder->add($this->createEmail($builder, $name, $label, $required, $constraints, $options));
+    }
+
+    public function addFile(
+        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $constraints = [],
+        array $options = []
+    ): FormBuilderInterface
+    {
+        return $builder->add($this->createFile($builder, $name, $label, $required, $constraints, $options));
     }
 
     public function addHtml(FormBuilderInterface $builder, string $name, string $html, array $options = []
@@ -153,6 +171,26 @@ class FormTypeBuilder
     ): FormBuilderInterface
     {
         return $this->createMessage($builder, $name, $message, AlertEnum::DANGER, $label, $options);
+    }
+
+    public function createEmail(
+        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $constraints = [],
+        array $options = []
+    ): FormBuilderInterface
+    {
+        return $this->createFormType(
+            $builder, EmailType::class, $name, $label, $required, $constraints, $options
+        );
+    }
+
+    public function createFile(
+        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $constraints = [],
+        array $options = []
+    ): FormBuilderInterface
+    {
+        return $this->createFormType(
+            $builder, FileType::class, $name, $label, $required, $constraints, $options
+        );
     }
 
     protected function createFormType(

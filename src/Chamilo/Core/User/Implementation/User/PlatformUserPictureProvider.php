@@ -168,13 +168,13 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
         return $this->getThemeSystemPathBuilder()->getImagePath(Manager::CONTEXT, 'Unknown');
     }
 
-    public function getUserPictureAsBase64String(User $targetUser, User $requestUser): string
+    public function getUserPictureAsBase64String(User $targetUser, User $requestUser): ?string
     {
         try {
             return $this->getPictureAsBase64String($this->getUserPicturePath($targetUser));
         }
         catch (Exception) {
-            return '';
+            return null;
         }
     }
 

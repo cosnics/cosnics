@@ -112,8 +112,9 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
                 User::PROPERTY_ACTIVE, User::PROPERTY_PLATFORM_ADMINISTRATOR => $translator->trans(
                     ($value ? 'ConfirmYes' : 'ConfirmNo'), [], StringUtilities::LIBRARIES
                 ),
-                User::PROPERTY_PICTURE_URI => '<img class="img-thumbnail" src="' . $userPicture . '" alt="' .
-                    $user->getFullName() . '" style="max-height: 150px;"/>',
+                User::PROPERTY_PICTURE_URI => $userPicture ?
+                    '<img class="img-thumbnail" src="' . $userPicture . '" alt="' . $user->getFullName() .
+                    '" style="max-height: 150px;"/>' : null,
                 User::PROPERTY_REGISTRATION_DATE => $datetimeUtilities->formatLocaleDate($value),
                 User::PROPERTY_EMAIL => $this->getStringUtilities()->encryptMailLink($value),
                 default => $value,
