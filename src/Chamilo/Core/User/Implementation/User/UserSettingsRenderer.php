@@ -7,6 +7,7 @@ use Chamilo\Core\User\Architecture\Trait\UserDetailsRendererTrait;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserSettingsParser;
+use Chamilo\Core\User\Service\UserSettingsService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -26,9 +27,12 @@ class UserSettingsRenderer implements UserDetailsRendererInterface
 
     protected UserSettingsParser $userSettingsParser;
 
+    protected UserSettingsService $userSettingsService;
+
     public function __construct(
         UserService $userService, Translator $translator, UserPictureProviderInterface $userPictureProvider,
-        StringUtilities $stringUtilities, DatetimeUtilities $datetimeUtilities, UserSettingsParser $userSettingsParser
+        StringUtilities $stringUtilities, DatetimeUtilities $datetimeUtilities, UserSettingsParser $userSettingsParser,
+        UserSettingsService $userSettingsService
     )
     {
         $this->userService = $userService;
@@ -37,6 +41,7 @@ class UserSettingsRenderer implements UserDetailsRendererInterface
         $this->stringUtilities = $stringUtilities;
         $this->datetimeUtilities = $datetimeUtilities;
         $this->userSettingsParser = $userSettingsParser;
+        $this->userSettingsService = $userSettingsService;
     }
 
     public function getDatetimeUtilities(): DatetimeUtilities
@@ -62,6 +67,11 @@ class UserSettingsRenderer implements UserDetailsRendererInterface
     public function getUserSettingsParser(): UserSettingsParser
     {
         return $this->userSettingsParser;
+    }
+
+    public function getUserSettingsService(): UserSettingsService
+    {
+        return $this->userSettingsService;
     }
 
     public function hasContentForUser(User $user, User $requestingUser): bool
@@ -103,7 +113,7 @@ class UserSettingsRenderer implements UserDetailsRendererInterface
                 foreach ($categorySettings as $setting => $settingConfiguration) {
                     $html[] = '<tr>';
                     $html[] = '<td class="w-25">' . $translator->trans($setting, [], $packageContext) . '</td>';
-                    $html[] = '<td>' . $this->getUserService()->findUserSetting($user, $setting, '-') . '</td>';
+                    $html[] = '<td>' . $this->getUserSettingsService()->findUserSetting($user, $setting, '-') . '</td>';
                     $html[] = '</tr>';
                 }
 

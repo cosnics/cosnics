@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Service;
 
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
-use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserSettingsService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Architecture\Trait\SingleCacheAdapterHandlerTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -19,18 +19,18 @@ class OwnedCalendarsCacheService
 
     protected int $defaultLifetime;
 
-    protected UserService $userService;
+    protected UserSettingsService $userSettingsService;
 
     private CalendarRepository $calendarRepository;
 
     public function __construct(
-        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository, UserService $userService,
-        int $defaultLifetime = 3600
+        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository,
+        UserSettingsService $userSettingsService, int $defaultLifetime = 3600
     )
     {
         $this->cacheAdapter = $cacheAdapter;
         $this->calendarRepository = $calendarRepository;
-        $this->userService = $userService;
+        $this->userSettingsService = $userSettingsService;
         $this->defaultLifetime = $defaultLifetime;
     }
 
@@ -58,7 +58,7 @@ class OwnedCalendarsCacheService
         $cacheIdentifier = $this->getCacheKeyForParts([__METHOD__, $user->getId()]);
 
         if (!$this->hasCacheDataForKey($cacheIdentifier)) {
-            $lifetime = $this->getUserService()->findUserSetting(
+            $lifetime = $this->getUserSettingsService()->findUserSetting(
                 $user, 'cosnics.libraries.storage.cache.external.defaultLifetime', $this->getDefaultLifetime()
             );
 
@@ -70,8 +70,8 @@ class OwnedCalendarsCacheService
         return $this->readCacheDataForKey($cacheIdentifier);
     }
 
-    public function getUserService(): UserService
+    public function getUserSettingsService(): UserSettingsService
     {
-        return $this->userService;
+        return $this->userSettingsService;
     }
 }

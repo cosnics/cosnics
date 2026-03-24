@@ -97,7 +97,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
             User::PROPERTY_ACTIVE
         ];
 
-        $userPicture = $this->getUserPictureProvider()->getUserPictureAsBase64String($user, $requestingUser);
+        $userPicture = $this->getUserPictureProvider()->getUserPictureAsBase64String($user);
 
         foreach ($attributes as $i => $attribute) {
             $table->setCellContents(

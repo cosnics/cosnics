@@ -4,4 +4,5 @@
 
 .navbar .img-profile, .navbar-brand {
     height: 48px;
+    max-width: 48px;
 }

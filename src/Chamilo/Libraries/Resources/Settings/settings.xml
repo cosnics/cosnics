@@ -3,11 +3,13 @@
     <settings>
         <category name="Calendar">
             <setting name="cosnics.libraries.calendar.hourStep"
-                     field="HTML_QuickForm_text"
-                     default="1"></setting>
+                     field="Symfony\Component\Form\Extension\Core\Type\TextType"
+                     default="1"
+                     required="true"></setting>
             <setting name="cosnics.libraries.calendar.workingHoursStart"
-                     field="HTML_QuickForm_select"
-                     default="0">
+                     field="Symfony\Component\Form\Extension\Core\Type\ChoiceType"
+                     default="0"
+                     required="true">
                 <options type="static">
                     <option value="0"
                             name="00"/>
@@ -60,8 +62,9 @@
                 </options>
             </setting>
             <setting name="cosnics.libraries.calendar.workingHoursEnd"
-                     field="HTML_QuickForm_select"
-                     default="24">
+                     field="Symfony\Component\Form\Extension\Core\Type\ChoiceType"
+                     default="24"
+                     required="true">
                 <options type="static">
                     <option value="0"
                             name="00"/>
@@ -114,16 +117,18 @@
                 </options>
             </setting>
             <setting name="cosnics.libraries.calendar.hideNonWorkingHours"
-                     field="Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_checkbox"
-                     default="0">
+                     field="Symfony\Component\Form\Extension\Core\Type\CheckboxType"
+                     default="false"
+                     required="true">
                 <options type="static">
                     <option name="hide_non_working_hours"
                             value="1"/>
                 </options>
             </setting>
             <setting name="cosnics.libraries.calendar.defaultView"
-                     field="Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_radio"
-                     default="Month">
+                     field="Symfony\Component\Form\Extension\Core\Type\RadioType"
+                     default="Month"
+                     required="true">
                 <options type="static">
                     <option name="Month"
                             value="Month"/>
@@ -136,8 +141,9 @@
                 </options>
             </setting>
             <setting name="cosnics.libraries.calendar.firstDayOfWeek"
-                     field="Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_radio"
-                     default="monday">
+                     field="Symfony\Component\Form\Extension\Core\Type\RadioType"
+                     default="monday"
+                     required="true">
                 <options type="static">
                     <option name="Sunday"
                             value="sunday"/>
@@ -148,20 +154,22 @@
         </category>
         <category name="MicrosoftGraph">
             <setting name="cosnics.libraries.protocol.microsoft.graph.externalUserIdentifier"
-                     field="HTML_QuickForm_text"
+                     field="Symfony\Component\Form\Extension\Core\Type\TextType"
                      default=""/>
         </category>
         <category name="UserInterface">
             <setting name="cosnics.libraries.userInterface.translation.language.default"
-                     field="HTML_QuickForm_select"
-                     default="english">
+                     field="Symfony\Component\Form\Extension\Core\Type\ChoiceType"
+                     default="english"
+                     required="true">
                 <options type="dynamic"
                          source="getLanguages"/>
                 <availability source="isAllowedToChangePlatformLanguage"/>
             </setting>
             <setting name="cosnics.libraries.calendar.timezone"
-                     field="HTML_QuickForm_select"
-                     default="Europe/Brussels">
+                     field="Symfony\Component\Form\Extension\Core\Type\ChoiceType"
+                     default="Europe/Brussels"
+                     required="true">
                 <options type="dynamic"
                          source="getTimeZones"/>
                 <availability source="isAllowedToChangePlatformTimezone"/>
@@ -169,8 +177,9 @@
         </category>
         <category name="Caching">
             <setting name="cosnics.libraries.storage.cache.external.defaultLifetime"
-                     field="HTML_QuickForm_text"
-                     default="3600"/>
+                     field="Symfony\Component\Form\Extension\Core\Type\TextType"
+                     default="3600"
+                     required="true"/>
         </category>
     </settings>
 </package>

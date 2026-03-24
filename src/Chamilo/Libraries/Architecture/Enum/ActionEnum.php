@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Enum;
 
-use Chamilo\Libraries\Component\CalendarPopupComponent;
 use Chamilo\Libraries\Component\DeleteTemporaryFileComponent;
 use Chamilo\Libraries\Component\UploadTemporaryFileComponent;
 use Chamilo\Libraries\Component\UtilitiesComponent;
@@ -12,7 +11,6 @@ use Chamilo\Libraries\Component\UtilitiesComponent;
  */
 enum ActionEnum: string
 {
-    case CALENDAR_POPUP = 'CalendarPopup';
     case DELETE_TEMPORARY_FILE = 'DeleteTemporaryFile';
     case UPLOAD_TEMPORARY_FILE = 'UploadTemporaryFile';
     case UTILITIES = 'Utilities';
@@ -20,7 +18,6 @@ enum ActionEnum: string
     public static function getAction(string $className): ActionEnum
     {
         return match ($className) {
-            CalendarPopupComponent::class => self::CALENDAR_POPUP,
             DeleteTemporaryFileComponent::class => self::DELETE_TEMPORARY_FILE,
             UploadTemporaryFileComponent::class => self::UPLOAD_TEMPORARY_FILE,
             UtilitiesComponent::class => self::UTILITIES

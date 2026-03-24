@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
-use Chamilo\Core\User\Service\UserService as PlatformUserService;
+use Chamilo\Core\User\Service\UserSettingsService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository;
@@ -15,14 +15,14 @@ class UserService
 {
     protected UserRepository $userRepository;
 
-    protected PlatformUserService $userService;
+    protected UserSettingsService $userSettingsService;
 
     public function __construct(
-        UserRepository $userRepository, PlatformUserService $userService
+        UserRepository $userRepository, UserSettingsService $userSettingsService
     )
     {
         $this->userRepository = $userRepository;
-        $this->userService = $userService;
+        $this->userSettingsService = $userSettingsService;
     }
 
     /**
@@ -31,14 +31,14 @@ class UserService
      */
     public function getAndSaveUserIdentifier(User $user): ?string
     {
-        $userIdentifier = $this->getUserService()->findUserSetting(
+        $userIdentifier = $this->getUserSettingsService()->findUserSetting(
             $user, 'cosnics.libraries.protocol.microsoft.graph.externalUserIdentifier'
         );
 
         if (empty($userIdentifier)) {
             $userIdentifier = $this->getUserIdentifier($user);
 
-            $this->getUserService()->updateUserSetting(
+            $this->getUserSettingsService()->updateUserSetting(
                 $user, 'cosnics.libraries.protocol.microsoft.graph.externalUserIdentifier', $userIdentifier
             );
         }
@@ -93,8 +93,8 @@ class UserService
         return $this->userRepository;
     }
 
-    public function getUserService(): PlatformUserService
+    public function getUserSettingsService(): UserSettingsService
     {
-        return $this->userService;
+        return $this->userSettingsService;
     }
 }

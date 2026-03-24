@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  * @package Chamilo\Core\User\UserInterface\Form
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserCreateFormType extends AbstractUserFormType
+class RegisterFormType extends AbstractUserFormType
 {
     /**
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
@@ -15,12 +15,11 @@ class UserCreateFormType extends AbstractUserFormType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $this->buildPersonalDetailsForm($builder, $options);
-        $this->buildSecurityForm($builder, $options, true);
+        $this->buildSecurityForm($builder, $options);
         $this->buildPictureForm($builder, $options);
-        $this->buildAccountForm($builder, $options);
         $this->buildMailForm($builder);
 
-        if ($this->canUserChangeAnything($options['user'])) {
+        if ($this->isAnythingChangeable($options['executingUser'], $options['user'])) {
             $this->getFormButtonTypeBuilder()->addSaveAndResetButton($builder);
         }
     }

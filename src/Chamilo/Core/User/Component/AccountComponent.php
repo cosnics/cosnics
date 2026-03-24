@@ -3,13 +3,12 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
-use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\UserInterface\Form\AbstractUserFormType;
 use Chamilo\Core\User\UserInterface\Form\AccountFormType;
-use Chamilo\Core\User\UserInterface\Form\UserForm;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
@@ -22,7 +21,6 @@ use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
@@ -39,32 +37,23 @@ class AccountComponent extends ProfileComponent
 {
     protected AccountFormType $accountFormType;
 
-    protected FormFactoryInterface $formFactory;
-
-    protected Environment $twigFormEnvironment;
-
-    protected ?UserPictureProviderInterface $userPictureProvider;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        UrlGenerator $urlGenerator, ?UserPictureProviderInterface $userPictureProvider, TabsRenderer $tabsRenderer,
-        FormFactoryInterface $formFactory, AccountFormType $accountFormType, Environment $twigFormEnvironment,
-        bool $userCanChangePicture
+        UrlGenerator $urlGenerator, TabsRenderer $tabsRenderer, FormFactoryInterface $formFactory,
+        Environment $twigEnvironment, ?UserPictureProviderInterface $userPictureProvider,
+        AccountFormType $accountFormType, bool $userCanChangePicture
     )
     {
         parent::__construct(
             $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator, $tabsRenderer,
-            $userCanChangePicture
+            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator, $tabsRenderer, $formFactory,
+            $twigEnvironment, $userPictureProvider, $userCanChangePicture
         );
 
-        $this->userPictureProvider = $userPictureProvider;
-        $this->formFactory = $formFactory;
         $this->accountFormType = $accountFormType;
-        $this->twigFormEnvironment = $twigFormEnvironment;
     }
 
     /**
@@ -79,7 +68,11 @@ class AccountComponent extends ProfileComponent
         $translator = $this->getTranslator();
 
         $form = $this->getFormFactory()->create(
-            AccountFormType::class, $currentUser->getDefaultProperties(), ['action' => $this->getUrlGenerator()->fromRequest(), 'user' => $currentUser]
+            AccountFormType::class, $currentUser->getDefaultProperties(), [
+                'action' => $this->getUrlGenerator()->fromRequest(),
+                'user' => $currentUser,
+                'executingUser' => $currentUser
+            ]
         );
         $form->handleRequest($this->getRequest());
 
@@ -90,28 +83,10 @@ class AccountComponent extends ProfileComponent
                 $this->getUserService()->updateAccountFromParameters(
                     $currentUser, $submittedData[User::PROPERTY_GIVEN_NAME], $submittedData[User::PROPERTY_SURNAME],
                     $submittedData[User::PROPERTY_USERNAME], $submittedData[User::PROPERTY_OFFICIAL_CODE],
-                    $submittedData[User::PROPERTY_EMAIL], $submittedData[UserForm::PROPERTY_CURRENT_PASSWORD],
+                    $submittedData[User::PROPERTY_EMAIL],
+                    $submittedData[AbstractUserFormType::PROPERTY_PASSWORD_CURRENT],
                     $submittedData[User::PROPERTY_PASSWORD]
                 );
-
-                $userPictureProvider = $this->getUserPictureProvider();
-
-                if ($userPictureProvider instanceof UserPictureUpdateProviderInterface) {
-                    $pictureInformation = $this->getRequest()->files->get(User::PROPERTY_PICTURE_URI);
-
-                    if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid()) {
-                        if (!$userPictureProvider->updateUserPictureFromParameters(
-                            $currentUser, $currentUser, $pictureInformation
-                        )) {
-                            $this->getAlertsManager()->addAlert(
-                                new Alert(
-                                    $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
-                                    AlertEnum::WARNING
-                                )
-                            );
-                        }
-                    }
-                }
 
                 $this->getAlertsManager()->addAlert(
                     new Alert(
@@ -136,7 +111,7 @@ class AccountComponent extends ProfileComponent
         $html = [];
 
         $html[] = $this->renderHeader($currentUser);
-        $html[] = $this->getTwigFormEnvironment()->render('form.html.twig', [
+        $html[] = $this->getTwigEnvironment()->render('form.html.twig', [
             'form' => $form->createView(),
         ]);
         $html[] = $this->renderFooter();
@@ -147,20 +122,5 @@ class AccountComponent extends ProfileComponent
     public function getAccountFormType(): AccountFormType
     {
         return $this->accountFormType;
-    }
-
-    public function getFormFactory(): FormFactoryInterface
-    {
-        return $this->formFactory;
-    }
-
-    public function getTwigFormEnvironment(): Environment
-    {
-        return $this->twigFormEnvironment;
-    }
-
-    public function getUserPictureProvider(): ?UserPictureUpdateProviderInterface
-    {
-        return $this->userPictureProvider;
     }
 }

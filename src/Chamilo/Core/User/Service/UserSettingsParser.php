@@ -46,7 +46,7 @@ class UserSettingsParser
 
                 // Get settings in category
                 $properties = $category->getElementsByTagname('setting');
-                $attributes = ['field', 'default', 'locked', 'user_setting', 'hidden'];
+                $attributes = ['field', 'default', 'locked', 'user_setting', 'hidden', 'required'];
 
                 foreach ($properties as $property) {
                     $propertyInfo = [];

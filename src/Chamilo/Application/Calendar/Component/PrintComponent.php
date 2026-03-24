@@ -7,6 +7,7 @@ use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserSettingsService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Calendar\Factory\HtmlCalendarRendererFactory;
@@ -43,14 +44,16 @@ class PrintComponent extends BrowseComponent
         CalendarDataProvider $calendarDataProvider,
         CalendarExtensionActionProviderRegistry $calendarExtensionActionProviderRegistry,
         CalendarExtensionDataProviderRegistry $calendarExtensionDataProviderRegistry,
-        HtmlCalendarRendererFactory $htmlCalendarRendererFactory, CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder, string $defaultView
+        HtmlCalendarRendererFactory $htmlCalendarRendererFactory,
+        CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder, UserSettingsService $userSettingsService,
+        string $defaultView
     )
     {
         parent::__construct(
             $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $visibilityRepository,
             $themeWebPathBuilder, $pageHeaders, $webPathBuilder, $userService, $urlGenerator, $calendarDataProvider,
             $calendarExtensionActionProviderRegistry, $calendarExtensionDataProviderRegistry,
-            $htmlCalendarRendererFactory, $calendarTableConfigurationBuilder, $defaultView
+            $htmlCalendarRendererFactory, $calendarTableConfigurationBuilder, $userSettingsService, $defaultView
         );
 
         $this->baseHeaderRenderer = $baseHeaderRenderer;

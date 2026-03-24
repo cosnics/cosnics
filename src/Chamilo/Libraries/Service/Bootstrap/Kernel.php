@@ -56,7 +56,7 @@ class Kernel
         ChamiloRequest $request, SessionInterface $session, ApplicationFactory $applicationFactory,
         ExceptionLoggerInterface $exceptionLogger, AuthenticationValidator $authenticationValidator,
         UrlGenerator $urlGenerator, EventDispatcherInterface $eventDispatcher,
-        UserExceptionResponseRenderer $userExceptionResponseRenderer, string $timezone, User $currentUser = null,
+        UserExceptionResponseRenderer $userExceptionResponseRenderer, string $timezone, ?User $currentUser = null,
         bool $maintenanceMode = false
     )
     {

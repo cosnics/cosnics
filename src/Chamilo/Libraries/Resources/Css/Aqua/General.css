@@ -56,8 +56,6 @@ footer.chamilo-footer {
     --bs-code-color: var(--callout-code-color);
     color: var(--callout-color, inherit);
     --bs-link-color-rgb: var(--callout-link);
-    margin-bottom: 1.25rem;
-    margin-top: 1.25rem;
     padding: 1.25rem;
 }
 
@@ -67,10 +65,6 @@ footer.chamilo-footer {
 
 .callout > :last-child {
     margin-bottom: 0
-}
-
-.callout + .callout {
-    margin-top: -.25rem
 }
 
 .callout .highlight {

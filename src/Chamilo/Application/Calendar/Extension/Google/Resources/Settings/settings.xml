@@ -3,7 +3,7 @@
     <settings>
         <category name="Security">
             <setting name="cosnics.libraries.protocol.google.token"
-                     field="HTML_QuickForm_text"
+                     field="Symfony\Component\Form\Extension\Core\Type\TextType"
                      default=""/>
         </category>
     </settings>

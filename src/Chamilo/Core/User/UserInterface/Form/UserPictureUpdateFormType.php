@@ -7,17 +7,13 @@ use Symfony\Component\Form\FormBuilderInterface;
  * @package Chamilo\Core\User\UserInterface\Form
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class AccountFormType extends AbstractUserFormType
+class UserPictureUpdateFormType extends AbstractUserFormType
 {
-    /**
-     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $this->buildPersonalDetailsForm($builder, $options);
-        $this->buildSecurityForm($builder, $options, true);
+        $this->buildPictureForm($builder, $options);
 
-        if ($this->isAnythingChangeable($options['executingUser'], $options['user'])) {
+        if ($this->isPictureChangeable($options['executingUser'])) {
             $this->getFormButtonTypeBuilder()->addSaveAndResetButton($builder);
         }
     }

@@ -16,5 +16,5 @@ interface UserPictureProviderInterface
 
     public function downloadUserPicture(User $user): Response;
 
-    public function getUserPictureAsBase64String(User $targetUser, User $requestUser): ?string;
+    public function getUserPictureAsBase64String(User $user, bool $useFallback = true): ?string;
 }

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service;
 
-use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserSettingsService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Calendar\Architecture\Domain\CalendarTableConfiguration;
 
@@ -21,14 +21,14 @@ class CalendarTableConfigurationBuilder
 
     protected int $defaultStartHour;
 
-    protected UserService $userService;
+    protected UserSettingsService $userSettingsService;
 
     public function __construct(
-        UserService $userService, string $defaultFirstDayOfWeek, bool $defaultHideNonWorkingHours,
+        UserSettingsService $userSettingsService, string $defaultFirstDayOfWeek, bool $defaultHideNonWorkingHours,
         int $defaultStartHour, int $defaultEndHour, int $defaultHourStep
     )
     {
-        $this->userService = $userService;
+        $this->userSettingsService = $userSettingsService;
         $this->defaultEndHour = $defaultEndHour;
         $this->defaultFirstDayOfWeek = $defaultFirstDayOfWeek;
         $this->defaultHideNonWorkingHours = $defaultHideNonWorkingHours;
@@ -72,7 +72,7 @@ class CalendarTableConfigurationBuilder
     public function getEndHour(?User $user): int
     {
         if ($user instanceof User) {
-            return $this->getUserService()->findUserSetting(
+            return $this->getUserSettingsService()->findUserSetting(
                 $user, 'cosnics.libraries.calendar.workingHoursEnd', $this->getDefaultEndHour()
             );
         }
@@ -83,7 +83,7 @@ class CalendarTableConfigurationBuilder
     protected function getFirstDayOfWeek(?User $user): ?string
     {
         if ($user instanceof User) {
-            return $this->getUserService()->findUserSetting(
+            return $this->getUserSettingsService()->findUserSetting(
                 $user, 'cosnics.libraries.calendar.firstDayOfWeek', $this->getDefaultFirstDayOfWeek()
             );
         }
@@ -94,7 +94,7 @@ class CalendarTableConfigurationBuilder
     public function getHideNonWorkingHours(?User $user): bool
     {
         if ($user instanceof User) {
-            return $this->getUserService()->findUserSetting(
+            return $this->getUserSettingsService()->findUserSetting(
                 $user, 'cosnics.libraries.calendar.hideNonWorkingHours', $this->getDefaultHideNonWorkingHours()
             );
         }
@@ -105,7 +105,7 @@ class CalendarTableConfigurationBuilder
     public function getHourStep(?User $user): int
     {
         if ($user instanceof User) {
-            return $this->getUserService()->findUserSetting(
+            return $this->getUserSettingsService()->findUserSetting(
                 $user, 'cosnics.libraries.calendar.hourStep', $this->getDefaultHourStep()
             );
         }
@@ -116,7 +116,7 @@ class CalendarTableConfigurationBuilder
     public function getStartHour(?User $user): int
     {
         if ($user instanceof User) {
-            return $this->getUserService()->findUserSetting(
+            return $this->getUserSettingsService()->findUserSetting(
                 $user, 'cosnics.libraries.calendar.workingHoursStart', $this->getDefaultStartHour()
             );
         }
@@ -124,8 +124,8 @@ class CalendarTableConfigurationBuilder
         return $this->getDefaultStartHour();
     }
 
-    public function getUserService(): UserService
+    public function getUserSettingsService(): UserSettingsService
     {
-        return $this->userService;
+        return $this->userSettingsService;
     }
 }

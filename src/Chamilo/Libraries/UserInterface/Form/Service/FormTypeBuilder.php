@@ -6,6 +6,7 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\CategoryFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlEditorFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\MessageFormType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\PictureFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\VisualContentFormType;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -109,6 +110,26 @@ class FormTypeBuilder
         );
     }
 
+    public function addPicture(
+        FormBuilderInterface $builder, string $name, string $label, ?string $pictureUri = null,
+        ?string $noPictureLabel = null, array $pictureStyles = [], array $options = []
+    ): FormBuilderInterface
+    {
+        return $builder->add(
+            $this->createPicture(
+                $builder, $name, $label, $pictureUri, $noPictureLabel, $pictureStyles, $options
+            )
+        );
+    }
+
+    public function addRadio(
+        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $choices = [],
+        array $constraints = [], array $options = []
+    ): FormBuilderInterface
+    {
+        return $builder->add($this->createRadio($builder, $name, $label, $required, $choices, $constraints, $options));
+    }
+
     public function addSelect(
         FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $choices = [],
         array $constraints = [], array $options = []
@@ -178,26 +199,6 @@ class FormTypeBuilder
         array $options = []
     ): FormBuilderInterface
     {
-        return $this->createFormType(
-            $builder, EmailType::class, $name, $label, $required, $constraints, $options
-        );
-    }
-
-    public function createFile(
-        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $constraints = [],
-        array $options = []
-    ): FormBuilderInterface
-    {
-        return $this->createFormType(
-            $builder, FileType::class, $name, $label, $required, $constraints, $options
-        );
-    }
-
-    protected function createFormType(
-        FormBuilderInterface $builder, string $type, string $name, string $label, bool $required = true,
-        array $constraints = [], array $options = []
-    ): FormBuilderInterface
-    {
         if ($required) {
             $label .= ' ' . $this->getRequired();
             $constraints[] = new Assert\NotBlank();
@@ -209,7 +210,20 @@ class FormTypeBuilder
         $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
         $options['constraints'] = $constraints;
 
-        return $builder->create($name, $type, $options);
+        return $builder->create($name, EmailType::class, $options);
+    }
+
+    public function createFile(
+        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $constraints = [],
+        array $options = []
+    ): FormBuilderInterface
+    {
+        $options['label'] = $label;
+        $options['label_html'] = true;
+        $options['required'] = $required;
+        $options['constraints'] = $constraints;
+
+        return $builder->create($name, FileType::class, $options);
     }
 
     public function createHtml(FormBuilderInterface $builder, string $name, string $html, array $options = []
@@ -225,9 +239,18 @@ class FormTypeBuilder
         array $options = []
     ): FormBuilderInterface
     {
-        return $this->createFormType(
-            $builder, HtmlEditorFormType::class, $name, $label, $required, $constraints, $options
-        );
+        if ($required) {
+            $label .= ' ' . $this->getRequired();
+            $constraints[] = new Assert\NotBlank();
+        }
+
+        $options['label'] = $label;
+        $options['label_html'] = true;
+        $options['required'] = $required;
+        $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
+        $options['constraints'] = $constraints;
+
+        return $builder->create($name, HtmlEditorFormType::class, $options);
     }
 
     public function createInformation(
@@ -242,12 +265,15 @@ class FormTypeBuilder
         ?string $label = null, array $options = []
     ): FormBuilderInterface
     {
+        $options['label'] = $label;
+        $options['label_html'] = true;
+        $options['required'] = false;
+        $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
+
         $options ['message'] = $message;
         $options ['messageType'] = $messageType;
 
-        return $this->createFormType(
-            $builder, MessageFormType::class, $name, $label, false, [], $options
-        );
+        return $builder->create($name, MessageFormType::class, $options);
     }
 
     public function createPassword(
@@ -259,9 +285,62 @@ class FormTypeBuilder
             $constraints[] = new Assert\PasswordStrength(minScore: Assert\PasswordStrength::STRENGTH_STRONG);
         }
 
-        return $this->createFormType(
-            $builder, PasswordType::class, $name, $label, $required, $constraints, $options
-        );
+        if ($required) {
+            $label .= ' ' . $this->getRequired();
+            $constraints[] = new Assert\NotBlank();
+        }
+
+        $options['label'] = $label;
+        $options['label_html'] = true;
+        $options['required'] = $required;
+        $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
+        $options['constraints'] = $constraints;
+
+        return $builder->create($name, PasswordType::class, $options);
+    }
+
+    public function createPicture(
+        FormBuilderInterface $builder, string $name, string $label, ?string $pictureUri = null,
+        ?string $noPictureLabel = null, array $pictureStyles = [], array $options = []
+    ): FormBuilderInterface
+    {
+        $options['label'] = $label;
+        $options['label_html'] = true;
+        $options['pictureStyles'] = $pictureStyles;
+        $options['pictureUri'] = $pictureUri;
+
+        if ($noPictureLabel) {
+            $options['noPictureLabel'] = $noPictureLabel;
+        }
+
+        return $builder->create($name, PictureFormType::class, $options);
+    }
+
+    public function createRadio(
+        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $choices = [],
+        array $constraints = [], array $options = []
+    ): FormBuilderInterface
+    {
+        if ($required) {
+            $label .= ' ' . $this->getRequired();
+            $constraints[] = new Assert\NotBlank();
+        }
+
+        $options['label'] = $label;
+        $options['label_html'] = true;
+        $options['required'] = $required;
+        $options['constraints'] = $constraints;
+
+        $options['choices'] = $choices;
+        $options['choice_value'] = 'value';
+        $options['choice_label'] = 'label';
+        $options['choice_attr'] = 'attributes';
+        $options['choice_translation_domain'] = false;
+
+        $options['expanded'] = true;
+        $options['multiple'] = false;
+
+        return $builder->create($name, ChoiceType::class, $options);
     }
 
     public function createSelect(
@@ -269,15 +348,24 @@ class FormTypeBuilder
         array $constraints = [], array $options = []
     ): FormBuilderInterface
     {
+        if ($required) {
+            $label .= ' ' . $this->getRequired();
+            $constraints[] = new Assert\NotBlank();
+        }
+
+        $options['label'] = $label;
+        $options['label_html'] = true;
+        $options['required'] = $required;
+        $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
+        $options['constraints'] = $constraints;
+
         $options['choices'] = $choices;
         $options['choice_value'] = 'value';
         $options['choice_label'] = 'label';
         $options['choice_attr'] = 'attributes';
         $options['choice_translation_domain'] = false;
 
-        return $this->createFormType(
-            $builder, ChoiceType::class, $name, $label, $required, $constraints, $options
-        );
+        return $builder->create($name, ChoiceType::class, $options);
     }
 
     public function createText(
@@ -285,18 +373,30 @@ class FormTypeBuilder
         array $options = []
     ): FormBuilderInterface
     {
-        return $this->createFormType(
-            $builder, TextType::class, $name, $label, $required, $constraints, $options
-        );
+        if ($required) {
+            $label .= ' ' . $this->getRequired();
+            $constraints[] = new Assert\NotBlank();
+        }
+
+        $options['label'] = $label;
+        $options['label_html'] = true;
+        $options['required'] = $required;
+        $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
+        $options['constraints'] = $constraints;
+
+        return $builder->create($name, TextType::class, $options);
     }
 
     public function createVisualContent(
         FormBuilderInterface $builder, string $name, string $label, array $options = []
     ): FormBuilderInterface
     {
-        return $this->createFormType(
-            $builder, VisualContentFormType::class, $name, $label, false, [], $options
-        );
+        $options['label'] = $label;
+        $options['label_html'] = true;
+        $options['required'] = false;
+        $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
+
+        return $builder->create($name, VisualContentFormType::class, $options);
     }
 
     public function createWarning(

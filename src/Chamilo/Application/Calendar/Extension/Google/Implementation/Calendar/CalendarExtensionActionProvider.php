@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Architecture\Interface\CalendarExtensionActionP
 use Chamilo\Application\Calendar\Extension\Google\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
-use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserSettingsService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
@@ -29,16 +29,17 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
 
     protected UrlGenerator $urlGenerator;
 
-    protected UserService $userService;
+    protected UserSettingsService $userSettingsService;
 
     public function __construct(
-        UrlGenerator $urlGenerator, UserService $userService, Translator $translator, CalendarService $calendarService
+        UrlGenerator $urlGenerator, Translator $translator, CalendarService $calendarService,
+        UserSettingsService $userSettingsService
     )
     {
         $this->urlGenerator = $urlGenerator;
-        $this->userService = $userService;
         $this->translator = $translator;
         $this->calendarService = $calendarService;
+        $this->userSettingsService = $userSettingsService;
     }
 
     /**
@@ -57,7 +58,8 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
             DisplayTypeEnum::ICON_AND_LABEL, [], ['dropdown-menu-right']
         );
 
-        $accessToken = $this->getUserService()->findUserSetting($user, 'cosnics.libraries.protocol.google.token');
+        $accessToken =
+            $this->getUserSettingsService()->findUserSetting($user, 'cosnics.libraries.protocol.google.token');
 
         if (!$accessToken) {
             $link = $this->getUrlGenerator()->fromParameters(
@@ -116,8 +118,8 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
         return $this->urlGenerator;
     }
 
-    public function getUserService(): UserService
+    public function getUserSettingsService(): UserSettingsService
     {
-        return $this->userService;
+        return $this->userSettingsService;
     }
 }

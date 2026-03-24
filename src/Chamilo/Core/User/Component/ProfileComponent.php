@@ -2,6 +2,8 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
+use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
+use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
@@ -17,7 +19,9 @@ use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Translation\Translator;
+use Twig\Environment;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -27,16 +31,23 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class ProfileComponent extends Manager
 {
+    protected FormFactoryInterface $formFactory;
+
     protected TabsRenderer $tabsRenderer;
 
+    protected Environment $twigEnvironment;
+
     protected bool $userCanChangePicture;
+
+    protected ?UserPictureProviderInterface $userPictureProvider;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        UrlGenerator $urlGenerator, TabsRenderer $tabsRenderer, bool $userCanChangePicture
+        UrlGenerator $urlGenerator, TabsRenderer $tabsRenderer, FormFactoryInterface $formFactory,
+        Environment $twigEnvironment, ?UserPictureProviderInterface $userPictureProvider, bool $userCanChangePicture
     )
     {
         parent::__construct(
@@ -46,11 +57,15 @@ abstract class ProfileComponent extends Manager
 
         $this->tabsRenderer = $tabsRenderer;
         $this->userCanChangePicture = $userCanChangePicture;
+        $this->userPictureProvider = $userPictureProvider;
+        $this->twigEnvironment = $twigEnvironment;
+        $this->formFactory = $formFactory;
     }
 
     public function canUserChangePicture(): bool
     {
-        return $this->userCanChangePicture;
+        return $this->userCanChangePicture &&
+            $this->getUserPictureProvider() instanceof UserPictureUpdateProviderInterface;
     }
 
     /**
@@ -91,9 +106,24 @@ abstract class ProfileComponent extends Manager
         return $tabs;
     }
 
+    public function getFormFactory(): FormFactoryInterface
+    {
+        return $this->formFactory;
+    }
+
     public function getTabsRenderer(): TabsRenderer
     {
         return $this->tabsRenderer;
+    }
+
+    public function getTwigEnvironment(): Environment
+    {
+        return $this->twigEnvironment;
+    }
+
+    public function getUserPictureProvider(): ?UserPictureUpdateProviderInterface
+    {
+        return $this->userPictureProvider;
     }
 
     protected function renderHeader(?User $user = null): string

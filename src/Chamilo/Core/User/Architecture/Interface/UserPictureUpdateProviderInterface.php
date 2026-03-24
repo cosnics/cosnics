@@ -11,12 +11,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 interface UserPictureUpdateProviderInterface
 {
+    public function deleteUserPicture(User $user): bool;
 
-    public function deleteUserPicture(User $targetUser, User $requestUser): bool;
-
-    public function setUserPicture(User $targetUser, User $requestUser, ?UploadedFile $fileInformation = null): bool;
+    public function setUserPicture(User $user, ?UploadedFile $fileInformation = null): bool;
 
     public function updateUserPictureFromParameters(
-        User $targetUser, User $requestUser, ?UploadedFile $fileInformation = null, bool $removeExistingPicture = false
+        User $user, ?UploadedFile $fileInformation = null, bool $removeExistingPicture = false
     ): bool;
 }

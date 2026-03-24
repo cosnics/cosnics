@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\Admin\Service\Consulter\LanguageConsulter;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserSettingsService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
@@ -23,14 +24,18 @@ use Symfony\Component\Translation\Translator;
 class LanguageComponent extends Manager
 {
     protected LanguageConsulter $languageConsulter;
+
     protected bool $userCanChangeLanguage;
+
+    protected UserSettingsService $userSettingsService;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        UrlGenerator $urlGenerator, LanguageConsulter $languageConsulter, bool $userCanChangeLanguage
+        UrlGenerator $urlGenerator, LanguageConsulter $languageConsulter, UserSettingsService $userSettingsService,
+        bool $userCanChangeLanguage
     )
     {
         parent::__construct(
@@ -40,14 +45,8 @@ class LanguageComponent extends Manager
 
         $this->languageConsulter = $languageConsulter;
         $this->userCanChangeLanguage = $userCanChangeLanguage;
+        $this->userSettingsService = $userSettingsService;
     }
-
-    public function canUserChangeLanguage(): bool
-    {
-        return $this->userCanChangeLanguage;
-    }
-
-
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
@@ -62,13 +61,18 @@ class LanguageComponent extends Manager
             $languages = array_keys($this->getLanguages());
 
             if ($choice && in_array($choice, $languages)) {
-                $this->getUserService()->updateUserSetting(
+                $this->getUserSettingsService()->updateUserSetting(
                     $currentUser, 'cosnics.libraries.userInterface.translation.language.default', $choice
                 );
             }
         }
 
         return new RedirectResponse($this->getRequest()->query->get(self::PARAM_REFER));
+    }
+
+    public function canUserChangeLanguage(): bool
+    {
+        return $this->userCanChangeLanguage;
     }
 
     protected function getLanguageConsulter(): LanguageConsulter
@@ -82,5 +86,10 @@ class LanguageComponent extends Manager
     private function getLanguages(): array
     {
         return $this->getLanguageConsulter()->getLanguages();
+    }
+
+    public function getUserSettingsService(): UserSettingsService
+    {
+        return $this->userSettingsService;
     }
 }

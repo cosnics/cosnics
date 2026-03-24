@@ -4,6 +4,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use Chamilo\Core\User\Service\UserFactory;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserSettingsParser;
+use Chamilo\Core\User\Service\UserSettingsService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
 
 return static function (ContainerConfigurator $container) {
@@ -30,4 +31,5 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(UserUrlGenerator::class);
     $services->set(UserSettingsParser::class);
+    $services->set(UserSettingsService::class);
 };

@@ -43,7 +43,7 @@ class WidgetItemRenderer extends ItemRenderer
     {
         $translator = $this->getTranslator();
 
-        $userPicture = $this->getUserPictureProvider()->getUserPictureAsBase64String($user, $user);
+        $userPicture = $this->getUserPictureProvider()->getUserPictureAsBase64String($user);
 
         $html = [];
 

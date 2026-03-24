@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Repository;
 use Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar;
 use Chamilo\Application\Calendar\Extension\Google\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
-use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserSettingsService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
@@ -36,20 +36,21 @@ class CalendarRepository
 
     protected UrlGenerator $urlGenerator;
 
-    protected UserService $userService;
+    protected UserSettingsService $userSettingsService;
 
     private ?Google_Service_Calendar $calendarClient = null;
 
     private ?Google_Client $googleClient = null;
 
     public function __construct(
-        ConfigurablePathBuilder $configurablePathBuilder, UrlGenerator $urlGenerator, UserService $userService,
-        ?string $clientId = null, ?string $clientSecret = null, ?string $developerKey = null
+        ConfigurablePathBuilder $configurablePathBuilder, UrlGenerator $urlGenerator,
+        UserSettingsService $userSettingsService, ?string $clientId = null, ?string $clientSecret = null,
+        ?string $developerKey = null
     )
     {
         $this->urlGenerator = $urlGenerator;
         $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->userService = $userService;
+        $this->userSettingsService = $userSettingsService;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->developerKey = $developerKey;
@@ -60,7 +61,7 @@ class CalendarRepository
      */
     public function clearAccessToken(User $user): bool
     {
-        return $this->getUserService()->updateUserSetting($user, 'cosnics.libraries.protocol.google.token', '');
+        return $this->getUserSettingsService()->updateUserSetting($user, 'cosnics.libraries.protocol.google.token', '');
     }
 
     /**
@@ -117,7 +118,7 @@ class CalendarRepository
 
     public function getAccessToken(User $user): ?string
     {
-        return $this->getUserService()->findUserSetting($user, 'cosnics.libraries.protocol.google.token');
+        return $this->getUserSettingsService()->findUserSetting($user, 'cosnics.libraries.protocol.google.token');
     }
 
     public function getCacheIdentifier($userToken, $method, $additionalIdentifiers = []): string
@@ -210,9 +211,9 @@ class CalendarRepository
         return $this->urlGenerator;
     }
 
-    protected function getUserService(): UserService
+    protected function getUserSettingsService(): UserSettingsService
     {
-        return $this->userService;
+        return $this->userSettingsService;
     }
 
     public function hasAccessToken(User $user): bool
@@ -280,7 +281,7 @@ class CalendarRepository
     public function saveAccessToken(User $user, string $accessToken): bool
     {
         try {
-            return $this->getUserService()->updateUserSetting(
+            return $this->getUserSettingsService()->updateUserSetting(
                 $user, 'cosnics.libraries.protocol.google.token', $accessToken
             );
         }

@@ -7,6 +7,7 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\ElementFinderFormTy
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlEditorFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\MessageFormType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\PictureFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\VisualContentFormType;
 use Chamilo\Libraries\UserInterface\Form\Factory\FormFactoryBuilder;
 use Chamilo\Libraries\UserInterface\Form\Factory\TwigFormRendererFactory;
@@ -50,4 +51,5 @@ return static function (ContainerConfigurator $container) {
     $services->set(CategoryFormType::class)->tag(FormTypeInterface::class);
     $services->set(HtmlEditorFormType::class)->tag(FormTypeInterface::class);
     $services->set(ElementFinderFormType::class)->tag(FormTypeInterface::class);
+    $services->set(PictureFormType::class)->tag(FormTypeInterface::class);
 };

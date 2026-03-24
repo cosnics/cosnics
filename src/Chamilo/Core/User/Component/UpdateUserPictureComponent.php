@@ -2,12 +2,14 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
+use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\UserInterface\Form\PictureForm;
+use Chamilo\Core\User\UserInterface\Form\AbstractUserFormType;
+use Chamilo\Core\User\UserInterface\Form\UserPictureUpdateFormType;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
@@ -20,11 +22,12 @@ use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
-use Exception;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Twig\Environment;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -34,32 +37,33 @@ use Symfony\Component\Translation\Translator;
  */
 class UpdateUserPictureComponent extends ProfileComponent
 {
-    protected PictureForm $pictureForm;
-
-    protected ?UserPictureUpdateProviderInterface $userPictureUpdateProvider;
+    protected UserPictureUpdateFormType $userPictureUpdateFormType;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        UrlGenerator $urlGenerator, ?UserPictureUpdateProviderInterface $userPictureUpdateProvider,
-        TabsRenderer $tabsRenderer, bool $userCanChangePicture
+        UrlGenerator $urlGenerator, TabsRenderer $tabsRenderer, FormFactoryInterface $formFactory,
+        Environment $twigEnvironment, ?UserPictureProviderInterface $userPictureProvider,
+        UserPictureUpdateFormType $userPictureUpdateFormType, bool $userCanChangePicture
     )
     {
         parent::__construct(
             $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator, $tabsRenderer,
-            $userCanChangePicture
+            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator, $tabsRenderer, $formFactory,
+            $twigEnvironment, $userPictureProvider, $userCanChangePicture
         );
 
-        $this->userPictureUpdateProvider = $userPictureUpdateProvider;
+        $this->userPictureUpdateFormType = $userPictureUpdateFormType;
     }
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     * @throws \QuickformException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function run(?User $currentUser = null): Response
     {
@@ -68,20 +72,23 @@ class UpdateUserPictureComponent extends ProfileComponent
         $userPictureProvider = $this->getUserPictureProvider();
 
         if ($userPictureProvider instanceof UserPictureUpdateProviderInterface) {
-            $pictureForm = $this->getPictureForm($currentUser);
+            $form = $this->getFormFactory()->create(
+                UserPictureUpdateFormType::class, [], [
+                    'action' => $this->getUrlGenerator()->fromRequest(),
+                    'user' => $currentUser,
+                    'executingUser' => $currentUser
+                ]
+            );
+            $form->handleRequest($this->getRequest());
 
-            if ($pictureForm->validate()) {
-                try {
-                    $removeExistingPicture = (bool) $pictureForm->exportValue('remove_picture');
-                }
-                catch (Exception) {
-                    $removeExistingPicture = false;
-                }
+            if ($form->isSubmitted() && $form->isValid()) {
+                $submittedData = $form->getData();
 
-                $pictureInformation = $this->getRequest()->files->get(User::PROPERTY_PICTURE_URI);
+                $pictureInformation = $submittedData[User::PROPERTY_PICTURE_URI];
 
                 $success = $userPictureProvider->updateUserPictureFromParameters(
-                    $currentUser, $currentUser, $pictureInformation, $removeExistingPicture
+                    $currentUser, $pictureInformation,
+                    (bool) $submittedData[AbstractUserFormType::PROPERTY_PICTURE_REMOVE]
                 );
 
                 if (!$success) {
@@ -109,9 +116,6 @@ class UpdateUserPictureComponent extends ProfileComponent
                     ApplicationInterface::PARAM_ACTION => ActionEnum::UPDATE_USER_PICTURE->value
                 ]));
             }
-            else {
-                return new Response($this->renderPage($currentUser));
-            }
         }
         else {
             throw new UserException(
@@ -120,30 +124,20 @@ class UpdateUserPictureComponent extends ProfileComponent
                 )
             );
         }
+
+        $html = [];
+
+        $html[] = $this->renderHeader($currentUser);
+        $html[] = $this->getTwigEnvironment()->render('form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+        $html[] = $this->renderFooter();
+
+        return new Response(implode(PHP_EOL, $html));
     }
 
-    /**
-     * @throws \QuickformException
-     */
-    public function getContent(User $user): string
+    public function getUserPictureUpdateFormType(): UserPictureUpdateFormType
     {
-        return $this->getPictureForm($user)->render();
-    }
-
-    /**
-     * @throws \QuickformException
-     */
-    public function getPictureForm(User $user): PictureForm
-    {
-        if (!isset($this->pictureForm)) {
-            $this->pictureForm = new PictureForm($user, $this->getUrlGenerator()->fromRequest());
-        }
-
-        return $this->pictureForm;
-    }
-
-    public function getUserPictureProvider(): ?UserPictureUpdateProviderInterface
-    {
-        return $this->userPictureUpdateProvider;
+        return $this->userPictureUpdateFormType;
     }
 }

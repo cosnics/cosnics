@@ -10,8 +10,12 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(TranslatorFactory::class);
 
-    $services->set(Translator::class)->args(['%cosnics.libraries.userInterface.translation.language.default%'])
-        ->factory(
-            [service(TranslatorFactory::class), 'createTranslator']
-        );
+    $services->set(Translator::class)->factory(
+        [service(TranslatorFactory::class), 'createTranslator']
+    )->args(
+        [
+            '$locale' => '%cosnics.libraries.userInterface.translation.language.default%',
+            '$fallbackLanguages' => '%cosnics.libraries.userInterface.translation.language.fallback%'
+        ]
+    );
 };

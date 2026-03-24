@@ -248,7 +248,6 @@ class UserService
         return $user;
     }
 
-    /** @noinspection PhpUnusedParameterInspection */
     public function deleteUser(User $user): bool
     {
         return false;
@@ -271,6 +270,7 @@ class UserService
         //        return true;
     }
 
+    /** @noinspection PhpUnusedParameterInspection */
     public function determineUserKey(User $user): string
     {
         return $this->getHashingUtilities()->hashString($this->getSecurityKey() . $user->getEmail());
@@ -389,11 +389,6 @@ class UserService
     ): array
     {
         return $this->getUserRepository()->findUserProperties($retrieveProperties, $condition, $orderBy);
-    }
-
-    public function findUserSetting(User $user, string $variable, mixed $defaultValue = null)
-    {
-        return $user->getSetting($variable, $defaultValue);
     }
 
     /**
@@ -583,7 +578,6 @@ class UserService
     {
         return $this->allowRegistration;
     }
-
 
     public function isUsernameAvailable(string $username): bool
     {
@@ -834,16 +828,6 @@ class UserService
         if ($sendEmail && !$this->sendRegistrationEmailToUser($user, $password)) {
             throw new RuntimeException('Could not send an email to the updated user');
         }
-
-        return $this->updateUser($user);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function updateUserSetting(User $user, string $variable, mixed $value = null): bool
-    {
-        $user->setSetting($variable, $value);
 
         return $this->updateUser($user);
     }

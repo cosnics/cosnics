@@ -9,6 +9,7 @@ use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Core\User\Component\ConfigureComponent;
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Service\UserSettingsService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
@@ -64,6 +65,8 @@ class BrowseComponent extends Manager
 
     protected UserService $userService;
 
+    protected UserSettingsService $userSettingsService;
+
     protected WebPathBuilder $webPathBuilder;
 
     private int $currentTime;
@@ -77,7 +80,8 @@ class BrowseComponent extends Manager
         CalendarExtensionActionProviderRegistry $calendarExtensionActionProviderRegistry,
         CalendarExtensionDataProviderRegistry $calendarExtensionDataProviderRegistry,
         HtmlCalendarRendererFactory $htmlCalendarRendererFactory,
-        CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder, string $defaultView
+        CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder, UserSettingsService $userSettingsService,
+        string $defaultView
     )
     {
         parent::__construct(
@@ -94,6 +98,7 @@ class BrowseComponent extends Manager
         $this->calendarExtensionDataProviderRegistry = $calendarExtensionDataProviderRegistry;
         $this->htmlCalendarRendererFactory = $htmlCalendarRendererFactory;
         $this->calendarTableConfigurationBuilder = $calendarTableConfigurationBuilder;
+        $this->userSettingsService = $userSettingsService;
 
         $this->defaultView = $defaultView;
     }
@@ -185,7 +190,7 @@ class BrowseComponent extends Manager
         $rendererType = $this->getRequest()->query->get(HtmlCalendarRenderer::PARAM_TYPE);
 
         if (!$rendererType) {
-            $rendererType = $this->getUserService()->findUserSetting(
+            $rendererType = $this->getUserSettingsService()->findUserSetting(
                 $user, 'cosnics.libraries.calendar.defaultView', $this->getDefaultView()
             );
 
@@ -285,6 +290,11 @@ class BrowseComponent extends Manager
     public function getUserService(): UserService
     {
         return $this->userService;
+    }
+
+    public function getUserSettingsService(): UserSettingsService
+    {
+        return $this->userSettingsService;
     }
 
     /**

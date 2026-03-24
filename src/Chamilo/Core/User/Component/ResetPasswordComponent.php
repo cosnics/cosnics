@@ -61,6 +61,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function run(?User $currentUser = null): Response
     {

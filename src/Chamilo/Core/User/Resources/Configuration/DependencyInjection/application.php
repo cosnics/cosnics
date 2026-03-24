@@ -26,12 +26,24 @@ return static function (ContainerConfigurator $container) {
     $services->defaults()->public()->autowire()->autoconfigure();
 
     $services->set(MultiPasswordResetComponent::class)->tag(ApplicationInterface::class);
-    $services->set(UpdateComponent::class)->tag(ApplicationInterface::class);
+    $services->set(UpdateComponent::class)->args(
+        [
+            '$userCanChangePicture' => '%cosnics.application.user.rights.changeUserPicture%',
+            '$twigEnvironment' => service('Twig\Environment\Form')
+        ]
+    )->tag(
+        ApplicationInterface::class
+    );
     $services->set(DownloadUserPictureComponent::class)->tag(ApplicationInterface::class);
     $services->set(DeleteComponent::class)->tag(ApplicationInterface::class);
     $services->set(LeaveComponent::class)->tag(ApplicationInterface::class);
     $services->set(ConfigureComponent::class)->args(
-        ['$userCanChangePicture' => '%cosnics.application.user.rights.changeUserPicture%']
+        [
+            '$userCanChangePicture' => '%cosnics.application.user.rights.changeUserPicture%',
+            '$twigEnvironment' => service('Twig\Environment\Form'),
+            '$parameters' => null
+
+        ]
     )->tag(ApplicationInterface::class);
     $services->set(LogoutComponent::class)->tag(ApplicationInterface::class);
     $services->set(BrowseComponent::class)->tag(ApplicationInterface::class);
@@ -42,19 +54,30 @@ return static function (ContainerConfigurator $container) {
     )->tag(ApplicationInterface::class);
     $services->set(ActiveComponent::class)->tag(ApplicationInterface::class);
     $services->set(UpdateUserPictureComponent::class)->args(
-        ['$userCanChangePicture' => '%cosnics.application.user.rights.changeUserPicture%']
+        [
+            '$userCanChangePicture' => '%cosnics.application.user.rights.changeUserPicture%',
+            '$twigEnvironment' => service('Twig\Environment\Form')
+        ]
     )->tag(ApplicationInterface::class);
-    $services->set(CreateComponent::class)->tag(ApplicationInterface::class);
+    $services->set(CreateComponent::class)->args(
+        [
+            '$twigEnvironment' => service('Twig\Environment\Form')
+        ]
+    )->tag(ApplicationInterface::class);
     $services->set(LanguageComponent::class)->args(
         ['$userCanChangeLanguage' => '%cosnics.application.user.rights.changeLanguage%']
     )->tag(ApplicationInterface::class);
-    $services->set(RegisterComponent::class)->args(['$userCanRegister' => '%cosnics.application.user.rights.register%'])
-        ->tag(ApplicationInterface::class);
+    $services->set(RegisterComponent::class)->args(
+        [
+            '$userCanRegister' => '%cosnics.application.user.rights.register%',
+            '$twigEnvironment' => service('Twig\Environment\Form')
+        ]
+    )->tag(ApplicationInterface::class);
     $services->set(ViewComponent::class)->tag(ApplicationInterface::class);
     $services->set(AccountComponent::class)->args(
         [
             '$userCanChangePicture' => '%cosnics.application.user.rights.changeUserPicture%',
-            '$twigFormEnvironment' => service('Twig\Environment\Form')
+            '$twigEnvironment' => service('Twig\Environment\Form')
         ]
     )->tag(ApplicationInterface::class);
 };

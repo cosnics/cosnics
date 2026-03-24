@@ -19,6 +19,8 @@ class UserFactory
 
     protected bool $canChangeTimezone;
 
+    protected UserSettingsService $userSettingsService;
+
     private SessionInterface $session;
 
     private ThemePathBuilder $themeSystemPathBuilder;
@@ -31,8 +33,8 @@ class UserFactory
 
     public function __construct(
         SessionInterface $session, UserService $userService, ThemePathBuilder $themeWebPathBuilder,
-        ThemePathBuilder $themeSystemPathBuilder, Translator $translator, bool $canChangeLanguage = true,
-        bool $canChangeTimezone = true
+        ThemePathBuilder $themeSystemPathBuilder, Translator $translator, UserSettingsService $userSettingsService,
+        bool $canChangeLanguage = true, bool $canChangeTimezone = true
     )
     {
         $this->session = $session;
@@ -40,6 +42,7 @@ class UserFactory
         $this->themeWebPathBuilder = $themeWebPathBuilder;
         $this->themeSystemPathBuilder = $themeSystemPathBuilder;
         $this->translator = $translator;
+        $this->userSettingsService = $userSettingsService;
         $this->canChangeLanguage = $canChangeLanguage;
         $this->canChangeTimezone = $canChangeTimezone;
     }
@@ -84,7 +87,7 @@ class UserFactory
 
                 if ($user instanceof User) {
                     if ($this->canChangeLanguage()) {
-                        $userLanguage = $this->getUserService()->findUserSetting(
+                        $userLanguage = $this->getUserSettingsService()->findUserSetting(
                             $user, 'cosnics.libraries.userInterface.translation.language.default'
                         );
 
@@ -94,8 +97,9 @@ class UserFactory
                     }
 
                     if ($this->canChangeTimezone()) {
-                        $userTimezone =
-                            $this->getUserService()->findUserSetting($user, 'cosnics.libraries.calendar.timezone');
+                        $userTimezone = $this->getUserSettingsService()->findUserSetting(
+                            $user, 'cosnics.libraries.calendar.timezone'
+                        );
 
                         if ($userTimezone) {
                             date_default_timezone_set($userTimezone);
@@ -116,6 +120,11 @@ class UserFactory
     public function getUserService(): UserService
     {
         return $this->userService;
+    }
+
+    public function getUserSettingsService(): UserSettingsService
+    {
+        return $this->userSettingsService;
     }
 }
 

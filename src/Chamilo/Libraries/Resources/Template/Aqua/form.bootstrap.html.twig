@@ -22,13 +22,19 @@
 {%- endblock html_widget -%}
 
 {%- block visual_content_widget -%}
-    <div class="form-control">{{ value|raw }}</div>
+    <div class="form-control bg-secondary-subtle user-select-none">{{ value|raw }}</div>
 {%- endblock visual_content_widget -%}
 
 {%- block message_row -%}
-    <div role="alert" class="callout callout-{{ form.vars.messageType }}">
+    <div role="alert" class="callout callout-{{ form.vars.messageType }} mb-3">
         {%- if label is defined -%}
-            <h4 class="callout-heading">{{ label|raw }}</h4>
+            <h4 class="callout-heading">
+                {%- if label_html is same as(false) -%}
+                    {{- label -}}
+                {%- else -%}
+                    {{- label|raw -}}
+                {%- endif -%}
+            </h4>
         {%- endif -%}
 
         {{ block('message_widget') }}
@@ -148,3 +154,15 @@
         </script>
     {% endapply %}
 {% endblock %}
+
+{%- block picture_widget -%}
+    {% if pictureUri %}
+        <div>
+            <img class="img-thumbnail" src="{{ pictureUri|raw }}" style="{% for property, value in pictureStyles %}{{ property }}: {{ value }};{% endfor %}" title="{{ label }}"/>
+        </div>
+    {% else %}
+        <div role="alert" class="callout callout-info mb-3">
+            <p>{{ noPictureLabel|raw }}</p>
+        </div>
+    {% endif %}
+{%- endblock picture_widget -%}
