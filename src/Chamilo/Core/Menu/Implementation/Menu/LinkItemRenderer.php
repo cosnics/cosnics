@@ -13,13 +13,11 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_category;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
+use Chamilo\Libraries\UserInterface\Form\Service\FormTypeBuilder;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
-use HTML_QuickForm_Rule_Required;
-use HTML_QuickForm_select;
+use stdClass;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -38,13 +36,16 @@ class LinkItemRenderer extends ItemRenderer
     public const string TARGET_SELF = '_self';
     public const string TARGET_TOP = '_top';
 
+    protected FormTypeBuilder $formTypeBuilder;
+
     protected WebPathBuilder $webPathBuilder;
 
     private ClassnameUtilities $classnameUtilities;
 
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
-        ClassnameUtilities $classnameUtilities, WebPathBuilder $webPathBuilder, array $fallbackIsoCodes
+        ClassnameUtilities $classnameUtilities, WebPathBuilder $webPathBuilder, FormTypeBuilder $formTypeBuilder,
+        array $fallbackIsoCodes
     )
     {
         parent::__construct($translator, $itemCacheService, $request);
@@ -52,6 +53,7 @@ class LinkItemRenderer extends ItemRenderer
         $this->classnameUtilities = $classnameUtilities;
         $this->fallbackIsoCodes = $fallbackIsoCodes;
         $this->webPathBuilder = $webPathBuilder;
+        $this->formTypeBuilder = $formTypeBuilder;
     }
 
     public function render(Item $item, User $user): string
@@ -89,27 +91,22 @@ class LinkItemRenderer extends ItemRenderer
     /**
      * @throws \QuickformException
      */
-    public function addConfigurationToForm(FormValidator $formValidator): void
+    public function addConfigurationToForm(FormBuilderInterface $builder, array $options): void
     {
-        $formValidator->addElement(
-            HTML_QuickForm_category::class, $this->getTranslator()->trans('Properties', [], Manager::CONTEXT)
+        $translator = $this->getTranslator();
+        $formTypeBuilder = $this->formTypeBuilder;
+
+        $formTypeBuilder->addCategory(
+            $builder, 'category_properties', $translator->trans('Properties', [], Manager::CONTEXT)
         );
 
-        $formValidator->addTextfield(
-            Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_URL . ']',
-            $this->getTranslator()->trans('URL', [], Manager::CONTEXT), true, ['size' => '100']
+        $formTypeBuilder->addText(
+            $builder, self::CONFIGURATION_URL, $translator->trans('Url', [], Manager::CONTEXT), true
         );
 
-        $formValidator->addElement(
-            HTML_QuickForm_select::class, Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_TARGET . ']',
-            $this->getTranslator()->trans('Target', [], Manager::CONTEXT), ['_blank', '_self', '_parent', '_top'],
-            ['class' => 'form-control']
-        );
-
-        $formValidator->addRule(
-            Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_TARGET . ']',
-            $this->getTranslator()->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
-            HTML_QuickForm_Rule_Required::class
+        $formTypeBuilder->addSelect(
+            $builder, self::CONFIGURATION_TARGET, $translator->trans('Target', [], Manager::CONTEXT), true,
+            $this->getTargetOptions()
         );
     }
 
@@ -126,6 +123,26 @@ class LinkItemRenderer extends ItemRenderer
         return [self::CONFIGURATION_URL, self::CONFIGURATION_TARGET];
     }
 
+    public function getDefaultFormConfigurationData(Item $item): array
+    {
+        $configurationData = [];
+        $configuration = $item->getConfiguration();
+
+        $configurationData[self::CONFIGURATION_TARGET] = new stdClass();
+        $configurationData[self::CONFIGURATION_TARGET]->value = $configuration[self::CONFIGURATION_TARGET];
+        $configurationData[self::CONFIGURATION_TARGET]->label = '';
+        $configurationData[self::CONFIGURATION_TARGET]->attributes = [];
+
+        $configurationData[self::CONFIGURATION_URL] = $configuration[self::CONFIGURATION_URL];
+
+        return $configurationData;
+    }
+
+    public function getFormTypeBuilder(): FormTypeBuilder
+    {
+        return $this->formTypeBuilder;
+    }
+
     public function getRendererTypeGlyph(): InlineGlyph
     {
         return new FontAwesomeGlyph('link', ['fa-fw']);
@@ -136,9 +153,37 @@ class LinkItemRenderer extends ItemRenderer
         return $this->getTranslator()->trans('LinkItem', [], Manager::CONTEXT);
     }
 
+    protected function getTargetOptions(): array
+    {
+        $targets = ['_blank', '_self', '_parent', '_top'];
+
+        $options = [];
+
+        foreach ($targets as $target) {
+            $option = new stdClass();
+            $option->value = $target;
+            $option->label = $target;
+            $option->attributes = [];
+
+            $options[] = $option;
+        }
+
+        return $options;
+    }
+
     public function getWebPathBuilder(): WebPathBuilder
     {
         return $this->webPathBuilder;
+    }
+
+    public function handleConfigurationData(mixed $submittedData): mixed
+    {
+        $processedData = [];
+
+        $processedData[self::CONFIGURATION_TARGET] = $submittedData[self::CONFIGURATION_TARGET]->value;
+        $processedData[self::CONFIGURATION_URL] = $submittedData[self::CONFIGURATION_URL];
+
+        return $processedData;
     }
 
     public function isSelected(Item $item, User $user): bool

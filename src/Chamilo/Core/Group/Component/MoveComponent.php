@@ -23,6 +23,7 @@ use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
+use Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\OptionsTreeChoice;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -89,9 +90,10 @@ class MoveComponent extends Manager
         );
 
         $form = $this->getFormFactory()->create(
-            GroupMoveFormType::class,
-            [NestedSet::PROPERTY_PARENT_ID => $group->getParentId(), Group::PROPERTY_NAME => $group->getName()],
-            ['action' => $formUri, 'disabledGroupIdentifiers' => [$groupIdentifier]]
+            GroupMoveFormType::class, [
+            NestedSet::PROPERTY_PARENT_ID => new OptionsTreeChoice($group->getParentId(), ''),
+            Group::PROPERTY_NAME => $group->getName()
+        ], ['action' => $formUri, 'disabledGroupIdentifiers' => [$groupIdentifier]]
         );
         $form->handleRequest($this->getRequest());
 
@@ -99,7 +101,7 @@ class MoveComponent extends Manager
             $submittedData = $form->getData();
 
             $success = $this->getGroupService()->moveGroup(
-                $group, $submittedData[NestedSet::PROPERTY_PARENT_ID], $currentUser
+                $group, $submittedData[NestedSet::PROPERTY_PARENT_ID]->getValue(), $currentUser
             );
 
             $message = $translator->trans(

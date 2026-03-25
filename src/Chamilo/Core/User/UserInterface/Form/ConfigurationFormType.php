@@ -9,7 +9,6 @@ use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlEditorFormType;
 use Chamilo\Libraries\UserInterface\Form\Service\FormButtonTypeBuilder;
 use Chamilo\Libraries\UserInterface\Form\Service\FormTypeBuilder;
-use Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\OptionsTreeChoice;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -76,11 +75,7 @@ class ConfigurationFormType extends AbstractType
                     }
                     $fieldName = str_replace('.', '-', $name);
 
-                    if ($this->isLocked($setting)) {
-                        $formTypeBuilder->addVisualContent($builder, $fieldName, $translator->trans($name, [], $context)
-                        );
-                    }
-                    elseif ($setting['field'] == TextType::class) {
+                    if ($setting['field'] == TextType::class) {
                         $formTypeBuilder->addText($builder, $fieldName, $translator->trans($name, [], $context),
                             ($setting['required'] == 'true'));
                     }
@@ -92,40 +87,25 @@ class ConfigurationFormType extends AbstractType
                         $formTypeBuilder->addPassword($builder, $fieldName, $translator->trans($name, [], $context),
                             ($setting['required'] == 'true'));
                     }
-                    else {
-                        $optionsType = $setting['options']['type'];
-
-                        if ($optionsType == 'dynamic') {
-                            $optionsSource = $setting['options']['source'];
-
-                            if ($settingsConnector instanceof SettingsConnectorInterface) {
-                                $options = $settingsConnector->$optionsSource();
-                            }
-                            else {
-                                $options = [];
-                            }
+                    elseif ($setting['field'] == CheckboxType::class) {
+                        $formTypeBuilder->addCheckbox($builder, $fieldName, $translator->trans($name, [], $context));
+                    }
+                    elseif (in_array($setting['field'], [RadioType::class, ChoiceType::class])) {
+                        if ($settingsConnector instanceof SettingsConnectorInterface) {
+                            $source = $setting['options']['source'];
+                            $options = $settingsConnector->$source();
                         }
                         else {
-                            $options = $setting['options']['values'];
-                        }
-
-                        $optionObjects = [];
-
-                        foreach ($options as $optionKey => $optionValue) {
-                            $optionObjects[] = new OptionsTreeChoice($optionKey, $optionValue);
+                            $options = [];
                         }
 
                         if ($setting['field'] == RadioType::class) {
                             $formTypeBuilder->addRadio($builder, $fieldName, $translator->trans($name, [], $context),
-                                ($setting['required'] == 'true'), $optionObjects);
+                                ($setting['required'] == 'true'), $options);
                         }
-                        elseif ($setting['field'] == CheckboxType::class) {
-                            $formTypeBuilder->addCheckbox($builder, $fieldName, $translator->trans($name, [], $context)
-                            );
-                        }
-                        elseif ($setting['field'] == ChoiceType::class) {
+                        else {
                             $formTypeBuilder->addSelect($builder, $fieldName, $translator->trans($name, [], $context),
-                                ($setting['required'] == 'true'), $optionObjects);
+                                ($setting['required'] == 'true'), $options);
                         }
                     }
                 }
@@ -181,10 +161,5 @@ class ConfigurationFormType extends AbstractType
     public function getUserSettingsService(): UserSettingsService
     {
         return $this->userSettingsService;
-    }
-
-    protected function isLocked($setting): bool
-    {
-        return isset($setting['locked']) && ($setting['locked'] == 1 || $setting['locked'] == 'true');
     }
 }

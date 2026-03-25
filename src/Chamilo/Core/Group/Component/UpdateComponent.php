@@ -24,6 +24,7 @@ use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
+use Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\OptionsTreeChoice;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,8 +93,11 @@ class UpdateComponent extends Manager
                 ]
             );
 
+            $data = $group->getDefaultProperties();
+            $data[NestedSet::PROPERTY_PARENT_ID] = new OptionsTreeChoice($group->getParentId(), '');
+
             $form = $this->getFormFactory()->create(
-                GroupFormType::class, $group->getDefaultProperties(), ['action' => $formUri]
+                GroupFormType::class, $data, ['action' => $formUri]
             );
             $form->handleRequest($this->getRequest());
 

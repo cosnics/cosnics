@@ -2,6 +2,7 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Core\Menu\Service\CachedItemService;
+use Chamilo\Core\Menu\Service\ItemFormDataHandler;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Libraries\Storage\Architecture\Interface\CacheDataPreLoaderInterface;
 use Chamilo\Libraries\Storage\Factory\SymfonyCacheAdapterFactory;
@@ -15,6 +16,7 @@ return static function (ContainerConfigurator $container) {
     $services->set(ItemService::class)->args(
         ['$fallbackIsoCodes' => '%cosnics.libraries.userInterface.translation.language.fallback%']
     );
+    $services->set(ItemFormDataHandler::class);
 
     $services->set(CachedItemService::class)->args(
         ['$cacheAdapter' => service('Chamilo\Core\Menu\Service\Cache\ItemCacheProvider')]

@@ -13,7 +13,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\UserInterface\Form\ConfigurationFormType;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
-use Chamilo\Libraries\DependencyInjection\Service\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
@@ -28,8 +27,8 @@ use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
-use Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\OptionsTreeChoice;
 use stdClass;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\RadioType;
@@ -53,7 +52,7 @@ class ConfigureComponent extends ProfileComponent
 
     protected PackageBundlesCacheService $packageBundlesCacheService;
 
-    protected mixed $parameters;
+    protected ParameterBagInterface $platformParameterBag;
 
     protected string $selectedContext;
 
@@ -71,8 +70,8 @@ class ConfigureComponent extends ProfileComponent
         UserService $userService, UrlGenerator $urlGenerator, PackageBundlesCacheService $packageBundlesCacheService,
         TabsRenderer $tabsRenderer, FormFactoryInterface $formFactory, Environment $twigEnvironment,
         ?UserPictureProviderInterface $userPictureProvider, ConfigurationFormType $configurationFormType,
-        UserSettingsService $userSettingsService, UserSettingsParser $userSettingsParser, mixed $parameters,
-        bool $userCanChangePicture
+        UserSettingsService $userSettingsService, UserSettingsParser $userSettingsParser,
+        ParameterBagInterface $platformParameterBag, bool $userCanChangePicture
     )
     {
         parent::__construct(
@@ -86,7 +85,7 @@ class ConfigureComponent extends ProfileComponent
         $this->configurationFormType = $configurationFormType;
         $this->userSettingsService = $userSettingsService;
         $this->userSettingsParser = $userSettingsParser;
-        $this->parameters = $parameters;
+        $this->platformParameterBag = $platformParameterBag;
     }
 
     /**
@@ -118,8 +117,6 @@ class ConfigureComponent extends ProfileComponent
 
         if ($form->isSubmitted() && $form->isValid()) {
             $submittedData = $this->processData($form->getData());
-            dump($submittedData);
-            exit;
 
             $success = $this->getUserSettingsService()->updateUserSettingsFromParameters(
                 $currentUser, $this->getSelectedContext(), $submittedData
@@ -142,7 +139,6 @@ class ConfigureComponent extends ProfileComponent
             $html = [];
 
             $html[] = $this->renderHeader($currentUser);
-            $form->createView();
             $html[] = $this->getContent($form);
             $html[] = $this->renderFooter();
 
@@ -212,7 +208,7 @@ class ConfigureComponent extends ProfileComponent
 
     public function getFormData(User $user): array
     {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+        $platformParameters = $this->getPlatformParameterBag();
         $data = [];
 
         $configuration =
@@ -230,8 +226,8 @@ class ConfigureComponent extends ProfileComponent
                 elseif (isset($configurationValue) && ($configurationValue == 0 || !empty($configurationValue))) {
                     $dataValue = $configurationValue;
                 }
-                elseif ($container->hasParameter($name)) {
-                    $dataValue = $container->getParameter($name);
+                elseif ($platformParameters->has($name)) {
+                    $dataValue = $platformParameters->get($name);
                 }
                 else {
                     $dataValue = $setting['default'];
@@ -256,9 +252,9 @@ class ConfigureComponent extends ProfileComponent
         return $this->packageBundlesCacheService;
     }
 
-    public function getParameters(): mixed
+    public function getPlatformParameterBag(): ParameterBagInterface
     {
-        return $this->parameters;
+        return $this->platformParameterBag;
     }
 
     public function getSelectedContext(): ?string
@@ -290,8 +286,20 @@ class ConfigureComponent extends ProfileComponent
     {
         $data = [];
 
-        foreach ($originalData as $name => $value) {
-            $data[str_replace('-', '.', $name)] = $value;
+        $configuration =
+            $this->getUserSettingsParser()->determineConfigurablePackageContextSettings($this->getSelectedContext());
+
+        foreach ($configuration as $settings) {
+            foreach ($settings as $name => $setting) {
+                $fieldName = str_replace('.', '-', $name);
+
+                if (in_array($setting['field'], [ChoiceType::class, RadioType::class])) {
+                    $data[$name] = $originalData[$fieldName]->value;
+                }
+                else {
+                    $data[$name] = $originalData[$fieldName];
+                }
+            }
         }
 
         return $data;

@@ -1,7 +1,8 @@
 <?php
 namespace Chamilo\Core\Menu\Architecture\Interface;
 
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
+use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * @package Chamilo\Core\Menu\Architecture\Interface
@@ -9,10 +10,14 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
  */
 interface ConfigurableItemInterface
 {
-    public function addConfigurationToForm(FormValidator $formValidator): void;
+    public function addConfigurationToForm(FormBuilderInterface $builder, array $options): void;
 
     /**
      * @return string[]
      */
     public function getConfigurationPropertyNames(): array;
+
+    public function getDefaultFormConfigurationData(Item $item);
+
+    public function handleConfigurationData(mixed $submittedData): mixed;
 }

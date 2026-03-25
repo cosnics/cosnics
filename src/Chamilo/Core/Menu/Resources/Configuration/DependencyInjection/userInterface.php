@@ -1,6 +1,9 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Chamilo\Core\Menu\UserInterface\Form\ItemConfigurationFormType;
+use Chamilo\Core\Menu\UserInterface\Form\ItemFormType;
+use Chamilo\Core\Menu\UserInterface\Form\ItemTitleFormType;
 use Chamilo\Core\Menu\UserInterface\Menu\ItemOptionsTreeDataProvider;
 use Chamilo\Core\Menu\UserInterface\Menu\ItemTreeMenuDataProvider;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\MenuRenderer;
@@ -8,6 +11,7 @@ use Chamilo\Core\Menu\UserInterface\Table\ItemTableRenderer;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\UserInterface\Tree\Service\JsTreeMenuDataProvider;
 use Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer;
+use Symfony\Component\Form\FormTypeInterface;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
@@ -35,4 +39,11 @@ return static function (ContainerConfigurator $container) {
     ]);
 
     $services->set(ItemTableRenderer::class);
+    $services->set(ItemFormType::class)->args(
+        ['$optionsTreeRenderer' => service('Chamilo\Core\Menu\UserInterface\Menu\ItemOptionsTreeRenderer')]
+    )->tag(FormTypeInterface::class);
+    $services->set(ItemConfigurationFormType::class)->tag(FormTypeInterface::class);
+    $services->set(ItemTitleFormType::class)->args(
+        ['$defaultLanguage' => '%cosnics.libraries.userInterface.translation.language.default%']
+    )->tag(FormTypeInterface::class);
 };

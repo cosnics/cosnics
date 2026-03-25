@@ -26,6 +26,11 @@ class UserSettingsService
         $this->userSettingsParser = $userSettingsParser;
     }
 
+    public function findUserSetting(User $user, string $variable, mixed $defaultValue = null)
+    {
+        return $user->getSetting($variable, $defaultValue);
+    }
+
     public function getSettingsConnectorRegistry(): SettingsConnectorRegistry
     {
         return $this->settingsConnectorRegistry;
@@ -82,11 +87,6 @@ class UserSettingsService
         return $this->getUserService()->updateUser($user);
     }
 
-    public function findUserSetting(User $user, string $variable, mixed $defaultValue = null)
-    {
-        return $user->getSetting($variable, $defaultValue);
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -95,18 +95,14 @@ class UserSettingsService
         $problems = 0;
         $configuration = $this->getUserSettingsParser()->determineConfigurablePackageContextSettings($context);
 
-        foreach ($configuration as $settings) {
-            foreach ($settings as $name => $setting) {
+        foreach ($configuration as $category) {
+            foreach ($category as $name => $setting) {
                 if (!$this->isSettingAvailable($context, $setting)) {
                     continue;
                 }
 
-                if ($setting['locked'] != 'true' && $setting['user_setting']) {
-                    if (!$this->updateUserSetting(
-                        $user, $name, $values[$name]
-                    )) {
-                        $problems ++;
-                    }
+                if (!$this->updateUserSetting($user, $name, $values[$name])) {
+                    $problems ++;
                 }
             }
         }

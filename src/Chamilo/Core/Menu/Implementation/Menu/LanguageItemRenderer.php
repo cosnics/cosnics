@@ -56,7 +56,7 @@ class LanguageItemRenderer extends ItemRenderer
                         ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                         ApplicationInterface::PARAM_ACTION => ActionEnum::LANGUAGE->value,
                         Manager::PARAM_LANGUAGE => $isocode,
-                        Manager::PARAM_REFER => $this->getRequest()->getUri()
+                        Manager::PARAM_REFER => urlencode($this->getRequest()->getUri())
                     ]
                 );
 
@@ -159,7 +159,7 @@ class LanguageItemRenderer extends ItemRenderer
                         ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                         ApplicationInterface::PARAM_ACTION => ActionEnum::LANGUAGE->value,
                         Manager::PARAM_LANGUAGE => $isocode,
-                        Manager::PARAM_REFER => $currentUrl
+                        Manager::PARAM_REFER => urlencode($currentUrl)
                     ]
                 );
 

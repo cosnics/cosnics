@@ -16,6 +16,8 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -95,6 +97,8 @@ class DependencyInjectionContainerBuilder
         }
         else {
             $container = $this->builder ?: new ContainerBuilder();
+            $container->register('Chamilo\Libraries\Architecture\Domain\ParameterBag', ParameterBagInterface::class)
+                ->setFactory([new Reference('service_container'), 'getParameterBag'])->setPublic(false);
             $this->loadContainerExtensions($container);
             $container->compile();
 

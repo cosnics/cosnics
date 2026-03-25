@@ -117,8 +117,6 @@ class CreateComponent extends Manager
                 ]));
             }
             catch (Throwable $e) {
-                dump($e->getMessage(), $submittedData);
-                exit;
                 $this->getAlertsManager()->addAlert(
                     new Alert(
                         $translator->trans(

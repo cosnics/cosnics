@@ -41,7 +41,7 @@ return static function (ContainerConfigurator $container) {
         [
             '$userCanChangePicture' => '%cosnics.application.user.rights.changeUserPicture%',
             '$twigEnvironment' => service('Twig\Environment\Form'),
-            '$parameters' => null
+            '$platformParameterBag' => service('Chamilo\Libraries\Architecture\Domain\ParameterBag')
 
         ]
     )->tag(ApplicationInterface::class);

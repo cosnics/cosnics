@@ -14,16 +14,13 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_category;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_checkbox;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
+use Chamilo\Libraries\UserInterface\Form\Service\FormTypeBuilder;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\NamespaceIdentGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Enum\IdentGlyphSizeEnum;
-use HTML_QuickForm_Rule_Required;
-use HTML_QuickForm_select;
+use stdClass;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -40,13 +37,16 @@ class ApplicationItemRenderer extends ItemRenderer
     public const string CONFIGURATION_EXTRA_PARAMETERS = 'extra_parameters';
     public const string CONFIGURATION_USE_TRANSLATION = 'use_translation';
 
+    protected FormTypeBuilder $formTypeBuilder;
+
     private PackageBundlesCacheService $packageBundlesCacheService;
 
     private UrlGenerator $urlGenerator;
 
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
-        PackageBundlesCacheService $packageBundlesCacheService, UrlGenerator $urlGenerator, array $fallbackIsoCodes
+        PackageBundlesCacheService $packageBundlesCacheService, UrlGenerator $urlGenerator,
+        FormTypeBuilder $formTypeBuilder, array $fallbackIsoCodes
     )
     {
         parent::__construct($translator, $itemCacheService, $request);
@@ -54,6 +54,7 @@ class ApplicationItemRenderer extends ItemRenderer
         $this->packageBundlesCacheService = $packageBundlesCacheService;
         $this->urlGenerator = $urlGenerator;
         $this->fallbackIsoCodes = $fallbackIsoCodes;
+        $this->formTypeBuilder = $formTypeBuilder;
     }
 
     public function render(Item $item, User $user): string
@@ -91,42 +92,31 @@ class ApplicationItemRenderer extends ItemRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @throws \QuickformException
-     */
-    public function addConfigurationToForm(FormValidator $formValidator): void
+    public function addConfigurationToForm(FormBuilderInterface $builder, array $options): void
     {
         $translator = $this->getTranslator();
+        $formTypeBuilder = $this->formTypeBuilder;
 
-        $formValidator->addElement(
-            HTML_QuickForm_category::class, $translator->trans('Properties', [], Manager::CONTEXT)
+        $formTypeBuilder->addCategory(
+            $builder, 'category_properties', $translator->trans('Properties', [], Manager::CONTEXT)
         );
 
-        $formValidator->addElement(
-            HTML_QuickForm_select::class, Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_APPLICATION . ']',
-            $translator->trans('Application', [], Manager::CONTEXT), $this->getApplicationOptions(),
-            ['class' => 'form-control']
+        $formTypeBuilder->addSelect(
+            $builder, self::CONFIGURATION_APPLICATION, $translator->trans('Application', [], Manager::CONTEXT), true,
+            $this->getApplicationOptions()
         );
 
-        $formValidator->addRule(
-            Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_APPLICATION . ']',
-            $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
-            HTML_QuickForm_Rule_Required::class
+        $formTypeBuilder->addCheckbox(
+            $builder, self::CONFIGURATION_USE_TRANSLATION, $translator->trans('UseTranslation', [], Manager::CONTEXT)
         );
 
-        $formValidator->addElement(
-            HTML_QuickForm_checkbox::class,
-            Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_USE_TRANSLATION . ']',
-            $translator->trans('UseTranslation', [], Manager::CONTEXT)
+        $formTypeBuilder->addText(
+            $builder, self::CONFIGURATION_COMPONENT, $translator->trans('Component', [], Manager::CONTEXT), false
         );
 
-        $formValidator->addTextfield(
-            Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_COMPONENT . ']',
-            $translator->trans('Component', [], Manager::CONTEXT), false
-        );
-        $formValidator->addTextfield(
-            Item::PROPERTY_CONFIGURATION . '[' . self::CONFIGURATION_EXTRA_PARAMETERS . ']',
-            $translator->trans('ExtraParameters', [], Manager::CONTEXT), false
+        $formTypeBuilder->addText(
+            $builder, self::CONFIGURATION_EXTRA_PARAMETERS, $translator->trans('ExtraParameters', [], Manager::CONTEXT),
+            false
         );
     }
 
@@ -162,7 +152,7 @@ class ApplicationItemRenderer extends ItemRenderer
     }
 
     /**
-     * @return string[]
+     * @return \stdClass[]
      */
     protected function getApplicationOptions(): array
     {
@@ -175,8 +165,12 @@ class ApplicationItemRenderer extends ItemRenderer
                 continue;
             }
 
-            $activeApplications[$package->getContext()] =
-                $this->getTranslator()->trans('TypeName', [], $package->getContext());
+            $activeApplication = new stdClass();
+            $activeApplication->value = $package->getContext();
+            $activeApplication->label = $this->getTranslator()->trans('TypeName', [], $package->getContext());
+            $activeApplication->attributes = [];
+
+            $activeApplications[] = $activeApplication;
         }
 
         return $activeApplications;
@@ -193,6 +187,29 @@ class ApplicationItemRenderer extends ItemRenderer
             self::CONFIGURATION_COMPONENT,
             self::CONFIGURATION_EXTRA_PARAMETERS
         ];
+    }
+
+    public function getDefaultFormConfigurationData(Item $item): array
+    {
+        $configurationData = [];
+        $configuration = $item->getConfiguration();
+
+        $configurationData[self::CONFIGURATION_APPLICATION] = new stdClass();
+        $configurationData[self::CONFIGURATION_APPLICATION]->value = $configuration[self::CONFIGURATION_APPLICATION];
+        $configurationData[self::CONFIGURATION_APPLICATION]->label = '';
+        $configurationData[self::CONFIGURATION_APPLICATION]->attributes = [];
+
+        $configurationData[self::CONFIGURATION_USE_TRANSLATION] =
+            (bool) $configuration[self::CONFIGURATION_USE_TRANSLATION];
+        $configurationData[self::CONFIGURATION_COMPONENT] = $configuration[self::CONFIGURATION_COMPONENT];
+        $configurationData[self::CONFIGURATION_EXTRA_PARAMETERS] = $configuration[self::CONFIGURATION_EXTRA_PARAMETERS];
+
+        return $configurationData;
+    }
+
+    public function getFormTypeBuilder(): FormTypeBuilder
+    {
+        return $this->formTypeBuilder;
     }
 
     public function getPackageBundlesCacheService(): PackageBundlesCacheService
@@ -213,6 +230,19 @@ class ApplicationItemRenderer extends ItemRenderer
     public function getUrlGenerator(): UrlGenerator
     {
         return $this->urlGenerator;
+    }
+
+    public function handleConfigurationData(mixed $submittedData): mixed
+    {
+        $processedData = [];
+
+        $processedData[self::CONFIGURATION_APPLICATION] = $submittedData[self::CONFIGURATION_APPLICATION];
+        $processedData[self::CONFIGURATION_USE_TRANSLATION] =
+            $submittedData[self::CONFIGURATION_USE_TRANSLATION] ? 1 : 0;
+        $processedData[self::CONFIGURATION_COMPONENT] = $submittedData[self::CONFIGURATION_COMPONENT];
+        $processedData[self::CONFIGURATION_EXTRA_PARAMETERS] = $submittedData[self::CONFIGURATION_EXTRA_PARAMETERS];
+
+        return $processedData;
     }
 
     public function isSelected(Item $item, User $user): bool

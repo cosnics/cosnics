@@ -9,6 +9,7 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\MessageFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\PictureFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\VisualContentFormType;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use stdClass;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;

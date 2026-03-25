@@ -67,7 +67,7 @@ class LanguageComponent extends Manager
             }
         }
 
-        return new RedirectResponse($this->getRequest()->query->get(self::PARAM_REFER));
+        return new RedirectResponse(urldecode($this->getRequest()->query->get(self::PARAM_REFER)));
     }
 
     public function canUserChangeLanguage(): bool

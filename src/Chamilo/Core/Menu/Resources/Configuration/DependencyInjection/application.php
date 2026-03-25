@@ -14,9 +14,13 @@ return static function (ContainerConfigurator $container) {
     $services->defaults()->public()->autowire()->autoconfigure();
 
     $services->set(BrowseComponent::class)->tag(ApplicationInterface::class);
-    $services->set(CreateComponent::class)->tag(ApplicationInterface::class);
+    $services->set(CreateComponent::class)->args(['$twigFormEnvironment' => service('Twig\Environment\Form')])->tag(
+        ApplicationInterface::class
+    );
     $services->set(DeleteComponent::class)->tag(ApplicationInterface::class);
-    $services->set(UpdateComponent::class)->tag(ApplicationInterface::class);
+    $services->set(UpdateComponent::class)->args(['$twigFormEnvironment' => service('Twig\Environment\Form')])->tag(
+        ApplicationInterface::class
+    );
     $services->set(ItemTreeDataComponent::class)->args(
         ['$jsTreeMenuDataProvider' => service('Chamilo\Core\Menu\UserInterface\Menu\ItemJsTreeMenuDataProvider')]
     )->tag(ApplicationInterface::class);

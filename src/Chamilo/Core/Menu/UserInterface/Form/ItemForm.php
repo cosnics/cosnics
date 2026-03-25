@@ -57,7 +57,7 @@ class ItemForm extends FormValidator
         $this->addElement(HTML_QuickForm_category::class, $translator->trans('General', [], Manager::CONTEXT));
 
         if ($this->getItemType() === CategoryItemRenderer::class) {
-            $options[0] = $this->getTranslator()->trans('Home', [], Manager::CONTEXT);
+            $options[DataClass::EMPTY_UUID] = $this->getTranslator()->trans('Home', [], Manager::CONTEXT);
         }
         else {
             $options = $this->getMenuOptionsTreeRenderer()->getOptions();

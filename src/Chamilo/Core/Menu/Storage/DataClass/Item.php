@@ -143,7 +143,7 @@ class Item extends DataClass
         return $this;
     }
 
-    public function setIconClass(string $iconClass = ''): Item
+    public function setIconClass(?string $iconClass = null): Item
     {
         $this->setDefaultProperty(self::PROPERTY_ICON_CLASS, $iconClass);
 

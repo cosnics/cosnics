@@ -2,9 +2,9 @@
 namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain;
 
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
-use Chamilo\Libraries\Format\Form\DataTransformer\ElementFinderDataTransformer;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Form\Service\ElementFinderDataTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
