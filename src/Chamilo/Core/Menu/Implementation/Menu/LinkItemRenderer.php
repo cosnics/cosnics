@@ -18,6 +18,7 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 use stdClass;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -88,25 +89,28 @@ class LinkItemRenderer extends ItemRenderer
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @throws \QuickformException
-     */
     public function addConfigurationToForm(FormBuilderInterface $builder, array $options): void
     {
         $translator = $this->getTranslator();
         $formTypeBuilder = $this->formTypeBuilder;
 
-        $formTypeBuilder->addCategory(
-            $builder, 'category_properties', $translator->trans('Properties', [], Manager::CONTEXT)
+        $builder->add(
+            $formTypeBuilder->createCategory(
+                $builder, 'category_properties', $translator->trans('Properties', [], Manager::CONTEXT)
+            )
         );
 
-        $formTypeBuilder->addText(
-            $builder, self::CONFIGURATION_URL, $translator->trans('Url', [], Manager::CONTEXT), true
+        $builder->add(
+            $formTypeBuilder->createText(
+                $builder, self::CONFIGURATION_URL, $translator->trans('Url', [], Manager::CONTEXT), true
+            )
         );
 
-        $formTypeBuilder->addSelect(
-            $builder, self::CONFIGURATION_TARGET, $translator->trans('Target', [], Manager::CONTEXT), true,
-            $this->getTargetOptions()
+        $builder->add(
+            $formTypeBuilder->createSelect(
+                $builder, self::CONFIGURATION_TARGET, $translator->trans('Target', [], Manager::CONTEXT), true,
+                $this->getTargetOptions()
+            )
         );
     }
 
@@ -121,21 +125,6 @@ class LinkItemRenderer extends ItemRenderer
     public function getConfigurationPropertyNames(): array
     {
         return [self::CONFIGURATION_URL, self::CONFIGURATION_TARGET];
-    }
-
-    public function getDefaultFormConfigurationData(Item $item): array
-    {
-        $configurationData = [];
-        $configuration = $item->getConfiguration();
-
-        $configurationData[self::CONFIGURATION_TARGET] = new stdClass();
-        $configurationData[self::CONFIGURATION_TARGET]->value = $configuration[self::CONFIGURATION_TARGET];
-        $configurationData[self::CONFIGURATION_TARGET]->label = '';
-        $configurationData[self::CONFIGURATION_TARGET]->attributes = [];
-
-        $configurationData[self::CONFIGURATION_URL] = $configuration[self::CONFIGURATION_URL];
-
-        return $configurationData;
     }
 
     public function getFormTypeBuilder(): FormTypeBuilder
@@ -176,16 +165,6 @@ class LinkItemRenderer extends ItemRenderer
         return $this->webPathBuilder;
     }
 
-    public function handleConfigurationData(mixed $submittedData): mixed
-    {
-        $processedData = [];
-
-        $processedData[self::CONFIGURATION_TARGET] = $submittedData[self::CONFIGURATION_TARGET]->value;
-        $processedData[self::CONFIGURATION_URL] = $submittedData[self::CONFIGURATION_URL];
-
-        return $processedData;
-    }
-
     public function isSelected(Item $item, User $user): bool
     {
         $urlParts = parse_url($item->getSetting(self::CONFIGURATION_URL));
@@ -208,6 +187,27 @@ class LinkItemRenderer extends ItemRenderer
         }
 
         return true;
+    }
+
+    public function mapDataToForms(array $viewData, FormInterface $form): void
+    {
+        $target = new stdClass();
+        $target->value = $viewData[self::CONFIGURATION_TARGET];
+        $target->label = $target->value;
+        $target->attributes = [];
+
+        $data = [];
+
+        $data[self::CONFIGURATION_TARGET] = $target;
+        $data[self::CONFIGURATION_URL] = $viewData[self::CONFIGURATION_URL];
+
+        $form->setData($data);
+    }
+
+    public function mapFormsToData(FormInterface $form, mixed &$viewData): void
+    {
+        $viewData[self::CONFIGURATION_TARGET] = $form[self::CONFIGURATION_TARGET]->getData()->value;
+        $viewData[self::CONFIGURATION_URL] = $form[self::CONFIGURATION_URL]->getData();
     }
 
     public function renderTitleForCurrentLanguage(Item $item): string

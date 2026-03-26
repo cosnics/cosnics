@@ -9,7 +9,6 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\MessageFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\PictureFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\VisualContentFormType;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use stdClass;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -17,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\PropertyAccess\PropertyPath;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -28,156 +28,59 @@ class FormTypeBuilder
 {
     protected const array DEFAULT_ROW_ATTRIBUTES = ['class' => 'form-floating mb-3'];
 
-    protected Translator $translator;
+    protected ?string $requiredMarkup = null;
 
-    public function __construct(Translator $translator)
+    public function __construct(protected readonly Translator $translator)
     {
-        $this->translator = $translator;
     }
 
-    public function addCategory(FormBuilderInterface $builder, string $name, string $title, array $options = []
-    ): FormBuilderInterface
+    protected function applyChoiceOptions(
+        array &$options, array $choices, null|callable|string|PropertyPath $value = 'value',
+        null|bool|callable|string|PropertyPath $label = 'label',
+        null|array|callable|string|PropertyPath $attributes = 'attributes', null|bool|string $translationDomain = false
+    ): void
     {
-        return $builder->add($this->createCategory($builder, $name, $title, $options));
+        $options['choices'] = $choices;
+        $options['choice_value'] = $value;
+        $options['choice_label'] = $label;
+        $options['choice_attr'] = $attributes;
+        $options['choice_translation_domain'] = $translationDomain;
     }
 
-    public function addCheckbox(
-        FormBuilderInterface $builder, string $name, $label, bool $required = false, bool $isSwitch = true,
-        array $options = []
-    ): FormBuilderInterface
+    protected function applyCommonOptions(
+        array &$options, ?string $label = null, bool $required = false, array $constraints = [],
+        bool $includeRowAttr = false
+    ): void
     {
-        return $builder->add($this->createCheckbox($builder, $name, $label, $required, $isSwitch, $options));
-    }
+        if ($required) {
+            $label .= ' ' . $this->getRequired();
+            $constraints[] = new Assert\NotBlank();
+        }
 
-    public function addDanger(
-        FormBuilderInterface $builder, string $name, string $message, ?string $label = null, array $options = []
-    ): FormBuilderInterface
-    {
-        return $builder->add($this->createDanger($builder, $name, $message, $label, $options));
-    }
+        $options['label'] = $label;
+        $options['label_html'] = true;
+        $options['required'] = $required;
+        $options['constraints'] = $constraints;
 
-    public function addEmail(
-        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $constraints = [],
-        array $options = []
-    ): FormBuilderInterface
-    {
-        return $builder->add($this->createEmail($builder, $name, $label, $required, $constraints, $options));
-    }
-
-    public function addFile(
-        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $constraints = [],
-        array $options = []
-    ): FormBuilderInterface
-    {
-        return $builder->add($this->createFile($builder, $name, $label, $required, $constraints, $options));
-    }
-
-    public function addHtml(FormBuilderInterface $builder, string $name, string $html, array $options = []
-    ): FormBuilderInterface
-    {
-        return $builder->add($this->createHtml($builder, $name, $html, $options));
-    }
-
-    public function addHtmlEditor(
-        FormBuilderInterface $builder, string $name, string $label, bool $required = false, array $constraints = [],
-        array $options = []
-    ): FormBuilderInterface
-    {
-        return $builder->add($this->createHtmlEditor($builder, $name, $label, $required, $constraints, $options));
-    }
-
-    public function addInformation(
-        FormBuilderInterface $builder, string $name, string $message, ?string $label = null, array $options = []
-    ): FormBuilderInterface
-    {
-        return $builder->add($this->createInformation($builder, $name, $message, $label, $options));
-    }
-
-    public function addMessage(
-        FormBuilderInterface $builder, string $name, string $message, AlertEnum $messageType = AlertEnum::INFO,
-        ?string $label = null, array $options = []
-    ): FormBuilderInterface
-    {
-        return $builder->add($this->createMessage($builder, $name, $message, $messageType, $label, $options));
-    }
-
-    public function addPassword(
-        FormBuilderInterface $builder, string $name, string $label, bool $required = true,
-        bool $validateStrength = false, array $constraints = [], array $options = []
-    ): FormBuilderInterface
-    {
-        return $builder->add(
-            $this->createPassword($builder, $name, $label, $required, $validateStrength, $constraints, $options)
-        );
-    }
-
-    public function addPicture(
-        FormBuilderInterface $builder, string $name, string $label, ?string $pictureUri = null,
-        ?string $noPictureLabel = null, array $pictureStyles = [], array $options = []
-    ): FormBuilderInterface
-    {
-        return $builder->add(
-            $this->createPicture(
-                $builder, $name, $label, $pictureUri, $noPictureLabel, $pictureStyles, $options
-            )
-        );
-    }
-
-    public function addRadio(
-        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $choices = [],
-        array $constraints = [], array $options = []
-    ): FormBuilderInterface
-    {
-        return $builder->add($this->createRadio($builder, $name, $label, $required, $choices, $constraints, $options));
-    }
-
-    public function addSelect(
-        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $choices = [],
-        array $constraints = [], array $options = []
-    ): FormBuilderInterface
-    {
-        return $builder->add($this->createSelect($builder, $name, $label, $required, $choices, $constraints, $options));
-    }
-
-    public function addText(
-        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $constraints = [],
-        array $options = []
-    ): FormBuilderInterface
-    {
-        return $builder->add($this->createText($builder, $name, $label, $required, $constraints, $options));
-    }
-
-    public function addVisualContent(
-        FormBuilderInterface $builder, string $name, string $label, array $options = []
-    ): FormBuilderInterface
-    {
-        return $builder->add($this->createVisualContent($builder, $name, $label, $options));
-    }
-
-    public function addWarning(
-        FormBuilderInterface $builder, string $name, string $message, ?string $label = null, array $options = []
-    ): FormBuilderInterface
-    {
-        return $builder->add($this->createWarning($builder, $name, $message, $label, $options));
+        if ($includeRowAttr) {
+            $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
+        }
     }
 
     public function createCategory(FormBuilderInterface $builder, string $name, string $label, array $options = []
     ): FormBuilderInterface
     {
-        $options['label'] = $label;
-        $options['label_html'] = true;
+        $this->applyCommonOptions($options, $label);
 
         return $builder->create($name, CategoryFormType::class, $options);
     }
 
     public function createCheckbox(
-        FormBuilderInterface $builder, string $name, $label, bool $required = false, bool $isSwitch = true,
+        FormBuilderInterface $builder, string $name, string $label, bool $required = false, bool $isSwitch = true,
         array $options = []
     ): FormBuilderInterface
     {
-        $options['label'] = $label;
-        $options['label_html'] = true;
-        $options['required'] = $required;
+        $this->applyCommonOptions($options, $label, $required);
 
         if ($isSwitch) {
             $options['label_attr'] = [
@@ -188,28 +91,12 @@ class FormTypeBuilder
         return $builder->create($name, CheckboxType::class, $options);
     }
 
-    public function createDanger(
-        FormBuilderInterface $builder, string $name, string $message, ?string $label = null, array $options = []
-    ): FormBuilderInterface
-    {
-        return $this->createMessage($builder, $name, $message, AlertEnum::DANGER, $label, $options);
-    }
-
     public function createEmail(
         FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $constraints = [],
         array $options = []
     ): FormBuilderInterface
     {
-        if ($required) {
-            $label .= ' ' . $this->getRequired();
-            $constraints[] = new Assert\NotBlank();
-        }
-
-        $options['label'] = $label;
-        $options['label_html'] = true;
-        $options['required'] = $required;
-        $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
-        $options['constraints'] = $constraints;
+        $this->applyCommonOptions($options, $label, $required, $constraints, true);
 
         return $builder->create($name, EmailType::class, $options);
     }
@@ -219,10 +106,7 @@ class FormTypeBuilder
         array $options = []
     ): FormBuilderInterface
     {
-        $options['label'] = $label;
-        $options['label_html'] = true;
-        $options['required'] = $required;
-        $options['constraints'] = $constraints;
+        $this->applyCommonOptions($options, $label, $required, $constraints);
 
         return $builder->create($name, FileType::class, $options);
     }
@@ -236,43 +120,24 @@ class FormTypeBuilder
     }
 
     public function createHtmlEditor(
-        FormBuilderInterface $builder, string $name, $label, bool $required = true, array $constraints = [],
+        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $constraints = [],
         array $options = []
     ): FormBuilderInterface
     {
-        if ($required) {
-            $label .= ' ' . $this->getRequired();
-            $constraints[] = new Assert\NotBlank();
-        }
-
-        $options['label'] = $label;
-        $options['label_html'] = true;
-        $options['required'] = $required;
-        $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
-        $options['constraints'] = $constraints;
+        $this->applyCommonOptions($options, $label, $required, $constraints);
 
         return $builder->create($name, HtmlEditorFormType::class, $options);
     }
 
-    public function createInformation(
-        FormBuilderInterface $builder, string $name, string $message, ?string $label = null, array $options = []
-    ): FormBuilderInterface
-    {
-        return $this->createMessage($builder, $name, $message, AlertEnum::INFO, $label, $options);
-    }
-
     public function createMessage(
-        FormBuilderInterface $builder, string $name, string $message, AlertEnum $messageType = AlertEnum::INFO,
-        ?string $label = null, array $options = []
+        FormBuilderInterface $builder, string $name, string $label, string $message,
+        AlertEnum $messageType = AlertEnum::INFO, array $options = []
     ): FormBuilderInterface
     {
-        $options['label'] = $label;
-        $options['label_html'] = true;
-        $options['required'] = false;
-        $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
+        $this->applyCommonOptions($options, $label);
 
-        $options ['message'] = $message;
-        $options ['messageType'] = $messageType;
+        $options['message'] = $message;
+        $options['messageType'] = $messageType;
 
         return $builder->create($name, MessageFormType::class, $options);
     }
@@ -286,16 +151,7 @@ class FormTypeBuilder
             $constraints[] = new Assert\PasswordStrength(minScore: Assert\PasswordStrength::STRENGTH_STRONG);
         }
 
-        if ($required) {
-            $label .= ' ' . $this->getRequired();
-            $constraints[] = new Assert\NotBlank();
-        }
-
-        $options['label'] = $label;
-        $options['label_html'] = true;
-        $options['required'] = $required;
-        $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
-        $options['constraints'] = $constraints;
+        $this->applyCommonOptions($options, $label, $required, $constraints, true);
 
         return $builder->create($name, PasswordType::class, $options);
     }
@@ -305,8 +161,8 @@ class FormTypeBuilder
         ?string $noPictureLabel = null, array $pictureStyles = [], array $options = []
     ): FormBuilderInterface
     {
-        $options['label'] = $label;
-        $options['label_html'] = true;
+        $this->applyCommonOptions($options, $label);
+
         $options['pictureStyles'] = $pictureStyles;
         $options['pictureUri'] = $pictureUri;
 
@@ -322,21 +178,8 @@ class FormTypeBuilder
         array $constraints = [], array $options = []
     ): FormBuilderInterface
     {
-        if ($required) {
-            $label .= ' ' . $this->getRequired();
-            $constraints[] = new Assert\NotBlank();
-        }
-
-        $options['label'] = $label;
-        $options['label_html'] = true;
-        $options['required'] = $required;
-        $options['constraints'] = $constraints;
-
-        $options['choices'] = $choices;
-        $options['choice_value'] = 'value';
-        $options['choice_label'] = 'label';
-        $options['choice_attr'] = 'attributes';
-        $options['choice_translation_domain'] = false;
+        $this->applyCommonOptions($options, $label, $required, $constraints);
+        $this->applyChoiceOptions($options, $choices);
 
         $options['expanded'] = true;
         $options['multiple'] = false;
@@ -349,22 +192,8 @@ class FormTypeBuilder
         array $constraints = [], array $options = []
     ): FormBuilderInterface
     {
-        if ($required) {
-            $label .= ' ' . $this->getRequired();
-            $constraints[] = new Assert\NotBlank();
-        }
-
-        $options['label'] = $label;
-        $options['label_html'] = true;
-        $options['required'] = $required;
-        $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
-        $options['constraints'] = $constraints;
-
-        $options['choices'] = $choices;
-        $options['choice_value'] = 'value';
-        $options['choice_label'] = 'label';
-        $options['choice_attr'] = 'attributes';
-        $options['choice_translation_domain'] = false;
+        $this->applyCommonOptions($options, $label, $required, $constraints, true);
+        $this->applyChoiceOptions($options, $choices);
 
         return $builder->create($name, ChoiceType::class, $options);
     }
@@ -374,16 +203,7 @@ class FormTypeBuilder
         array $options = []
     ): FormBuilderInterface
     {
-        if ($required) {
-            $label .= ' ' . $this->getRequired();
-            $constraints[] = new Assert\NotBlank();
-        }
-
-        $options['label'] = $label;
-        $options['label_html'] = true;
-        $options['required'] = $required;
-        $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
-        $options['constraints'] = $constraints;
+        $this->applyCommonOptions($options, $label, $required, $constraints, true);
 
         return $builder->create($name, TextType::class, $options);
     }
@@ -392,30 +212,18 @@ class FormTypeBuilder
         FormBuilderInterface $builder, string $name, string $label, array $options = []
     ): FormBuilderInterface
     {
-        $options['label'] = $label;
-        $options['label_html'] = true;
-        $options['required'] = false;
-        $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
+        $this->applyCommonOptions($options, $label, false, [], true);
 
         return $builder->create($name, VisualContentFormType::class, $options);
     }
 
-    public function createWarning(
-        FormBuilderInterface $builder, string $name, string $message, ?string $label = null, array $options = []
-    ): FormBuilderInterface
-    {
-        return $this->createMessage($builder, $name, $message, AlertEnum::WARNING, $label, $options);
-    }
-
     protected function getRequired(): string
     {
-        $glyph = new FontAwesomeGlyph('asterisk', ['text-danger', 'fa-2xs'], null, 'fas');
+        if ($this->requiredMarkup === null) {
+            $glyph = new FontAwesomeGlyph('asterisk', ['text-danger', 'fa-2xs'], null, 'fas');
+            $this->requiredMarkup = '<span class="text-danger ms-1">' . $glyph->render() . '</span>';
+        }
 
-        return '<span class="text-danger ms-1">' . $glyph->render() . '</span>';
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
+        return $this->requiredMarkup;
     }
 }

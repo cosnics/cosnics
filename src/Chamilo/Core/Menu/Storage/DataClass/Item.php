@@ -31,6 +31,16 @@ class Item extends DataClass
     public const string PROPERTY_TITLES = 'titles';
     public const string PROPERTY_TYPE = 'type';
 
+    public function getDefaultPropertiesUnserialized(): array
+    {
+        $defaultProperties = $this->getDefaultProperties();
+        
+        $defaultProperties[self::PROPERTY_TITLES] = $this->getTitles();
+        $defaultProperties[self::PROPERTY_CONFIGURATION] = $this->getConfiguration();
+
+        return $defaultProperties;
+    }
+
     /**
      * @param string[] $extendedPropertyNames
      *

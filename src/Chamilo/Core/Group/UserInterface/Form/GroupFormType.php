@@ -18,6 +18,7 @@ use Symfony\Component\Translation\Translator;
 /**
  * @package Chamilo\Core\Group\UserInterface\Form
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @todo Use a DataMapper here
  */
 class GroupFormType extends AbstractType
 {
@@ -51,21 +52,29 @@ class GroupFormType extends AbstractType
         $formTypeBuilderHelper = $this->formTypeBuilder;
         $translator = $this->getTranslator();
 
-        $formTypeBuilderHelper->addText(
-            $builder, Group::PROPERTY_NAME, $translator->trans('Name', [], Manager::CONTEXT)
+        $builder->add(
+            $formTypeBuilderHelper->createText(
+                $builder, Group::PROPERTY_NAME, $translator->trans('Name', [], Manager::CONTEXT)
+            )
         );
 
-        $formTypeBuilderHelper->addText(
-            $builder, Group::PROPERTY_CODE, $translator->trans('Code', [], Manager::CONTEXT)
+        $builder->add(
+            $formTypeBuilderHelper->createText(
+                $builder, Group::PROPERTY_CODE, $translator->trans('Code', [], Manager::CONTEXT)
+            )
         );
 
-        $formTypeBuilderHelper->addSelect(
-            $builder, NestedSet::PROPERTY_PARENT_ID, $translator->trans('NewLocation', [], Manager::CONTEXT), true,
-            $this->getOptionsTreeRenderer()->getOptions()->toArray()
+        $builder->add(
+            $formTypeBuilderHelper->createSelect(
+                $builder, NestedSet::PROPERTY_PARENT_ID, $translator->trans('NewLocation', [], Manager::CONTEXT), true,
+                $this->getOptionsTreeRenderer()->getOptions()->toArray()
+            )
         );
 
-        $formTypeBuilderHelper->addHtmlEditor(
-            $builder, Group::PROPERTY_DESCRIPTION, $translator->trans('Description', [], Manager::CONTEXT)
+        $builder->add(
+            $formTypeBuilderHelper->createHtmlEditor(
+                $builder, Group::PROPERTY_DESCRIPTION, $translator->trans('Description', [], Manager::CONTEXT)
+            )
         );
 
         $this->getFormButtonTypeBuilder()->addSaveAndResetButton($builder);

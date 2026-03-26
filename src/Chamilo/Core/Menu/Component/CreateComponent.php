@@ -5,7 +5,6 @@ use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
 use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\CachedItemService;
-use Chamilo\Core\Menu\Service\ItemFormDataHandler;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\Form\ItemFormType;
@@ -41,8 +40,6 @@ class CreateComponent extends Manager
 
     protected FormFactoryInterface $formFactory;
 
-    protected ItemFormDataHandler $itemFormDataHandler;
-
     protected ItemFormType $itemFormType;
 
     protected Environment $twigFormEnvironment;
@@ -52,7 +49,7 @@ class CreateComponent extends Manager
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, CachedItemService $cachedItemService,
         ItemRendererRegistry $itemRendererRegistry, ItemService $itemService, AlertsManager $alertsManager,
         BreadcrumbTrail $breadcrumbTrail, UrlGenerator $urlGenerator, FormFactoryInterface $formFactory,
-        ItemFormType $itemFormType, Environment $twigFormEnvironment, ItemFormDataHandler $itemFormDataHandler
+        ItemFormType $itemFormType, Environment $twigFormEnvironment
     )
     {
         parent::__construct(
@@ -64,7 +61,6 @@ class CreateComponent extends Manager
         $this->formFactory = $formFactory;
         $this->twigFormEnvironment = $twigFormEnvironment;
         $this->itemFormType = $itemFormType;
-        $this->itemFormDataHandler = $itemFormDataHandler;
     }
 
     /**
@@ -118,7 +114,7 @@ class CreateComponent extends Manager
 
         if ($form->isSubmitted() && $form->isValid()) {
             $item = $this->getCachedItemService()->createItemForTypeFromValues(
-                $itemType, $this->getItemFormDataHandler()->handleData($itemType, $form->getData())
+                $itemType, $form->getData()
             );
 
             $success = $item instanceof Item;
@@ -169,11 +165,6 @@ class CreateComponent extends Manager
     public function getFormFactory(): FormFactoryInterface
     {
         return $this->formFactory;
-    }
-
-    public function getItemFormDataHandler(): ItemFormDataHandler
-    {
-        return $this->itemFormDataHandler;
     }
 
     public function getItemFormType(): ItemFormType

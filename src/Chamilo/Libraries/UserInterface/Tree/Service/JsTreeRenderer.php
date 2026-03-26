@@ -9,11 +9,8 @@ use Chamilo\Libraries\Service\Resource\ResourceManager;
  */
 class JsTreeRenderer
 {
-    protected ResourceManager $resourceManager;
-
-    public function __construct(ResourceManager $resourceManager)
+    public function __construct(protected readonly ResourceManager $resourceManager)
     {
-        $this->resourceManager = $resourceManager;
     }
 
     /**
@@ -28,10 +25,10 @@ class JsTreeRenderer
 
         $html = [];
 
-        $html[] = $this->getResourceManager()->getResourceHtml(
+        $html[] = $this->resourceManager->getResourceHtml(
             'https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.17/jstree.min.js'
         );
-        $html[] = $this->getResourceManager()->getResourceHtml(
+        $html[] = $this->resourceManager->getResourceHtml(
             'https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.17/themes/default/style.min.css'
         );
 
@@ -96,10 +93,5 @@ $(function () {
 EOT;
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function getResourceManager(): ResourceManager
-    {
-        return $this->resourceManager;
     }
 }

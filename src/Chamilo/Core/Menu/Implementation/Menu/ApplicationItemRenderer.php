@@ -21,6 +21,7 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\NamespaceIdentGlyp
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Enum\IdentGlyphSizeEnum;
 use stdClass;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -97,26 +98,37 @@ class ApplicationItemRenderer extends ItemRenderer
         $translator = $this->getTranslator();
         $formTypeBuilder = $this->formTypeBuilder;
 
-        $formTypeBuilder->addCategory(
-            $builder, 'category_properties', $translator->trans('Properties', [], Manager::CONTEXT)
+        $builder->add(
+            $formTypeBuilder->createCategory(
+                $builder, 'category_properties', $translator->trans('Properties', [], Manager::CONTEXT)
+            )
         );
 
-        $formTypeBuilder->addSelect(
-            $builder, self::CONFIGURATION_APPLICATION, $translator->trans('Application', [], Manager::CONTEXT), true,
-            $this->getApplicationOptions()
+        $builder->add(
+            $formTypeBuilder->createSelect(
+                $builder, self::CONFIGURATION_APPLICATION, $translator->trans('Application', [], Manager::CONTEXT),
+                true, $this->getApplicationOptions()
+            )
         );
 
-        $formTypeBuilder->addCheckbox(
-            $builder, self::CONFIGURATION_USE_TRANSLATION, $translator->trans('UseTranslation', [], Manager::CONTEXT)
+        $builder->add(
+            $formTypeBuilder->createCheckbox(
+                $builder, self::CONFIGURATION_USE_TRANSLATION,
+                $translator->trans('UseTranslation', [], Manager::CONTEXT)
+            )
         );
 
-        $formTypeBuilder->addText(
-            $builder, self::CONFIGURATION_COMPONENT, $translator->trans('Component', [], Manager::CONTEXT), false
+        $builder->add(
+            $formTypeBuilder->createText(
+                $builder, self::CONFIGURATION_COMPONENT, $translator->trans('Component', [], Manager::CONTEXT), false
+            )
         );
 
-        $formTypeBuilder->addText(
-            $builder, self::CONFIGURATION_EXTRA_PARAMETERS, $translator->trans('ExtraParameters', [], Manager::CONTEXT),
-            false
+        $builder->add(
+            $formTypeBuilder->createText(
+                $builder, self::CONFIGURATION_EXTRA_PARAMETERS,
+                $translator->trans('ExtraParameters', [], Manager::CONTEXT), false
+            )
         );
     }
 
@@ -189,24 +201,6 @@ class ApplicationItemRenderer extends ItemRenderer
         ];
     }
 
-    public function getDefaultFormConfigurationData(Item $item): array
-    {
-        $configurationData = [];
-        $configuration = $item->getConfiguration();
-
-        $configurationData[self::CONFIGURATION_APPLICATION] = new stdClass();
-        $configurationData[self::CONFIGURATION_APPLICATION]->value = $configuration[self::CONFIGURATION_APPLICATION];
-        $configurationData[self::CONFIGURATION_APPLICATION]->label = '';
-        $configurationData[self::CONFIGURATION_APPLICATION]->attributes = [];
-
-        $configurationData[self::CONFIGURATION_USE_TRANSLATION] =
-            (bool) $configuration[self::CONFIGURATION_USE_TRANSLATION];
-        $configurationData[self::CONFIGURATION_COMPONENT] = $configuration[self::CONFIGURATION_COMPONENT];
-        $configurationData[self::CONFIGURATION_EXTRA_PARAMETERS] = $configuration[self::CONFIGURATION_EXTRA_PARAMETERS];
-
-        return $configurationData;
-    }
-
     public function getFormTypeBuilder(): FormTypeBuilder
     {
         return $this->formTypeBuilder;
@@ -232,19 +226,6 @@ class ApplicationItemRenderer extends ItemRenderer
         return $this->urlGenerator;
     }
 
-    public function handleConfigurationData(mixed $submittedData): mixed
-    {
-        $processedData = [];
-
-        $processedData[self::CONFIGURATION_APPLICATION] = $submittedData[self::CONFIGURATION_APPLICATION];
-        $processedData[self::CONFIGURATION_USE_TRANSLATION] =
-            $submittedData[self::CONFIGURATION_USE_TRANSLATION] ? 1 : 0;
-        $processedData[self::CONFIGURATION_COMPONENT] = $submittedData[self::CONFIGURATION_COMPONENT];
-        $processedData[self::CONFIGURATION_EXTRA_PARAMETERS] = $submittedData[self::CONFIGURATION_EXTRA_PARAMETERS];
-
-        return $processedData;
-    }
-
     public function isSelected(Item $item, User $user): bool
     {
         $request = $this->getRequest();
@@ -263,6 +244,31 @@ class ApplicationItemRenderer extends ItemRenderer
         }
 
         return true;
+    }
+
+    public function mapDataToForms(array $viewData, FormInterface $form): void
+    {
+        $application = new stdClass();
+        $application->value = $viewData[self::CONFIGURATION_APPLICATION];
+        $application->label = $application->value;
+        $application->attributes = [];
+
+        $data = [];
+
+        $data[self::CONFIGURATION_APPLICATION] = $application;
+        $data[self::CONFIGURATION_USE_TRANSLATION] = (bool) $viewData[self::CONFIGURATION_USE_TRANSLATION];
+        $data[self::CONFIGURATION_COMPONENT] = $viewData[self::CONFIGURATION_COMPONENT];
+        $data[self::CONFIGURATION_EXTRA_PARAMETERS] = $viewData[self::CONFIGURATION_EXTRA_PARAMETERS];
+
+        $form->setData($data);
+    }
+
+    public function mapFormsToData(FormInterface $form, mixed &$viewData): void
+    {
+        $viewData[self::CONFIGURATION_APPLICATION] = $form[self::CONFIGURATION_APPLICATION]->getData();
+        $viewData[self::CONFIGURATION_USE_TRANSLATION] = $form[self::CONFIGURATION_USE_TRANSLATION]->getData() ? 1 : 0;
+        $viewData[self::CONFIGURATION_COMPONENT] = $form[self::CONFIGURATION_COMPONENT]->getData();
+        $viewData[self::CONFIGURATION_EXTRA_PARAMETERS] = $form[self::CONFIGURATION_EXTRA_PARAMETERS]->getData();
     }
 
     public function renderTitleForCurrentLanguage(Item $item): string

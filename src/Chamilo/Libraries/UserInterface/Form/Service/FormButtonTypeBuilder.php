@@ -25,22 +25,6 @@ class FormButtonTypeBuilder
         $this->translator = $translator;
     }
 
-    public function addButton(
-        FormBuilderInterface $builder, string $name, ?string $labelText = null, ?InlineGlyph $labelGlyph = null,
-        array $classes = [], string $type = ButtonType::class
-    ): void
-    {
-        $builder->add($this->createButton($builder, $name, $labelText, $labelGlyph, $classes, $type));
-    }
-
-    public function addResetButton(
-        FormBuilderInterface $builder, ?string $labelText = null, ?InlineGlyph $labelGlyph = null,
-        string $name = 'reset'
-    ): void
-    {
-        $builder->add($this->createResetButton($builder, $labelText, $labelGlyph, $name));
-    }
-
     public function addSaveAndResetButton(FormBuilderInterface $builder): void
     {
         $translator = $this->getTranslator();
@@ -59,14 +43,6 @@ class FormButtonTypeBuilder
         $options['buttons'] = $buttons;
 
         $builder->add('buttons', ButtonsFormType::class, $options);
-    }
-
-    public function addSubmitButton(
-        FormBuilderInterface $builder, ?string $labelText = null, ?InlineGlyph $labelGlyph = null,
-        string $name = 'submit'
-    ): void
-    {
-        $builder->add($this->createSubmitButton($builder, $labelText, $labelGlyph, $name));
     }
 
     public function createButton(

@@ -6,6 +6,7 @@ use Chamilo\Core\Admin\Architecture\Interface\SettingsConnectorInterface;
 use Chamilo\Core\User\Service\UserSettingsParser;
 use Chamilo\Core\User\Service\UserSettingsService;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlEditorFormType;
 use Chamilo\Libraries\UserInterface\Form\Service\FormButtonTypeBuilder;
 use Chamilo\Libraries\UserInterface\Form\Service\FormTypeBuilder;
@@ -27,68 +28,68 @@ use Symfony\Component\Translation\Translator;
  */
 class ConfigurationFormType extends AbstractType
 {
-    protected FormButtonTypeBuilder $formButtonTypeBuilder;
-
-    protected FormTypeBuilder $formTypeBuilder;
-
-    protected SettingsConnectorRegistry $settingsConnectorRegistry;
-
-    protected Translator $translator;
-
-    protected UserSettingsParser $userSettingsParser;
-
-    protected UserSettingsService $userSettingsService;
-
     public function __construct(
-        FormButtonTypeBuilder $formButtonTypeBuilder, FormTypeBuilder $formTypeBuilder,
-        SettingsConnectorRegistry $settingsConnectorRegistry, Translator $translator,
-        UserSettingsParser $userSettingsParser, UserSettingsService $userSettingsService
+        protected readonly FormButtonTypeBuilder $formButtonTypeBuilder,
+        protected readonly FormTypeBuilder $formTypeBuilder,
+        protected readonly SettingsConnectorRegistry $settingsConnectorRegistry,
+        protected readonly Translator $translator, protected readonly UserSettingsParser $userSettingsParser,
+        protected readonly UserSettingsService $userSettingsService
     )
     {
-        $this->formButtonTypeBuilder = $formButtonTypeBuilder;
-        $this->formTypeBuilder = $formTypeBuilder;
-        $this->settingsConnectorRegistry = $settingsConnectorRegistry;
-        $this->translator = $translator;
-        $this->userSettingsParser = $userSettingsParser;
-        $this->userSettingsService = $userSettingsService;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $context = $options['context'];
-        $configuration = $this->getUserSettingsParser()->determineConfigurablePackageContextSettings($context);
-        $formTypeBuilder = $this->getFormTypeBuilder();
+        $configuration = $this->userSettingsParser->determineConfigurablePackageContextSettings($context);
+        $formTypeBuilder = $this->formTypeBuilder;
 
-        $translator = $this->getTranslator();
+        $translator = $this->translator;
 
         if (count($configuration) > 0) {
-            $settingsConnector = $this->getSettingsConnectorRegistry()->getSettingsConnectorForContext($context);
+            $settingsConnector = $this->settingsConnectorRegistry->getSettingsConnectorForContext($context);
 
             foreach ($configuration as $categoryName => $settings) {
-                $formTypeBuilder->addCategory(
-                    $builder, 'category_' . $categoryName, $translator->trans($categoryName, [], $context)
+                $builder->add(
+                    $formTypeBuilder->createCategory(
+                        $builder, 'category_' . $categoryName, $translator->trans($categoryName, [], $context)
+                    )
                 );
 
                 foreach ($settings as $name => $setting) {
-                    if (!$this->getUserSettingsService()->isSettingAvailable($context, $setting)) {
+                    if (!$this->userSettingsService->isSettingAvailable($context, $setting)) {
                         continue;
                     }
                     $fieldName = str_replace('.', '-', $name);
 
                     if ($setting['field'] == TextType::class) {
-                        $formTypeBuilder->addText($builder, $fieldName, $translator->trans($name, [], $context),
-                            ($setting['required'] == 'true'));
+                        $builder->add(
+                            $formTypeBuilder->createText($builder, $fieldName, $translator->trans($name, [], $context),
+                                ($setting['required'] == 'true'))
+                        );
                     }
                     elseif ($setting['field'] == HtmlEditorFormType::class) {
-                        $formTypeBuilder->addHtmlEditor($builder, $fieldName, $translator->trans($name, [], $context),
-                            ($setting['required'] == 'true'));
+                        $builder->add(
+                            $formTypeBuilder->createHtmlEditor(
+                                $builder, $fieldName, $translator->trans($name, [], $context),
+                                ($setting['required'] == 'true')
+                            )
+                        );
                     }
                     elseif ($setting['field'] == PasswordType::class) {
-                        $formTypeBuilder->addPassword($builder, $fieldName, $translator->trans($name, [], $context),
-                            ($setting['required'] == 'true'));
+                        $builder->add(
+                            $formTypeBuilder->createPassword(
+                                $builder, $fieldName, $translator->trans($name, [], $context),
+                                ($setting['required'] == 'true')
+                            )
+                        );
                     }
                     elseif ($setting['field'] == CheckboxType::class) {
-                        $formTypeBuilder->addCheckbox($builder, $fieldName, $translator->trans($name, [], $context));
+                        $builder->add(
+                            $formTypeBuilder->createCheckbox(
+                                $builder, $fieldName, $translator->trans($name, [], $context)
+                            )
+                        );
                     }
                     elseif (in_array($setting['field'], [RadioType::class, ChoiceType::class])) {
                         if ($settingsConnector instanceof SettingsConnectorInterface) {
@@ -100,22 +101,35 @@ class ConfigurationFormType extends AbstractType
                         }
 
                         if ($setting['field'] == RadioType::class) {
-                            $formTypeBuilder->addRadio($builder, $fieldName, $translator->trans($name, [], $context),
-                                ($setting['required'] == 'true'), $options);
+                            $builder->add(
+                                $formTypeBuilder->createRadio(
+                                    $builder, $fieldName, $translator->trans($name, [], $context),
+                                    ($setting['required'] == 'true'), $options
+                                )
+                            );
                         }
                         else {
-                            $formTypeBuilder->addSelect($builder, $fieldName, $translator->trans($name, [], $context),
-                                ($setting['required'] == 'true'), $options);
+                            $builder->add(
+                                $formTypeBuilder->createSelect(
+                                    $builder, $fieldName, $translator->trans($name, [], $context),
+                                    ($setting['required'] == 'true'), $options
+                                )
+                            );
                         }
                     }
                 }
             }
 
-            $this->getFormButtonTypeBuilder()->addSaveAndResetButton($builder);
+            $this->formButtonTypeBuilder->addSaveAndResetButton($builder);
         }
         else {
-            $formTypeBuilder->addWarning(
-                $builder, 'no_settings', $translator->trans('NoConfigurableSettings', [], StringUtilities::LIBRARIES)
+            $builder->add(
+                $formTypeBuilder->createMessage(
+                    $builder, 'no_settings',
+                    $translator->trans('NoConfigurableSettingsLabel', [], StringUtilities::LIBRARIES),
+                    $translator->trans('NoConfigurableSettingsMessage', [], StringUtilities::LIBRARIES),
+                    AlertEnum::WARNING
+                )
             );
         }
     }
@@ -131,35 +145,5 @@ class ConfigurationFormType extends AbstractType
 
             return $context;
         });
-    }
-
-    protected function getFormButtonTypeBuilder(): FormButtonTypeBuilder
-    {
-        return $this->formButtonTypeBuilder;
-    }
-
-    public function getFormTypeBuilder(): FormTypeBuilder
-    {
-        return $this->formTypeBuilder;
-    }
-
-    public function getSettingsConnectorRegistry(): SettingsConnectorRegistry
-    {
-        return $this->settingsConnectorRegistry;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    protected function getUserSettingsParser(): UserSettingsParser
-    {
-        return $this->userSettingsParser;
-    }
-
-    public function getUserSettingsService(): UserSettingsService
-    {
-        return $this->userSettingsService;
     }
 }

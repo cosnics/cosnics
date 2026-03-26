@@ -16,11 +16,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ItemConfigurationFormType extends AbstractType
 {
-    protected ItemRendererRegistry $itemRendererRegistry;
-
-    public function __construct(ItemRendererRegistry $itemRendererRegistry)
+    public function __construct(protected readonly ItemRendererRegistry $itemRendererRegistry)
     {
-        $this->itemRendererRegistry = $itemRendererRegistry;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -28,7 +25,7 @@ class ItemConfigurationFormType extends AbstractType
         $itemType = $options['itemType'];
 
         try {
-            $itemRenderer = $this->getItemRendererRegistry()->getItemRenderer($itemType);
+            $itemRenderer = $this->itemRendererRegistry->getItemRenderer($itemType);
 
             if ($itemRenderer instanceof ConfigurableItemInterface &&
                 count($itemRenderer->getConfigurationPropertyNames()) > 0) {
@@ -52,10 +49,5 @@ class ItemConfigurationFormType extends AbstractType
         };
 
         $resolver->setNormalizer('itemType', $normalizer);
-    }
-
-    public function getItemRendererRegistry(): ItemRendererRegistry
-    {
-        return $this->itemRendererRegistry;
     }
 }

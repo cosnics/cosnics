@@ -15,67 +15,28 @@ use Symfony\Component\Translation\Translator;
  */
 class ItemTitleFormType extends AbstractType
 {
-    protected string $defaultLanguage;
-
-    protected FormTypeBuilder $formTypeBuilder;
-
-    protected ItemRendererRegistry $itemRendererRegistry;
-
-    protected LanguageConsulter $languageConsulter;
-
-    protected Translator $translator;
-
     public function __construct(
-        FormTypeBuilder $formTypeBuilder, string $defaultLanguage, ItemRendererRegistry $itemRendererRegistry,
-        LanguageConsulter $languageConsulter, Translator $translator
+        protected FormTypeBuilder $formTypeBuilder, protected string $defaultLanguage,
+        protected ItemRendererRegistry $itemRendererRegistry, protected LanguageConsulter $languageConsulter,
+        protected Translator $translator
     )
     {
-        $this->defaultLanguage = $defaultLanguage;
-        $this->itemRendererRegistry = $itemRendererRegistry;
-        $this->languageConsulter = $languageConsulter;
-        $this->translator = $translator;
-        $this->formTypeBuilder = $formTypeBuilder;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $translator = $this->getTranslator();
-        $formTypeBuilder = $this->getFormTypeBuilder();
-        $defaultLanguage = $this->getDefaultLanguage();
-
-        $formTypeBuilder->addCategory(
-            $builder, 'category_titles', $translator->trans('Titles', [], Manager::CONTEXT)
+        $builder->add(
+            $this->formTypeBuilder->createCategory(
+                $builder, 'category_titles', $this->translator->trans('Titles', [], Manager::CONTEXT)
+            )
         );
 
-        $activeLanguages = $this->getLanguageConsulter()->getLanguages();
+        $activeLanguages = $this->languageConsulter->getLanguages();
 
         foreach ($activeLanguages as $isocode => $language) {
-            $formTypeBuilder->addText($builder, $isocode, $language, $isocode == $defaultLanguage);
+            $builder->add(
+                $this->formTypeBuilder->createText($builder, $isocode, $language, $isocode == $this->defaultLanguage)
+            );
         }
-    }
-
-    public function getDefaultLanguage(): string
-    {
-        return $this->defaultLanguage;
-    }
-
-    public function getFormTypeBuilder(): FormTypeBuilder
-    {
-        return $this->formTypeBuilder;
-    }
-
-    public function getItemRendererRegistry(): ItemRendererRegistry
-    {
-        return $this->itemRendererRegistry;
-    }
-
-    public function getLanguageConsulter(): LanguageConsulter
-    {
-        return $this->languageConsulter;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }

@@ -5,7 +5,6 @@ use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
 use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\CachedItemService;
-use Chamilo\Core\Menu\Service\ItemFormDataHandler;
 use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\Form\ItemFormType;
@@ -42,8 +41,6 @@ class UpdateComponent extends Manager
 
     protected FormFactoryInterface $formFactory;
 
-    protected ItemFormDataHandler $itemFormDataHandler;
-
     protected ItemFormType $itemFormType;
 
     protected Environment $twigFormEnvironment;
@@ -53,7 +50,7 @@ class UpdateComponent extends Manager
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, CachedItemService $cachedItemService,
         ItemRendererRegistry $itemRendererRegistry, ItemService $itemService, AlertsManager $alertsManager,
         BreadcrumbTrail $breadcrumbTrail, UrlGenerator $urlGenerator, FormFactoryInterface $formFactory,
-        ItemFormType $itemFormType, Environment $twigFormEnvironment, ItemFormDataHandler $itemFormDataHandler
+        ItemFormType $itemFormType, Environment $twigFormEnvironment
     )
     {
         parent::__construct(
@@ -65,7 +62,6 @@ class UpdateComponent extends Manager
         $this->formFactory = $formFactory;
         $this->twigFormEnvironment = $twigFormEnvironment;
         $this->itemFormType = $itemFormType;
-        $this->itemFormDataHandler = $itemFormDataHandler;
     }
 
     /**
@@ -89,7 +85,6 @@ class UpdateComponent extends Manager
 
         $item = $this->getItem();
         $itemRenderer = $this->getItemRendererFactory()->getItemRendererForItem($item);
-        $itemFormDataHandler = $this->getItemFormDataHandler();
 
         $this->getBreadcrumbTrail()->add(
             new Breadcrumb(
@@ -110,14 +105,14 @@ class UpdateComponent extends Manager
         );
 
         $form = $this->getFormFactory()->create(
-            ItemFormType::class, $itemFormDataHandler->getDefaultFormData($item),
+            ItemFormType::class, $item->getDefaultPropertiesUnserialized(),
             ['action' => $itemUri, 'itemType' => $item->getType()]
         );
         $form->handleRequest($this->getRequest());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $success = $this->getCachedItemService()->saveItemFromValues(
-                $item, $itemFormDataHandler->handleData($item->getType(), $form->getData())
+                $item, $form->getData()
             );
 
             $message = $this->getTranslator()->trans(
@@ -182,11 +177,6 @@ class UpdateComponent extends Manager
         }
 
         return $item;
-    }
-
-    public function getItemFormDataHandler(): ItemFormDataHandler
-    {
-        return $this->itemFormDataHandler;
     }
 
     public function getItemFormType(): ItemFormType

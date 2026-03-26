@@ -11,6 +11,7 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeableP
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeableUsernameInterface;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
+use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Chamilo\Libraries\UserInterface\Form\Service\FormButtonTypeBuilder;
 use Chamilo\Libraries\UserInterface\Form\Service\FormTypeBuilder;
 use Symfony\Component\Form\AbstractType;
@@ -82,23 +83,32 @@ abstract class AbstractUserFormType extends AbstractType
         $formTypeBuilder = $this->getFormTypeBuilder();
         $translator = $this->getTranslator();
 
-        $formTypeBuilder->addCategory(
-            $builder, self::CATEGORY_ACCOUNT, $translator->trans('Account', [], Manager::CONTEXT)
+        $builder->add(
+            $formTypeBuilder->createCategory(
+                $builder, self::CATEGORY_ACCOUNT, $translator->trans('Account', [], Manager::CONTEXT)
+            )
         );
 
         if ($options['isLockoutRisk']) {
-            $formTypeBuilder->addWarning(
-                $builder, self::PROPERTY_LOCKOUT, $translator->trans('LockOutWarningMessage', [], Manager::CONTEXT)
+            $builder->add(
+                $formTypeBuilder->createMessage(
+                    $builder, self::PROPERTY_LOCKOUT, $translator->trans('LockOutWarningLabel', [], Manager::CONTEXT),
+                    $translator->trans('LockOutWarningMessage', [], Manager::CONTEXT), AlertEnum::WARNING
+                )
             );
         }
 
-        $formTypeBuilder->addCheckbox(
-            $builder, User::PROPERTY_ACTIVE, $translator->trans('Active', [], Manager::CONTEXT)
+        $builder->add(
+            $formTypeBuilder->createCheckbox(
+                $builder, User::PROPERTY_ACTIVE, $translator->trans('Active', [], Manager::CONTEXT)
+            )
         );
 
-        $formTypeBuilder->addCheckbox(
-            $builder, User::PROPERTY_PLATFORM_ADMINISTRATOR,
-            $translator->trans('PlatformAdministrator', [], Manager::CONTEXT)
+        $builder->add(
+            $formTypeBuilder->createCheckbox(
+                $builder, User::PROPERTY_PLATFORM_ADMINISTRATOR,
+                $translator->trans('PlatformAdministrator', [], Manager::CONTEXT)
+            )
         );
     }
 
@@ -107,12 +117,16 @@ abstract class AbstractUserFormType extends AbstractType
         $formTypeBuilder = $this->getFormTypeBuilder();
         $translator = $this->getTranslator();
 
-        $formTypeBuilder->addCategory(
-            $builder, self::CATEGORY_MAIL, $translator->trans('Mail', [], Manager::CONTEXT)
+        $builder->add(
+            $formTypeBuilder->createCategory(
+                $builder, self::CATEGORY_MAIL, $translator->trans('Mail', [], Manager::CONTEXT)
+            )
         );
 
-        $formTypeBuilder->addCheckbox(
-            $builder, self::PROPERTY_SEND_MAIL, $translator->trans('SendMailToUser', [], Manager::CONTEXT)
+        $builder->add(
+            $formTypeBuilder->createCheckbox(
+                $builder, self::PROPERTY_SEND_MAIL, $translator->trans('SendMailToUser', [], Manager::CONTEXT)
+            )
         );
     }
 
@@ -135,9 +149,11 @@ abstract class AbstractUserFormType extends AbstractType
 
         if ($this->isPasswordChangeable($executingUser, $user)) {
             if ($allowedToGeneratePassword) {
-                $formTypeBuilder->addCheckbox(
-                    $builder, self::PROPERTY_PASSWORD_GENERATE,
-                    $translator->trans('GeneratePassword', [], Manager::CONTEXT)
+                $builder->add(
+                    $formTypeBuilder->createCheckbox(
+                        $builder, self::PROPERTY_PASSWORD_GENERATE,
+                        $translator->trans('GeneratePassword', [], Manager::CONTEXT)
+                    )
                 );
             }
 
@@ -145,16 +161,20 @@ abstract class AbstractUserFormType extends AbstractType
                 $constraint = new Assert\Callback(callback: [$this, 'validateCurrentPassword'],
                     payload: ['authentication' => $this->getAuthentication($user), 'user' => $user]);
 
-                $formTypeBuilder->addPassword(
-                    builder: $builder, name: self::PROPERTY_PASSWORD_CURRENT, label: $translator->trans(
-                    'CurrentPassword', [], Manager::CONTEXT
-                ), constraints: [$constraint]
+                $builder->add(
+                    $formTypeBuilder->createPassword(
+                        builder: $builder, name: self::PROPERTY_PASSWORD_CURRENT, label: $translator->trans(
+                        'CurrentPassword', [], Manager::CONTEXT
+                    ), constraints: [$constraint]
+                    )
                 );
             }
 
-            $formTypeBuilder->addPassword(
-                builder: $builder, name: User::PROPERTY_PASSWORD, label: $translator->trans('Password', [],
-                Manager::CONTEXT), validateStrength: true
+            $builder->add(
+                $formTypeBuilder->createPassword(
+                    builder: $builder, name: User::PROPERTY_PASSWORD, label: $translator->trans('Password', [],
+                    Manager::CONTEXT), validateStrength: true
+                )
             );
 
             if ($requiresPasswordConfirmation) {
@@ -163,10 +183,12 @@ abstract class AbstractUserFormType extends AbstractType
                     'message' => 'The passwords must match',
                 ]);
 
-                $formTypeBuilder->addPassword(
-                    builder: $builder, name: self::PROPERTY_PASSWORD_CONFIRM, label: $translator->trans(
-                    'PasswordConfirmation', [], Manager::CONTEXT
-                ), validateStrength: true, constraints: [$constraint]
+                $builder->add(
+                    $formTypeBuilder->createPassword(
+                        builder: $builder, name: self::PROPERTY_PASSWORD_CONFIRM, label: $translator->trans(
+                        'PasswordConfirmation', [], Manager::CONTEXT
+                    ), validateStrength: true, constraints: [$constraint]
+                    )
                 );
             }
         }
@@ -187,11 +209,15 @@ abstract class AbstractUserFormType extends AbstractType
         $givenNameLabel = $translator->trans('GivenName', [], Manager::CONTEXT);
 
         if ($this->hasUserRight($executingUser, 'cosnics.application.user.rights.changeGivenName')) {
-            $formTypeBuilder->addText(builder: $builder, name: User::PROPERTY_GIVEN_NAME, label: $givenNameLabel);
+            $builder->add(
+                $formTypeBuilder->createText(builder: $builder, name: User::PROPERTY_GIVEN_NAME, label: $givenNameLabel)
+            );
         }
         else {
-            $formTypeBuilder->addVisualContent(
-                builder: $builder, name: User::PROPERTY_GIVEN_NAME, label: $givenNameLabel
+            $builder->add(
+                $formTypeBuilder->createVisualContent(
+                    builder: $builder, name: User::PROPERTY_GIVEN_NAME, label: $givenNameLabel
+                )
             );
         }
 
@@ -199,11 +225,15 @@ abstract class AbstractUserFormType extends AbstractType
         $surnameLabel = $translator->trans('Surname', [], Manager::CONTEXT);
 
         if ($this->hasUserRight($executingUser, 'cosnics.application.user.rights.changeSurname')) {
-            $formTypeBuilder->addText(builder: $builder, name: User::PROPERTY_SURNAME, label: $surnameLabel);
+            $builder->add(
+                $formTypeBuilder->createText(builder: $builder, name: User::PROPERTY_SURNAME, label: $surnameLabel)
+            );
         }
         else {
-            $formTypeBuilder->addVisualContent(
-                builder: $builder, name: User::PROPERTY_SURNAME, label: $surnameLabel
+            $builder->add(
+                $formTypeBuilder->createVisualContent(
+                    builder: $builder, name: User::PROPERTY_SURNAME, label: $surnameLabel
+                )
             );
         }
 
@@ -211,15 +241,20 @@ abstract class AbstractUserFormType extends AbstractType
         $emailLabel = $translator->trans('Email', [], Manager::CONTEXT);
 
         if ($this->hasUserRight($executingUser, 'cosnics.application.user.rights.changeEmail')) {
-            $formTypeBuilder->addEmail(
-                builder: $builder, name: User::PROPERTY_EMAIL, label: $emailLabel, required: $this->getUserRequirement(
-                'cosnics.application.user.require.email',
-            ), constraints: [new Assert\Email()]
+            $builder->add(
+                $formTypeBuilder->createEmail(
+                    builder: $builder, name: User::PROPERTY_EMAIL, label: $emailLabel,
+                    required: $this->getUserRequirement(
+                        'cosnics.application.user.require.email',
+                    ), constraints: [new Assert\Email()]
+                )
             );
         }
         else {
-            $formTypeBuilder->addVisualContent(
-                builder: $builder, name: User::PROPERTY_EMAIL, label: $emailLabel
+            $builder->add(
+                $formTypeBuilder->createVisualContent(
+                    builder: $builder, name: User::PROPERTY_EMAIL, label: $emailLabel
+                )
             );
         }
 
@@ -229,13 +264,17 @@ abstract class AbstractUserFormType extends AbstractType
         if ($this->isUsernameChangeable($executingUser, $user)) {
             $constraint = new Assert\Callback(callback: [$this, 'validateUserName'], payload: ['user' => $user]);
 
-            $formTypeBuilder->addText(
-                builder: $builder, name: User::PROPERTY_USERNAME, label: $usernameLabel, constraints: [$constraint]
+            $builder->add(
+                $formTypeBuilder->createText(
+                    builder: $builder, name: User::PROPERTY_USERNAME, label: $usernameLabel, constraints: [$constraint]
+                )
             );
         }
         else {
-            $formTypeBuilder->addVisualContent(
-                builder: $builder, name: User::PROPERTY_USERNAME, label: $usernameLabel
+            $builder->add(
+                $formTypeBuilder->createVisualContent(
+                    builder: $builder, name: User::PROPERTY_USERNAME, label: $usernameLabel
+                )
             );
         }
 
@@ -243,14 +282,18 @@ abstract class AbstractUserFormType extends AbstractType
         $officialCodeLabel = $translator->trans('OfficialCode', [], Manager::CONTEXT);
 
         if ($this->hasUserRight($executingUser, 'cosnics.application.user.rights.changeOfficialCode')) {
-            $formTypeBuilder->addText(
-                builder: $builder, name: User::PROPERTY_OFFICIAL_CODE, label: $officialCodeLabel,
-                required: $this->getUserRequirement('cosnics.application.user.require.officialCode')
+            $builder->add(
+                $formTypeBuilder->createText(
+                    builder: $builder, name: User::PROPERTY_OFFICIAL_CODE, label: $officialCodeLabel,
+                    required: $this->getUserRequirement('cosnics.application.user.require.officialCode')
+                )
             );
         }
         else {
-            $formTypeBuilder->addVisualContent(
-                builder: $builder, name: User::PROPERTY_OFFICIAL_CODE, label: $officialCodeLabel
+            $builder->add(
+                $formTypeBuilder->createVisualContent(
+                    builder: $builder, name: User::PROPERTY_OFFICIAL_CODE, label: $officialCodeLabel
+                )
             );
         }
     }
@@ -271,25 +314,31 @@ abstract class AbstractUserFormType extends AbstractType
                     $user, false
                 );
 
-                $formTypeBuilder->addPicture(
-                    builder: $builder, name: self::PROPERTY_PICTURE_CURRENT, label: $translator->trans(
-                    'CurrentPicture', [], Manager::CONTEXT
-                ), pictureUri: $encodedUserPicture, noPictureLabel: $translator->trans(
-                    'NoCurrentPicture', [], Manager::CONTEXT
-                ), pictureStyles: ['max-height' => '250px']
+                $builder->add(
+                    $formTypeBuilder->createPicture(
+                        builder: $builder, name: self::PROPERTY_PICTURE_CURRENT, label: $translator->trans(
+                        'CurrentPicture', [], Manager::CONTEXT
+                    ), pictureUri: $encodedUserPicture, noPictureLabel: $translator->trans(
+                        'NoCurrentPicture', [], Manager::CONTEXT
+                    ), pictureStyles: ['max-height' => '250px']
+                    )
                 );
 
                 if ($encodedUserPicture) {
-                    $formTypeBuilder->addCheckbox(
-                        $builder, self::PROPERTY_PICTURE_REMOVE,
-                        $translator->trans('RemoveCurrentPicture', [], Manager::CONTEXT)
+                    $builder->add(
+                        $formTypeBuilder->createCheckbox(
+                            $builder, self::PROPERTY_PICTURE_REMOVE,
+                            $translator->trans('RemoveCurrentPicture', [], Manager::CONTEXT)
+                        )
                     );
                 }
             }
 
-            $formTypeBuilder->addFile(
-                builder: $builder, name: User::PROPERTY_PICTURE_URI, label: $translator->trans('AddPicture', [],
-                Manager::CONTEXT), required: false, constraints: [new Assert\Image()]
+            $builder->add(
+                $formTypeBuilder->createFile(
+                    builder: $builder, name: User::PROPERTY_PICTURE_URI, label: $translator->trans('AddPicture', [],
+                    Manager::CONTEXT), required: false, constraints: [new Assert\Image()]
+                )
             );
         }
     }
@@ -302,15 +351,19 @@ abstract class AbstractUserFormType extends AbstractType
         $formTypeBuilder = $this->getFormTypeBuilder();
         $translator = $this->getTranslator();
 
-        $formTypeBuilder->addCategory(
-            $builder, self::CATEGORY_SECURITY, $translator->trans('Security', [], Manager::CONTEXT)
+        $builder->add(
+            $formTypeBuilder->createCategory(
+                $builder, self::CATEGORY_SECURITY, $translator->trans('Security', [], Manager::CONTEXT)
+            )
         );
 
         $this->buildPasswordForm($builder, $options, false, true, true);
 
         if ($addTokenField) {
-            $formTypeBuilder->addVisualContent(
-                $builder, User::PROPERTY_SECURITY_TOKEN, $translator->trans('SecurityToken', [], Manager::CONTEXT)
+            $builder->add(
+                $formTypeBuilder->createVisualContent(
+                    $builder, User::PROPERTY_SECURITY_TOKEN, $translator->trans('SecurityToken', [], Manager::CONTEXT)
+                )
             );
         }
     }

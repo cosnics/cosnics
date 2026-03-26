@@ -22,6 +22,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @package Chamilo\Core\Group\UserInterface\Form
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @todo Use a DataMapper here
  */
 class GroupMoveFormType extends AbstractType
 {
@@ -55,48 +56,23 @@ class GroupMoveFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $formTypeBuilderHelper = $this->formTypeBuilder;
+        $formTypeBuilder = $this->formTypeBuilder;
         $translator = $this->getTranslator();
 
-        $name = $formTypeBuilderHelper->createText(
+        $name = $formTypeBuilder->createText(
             $builder, Group::PROPERTY_NAME, $translator->trans('Name', [], Manager::CONTEXT), false
         )->setDisabled(true);
         $builder->add($name);
 
-        /*
         $builder->add(
-            'visual', VisualContentType::class, [
-                'label' => $translator->trans('Visual', [], Manager::CONTEXT),
-                'content' => 'Just some visual content that looks like a form element',
-                'row_attr' => [
-                    'class' => 'form-floating mb-3'
-                ]
-            ]
-        );
-
-        $formTypeBuilderHelper->addCategory(
-            $builder, 'category', $translator->trans('CategoryTitle', [], Manager::CONTEXT)
-        );
-
-        $formTypeBuilderHelper->addDanger(
-            $builder, 'message', 'This is where the message content should go',
-            $translator->trans('MessageTitle', [], Manager::CONTEXT)
-        );
-
-        $formTypeBuilderHelper->addHtml(
-            $builder, 'test', '<div class="alert alert-danger mb-3">Sample Html Alert</div>'
-        );
-
-        $formTypeBuilderHelper->addHtmlEditor($builder, 'description', 'HtmlEditorLabel');
-         */
-
-        $formTypeBuilderHelper->addSelect(
-            $builder, NestedSet::PROPERTY_PARENT_ID, $translator->trans('NewLocation', [], Manager::CONTEXT), true,
-            $this->getOptionsTreeRenderer()->getOptions(
-                disabledIdentifiers: $this->determineDisabledGroupIdentifiers(
-                    $options[self::OPTION_DISABLED_IDENTIFIERS]
-                )
-            )->toArray()
+            $formTypeBuilder->createSelect(
+                $builder, NestedSet::PROPERTY_PARENT_ID, $translator->trans('NewLocation', [], Manager::CONTEXT), true,
+                $this->getOptionsTreeRenderer()->getOptions(
+                    disabledIdentifiers: $this->determineDisabledGroupIdentifiers(
+                        $options[self::OPTION_DISABLED_IDENTIFIERS]
+                    )
+                )->toArray()
+            )
         );
 
         $this->getFormButtonTypeBuilder()->addSaveAndResetButton($builder);

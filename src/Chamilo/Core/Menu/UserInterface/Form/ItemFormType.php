@@ -6,6 +6,7 @@ use Chamilo\Core\Menu\Architecture\Interface\TranslatableItemInterface;
 use Chamilo\Core\Menu\Implementation\Menu\CategoryItemRenderer;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\Menu\UserInterface\Form\Service\ItemFormDataMapper;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\UserInterface\Form\Service\FormButtonTypeBuilder;
 use Chamilo\Libraries\UserInterface\Form\Service\FormTypeBuilder;
@@ -23,51 +24,48 @@ use Symfony\Component\Translation\Translator;
  */
 class ItemFormType extends AbstractType
 {
-    protected FormButtonTypeBuilder $formButtonTypeBuilder;
-
-    protected FormTypeBuilder $formTypeBuilder;
-
-    protected ItemRendererRegistry $itemRendererRegistry;
-
-    protected OptionsTreeRenderer $optionsTreeRenderer;
-
-    protected Translator $translator;
-
     public function __construct(
-        FormTypeBuilder $formTypeBuilder, FormButtonTypeBuilder $formButtonTypeBuilder, Translator $translator,
-        OptionsTreeRenderer $optionsTreeRenderer, ItemRendererRegistry $itemRendererRegistry
+        protected readonly FormTypeBuilder $formTypeBuilder,
+        protected readonly FormButtonTypeBuilder $formButtonTypeBuilder, protected readonly Translator $translator,
+        protected readonly OptionsTreeRenderer $optionsTreeRenderer,
+        protected readonly ItemRendererRegistry $itemRendererRegistry,
+        protected readonly ItemFormDataMapper $itemFormDataMapper
     )
     {
-        $this->translator = $translator;
-        $this->optionsTreeRenderer = $optionsTreeRenderer;
-        $this->formTypeBuilder = $formTypeBuilder;
-        $this->formButtonTypeBuilder = $formButtonTypeBuilder;
-        $this->itemRendererRegistry = $itemRendererRegistry;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $formTypeBuilderHelper = $this->formTypeBuilder;
-        $itemType = $options['itemType'];
-        $translator = $this->getTranslator();
+        $builder->setDataMapper($this->itemFormDataMapper);
 
-        $formTypeBuilderHelper->addCategory(
-            $builder, 'category_general', $translator->trans('General', [], Manager::CONTEXT)
+        $itemType = $options['itemType'];
+        $translator = $this->translator;
+
+        $builder->add(
+            $this->formTypeBuilder->createCategory(
+                $builder, 'category_general', $translator->trans('General', [], Manager::CONTEXT)
+            )
         );
 
         if ($itemType !== CategoryItemRenderer::class) {
-            $formTypeBuilderHelper->addSelect(
-                $builder, Item::PROPERTY_PARENT, $translator->trans('Parent', [], Manager::CONTEXT), true,
-                $this->getOptionsTreeRenderer()->getOptions()->toArray()
+            $builder->add(
+                $this->formTypeBuilder->createSelect(
+                    $builder, Item::PROPERTY_PARENT, $translator->trans('Parent', [], Manager::CONTEXT), true,
+                    $this->optionsTreeRenderer->getOptions()->toArray()
+                )
             );
         }
 
-        $formTypeBuilderHelper->addCheckbox(
-            $builder, Item::PROPERTY_HIDDEN, $translator->trans('Hidden', [], Manager::CONTEXT)
+        $builder->add(
+            $this->formTypeBuilder->createCheckbox(
+                $builder, Item::PROPERTY_HIDDEN, $translator->trans('Hidden', [], Manager::CONTEXT)
+            )
         );
 
-        $formTypeBuilderHelper->addText(
-            $builder, Item::PROPERTY_ICON_CLASS, $translator->trans('IconClass', [], Manager::CONTEXT), false
+        $builder->add(
+            $this->formTypeBuilder->createText(
+                $builder, Item::PROPERTY_ICON_CLASS, $translator->trans('IconClass', [], Manager::CONTEXT), false
+            )
         );
 
         $builder->add(
@@ -78,7 +76,7 @@ class ItemFormType extends AbstractType
         );
 
         try {
-            $itemRenderer = $this->getItemRendererRegistry()->getItemRenderer($itemType);
+            $itemRenderer = $this->itemRendererRegistry->getItemRenderer($itemType);
 
             if ($itemRenderer instanceof TranslatableItemInterface) {
                 $builder->add(
@@ -91,7 +89,7 @@ class ItemFormType extends AbstractType
         catch (NoSuchClassException) {
         }
 
-        $this->getFormButtonTypeBuilder()->addSaveAndResetButton($builder);
+        $this->formButtonTypeBuilder->addSaveAndResetButton($builder);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -107,30 +105,5 @@ class ItemFormType extends AbstractType
         };
 
         $resolver->setNormalizer('itemType', $normalizer);
-    }
-
-    public function getFormButtonTypeBuilder(): FormButtonTypeBuilder
-    {
-        return $this->formButtonTypeBuilder;
-    }
-
-    public function getFormTypeBuilder(): FormTypeBuilder
-    {
-        return $this->formTypeBuilder;
-    }
-
-    public function getItemRendererRegistry(): ItemRendererRegistry
-    {
-        return $this->itemRendererRegistry;
-    }
-
-    public function getOptionsTreeRenderer(): OptionsTreeRenderer
-    {
-        return $this->optionsTreeRenderer;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }

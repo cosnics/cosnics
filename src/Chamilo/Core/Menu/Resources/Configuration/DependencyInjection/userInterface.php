@@ -4,6 +4,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 use Chamilo\Core\Menu\UserInterface\Form\ItemConfigurationFormType;
 use Chamilo\Core\Menu\UserInterface\Form\ItemFormType;
 use Chamilo\Core\Menu\UserInterface\Form\ItemTitleFormType;
+use Chamilo\Core\Menu\UserInterface\Form\Service\ItemFormDataMapper;
 use Chamilo\Core\Menu\UserInterface\Menu\ItemOptionsTreeDataProvider;
 use Chamilo\Core\Menu\UserInterface\Menu\ItemTreeMenuDataProvider;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\MenuRenderer;
@@ -46,4 +47,6 @@ return static function (ContainerConfigurator $container) {
     $services->set(ItemTitleFormType::class)->args(
         ['$defaultLanguage' => '%cosnics.libraries.userInterface.translation.language.default%']
     )->tag(FormTypeInterface::class);
+
+    $services->set(ItemFormDataMapper::class);
 };

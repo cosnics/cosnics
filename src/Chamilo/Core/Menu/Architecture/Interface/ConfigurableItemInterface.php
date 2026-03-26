@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Core\Menu\Architecture\Interface;
 
-use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Traversable;
 
 /**
  * @package Chamilo\Core\Menu\Architecture\Interface
@@ -17,7 +18,7 @@ interface ConfigurableItemInterface
      */
     public function getConfigurationPropertyNames(): array;
 
-    public function getDefaultFormConfigurationData(Item $item);
+    public function mapDataToForms(array $viewData, FormInterface $form): void;
 
-    public function handleConfigurationData(mixed $submittedData): mixed;
+    public function mapFormsToData(FormInterface $form, mixed &$viewData): void;
 }
