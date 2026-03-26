@@ -26,41 +26,15 @@ abstract class Manager extends Application
     public const string PARAM_RESET_KEY = 'key';
     public const string PARAM_USER_ID = 'user_id';
 
-    protected MailerInterface $activeMailer;
-
-    protected AlertsManager $alertsManager;
-
-    protected AuthenticationValidator $authenticationValidator;
-
-    protected UserService $userService;
-
-    protected UserUrlGenerator $userUrlGenerator;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
-        MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        UrlGenerator $urlGenerator
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        protected readonly AuthenticationValidator $authenticationValidator,
+        protected readonly UserUrlGenerator $userUrlGenerator, protected readonly MailerInterface $activeMailer,
+        protected readonly AlertsManager $alertsManager, protected readonly UserService $userService
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
-
-        $this->authenticationValidator = $authenticationValidator;
-        $this->userUrlGenerator = $userUrlGenerator;
-        $this->activeMailer = $activeMailer;
-        $this->alertsManager = $alertsManager;
-        $this->userService = $userService;
-    }
-
-    protected function getActiveMailer(): MailerInterface
-    {
-        return $this->activeMailer;
-    }
-
-    public function getAlertsManager(): AlertsManager
-    {
-        return $this->alertsManager;
     }
 
     public function getApplicationAction(): string
@@ -73,23 +47,8 @@ abstract class Manager extends Application
         return self::CONTEXT;
     }
 
-    protected function getAuthenticationValidator(): AuthenticationValidator
-    {
-        return $this->authenticationValidator;
-    }
-
     public function getDefaultApplicationAction(): string
     {
         return ActionEnum::BROWSE->value;
-    }
-
-    public function getUserService(): UserService
-    {
-        return $this->userService;
-    }
-
-    protected function getUserUrlGenerator(): UserUrlGenerator
-    {
-        return $this->userUrlGenerator;
     }
 }

@@ -12,13 +12,9 @@ use Symfony\Component\Translation\Translator;
  */
 class UserDetailsRendererRegistry extends ArrayCollection
 {
-    protected Translator $translator;
-
-    public function __construct(Translator $translator)
+    public function __construct(protected readonly Translator $translator)
     {
         parent::__construct();
-
-        $this->translator = $translator;
     }
 
     public function addUserDetailsRenderer(UserDetailsRendererInterface $userDetailsRenderer): void

@@ -26,22 +26,18 @@ use Symfony\Component\Translation\Translator;
  */
 class DownloadUserPictureComponent extends Manager
 {
-    protected UserPictureProviderInterface $userPictureProvider;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        UrlGenerator $urlGenerator, UserPictureProviderInterface $userPictureProvider
+        protected readonly UserPictureProviderInterface $userPictureProvider
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $authenticationValidator, $userUrlGenerator, $activeMailer, $alertsManager, $userService
         );
-
-        $this->userPictureProvider = $userPictureProvider;
     }
 
     /**
@@ -52,7 +48,7 @@ class DownloadUserPictureComponent extends Manager
      */
     public function run(?User $currentUser = null): Response
     {
-        return $this->getUserPictureProvider()->downloadUserPicture($this->getUserFromRequest());
+        return $this->userPictureProvider->downloadUserPicture($this->getUserFromRequest());
     }
 
     /**
@@ -70,7 +66,7 @@ class DownloadUserPictureComponent extends Manager
             throw new NoSuchParameterException(Manager::PARAM_USER_ID);
         }
 
-        $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
+        $user = $this->userService->findUserByIdentifier($userIdentifier);
 
         if (empty($user)) {
             throw new NoSuchObjectException(
@@ -79,10 +75,5 @@ class DownloadUserPictureComponent extends Manager
         }
 
         return $user;
-    }
-
-    public function getUserPictureProvider(): UserPictureProviderInterface
-    {
-        return $this->userPictureProvider;
     }
 }

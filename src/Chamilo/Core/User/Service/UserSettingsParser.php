@@ -11,22 +11,13 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\User\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserSettingsParser
+readonly class UserSettingsParser
 {
-    protected PackageBundlesCacheService $packageBundlesCacheService;
-
-    protected SystemPathBuilder $systemPathBuilder;
-
-    protected Translator $translator;
-
     public function __construct(
-        SystemPathBuilder $systemPathBuilder, Translator $translator,
-        PackageBundlesCacheService $packageBundlesCacheService
+        protected SystemPathBuilder $systemPathBuilder, protected Translator $translator,
+        protected PackageBundlesCacheService $packageBundlesCacheService
     )
     {
-        $this->systemPathBuilder = $systemPathBuilder;
-        $this->translator = $translator;
-        $this->packageBundlesCacheService = $packageBundlesCacheService;
     }
 
     public function determineConfigurablePackageContextSettings(string $packageContext): array
@@ -112,13 +103,13 @@ class UserSettingsParser
      */
     public function determineConfigurablePackages(): array
     {
-        $packages = $this->getPackageBundlesCacheService()->getPackages();
+        $packages = $this->packageBundlesCacheService->getPackages();
         $configurablePackages = [];
 
         foreach ($packages as $package) {
             $packageContext = $package->getContext();
             $settingsFilePath =
-                $this->getSystemPathBuilder()->namespaceToFullPath($packageContext) . 'Resources/Settings/settings.xml';
+                $this->systemPathBuilder->namespaceToFullPath($packageContext) . 'Resources/Settings/settings.xml';
 
             if (file_exists($settingsFilePath)) {
                 $configurablePackages[] = $package;
@@ -147,27 +138,12 @@ class UserSettingsParser
 
     protected function getConfigurablePackageContextPath(string $packageContext): string
     {
-        return $this->getSystemPathBuilder()->namespaceToFullPath($packageContext) . 'Resources/Settings/settings.xml';
+        return $this->systemPathBuilder->namespaceToFullPath($packageContext) . 'Resources/Settings/settings.xml';
     }
 
     protected function getConfigurablePackagePath(Package $package): string
     {
         return $this->getConfigurablePackageContextPath($package->getContext());
-    }
-
-    protected function getPackageBundlesCacheService(): PackageBundlesCacheService
-    {
-        return $this->packageBundlesCacheService;
-    }
-
-    protected function getSystemPathBuilder(): SystemPathBuilder
-    {
-        return $this->systemPathBuilder;
-    }
-
-    protected function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 
     protected function isConfigurablePackage(Package $package): bool
@@ -182,7 +158,7 @@ class UserSettingsParser
 
     protected function orderConfigurablePackages(Package $packageLeft, Package $packageRight): int
     {
-        $translator = $this->getTranslator();
+        $translator = $this->translator;
 
         return strcasecmp($translator->trans('TypeName', [], $packageLeft->getContext()),
             $translator->trans('TypeName', [], $packageRight->getContext()));

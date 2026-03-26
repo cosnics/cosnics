@@ -38,32 +38,20 @@ use Symfony\Component\Translation\Translator;
  */
 class ViewComponent extends Manager
 {
-    protected BreadcrumbTrail $breadcrumbTrail;
-
-    protected ButtonToolBarRenderer $buttonToolBarRenderer;
-
-    protected TabsRenderer $tabsRenderer;
-
-    protected UserDetailsRendererRegistry $userDetailsRendererCollection;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
-        MailerInterface $activeMailer, AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail,
-        UserService $userService, ButtonToolBarRenderer $buttonToolBarRenderer, UrlGenerator $urlGenerator,
-        TabsRenderer $tabsRenderer, UserDetailsRendererRegistry $userDetailsRendererCollection
+        MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
+        protected readonly BreadcrumbTrail $breadcrumbTrail,
+        protected readonly ButtonToolBarRenderer $buttonToolBarRenderer, protected readonly TabsRenderer $tabsRenderer,
+        protected readonly UserDetailsRendererRegistry $userDetailsRendererCollection
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $authenticationValidator, $userUrlGenerator, $activeMailer, $alertsManager, $userService
         );
-
-        $this->breadcrumbTrail = $breadcrumbTrail;
-        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
-        $this->tabsRenderer = $tabsRenderer;
-        $this->userDetailsRendererCollection = $userDetailsRendererCollection;
     }
 
     /**
@@ -83,16 +71,16 @@ class ViewComponent extends Manager
         }
 
         $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
-        $userToRender = $this->getUserService()->findUserByIdentifier($userIdentifier);
+        $userToRender = $this->userService->findUserByIdentifier($userIdentifier);
 
         if ($userToRender instanceof User) {
-            $this->getBreadcrumbTrail()->add(new Breadcrumb($userToRender->getFullName()));
+            $this->breadcrumbTrail->add(new Breadcrumb($userToRender->getFullName()));
 
             $html = [];
 
             $html[] = $this->renderHeader($currentUser);
-            $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar($userToRender));
-            $html[] = $this->getTabsRenderer()->renderNavigationAndContent(
+            $html[] = $this->buttonToolBarRenderer->render($this->getButtonToolBar($userToRender));
+            $html[] = $this->tabsRenderer->renderNavigationAndContent(
                 'userDetails', $this->getTabsCollection($userToRender, $currentUser), md5(UserDetailsRenderer::class)
             );
             $html[] = $this->renderFooter();
@@ -104,11 +92,6 @@ class ViewComponent extends Manager
         }
     }
 
-    public function getBreadcrumbTrail(): BreadcrumbTrail
-    {
-        return $this->breadcrumbTrail;
-    }
-
     public function getButtonToolBar(User $userToRender): ButtonToolBar
     {
         $translator = $this->getTranslator();
@@ -117,7 +100,7 @@ class ViewComponent extends Manager
         $commonActions = new ButtonGroup();
         $toolActions = new ButtonGroup();
 
-        $editUrl = $this->getUserUrlGenerator()->getUpdateUrl($userToRender);
+        $editUrl = $this->userUrlGenerator->getUpdateUrl($userToRender);
 
         $commonActions->addButton(
             new Button(
@@ -126,7 +109,7 @@ class ViewComponent extends Manager
             )
         );
 
-        $deleteUrl = $this->getUserUrlGenerator()->getDeleteUrl($userToRender);
+        $deleteUrl = $this->userUrlGenerator->getDeleteUrl($userToRender);
 
         $commonActions->addButton(
             new Button(
@@ -135,7 +118,7 @@ class ViewComponent extends Manager
             )
         );
 
-        $changeUserUrl = $this->getUserUrlGenerator()->getChangeUserUrl($userToRender);
+        $changeUserUrl = $this->userUrlGenerator->getChangeUserUrl($userToRender);
 
         $toolActions->addButton(
             new Button(
@@ -150,17 +133,12 @@ class ViewComponent extends Manager
         return $buttonToolBar;
     }
 
-    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
-    {
-        return $this->buttonToolBarRenderer;
-    }
-
     protected function getTabsCollection(User $userToView, User $currentUser): TabsCollection
     {
         $tabsCollection = new TabsCollection();
 
         foreach (
-            $this->getUserDetailsRendererCollection()->getUserDetailsRenderers() as $userDetailsRendererClassName =>
+            $this->userDetailsRendererCollection->getUserDetailsRenderers() as $userDetailsRendererClassName =>
             $userDetailsRenderer
         ) {
             if ($userDetailsRenderer->hasContentForUser($userToView, $currentUser)) {
@@ -173,16 +151,6 @@ class ViewComponent extends Manager
         }
 
         return $tabsCollection;
-    }
-
-    public function getTabsRenderer(): TabsRenderer
-    {
-        return $this->tabsRenderer;
-    }
-
-    public function getUserDetailsRendererCollection(): UserDetailsRendererRegistry
-    {
-        return $this->userDetailsRendererCollection;
     }
 
     protected function initializeContentTab(

@@ -10,25 +10,9 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class AbstractActionProvider
 {
-    protected Translator $translator;
-
-    protected UrlGenerator $urlGenerator;
-
     public function __construct(
-        UrlGenerator $urlGenerator, Translator $translator
+        protected readonly UrlGenerator $urlGenerator, protected readonly Translator $translator
     )
     {
-        $this->urlGenerator = $urlGenerator;
-        $this->translator = $translator;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
     }
 }

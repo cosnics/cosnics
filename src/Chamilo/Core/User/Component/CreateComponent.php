@@ -36,32 +36,20 @@ use Twig\Environment;
  */
 class CreateComponent extends Manager
 {
-    protected FormFactoryInterface $formFactory;
-
-    protected Environment $twigEnvironment;
-
-    protected UserFormType $userFormType;
-
-    protected ?UserPictureProviderInterface $userPictureUpdateProvider;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        UrlGenerator $urlGenerator, ?UserPictureProviderInterface $userPictureUpdateProvider,
-        FormFactoryInterface $formFactory, Environment $twigEnvironment, UserFormType $userFormType
+        protected readonly FormFactoryInterface $formFactory, protected readonly Environment $twigEnvironment,
+        protected readonly UserFormType $userFormType,
+        protected readonly ?UserPictureProviderInterface $userPictureProvider
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $authenticationValidator, $userUrlGenerator, $activeMailer, $alertsManager, $userService
         );
-
-        $this->userPictureUpdateProvider = $userPictureUpdateProvider;
-        $this->formFactory = $formFactory;
-        $this->twigEnvironment = $twigEnvironment;
-        $this->userFormType = $userFormType;
     }
 
     /**
@@ -80,7 +68,7 @@ class CreateComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $form = $this->getFormFactory()->create(
+        $form = $this->formFactory->create(
             UserFormType::class,
             [User::PROPERTY_ACTIVE => true, AbstractUserFormType::PROPERTY_PASSWORD_GENERATE => true],
             ['action' => $this->getUrlGenerator()->fromRequest(), 'executingUser' => $currentUser]
@@ -92,7 +80,7 @@ class CreateComponent extends Manager
             try {
                 $submittedData = $form->getData();
 
-                $createdUser = $this->getUserService()->createUserFromParameters(
+                $createdUser = $this->userService->createUserFromParameters(
                     $submittedData[User::PROPERTY_GIVEN_NAME], $submittedData[User::PROPERTY_SURNAME],
                     $submittedData[User::PROPERTY_USERNAME], $submittedData[User::PROPERTY_OFFICIAL_CODE],
                     $submittedData[User::PROPERTY_EMAIL],
@@ -100,19 +88,17 @@ class CreateComponent extends Manager
                     $submittedData[User::PROPERTY_PASSWORD], PlatformAuthentication::class,
                     (bool) $submittedData[User::PROPERTY_PLATFORM_ADMINISTRATOR],
                     (bool) $submittedData[User::PROPERTY_ACTIVE],
-                    (bool) $submittedData[AbstractUserFormType::PROPERTY_SEND_MAIL]
+                    (bool) $submittedData[AbstractUserFormType::PROPERTY_SEND_MAIL], $currentUser
                 );
 
-                $userPictureProvider = $this->getUserPictureProvider();
-
-                if ($userPictureProvider instanceof UserPictureUpdateProviderInterface) {
+                if ($this->userPictureProvider instanceof UserPictureUpdateProviderInterface) {
                     $pictureInformation = $submittedData[User::PROPERTY_PICTURE_URI];
 
                     if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid()) {
-                        if (!$userPictureProvider->updateUserPictureFromParameters(
-                            $createdUser, $pictureInformation
+                        if (!$this->userPictureProvider->updateUserPictureFromParameters(
+                            $createdUser, $pictureInformation, false, $currentUser
                         )) {
-                            $this->getAlertsManager()->addAlert(
+                            $this->alertsManager->addAlert(
                                 new Alert(
                                     $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
                                     AlertEnum::WARNING
@@ -122,7 +108,7 @@ class CreateComponent extends Manager
                     }
                 }
 
-                $this->getAlertsManager()->addAlert(
+                $this->alertsManager->addAlert(
                     new Alert(
                         $translator->trans('UserCreated', [], Manager::CONTEXT), AlertEnum::SUCCESS
                     )
@@ -138,7 +124,7 @@ class CreateComponent extends Manager
                 );
             }
             catch (Exception $exception) {
-                $this->getAlertsManager()->addAlert(
+                $this->alertsManager->addAlert(
                     new Alert($exception->getMessage(), AlertEnum::DANGER)
                 );
             }
@@ -147,36 +133,11 @@ class CreateComponent extends Manager
         $html = [];
 
         $html[] = $this->renderHeader($currentUser);
-        $html[] = $this->getTwigEnvironment()->render('form.html.twig', [
+        $html[] = $this->twigEnvironment->render('form.html.twig', [
             'form' => $form->createView(),
         ]);
         $html[] = $this->renderFooter();
 
         return new Response(implode(PHP_EOL, $html));
-    }
-
-    public function getFormFactory(): FormFactoryInterface
-    {
-        return $this->formFactory;
-    }
-
-    public function getTwigEnvironment(): Environment
-    {
-        return $this->twigEnvironment;
-    }
-
-    public function getUserFormType(): UserFormType
-    {
-        return $this->userFormType;
-    }
-
-    public function getUserPictureProvider(): ?UserPictureUpdateProviderInterface
-    {
-        return $this->userPictureUpdateProvider;
-    }
-
-    public function getUserPictureUpdateProvider(): ?UserPictureProviderInterface
-    {
-        return $this->userPictureUpdateProvider;
     }
 }

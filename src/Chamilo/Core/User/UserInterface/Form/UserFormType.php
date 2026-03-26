@@ -22,7 +22,7 @@ class UserFormType extends AbstractUserFormType
         $this->buildMailForm($builder);
 
         if ($this->isAnythingChangeable($options['executingUser'], $options['user'])) {
-            $this->getFormButtonTypeBuilder()->addSaveAndResetButton($builder);
+            $this->formButtonTypeBuilder->addSaveAndResetButton($builder);
         }
 
         $builder->setDataMapper(new UserFormDataMapper());

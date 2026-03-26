@@ -18,9 +18,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 {
     public function getActions(): Actions
     {
-        $translator = $this->getTranslator();
         $context = $this->getContext();
-        $urlGenerator = $this->getUrlGenerator();
 
         $links = [];
 
@@ -30,8 +28,10 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
         ];
 
         $links[] = new Action(
-            $translator->trans('ManageDescription', [], $context), $translator->trans('Manage', [], $context),
-            new FontAwesomeGlyph('sort', ['fa-fw', 'fa-2x'], null, 'fas'), $urlGenerator->fromParameters($parameters)
+            $this->translator->trans('ManageDescription', [], $context),
+            $this->translator->trans('Manage', [], $context),
+            new FontAwesomeGlyph('sort', ['fa-fw', 'fa-2x'], null, 'fas'),
+            $this->urlGenerator->fromParameters($parameters)
         );
 
         return new Actions($context, $links);

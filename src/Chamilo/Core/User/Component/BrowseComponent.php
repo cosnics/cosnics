@@ -35,29 +35,20 @@ use Symfony\Component\Translation\Translator;
  */
 class BrowseComponent extends Manager
 {
-    protected ButtonToolBarRenderer $buttonToolBarRenderer;
-
-    protected RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler;
-
-    protected UserTableRenderer $userTableRenderer;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        ButtonToolBarRenderer $buttonToolBarRenderer, UrlGenerator $urlGenerator,
-        RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler, UserTableRenderer $userTableRenderer
+        protected readonly ButtonToolBarRenderer $buttonToolBarRenderer,
+        protected readonly RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler,
+        protected readonly UserTableRenderer $userTableRenderer
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $authenticationValidator, $userUrlGenerator, $activeMailer, $alertsManager, $userService
         );
-
-        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
-        $this->requestTableParameterValuesCompiler = $requestTableParameterValuesCompiler;
-        $this->userTableRenderer = $userTableRenderer;
     }
 
     /**
@@ -79,16 +70,11 @@ class BrowseComponent extends Manager
         $html = [];
 
         $html[] = $this->renderHeader($currentUser);
-        $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar($currentUser));
+        $html[] = $this->buttonToolBarRenderer->render($this->getButtonToolBar($currentUser));
         $html[] = $this->renderTable();
         $html[] = $this->renderFooter();
 
         return new Response(implode(PHP_EOL, $html));
-    }
-
-    public function getAdminUserTableRenderer(): UserTableRenderer
-    {
-        return $this->userTableRenderer;
     }
 
     public function getButtonToolBar(User $user): ButtonToolBar
@@ -118,16 +104,6 @@ class BrowseComponent extends Manager
         return $buttonToolBar;
     }
 
-    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
-    {
-        return $this->buttonToolBarRenderer;
-    }
-
-    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
-    {
-        return $this->requestTableParameterValuesCompiler;
-    }
-
     public function getUserTableCondition(): ?ConditionInterface
     {
         $searchProperties = [];
@@ -137,7 +113,7 @@ class BrowseComponent extends Manager
         $searchProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE);
         $searchProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL);
 
-        return $this->getButtonToolBarRenderer()->getConditions($searchProperties);
+        return $this->buttonToolBarRenderer->getConditions($searchProperties);
     }
 
     /**
@@ -150,23 +126,22 @@ class BrowseComponent extends Manager
     protected function renderTable(): string
     {
         $this->getRequest()->query->set(
-            ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, $this->getButtonToolBarRenderer()->getSearchForm()->getQuery()
+            ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, $this->buttonToolBarRenderer->getSearchForm()->getQuery()
         );
 
-        $totalNumberOfItems = $this->getUserService()->countUsers($this->getUserTableCondition());
-        $adminUserTableRenderer = $this->getAdminUserTableRenderer();
+        $totalNumberOfItems = $this->userService->countUsers($this->getUserTableCondition());
 
-        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
-            $adminUserTableRenderer->getParameterNames(), $adminUserTableRenderer->getDefaultParameterValues(),
+        $tableParameterValues = $this->requestTableParameterValuesCompiler->determineParameterValues(
+            $this->userTableRenderer->getParameterNames(), $this->userTableRenderer->getDefaultParameterValues(),
             $totalNumberOfItems
         );
 
-        $users = $this->getUserService()->findUsers(
+        $users = $this->userService->findUsers(
             $this->getUserTableCondition(), $tableParameterValues->getOffset(),
             $tableParameterValues->getNumberOfItemsPerPage(),
-            $adminUserTableRenderer->determineOrderBy($tableParameterValues)
+            $this->userTableRenderer->determineOrderBy($tableParameterValues)
         );
 
-        return $adminUserTableRenderer->render($tableParameterValues, $users);
+        return $this->userTableRenderer->render($tableParameterValues, $users);
     }
 }

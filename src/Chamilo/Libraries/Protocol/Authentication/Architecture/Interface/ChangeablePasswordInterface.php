@@ -14,7 +14,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 interface ChangeablePasswordInterface
 {
-    public function changePassword(User $user, string $oldPassword, string $newPassword): bool;
+    public function changePassword(User $user, string $oldPassword, string $newPassword, ?User $executingUser = null): bool;
 
     public function verifyPassword(User $user, string $password): bool;
 

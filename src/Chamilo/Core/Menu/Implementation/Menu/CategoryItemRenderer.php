@@ -25,17 +25,12 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
 {
     use TranslatableItemTrait;
 
-    private ItemRendererRegistry $itemRendererFactory;
-
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
-        ItemRendererRegistry $itemRendererFactory, array $fallbackIsoCodes
+        protected ItemRendererRegistry $itemRendererFactory, protected array $fallbackIsoCodes
     )
     {
         parent::__construct($translator, $itemCacheService, $request);
-
-        $this->itemRendererFactory = $itemRendererFactory;
-        $this->fallbackIsoCodes = $fallbackIsoCodes;
     }
 
     /**
@@ -73,18 +68,13 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
 
         $html[] = '</a>';
 
-        if ($this->getItemCacheService()->doesItemHaveChildren($item)) {
+        if ($this->itemCacheService->doesItemHaveChildren($item)) {
             $html[] = $this->renderChildren($item, $user);
         }
 
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function getItemRendererFactory(): ItemRendererRegistry
-    {
-        return $this->itemRendererFactory;
     }
 
     public function getRendererTypeGlyph(): InlineGlyph
@@ -94,16 +84,16 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
 
     public function getRendererTypeName(): string
     {
-        return $this->getTranslator()->trans('CategoryItem', [], Manager::CONTEXT);
+        return $this->translator->trans('CategoryItem', [], Manager::CONTEXT);
     }
 
     public function isSelected(Item $item, User $user): bool
     {
         try {
-            $childItems = $this->getItemCacheService()->findItemsByParentIdentifier($item->getId());
+            $childItems = $this->itemCacheService->findItemsByParentIdentifier($item->getId());
 
             foreach ($childItems as $childItem) {
-                $itemRenderer = $this->getItemRendererFactory()->getItemRendererForItem($childItem);
+                $itemRenderer = $this->itemRendererFactory->getItemRendererForItem($childItem);
 
                 if ($itemRenderer instanceof SelectableItemInterface && $itemRenderer->isSelected($childItem, $user)) {
                     return true;
@@ -122,7 +112,7 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
      */
     public function renderChildren(Item $item, User $user): string
     {
-        $childItems = $this->getItemCacheService()->findItemsByParentIdentifier($item->getId());
+        $childItems = $this->itemCacheService->findItemsByParentIdentifier($item->getId());
 
         $html = [];
 
@@ -132,7 +122,7 @@ class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInter
             if (!$childItem->isHidden()) {
                 $childItem->setDisplay(DisplayTypeEnum::LABEL);
 
-                $itemRenderer = $this->getItemRendererFactory()->getItemRendererForItem($childItem);
+                $itemRenderer = $this->itemRendererFactory->getItemRendererForItem($childItem);
                 $html[] = $itemRenderer->render($childItem, $user);
             }
         }

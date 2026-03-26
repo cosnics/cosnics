@@ -23,17 +23,11 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 {
     use UserDetailsRendererTrait;
 
-    protected GroupsTreeTraverser $groupsTreeTraverser;
-
-    protected UrlGenerator $urlGenerator;
-
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, GroupsTreeTraverser $groupsTreeTraverser
+        protected Translator $translator, protected UrlGenerator $urlGenerator,
+        protected GroupsTreeTraverser $groupsTreeTraverser
     )
     {
-        $this->translator = $translator;
-        $this->urlGenerator = $urlGenerator;
-        $this->groupsTreeTraverser = $groupsTreeTraverser;
     }
 
     public function getGlyph(): InlineGlyph
@@ -41,27 +35,17 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         return new NamespaceIdentGlyph(Manager::CONTEXT, true);
     }
 
-    public function getGroupsTreeTraverser(): GroupsTreeTraverser
-    {
-        return $this->groupsTreeTraverser;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function hasContentForUser(User $user, User $requestingUser): bool
     {
-        return $this->getGroupsTreeTraverser()->findAllSubscribedGroupsForUserIdentifier($user->getId())->count() > 0;
+        return $this->groupsTreeTraverser->findAllSubscribedGroupsForUserIdentifier($user->getId())->count() > 0;
     }
 
     public function renderTitle(User $user, User $requestingUser): string
     {
-        return $this->getTranslator()->trans('TypeName', [], Manager::CONTEXT);
+        return $this->translator->trans('TypeName', [], Manager::CONTEXT);
     }
 
     /**
@@ -70,28 +54,26 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
      */
     public function renderUserDetails(User $user, User $requestingUser): string
     {
-        $translator = $this->getTranslator();
-
         $table = new HTML_Table(['class' => 'table table-striped table-bordered table-hover table-responsive']);
 
-        $table->setHeaderContents(0, 0, $translator->trans('Groups', [], Manager::CONTEXT));
+        $table->setHeaderContents(0, 0, $this->translator->trans('Groups', [], Manager::CONTEXT));
         $table->setCellAttributes(0, 0, ['colspan' => 2, 'style' => 'text-align: center;']);
 
-        $table->setHeaderContents(1, 0, $translator->trans('GroupCode', [], Manager::CONTEXT));
+        $table->setHeaderContents(1, 0, $this->translator->trans('GroupCode', [], Manager::CONTEXT));
         $table->setCellAttributes(1, 0, ['style' => 'width: 150px;']);
-        $table->setHeaderContents(1, 1, $translator->trans('GroupName', [], Manager::CONTEXT));
+        $table->setHeaderContents(1, 1, $this->translator->trans('GroupName', [], Manager::CONTEXT));
 
-        $groups = $this->getGroupsTreeTraverser()->findAllSubscribedGroupsForUserIdentifier($user->getId());
+        $groups = $this->groupsTreeTraverser->findAllSubscribedGroupsForUserIdentifier($user->getId());
 
         if ($groups->count() == 0) {
-            $table->setCellContents(2, 0, $translator->trans('NoGroups', [], Manager::CONTEXT));
+            $table->setCellContents(2, 0, $this->translator->trans('NoGroups', [], Manager::CONTEXT));
             $table->setCellAttributes(2, 0, ['colspan' => 2, 'style' => 'text-align: center;']);
         }
         else {
             $i = 2;
 
             foreach ($groups as $group) {
-                $viewUrl = $this->getUrlGenerator()->fromParameters(
+                $viewUrl = $this->urlGenerator->fromParameters(
                     [
                         ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                         ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,

@@ -8,22 +8,13 @@ use Chamilo\Core\User\Storage\DataClass\User;
  * @package Chamilo\Core\User\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserSettingsService
+readonly class UserSettingsService
 {
-    protected SettingsConnectorRegistry $settingsConnectorRegistry;
-
-    protected UserService $userService;
-
-    protected UserSettingsParser $userSettingsParser;
-
     public function __construct(
-        SettingsConnectorRegistry $settingsConnectorRegistry, UserService $userService,
-        UserSettingsParser $userSettingsParser
+        protected SettingsConnectorRegistry $settingsConnectorRegistry, protected UserService $userService,
+        protected UserSettingsParser $userSettingsParser
     )
     {
-        $this->settingsConnectorRegistry = $settingsConnectorRegistry;
-        $this->userService = $userService;
-        $this->userSettingsParser = $userSettingsParser;
     }
 
     public function findUserSetting(User $user, string $variable, mixed $defaultValue = null)
@@ -31,24 +22,9 @@ class UserSettingsService
         return $user->getSetting($variable, $defaultValue);
     }
 
-    public function getSettingsConnectorRegistry(): SettingsConnectorRegistry
-    {
-        return $this->settingsConnectorRegistry;
-    }
-
-    public function getUserService(): UserService
-    {
-        return $this->userService;
-    }
-
-    public function getUserSettingsParser(): UserSettingsParser
-    {
-        return $this->userSettingsParser;
-    }
-
     public function isSettingAvailable(string $context, array $setting): bool
     {
-        $settingsConnector = $this->getSettingsConnectorRegistry()->getSettingsConnectorForContext($context);
+        $settingsConnector = $this->settingsConnectorRegistry->getSettingsConnectorForContext($context);
         $isHidden = $this->isSettingHidden($setting);
 
         $availabilitySource = $setting['availability']['source'];
@@ -80,20 +56,20 @@ class UserSettingsService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updateUserSetting(User $user, string $variable, mixed $value = null): bool
+    public function updateUserSetting(User $user, string $variable, mixed $value = null, ?User $executingUser = null): bool
     {
         $user->setSetting($variable, $value);
 
-        return $this->getUserService()->updateUser($user);
+        return $this->userService->updateUser($user, $executingUser);
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updateUserSettingsFromParameters(User $user, string $context, array $values): bool
+    public function updateUserSettingsFromParameters(User $user, string $context, array $values, ?User $executingUser = null): bool
     {
         $problems = 0;
-        $configuration = $this->getUserSettingsParser()->determineConfigurablePackageContextSettings($context);
+        $configuration = $this->userSettingsParser->determineConfigurablePackageContextSettings($context);
 
         foreach ($configuration as $category) {
             foreach ($category as $name => $setting) {
@@ -101,7 +77,7 @@ class UserSettingsService
                     continue;
                 }
 
-                if (!$this->updateUserSetting($user, $name, $values[$name])) {
+                if (!$this->updateUserSetting($user, $name, $values[$name], $executingUser)) {
                     $problems ++;
                 }
             }

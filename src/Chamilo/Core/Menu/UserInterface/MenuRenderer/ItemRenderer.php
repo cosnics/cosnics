@@ -14,17 +14,11 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class ItemRenderer
 {
-    private CachedItemService $itemCacheService;
-
-    private ChamiloRequest $request;
-
-    private Translator $translator;
-
-    public function __construct(Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request)
+    public function __construct(
+        protected Translator $translator, protected CachedItemService $itemCacheService,
+        protected ChamiloRequest $request
+    )
     {
-        $this->translator = $translator;
-        $this->itemCacheService = $itemCacheService;
-        $this->request = $request;
     }
 
     abstract public function render(Item $item, User $user): string;
@@ -36,32 +30,16 @@ abstract class ItemRenderer
      */
     protected function getClasses(bool $isSelected = false, array $existingClasses = []): array
     {
-        if ($isSelected)
-        {
+        if ($isSelected) {
             $existingClasses[] = 'active';
         }
 
         return $existingClasses;
     }
 
-    public function getItemCacheService(): CachedItemService
-    {
-        return $this->itemCacheService;
-    }
-
     abstract public function getRendererTypeGlyph(): InlineGlyph;
 
     abstract public function getRendererTypeName(): string;
-
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
 
     abstract public function renderTitleForCurrentLanguage(Item $item): string;
 

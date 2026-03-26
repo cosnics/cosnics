@@ -18,7 +18,7 @@ class AccountFormType extends AbstractUserFormType
         $this->buildSecurityForm($builder, $options, true);
 
         if ($this->isAnythingChangeable($options['executingUser'], $options['user'])) {
-            $this->getFormButtonTypeBuilder()->addSaveAndResetButton($builder);
+            $this->formButtonTypeBuilder->addSaveAndResetButton($builder);
         }
     }
 }

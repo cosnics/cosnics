@@ -16,41 +16,26 @@ trait TranslatableItemTrait
      */
     protected array $fallbackIsoCodes;
 
+    protected Translator $translator;
+
     public function determineItemTitleForCurrentLanguage(Item $item): string
     {
-        return $this->determineItemTitleForIsoCode($item, $this->getTranslator()->getLocale());
+        return $this->determineItemTitleForIsoCode($item, $this->translator->getLocale());
     }
 
     public function determineItemTitleForIsoCode(Item $item, string $isoCode): string
     {
-        if ($item->getTitleForIsoCode($isoCode))
-        {
+        if ($item->getTitleForIsoCode($isoCode)) {
             return $item->getTitleForIsoCode($isoCode);
         }
-        else
-        {
-            $fallbackIsoCodes = $this->getFallbackIsoCodes();
-
-            foreach ($fallbackIsoCodes as $fallbackIsoCode)
-            {
-                if ($item->getTitleForIsoCode($fallbackIsoCode))
-                {
+        else {
+            foreach ($this->fallbackIsoCodes as $fallbackIsoCode) {
+                if ($item->getTitleForIsoCode($fallbackIsoCode)) {
                     return $item->getTitleForIsoCode($fallbackIsoCode);
                 }
             }
         }
 
-        return $this->getTranslator()->trans('MenuItem', [], Manager::CONTEXT);
+        return $this->translator->trans('MenuItem', [], Manager::CONTEXT);
     }
-
-    /**
-     * @return string[]
-     */
-    protected function getFallbackIsoCodes(): array
-    {
-        return $this->fallbackIsoCodes;
-    }
-
-    abstract public function getTranslator(): Translator;
-
 }

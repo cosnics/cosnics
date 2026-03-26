@@ -12,11 +12,8 @@ use Chamilo\Libraries\Storage\Repository\DataClassRepository;
  */
 class UserTrackingRepository
 {
-    private DataClassRepository $dataClassRepository;
-
-    public function __construct(DataClassRepository $dataClassRepository)
+    public function __construct(protected DataClassRepository $dataClassRepository)
     {
-        $this->dataClassRepository = $dataClassRepository;
     }
 
     /**
@@ -25,7 +22,7 @@ class UserTrackingRepository
      */
     public function createUserActivity(UserActivity $userActivity): bool
     {
-        return $this->getDataClassRepository()->create($userActivity);
+        return $this->dataClassRepository->create($userActivity);
     }
 
     /**
@@ -34,7 +31,7 @@ class UserTrackingRepository
      */
     public function createUserAuthenticationActivity(UserAuthenticationActivity $userAuthenticationActivity): bool
     {
-        return $this->getDataClassRepository()->create($userAuthenticationActivity);
+        return $this->dataClassRepository->create($userAuthenticationActivity);
     }
 
     /**
@@ -43,7 +40,7 @@ class UserTrackingRepository
      */
     public function createUserVisit(UserVisit $userVisit): bool
     {
-        return $this->getDataClassRepository()->create($userVisit);
+        return $this->dataClassRepository->create($userVisit);
     }
 
     /**
@@ -52,12 +49,7 @@ class UserTrackingRepository
      */
     public function findUserVisitByIdentifier(string $userVisitIdentifier): ?UserVisit
     {
-        return $this->getDataClassRepository()->retrieveById(UserVisit::class, $userVisitIdentifier);
-    }
-
-    public function getDataClassRepository(): DataClassRepository
-    {
-        return $this->dataClassRepository;
+        return $this->dataClassRepository->retrieveById(UserVisit::class, $userVisitIdentifier);
     }
 
     /**
@@ -65,7 +57,6 @@ class UserTrackingRepository
      */
     public function updateUserVisit(UserVisit $userVisit): bool
     {
-        return $this->getDataClassRepository()->update($userVisit);
+        return $this->dataClassRepository->update($userVisit);
     }
-
 }

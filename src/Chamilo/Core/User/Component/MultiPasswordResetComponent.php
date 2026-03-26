@@ -29,25 +29,19 @@ use Symfony\Component\Translation\Translator;
  */
 class MultiPasswordResetComponent extends Manager
 {
-    protected HashingAlgorithm $hashingAlgorithm;
-
-    protected PasswordGeneratorInterface $passwordGenerator;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        UrlGenerator $urlGenerator, HashingAlgorithm $hashingAlgorithm, PasswordGeneratorInterface $passwordGenerator
+        protected readonly HashingAlgorithm $hashingAlgorithm,
+        protected readonly PasswordGeneratorInterface $passwordGenerator
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $authenticationValidator, $userUrlGenerator, $activeMailer, $alertsManager, $userService
         );
-
-        $this->hashingAlgorithm = $hashingAlgorithm;
-        $this->passwordGenerator = $passwordGenerator;
     }
 
     /**
@@ -66,14 +60,12 @@ class MultiPasswordResetComponent extends Manager
         }
 
         if (count($userIdentifiers) > 0) {
-            $userService = $this->getUserService();
-
             $failures = 0;
 
             foreach ($userIdentifiers as $userIdentifier) {
-                $userToReset = $userService->findUserByIdentifier($userIdentifier);
+                $userToReset = $this->userService->findUserByIdentifier($userIdentifier);
 
-                if (!$userService->createNewPasswordForUser($userToReset)) {
+                if (!$this->userService->createNewPasswordForUser($userToReset, $currentUser)) {
                     $failures ++;
                 }
             }
@@ -101,7 +93,7 @@ class MultiPasswordResetComponent extends Manager
                 );
             }
 
-            $this->getAlertsManager()->addAlert(
+            $this->alertsManager->addAlert(
                 new Alert(
                     $message, $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS
                 )
@@ -115,15 +107,5 @@ class MultiPasswordResetComponent extends Manager
         else {
             throw new NoSuchParameterException(self::PARAM_USER_ID);
         }
-    }
-
-    public function getHashingUtilities(): HashingAlgorithm
-    {
-        return $this->hashingAlgorithm;
-    }
-
-    public function getPasswordGenerator(): PasswordGeneratorInterface
-    {
-        return $this->passwordGenerator;
     }
 }

@@ -36,36 +36,20 @@ use Twig\Environment;
  */
 class UpdateComponent extends Manager
 {
-    protected FormFactoryInterface $formFactory;
-
-    protected Environment $twigEnvironment;
-
-    protected bool $userCanChangePicture;
-
-    protected UserFormType $userFormType;
-
-    protected ?UserPictureProviderInterface $userPictureUpdateProvider;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        UrlGenerator $urlGenerator, ?UserPictureProviderInterface $userPictureUpdateProvider,
-        FormFactoryInterface $formFactory, Environment $twigEnvironment, UserFormType $userFormType,
-        bool $userCanChangePicture
+        protected readonly FormFactoryInterface $formFactory, protected readonly Environment $twigEnvironment,
+        protected readonly bool $userCanChangePicture, protected readonly UserFormType $userFormType,
+        protected readonly ?UserPictureProviderInterface $userPictureProvider
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $authenticationValidator, $userUrlGenerator, $activeMailer, $alertsManager, $userService
         );
-
-        $this->userPictureUpdateProvider = $userPictureUpdateProvider;
-        $this->formFactory = $formFactory;
-        $this->twigEnvironment = $twigEnvironment;
-        $this->userFormType = $userFormType;
-        $this->userCanChangePicture = $userCanChangePicture;
     }
 
     /**
@@ -91,7 +75,7 @@ class UpdateComponent extends Manager
         $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
 
         if ($userIdentifier) {
-            $userToUpdate = $this->getUserService()->findUserByIdentifier($userIdentifier);
+            $userToUpdate = $this->userService->findUserByIdentifier($userIdentifier);
             $isLockoutRisk =
                 $currentUser->getId() == $userToUpdate->getId() && $userToUpdate->isPlatformAdministrator();
 
@@ -101,7 +85,7 @@ class UpdateComponent extends Manager
                 self::PARAM_USER_ID => $userIdentifier
             ]);
 
-            $form = $this->getFormFactory()->create(
+            $form = $this->formFactory->create(
                 UserFormType::class, $userToUpdate->getDefaultProperties(), [
                     'action' => $updateUrl,
                     'user' => $userToUpdate,
@@ -116,7 +100,7 @@ class UpdateComponent extends Manager
                 try {
                     $submittedData = $form->getData();
 
-                    $this->getUserService()->updateUserFromParameters(
+                    $this->userService->updateUserFromParameters(
                         $userToUpdate, $submittedData[User::PROPERTY_GIVEN_NAME],
                         $submittedData[User::PROPERTY_SURNAME], $submittedData[User::PROPERTY_USERNAME],
                         $submittedData[User::PROPERTY_OFFICIAL_CODE], $submittedData[User::PROPERTY_EMAIL],
@@ -127,16 +111,15 @@ class UpdateComponent extends Manager
                         (bool) $submittedData[AbstractUserFormType::PROPERTY_SEND_MAIL]
                     );
 
-                    $userPictureProvider = $this->getUserPictureProvider();
-
-                    if ($userPictureProvider instanceof UserPictureUpdateProviderInterface) {
+                    if ($this->userPictureProvider instanceof UserPictureUpdateProviderInterface) {
                         $pictureInformation = $submittedData[User::PROPERTY_PICTURE_URI];
 
                         if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid()) {
-                            if (!$userPictureProvider->updateUserPictureFromParameters(
-                                $userToUpdate, $pictureInformation
+                            if (!$this->userPictureProvider->updateUserPictureFromParameters(
+                                $userToUpdate, $pictureInformation,
+                                (bool) $submittedData[AbstractUserFormType::PROPERTY_PICTURE_REMOVE], $currentUser
                             )) {
-                                $this->getAlertsManager()->addAlert(
+                                $this->alertsManager->addAlert(
                                     new Alert(
                                         $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
                                         AlertEnum::WARNING
@@ -146,7 +129,7 @@ class UpdateComponent extends Manager
                         }
                     }
 
-                    $this->getAlertsManager()->addAlert(
+                    $this->alertsManager->addAlert(
                         new Alert(
                             $translator->trans('UserUpdated', [], Manager::CONTEXT), AlertEnum::SUCCESS
                         )
@@ -162,7 +145,7 @@ class UpdateComponent extends Manager
                     );
                 }
                 catch (Exception $exception) {
-                    $this->getAlertsManager()->addAlert(
+                    $this->alertsManager->addAlert(
                         new Alert($exception->getMessage(), AlertEnum::DANGER)
                     );
                 }
@@ -171,7 +154,7 @@ class UpdateComponent extends Manager
             $html = [];
 
             $html[] = $this->renderHeader($currentUser);
-            $html[] = $this->getTwigEnvironment()->render('form.html.twig', [
+            $html[] = $this->twigEnvironment->render('form.html.twig', [
                 'form' => $form->createView(),
             ]);
             $html[] = $this->renderFooter();
@@ -185,32 +168,6 @@ class UpdateComponent extends Manager
 
     public function canUserChangePicture(): bool
     {
-        return $this->userCanChangePicture &&
-            $this->getUserPictureProvider() instanceof UserPictureUpdateProviderInterface;
-    }
-
-    public function getFormFactory(): FormFactoryInterface
-    {
-        return $this->formFactory;
-    }
-
-    public function getTwigEnvironment(): Environment
-    {
-        return $this->twigEnvironment;
-    }
-
-    public function getUserFormType(): UserFormType
-    {
-        return $this->userFormType;
-    }
-
-    public function getUserPictureProvider(): ?UserPictureUpdateProviderInterface
-    {
-        return $this->userPictureUpdateProvider;
-    }
-
-    public function getUserPictureUpdateProvider(): ?UserPictureUpdateProviderInterface
-    {
-        return $this->userPictureUpdateProvider;
+        return $this->userCanChangePicture && $this->userPictureProvider instanceof UserPictureUpdateProviderInterface;
     }
 }

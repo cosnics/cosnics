@@ -30,9 +30,6 @@ class ActiveComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $userService = $this->getUserService();
-        $translator = $this->getTranslator();
-
         $this->checkAuthorization(Manager::CONTEXT, $currentUser, 'ManageUsers');
 
         $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_ID);
@@ -52,10 +49,10 @@ class ActiveComponent extends Manager
                     continue;
                 }
 
-                $userToActivate = $userService->findUserByIdentifier($id);
+                $userToActivate = $this->userService->findUserByIdentifier($id);
                 $userToActivate->setActive($active);
 
-                if (!$userService->updateUser($userToActivate)) {
+                if (!$this->userService->updateUser($userToActivate, $currentUser)) {
                     $failures ++;
                 }
             }
@@ -75,9 +72,9 @@ class ActiveComponent extends Manager
                 $message = $active ? 'UsersActivated' : 'UsersDeactivated';
             }
 
-            $this->getAlertsManager()->addAlert(
+            $this->alertsManager->addAlert(
                 new Alert(
-                    $translator->trans($message, [], \Chamilo\Core\Group\Manager::CONTEXT),
+                    $this->translator->trans($message, [], \Chamilo\Core\Group\Manager::CONTEXT),
                     $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS
                 )
             );

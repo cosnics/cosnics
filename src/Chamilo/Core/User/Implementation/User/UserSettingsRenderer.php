@@ -19,59 +19,18 @@ class UserSettingsRenderer implements UserDetailsRendererInterface
 {
     use UserDetailsRendererTrait;
 
-    protected DatetimeUtilities $datetimeUtilities;
-
-    protected StringUtilities $stringUtilities;
-
-    protected UserPictureProviderInterface $userPictureProvider;
-
-    protected UserSettingsParser $userSettingsParser;
-
-    protected UserSettingsService $userSettingsService;
-
     public function __construct(
-        UserService $userService, Translator $translator, UserPictureProviderInterface $userPictureProvider,
-        StringUtilities $stringUtilities, DatetimeUtilities $datetimeUtilities, UserSettingsParser $userSettingsParser,
-        UserSettingsService $userSettingsService
+        protected UserService $userService, protected Translator $translator,
+        protected UserPictureProviderInterface $userPictureProvider, protected StringUtilities $stringUtilities,
+        protected DatetimeUtilities $datetimeUtilities, protected UserSettingsParser $userSettingsParser,
+        protected UserSettingsService $userSettingsService
     )
     {
-        $this->userService = $userService;
-        $this->translator = $translator;
-        $this->userPictureProvider = $userPictureProvider;
-        $this->stringUtilities = $stringUtilities;
-        $this->datetimeUtilities = $datetimeUtilities;
-        $this->userSettingsParser = $userSettingsParser;
-        $this->userSettingsService = $userSettingsService;
-    }
-
-    public function getDatetimeUtilities(): DatetimeUtilities
-    {
-        return $this->datetimeUtilities;
     }
 
     public function getGlyph(): InlineGlyph
     {
         return new FontAwesomeGlyph('cog');
-    }
-
-    public function getStringUtilities(): StringUtilities
-    {
-        return $this->stringUtilities;
-    }
-
-    public function getUserPictureProvider(): UserPictureProviderInterface
-    {
-        return $this->userPictureProvider;
-    }
-
-    public function getUserSettingsParser(): UserSettingsParser
-    {
-        return $this->userSettingsParser;
-    }
-
-    public function getUserSettingsService(): UserSettingsService
-    {
-        return $this->userSettingsService;
     }
 
     public function hasContentForUser(User $user, User $requestingUser): bool
@@ -85,7 +44,7 @@ class UserSettingsRenderer implements UserDetailsRendererInterface
 
     public function renderTitle(User $user, User $requestingUser): string
     {
-        return $this->getTranslator()->trans('UserSettings', [], Manager::CONTEXT);
+        return $this->translator->trans('UserSettings', [], Manager::CONTEXT);
     }
 
     public function renderUserDetails(User $user, User $requestingUser): string
@@ -94,26 +53,24 @@ class UserSettingsRenderer implements UserDetailsRendererInterface
             return '';
         }
 
-        $translator = $this->getTranslator();
-
         $html = [];
 
-        $configurableSettings = $this->getUserSettingsParser()->determineConfigurableSettings();
+        $configurableSettings = $this->userSettingsParser->determineConfigurableSettings();
 
         foreach ($configurableSettings as $packageContext => $packageSettings) {
-            $html[] = '<h5>' . $translator->trans('TypeName', [], $packageContext) . '</h5>';
+            $html[] = '<h5>' . $this->translator->trans('TypeName', [], $packageContext) . '</h5>';
 
             foreach ($packageSettings as $settingCategory => $categorySettings) {
                 $html[] = '<div class="table-responsive">';
                 $html[] = '<table class="table table-striped table-bordered table-hover">';
-                $html[] = '<thead><th colspan="2">' . $translator->trans($settingCategory, [], $packageContext) .
+                $html[] = '<thead><th colspan="2">' . $this->translator->trans($settingCategory, [], $packageContext) .
                     '</th></thead>';
                 $html[] = '<tbody>';
 
                 foreach ($categorySettings as $setting => $settingConfiguration) {
                     $html[] = '<tr>';
-                    $html[] = '<td class="w-25">' . $translator->trans($setting, [], $packageContext) . '</td>';
-                    $html[] = '<td>' . $this->getUserSettingsService()->findUserSetting($user, $setting, '-') . '</td>';
+                    $html[] = '<td class="w-25">' . $this->translator->trans($setting, [], $packageContext) . '</td>';
+                    $html[] = '<td>' . $this->userSettingsService->findUserSetting($user, $setting, '-') . '</td>';
                     $html[] = '</tr>';
                 }
 

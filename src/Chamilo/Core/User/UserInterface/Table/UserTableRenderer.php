@@ -34,37 +34,17 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 {
     public const string TABLE_IDENTIFIER = Manager::PARAM_USER_ID;
 
-    protected ?User $currentUser;
-
-    protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
-
-    protected UserUrlGenerator $userUrlGenerator;
-
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
         PageNavigationCalculator $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
-        UserUrlGenerator $userUrlGenerator, ClassnameUtilities $classnameUtilities,
-        MiniButtonToolBarRenderer $miniButtonToolBarRenderer, ?User $currentUser = null
+        protected UserUrlGenerator $userUrlGenerator, ClassnameUtilities $classnameUtilities,
+        protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer, protected ?User $currentUser = null
     )
     {
-        $this->currentUser = $currentUser;
-        $this->userUrlGenerator = $userUrlGenerator;
-        $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
-
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
             $classnameUtilities
         );
-    }
-
-    public function getCurrentUser(): ?User
-    {
-        return $this->currentUser;
-    }
-
-    public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
-    {
-        return $this->miniButtonToolBarRenderer;
     }
 
     public function getTableActions(): TableActions
@@ -131,11 +111,6 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
         return $actions;
     }
 
-    public function getUserUrlGenerator(): UserUrlGenerator
-    {
-        return $this->userUrlGenerator;
-    }
-
     protected function initializeColumns(): void
     {
         $this->addColumn(
@@ -189,13 +164,12 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
     public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
     {
         $translator = $this->getTranslator();
-        $currentUser = $this->getCurrentUser();
-        $isPlatformAdministrator = $currentUser instanceof User && $currentUser->isPlatformAdministrator();
+        $isPlatformAdministrator = $this->currentUser instanceof User && $this->currentUser->isPlatformAdministrator();
 
         $buttonToolBar = new MiniButtonToolBar();
 
         if ($isPlatformAdministrator) {
-            $editUrl = $this->getUserUrlGenerator()->getUpdateUrl($result);
+            $editUrl = $this->userUrlGenerator->getUpdateUrl($result);
 
             $buttonToolBar->addButton(
                 new Button(
@@ -205,7 +179,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
                 )
             );
 
-            $detailUrl = $this->getUserUrlGenerator()->getDetailUrl($result);
+            $detailUrl = $this->userUrlGenerator->getDetailUrl($result);
 
             $buttonToolBar->addButton(
                 new Button(
@@ -216,9 +190,9 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
             );
         }
 
-        if ($currentUser instanceof User && $result->getId() != $currentUser->getId()) {
+        if ($this->currentUser instanceof User && $result->getId() != $this->currentUser->getId()) {
             if ($isPlatformAdministrator) {
-                $deleteUrl = $this->getUserUrlGenerator()->getDeleteUrl($result);
+                $deleteUrl = $this->userUrlGenerator->getDeleteUrl($result);
 
                 $buttonToolBar->addButton(
                     new Button(
@@ -230,7 +204,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
                     )
                 );
 
-                $changeUserUrl = $this->getUserUrlGenerator()->getChangeUserUrl($result);
+                $changeUserUrl = $this->userUrlGenerator->getChangeUserUrl($result);
 
                 $buttonToolBar->addButton(
                     new Button(
@@ -260,6 +234,6 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
             );
         }
 
-        return $this->getMiniButtonToolBarRenderer()->render($buttonToolBar);
+        return $this->miniButtonToolBarRenderer->render($buttonToolBar);
     }
 }

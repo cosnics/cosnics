@@ -29,29 +29,14 @@ class DayBlockRenderer extends BlockRenderer
     public const string CONFIGURATION_TIME_START = 'time_start';
     public const string CONTEXT = Manager::CONTEXT;
 
-    protected CalendarDataProvider $calendarDataProvider;
-
-    protected CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder;
-
-    protected DatetimeUtilities $datetimeUtilities;
-
-    protected MiniDayCalendarRenderer $miniDayCalendarRenderer;
-
-    protected ChamiloRequest $request;
-
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
-        DatetimeUtilities $datetimeUtilities, MiniDayCalendarRenderer $miniDayCalendarRenderer, ChamiloRequest $request,
-        CalendarDataProvider $calendarDataProvider, CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder
+        protected DatetimeUtilities $datetimeUtilities, protected MiniDayCalendarRenderer $miniDayCalendarRenderer,
+        protected ChamiloRequest $request, protected CalendarDataProvider $calendarDataProvider,
+        protected CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder
     )
     {
         parent::__construct($homeService, $urlGenerator, $translator);
-
-        $this->datetimeUtilities = $datetimeUtilities;
-        $this->miniDayCalendarRenderer = $miniDayCalendarRenderer;
-        $this->request = $request;
-        $this->calendarDataProvider = $calendarDataProvider;
-        $this->calendarTableConfigurationBuilder = $calendarTableConfigurationBuilder;
     }
 
     /**
@@ -59,57 +44,31 @@ class DayBlockRenderer extends BlockRenderer
      */
     public function displayContent(Element $block, ?User $user = null): string
     {
-        $miniDayCalendarRenderer = $this->getMiniDayCalendarRenderer();
         $events = [];
 
-        $calendarTableConfiguration = $this->getCalendarTableConfigurationBuilder()->buildConfiguration($user);
+        $calendarTableConfiguration = $this->calendarTableConfigurationBuilder->buildConfiguration($user);
 
         if ($user instanceof User) {
-            $events = $this->getCalendarDataProvider()->getEvents(
-                $user,
-                $miniDayCalendarRenderer->getEventsStartTime($calendarTableConfiguration, $this->getDisplayTime()),
-                $miniDayCalendarRenderer->getEventsEndTime($calendarTableConfiguration, $this->getDisplayTime())
+            $events = $this->calendarDataProvider->getEvents(
+                $user, $this->miniDayCalendarRenderer->getEventsStartTime(
+                $calendarTableConfiguration, $this->getDisplayTime()
+            ), $this->miniDayCalendarRenderer->getEventsEndTime($calendarTableConfiguration, $this->getDisplayTime())
             );
         }
 
-        return '<div style="max-height: 500px; overflow: auto;">' . $miniDayCalendarRenderer->renderFullCalendar(
+        return '<div style="max-height: 500px; overflow: auto;">' . $this->miniDayCalendarRenderer->renderFullCalendar(
                 $calendarTableConfiguration, $events, $this->getDisplayTime()
             ) . '</div>';
     }
 
-    protected function getCalendarDataProvider(): CalendarDataProvider
-    {
-        return $this->calendarDataProvider;
-    }
-
-    public function getCalendarTableConfigurationBuilder(): CalendarTableConfigurationBuilder
-    {
-        return $this->calendarTableConfigurationBuilder;
-    }
-
-    public function getDatetimeUtilities(): DatetimeUtilities
-    {
-        return $this->datetimeUtilities;
-    }
-
     protected function getDisplayTime(): int
     {
-        return (int) $this->getRequest()->query->get('time', time());
-    }
-
-    public function getMiniDayCalendarRenderer(): MiniDayCalendarRenderer
-    {
-        return $this->miniDayCalendarRenderer;
-    }
-
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
+        return (int) $this->request->query->get('time', time());
     }
 
     public function getTitle(Element $block): string
     {
-        return $this->getDatetimeUtilities()->formatLocaleDate(
+        return $this->datetimeUtilities->formatLocaleDate(
             $this->getDisplayTime(), IntlDateFormatter::FULL, IntlDateFormatter::NONE
         );
     }

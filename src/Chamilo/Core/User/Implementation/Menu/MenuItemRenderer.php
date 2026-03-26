@@ -17,19 +17,12 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class MenuItemRenderer extends ItemRenderer
 {
-    protected UrlGenerator $urlGenerator;
-
-    private ClassnameUtilities $classnameUtilities;
-
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
-        ClassnameUtilities $classnameUtilities, UrlGenerator $urlGenerator
+        protected ClassnameUtilities $classnameUtilities, protected UrlGenerator $urlGenerator
     )
     {
         parent::__construct($translator, $itemCacheService, $request);
-
-        $this->classnameUtilities = $classnameUtilities;
-        $this->urlGenerator = $urlGenerator;
     }
 
     public function render(Item $item, User $user): string
@@ -66,11 +59,6 @@ abstract class MenuItemRenderer extends ItemRenderer
     }
 
     abstract public function getUrl(): string;
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
-    }
 
     abstract public function renderTitleForCurrentLanguage(Item $item): string;
 }

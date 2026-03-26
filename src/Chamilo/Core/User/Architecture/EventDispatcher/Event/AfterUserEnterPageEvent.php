@@ -11,9 +11,9 @@ class AfterUserEnterPageEvent extends AbstractUserEvent
 {
     protected string $pageUri;
 
-    public function __construct(User $user, string $pageUri)
+    public function __construct(User $user, string $pageUri, ?User $executingUser = null)
     {
-        parent::__construct($user);
+        parent::__construct($user, $executingUser);
 
         $this->pageUri = $pageUri;
     }
@@ -22,5 +22,4 @@ class AfterUserEnterPageEvent extends AbstractUserEvent
     {
         return $this->pageUri;
     }
-
 }

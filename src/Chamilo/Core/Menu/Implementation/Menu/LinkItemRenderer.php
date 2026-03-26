@@ -37,24 +37,13 @@ class LinkItemRenderer extends ItemRenderer
     public const string TARGET_SELF = '_self';
     public const string TARGET_TOP = '_top';
 
-    protected FormTypeBuilder $formTypeBuilder;
-
-    protected WebPathBuilder $webPathBuilder;
-
-    private ClassnameUtilities $classnameUtilities;
-
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
-        ClassnameUtilities $classnameUtilities, WebPathBuilder $webPathBuilder, FormTypeBuilder $formTypeBuilder,
-        array $fallbackIsoCodes
+        protected ClassnameUtilities $classnameUtilities, protected WebPathBuilder $webPathBuilder,
+        protected FormTypeBuilder $formTypeBuilder, protected array $fallbackIsoCodes
     )
     {
         parent::__construct($translator, $itemCacheService, $request);
-
-        $this->classnameUtilities = $classnameUtilities;
-        $this->fallbackIsoCodes = $fallbackIsoCodes;
-        $this->webPathBuilder = $webPathBuilder;
-        $this->formTypeBuilder = $formTypeBuilder;
     }
 
     public function render(Item $item, User $user): string
@@ -91,24 +80,23 @@ class LinkItemRenderer extends ItemRenderer
 
     public function addConfigurationToForm(FormBuilderInterface $builder, array $options): void
     {
-        $translator = $this->getTranslator();
         $formTypeBuilder = $this->formTypeBuilder;
 
         $builder->add(
             $formTypeBuilder->createCategory(
-                $builder, 'category_properties', $translator->trans('Properties', [], Manager::CONTEXT)
+                $builder, 'category_properties', $this->translator->trans('Properties', [], Manager::CONTEXT)
             )
         );
 
         $builder->add(
             $formTypeBuilder->createText(
-                $builder, self::CONFIGURATION_URL, $translator->trans('Url', [], Manager::CONTEXT), true
+                $builder, self::CONFIGURATION_URL, $this->translator->trans('Url', [], Manager::CONTEXT)
             )
         );
 
         $builder->add(
             $formTypeBuilder->createSelect(
-                $builder, self::CONFIGURATION_TARGET, $translator->trans('Target', [], Manager::CONTEXT), true,
+                $builder, self::CONFIGURATION_TARGET, $this->translator->trans('Target', [], Manager::CONTEXT), true,
                 $this->getTargetOptions()
             )
         );
@@ -139,7 +127,7 @@ class LinkItemRenderer extends ItemRenderer
 
     public function getRendererTypeName(): string
     {
-        return $this->getTranslator()->trans('LinkItem', [], Manager::CONTEXT);
+        return $this->translator->trans('LinkItem', [], Manager::CONTEXT);
     }
 
     protected function getTargetOptions(): array
@@ -176,8 +164,8 @@ class LinkItemRenderer extends ItemRenderer
             parse_str($urlParts['query'], $queryParts);
 
             foreach ($queryParts as $queryPartVariable => $queryPartValue) {
-                if (!$this->getRequest()->query->has($queryPartVariable) ||
-                    $this->getRequest()->query->get($queryPartVariable) !== $queryPartValue) {
+                if (!$this->request->query->has($queryPartVariable) ||
+                    $this->request->query->get($queryPartVariable) !== $queryPartValue) {
                     return false;
                 }
             }

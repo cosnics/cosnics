@@ -18,42 +18,17 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 {
     use UserDetailsRendererTrait;
 
-    protected DatetimeUtilities $datetimeUtilities;
-
-    protected StringUtilities $stringUtilities;
-
-    protected UserPictureProviderInterface $userPictureProvider;
-
     public function __construct(
-        UserService $userService, Translator $translator, UserPictureProviderInterface $userPictureProvider,
-        StringUtilities $stringUtilities, DatetimeUtilities $datetimeUtilities
+        protected UserService $userService, protected Translator $translator,
+        protected UserPictureProviderInterface $userPictureProvider, protected StringUtilities $stringUtilities,
+        protected DatetimeUtilities $datetimeUtilities
     )
     {
-        $this->userService = $userService;
-        $this->translator = $translator;
-        $this->userPictureProvider = $userPictureProvider;
-        $this->stringUtilities = $stringUtilities;
-        $this->datetimeUtilities = $datetimeUtilities;
-    }
-
-    public function getDatetimeUtilities(): DatetimeUtilities
-    {
-        return $this->datetimeUtilities;
     }
 
     public function getGlyph(): InlineGlyph
     {
         return new NamespaceIdentGlyph(Manager::CONTEXT, true);
-    }
-
-    public function getStringUtilities(): StringUtilities
-    {
-        return $this->stringUtilities;
-    }
-
-    public function getUserPictureProvider(): UserPictureProviderInterface
-    {
-        return $this->userPictureProvider;
     }
 
     public function hasContentForUser(User $user, User $requestingUser): bool
@@ -67,7 +42,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
     public function renderTitle(User $user, User $requestingUser): string
     {
-        return $this->getTranslator()->trans('UserDetails', [], Manager::CONTEXT);
+        return $this->translator->trans('UserDetails', [], Manager::CONTEXT);
     }
 
     /**
@@ -78,9 +53,6 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         if (!$requestingUser->isPlatformAdministrator()) {
             return '';
         }
-
-        $translator = $this->getTranslator();
-        $datetimeUtilities = $this->getDatetimeUtilities();
 
         $table = new HTML_Table(['class' => 'table table-striped table-bordered table-hover table-responsive']);
 
@@ -97,26 +69,26 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
             User::PROPERTY_ACTIVE
         ];
 
-        $userPicture = $this->getUserPictureProvider()->getUserPictureAsBase64String($user);
+        $userPicture = $this->userPictureProvider->getUserPictureAsBase64String($user);
 
         foreach ($attributes as $i => $attribute) {
             $table->setCellContents(
-                $i, 0, $translator->trans(
-                $this->getStringUtilities()->createString($attribute)->upperCamelize()->toString(), [], Manager::CONTEXT
+                $i, 0, $this->translator->trans(
+                $this->stringUtilities->createString($attribute)->upperCamelize()->toString(), [], Manager::CONTEXT
             ), 'th'
             );
 
             $value = $user->getDefaultProperty($attribute);
 
             $value = match ($attribute) {
-                User::PROPERTY_ACTIVE, User::PROPERTY_PLATFORM_ADMINISTRATOR => $translator->trans(
+                User::PROPERTY_ACTIVE, User::PROPERTY_PLATFORM_ADMINISTRATOR => $this->translator->trans(
                     ($value ? 'ConfirmYes' : 'ConfirmNo'), [], StringUtilities::LIBRARIES
                 ),
                 User::PROPERTY_PICTURE_URI => $userPicture ?
                     '<img class="img-thumbnail" src="' . $userPicture . '" alt="' . $user->getFullName() .
                     '" style="max-height: 150px;"/>' : null,
-                User::PROPERTY_REGISTRATION_DATE => $datetimeUtilities->formatLocaleDate($value),
-                User::PROPERTY_EMAIL => $this->getStringUtilities()->encryptMailLink($value),
+                User::PROPERTY_REGISTRATION_DATE => $this->datetimeUtilities->formatLocaleDate($value),
+                User::PROPERTY_EMAIL => $this->stringUtilities->encryptMailLink($value),
                 default => $value,
             };
 

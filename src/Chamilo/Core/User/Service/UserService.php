@@ -37,61 +37,19 @@ use Symfony\Component\Translation\Translator;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class UserService
+readonly class UserService
 {
-    protected MailerInterface $activeMailer;
-
-    protected string $administratorEmail;
-
-    protected string $administratorName;
-
-    protected bool $allowRegistration;
-
-    protected AuthenticationValidator $authenticationValidator;
-
-    protected EventDispatcherInterface $eventDispatcher;
-
-    protected PasswordGeneratorInterface $passwordGenerator;
-
-    protected string $siteName;
-
-    protected Translator $translator;
-
-    protected UrlGenerator $urlGenerator;
-
-    protected WebPathBuilder $webPathBuilder;
-
-    private HashingAlgorithm $hashingUtilities;
-
-    private PropertyMapper $propertyMapper;
-
-    private string $securityKey;
-
-    private UserRepository $userRepository;
-
     public function __construct(
-        UserRepository $userRepository, HashingAlgorithm $hashingUtilities, PropertyMapper $propertyMapper,
-        Translator $translator, WebPathBuilder $webPathBuilder, MailerInterface $activeMailer,
-        PasswordGeneratorInterface $passwordGenerator, AuthenticationValidator $authenticationValidator,
-        UrlGenerator $urlGenerator, EventDispatcherInterface $eventDispatcher, string $securityKey, string $siteName,
-        string $administratorName, string $administratorEmail, bool $allowRegistration = false
+        private UserRepository $userRepository, private HashingAlgorithm $hashingUtilities,
+        private PropertyMapper $propertyMapper, protected Translator $translator,
+        protected WebPathBuilder $webPathBuilder, protected MailerInterface $activeMailer,
+        protected PasswordGeneratorInterface $passwordGenerator,
+        protected AuthenticationValidator $authenticationValidator, protected UrlGenerator $urlGenerator,
+        protected EventDispatcherInterface $eventDispatcher, private string $securityKey, protected string $siteName,
+        protected string $administratorName, protected string $administratorEmail,
+        protected bool $allowRegistration = false
     )
     {
-        $this->userRepository = $userRepository;
-        $this->hashingUtilities = $hashingUtilities;
-        $this->propertyMapper = $propertyMapper;
-        $this->translator = $translator;
-        $this->webPathBuilder = $webPathBuilder;
-        $this->activeMailer = $activeMailer;
-        $this->passwordGenerator = $passwordGenerator;
-        $this->authenticationValidator = $authenticationValidator;
-        $this->urlGenerator = $urlGenerator;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->securityKey = $securityKey;
-        $this->siteName = $siteName;
-        $this->administratorName = $administratorName;
-        $this->allowRegistration = $allowRegistration;
-        $this->administratorEmail = $administratorEmail;
     }
 
     /**
@@ -125,19 +83,19 @@ class UserService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function createNewPasswordForUser(User $user): bool
+    public function createNewPasswordForUser(User $user, ?User $executingUser = null): bool
     {
-        $translator = $this->getTranslator();
+        $translator = $this->translator;
 
-        $newPassword = $this->getPasswordGenerator()->generatePassword();
+        $newPassword = $this->passwordGenerator->generatePassword();
 
-        $user->setPassword($this->getHashingUtilities()->hashString($newPassword));
+        $user->setPassword($this->hashingUtilities->hashString($newPassword));
 
         if (!$this->updateUser($user)) {
             return false;
         }
 
-        $this->getEventDispatcher()->dispatch(new AfterUserPasswordResetEvent($user));
+        $this->eventDispatcher->dispatch(new AfterUserPasswordResetEvent($user, $executingUser));
 
         try {
             $mailSubject = $translator->trans('LoginRequest', [], Manager::CONTEXT);
@@ -155,20 +113,19 @@ class UserService
                 $translator->trans('MailResetPasswordNew', [], Manager::CONTEXT) . ': ' . $newPassword . '</p>';
             $mailBody[] = '<p>' . $translator->trans(
                     'MailResetPasswordLogIn', [
-                    '%LoginLink%' => '<a href="' . $this->getWebPathBuilder()->getBasePath() . '">' .
-                        $this->getWebPathBuilder()->getBasePath() . '</a>'
+                    '%LoginLink%' => '<a href="' . $this->webPathBuilder->getBasePath() . '">' .
+                        $this->webPathBuilder->getBasePath() . '</a>'
                 ], Manager::CONTEXT
                 ) . '</p>';
             $mailBody[] = '<p>' . $translator->trans('MailResetPasswordCloser', [], Manager::CONTEXT) . '<br/>';
             $mailBody[] = $translator->trans(
                     'MailResetPasswordSender', [
-                    '%AdminName%' => $this->getAdministratorName()
+                    '%AdminName%' => $this->administratorName
                 ], Manager::CONTEXT
                 ) . '</p>';
             $mailBody[] = '</div>';
 
-            $this->getActiveMailer()->sendMail(new Mail($mailSubject, implode(PHP_EOL, $mailBody), [$user->getEmail()])
-            );
+            $this->activeMailer->sendMail(new Mail($mailSubject, implode(PHP_EOL, $mailBody), [$user->getEmail()]));
 
             return true;
         }
@@ -181,16 +138,16 @@ class UserService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function createUser(User $user): bool
+    public function createUser(User $user, ?User $executingUser = null): bool
     {
         $user->setRegistrationDate(time());
         $user->setSecurityToken(sha1(time() . uniqid()));
 
-        if (!$this->getUserRepository()->createUser($user)) {
+        if (!$this->userRepository->createUser($user)) {
             return false;
         }
 
-        $this->getEventDispatcher()->dispatch(new AfterUserCreateEvent($user));
+        $this->eventDispatcher->dispatch(new AfterUserCreateEvent($user, $executingUser));
 
         return true;
     }
@@ -203,7 +160,7 @@ class UserService
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
         bool $generatePassword, ?string $password,
         ?string $authSource = 'Chamilo\Libraries\Protocol\Authentication\Service\PlatformAuthentication',
-        bool $isPlatformAdmin = false, bool $active = true, bool $sendEmail = false
+        bool $isPlatformAdmin = false, bool $active = true, bool $sendEmail = false, ?User $executingUser = null
     ): User
     {
         $requiredParameters = [
@@ -237,7 +194,7 @@ class UserService
         $password = $generatePassword ? $this->getPasswordGenerator()->generatePassword() : $password;
         $user->setPassword($this->getHashingUtilities()->hashString($password));
 
-        if (!$this->createUser($user)) {
+        if (!$this->createUser($user, $executingUser)) {
             throw new RuntimeException('Could not create the user');
         }
 
@@ -248,7 +205,7 @@ class UserService
         return $user;
     }
 
-    public function deleteUser(User $user): bool
+    public function deleteUser(User $user, ?User $executingUser = null): bool
     {
         return false;
 
@@ -265,7 +222,7 @@ class UserService
         //            return false;
         //        }
         //
-        //        $this->getEventDispatcher()->dispatch(new AfterUserDeleteEvent($user));
+        //        $this->getEventDispatcher()->dispatch(new AfterUserDeleteEvent($user, $executingUser));
         //
         //        return true;
     }
@@ -613,15 +570,15 @@ class UserService
      */
     public function registerUserFromParameters(
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
-        bool $generatePassword, ?string $password = null, ?string $authSource = 'Platform', bool $sendEmail = false
+        bool $generatePassword, ?string $password = null, ?string $authSource = 'Platform', bool $sendEmail = false, ?User $executingUser = null
     ): User
     {
         $user = $this->createUserFromParameters(
             $firstName, $lastName, $username, $officialCode, $emailAddress, $generatePassword, $password, $authSource,
-            false, $this->isRegistrationAllowed(), $sendEmail
+            false, $this->isRegistrationAllowed(), $sendEmail, $executingUser
         );
 
-        $this->getEventDispatcher()->dispatch(new AfterUserRegistrationEvent($user));
+        $this->eventDispatcher->dispatch(new AfterUserRegistrationEvent($user));
 
         return $user;
     }
@@ -643,8 +600,7 @@ class UserService
             );
         }
 
-        $authentication =
-            $this->getAuthenticationValidator()->getAuthenticationByType($user->getAuthenticationSource());
+        $authentication = $this->authenticationValidator->getAuthenticationByType($user->getAuthenticationSource());
 
         if (!$authentication instanceof ChangeablePasswordInterface) {
             throw new UserException(
@@ -656,7 +612,7 @@ class UserService
         }
 
         try {
-            $resetLink = $this->getUrlGenerator()->fromParameters(
+            $resetLink = $this->urlGenerator->fromParameters(
                 [
                     ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                     ApplicationInterface::PARAM_ACTION => ActionEnum::RESET_PASSWORD->value,
@@ -681,12 +637,12 @@ class UserService
             $mailBody[] = '<p>' . $translator->trans('MailResetPasswordCloser', [], Manager::CONTEXT) . '<br/>';
             $mailBody[] = $translator->trans(
                     'MailResetPasswordSender', [
-                    '%AdminName%' => $this->getAdministratorName()
+                    '%AdminName%' => $this->administratorName
                 ], Manager::CONTEXT
                 ) . '</p>';
             $mailBody[] = '</div>';
 
-            $this->getActiveMailer()->sendMail(
+            $this->activeMailer->sendMail(
                 new Mail($mailSubject, implode(PHP_EOL, $mailBody), [$user->getEmail()])
             );
 
@@ -709,22 +665,21 @@ class UserService
         $options['lastname'] = $user->getSurname();
         $options['username'] = $user->getUsername();
         $options['password'] = $password;
-        $options['site_name'] = $this->getSiteName();
-        $options['site_url'] = $this->getWebPathBuilder()->getBasePath();
-        $options['admin_name'] = $this->getAdministratorName();
-        $options['admin_email'] = $this->getAdministratorEmail();
+        $options['site_name'] = $this->siteName;
+        $options['site_url'] = $this->webPathBuilder->getBasePath();
+        $options['admin_name'] = $this->administratorName;
+        $options['admin_email'] = $this->administratorEmail;
 
-        $subject =
-            $this->getTranslator()->trans('YourRegistrationOn', [], Manager::CONTEXT) . ' ' . $options['site_name'];
+        $subject = $this->translator->trans('YourRegistrationOn', [], Manager::CONTEXT) . ' ' . $options['site_name'];
 
-        $body = $this->getTranslator()->trans('EmailTemplate', $options);
+        $body = $this->translator->trans('EmailTemplate', $options);
 
         $mail = new Mail(
             $subject, $body, [$user->getEmail()], true, [], [], $options['admin_name'], $options['admin_email']
         );
 
         try {
-            $this->getActiveMailer()->sendMail($mail);
+            $this->activeMailer->sendMail($mail);
         }
         catch (Exception) {
             return false;
@@ -739,7 +694,7 @@ class UserService
      */
     public function updateAccountFromParameters(
         User $user, ?string $firstName, ?string $lastName, string $username, ?string $officialCode,
-        string $emailAddress, ?string $currentPassword, ?string $newPassword
+        string $emailAddress, ?string $currentPassword, ?string $newPassword, ?User $executingUser = null
     ): bool
     {
         $authentication = $this->authenticationValidator->getAuthenticationByType($user->getAuthenticationSource());
@@ -756,7 +711,7 @@ class UserService
         $user->setUsername($username);
 
         if (strlen($currentPassword) && $authentication instanceof ChangeablePasswordInterface) {
-            if (!$authentication->changePassword($user, $currentPassword, $newPassword)) {
+            if (!$authentication->changePassword($user, $currentPassword, $newPassword, $executingUser)) {
                 return false;
             }
         }
@@ -767,13 +722,13 @@ class UserService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updateUser(User $user): bool
+    public function updateUser(User $user, ?User $executingUser = null): bool
     {
-        if (!$this->getUserRepository()->updateUser($user)) {
+        if (!$this->userRepository->updateUser($user)) {
             return false;
         }
 
-        $this->getEventDispatcher()->dispatch(new AfterUserUpdateEvent($user));
+        $this->eventDispatcher->dispatch(new AfterUserUpdateEvent($user, $executingUser));
 
         return true;
     }

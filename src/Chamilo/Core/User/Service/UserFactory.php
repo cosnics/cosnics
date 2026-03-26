@@ -13,91 +13,38 @@ use Throwable;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class UserFactory
+readonly class UserFactory
 {
-    protected bool $canChangeLanguage;
-
-    protected bool $canChangeTimezone;
-
-    protected UserSettingsService $userSettingsService;
-
-    private SessionInterface $session;
-
-    private ThemePathBuilder $themeSystemPathBuilder;
-
-    private ThemePathBuilder $themeWebPathBuilder;
-
-    private Translator $translator;
-
-    private UserService $userService;
-
     public function __construct(
-        SessionInterface $session, UserService $userService, ThemePathBuilder $themeWebPathBuilder,
-        ThemePathBuilder $themeSystemPathBuilder, Translator $translator, UserSettingsService $userSettingsService,
-        bool $canChangeLanguage = true, bool $canChangeTimezone = true
+        protected SessionInterface $session, protected UserService $userService,
+        protected ThemePathBuilder $themeWebPathBuilder, protected ThemePathBuilder $themeSystemPathBuilder,
+        protected Translator $translator, protected UserSettingsService $userSettingsService,
+        protected bool $canChangeLanguage, protected bool $canChangeTimezone
     )
     {
-        $this->session = $session;
-        $this->userService = $userService;
-        $this->themeWebPathBuilder = $themeWebPathBuilder;
-        $this->themeSystemPathBuilder = $themeSystemPathBuilder;
-        $this->translator = $translator;
-        $this->userSettingsService = $userSettingsService;
-        $this->canChangeLanguage = $canChangeLanguage;
-        $this->canChangeTimezone = $canChangeTimezone;
-    }
-
-    public function canChangeLanguage(): bool
-    {
-        return $this->canChangeLanguage;
-    }
-
-    public function canChangeTimezone(): bool
-    {
-        return $this->canChangeTimezone;
-    }
-
-    public function getSession(): SessionInterface
-    {
-        return $this->session;
-    }
-
-    public function getThemeSystemPathBuilder(): ThemePathBuilder
-    {
-        return $this->themeSystemPathBuilder;
-    }
-
-    public function getThemeWebPathBuilder(): ThemePathBuilder
-    {
-        return $this->themeWebPathBuilder;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 
     public function getUser(): ?User
     {
-        $userIdentifier = $this->getSession()->get(AuthenticationValidator::SESSION_USER_ID);
+        $userIdentifier = $this->session->get(AuthenticationValidator::SESSION_USER_ID);
 
         if ($userIdentifier) {
             try {
-                $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
+                $user = $this->userService->findUserByIdentifier($userIdentifier);
 
                 if ($user instanceof User) {
-                    if ($this->canChangeLanguage()) {
-                        $userLanguage = $this->getUserSettingsService()->findUserSetting(
+                    if ($this->canChangeLanguage) {
+                        $userLanguage = $this->userSettingsService->findUserSetting(
                             $user, 'cosnics.libraries.userInterface.translation.language.default'
                         );
 
                         if ($userLanguage) {
-                            $this->getTranslator()->setLocale($userLanguage);
+                            $this->translator->setLocale($userLanguage);
                         }
                     }
 
-                    if ($this->canChangeTimezone()) {
-                        $userTimezone = $this->getUserSettingsService()->findUserSetting(
+                    if ($this->canChangeTimezone) {
+                        $userTimezone = $this->userSettingsService->findUserSetting(
                             $user, 'cosnics.libraries.calendar.timezone'
                         );
 
@@ -115,16 +62,6 @@ class UserFactory
         }
 
         return null;
-    }
-
-    public function getUserService(): UserService
-    {
-        return $this->userService;
-    }
-
-    public function getUserSettingsService(): UserSettingsService
-    {
-        return $this->userSettingsService;
     }
 }
 

@@ -10,16 +10,23 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 abstract class AbstractUserEvent extends Event
 {
+    protected ?User $executingUser;
+
     protected User $user;
 
-    public function __construct(User $user)
+    public function __construct(User $user, ?User $executingUser = null)
     {
         $this->user = $user;
+        $this->executingUser = $executingUser;
+    }
+
+    public function getExecutingUser(): ?User
+    {
+        return $this->executingUser;
     }
 
     public function getUser(): User
     {
         return $this->user;
     }
-
 }

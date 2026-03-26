@@ -11,9 +11,9 @@ class BeforeUserLeavePageEvent extends AbstractUserEvent
 {
     protected string $userVisitIdentifier;
 
-    public function __construct(User $user, string $userVisitIdentifier)
+    public function __construct(User $user, string $userVisitIdentifier, ?User $executingUser = null)
     {
-        parent::__construct($user);
+        parent::__construct($user, $executingUser);
 
         $this->userVisitIdentifier = $userVisitIdentifier;
     }
@@ -22,5 +22,4 @@ class BeforeUserLeavePageEvent extends AbstractUserEvent
     {
         return $this->userVisitIdentifier;
     }
-
 }

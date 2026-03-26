@@ -18,27 +18,13 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class Application implements ApplicationInterface
 {
-    protected ApplicationHeaderRenderer $applicationHeaderRenderer;
-
-    protected DefaultFooterRenderer $defaultFooterRenderer;
-
-    protected ChamiloRequest $request;
-
-    protected Translator $translator;
-
-    protected UrlGenerator $urlGenerator;
-
     public function __construct(
-        ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator
-
+        protected readonly ChamiloRequest $request,
+        protected readonly ApplicationHeaderRenderer $applicationHeaderRenderer,
+        protected readonly DefaultFooterRenderer $defaultFooterRenderer, protected readonly Translator $translator,
+        protected readonly UrlGenerator $urlGenerator
     )
     {
-        $this->request = $request;
-        $this->applicationHeaderRenderer = $applicationHeaderRenderer;
-        $this->defaultFooterRenderer = $defaultFooterRenderer;
-        $this->translator = $translator;
-        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -60,7 +46,7 @@ abstract class Application implements ApplicationInterface
 
     protected function getCurrentAction(): string
     {
-        return $this->getRequest()->query->get(self::PARAM_ACTION, $this->getDefaultApplicationAction());
+        return $this->request->query->get(self::PARAM_ACTION, $this->getDefaultApplicationAction());
     }
 
     protected function getDefaultFooterRenderer(): DefaultFooterRenderer
@@ -85,11 +71,11 @@ abstract class Application implements ApplicationInterface
 
     protected function renderFooter(): string
     {
-        return $this->getDefaultFooterRenderer()->render();
+        return $this->defaultFooterRenderer->render();
     }
 
     protected function renderHeader(?User $user = null): string
     {
-        return $this->getApplicationHeaderRenderer()->render($this, $user);
+        return $this->applicationHeaderRenderer->render($this, $user);
     }
 }

@@ -19,8 +19,7 @@ class LogoutComponent extends Manager
     public function run(?User $currentUser = null): Response
     {
         if ($currentUser instanceof User) {
-            $authenticationHandler = $this->getAuthenticationValidator();
-            $authenticationHandler->logout($currentUser);
+            $this->authenticationValidator->logout($currentUser);
         }
         else {
             throw new NotAllowedException();

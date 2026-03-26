@@ -7,5 +7,4 @@ namespace Chamilo\Core\User\Architecture\EventDispatcher\Event;
  */
 class AfterUserLoginEvent extends AbstractUserAuthenticationEvent
 {
-
 }

@@ -27,16 +27,11 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class UserRepository
 {
-    private DataClassRepository $dataClassRepository;
-
-    private SearchQueryConditionGenerator $searchQueryConditionGenerator;
-
     public function __construct(
-        DataClassRepository $dataClassRepository, SearchQueryConditionGenerator $searchQueryConditionGenerator
+        protected DataClassRepository $dataClassRepository,
+        protected SearchQueryConditionGenerator $searchQueryConditionGenerator
     )
     {
-        $this->dataClassRepository = $dataClassRepository;
-        $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
     }
 
     /**
@@ -44,7 +39,7 @@ class UserRepository
      */
     public function countUsers(?ConditionInterface $condition = null): int
     {
-        return $this->getDataClassRepository()->count(User::class, new StorageParameters(condition: $condition));
+        return $this->dataClassRepository->count(User::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -52,7 +47,7 @@ class UserRepository
      */
     public function countUsersForSearchQuery(?string $searchQuery = null): int
     {
-        return $this->getDataClassRepository()->count(
+        return $this->dataClassRepository->count(
             User::class, new StorageParameters(condition: $this->getUserConditionForSearchQuery($searchQuery))
         );
     }
@@ -66,7 +61,7 @@ class UserRepository
         ?string $searchQuery = null, array $userIdentifiers = []
     ): int
     {
-        return $this->getDataClassRepository()->count(
+        return $this->dataClassRepository->count(
             User::class, new StorageParameters(
                 condition: $this->getUserConditionForSearchQueryAndUserIdentifiers($searchQuery, $userIdentifiers)
             )
@@ -79,7 +74,7 @@ class UserRepository
      */
     public function createUser(User $user): bool
     {
-        return $this->getDataClassRepository()->create($user);
+        return $this->dataClassRepository->create($user);
     }
 
     /**
@@ -87,7 +82,7 @@ class UserRepository
      */
     public function deleteUser(User $user): bool
     {
-        return $this->getDataClassRepository()->delete($user);
+        return $this->dataClassRepository->delete($user);
     }
 
     /**
@@ -109,7 +104,7 @@ class UserRepository
             new StaticConditionVariable(1)
         );
 
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieves(
             User::class, new StorageParameters(
                 condition: new AndCondition($conditions), orderBy: $orderBy, count: $count, offset: $offset
             )
@@ -150,7 +145,7 @@ class UserRepository
             new PropertyConditionVariable(User::class, User::PROPERTY_ACTIVE), new StaticConditionVariable(1)
         );
 
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieves(
             User::class, new StorageParameters(condition: new AndCondition($conditions))
         );
     }
@@ -165,7 +160,7 @@ class UserRepository
             new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL), new StaticConditionVariable($email)
         );
 
-        return $this->getDataClassRepository()->retrieve(User::class, new StorageParameters(condition: $condition));
+        return $this->dataClassRepository->retrieve(User::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -174,7 +169,7 @@ class UserRepository
      */
     public function findUserByIdentifier(string $identifier): ?User
     {
-        return $this->getDataClassRepository()->retrieveById(User::class, $identifier);
+        return $this->dataClassRepository->retrieveById(User::class, $identifier);
     }
 
     /**
@@ -188,7 +183,7 @@ class UserRepository
             new StaticConditionVariable($officialCode)
         );
 
-        return $this->getDataClassRepository()->retrieve(User::class, new StorageParameters(condition: $condition));
+        return $this->dataClassRepository->retrieve(User::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -202,7 +197,7 @@ class UserRepository
             new StaticConditionVariable($securityToken)
         );
 
-        return $this->getDataClassRepository()->retrieve(User::class, new StorageParameters(condition: $condition));
+        return $this->dataClassRepository->retrieve(User::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -215,7 +210,7 @@ class UserRepository
             new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), new StaticConditionVariable($username)
         );
 
-        return $this->getDataClassRepository()->retrieve(User::class, new StorageParameters(condition: $condition));
+        return $this->dataClassRepository->retrieve(User::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -235,7 +230,7 @@ class UserRepository
             new StaticConditionVariable($usernameOrEmail)
         );
 
-        return $this->getDataClassRepository()->retrieve(
+        return $this->dataClassRepository->retrieve(
             User::class, new StorageParameters(condition: new OrCondition($conditions))
         );
     }
@@ -249,7 +244,7 @@ class UserRepository
         $retrieveProperties = new RetrieveProperties();
         $retrieveProperties->add(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID));
 
-        return $this->getDataClassRepository()->distinct(
+        return $this->dataClassRepository->distinct(
             User::class, new StorageParameters(retrieveProperties: $retrieveProperties)
         );
     }
@@ -265,7 +260,7 @@ class UserRepository
         $condition =
             new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE), $officialCodes);
 
-        return $this->getDataClassRepository()->distinct(
+        return $this->dataClassRepository->distinct(
             User::class, new StorageParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [
@@ -288,7 +283,7 @@ class UserRepository
         array $retrieveProperties, ?ConditionInterface $condition = null, OrderBy $orderBy = new OrderBy()
     ): array
     {
-        return $this->getDataClassRepository()->distinct(
+        return $this->dataClassRepository->distinct(
             User::class, new StorageParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties($retrieveProperties),
                 orderBy: $orderBy
@@ -311,7 +306,7 @@ class UserRepository
     {
         $parameters = new StorageParameters(condition: $condition, orderBy: $orderBy, count: $count, offset: $offset);
 
-        return $this->getDataClassRepository()->retrieves(User::class, $parameters);
+        return $this->dataClassRepository->retrieves(User::class, $parameters);
     }
 
     /**
@@ -325,7 +320,7 @@ class UserRepository
         $condition =
             new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers);
 
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieves(
             User::class, new StorageParameters(
                 condition: $condition, orderBy: $orderBy
             )
@@ -370,7 +365,7 @@ class UserRepository
             count: $count, offset: $offset
         );
 
-        return $this->getDataClassRepository()->retrieves(User::class, $parameters);
+        return $this->dataClassRepository->retrieves(User::class, $parameters);
     }
 
     /**
@@ -396,22 +391,7 @@ class UserRepository
             orderBy: new OrderBy($orderProperties), count: $count, offset: $offset
         );
 
-        return $this->getDataClassRepository()->retrieves(User::class, $parameters);
-    }
-
-    protected function getDataClassRepository(): DataClassRepository
-    {
-        return $this->dataClassRepository;
-    }
-
-    public function getSearchQueryConditionGenerator(): SearchQueryConditionGenerator
-    {
-        return $this->searchQueryConditionGenerator;
-    }
-
-    public function setSearchQueryConditionGenerator(SearchQueryConditionGenerator $searchQueryConditionGenerator): void
-    {
-        $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
+        return $this->dataClassRepository->retrieves(User::class, $parameters);
     }
 
     protected function getUserConditionForSearchQuery(string $searchQuery = null): AndCondition
@@ -420,7 +400,7 @@ class UserRepository
 
         // Set the conditions for the search query
         if ($searchQuery && $searchQuery != '') {
-            $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
+            $conditions[] = $this->searchQueryConditionGenerator->getSearchConditions(
                 $searchQuery, [
                     new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME),
@@ -458,6 +438,6 @@ class UserRepository
      */
     public function updateUser(User $user): bool
     {
-        return $this->getDataClassRepository()->update($user);
+        return $this->dataClassRepository->update($user);
     }
 }

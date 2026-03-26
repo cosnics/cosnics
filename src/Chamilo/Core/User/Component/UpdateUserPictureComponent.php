@@ -37,25 +37,21 @@ use Twig\Environment;
  */
 class UpdateUserPictureComponent extends ProfileComponent
 {
-    protected UserPictureUpdateFormType $userPictureUpdateFormType;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        UrlGenerator $urlGenerator, TabsRenderer $tabsRenderer, FormFactoryInterface $formFactory,
-        Environment $twigEnvironment, ?UserPictureProviderInterface $userPictureProvider,
-        UserPictureUpdateFormType $userPictureUpdateFormType, bool $userCanChangePicture
+        FormFactoryInterface $formFactory, TabsRenderer $tabsRenderer, Environment $twigEnvironment,
+        bool $userCanChangePicture, ?UserPictureProviderInterface $userPictureProvider,
+        protected readonly UserPictureUpdateFormType $userPictureUpdateFormType
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator, $tabsRenderer, $formFactory,
-            $twigEnvironment, $userPictureProvider, $userCanChangePicture
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $authenticationValidator, $userUrlGenerator, $activeMailer, $alertsManager, $userService, $formFactory,
+            $tabsRenderer, $twigEnvironment, $userCanChangePicture, $userPictureProvider
         );
-
-        $this->userPictureUpdateFormType = $userPictureUpdateFormType;
     }
 
     /**
@@ -69,10 +65,9 @@ class UpdateUserPictureComponent extends ProfileComponent
     {
         $this->checkAuthorization(Manager::CONTEXT, $currentUser, 'ManageAccount');
         $translator = $this->getTranslator();
-        $userPictureProvider = $this->getUserPictureProvider();
 
-        if ($userPictureProvider instanceof UserPictureUpdateProviderInterface) {
-            $form = $this->getFormFactory()->create(
+        if ($this->userPictureProvider instanceof UserPictureUpdateProviderInterface) {
+            $form = $this->formFactory->create(
                 UserPictureUpdateFormType::class, [], [
                     'action' => $this->getUrlGenerator()->fromRequest(),
                     'user' => $currentUser,
@@ -86,9 +81,9 @@ class UpdateUserPictureComponent extends ProfileComponent
 
                 $pictureInformation = $submittedData[User::PROPERTY_PICTURE_URI];
 
-                $success = $userPictureProvider->updateUserPictureFromParameters(
+                $success = $this->userPictureProvider->updateUserPictureFromParameters(
                     $currentUser, $pictureInformation,
-                    (bool) $submittedData[AbstractUserFormType::PROPERTY_PICTURE_REMOVE]
+                    (bool) $submittedData[AbstractUserFormType::PROPERTY_PICTURE_REMOVE], $currentUser
                 );
 
                 if (!$success) {
@@ -104,7 +99,7 @@ class UpdateUserPictureComponent extends ProfileComponent
                     $successMessage = 'UserProfileUpdated';
                 }
 
-                $this->getAlertsManager()->addAlert(
+                $this->alertsManager->addAlert(
                     new Alert(
                         $this->getTranslator()->trans($success ? $successMessage : $errorMessage),
                         !$success ? AlertEnum::DANGER : AlertEnum::SUCCESS
@@ -128,16 +123,11 @@ class UpdateUserPictureComponent extends ProfileComponent
         $html = [];
 
         $html[] = $this->renderHeader($currentUser);
-        $html[] = $this->getTwigEnvironment()->render('form.html.twig', [
+        $html[] = $this->twigEnvironment->render('form.html.twig', [
             'form' => $form->createView(),
         ]);
         $html[] = $this->renderFooter();
 
         return new Response(implode(PHP_EOL, $html));
-    }
-
-    public function getUserPictureUpdateFormType(): UserPictureUpdateFormType
-    {
-        return $this->userPictureUpdateFormType;
     }
 }

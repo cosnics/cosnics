@@ -19,9 +19,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 {
     public function getActions(): Actions
     {
-        $translator = $this->getTranslator();
         $context = $this->getContext();
-        $urlGenerator = $this->getUrlGenerator();
 
         $links = [];
 
@@ -31,9 +29,10 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
         ];
 
         $links[] = new Action(
-            $translator->trans('DiagnoseDescription', [], $context), $translator->trans('Diagnose', [], $context),
+            $this->translator->trans('DiagnoseDescription', [], $context),
+            $this->translator->trans('Diagnose', [], $context),
             new FontAwesomeGlyph('stethoscope', ['fa-fw', 'fa-2x'], null, 'fas'),
-            $urlGenerator->fromParameters($parameters)
+            $this->urlGenerator->fromParameters($parameters)
         );
 
         $parameters = [
@@ -42,9 +41,10 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
         ];
 
         $links[] = new Action(
-            $translator->trans('LogsViewerDescription', [], $context), $translator->trans('LogsViewer', [], $context),
+            $this->translator->trans('LogsViewerDescription', [], $context),
+            $this->translator->trans('LogsViewer', [], $context),
             new FontAwesomeGlyph('info-circle', ['fa-fw', 'fa-2x'], null, 'fas'),
-            $urlGenerator->fromParameters($parameters)
+            $this->urlGenerator->fromParameters($parameters)
         );
 
         $parameters = [
@@ -53,9 +53,10 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
         ];
 
         $links[] = new Action(
-            $translator->trans('WhoisOnline', [], StringUtilities::LIBRARIES),
-            $translator->trans('WhoisOnline', [], StringUtilities::LIBRARIES),
-            new FontAwesomeGlyph('user', ['fa-fw', 'fa-2x'], null, 'fas'), $urlGenerator->fromParameters($parameters)
+            $this->translator->trans('WhoisOnline', [], StringUtilities::LIBRARIES),
+            $this->translator->trans('WhoisOnline', [], StringUtilities::LIBRARIES),
+            new FontAwesomeGlyph('user', ['fa-fw', 'fa-2x'], null, 'fas'),
+            $this->urlGenerator->fromParameters($parameters)
         );
 
         return new Actions($context, $links);

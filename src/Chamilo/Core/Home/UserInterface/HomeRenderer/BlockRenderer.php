@@ -20,17 +20,11 @@ abstract class BlockRenderer
     public const int SOURCE_AJAX = 2;
     public const int SOURCE_DEFAULT = 1;
 
-    protected HomeService $homeService;
-
-    protected Translator $translator;
-
-    protected UrlGenerator $urlGenerator;
-
-    public function __construct(HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator)
+    public function __construct(
+        protected readonly HomeService $homeService, protected readonly UrlGenerator $urlGenerator,
+        protected readonly Translator $translator
+    )
     {
-        $this->homeService = $homeService;
-        $this->urlGenerator = $urlGenerator;
-        $this->translator = $translator;
     }
 
     public function render(Element $block, ?User $user = null): string
@@ -56,24 +50,9 @@ abstract class BlockRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function getHomeService(): HomeService
-    {
-        return $this->homeService;
-    }
-
     public function getTitle(Element $block): string
     {
         return htmlspecialchars($block->getTitle());
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
     }
 
     /**

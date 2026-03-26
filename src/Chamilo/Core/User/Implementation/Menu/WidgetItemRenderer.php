@@ -21,33 +21,22 @@ use Symfony\Component\Translation\Translator;
  */
 class WidgetItemRenderer extends ItemRenderer
 {
-    protected bool $canChangeUserPicture;
-
-    protected UrlGenerator $urlGenerator;
-
-    private UserPictureProviderInterface $userPictureProvider;
-
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
-        UserPictureProviderInterface $userPictureProvider, UrlGenerator $urlGenerator, bool $canChangeUserPicture = true
+        protected UserPictureProviderInterface $userPictureProvider, protected UrlGenerator $urlGenerator,
+        protected bool $canChangeUserPicture
     )
     {
         parent::__construct($translator, $itemCacheService, $request);
-
-        $this->userPictureProvider = $userPictureProvider;
-        $this->urlGenerator = $urlGenerator;
-        $this->canChangeUserPicture = $canChangeUserPicture;
     }
 
     public function render(Item $item, User $user): string
     {
-        $translator = $this->getTranslator();
-
         $userPicture = $this->getUserPictureProvider()->getUserPictureAsBase64String($user);
 
         $html = [];
 
-        $title = $this->getTranslator()->trans('MyAccount', [], Manager::CONTEXT);
+        $title = $this->translator->trans('MyAccount', [], Manager::CONTEXT);
 
         $html[] = '<li class="nav-item dropdown">';
         $html[] = '<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">';
@@ -76,7 +65,7 @@ class WidgetItemRenderer extends ItemRenderer
         if ($this->canChangeUserPicture()) {
             $html[] = '<li>';
             $html[] = '<a class="dropdown-item" href="' . $this->getPictureUrl() . '">';
-            $html[] = '<div>' . $translator->trans('EditProfilePicture', [], Manager::CONTEXT) . '</div>';
+            $html[] = '<div>' . $this->translator->trans('EditProfilePicture', [], Manager::CONTEXT) . '</div>';
             $html[] = '</a>';
             $html[] = '</li>';
         }
@@ -84,14 +73,14 @@ class WidgetItemRenderer extends ItemRenderer
         // Account
         $html[] = '<li>';
         $html[] = '<a class="dropdown-item" href="' . $this->getAccountUrl() . '">';
-        $html[] = '<div>' . $translator->trans('MyAccount', [], Manager::CONTEXT) . '</div>';
+        $html[] = '<div>' . $this->translator->trans('MyAccount', [], Manager::CONTEXT) . '</div>';
         $html[] = '</a>';
         $html[] = '</li>';
 
         // Settings
         $html[] = '<li>';
         $html[] = '<a class="dropdown-item" href="' . $this->getSettingsUrl() . '">';
-        $html[] = '<div>' . $translator->trans('Settings', [], Manager::CONTEXT) . '</div>';
+        $html[] = '<div>' . $this->translator->trans('Settings', [], Manager::CONTEXT) . '</div>';
         $html[] = '</a>';
         $html[] = '</li>';
 
@@ -101,7 +90,7 @@ class WidgetItemRenderer extends ItemRenderer
         // Logout
         $html[] = '<li>';
         $html[] = '<a class="dropdown-item" href="' . $this->getLogoutUrl() . '">';
-        $html[] = '<div>' . $translator->trans('Logout', [], Manager::CONTEXT) . '</div>';
+        $html[] = '<div>' . $this->translator->trans('Logout', [], Manager::CONTEXT) . '</div>';
         $html[] = '</a>';
         $html[] = '</li>';
 
@@ -139,7 +128,7 @@ class WidgetItemRenderer extends ItemRenderer
 
     public function getRendererTypeName(): string
     {
-        return $this->getTranslator()->trans('UserAccountWidget', [], Manager::CONTEXT);
+        return $this->translator->trans('UserAccountWidget', [], Manager::CONTEXT);
     }
 
     public function getSettingsUrl(): string
@@ -171,6 +160,6 @@ class WidgetItemRenderer extends ItemRenderer
 
     public function renderTitleForIsoCode(Item $item, string $isoCode): string
     {
-        return $this->getTranslator()->trans('UserAccountWidget', [], \Chamilo\Core\Menu\Manager::CONTEXT, $isoCode);
+        return $this->translator->trans('UserAccountWidget', [], \Chamilo\Core\Menu\Manager::CONTEXT, $isoCode);
     }
 }

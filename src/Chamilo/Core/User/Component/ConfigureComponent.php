@@ -48,44 +48,28 @@ class ConfigureComponent extends ProfileComponent
 {
     public const string PARAM_SELECTED_CONTEXT = 'selected_context';
 
-    protected ConfigurationFormType $configurationFormType;
-
-    protected PackageBundlesCacheService $packageBundlesCacheService;
-
-    protected ParameterBagInterface $platformParameterBag;
-
     protected string $selectedContext;
-
-    protected SystemPathBuilder $systemPathBuilder;
-
-    protected UserSettingsParser $userSettingsParser;
-
-    protected UserSettingsService $userSettingsService;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
-        MailerInterface $activeMailer, AlertsManager $alertsManager, SystemPathBuilder $systemPathBuilder,
-        UserService $userService, UrlGenerator $urlGenerator, PackageBundlesCacheService $packageBundlesCacheService,
-        TabsRenderer $tabsRenderer, FormFactoryInterface $formFactory, Environment $twigEnvironment,
-        ?UserPictureProviderInterface $userPictureProvider, ConfigurationFormType $configurationFormType,
-        UserSettingsService $userSettingsService, UserSettingsParser $userSettingsParser,
-        ParameterBagInterface $platformParameterBag, bool $userCanChangePicture
+        MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
+        FormFactoryInterface $formFactory, TabsRenderer $tabsRenderer, Environment $twigEnvironment,
+        bool $userCanChangePicture, ?UserPictureProviderInterface $userPictureProvider,
+        protected readonly ConfigurationFormType $configurationFormType,
+        protected readonly PackageBundlesCacheService $packageBundlesCacheService,
+        protected readonly ParameterBagInterface $platformParameterBag,
+        protected readonly SystemPathBuilder $systemPathBuilder,
+        protected readonly UserSettingsParser $userSettingsParser,
+        protected readonly UserSettingsService $userSettingsService
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator, $tabsRenderer, $formFactory,
-            $twigEnvironment, $userPictureProvider, $userCanChangePicture
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $authenticationValidator, $userUrlGenerator, $activeMailer, $alertsManager, $userService, $formFactory,
+            $tabsRenderer, $twigEnvironment, $userCanChangePicture, $userPictureProvider
         );
-
-        $this->systemPathBuilder = $systemPathBuilder;
-        $this->packageBundlesCacheService = $packageBundlesCacheService;
-        $this->configurationFormType = $configurationFormType;
-        $this->userSettingsService = $userSettingsService;
-        $this->userSettingsParser = $userSettingsParser;
-        $this->platformParameterBag = $platformParameterBag;
     }
 
     /**
@@ -107,7 +91,7 @@ class ConfigureComponent extends ProfileComponent
             ]
         );
 
-        $form = $this->getFormFactory()->create(
+        $form = $this->formFactory->create(
             ConfigurationFormType::class, $this->getFormData($currentUser), [
                 'action' => $configureUri,
                 'context' => $this->getSelectedContext()
@@ -119,10 +103,10 @@ class ConfigureComponent extends ProfileComponent
             $submittedData = $this->processData($form->getData());
 
             $success = $this->getUserSettingsService()->updateUserSettingsFromParameters(
-                $currentUser, $this->getSelectedContext(), $submittedData
+                $currentUser, $this->getSelectedContext(), $submittedData, $currentUser
             );
 
-            $this->getAlertsManager()->addAlert(
+            $this->alertsManager->addAlert(
                 new Alert(
                     $this->getTranslator()->trans($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'),
                     !$success ? AlertEnum::DANGER : AlertEnum::SUCCESS
@@ -198,8 +182,8 @@ class ConfigureComponent extends ProfileComponent
 
         $html = [];
 
-        $html[] = $this->getTabsRenderer()->renderNavigation('package', $tabs, $this->getSelectedContext());
-        $html[] = $this->getTwigEnvironment()->render('form.html.twig', [
+        $html[] = $this->tabsRenderer->renderNavigation('package', $tabs, $this->getSelectedContext());
+        $html[] = $this->twigEnvironment->render('form.html.twig', [
             'form' => $form->createView(),
         ]);
 

@@ -14,7 +14,7 @@ class UserPictureUpdateFormType extends AbstractUserFormType
         $this->buildPictureForm($builder, $options);
 
         if ($this->isPictureChangeable($options['executingUser'])) {
-            $this->getFormButtonTypeBuilder()->addSaveAndResetButton($builder);
+            $this->formButtonTypeBuilder->addSaveAndResetButton($builder);
         }
     }
 }

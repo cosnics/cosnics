@@ -12,18 +12,12 @@ use Symfony\Component\Translation\Translator;
  */
 class UserPictureProviderRegistry extends ArrayCollection
 {
-    protected string $activePictureProviderClass;
-
-    protected Translator $translator;
-
     public function __construct(
-        Translator $translator, string $activePictureProviderClass
+        protected readonly Translator $translator,
+        protected readonly string $activePictureProviderClass
     )
     {
         parent::__construct();
-
-        $this->translator = $translator;
-        $this->activePictureProviderClass = $activePictureProviderClass;
     }
 
     public function addAvailablePictureProvider(UserPictureProviderInterface $userPictureProvider): void
@@ -36,7 +30,7 @@ class UserPictureProviderRegistry extends ArrayCollection
      */
     public function getActivePictureProvider(): UserPictureProviderInterface
     {
-        $configuredPictureProvider = $this->getActivePictureProviderClass();
+        $configuredPictureProvider = $this->activePictureProviderClass;
 
         if (!$this->containsKey($configuredPictureProvider)) {
             throw new NoSuchClassException($configuredPictureProvider, UserPictureProviderInterface::class);

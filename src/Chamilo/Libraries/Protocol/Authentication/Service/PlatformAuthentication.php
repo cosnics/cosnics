@@ -44,7 +44,7 @@ class PlatformAuthentication extends Authentication
     /**
      * @throws \Exception
      */
-    public function changePassword(User $user, string $oldPassword, string $newPassword): bool
+    public function changePassword(User $user, string $oldPassword, string $newPassword, ?User $executingUser = null): bool
     {
         // Check whether the current password is different from the new password
         if ($oldPassword == $newPassword) {
@@ -63,7 +63,7 @@ class PlatformAuthentication extends Authentication
         // Set the password
         $user->setPassword($hashingUtilities->hashString($newPassword));
 
-        return $this->getUserService()->updateUser($user);
+        return $this->getUserService()->updateUser($user, $executingUser);
     }
 
     public function getHashingUtilities(): HashingAlgorithm

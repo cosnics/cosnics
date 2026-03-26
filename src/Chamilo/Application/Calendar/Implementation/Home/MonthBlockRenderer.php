@@ -28,30 +28,15 @@ class MonthBlockRenderer extends BlockRenderer
 {
     public const string CONTEXT = Manager::CONTEXT;
 
-    protected CalendarDataProvider $calendarDataProvider;
-
-    protected VisibilityRepository $calendarRendererProviderRepository;
-
-    protected CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder;
-
-    protected MiniMonthCalendarRenderer $miniMonthCalendarRenderer;
-
-    protected ChamiloRequest $request;
-
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
-        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, ChamiloRequest $request,
-        VisibilityRepository $calendarRendererProviderRepository, CalendarDataProvider $calendarDataProvider,
-        CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder
+        protected MiniMonthCalendarRenderer $miniMonthCalendarRenderer, protected ChamiloRequest $request,
+        protected VisibilityRepository $calendarRendererProviderRepository,
+        protected CalendarDataProvider $calendarDataProvider,
+        protected CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder
     )
     {
         parent::__construct($homeService, $urlGenerator, $translator);
-
-        $this->miniMonthCalendarRenderer = $miniMonthCalendarRenderer;
-        $this->request = $request;
-        $this->calendarRendererProviderRepository = $calendarRendererProviderRepository;
-        $this->calendarDataProvider = $calendarDataProvider;
-        $this->calendarTableConfigurationBuilder = $calendarTableConfigurationBuilder;
     }
 
     /**
@@ -64,58 +49,32 @@ class MonthBlockRenderer extends BlockRenderer
             HtmlCalendarRenderer::PARAM_TYPE => HtmlCalendarRendererTypeEnum::DAY->value
         ];
 
-        $miniMonthCalendarRenderer = $this->getMiniMonthCalendarRenderer();
         $events = [];
 
-        $calendarTableConfiguration = $this->getCalendarTableConfigurationBuilder()->buildConfiguration($user);
+        $calendarTableConfiguration = $this->calendarTableConfigurationBuilder->buildConfiguration($user);
 
         if ($user instanceof User) {
-            $events = $this->getCalendarDataProvider()->getEvents(
-                $user,
-                $miniMonthCalendarRenderer->getEventsStartTime($calendarTableConfiguration, $this->getDisplayTime()),
-                $miniMonthCalendarRenderer->getEventsEndTime($calendarTableConfiguration, $this->getDisplayTime())
+            $events = $this->calendarDataProvider->getEvents(
+                $user, $this->miniMonthCalendarRenderer->getEventsStartTime(
+                $calendarTableConfiguration, $this->getDisplayTime()
+            ), $this->miniMonthCalendarRenderer->getEventsEndTime($calendarTableConfiguration, $this->getDisplayTime())
             );
         }
 
-        return $this->getMiniMonthCalendarRenderer()->renderCalendar(
+        return $this->miniMonthCalendarRenderer->renderCalendar(
             $calendarTableConfiguration, $events, $displayParameters, $this->getDisplayTime()
         );
     }
 
-    protected function getCalendarDataProvider(): CalendarDataProvider
-    {
-        return $this->calendarDataProvider;
-    }
-
-    public function getCalendarRendererProviderRepository(): VisibilityRepository
-    {
-        return $this->calendarRendererProviderRepository;
-    }
-
-    public function getCalendarTableConfigurationBuilder(): CalendarTableConfigurationBuilder
-    {
-        return $this->calendarTableConfigurationBuilder;
-    }
-
     protected function getDisplayTime(): int
     {
-        return (int) $this->getRequest()->query->get('time', time());
-    }
-
-    public function getMiniMonthCalendarRenderer(): MiniMonthCalendarRenderer
-    {
-        return $this->miniMonthCalendarRenderer;
-    }
-
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
+        return (int) $this->request->query->get('time', time());
     }
 
     public function getTitle(Element $block): string
     {
-        return $this->getTranslator()->trans(date('F', $this->getDisplayTime()) . 'Long', [], StringUtilities::LIBRARIES
-            ) . ' ' . date('Y', $this->getDisplayTime());
+        return $this->translator->trans(date('F', $this->getDisplayTime()) . 'Long', [], StringUtilities::LIBRARIES) .
+            ' ' . date('Y', $this->getDisplayTime());
     }
 
     public function renderContentFooter(): string

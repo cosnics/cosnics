@@ -15,9 +15,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
 {
     public function getActions(): Actions
     {
-        $translator = $this->getTranslator();
         $context = $this->getContext();
-        $urlGenerator = $this->getUrlGenerator();
 
         $links = [];
 
@@ -27,8 +25,9 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
         ];
 
         $links[] = new Action(
-            $translator->trans('ListDescription', [], $context), $translator->trans('List', [], $context),
-            new FontAwesomeGlyph('list', ['fa-fw', 'fa-2x'], null, 'fas'), $urlGenerator->fromParameters($parameters)
+            $this->translator->trans('ListDescription', [], $context), $this->translator->trans('List', [], $context),
+            new FontAwesomeGlyph('list', ['fa-fw', 'fa-2x'], null, 'fas'),
+            $this->urlGenerator->fromParameters($parameters)
         );
 
         $parameters = [
@@ -37,9 +36,10 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
         ];
 
         $links[] = new Action(
-            $translator->trans('CreateDescription', [], $context),
-            $translator->trans('Create', [], StringUtilities::LIBRARIES),
-            new FontAwesomeGlyph('plus', ['fa-fw', 'fa-2x'], null, 'fas'), $urlGenerator->fromParameters($parameters)
+            $this->translator->trans('CreateDescription', [], $context),
+            $this->translator->trans('Create', [], StringUtilities::LIBRARIES),
+            new FontAwesomeGlyph('plus', ['fa-fw', 'fa-2x'], null, 'fas'),
+            $this->urlGenerator->fromParameters($parameters)
         );
 
         $parameters = [
@@ -47,7 +47,7 @@ class ActionProvider extends AbstractActionProvider implements ActionProviderInt
             ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value
         ];
 
-        return new Actions($context, $links, $urlGenerator->fromParameters($parameters));
+        return new Actions($context, $links, $this->urlGenerator->fromParameters($parameters));
     }
 
     public function getContext(): string

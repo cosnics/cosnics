@@ -11,9 +11,9 @@ class AbstractUserAuthenticationEvent extends AbstractUserEvent
 {
     protected ?string $clientIpAddress;
 
-    public function __construct(User $user, ?string $clientIpAddress)
+    public function __construct(User $user, ?string $clientIpAddress, ?User $executingUser = null)
     {
-        parent::__construct($user);
+        parent::__construct($user, $executingUser);
 
         $this->clientIpAddress = $clientIpAddress;
     }
@@ -22,5 +22,4 @@ class AbstractUserAuthenticationEvent extends AbstractUserEvent
     {
         return $this->clientIpAddress;
     }
-
 }

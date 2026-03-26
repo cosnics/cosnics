@@ -39,24 +39,20 @@ class UsersFeedComponent extends Manager
     public const string PROPERTY_ELEMENTS = 'elements';
     public const string PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
-    protected SearchQueryConditionGenerator $searchQueryConditionGenerator;
-
     private int $userCount = 0;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        UrlGenerator $urlGenerator, SearchQueryConditionGenerator $searchQueryConditionGenerator
+        protected readonly SearchQueryConditionGenerator $searchQueryConditionGenerator
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $authenticationValidator, $userUrlGenerator, $activeMailer, $alertsManager, $userService
         );
-
-        $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
     }
 
     /**
@@ -83,7 +79,7 @@ class UsersFeedComponent extends Manager
 
         // Set the conditions for the search query
         if ($searchQuery && $searchQuery != '') {
-            $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
+            $conditions[] = $this->searchQueryConditionGenerator->getSearchConditions(
                 $searchQuery, [
                     new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME),
@@ -140,11 +136,6 @@ class UsersFeedComponent extends Manager
         return $this->getRequest()->request->get(self::PARAM_OFFSET, 0);
     }
 
-    protected function getSearchQueryConditionGenerator(): SearchQueryConditionGenerator
-    {
-        return $this->searchQueryConditionGenerator;
-    }
-
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -153,9 +144,9 @@ class UsersFeedComponent extends Manager
     {
         $condition = $this->getCondition();
 
-        $this->userCount = $this->getUserService()->countUsers($condition);
+        $this->userCount = $this->userService->countUsers($condition);
 
-        return $this->getUserService()->findUsers(
+        return $this->userService->findUsers(
             $condition, $this->getOffset(), 100, new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_SURNAME)),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME)),

@@ -35,25 +35,21 @@ use Twig\Environment;
  */
 class AccountComponent extends ProfileComponent
 {
-    protected AccountFormType $accountFormType;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        UrlGenerator $urlGenerator, TabsRenderer $tabsRenderer, FormFactoryInterface $formFactory,
-        Environment $twigEnvironment, ?UserPictureProviderInterface $userPictureProvider,
-        AccountFormType $accountFormType, bool $userCanChangePicture
+        FormFactoryInterface $formFactory, TabsRenderer $tabsRenderer, Environment $twigEnvironment,
+        bool $userCanChangePicture, ?UserPictureProviderInterface $userPictureProvider,
+        protected readonly AccountFormType $accountFormType
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator, $tabsRenderer, $formFactory,
-            $twigEnvironment, $userPictureProvider, $userCanChangePicture
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $authenticationValidator, $userUrlGenerator, $activeMailer, $alertsManager, $userService, $formFactory,
+            $tabsRenderer, $twigEnvironment, $userCanChangePicture, $userPictureProvider
         );
-
-        $this->accountFormType = $accountFormType;
     }
 
     /**
@@ -67,7 +63,7 @@ class AccountComponent extends ProfileComponent
         $this->checkAuthorization(Manager::CONTEXT, $currentUser, 'ManageAccount');
         $translator = $this->getTranslator();
 
-        $form = $this->getFormFactory()->create(
+        $form = $this->formFactory->create(
             AccountFormType::class, $currentUser->getDefaultProperties(), [
                 'action' => $this->getUrlGenerator()->fromRequest(),
                 'user' => $currentUser,
@@ -80,15 +76,15 @@ class AccountComponent extends ProfileComponent
             $submittedData = $form->getData();
 
             try {
-                $this->getUserService()->updateAccountFromParameters(
+                $this->userService->updateAccountFromParameters(
                     $currentUser, $submittedData[User::PROPERTY_GIVEN_NAME], $submittedData[User::PROPERTY_SURNAME],
                     $submittedData[User::PROPERTY_USERNAME], $submittedData[User::PROPERTY_OFFICIAL_CODE],
                     $submittedData[User::PROPERTY_EMAIL],
                     $submittedData[AbstractUserFormType::PROPERTY_PASSWORD_CURRENT],
-                    $submittedData[User::PROPERTY_PASSWORD]
+                    $submittedData[User::PROPERTY_PASSWORD], $currentUser
                 );
 
-                $this->getAlertsManager()->addAlert(
+                $this->alertsManager->addAlert(
                     new Alert(
                         $translator->trans('UserProfileUpdated', [], Manager::CONTEXT), AlertEnum::SUCCESS
                     )
@@ -100,7 +96,7 @@ class AccountComponent extends ProfileComponent
                 ]));
             }
             catch (Throwable) {
-                $this->getAlertsManager()->addAlert(
+                $this->alertsManager->addAlert(
                     new Alert(
                         $translator->trans('UserProfileNotUpdated', [], Manager::CONTEXT), AlertEnum::DANGER
                     )
@@ -111,7 +107,7 @@ class AccountComponent extends ProfileComponent
         $html = [];
 
         $html[] = $this->renderHeader($currentUser);
-        $html[] = $this->getTwigEnvironment()->render('form.html.twig', [
+        $html[] = $this->twigEnvironment->render('form.html.twig', [
             'form' => $form->createView(),
         ]);
         $html[] = $this->renderFooter();

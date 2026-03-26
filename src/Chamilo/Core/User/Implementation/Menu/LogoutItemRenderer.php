@@ -21,12 +21,12 @@ class LogoutItemRenderer extends MenuItemRenderer
 
     public function getRendererTypeName(): string
     {
-        return $this->getTranslator()->trans('Logout', [], Manager::CONTEXT);
+        return $this->translator->trans('Logout', [], Manager::CONTEXT);
     }
 
     public function getUrl(): string
     {
-        return $this->getUrlGenerator()->fromParameters(
+        return $this->urlGenerator->fromParameters(
             [
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::LOGOUT->value
@@ -41,6 +41,6 @@ class LogoutItemRenderer extends MenuItemRenderer
 
     public function renderTitleForIsoCode(Item $item, string $isoCode): string
     {
-        return $this->getTranslator()->trans('Logout', [], \Chamilo\Core\Menu\Manager::CONTEXT, $isoCode);
+        return $this->translator->trans('Logout', [], \Chamilo\Core\Menu\Manager::CONTEXT, $isoCode);
     }
 }

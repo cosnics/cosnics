@@ -31,41 +31,25 @@ use Twig\Environment;
  */
 abstract class ProfileComponent extends Manager
 {
-    protected FormFactoryInterface $formFactory;
-
-    protected TabsRenderer $tabsRenderer;
-
-    protected Environment $twigEnvironment;
-
-    protected bool $userCanChangePicture;
-
-    protected ?UserPictureProviderInterface $userPictureProvider;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        UrlGenerator $urlGenerator, TabsRenderer $tabsRenderer, FormFactoryInterface $formFactory,
-        Environment $twigEnvironment, ?UserPictureProviderInterface $userPictureProvider, bool $userCanChangePicture
+        protected readonly FormFactoryInterface $formFactory, protected readonly TabsRenderer $tabsRenderer,
+        protected readonly Environment $twigEnvironment, protected readonly bool $userCanChangePicture,
+        protected readonly ?UserPictureProviderInterface $userPictureProvider
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $authenticationValidator, $userUrlGenerator, $activeMailer, $alertsManager, $userService
         );
-
-        $this->tabsRenderer = $tabsRenderer;
-        $this->userCanChangePicture = $userCanChangePicture;
-        $this->userPictureProvider = $userPictureProvider;
-        $this->twigEnvironment = $twigEnvironment;
-        $this->formFactory = $formFactory;
     }
 
     public function canUserChangePicture(): bool
     {
-        return $this->userCanChangePicture &&
-            $this->getUserPictureProvider() instanceof UserPictureUpdateProviderInterface;
+        return $this->userCanChangePicture && $this->userPictureProvider instanceof UserPictureUpdateProviderInterface;
     }
 
     /**
@@ -106,26 +90,6 @@ abstract class ProfileComponent extends Manager
         return $tabs;
     }
 
-    public function getFormFactory(): FormFactoryInterface
-    {
-        return $this->formFactory;
-    }
-
-    public function getTabsRenderer(): TabsRenderer
-    {
-        return $this->tabsRenderer;
-    }
-
-    public function getTwigEnvironment(): Environment
-    {
-        return $this->twigEnvironment;
-    }
-
-    public function getUserPictureProvider(): ?UserPictureUpdateProviderInterface
-    {
-        return $this->userPictureProvider;
-    }
-
     protected function renderHeader(?User $user = null): string
     {
         $html = [];
@@ -141,7 +105,7 @@ abstract class ProfileComponent extends Manager
                 $tabs->add($availableTab);
             }
 
-            $html[] = $this->getTabsRenderer()->renderNavigation('profile', $tabs, $this->getCurrentAction());
+            $html[] = $this->tabsRenderer->renderNavigation('profile', $tabs, $this->getCurrentAction());
         }
 
         return implode(PHP_EOL, $html);

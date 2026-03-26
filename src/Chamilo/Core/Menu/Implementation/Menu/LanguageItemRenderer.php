@@ -22,27 +22,18 @@ use Symfony\Component\Translation\Translator;
  */
 class LanguageItemRenderer extends ItemRenderer
 {
-    protected UrlGenerator $urlGenerator;
-
-    private ItemRendererRegistry $itemRendererFactory;
-
-    private LanguageConsulter $languageConsulter;
-
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
-        LanguageConsulter $languageConsulter, ItemRendererRegistry $itemRendererFactory, UrlGenerator $urlGenerator
+        protected LanguageConsulter $languageConsulter, protected ItemRendererRegistry $itemRendererFactory,
+        protected UrlGenerator $urlGenerator
     )
     {
         parent::__construct($translator, $itemCacheService, $request);
-
-        $this->languageConsulter = $languageConsulter;
-        $this->itemRendererFactory = $itemRendererFactory;
-        $this->urlGenerator = $urlGenerator;
     }
 
     public function render(Item $item, User $user): string
     {
-        $languages = $this->getLanguageConsulter()->getOtherLanguages($this->getTranslator()->getLocale());
+        $languages = $this->languageConsulter->getOtherLanguages($this->translator->getLocale());
 
         if (count($languages) > 1) {
             return $this->renderDropdown($item);
@@ -56,7 +47,7 @@ class LanguageItemRenderer extends ItemRenderer
                         ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                         ApplicationInterface::PARAM_ACTION => ActionEnum::LANGUAGE->value,
                         Manager::PARAM_LANGUAGE => $isocode,
-                        Manager::PARAM_REFER => urlencode($this->getRequest()->getUri())
+                        Manager::PARAM_REFER => urlencode($this->request->getUri())
                     ]
                 );
 
@@ -81,16 +72,6 @@ class LanguageItemRenderer extends ItemRenderer
         }
     }
 
-    public function getItemRendererFactory(): ItemRendererRegistry
-    {
-        return $this->itemRendererFactory;
-    }
-
-    public function getLanguageConsulter(): LanguageConsulter
-    {
-        return $this->languageConsulter;
-    }
-
     public function getRenderedGlyph(): string
     {
         $glyph = $this->getRendererTypeGlyph();
@@ -106,7 +87,7 @@ class LanguageItemRenderer extends ItemRenderer
 
     public function getRendererTypeName(): string
     {
-        return $this->getTranslator()->trans('LanguageItem', [], \Chamilo\Core\Menu\Manager::CONTEXT);
+        return $this->translator->trans('LanguageItem', [], \Chamilo\Core\Menu\Manager::CONTEXT);
     }
 
     public function getUrlGenerator(): UrlGenerator
@@ -122,7 +103,7 @@ class LanguageItemRenderer extends ItemRenderer
         $html[] =
             '<a href="#" class="text-center nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">';
 
-        $title = strtoupper($this->getTranslator()->getLocale());
+        $title = strtoupper($this->translator->getLocale());
 
         if ($item->showIcon()) {
             $html[] = $this->getRenderedGlyph();
@@ -145,11 +126,11 @@ class LanguageItemRenderer extends ItemRenderer
     {
         $html = [];
 
-        $languages = $this->getLanguageConsulter()->getLanguages();
-        $currentLanguage = $this->getTranslator()->getLocale();
+        $languages = $this->languageConsulter->getLanguages();
+        $currentLanguage = $this->translator->getLocale();
 
         if (count($languages) > 1) {
-            $currentUrl = $this->getRequest()->getUri();
+            $currentUrl = $this->request->getUri();
 
             $html[] = '<ul class="dropdown-menu">';
 
@@ -180,11 +161,11 @@ class LanguageItemRenderer extends ItemRenderer
 
     public function renderTitleForCurrentLanguage(Item $item): string
     {
-        return $this->getTranslator()->trans('LanguageItem', [], \Chamilo\Core\Menu\Manager::CONTEXT);
+        return $this->translator->trans('LanguageItem', [], \Chamilo\Core\Menu\Manager::CONTEXT);
     }
 
     public function renderTitleForIsoCode(Item $item, string $isoCode): string
     {
-        return $this->getTranslator()->trans('LanguageItem', [], \Chamilo\Core\Menu\Manager::CONTEXT, $isoCode);
+        return $this->translator->trans('LanguageItem', [], \Chamilo\Core\Menu\Manager::CONTEXT, $isoCode);
     }
 }

@@ -40,92 +40,62 @@ abstract class AbstractUserFormType extends AbstractType
     public const string PROPERTY_PICTURE_REMOVE = 'remove_picture';
     public const string PROPERTY_SEND_MAIL = 'send_mail';
 
-    protected AuthenticationValidator $authenticationValidator;
-
-    protected FormButtonTypeBuilder $formButtonTypeBuilder;
-
-    protected FormTypeBuilder $formTypeBuilder;
-
-    protected Translator $translator;
-
-    protected UserPictureProviderInterface $userPictureProvider;
-
     /**
-     * @var array<bool>
+     * @param array<bool> $userRights
+     * @param array<bool> $userRequirements
      */
-    protected array $userRequirements;
-
-    /**
-     * @var array<bool>
-     */
-    protected array $userRights;
-
-    protected UserService $userService;
-
     public function __construct(
-        FormTypeBuilder $formTypeBuilder, FormButtonTypeBuilder $formButtonTypeBuilder, Translator $translator,
-        AuthenticationValidator $authenticationValidator, UserService $userService,
-        UserPictureProviderInterface $userPictureProvider, array $userRights = [], array $userRequirements = []
+        protected FormTypeBuilder $formTypeBuilder, protected FormButtonTypeBuilder $formButtonTypeBuilder,
+        protected Translator $translator, protected AuthenticationValidator $authenticationValidator,
+        protected UserService $userService, protected UserPictureProviderInterface $userPictureProvider,
+        protected array $userRights = [], protected array $userRequirements = []
     )
     {
-        $this->translator = $translator;
-        $this->formTypeBuilder = $formTypeBuilder;
-        $this->formButtonTypeBuilder = $formButtonTypeBuilder;
-        $this->authenticationValidator = $authenticationValidator;
-        $this->userRights = $userRights;
-        $this->userRequirements = $userRequirements;
-        $this->userService = $userService;
-        $this->userPictureProvider = $userPictureProvider;
     }
 
     public function buildAccountForm(FormBuilderInterface $builder, array $options): void
     {
-        $formTypeBuilder = $this->getFormTypeBuilder();
-        $translator = $this->getTranslator();
-
         $builder->add(
-            $formTypeBuilder->createCategory(
-                $builder, self::CATEGORY_ACCOUNT, $translator->trans('Account', [], Manager::CONTEXT)
+            $this->formTypeBuilder->createCategory(
+                $builder, self::CATEGORY_ACCOUNT, $this->translator->trans('Account', [], Manager::CONTEXT)
             )
         );
 
         if ($options['isLockoutRisk']) {
             $builder->add(
-                $formTypeBuilder->createMessage(
-                    $builder, self::PROPERTY_LOCKOUT, $translator->trans('LockOutWarningLabel', [], Manager::CONTEXT),
-                    $translator->trans('LockOutWarningMessage', [], Manager::CONTEXT), AlertEnum::WARNING
+                $this->formTypeBuilder->createMessage(
+                    $builder, self::PROPERTY_LOCKOUT,
+                    $this->translator->trans('LockOutWarningLabel', [], Manager::CONTEXT),
+                    $this->translator->trans('LockOutWarningMessage', [], Manager::CONTEXT), AlertEnum::WARNING
                 )
             );
         }
 
         $builder->add(
-            $formTypeBuilder->createCheckbox(
-                $builder, User::PROPERTY_ACTIVE, $translator->trans('Active', [], Manager::CONTEXT)
+            $this->formTypeBuilder->createCheckbox(
+                $builder, User::PROPERTY_ACTIVE, $this->translator->trans('Active', [], Manager::CONTEXT)
             )
         );
 
         $builder->add(
-            $formTypeBuilder->createCheckbox(
+            $this->formTypeBuilder->createCheckbox(
                 $builder, User::PROPERTY_PLATFORM_ADMINISTRATOR,
-                $translator->trans('PlatformAdministrator', [], Manager::CONTEXT)
+                $this->translator->trans('PlatformAdministrator', [], Manager::CONTEXT)
             )
         );
     }
 
     public function buildMailForm(FormBuilderInterface $builder): void
     {
-        $formTypeBuilder = $this->getFormTypeBuilder();
-        $translator = $this->getTranslator();
-
         $builder->add(
-            $formTypeBuilder->createCategory(
-                $builder, self::CATEGORY_MAIL, $translator->trans('Mail', [], Manager::CONTEXT)
+            $this->formTypeBuilder->createCategory(
+                $builder, self::CATEGORY_MAIL, $this->translator->trans('Mail', [], Manager::CONTEXT)
             )
         );
 
         $builder->add(
-            $formTypeBuilder->createCheckbox(
-                $builder, self::PROPERTY_SEND_MAIL, $translator->trans('SendMailToUser', [], Manager::CONTEXT)
+            $this->formTypeBuilder->createCheckbox(
+                $builder, self::PROPERTY_SEND_MAIL, $this->translator->trans('SendMailToUser', [], Manager::CONTEXT)
             )
         );
     }
@@ -138,8 +108,6 @@ abstract class AbstractUserFormType extends AbstractType
         bool $requiresCurrentPassword = false, bool $requiresPasswordConfirmation = false
     ): void
     {
-        $formTypeBuilder = $this->getFormTypeBuilder();
-        $translator = $this->getTranslator();
         /**
          * @var \Chamilo\Core\User\Storage\DataClass\User $user
          * @var \Chamilo\Core\User\Storage\DataClass\User $executingUser
@@ -150,9 +118,9 @@ abstract class AbstractUserFormType extends AbstractType
         if ($this->isPasswordChangeable($executingUser, $user)) {
             if ($allowedToGeneratePassword) {
                 $builder->add(
-                    $formTypeBuilder->createCheckbox(
+                    $this->formTypeBuilder->createCheckbox(
                         $builder, self::PROPERTY_PASSWORD_GENERATE,
-                        $translator->trans('GeneratePassword', [], Manager::CONTEXT)
+                        $this->translator->trans('GeneratePassword', [], Manager::CONTEXT)
                     )
                 );
             }
@@ -162,8 +130,8 @@ abstract class AbstractUserFormType extends AbstractType
                     payload: ['authentication' => $this->getAuthentication($user), 'user' => $user]);
 
                 $builder->add(
-                    $formTypeBuilder->createPassword(
-                        builder: $builder, name: self::PROPERTY_PASSWORD_CURRENT, label: $translator->trans(
+                    $this->formTypeBuilder->createPassword(
+                        builder: $builder, name: self::PROPERTY_PASSWORD_CURRENT, label: $this->translator->trans(
                         'CurrentPassword', [], Manager::CONTEXT
                     ), constraints: [$constraint]
                     )
@@ -171,8 +139,8 @@ abstract class AbstractUserFormType extends AbstractType
             }
 
             $builder->add(
-                $formTypeBuilder->createPassword(
-                    builder: $builder, name: User::PROPERTY_PASSWORD, label: $translator->trans('Password', [],
+                $this->formTypeBuilder->createPassword(
+                    builder: $builder, name: User::PROPERTY_PASSWORD, label: $this->translator->trans('Password', [],
                     Manager::CONTEXT), validateStrength: true
                 )
             );
@@ -184,8 +152,8 @@ abstract class AbstractUserFormType extends AbstractType
                 ]);
 
                 $builder->add(
-                    $formTypeBuilder->createPassword(
-                        builder: $builder, name: self::PROPERTY_PASSWORD_CONFIRM, label: $translator->trans(
+                    $this->formTypeBuilder->createPassword(
+                        builder: $builder, name: self::PROPERTY_PASSWORD_CONFIRM, label: $this->translator->trans(
                         'PasswordConfirmation', [], Manager::CONTEXT
                     ), validateStrength: true, constraints: [$constraint]
                     )
@@ -196,8 +164,6 @@ abstract class AbstractUserFormType extends AbstractType
 
     public function buildPersonalDetailsForm(FormBuilderInterface $builder, array $options): void
     {
-        $formTypeBuilder = $this->getFormTypeBuilder();
-        $translator = $this->getTranslator();
         /**
          * @var \Chamilo\Core\User\Storage\DataClass\User $user
          * @var \Chamilo\Core\User\Storage\DataClass\User $executingUser
@@ -206,43 +172,47 @@ abstract class AbstractUserFormType extends AbstractType
         $executingUser = $options['executingUser'];
 
         // Firstname
-        $givenNameLabel = $translator->trans('GivenName', [], Manager::CONTEXT);
+        $givenNameLabel = $this->translator->trans('GivenName', [], Manager::CONTEXT);
 
         if ($this->hasUserRight($executingUser, 'cosnics.application.user.rights.changeGivenName')) {
             $builder->add(
-                $formTypeBuilder->createText(builder: $builder, name: User::PROPERTY_GIVEN_NAME, label: $givenNameLabel)
+                $this->formTypeBuilder->createText(
+                    builder: $builder, name: User::PROPERTY_GIVEN_NAME, label: $givenNameLabel
+                )
             );
         }
         else {
             $builder->add(
-                $formTypeBuilder->createVisualContent(
+                $this->formTypeBuilder->createVisualContent(
                     builder: $builder, name: User::PROPERTY_GIVEN_NAME, label: $givenNameLabel
                 )
             );
         }
 
         // Lastname
-        $surnameLabel = $translator->trans('Surname', [], Manager::CONTEXT);
+        $surnameLabel = $this->translator->trans('Surname', [], Manager::CONTEXT);
 
         if ($this->hasUserRight($executingUser, 'cosnics.application.user.rights.changeSurname')) {
             $builder->add(
-                $formTypeBuilder->createText(builder: $builder, name: User::PROPERTY_SURNAME, label: $surnameLabel)
+                $this->formTypeBuilder->createText(
+                    builder: $builder, name: User::PROPERTY_SURNAME, label: $surnameLabel
+                )
             );
         }
         else {
             $builder->add(
-                $formTypeBuilder->createVisualContent(
+                $this->formTypeBuilder->createVisualContent(
                     builder: $builder, name: User::PROPERTY_SURNAME, label: $surnameLabel
                 )
             );
         }
 
         // Email
-        $emailLabel = $translator->trans('Email', [], Manager::CONTEXT);
+        $emailLabel = $this->translator->trans('Email', [], Manager::CONTEXT);
 
         if ($this->hasUserRight($executingUser, 'cosnics.application.user.rights.changeEmail')) {
             $builder->add(
-                $formTypeBuilder->createEmail(
+                $this->formTypeBuilder->createEmail(
                     builder: $builder, name: User::PROPERTY_EMAIL, label: $emailLabel,
                     required: $this->getUserRequirement(
                         'cosnics.application.user.require.email',
@@ -252,38 +222,38 @@ abstract class AbstractUserFormType extends AbstractType
         }
         else {
             $builder->add(
-                $formTypeBuilder->createVisualContent(
+                $this->formTypeBuilder->createVisualContent(
                     builder: $builder, name: User::PROPERTY_EMAIL, label: $emailLabel
                 )
             );
         }
 
         // Username
-        $usernameLabel = $translator->trans('Username', [], Manager::CONTEXT);
+        $usernameLabel = $this->translator->trans('Username', [], Manager::CONTEXT);
 
         if ($this->isUsernameChangeable($executingUser, $user)) {
             $constraint = new Assert\Callback(callback: [$this, 'validateUserName'], payload: ['user' => $user]);
 
             $builder->add(
-                $formTypeBuilder->createText(
+                $this->formTypeBuilder->createText(
                     builder: $builder, name: User::PROPERTY_USERNAME, label: $usernameLabel, constraints: [$constraint]
                 )
             );
         }
         else {
             $builder->add(
-                $formTypeBuilder->createVisualContent(
+                $this->formTypeBuilder->createVisualContent(
                     builder: $builder, name: User::PROPERTY_USERNAME, label: $usernameLabel
                 )
             );
         }
 
         // Official Code
-        $officialCodeLabel = $translator->trans('OfficialCode', [], Manager::CONTEXT);
+        $officialCodeLabel = $this->translator->trans('OfficialCode', [], Manager::CONTEXT);
 
         if ($this->hasUserRight($executingUser, 'cosnics.application.user.rights.changeOfficialCode')) {
             $builder->add(
-                $formTypeBuilder->createText(
+                $this->formTypeBuilder->createText(
                     builder: $builder, name: User::PROPERTY_OFFICIAL_CODE, label: $officialCodeLabel,
                     required: $this->getUserRequirement('cosnics.application.user.require.officialCode')
                 )
@@ -291,7 +261,7 @@ abstract class AbstractUserFormType extends AbstractType
         }
         else {
             $builder->add(
-                $formTypeBuilder->createVisualContent(
+                $this->formTypeBuilder->createVisualContent(
                     builder: $builder, name: User::PROPERTY_OFFICIAL_CODE, label: $officialCodeLabel
                 )
             );
@@ -300,25 +270,22 @@ abstract class AbstractUserFormType extends AbstractType
 
     public function buildPictureForm(FormBuilderInterface $builder, array $options): void
     {
-        $formTypeBuilder = $this->getFormTypeBuilder();
-        $translator = $this->getTranslator();
         /**
          * @var \Chamilo\Core\User\Storage\DataClass\User $user
          */
         $user = $options['user'];
-        $userPictureProvider = $this->getUserPictureProvider();
 
-        if ($userPictureProvider instanceof UserPictureUpdateProviderInterface) {
+        if ($this->userPictureProvider instanceof UserPictureUpdateProviderInterface) {
             if ($user instanceof User) {
-                $encodedUserPicture = $userPictureProvider->getUserPictureAsBase64String(
+                $encodedUserPicture = $this->userPictureProvider->getUserPictureAsBase64String(
                     $user, false
                 );
 
                 $builder->add(
-                    $formTypeBuilder->createPicture(
-                        builder: $builder, name: self::PROPERTY_PICTURE_CURRENT, label: $translator->trans(
+                    $this->formTypeBuilder->createPicture(
+                        builder: $builder, name: self::PROPERTY_PICTURE_CURRENT, label: $this->translator->trans(
                         'CurrentPicture', [], Manager::CONTEXT
-                    ), pictureUri: $encodedUserPicture, noPictureLabel: $translator->trans(
+                    ), pictureUri: $encodedUserPicture, noPictureLabel: $this->translator->trans(
                         'NoCurrentPicture', [], Manager::CONTEXT
                     ), pictureStyles: ['max-height' => '250px']
                     )
@@ -326,18 +293,19 @@ abstract class AbstractUserFormType extends AbstractType
 
                 if ($encodedUserPicture) {
                     $builder->add(
-                        $formTypeBuilder->createCheckbox(
+                        $this->formTypeBuilder->createCheckbox(
                             $builder, self::PROPERTY_PICTURE_REMOVE,
-                            $translator->trans('RemoveCurrentPicture', [], Manager::CONTEXT)
+                            $this->translator->trans('RemoveCurrentPicture', [], Manager::CONTEXT)
                         )
                     );
                 }
             }
 
             $builder->add(
-                $formTypeBuilder->createFile(
-                    builder: $builder, name: User::PROPERTY_PICTURE_URI, label: $translator->trans('AddPicture', [],
-                    Manager::CONTEXT), required: false, constraints: [new Assert\Image()]
+                $this->formTypeBuilder->createFile(
+                    builder: $builder, name: User::PROPERTY_PICTURE_URI, label: $this->translator->trans(
+                    'AddPicture', [], Manager::CONTEXT
+                ), required: false, constraints: [new Assert\Image()]
                 )
             );
         }
@@ -348,12 +316,9 @@ abstract class AbstractUserFormType extends AbstractType
      */
     public function buildSecurityForm(FormBuilderInterface $builder, array $options, bool $addTokenField = false): void
     {
-        $formTypeBuilder = $this->getFormTypeBuilder();
-        $translator = $this->getTranslator();
-
         $builder->add(
-            $formTypeBuilder->createCategory(
-                $builder, self::CATEGORY_SECURITY, $translator->trans('Security', [], Manager::CONTEXT)
+            $this->formTypeBuilder->createCategory(
+                $builder, self::CATEGORY_SECURITY, $this->translator->trans('Security', [], Manager::CONTEXT)
             )
         );
 
@@ -361,8 +326,9 @@ abstract class AbstractUserFormType extends AbstractType
 
         if ($addTokenField) {
             $builder->add(
-                $formTypeBuilder->createVisualContent(
-                    $builder, User::PROPERTY_SECURITY_TOKEN, $translator->trans('SecurityToken', [], Manager::CONTEXT)
+                $this->formTypeBuilder->createVisualContent(
+                    $builder, User::PROPERTY_SECURITY_TOKEN,
+                    $this->translator->trans('SecurityToken', [], Manager::CONTEXT)
                 )
             );
         }
@@ -405,60 +371,14 @@ abstract class AbstractUserFormType extends AbstractType
         return $this->authenticationValidator->getAuthenticationByType($user->getAuthenticationSource());
     }
 
-    protected function getAuthenticationValidator(): AuthenticationValidator
-    {
-        return $this->authenticationValidator;
-    }
-
-    protected function getFormButtonTypeBuilder(): FormButtonTypeBuilder
-    {
-        return $this->formButtonTypeBuilder;
-    }
-
-    protected function getFormTypeBuilder(): FormTypeBuilder
-    {
-        return $this->formTypeBuilder;
-    }
-
-    protected function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    protected function getUserPictureProvider(): UserPictureProviderInterface
-    {
-        return $this->userPictureProvider;
-    }
-
     protected function getUserRequirement(string $variabele): bool
     {
-        return $this->getUserRequirements()[$variabele] ?? false;
-    }
-
-    /**
-     * @return array<bool>
-     */
-    protected function getUserRequirements(): array
-    {
-        return $this->userRequirements;
-    }
-
-    /**
-     * @return array<bool>
-     */
-    protected function getUserRights(): array
-    {
-        return $this->userRights;
-    }
-
-    protected function getUserService(): UserService
-    {
-        return $this->userService;
+        return $this->userRequirements[$variabele] ?? false;
     }
 
     protected function hasUserRight(User $executingUser, string $variabele): bool
     {
-        return $executingUser->isPlatformAdministrator() || ($this->getUserRights()[$variabele] ?? false);
+        return $executingUser->isPlatformAdministrator() || ($this->userRights[$variabele] ?? false);
     }
 
     /**
@@ -526,7 +446,7 @@ abstract class AbstractUserFormType extends AbstractType
     protected function isPictureChangeable(User $executingUser): bool
     {
         return $this->hasUserRight($executingUser, 'cosnics.application.user.rights.changeUserPicture') &&
-            $this->getUserPictureProvider() instanceof UserPictureUpdateProviderInterface;
+            $this->userPictureProvider instanceof UserPictureUpdateProviderInterface;
     }
 
     public function isUsernameChangeable(User $executingUser, ?User $user = null): bool
@@ -569,8 +489,8 @@ abstract class AbstractUserFormType extends AbstractType
          */
         $user = $payload['user'];
 
-        if (($user instanceof User && !$this->getUserService()->isUsernameAvailableForUser($user, $value)) ||
-            !$this->getUserService()->isUsernameAvailable($value)) {
+        if (($user instanceof User && !$this->userService->isUsernameAvailableForUser($user, $value)) ||
+            !$this->userService->isUsernameAvailable($value)) {
             $context->buildViolation('UsernameInvalid')->atPath(User::PROPERTY_USERNAME)->addViolation();
         }
     }

@@ -32,27 +32,20 @@ use Symfony\Component\Translation\Translator;
  */
 class ResetPasswordComponent extends Manager implements NoAuthenticationSupportInterface
 {
-    protected AlertRenderer $alertRenderer;
-
     protected FormValidator $passwordResetForm;
-
-    protected bool $userCanRetrievePassword;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
-        MailerInterface $activeMailer, AlertRenderer $alertRenderer, AlertsManager $alertsManager,
-        UserService $userService, UrlGenerator $urlGenerator, bool $userCanRetrievePassword
+        MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
+        protected readonly AlertRenderer $alertRenderer, protected readonly bool $userCanRetrievePassword
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $authenticationValidator, $userUrlGenerator, $activeMailer, $alertsManager, $userService
         );
-
-        $this->alertRenderer = $alertRenderer;
-        $this->userCanRetrievePassword = $userCanRetrievePassword;
     }
 
     /**
@@ -65,15 +58,12 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
      */
     public function run(?User $currentUser = null): Response
     {
-        if (!$this->canUserRetrievePassword()) {
+        if (!$this->userCanRetrievePassword) {
             throw new NotAllowedException();
         }
 
-        $translator = $this->getTranslator();
-        $userService = $this->getUserService();
-
         if ($currentUser instanceof User) {
-            throw new UserException($translator->trans('AlreadyRegistered', [], Manager::CONTEXT));
+            throw new UserException($this->translator->trans('AlreadyRegistered', [], Manager::CONTEXT));
         }
 
         $html = [];
@@ -84,22 +74,24 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
         $requestUserIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID);
 
         if (!is_null($requestKey) && !is_null($requestUserIdentifier)) {
-            $userToCreateNewPasswordFor = $userService->findUserByIdentifier($requestUserIdentifier);
+            $userToCreateNewPasswordFor = $this->userService->findUserByIdentifier($requestUserIdentifier);
 
-            if ($userService->isValidKeyForUser($requestKey, $userToCreateNewPasswordFor)) {
-                if (!$userService->createNewPasswordForUser($userToCreateNewPasswordFor)) {
-                    throw new UserException($translator->trans('CreationOfNewPasswordFailed', [], Manager::CONTEXT));
+            if ($this->userService->isValidKeyForUser($requestKey, $userToCreateNewPasswordFor)) {
+                if (!$this->userService->createNewPasswordForUser($userToCreateNewPasswordFor, $currentUser)) {
+                    throw new UserException(
+                        $this->translator->trans('CreationOfNewPasswordFailed', [], Manager::CONTEXT)
+                    );
                 }
                 else {
-                    $html[] = $this->getAlertRenderer()->render(
+                    $html[] = $this->alertRenderer->render(
                         new Alert(
-                            $translator->trans('YourNewPasswordHasBeenMailedToYou', [], Manager::CONTEXT)
+                            $this->translator->trans('YourNewPasswordHasBeenMailedToYou', [], Manager::CONTEXT)
                         )
                     );
                 }
             }
             else {
-                throw new UserException($translator->trans('InvalidRequest', [], Manager::CONTEXT));
+                throw new UserException($this->translator->trans('InvalidRequest', [], Manager::CONTEXT));
             }
         }
         else {
@@ -107,10 +99,10 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
 
             if ($passwordResetForm->validate()) {
                 $userToResetPasswordFor =
-                    $userService->findUserByEmail($passwordResetForm->exportValue(User::PROPERTY_EMAIL));
+                    $this->userService->findUserByEmail($passwordResetForm->exportValue(User::PROPERTY_EMAIL));
 
-                if ($userService->sendPasswordResetLinkforUser($userToResetPasswordFor)) {
-                    $html[] = '<div class="alert alert-success">' . $translator->trans(
+                if ($this->userService->sendPasswordResetLinkforUser($userToResetPasswordFor)) {
+                    $html[] = '<div class="alert alert-success">' . $this->translator->trans(
                             'ResetLinkSendForUser', [
                             '%User%' => $userToResetPasswordFor->getFullName() . ' (' .
                                 $userToResetPasswordFor->getUsername() . ')'
@@ -128,41 +120,31 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
         return new Response(implode(PHP_EOL, $html));
     }
 
-    public function canUserRetrievePassword(): bool
-    {
-        return $this->userCanRetrievePassword;
-    }
-
-    public function getAlertRenderer(): AlertRenderer
-    {
-        return $this->alertRenderer;
-    }
-
     /**
      * @throws \QuickformException
      */
     protected function getPasswordResetForm(): FormValidator
     {
         if (!isset($this->passwordResetForm)) {
-            $translator = $this->getTranslator();
-
             $this->passwordResetForm = new FormValidator(
                 'lost_password', FormValidator::FORM_METHOD_POST, $this->getUrlGenerator()->fromRequest()
             );
 
             $this->passwordResetForm->addElement(
-                HTML_QuickForm_text::class, User::PROPERTY_EMAIL, $translator->trans('Email', [], Manager::CONTEXT)
+                HTML_QuickForm_text::class, User::PROPERTY_EMAIL,
+                $this->translator->trans('Email', [], Manager::CONTEXT)
             );
             $this->passwordResetForm->addRule(
-                User::PROPERTY_EMAIL, $translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
+                User::PROPERTY_EMAIL, $this->translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
                 HTML_QuickForm_Rule_Required::class
             );
             $this->passwordResetForm->addRule(
-                User::PROPERTY_EMAIL, $translator->trans('WrongEmail', [], Manager::CONTEXT),
+                User::PROPERTY_EMAIL, $this->translator->trans('WrongEmail', [], Manager::CONTEXT),
                 HTML_QuickForm_Rule_Email::class
             );
             $this->passwordResetForm->addElement(
-                HTML_QuickForm_button_submit::class, 'submit', $translator->trans('Ok', [], StringUtilities::LIBRARIES)
+                HTML_QuickForm_button_submit::class, 'submit',
+                $this->translator->trans('Ok', [], StringUtilities::LIBRARIES)
             );
         }
 

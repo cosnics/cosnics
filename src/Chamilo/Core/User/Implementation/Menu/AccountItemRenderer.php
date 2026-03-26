@@ -23,12 +23,12 @@ class AccountItemRenderer extends MenuItemRenderer implements SelectableItemInte
 
     public function getRendererTypeName(): string
     {
-        return $this->getTranslator()->trans('MyAccount', [], Manager::CONTEXT);
+        return $this->translator->trans('MyAccount', [], Manager::CONTEXT);
     }
 
     public function getUrl(): string
     {
-        return $this->getUrlGenerator()->fromParameters(
+        return $this->urlGenerator->fromParameters(
             [
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::ACCOUNT->value
@@ -38,8 +38,8 @@ class AccountItemRenderer extends MenuItemRenderer implements SelectableItemInte
 
     public function isSelected(Item $item, User $user): bool
     {
-        $currentContext = $this->getRequest()->query->get(ApplicationInterface::PARAM_CONTEXT);
-        $currentAction = $this->getRequest()->query->get(ApplicationInterface::PARAM_ACTION);
+        $currentContext = $this->request->query->get(ApplicationInterface::PARAM_CONTEXT);
+        $currentAction = $this->request->query->get(ApplicationInterface::PARAM_ACTION);
 
         return $currentContext == Manager::CONTEXT && $currentAction == ActionEnum::ACCOUNT->value;
     }
@@ -51,6 +51,6 @@ class AccountItemRenderer extends MenuItemRenderer implements SelectableItemInte
 
     public function renderTitleForIsoCode(Item $item, string $isoCode): string
     {
-        return $this->getTranslator()->trans('MyAccount', [], \Chamilo\Core\Menu\Manager::CONTEXT, $isoCode);
+        return $this->translator->trans('MyAccount', [], \Chamilo\Core\Menu\Manager::CONTEXT, $isoCode);
     }
 }

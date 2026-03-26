@@ -36,36 +36,20 @@ use Twig\Environment;
  */
 class RegisterComponent extends Manager implements NoAuthenticationSupportInterface
 {
-    protected FormFactoryInterface $formFactory;
-
-    protected RegisterFormType $registerFormType;
-
-    protected Environment $twigEnvironment;
-
-    protected bool $userCanRegister;
-
-    protected ?UserPictureProviderInterface $userPictureUpdateProvider;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        UrlGenerator $urlGenerator, ?UserPictureUpdateProviderInterface $userPictureUpdateProvider,
-        FormFactoryInterface $formFactory, Environment $twigEnvironment, RegisterFormType $registerFormType,
-        bool $userCanRegister
+        protected readonly FormFactoryInterface $formFactory, protected readonly RegisterFormType $registerFormType,
+        protected readonly Environment $twigEnvironment, protected readonly bool $userCanRegister,
+        protected readonly ?UserPictureProviderInterface $userPictureProvider
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $authenticationValidator, $userUrlGenerator, $activeMailer, $alertsManager, $userService
         );
-
-        $this->userPictureUpdateProvider = $userPictureUpdateProvider;
-        $this->userCanRegister = $userCanRegister;
-        $this->formFactory = $formFactory;
-        $this->twigEnvironment = $twigEnvironment;
-        $this->registerFormType = $registerFormType;
     }
 
     /**
@@ -89,7 +73,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
             ]
         );
 
-        $form = $this->getFormFactory()->create(
+        $form = $this->formFactory->create(
             RegisterFormType::class, [User::PROPERTY_ACTIVE => true, AbstractUserFormType::PROPERTY_SEND_MAIL => true],
             ['action' => $registerUri, 'executingUser' => $currentUser]
         );
@@ -100,7 +84,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
             try {
                 $submittedData = $form->getData();
 
-                $registeredUser = $this->getUserService()->registerUserFromParameters(
+                $registeredUser = $this->userService->registerUserFromParameters(
                     $submittedData[User::PROPERTY_GIVEN_NAME], $submittedData[User::PROPERTY_SURNAME],
                     $submittedData[User::PROPERTY_USERNAME], $submittedData[User::PROPERTY_OFFICIAL_CODE],
                     $submittedData[User::PROPERTY_EMAIL],
@@ -109,16 +93,14 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
                     (bool) $submittedData[AbstractUserFormType::PROPERTY_SEND_MAIL]
                 );
 
-                $userPictureProvider = $this->getUserPictureProvider();
-
-                if ($userPictureProvider instanceof UserPictureUpdateProviderInterface) {
+                if ($this->userPictureProvider instanceof UserPictureUpdateProviderInterface) {
                     $pictureInformation = $submittedData[User::PROPERTY_PICTURE_URI];
 
                     if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid()) {
-                        if (!$userPictureProvider->updateUserPictureFromParameters(
-                            $registeredUser, $pictureInformation
+                        if (!$this->userPictureProvider->updateUserPictureFromParameters(
+                            $registeredUser, $pictureInformation, false, $currentUser
                         )) {
-                            $this->getAlertsManager()->addAlert(
+                            $this->alertsManager->addAlert(
                                 new Alert(
                                     $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),
                                     AlertEnum::WARNING
@@ -131,7 +113,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
                 return new RedirectResponse($this->getUrlGenerator()->fromParameters());
             }
             catch (Exception $exception) {
-                $this->getAlertsManager()->addAlert(
+                $this->alertsManager->addAlert(
                     new Alert($exception->getMessage(), AlertEnum::DANGER)
                 );
             }
@@ -140,7 +122,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
         $html = [];
 
         $html[] = $this->renderHeader($currentUser);
-        $html[] = $this->getTwigEnvironment()->render('form.html.twig', [
+        $html[] = $this->twigEnvironment->render('form.html.twig', [
             'form' => $form->createView(),
         ]);
         $html[] = $this->renderFooter();
@@ -155,30 +137,5 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
         }
 
         return $this->userCanRegister;
-    }
-
-    public function getFormFactory(): FormFactoryInterface
-    {
-        return $this->formFactory;
-    }
-
-    public function getRegisterFormType(): RegisterFormType
-    {
-        return $this->registerFormType;
-    }
-
-    public function getTwigEnvironment(): Environment
-    {
-        return $this->twigEnvironment;
-    }
-
-    public function getUserPictureProvider(): ?UserPictureUpdateProviderInterface
-    {
-        return $this->userPictureUpdateProvider;
-    }
-
-    public function getUserPictureUpdateProvider(): ?UserPictureProviderInterface
-    {
-        return $this->userPictureUpdateProvider;
     }
 }

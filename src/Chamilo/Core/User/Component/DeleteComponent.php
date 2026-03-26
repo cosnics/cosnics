@@ -33,9 +33,6 @@ class DeleteComponent extends Manager
 
         $userIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_ID);
 
-        $translator = $this->getTranslator();
-        $userService = $this->getUserService();
-
         if (!is_array($userIdentifiers)) {
             $userIdentifiers = [$userIdentifiers];
         }
@@ -44,37 +41,37 @@ class DeleteComponent extends Manager
             $failures = 0;
 
             foreach ($userIdentifiers as $userIdentifier) {
-                $userToDelete = $userService->findUserByIdentifier($userIdentifier);
+                $userToDelete = $this->userService->findUserByIdentifier($userIdentifier);
 
-                if (!$userService->deleteUser($userToDelete)) {
+                if (!$this->userService->deleteUser($userToDelete, $currentUser)) {
                     $failures ++;
                 }
             }
 
             if ($failures) {
                 if (count($userIdentifiers) == 1) {
-                    $message = $translator->trans(
+                    $message = $this->translator->trans(
                         'UserNotDeleted', [], Manager::CONTEXT
                     );
                 }
                 else {
-                    $message = $translator->trans(
+                    $message = $this->translator->trans(
                         'UsersNotDeleted', [], Manager::CONTEXT
                     );
                 }
             }
             elseif (count($userIdentifiers) == 1) {
-                $message = $translator->trans(
+                $message = $this->translator->trans(
                     'UserDeleted', [], Manager::CONTEXT
                 );
             }
             else {
-                $message = $translator->trans(
+                $message = $this->translator->trans(
                     'UsersDeleted', [], Manager::CONTEXT
                 );
             }
 
-            $this->getAlertsManager()->addAlert(
+            $this->alertsManager->addAlert(
                 new Alert(
                     $message, $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS
                 )

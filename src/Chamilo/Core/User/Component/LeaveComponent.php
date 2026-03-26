@@ -27,28 +27,24 @@ use Symfony\Component\Translation\Translator;
  */
 class LeaveComponent extends Manager implements NoVisitTraceComponentInterface
 {
-    protected EventDispatcherInterface $eventDispatcher;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        EventDispatcherInterface $eventDispatcher, UrlGenerator $urlGenerator
+        protected readonly EventDispatcherInterface $eventDispatcher
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $authenticationValidator,
-            $userUrlGenerator, $activeMailer, $alertsManager, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $authenticationValidator, $userUrlGenerator, $activeMailer, $alertsManager, $userService
         );
-
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function run(?User $currentUser = null): Response
     {
         if ($currentUser instanceof User) {
-            $this->getEventDispatcher()->dispatch(
+            $this->eventDispatcher->dispatch(
                 new BeforeUserLeavePageEvent($currentUser, $this->getRequest()->request->get('tracker'))
             );
 
@@ -57,10 +53,5 @@ class LeaveComponent extends Manager implements NoVisitTraceComponentInterface
         else {
             return JsonAjaxResult::badRequest();
         }
-    }
-
-    public function getEventDispatcher(): EventDispatcherInterface
-    {
-        return $this->eventDispatcher;
     }
 }

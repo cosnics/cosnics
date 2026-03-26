@@ -26,42 +26,24 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class PlatformUserPictureProvider implements UserPictureProviderInterface, UserPictureUpdateProviderInterface
 {
-    protected Filesystem $filesystem;
-
-    protected FilesystemTools $filesystemTools;
-
-    protected UserService $userService;
-
-    protected WebPathBuilder $webPathBuilder;
-
-    private ConfigurablePathBuilder $configurablePathBuilder;
-
-    private ThemePathBuilder $themeSystemPathBuilder;
-
     public function __construct(
-        ConfigurablePathBuilder $configurablePathBuilder, ThemePathBuilder $themeSystemPathBuilder,
-        WebPathBuilder $webPathBuilder, Filesystem $filesystem, FilesystemTools $filesystemTools,
-        UserService $userService
+        protected ConfigurablePathBuilder $configurablePathBuilder, protected ThemePathBuilder $themeSystemPathBuilder,
+        protected WebPathBuilder $webPathBuilder, protected Filesystem $filesystem,
+        protected FilesystemTools $filesystemTools, protected UserService $userService
     )
     {
-        $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->themeSystemPathBuilder = $themeSystemPathBuilder;
-        $this->webPathBuilder = $webPathBuilder;
-        $this->filesystem = $filesystem;
-        $this->filesystemTools = $filesystemTools;
-        $this->userService = $userService;
     }
 
-    public function deleteUserPicture(User $user): bool
+    public function deleteUserPicture(User $user, ?User $executingUser = null): bool
     {
         try {
             if ($this->doesUserHavePicture($user)) {
                 $path = $this->getUserPicturePath($user, false);
-                $this->getFilesystem()->remove($path);
+                $this->filesystem->remove($path);
 
                 $user->setPictureUri(null);
 
-                return $this->getUserService()->updateUser($user);
+                return $this->userService->updateUser($user, $executingUser);
             }
 
             return true;
@@ -78,8 +60,8 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
     {
         $uri = $user->getPictureUri();
 
-        return ((strlen($uri) > 0) && ($this->getWebPathBuilder()->isWebUri($uri) || file_exists(
-                    $this->getConfigurablePathBuilder()->getProfilePicturePath() . $uri
+        return ((strlen($uri) > 0) && ($this->webPathBuilder->isWebUri($uri) || file_exists(
+                    $this->configurablePathBuilder->getProfilePicturePath() . $uri
                 )));
     }
 
@@ -117,24 +99,6 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
     }
 
     /**
-     * @return \Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder
-     */
-    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
-    {
-        return $this->configurablePathBuilder;
-    }
-
-    public function getFilesystem(): Filesystem
-    {
-        return $this->filesystem;
-    }
-
-    public function getFilesystemTools(): FilesystemTools
-    {
-        return $this->filesystemTools;
-    }
-
-    /**
      * @param string $filePath
      *
      * @return string
@@ -153,11 +117,6 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
         return 'data:' . $mime . ';base64,' . $imgString;
     }
 
-    public function getThemeSystemPathBuilder(): ThemePathBuilder
-    {
-        return $this->themeSystemPathBuilder;
-    }
-
     public function getUnknownUserPictureAsBase64String(): string
     {
         return $this->getPictureAsBase64String($this->getUnknownUserPicturePath());
@@ -165,7 +124,7 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
 
     private function getUnknownUserPicturePath(): string
     {
-        return $this->getThemeSystemPathBuilder()->getImagePath(Manager::CONTEXT, 'Unknown');
+        return $this->themeSystemPathBuilder->getImagePath(Manager::CONTEXT, 'Unknown');
     }
 
     public function getUserPictureAsBase64String(User $user, bool $useFallback = true): ?string
@@ -184,7 +143,7 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
     private function getUserPicturePath(User $user, bool $useFallback = true): string
     {
         if ($this->doesUserHavePicture($user)) {
-            return $this->getConfigurablePathBuilder()->getProfilePicturePath() . $user->getPictureUri();
+            return $this->configurablePathBuilder->getProfilePicturePath() . $user->getPictureUri();
         }
         elseif ($useFallback) {
             return $this->getUnknownUserPicturePath();
@@ -194,29 +153,19 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
         }
     }
 
-    public function getUserService(): UserService
-    {
-        return $this->userService;
-    }
-
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return $this->webPathBuilder;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function setUserPicture(User $user, ?UploadedFile $fileInformation = null): bool
+    public function setUserPicture(User $user, ?UploadedFile $fileInformation = null, ?User $executingUser = null): bool
     {
-        if (!$this->deleteUserPicture($user)) {
+        if (!$this->deleteUserPicture($user, $executingUser)) {
             return false;
         }
 
-        $path = $this->getConfigurablePathBuilder()->getProfilePicturePath();
-        $this->getFilesystem()->mkdir($path);
+        $path = $this->configurablePathBuilder->getProfilePicturePath();
+        $this->filesystem->mkdir($path);
 
-        $imageFile = $this->getFilesystemTools()->createUniqueName(
+        $imageFile = $this->filesystemTools->createUniqueName(
             $path, $user->getId() . '-' . $fileInformation->getClientOriginalName()
         );
 
@@ -236,16 +185,17 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
 
         $user->setPictureUri($imageFile);
 
-        return $this->getUserService()->updateUser($user);
+        return $this->userService->updateUser($user, $executingUser);
     }
 
     public function updateUserPictureFromParameters(
-        User $user, ?UploadedFile $fileInformation = null, bool $removeExistingPicture = false
+        User $user, ?UploadedFile $fileInformation = null, bool $removeExistingPicture = false,
+        ?User $executingUser = null
     ): bool
     {
         try {
             if ($removeExistingPicture) {
-                if (!$this->deleteUserPicture($user)) {
+                if (!$this->deleteUserPicture($user, $executingUser)) {
                     return false;
                 }
             }

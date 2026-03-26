@@ -38,24 +38,13 @@ class ApplicationItemRenderer extends ItemRenderer
     public const string CONFIGURATION_EXTRA_PARAMETERS = 'extra_parameters';
     public const string CONFIGURATION_USE_TRANSLATION = 'use_translation';
 
-    protected FormTypeBuilder $formTypeBuilder;
-
-    private PackageBundlesCacheService $packageBundlesCacheService;
-
-    private UrlGenerator $urlGenerator;
-
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
-        PackageBundlesCacheService $packageBundlesCacheService, UrlGenerator $urlGenerator,
-        FormTypeBuilder $formTypeBuilder, array $fallbackIsoCodes
+        protected PackageBundlesCacheService $packageBundlesCacheService, protected UrlGenerator $urlGenerator,
+        protected FormTypeBuilder $formTypeBuilder, protected array $fallbackIsoCodes
     )
     {
         parent::__construct($translator, $itemCacheService, $request);
-
-        $this->packageBundlesCacheService = $packageBundlesCacheService;
-        $this->urlGenerator = $urlGenerator;
-        $this->fallbackIsoCodes = $fallbackIsoCodes;
-        $this->formTypeBuilder = $formTypeBuilder;
     }
 
     public function render(Item $item, User $user): string
@@ -95,39 +84,39 @@ class ApplicationItemRenderer extends ItemRenderer
 
     public function addConfigurationToForm(FormBuilderInterface $builder, array $options): void
     {
-        $translator = $this->getTranslator();
         $formTypeBuilder = $this->formTypeBuilder;
 
         $builder->add(
             $formTypeBuilder->createCategory(
-                $builder, 'category_properties', $translator->trans('Properties', [], Manager::CONTEXT)
+                $builder, 'category_properties', $this->translator->trans('Properties', [], Manager::CONTEXT)
             )
         );
 
         $builder->add(
             $formTypeBuilder->createSelect(
-                $builder, self::CONFIGURATION_APPLICATION, $translator->trans('Application', [], Manager::CONTEXT),
-                true, $this->getApplicationOptions()
+                $builder, self::CONFIGURATION_APPLICATION,
+                $this->translator->trans('Application', [], Manager::CONTEXT), true, $this->getApplicationOptions()
             )
         );
 
         $builder->add(
             $formTypeBuilder->createCheckbox(
                 $builder, self::CONFIGURATION_USE_TRANSLATION,
-                $translator->trans('UseTranslation', [], Manager::CONTEXT)
+                $this->translator->trans('UseTranslation', [], Manager::CONTEXT)
             )
         );
 
         $builder->add(
             $formTypeBuilder->createText(
-                $builder, self::CONFIGURATION_COMPONENT, $translator->trans('Component', [], Manager::CONTEXT), false
+                $builder, self::CONFIGURATION_COMPONENT, $this->translator->trans('Component', [], Manager::CONTEXT),
+                false
             )
         );
 
         $builder->add(
             $formTypeBuilder->createText(
                 $builder, self::CONFIGURATION_EXTRA_PARAMETERS,
-                $translator->trans('ExtraParameters', [], Manager::CONTEXT), false
+                $this->translator->trans('ExtraParameters', [], Manager::CONTEXT), false
             )
         );
     }
@@ -179,7 +168,7 @@ class ApplicationItemRenderer extends ItemRenderer
 
             $activeApplication = new stdClass();
             $activeApplication->value = $package->getContext();
-            $activeApplication->label = $this->getTranslator()->trans('TypeName', [], $package->getContext());
+            $activeApplication->label = $this->translator->trans('TypeName', [], $package->getContext());
             $activeApplication->attributes = [];
 
             $activeApplications[] = $activeApplication;
@@ -218,7 +207,7 @@ class ApplicationItemRenderer extends ItemRenderer
 
     public function getRendererTypeName(): string
     {
-        return $this->getTranslator()->trans('ApplicationItem', [], Manager::CONTEXT);
+        return $this->translator->trans('ApplicationItem', [], Manager::CONTEXT);
     }
 
     public function getUrlGenerator(): UrlGenerator
@@ -228,10 +217,8 @@ class ApplicationItemRenderer extends ItemRenderer
 
     public function isSelected(Item $item, User $user): bool
     {
-        $request = $this->getRequest();
-
-        $currentContext = $request->query->get(ApplicationInterface::PARAM_CONTEXT);
-        $currentAction = $request->query->get(ApplicationInterface::PARAM_ACTION);
+        $currentContext = $this->request->query->get(ApplicationInterface::PARAM_CONTEXT);
+        $currentAction = $this->request->query->get(ApplicationInterface::PARAM_ACTION);
 
         if ($currentContext != $item->getSetting(self::CONFIGURATION_APPLICATION)) {
             return false;
@@ -274,7 +261,7 @@ class ApplicationItemRenderer extends ItemRenderer
     public function renderTitleForCurrentLanguage(Item $item): string
     {
         if ($item->getSetting(self::CONFIGURATION_USE_TRANSLATION)) {
-            return $this->getTranslator()->trans('TypeName', [], $item->getSetting(self::CONFIGURATION_APPLICATION));
+            return $this->translator->trans('TypeName', [], $item->getSetting(self::CONFIGURATION_APPLICATION));
         }
 
         return $this->determineItemTitleForCurrentLanguage($item);
@@ -283,8 +270,8 @@ class ApplicationItemRenderer extends ItemRenderer
     public function renderTitleForIsoCode(Item $item, string $isoCode): string
     {
         if ($item->getSetting(self::CONFIGURATION_USE_TRANSLATION)) {
-            return $this->getTranslator()->trans('TypeName', [], $item->getSetting(self::CONFIGURATION_APPLICATION),
-                $isoCode);
+            return $this->translator->trans('TypeName', [], $item->getSetting(self::CONFIGURATION_APPLICATION), $isoCode
+            );
         }
 
         return $this->determineItemTitleForIsoCode($item, $isoCode);

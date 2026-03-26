@@ -11,13 +11,10 @@ use Chamilo\Libraries\Service\Routing\DataClassUrlGenerator;
  * @package Chamilo\Core\User\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserUrlGenerator
+readonly class UserUrlGenerator
 {
-    protected DataClassUrlGenerator $dataClassUrlGenerator;
-
-    public function __construct(DataClassUrlGenerator $dataClassUrlGenerator)
+    public function __construct(protected DataClassUrlGenerator $dataClassUrlGenerator)
     {
-        $this->dataClassUrlGenerator = $dataClassUrlGenerator;
     }
 
     public function getChangeUserUrl(User $user): string
@@ -50,7 +47,7 @@ class UserUrlGenerator
      */
     protected function getUserActionUrl(string $action, User $user, array $additionalParameters = []): string
     {
-        return $this->getDataClassUrlGenerator()->getActionUrl(
+        return $this->dataClassUrlGenerator->getActionUrl(
             Manager::CONTEXT, ApplicationInterface::PARAM_ACTION, Manager::PARAM_USER_ID, $action, $user,
             $additionalParameters
         );
