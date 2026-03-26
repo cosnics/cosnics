@@ -18,17 +18,9 @@ class ItemFormDataMapper implements DataMapperInterface
 {
     protected DataMapper $defaultMapper;
 
-    protected ItemRendererRegistry $itemRendererRegistry;
-
-    public function __construct(ItemRendererRegistry $itemRendererRegistry)
+    public function __construct(protected ItemRendererRegistry $itemRendererRegistry)
     {
         $this->defaultMapper = new DataMapper();
-        $this->itemRendererRegistry = $itemRendererRegistry;
-    }
-
-    public function getItemRendererFactory(): ItemRendererRegistry
-    {
-        return $this->itemRendererRegistry;
     }
 
     public function mapDataToForms(mixed $viewData, Traversable $forms): void
@@ -42,7 +34,7 @@ class ItemFormDataMapper implements DataMapperInterface
         $forms[Item::PROPERTY_TITLES]->setData($viewData[Item::PROPERTY_TITLES]);
 
         try {
-            $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($viewData[Item::PROPERTY_TYPE]);
+            $itemRenderer = $this->itemRendererRegistry->getItemRenderer($viewData[Item::PROPERTY_TYPE]);
 
             if ($itemRenderer instanceof ConfigurableItemInterface) {
                 $itemRenderer->mapDataToForms(
@@ -65,7 +57,7 @@ class ItemFormDataMapper implements DataMapperInterface
         $viewData[Item::PROPERTY_TITLES] = $forms[Item::PROPERTY_TITLES]->getData();
 
         try {
-            $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($viewData[Item::PROPERTY_TYPE]);
+            $itemRenderer = $this->itemRendererRegistry->getItemRenderer($viewData[Item::PROPERTY_TYPE]);
 
             if ($itemRenderer instanceof ConfigurableItemInterface) {
                 $itemRenderer->mapFormsToData(

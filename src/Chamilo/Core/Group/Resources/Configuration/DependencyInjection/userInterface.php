@@ -3,6 +3,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Core\Group\UserInterface\Form\GroupFormType;
 use Chamilo\Core\Group\UserInterface\Form\GroupMoveFormType;
+use Chamilo\Core\Group\UserInterface\Form\Service\GroupMoveFormDataMapper;
 use Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeDataProvider;
 use Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider;
 use Chamilo\Core\Group\UserInterface\Table\GroupTableRenderer;
@@ -36,4 +37,6 @@ return static function (ContainerConfigurator $container) {
     $services->set(GroupFormType::class)->args(
         ['$optionsTreeRenderer' => service('Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeRenderer')]
     )->tag(FormTypeInterface::class);
+
+    $services->set(GroupMoveFormDataMapper::class);
 };

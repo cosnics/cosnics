@@ -5,6 +5,7 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\UserInterface\Form\Service\GroupMoveFormDataMapper;
 use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
@@ -22,50 +23,35 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @package Chamilo\Core\Group\UserInterface\Form
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @todo Use a DataMapper here
  */
 class GroupMoveFormType extends AbstractType
 {
     public const string OPTION_DISABLED_IDENTIFIERS = 'disabledGroupIdentifiers';
     public const string OPTION_EXCLUDED_IDENTIFIERS = 'excludedGroupIdentifiers';
 
-    protected FormButtonTypeBuilder $formButtonTypeBuilder;
-
-    protected FormTypeBuilder $formTypeBuilder;
-
-    protected GroupService $groupService;
-
-    protected GroupsTreeTraverser $groupsTreeTraverser;
-
-    protected OptionsTreeRenderer $optionsTreeRenderer;
-
-    protected Translator $translator;
-
     public function __construct(
-        FormTypeBuilder $formTypeBuilder, FormButtonTypeBuilder $formButtonTypeBuilder, Translator $translator,
-        OptionsTreeRenderer $optionsTreeRenderer, GroupsTreeTraverser $groupsTreeTraverser, GroupService $groupService
+        protected readonly FormTypeBuilder $formTypeBuilder,
+        protected readonly FormButtonTypeBuilder $formButtonTypeBuilder, protected readonly Translator $translator,
+        protected readonly OptionsTreeRenderer $optionsTreeRenderer,
+        protected readonly GroupsTreeTraverser $groupsTreeTraverser, protected readonly GroupService $groupService,
+        protected readonly GroupMoveFormDataMapper $groupMoveFormDataMapper
     )
     {
-        $this->translator = $translator;
-        $this->optionsTreeRenderer = $optionsTreeRenderer;
-        $this->groupsTreeTraverser = $groupsTreeTraverser;
-        $this->groupService = $groupService;
-        $this->formTypeBuilder = $formTypeBuilder;
-        $this->formButtonTypeBuilder = $formButtonTypeBuilder;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $formTypeBuilder = $this->formTypeBuilder;
+        $builder->setDataMapper($this->groupMoveFormDataMapper);
+
         $translator = $this->getTranslator();
 
-        $name = $formTypeBuilder->createText(
+        $name = $this->formTypeBuilder->createText(
             $builder, Group::PROPERTY_NAME, $translator->trans('Name', [], Manager::CONTEXT), false
         )->setDisabled(true);
         $builder->add($name);
 
         $builder->add(
-            $formTypeBuilder->createSelect(
+            $this->formTypeBuilder->createSelect(
                 $builder, NestedSet::PROPERTY_PARENT_ID, $translator->trans('NewLocation', [], Manager::CONTEXT), true,
                 $this->getOptionsTreeRenderer()->getOptions(
                     disabledIdentifiers: $this->determineDisabledGroupIdentifiers(
