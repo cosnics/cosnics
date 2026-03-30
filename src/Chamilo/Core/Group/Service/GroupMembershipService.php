@@ -21,22 +21,22 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class GroupMembershipService
 {
-    protected EventDispatcherInterface $eventDispatcher;
+    /**
+     * @var int[][]
+     */
+    protected array $groupUserIdentifiers = [];
 
-    protected GroupMembershipRepository $groupMembershipRepository;
-
-    protected GroupsTreeTraverser $groupsTreeTraverser;
-
-    protected UserService $userService;
+    /**
+     * @var int[]
+     */
+    protected array $groupUsersCount = [];
 
     public function __construct(
-        GroupMembershipRepository $groupMembershipRepository, EventDispatcherInterface $eventDispatcher,
-        UserService $userService
+        protected readonly GroupMembershipRepository $groupMembershipRepository,
+        protected readonly EventDispatcherInterface $eventDispatcher, protected readonly UserService $userService,
+        protected readonly GroupsTreeTraverser $groupsTreeTraverser
     )
     {
-        $this->groupMembershipRepository = $groupMembershipRepository;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->userService = $userService;
     }
 
     /**
@@ -46,7 +46,7 @@ class GroupMembershipService
         string $groupIdentifier, ?ConditionInterface $condition = null
     ): int
     {
-        return $this->getGroupMembershipRepository()->countSubscribedUsersForGroupIdentifier(
+        return $this->groupMembershipRepository->countSubscribedUsersForGroupIdentifier(
             $groupIdentifier, $condition
         );
     }
@@ -60,7 +60,7 @@ class GroupMembershipService
         array $groupIdentifiers, ?ConditionInterface $condition = null
     ): int
     {
-        return $this->getGroupMembershipRepository()->countSubscribedUsersForGroupIdentifiers(
+        return $this->groupMembershipRepository->countSubscribedUsersForGroupIdentifiers(
             $groupIdentifiers, $condition
         );
     }
@@ -68,17 +68,42 @@ class GroupMembershipService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
+    public function countUsersForGroup(Group $group, bool $includeSubGroups = false, bool $recursiveSubgroups = false
+    ): int
+    {
+        $cacheKey = md5(serialize([$group->getId(), $includeSubGroups, $recursiveSubgroups]));
+
+        if (!array_key_exists($cacheKey, $this->groupUsersCount)) {
+            if ($includeSubGroups) {
+                $groupIdentifiers =
+                    $this->groupsTreeTraverser->findSubGroupIdentifiersForGroup($group, $recursiveSubgroups);
+            }
+            else {
+                $groupIdentifiers = [];
+            }
+
+            $groupIdentifiers[] = $group->getId();
+
+            $this->groupUsersCount[$cacheKey] = $this->countSubscribedUsersForGroupIdentifiers($groupIdentifiers);
+        }
+
+        return $this->groupUsersCount[$cacheKey];
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function emptyGroup(Group $group, ?User $executingUser = null): bool
     {
-        $impactedUserIds = $this->groupsTreeTraverser->findUserIdentifiersForGroup($group);
+        $impactedUserIds = $this->findUserIdentifiersForGroup($group);
 
-        $success = $this->getGroupMembershipRepository()->emptyGroup($group);
+        $success = $this->groupMembershipRepository->emptyGroup($group);
 
         if (!$success) {
             throw new RuntimeException('Could not empty the group with id ' . $group->getId());
         }
 
-        $this->getEventDispatcher()->dispatch(new AfterGroupEmptyEvent($group, $impactedUserIds, $executingUser));
+        $this->eventDispatcher->dispatch(new AfterGroupEmptyEvent($group, $impactedUserIds, $executingUser));
 
         return true;
     }
@@ -89,7 +114,7 @@ class GroupMembershipService
      */
     public function findGroupRelUserByIdentifier(string $groupRelUserIdentifier): ?GroupRelUser
     {
-        return $this->getGroupMembershipRepository()->findGroupRelUserByIdentifier($groupRelUserIdentifier);
+        return $this->groupMembershipRepository->findGroupRelUserByIdentifier($groupRelUserIdentifier);
     }
 
     /**
@@ -109,7 +134,7 @@ class GroupMembershipService
      */
     public function findSubscribedUserIdentifiersForGroupIdentifiers(array $groupIdentifiers): array
     {
-        return $this->getGroupMembershipRepository()->findSubscribedUserIdentifiersForGroupIdentifiers(
+        return $this->groupMembershipRepository->findSubscribedUserIdentifiersForGroupIdentifiers(
             $groupIdentifiers
         );
     }
@@ -147,19 +172,37 @@ class GroupMembershipService
         OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        return $this->getGroupMembershipRepository()->findSubscribedUsersForGroupIdentifiers(
+        return $this->groupMembershipRepository->findSubscribedUsersForGroupIdentifiers(
             $groupIdentifiers, $condition, $offset, $count, $orderBy
         );
     }
 
-    public function getEventDispatcher(): EventDispatcherInterface
+    /**
+     * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function findUserIdentifiersForGroup(
+        Group $group, bool $includeSubGroups = false, bool $recursiveSubgroups = false
+    ): array
     {
-        return $this->eventDispatcher;
-    }
+        $cacheKey = md5(serialize([$group->getId(), $includeSubGroups, $recursiveSubgroups]));
 
-    public function getGroupMembershipRepository(): GroupMembershipRepository
-    {
-        return $this->groupMembershipRepository;
+        if (!array_key_exists($cacheKey, $this->groupUserIdentifiers)) {
+            if ($includeSubGroups) {
+                $groupIdentifiers =
+                    $this->groupsTreeTraverser->findSubGroupIdentifiersForGroup($group, $recursiveSubgroups);
+            }
+            else {
+                $groupIdentifiers = [];
+            }
+
+            $groupIdentifiers[] = $group->getId();
+
+            $this->groupUserIdentifiers[$cacheKey] =
+                $this->findSubscribedUserIdentifiersForGroupIdentifiers($groupIdentifiers);
+        }
+
+        return $this->groupUserIdentifiers[$cacheKey];
     }
 
     /**
@@ -168,7 +211,7 @@ class GroupMembershipService
      */
     public function getGroupUserRelationByGroupAndUser(Group $group, User $user): ?GroupRelUser
     {
-        return $this->getGroupMembershipRepository()->findGroupRelUserByGroupAndUserId($group->getId(), $user->getId());
+        return $this->groupMembershipRepository->findGroupRelUserByGroupAndUserId($group->getId(), $user->getId());
     }
 
     /**
@@ -177,7 +220,7 @@ class GroupMembershipService
      */
     public function getGroupUserRelationByGroupCodeAndUser(string $groupCode, User $user): ?GroupRelUser
     {
-        return $this->getGroupMembershipRepository()->findGroupRelUserByGroupCodeAndUserId($groupCode, $user->getId());
+        return $this->groupMembershipRepository->findGroupRelUserByGroupCodeAndUserId($groupCode, $user->getId());
     }
 
     /**
@@ -188,7 +231,7 @@ class GroupMembershipService
         string $groupIdentifier, string $userIdentifier
     ): ?GroupRelUser
     {
-        return $this->getGroupMembershipRepository()->findGroupUserRelationByGroupIdentifierAndUserIdentifier(
+        return $this->groupMembershipRepository->findGroupUserRelationByGroupIdentifierAndUserIdentifier(
             $groupIdentifier, $userIdentifier
         );
     }
@@ -201,17 +244,7 @@ class GroupMembershipService
      */
     public function getGroupUserRelationsByGroupIdentifier(string $groupIdentifier): ArrayCollection
     {
-        return $this->getGroupMembershipRepository()->getGroupUserRelationsByGroupIdentifier($groupIdentifier);
-    }
-
-    public function getGroupsTreeTraverser(): GroupsTreeTraverser
-    {
-        return $this->groupsTreeTraverser;
-    }
-
-    public function getUserService(): UserService
-    {
-        return $this->userService;
+        return $this->groupMembershipRepository->getGroupUserRelationsByGroupIdentifier($groupIdentifier);
     }
 
     /**
@@ -236,7 +269,7 @@ class GroupMembershipService
     public function subscribeUserToGroup(Group $group, User $user, ?User $executingUser = null): GroupRelUser
     {
         $groupRelation =
-            $this->getGroupMembershipRepository()->findGroupRelUserByGroupAndUserId($group->getId(), $user->getId());
+            $this->groupMembershipRepository->findGroupRelUserByGroupAndUserId($group->getId(), $user->getId());
 
         if (!$groupRelation instanceof GroupRelUser) {
             $groupRelation = new GroupRelUser();
@@ -244,13 +277,13 @@ class GroupMembershipService
             $groupRelation->setUserId($user->getId());
             $groupRelation->setGroupId($group->getId());
 
-            if (!$this->getGroupMembershipRepository()->createGroupUserRelation($groupRelation)) {
+            if (!$this->groupMembershipRepository->createGroupUserRelation($groupRelation)) {
                 throw new RuntimeException(
                     sprintf('Could not subscribe user %s to group %s', $user->getId(), $group->getId())
                 );
             }
 
-            $this->getEventDispatcher()->dispatch(new AfterGroupSubscribeEvent($group, $user, $executingUser));
+            $this->eventDispatcher->dispatch(new AfterGroupSubscribeEvent($group, $user, $executingUser));
         }
 
         return $groupRelation;
@@ -270,13 +303,13 @@ class GroupMembershipService
         $newUserIdentifiers = array_diff($userIdentifiers, $currentUserIdentifiers);
         $oldUserIdentifiers = array_diff($currentUserIdentifiers, $userIdentifiers);
 
-        $newUsers = $this->getUserService()->findUsersByIdentifiers($newUserIdentifiers);
+        $newUsers = $this->userService->findUsersByIdentifiers($newUserIdentifiers);
 
         foreach ($newUsers as $newUser) {
             $this->subscribeUserToGroup($group, $newUser, $executingUser);
         }
 
-        $oldUsers = $this->getUserService()->findUsersByIdentifiers($oldUserIdentifiers);
+        $oldUsers = $this->userService->findUsersByIdentifiers($oldUserIdentifiers);
 
         foreach ($oldUsers as $oldUser) {
             $this->unsubscribeUserFromGroup($group, $oldUser, $executingUser);
@@ -291,11 +324,10 @@ class GroupMembershipService
      */
     public function unsubscribeAllUsersFromGroup(Group $group, ?User $executingUser = null): bool
     {
-        $groupUserRelations =
-            $this->getGroupMembershipRepository()->getGroupUserRelationsByGroupIdentifier($group->getId());
+        $groupUserRelations = $this->groupMembershipRepository->getGroupUserRelationsByGroupIdentifier($group->getId());
 
         foreach ($groupUserRelations as $groupUserRelation) {
-            if (!$this->getGroupMembershipRepository()->deleteGroupUserRelation($groupUserRelation)) {
+            if (!$this->groupMembershipRepository->deleteGroupUserRelation($groupUserRelation)) {
                 throw new RuntimeException(
                     sprintf(
                         'Could not unsubscribe user %s from group %s', $groupUserRelation->getUserId(),
@@ -304,10 +336,9 @@ class GroupMembershipService
                 );
             }
 
-            $this->getEventDispatcher()->dispatch(
+            $this->eventDispatcher->dispatch(
                 new AfterGroupUnsubscribeEvent(
-                    $group, $this->getUserService()->findUserByIdentifier($groupUserRelation->getUserId()),
-                    $executingUser
+                    $group, $this->userService->findUserByIdentifier($groupUserRelation->getUserId()), $executingUser
                 )
             );
         }
@@ -337,7 +368,7 @@ class GroupMembershipService
     public function unsubscribeUserFromGroup(Group $group, User $user, ?User $executingUser = null): bool
     {
         $groupRelation =
-            $this->getGroupMembershipRepository()->findGroupRelUserByGroupAndUserId($group->getId(), $user->getId());
+            $this->groupMembershipRepository->findGroupRelUserByGroupAndUserId($group->getId(), $user->getId());
 
         if (!$groupRelation instanceof GroupRelUser) {
             throw new RuntimeException(
@@ -348,13 +379,13 @@ class GroupMembershipService
             );
         }
 
-        if (!$this->getGroupMembershipRepository()->deleteGroupUserRelation($groupRelation)) {
+        if (!$this->groupMembershipRepository->deleteGroupUserRelation($groupRelation)) {
             throw new RuntimeException(
                 sprintf('Could not unsubscribe user %s from group %s', $user->getId(), $group->getId())
             );
         }
 
-        $this->getEventDispatcher()->dispatch(new AfterGroupUnsubscribeEvent($group, $user, $executingUser));
+        $this->eventDispatcher->dispatch(new AfterGroupUnsubscribeEvent($group, $user, $executingUser));
 
         return true;
     }

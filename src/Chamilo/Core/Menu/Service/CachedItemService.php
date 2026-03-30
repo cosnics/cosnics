@@ -22,16 +22,11 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
 
     public const string KEY_ITEMS = 'items';
 
-    private ItemService $itemService;
-
-    private PropertyMapper $propertyMapper;
-
-    public function __construct(ItemService $itemService, AdapterInterface $cacheAdapter, PropertyMapper $propertyMapper
+    public function __construct(
+        protected readonly ItemService $itemService, protected readonly AdapterInterface $cacheAdapter,
+        protected readonly PropertyMapper $propertyMapper
     )
     {
-        $this->itemService = $itemService;
-        $this->cacheAdapter = $cacheAdapter;
-        $this->propertyMapper = $propertyMapper;
     }
 
     /**
@@ -40,7 +35,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     protected function __findItemsGroupedByParentIdentifier(): array
     {
-        return $this->getItemService()->findItemsGroupedByParentIdentifier();
+        return $this->itemService->findItemsGroupedByParentIdentifier();
     }
 
     /**
@@ -48,7 +43,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function countItemsByParentIdentifier(string $parentIdentifier): int
     {
-        return $this->getItemService()->countItemsByParentIdentifier($parentIdentifier);
+        return $this->itemService->countItemsByParentIdentifier($parentIdentifier);
     }
 
     /**
@@ -60,7 +55,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function createItem(Item $item): bool
     {
-        if (!$this->getItemService()->createItem($item)) {
+        if (!$this->itemService->createItem($item)) {
             return false;
         }
 
@@ -76,7 +71,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function createItemForTypeFromValues(string $itemType, array $values): ?Item
     {
-        $item = $this->getItemService()->createItemForTypeFromValues($itemType, $values);
+        $item = $this->itemService->createItemForTypeFromValues($itemType, $values);
 
         if (!$item) {
             return null;
@@ -97,7 +92,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function deleteItem(Item $item): bool
     {
-        if (!$this->getItemService()->deleteItem($item)) {
+        if (!$this->itemService->deleteItem($item)) {
             return false;
         }
 
@@ -112,7 +107,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function deleteItemChildren(Item $item): bool
     {
-        if (!$this->getItemService()->deleteItemChildren($item)) {
+        if (!$this->itemService->deleteItemChildren($item)) {
             return false;
         }
 
@@ -132,7 +127,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function findApplicationItems(): ArrayCollection
     {
-        return $this->getItemService()->findApplicationItems();
+        return $this->itemService->findApplicationItems();
     }
 
     /**
@@ -141,7 +136,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function findItemByIdentifier(string $identifier): ?Item
     {
-        return $this->getItemService()->findItemByIdentifier($identifier);
+        return $this->itemService->findItemByIdentifier($identifier);
     }
 
     /**
@@ -149,7 +144,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function findItems(): ArrayCollection
     {
-        return $this->getItemService()->findItems();
+        return $this->itemService->findItems();
     }
 
     /**
@@ -157,7 +152,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function findItemsByIdentifiers(array $identifiers): ArrayCollection
     {
-        return $this->getItemService()->findItemsByIdentifiers($identifiers);
+        return $this->itemService->findItemsByIdentifiers($identifiers);
     }
 
     /**
@@ -198,17 +193,12 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function findRootCategoryItems(): ArrayCollection
     {
-        return $this->getItemService()->findRootCategoryItems();
+        return $this->itemService->findRootCategoryItems();
     }
 
     public function findRootItems(): ArrayCollection
     {
         return $this->findItemsByParentIdentifier(DataClass::EMPTY_UUID);
-    }
-
-    public function getItemService(): ItemService
-    {
-        return $this->itemService;
     }
 
     /**
@@ -217,12 +207,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function getNextItemSortValueByParentIdentifier(string $parentIdentifier): int
     {
-        return $this->getItemService()->getNextItemSortValueByParentIdentifier($parentIdentifier);
-    }
-
-    public function getPropertyMapper(): PropertyMapper
-    {
-        return $this->propertyMapper;
+        return $this->itemService->getNextItemSortValueByParentIdentifier($parentIdentifier);
     }
 
     /**
@@ -233,7 +218,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function moveItemInDirection(Item $item, int $moveDirection): bool
     {
-        if (!$this->getItemService()->moveItemInDirection($item, $moveDirection)) {
+        if (!$this->itemService->moveItemInDirection($item, $moveDirection)) {
             return false;
         }
 
@@ -253,7 +238,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function saveItemFromValues(Item $item, array $values): bool
     {
-        if (!$this->getItemService()->saveItemFromValues($item, $values)) {
+        if (!$this->itemService->saveItemFromValues($item, $values)) {
             return false;
         }
 
@@ -266,7 +251,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      */
     public function updateItem(Item $item): bool
     {
-        if (!$this->getItemService() - $this->updateItem($item)) {
+        if (!$this->itemService - $this->updateItem($item)) {
             return false;
         }
 

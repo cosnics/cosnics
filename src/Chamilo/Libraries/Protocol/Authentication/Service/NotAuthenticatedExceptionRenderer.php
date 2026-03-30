@@ -23,10 +23,8 @@ class NotAuthenticatedExceptionRenderer extends AbstractUserExceptionRenderer im
      */
     public function renderMessage(UserExceptionInterface $userException): string
     {
-        $translator = $this->getTranslator();
-
         if (!$userException->getMessage()) {
-            return $translator->trans('NotAuthenticated', [], StringUtilities::LIBRARIES);
+            return $this->translator->trans('NotAuthenticated', [], StringUtilities::LIBRARIES);
         }
 
         return $userException->getMessage();
@@ -37,6 +35,6 @@ class NotAuthenticatedExceptionRenderer extends AbstractUserExceptionRenderer im
      */
     public function renderTitle(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('NotAuthenticatedTitle', [], StringUtilities::LIBRARIES);
+        return $this->translator->trans('NotAuthenticatedTitle', [], StringUtilities::LIBRARIES);
     }
 }

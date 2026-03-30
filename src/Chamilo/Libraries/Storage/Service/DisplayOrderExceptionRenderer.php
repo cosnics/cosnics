@@ -23,7 +23,7 @@ class DisplayOrderExceptionRenderer extends AbstractUserExceptionRenderer implem
      */
     public function renderMessage(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans(
+        return $this->translator->trans(
             'InvalidDisplayOrderExceptionMessage', [
             '%Type%' => $userException->getClassName(),
             '%Id%' => $userException->getIdentifier(),
@@ -39,6 +39,6 @@ class DisplayOrderExceptionRenderer extends AbstractUserExceptionRenderer implem
      */
     public function renderTitle(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('StorageMethodExceptionTitle', [], StringUtilities::LIBRARIES);
+        return $this->translator->trans('StorageMethodExceptionTitle', [], StringUtilities::LIBRARIES);
     }
 }

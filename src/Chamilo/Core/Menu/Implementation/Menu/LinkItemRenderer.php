@@ -25,7 +25,7 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\Menu\Implementation\Menu
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class LinkItemRenderer extends ItemRenderer
+readonly class LinkItemRenderer extends ItemRenderer
     implements TranslatableItemInterface, ConfigurableItemInterface, SelectableItemInterface
 {
     use TranslatableItemTrait;
@@ -102,22 +102,12 @@ class LinkItemRenderer extends ItemRenderer
         );
     }
 
-    public function getClassnameUtilities(): ClassnameUtilities
-    {
-        return $this->classnameUtilities;
-    }
-
     /**
      * @return string[]
      */
     public function getConfigurationPropertyNames(): array
     {
         return [self::CONFIGURATION_URL, self::CONFIGURATION_TARGET];
-    }
-
-    public function getFormTypeBuilder(): FormTypeBuilder
-    {
-        return $this->formTypeBuilder;
     }
 
     public function getRendererTypeGlyph(): InlineGlyph
@@ -148,16 +138,11 @@ class LinkItemRenderer extends ItemRenderer
         return $options;
     }
 
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return $this->webPathBuilder;
-    }
-
     public function isSelected(Item $item, User $user): bool
     {
         $urlParts = parse_url($item->getSetting(self::CONFIGURATION_URL));
 
-        $basePath = $this->getWebPathBuilder()->getBasePath();
+        $basePath = $this->webPathBuilder->getBasePath();
         $urlBasePath = $urlParts['scheme'] . '://' . $urlParts['host'] . $urlParts['path'];
 
         if ($basePath == $urlBasePath) {

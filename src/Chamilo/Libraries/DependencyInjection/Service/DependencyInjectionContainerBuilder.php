@@ -178,7 +178,7 @@ class DependencyInjectionContainerBuilder
         $packageFactory = new PackageFactory($this->getSystemPathBuilder(), $this->getFilesystem());
 
         $packageBundlesGenerator = new PackageBundlesGenerator(
-            $this->getSystemPathBuilder(), $this->getClassnameUtilities(), $packageFactory
+            $this->getSystemPathBuilder(), $packageFactory
         );
 
         return new PackageBundlesCacheService(new ArrayAdapter(), $packageBundlesGenerator);

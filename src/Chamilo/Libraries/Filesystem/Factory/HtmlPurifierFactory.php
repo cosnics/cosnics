@@ -12,27 +12,18 @@ use HTMLPurifier_Config;
  */
 class HtmlPurifierFactory
 {
-    protected ConfigurablePathBuilder $configurablePathBuilder;
-
-    public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
+    public function __construct(protected ConfigurablePathBuilder $configurablePathBuilder)
     {
-        $this->configurablePathBuilder = $configurablePathBuilder;
     }
 
     public function buildHtmlPurifier(): HTMLPurifier
     {
         $configuration = HTMLPurifier_Config::createDefault();
         $configuration->set(
-            'Cache.SerializerPath',
-            $this->getConfigurablePathBuilder()->getCachePath(StringUtilities::LIBRARIES . '\Rss')
+            'Cache.SerializerPath', $this->configurablePathBuilder->getCachePath(StringUtilities::LIBRARIES . '\Rss')
         );
         $configuration->set('Cache.SerializerPermissions', 06770);
 
         return new HTMLPurifier($configuration);
-    }
-
-    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
-    {
-        return $this->configurablePathBuilder;
     }
 }

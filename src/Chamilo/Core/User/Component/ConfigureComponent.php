@@ -102,7 +102,7 @@ class ConfigureComponent extends ProfileComponent
         if ($form->isSubmitted() && $form->isValid()) {
             $submittedData = $this->processData($form->getData());
 
-            $success = $this->getUserSettingsService()->updateUserSettingsFromParameters(
+            $success = $this->userSettingsService->updateUserSettingsFromParameters(
                 $currentUser, $this->getSelectedContext(), $submittedData, $currentUser
             );
 
@@ -130,11 +130,6 @@ class ConfigureComponent extends ProfileComponent
         }
     }
 
-    public function getConfigurationFormType(): ConfigurationFormType
-    {
-        return $this->configurationFormType;
-    }
-
     /**
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
@@ -145,13 +140,12 @@ class ConfigureComponent extends ProfileComponent
         $translator = $this->getTranslator();
         $tabs = new TabsCollection();
 
-        $packages = $this->getPackageBundlesCacheService()->getPackages();
+        $packages = $this->packageBundlesCacheService->getPackages();
         $packageNames = [];
 
         foreach ($packages as $package) {
             $packageContext = $package->getContext();
-            $file =
-                $this->getSystemPathBuilder()->namespaceToFullPath($packageContext) . 'Resources/Settings/settings.xml';
+            $file = $this->systemPathBuilder->namespaceToFullPath($packageContext) . 'Resources/Settings/settings.xml';
 
             if (file_exists($file)) {
                 $packageNames[$packageContext] = $translator->trans('TypeName', [], $packageContext);
@@ -192,17 +186,16 @@ class ConfigureComponent extends ProfileComponent
 
     public function getFormData(User $user): array
     {
-        $platformParameters = $this->getPlatformParameterBag();
         $data = [];
 
         $configuration =
-            $this->getUserSettingsParser()->determineConfigurablePackageContextSettings($this->getSelectedContext());
+            $this->userSettingsParser->determineConfigurablePackageContextSettings($this->getSelectedContext());
 
         foreach ($configuration as $settings) {
             foreach ($settings as $name => $setting) {
                 $fieldName = str_replace('.', '-', $name);
 
-                $configurationValue = $this->getUserSettingsService()->findUserSetting($user, $name);
+                $configurationValue = $this->userSettingsService->findUserSetting($user, $name);
 
                 if ($setting['field'] == CheckboxType::class) {
                     $dataValue = (bool) $configurationValue;
@@ -210,8 +203,8 @@ class ConfigureComponent extends ProfileComponent
                 elseif (isset($configurationValue) && ($configurationValue == 0 || !empty($configurationValue))) {
                     $dataValue = $configurationValue;
                 }
-                elseif ($platformParameters->has($name)) {
-                    $dataValue = $platformParameters->get($name);
+                elseif ($this->platformParameterBag->has($name)) {
+                    $dataValue = $this->platformParameterBag->get($name);
                 }
                 else {
                     $dataValue = $setting['default'];
@@ -231,16 +224,6 @@ class ConfigureComponent extends ProfileComponent
         return $data;
     }
 
-    public function getPackageBundlesCacheService(): PackageBundlesCacheService
-    {
-        return $this->packageBundlesCacheService;
-    }
-
-    public function getPlatformParameterBag(): ParameterBagInterface
-    {
-        return $this->platformParameterBag;
-    }
-
     public function getSelectedContext(): ?string
     {
         if (!isset($this->selectedContext)) {
@@ -251,27 +234,12 @@ class ConfigureComponent extends ProfileComponent
         return $this->selectedContext;
     }
 
-    public function getSystemPathBuilder(): SystemPathBuilder
-    {
-        return $this->systemPathBuilder;
-    }
-
-    public function getUserSettingsParser(): UserSettingsParser
-    {
-        return $this->userSettingsParser;
-    }
-
-    public function getUserSettingsService(): UserSettingsService
-    {
-        return $this->userSettingsService;
-    }
-
     protected function processData(array $originalData): array
     {
         $data = [];
 
         $configuration =
-            $this->getUserSettingsParser()->determineConfigurablePackageContextSettings($this->getSelectedContext());
+            $this->userSettingsParser->determineConfigurablePackageContextSettings($this->getSelectedContext());
 
         foreach ($configuration as $settings) {
             foreach ($settings as $name => $setting) {

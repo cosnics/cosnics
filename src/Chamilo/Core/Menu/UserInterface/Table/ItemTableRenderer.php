@@ -37,23 +37,14 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
     public const string PROPERTY_TYPE = 'Type';
     public const string TABLE_IDENTIFIER = Manager::PARAM_ITEM;
 
-    protected ItemRendererRegistry $itemRendererFactory;
-
-    protected ItemService $itemService;
-
-    protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
-
     public function __construct(
-        ItemRendererRegistry $itemRendererFactory, ItemService $itemService, Translator $translator,
         UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer, PageNavigationCalculator $pager,
         DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
-        ClassnameUtilities $classnameUtilities, MiniButtonToolBarRenderer $miniButtonToolBarRenderer
+        ClassnameUtilities $classnameUtilities, protected ItemRendererRegistry $itemRendererFactory,
+        protected ItemService $itemService, Translator $translator,
+        protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )
     {
-        $this->itemRendererFactory = $itemRendererFactory;
-        $this->itemService = $itemService;
-        $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
-
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
             $classnameUtilities
@@ -78,27 +69,12 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         );
     }
 
-    public function getItemRendererFactory(): ItemRendererRegistry
-    {
-        return $this->itemRendererFactory;
-    }
-
-    public function getItemService(): ItemService
-    {
-        return $this->itemService;
-    }
-
     public function getItemUrl(Item $item, array $parameters = []): string
     {
         $parameters[ApplicationInterface::PARAM_CONTEXT] = Manager::CONTEXT;
         $parameters[Manager::PARAM_ITEM] = $item->getId();
 
         return $this->getUrlGenerator()->fromParameters($parameters);
-    }
-
-    public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
-    {
-        return $this->miniButtonToolBarRenderer;
     }
 
     public function getTableActions(): TableActions
@@ -144,12 +120,10 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, mixed $result): string
     {
-        $itemRendererFactory = $this->getItemRendererFactory();
-
         return match ($column->getName()) {
-            Item::PROPERTY_TITLES => $itemRendererFactory->getItemRendererForItem($result)
+            Item::PROPERTY_TITLES => $this->itemRendererFactory->getItemRendererForItem($result)
                 ->renderTitleForCurrentLanguage($result),
-            self::PROPERTY_TYPE => $itemRendererFactory->getItemRendererForItem($result)->getRendererTypeGlyph()
+            self::PROPERTY_TYPE => $this->itemRendererFactory->getItemRendererForItem($result)->getRendererTypeGlyph()
                 ->render(),
             default => parent::renderCell($column, $resultPosition, $result),
         };
@@ -164,7 +138,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
     {
-        $numberOfSiblings = $this->getItemService()->countItemsByParentIdentifier($result->getParentId());
+        $numberOfSiblings = $this->itemService->countItemsByParentIdentifier($result->getParentId());
 
         $isFirstItem = $result->getSort() == 1;
         $isOnlyItem = $numberOfSiblings == 1;
@@ -233,6 +207,6 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
             )
         );
 
-        return $this->getMiniButtonToolBarRenderer()->render($buttonToolBar);
+        return $this->miniButtonToolBarRenderer->render($buttonToolBar);
     }
 }

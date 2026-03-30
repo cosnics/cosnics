@@ -12,7 +12,7 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\Menu\UserInterface\MenuRenderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class ItemRenderer
+abstract readonly class ItemRenderer
 {
     public function __construct(
         protected Translator $translator, protected CachedItemService $itemCacheService,

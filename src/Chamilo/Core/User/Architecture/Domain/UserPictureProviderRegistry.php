@@ -13,8 +13,7 @@ use Symfony\Component\Translation\Translator;
 class UserPictureProviderRegistry extends ArrayCollection
 {
     public function __construct(
-        protected readonly Translator $translator,
-        protected readonly string $activePictureProviderClass
+        protected readonly Translator $translator, protected readonly string $activePictureProviderClass
     )
     {
         parent::__construct();
@@ -39,21 +38,11 @@ class UserPictureProviderRegistry extends ArrayCollection
         return $this->get($configuredPictureProvider);
     }
 
-    public function getActivePictureProviderClass(): string
-    {
-        return $this->activePictureProviderClass;
-    }
-
     /**
      * @return string[]
      */
     public function getAvailablePictureProviderTypes(): array
     {
         return $this->getKeys();
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }

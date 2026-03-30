@@ -21,20 +21,14 @@ use Symfony\Component\Translation\Translator;
  */
 class ViewHomeComponent extends Manager implements NoAuthenticationSupportInterface
 {
-    protected AuthenticationValidator $authenticationValidator;
-
-    protected HomeRenderer $homeRenderer;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        AuthenticationValidator $authenticationValidator, HomeRenderer $homeRenderer, UrlGenerator $urlGenerator
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        protected readonly AuthenticationValidator $authenticationValidator,
+        protected readonly HomeRenderer $homeRenderer
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
-
-        $this->authenticationValidator = $authenticationValidator;
-        $this->homeRenderer = $homeRenderer;
     }
 
     /**
@@ -53,27 +47,14 @@ class ViewHomeComponent extends Manager implements NoAuthenticationSupportInterf
          * -> Via IDM or Graph API?
          * -> Mapping of usernames / user principals
          */
-        $authenticationValidator = $this->getAuthenticationValidator();
-        $authenticationValidator->validate();
-
-        $currentTabIdentifier = $this->getRequest()->query->get(self::PARAM_TAB_ID);
+        $this->authenticationValidator->validate();
 
         $html = [];
 
         $html[] = $this->renderHeader($currentUser);
-        $html[] = $this->getHomeRenderer()->render($currentTabIdentifier, $currentUser);
+        $html[] = $this->homeRenderer->render(null, $currentUser);
         $html[] = $this->renderFooter();
 
         return new Response(implode(PHP_EOL, $html));
-    }
-
-    protected function getAuthenticationValidator(): AuthenticationValidator
-    {
-        return $this->authenticationValidator;
-    }
-
-    protected function getHomeRenderer(): HomeRenderer
-    {
-        return $this->homeRenderer;
     }
 }

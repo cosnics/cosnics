@@ -25,21 +25,17 @@ use Symfony\Component\Translation\Translator;
  */
 class ItemTreeDataComponent extends Manager
 {
-    protected JsTreeMenuDataProvider $jsTreeMenuDataProvider;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, CachedItemService $cachedItemService,
         ItemRendererRegistry $itemRendererRegistry, ItemService $itemService, AlertsManager $alertsManager,
-        UrlGenerator $urlGenerator, JsTreeMenuDataProvider $jsTreeMenuDataProvider
+        UrlGenerator $urlGenerator, protected readonly JsTreeMenuDataProvider $jsTreeMenuDataProvider
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $cachedItemService,
-            $itemRendererRegistry, $itemService, $alertsManager, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $cachedItemService, $itemRendererRegistry, $itemService, $alertsManager
         );
-
-        $this->jsTreeMenuDataProvider = $jsTreeMenuDataProvider;
     }
 
     /**
@@ -60,7 +56,7 @@ class ItemTreeDataComponent extends Manager
         );
 
         return new JsonResponse(
-            data: $this->getJsTreeDataProvider()->getData(
+            data: $this->jsTreeMenuDataProvider->getData(
                 $urlFormat, $this->getCurrentParentIdentifier()
             )
         );
@@ -69,10 +65,5 @@ class ItemTreeDataComponent extends Manager
     public function getCurrentParentIdentifier(): ?string
     {
         return $this->getRequest()->query->get(Manager::PARAM_PARENT);
-    }
-
-    public function getJsTreeDataProvider(): JsTreeMenuDataProvider
-    {
-        return $this->jsTreeMenuDataProvider;
     }
 }

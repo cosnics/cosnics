@@ -36,11 +36,6 @@ class UnsubscribeComponent extends Manager
 
         $groupUserRelationIdentifiers = $this->getRequest()->getFromRequestOrQuery(DataClass::PROPERTY_ID);
 
-        $groupMembershipService = $this->getGroupMembershipService();
-        $userService = $this->getUserService();
-        $groupService = $this->getGroupService();
-        $translator = $this->getTranslator();
-
         $failures = 0;
 
         if (!empty($groupUserRelationIdentifiers)) {
@@ -50,17 +45,17 @@ class UnsubscribeComponent extends Manager
 
             foreach ($groupUserRelationIdentifiers as $groupUserRelationIdentifier) {
                 $groupUserRelation =
-                    $groupMembershipService->findGroupRelUserByIdentifier($groupUserRelationIdentifier);
+                    $this->groupMembershipService->findGroupRelUserByIdentifier($groupUserRelationIdentifier);
 
                 if (!$groupUserRelation instanceof GroupRelUser) {
                     continue;
                 }
 
-                $group = $groupService->findGroupByIdentifier($groupUserRelation->getGroupId());
-                $userToUnsubscribe = $userService->findUserByIdentifier($groupUserRelation->getUserId());
+                $group = $this->groupService->findGroupByIdentifier($groupUserRelation->getGroupId());
+                $userToUnsubscribe = $this->userService->findUserByIdentifier($groupUserRelation->getUserId());
 
                 try {
-                    $groupMembershipService->unsubscribeUserFromGroup($group, $userToUnsubscribe, $currentUser);
+                    $this->groupMembershipService->unsubscribeUserFromGroup($group, $userToUnsubscribe, $currentUser);
                 }
                 catch (RuntimeException) {
                     $failures ++;
@@ -82,9 +77,9 @@ class UnsubscribeComponent extends Manager
                 $message = 'SelectedGroupRelUsersDeleted';
             }
 
-            $this->getAlertsManager()->addAlert(
+            $this->alertsManager->addAlert(
                 new Alert(
-                    $translator->trans($message, [], Manager::CONTEXT),
+                    $this->translator->trans($message, [], Manager::CONTEXT),
                     $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS
                 )
             );

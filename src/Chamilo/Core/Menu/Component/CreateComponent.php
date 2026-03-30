@@ -36,31 +36,19 @@ use Twig\Environment;
  */
 class CreateComponent extends Manager
 {
-    protected BreadcrumbTrail $breadcrumbTrail;
-
-    protected FormFactoryInterface $formFactory;
-
-    protected ItemFormType $itemFormType;
-
-    protected Environment $twigFormEnvironment;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, CachedItemService $cachedItemService,
-        ItemRendererRegistry $itemRendererRegistry, ItemService $itemService, AlertsManager $alertsManager,
-        BreadcrumbTrail $breadcrumbTrail, UrlGenerator $urlGenerator, FormFactoryInterface $formFactory,
-        ItemFormType $itemFormType, Environment $twigFormEnvironment
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        CachedItemService $cachedItemService, ItemRendererRegistry $itemRendererRegistry, ItemService $itemService,
+        AlertsManager $alertsManager, protected readonly BreadcrumbTrail $breadcrumbTrail,
+        protected readonly FormFactoryInterface $formFactory, protected readonly ItemFormType $itemFormType,
+        protected readonly Environment $twigFormEnvironment
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $cachedItemService,
-            $itemRendererRegistry, $itemService, $alertsManager, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $cachedItemService, $itemRendererRegistry, $itemService, $alertsManager
         );
-
-        $this->breadcrumbTrail = $breadcrumbTrail;
-        $this->formFactory = $formFactory;
-        $this->twigFormEnvironment = $twigFormEnvironment;
-        $this->itemFormType = $itemFormType;
     }
 
     /**
@@ -88,9 +76,9 @@ class CreateComponent extends Manager
             throw new NoSuchParameterException(self::PARAM_TYPE);
         }
 
-        $itemRenderer = $this->getItemRendererFactory()->getItemRenderer($itemType);
+        $itemRenderer = $this->itemRendererRegistry->getItemRenderer($itemType);
 
-        $this->getBreadcrumbTrail()->add(
+        $this->breadcrumbTrail->add(
             new Breadcrumb(
                 $this->getTranslator()->trans(
                     'AddMenuItemComponentTitle', ['%ItemType%' => $itemRenderer->getRendererTypeName()],
@@ -107,13 +95,13 @@ class CreateComponent extends Manager
             ]
         );
 
-        $form = $this->getFormFactory()->create(
+        $form = $this->formFactory->create(
             ItemFormType::class, [], ['action' => $itemUri, 'itemType' => $itemType]
         );
         $form->handleRequest($this->getRequest());
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $item = $this->getCachedItemService()->createItemForTypeFromValues(
+            $item = $this->cachedItemService->createItemForTypeFromValues(
                 $itemType, $form->getData()
             );
 
@@ -133,7 +121,7 @@ class CreateComponent extends Manager
                 );
             }
 
-            $this->getAlertsManager()->addAlert(
+            $this->alertsManager->addAlert(
                 new Alert(
                     $message, $success ? AlertEnum::SUCCESS : AlertEnum::DANGER
                 )
@@ -149,31 +137,11 @@ class CreateComponent extends Manager
         $html = [];
 
         $html[] = $this->renderHeader($currentUser);
-        $html[] = $this->getTwigFormEnvironment()->render('form.html.twig', [
+        $html[] = $this->twigFormEnvironment->render('form.html.twig', [
             'form' => $form->createView(),
         ]);
         $html[] = $this->renderFooter();
 
         return new Response(implode(PHP_EOL, $html));
-    }
-
-    public function getBreadcrumbTrail(): BreadcrumbTrail
-    {
-        return $this->breadcrumbTrail;
-    }
-
-    public function getFormFactory(): FormFactoryInterface
-    {
-        return $this->formFactory;
-    }
-
-    public function getItemFormType(): ItemFormType
-    {
-        return $this->itemFormType;
-    }
-
-    public function getTwigFormEnvironment(): Environment
-    {
-        return $this->twigFormEnvironment;
     }
 }

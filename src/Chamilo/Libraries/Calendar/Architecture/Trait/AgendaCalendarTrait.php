@@ -46,11 +46,11 @@ trait AgendaCalendarTrait
         return $structuredEvents;
     }
 
-    abstract public function getAlertRenderer(): AlertRenderer;
+    protected AlertRenderer $alertRenderer;
 
     abstract protected function getEndTime(int $displayTime): int;
 
-    abstract public function getEventListRenderer(): EventListRenderer;
+    protected EventListRenderer $eventListRenderer;
 
     public function getEventsEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
@@ -62,7 +62,7 @@ trait AgendaCalendarTrait
         return $displayTime;
     }
 
-    abstract public function getTranslator(): Translator;
+    protected Translator $translator;
 
     abstract public function isEventSourceVisible(Event $event, array $invisibleSources = []): bool;
 

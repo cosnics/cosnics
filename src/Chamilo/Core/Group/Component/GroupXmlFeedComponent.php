@@ -29,22 +29,18 @@ use Symfony\Component\Translation\Translator;
  */
 class GroupXmlFeedComponent extends Manager
 {
-    protected GroupsTreeTraverser $groupsTreeTraverser;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        GroupMembershipService $groupMembershipService, GroupUrlGenerator $groupUrlGenerator,
-        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupService $groupService,
-        UserService $userService, UrlGenerator $urlGenerator, GroupsTreeTraverser $groupsTreeTraverser
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupMembershipService $groupMembershipService,
+        GroupService $groupService, GroupUrlGenerator $groupUrlGenerator, UserService $userService,
+        protected readonly GroupsTreeTraverser $groupsTreeTraverser
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $groupMembershipService,
-            $groupUrlGenerator, $alertsManager, $breadcrumbTrail, $groupService, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator, $alertsManager,
+            $breadcrumbTrail, $groupMembershipService, $groupService, $groupUrlGenerator, $userService
         );
-
-        $this->groupsTreeTraverser = $groupsTreeTraverser;
     }
 
     /**
@@ -57,7 +53,7 @@ class GroupXmlFeedComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $groupsTree = $this->getGroupService()->findGroupsForParentIdentifier(
+        $groupsTree = $this->groupService->findGroupsForParentIdentifier(
             $this->getRequest()->query->get(NestedSet::PROPERTY_PARENT_ID)
         );
 
@@ -69,11 +65,6 @@ class GroupXmlFeedComponent extends Manager
         $html[] = '</tree>';
 
         return new Response(implode(PHP_EOL, $html), 200, ['Content-Type' => 'text/xml']);
-    }
-
-    public function getGroupsTreeTraverser(): GroupsTreeTraverser
-    {
-        return $this->groupsTreeTraverser;
     }
 
     /**
@@ -88,7 +79,7 @@ class GroupXmlFeedComponent extends Manager
 
         foreach ($groups as $group) {
             $description = strip_tags(
-                $this->getGroupsTreeTraverser()->getFullyQualifiedNameForGroup($group) . ' [' . $group->getCode() . ']'
+                $this->groupsTreeTraverser->getFullyQualifiedNameForGroup($group) . ' [' . $group->getCode() . ']'
             );
 
             $hasChildren = $group->hasChildren() ? 1 : 0;

@@ -36,29 +36,19 @@ use Twig\Environment;
  */
 class CreateComponent extends Manager
 {
-    protected FormFactoryInterface $formFactory;
-
-    protected GroupFormType $groupFormType;
-
-    protected Environment $twigFormEnvironment;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        GroupMembershipService $groupMembershipService, GroupUrlGenerator $groupUrlGenerator,
-        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupService $groupService,
-        UserService $userService, UrlGenerator $urlGenerator, FormFactoryInterface $formFactory,
-        GroupFormType $groupFormType, Environment $twigFormEnvironment
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupMembershipService $groupMembershipService,
+        GroupService $groupService, GroupUrlGenerator $groupUrlGenerator, UserService $userService,
+        protected readonly FormFactoryInterface $formFactory, protected readonly GroupFormType $groupFormType,
+        protected readonly Environment $twigFormEnvironment
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $groupMembershipService,
-            $groupUrlGenerator, $alertsManager, $breadcrumbTrail, $groupService, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator, $alertsManager,
+            $breadcrumbTrail, $groupMembershipService, $groupService, $groupUrlGenerator, $userService
         );
-
-        $this->formFactory = $formFactory;
-        $this->groupFormType = $groupFormType;
-        $this->twigFormEnvironment = $twigFormEnvironment;
     }
 
     /**
@@ -87,7 +77,7 @@ class CreateComponent extends Manager
             ]
         );
 
-        $form = $this->getFormFactory()->create(
+        $form = $this->formFactory->create(
             GroupFormType::class, [DataClass::PROPERTY_ID => $groupIdentifier], ['action' => $formUri]
         );
         $form->handleRequest($this->getRequest());
@@ -96,12 +86,12 @@ class CreateComponent extends Manager
             $submittedData = $form->getData();
 
             try {
-                $group = $this->getGroupService()->createGroupFromParameters(
+                $group = $this->groupService->createGroupFromParameters(
                     $submittedData[Group::PROPERTY_NAME], $submittedData[NestedSet::PROPERTY_PARENT_ID]->getValue(),
                     $submittedData[Group::PROPERTY_DESCRIPTION], $submittedData[Group::PROPERTY_CODE], $currentUser
                 );
 
-                $this->getAlertsManager()->addAlert(
+                $this->alertsManager->addAlert(
                     new Alert(
                         $translator->trans(
                             'ObjectCreated', ['%Object%' => $translator->trans('Group', [], Manager::CONTEXT)],
@@ -116,8 +106,8 @@ class CreateComponent extends Manager
                     DataClass::PROPERTY_ID => $group->getId()
                 ]));
             }
-            catch (Throwable $e) {
-                $this->getAlertsManager()->addAlert(
+            catch (Throwable) {
+                $this->alertsManager->addAlert(
                     new Alert(
                         $translator->trans(
                             'ObjectNotCreated', ['%Object%' => $translator->trans('Group', [], Manager::CONTEXT)],
@@ -137,26 +127,11 @@ class CreateComponent extends Manager
         $html = [];
 
         $html[] = $this->renderHeader($currentUser);
-        $html[] = $this->getTwigFormEnvironment()->render('form.html.twig', [
+        $html[] = $this->twigFormEnvironment->render('form.html.twig', [
             'form' => $form->createView(),
         ]);
         $html[] = $this->renderFooter();
 
         return new Response(implode(PHP_EOL, $html));
-    }
-
-    public function getFormFactory(): FormFactoryInterface
-    {
-        return $this->formFactory;
-    }
-
-    public function getGroupFormType(): GroupFormType
-    {
-        return $this->groupFormType;
-    }
-
-    public function getTwigFormEnvironment(): Environment
-    {
-        return $this->twigFormEnvironment;
     }
 }

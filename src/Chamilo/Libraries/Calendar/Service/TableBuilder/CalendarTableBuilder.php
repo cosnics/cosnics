@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Service\TableBuilder;
 
-use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Calendar\Architecture\Domain\CalendarTableConfiguration;
 use HTML_Table;
 use Symfony\Component\Translation\Translator;
@@ -15,17 +13,8 @@ abstract class CalendarTableBuilder
 {
     public const string TIME_PLACEHOLDER = '__TIME__';
 
-    protected Translator $translator;
-
-    protected ?User $user;
-
-    protected UserService $userService;
-
-    public function __construct(Translator $translator, ?User $user, UserService $userService)
+    public function __construct(protected Translator $translator)
     {
-        $this->translator = $translator;
-        $this->user = $user;
-        $this->userService = $userService;
     }
 
     /**
@@ -58,9 +47,4 @@ abstract class CalendarTableBuilder
         CalendarTableConfiguration $calendarTableConfiguration, HTML_Table $table, int $displayTime,
         ?string $dayUrlTemplate = null
     ): array;
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
 }

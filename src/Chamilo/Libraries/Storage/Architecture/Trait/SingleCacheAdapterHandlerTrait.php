@@ -11,11 +11,11 @@ trait SingleCacheAdapterHandlerTrait
 {
     use CacheAdapterHandlerTrait;
 
-    protected AdapterInterface $cacheAdapter;
+    protected readonly AdapterInterface $cacheAdapter;
 
     public function clearAllCacheData(): bool
     {
-        return $this->clearAllCacheDataForAdapter($this->getCacheAdapter());
+        return $this->clearAllCacheDataForAdapter($this->cacheAdapter);
     }
 
     /**
@@ -23,7 +23,7 @@ trait SingleCacheAdapterHandlerTrait
      */
     public function clearCacheDataForKey(string $cacheKey): bool
     {
-        return $this->clearCacheDataForAdapterAndKey($this->getCacheAdapter(), $cacheKey);
+        return $this->clearCacheDataForAdapterAndKey($this->cacheAdapter, $cacheKey);
     }
 
     /**
@@ -31,12 +31,7 @@ trait SingleCacheAdapterHandlerTrait
      */
     public function clearCacheDataForKeyParts(array $cacheKeyParts): bool
     {
-        return $this->clearCacheDataForAdapterAndKeyParts($this->getCacheAdapter(), $cacheKeyParts);
-    }
-
-    public function getCacheAdapter(): AdapterInterface
-    {
-        return $this->cacheAdapter;
+        return $this->clearCacheDataForAdapterAndKeyParts($this->cacheAdapter, $cacheKeyParts);
     }
 
     /**
@@ -49,7 +44,7 @@ trait SingleCacheAdapterHandlerTrait
 
     public function hasCacheDataForKey(string $cacheKey): bool
     {
-        return $this->hasCacheDataForAdapterAndKey($this->getCacheAdapter(), $cacheKey);
+        return $this->hasCacheDataForAdapterAndKey($this->cacheAdapter, $cacheKey);
     }
 
     /**
@@ -57,7 +52,7 @@ trait SingleCacheAdapterHandlerTrait
      */
     public function hasCacheDataForKeyParts(array $cacheKeyParts): bool
     {
-        return $this->hasCacheDataForAdapterAndKeyParts($this->getCacheAdapter(), $cacheKeyParts);
+        return $this->hasCacheDataForAdapterAndKeyParts($this->cacheAdapter, $cacheKeyParts);
     }
 
     /**
@@ -65,7 +60,7 @@ trait SingleCacheAdapterHandlerTrait
      */
     public function loadCacheDataForKey(string $cacheKey, callable $dataSource): mixed
     {
-        return $this->loadCacheDataForAdapterAndKey($this->getCacheAdapter(), $cacheKey, $dataSource);
+        return $this->loadCacheDataForAdapterAndKey($this->cacheAdapter, $cacheKey, $dataSource);
     }
 
     /**
@@ -75,7 +70,7 @@ trait SingleCacheAdapterHandlerTrait
      */
     public function loadCacheDataForKeyParts(array $cacheKeyParts, callable $dataSource): mixed
     {
-        return $this->loadCacheDataForAdapterAndKeyParts($this->getCacheAdapter(), $cacheKeyParts, $dataSource);
+        return $this->loadCacheDataForAdapterAndKeyParts($this->cacheAdapter, $cacheKeyParts, $dataSource);
     }
 
     /**
@@ -83,7 +78,7 @@ trait SingleCacheAdapterHandlerTrait
      */
     public function readCacheDataForKey(string $cacheKey): mixed
     {
-        return $this->readCacheDataForAdapterAndKey($this->getCacheAdapter(), $cacheKey);
+        return $this->readCacheDataForAdapterAndKey($this->cacheAdapter, $cacheKey);
     }
 
     /**
@@ -91,7 +86,7 @@ trait SingleCacheAdapterHandlerTrait
      */
     public function readCacheDataForKeyParts(array $cacheKeyParts): mixed
     {
-        return $this->readCacheDataForAdapterAndKeyParts($this->getCacheAdapter(), $cacheKeyParts);
+        return $this->readCacheDataForAdapterAndKeyParts($this->cacheAdapter, $cacheKeyParts);
     }
 
     /**
@@ -99,7 +94,7 @@ trait SingleCacheAdapterHandlerTrait
      */
     public function reloadCacheDataForKey(string $cacheKey, callable $dataSource): mixed
     {
-        return $this->reloadCacheDataForAdapterAndKey($this->getCacheAdapter(), $cacheKey, $dataSource);
+        return $this->reloadCacheDataForAdapterAndKey($this->cacheAdapter, $cacheKey, $dataSource);
     }
 
     /**
@@ -109,7 +104,7 @@ trait SingleCacheAdapterHandlerTrait
      */
     public function reloadCacheDataForKeyParts(array $cacheKeyParts, callable $dataSource): mixed
     {
-        return $this->reloadCacheDataForAdapterAndKeyParts($this->getCacheAdapter(), $cacheKeyParts, $dataSource);
+        return $this->reloadCacheDataForAdapterAndKeyParts($this->cacheAdapter, $cacheKeyParts, $dataSource);
     }
 
     /**
@@ -117,7 +112,7 @@ trait SingleCacheAdapterHandlerTrait
      */
     public function saveCacheDataForKey(string $cacheKey, $cacheData, ?int $lifetime = null): bool
     {
-        return $this->saveCacheDataForAdapterAndKey($this->getCacheAdapter(), $cacheKey, $cacheData, $lifetime);
+        return $this->saveCacheDataForAdapterAndKey($this->cacheAdapter, $cacheKey, $cacheData, $lifetime);
     }
 
     /**
@@ -128,7 +123,7 @@ trait SingleCacheAdapterHandlerTrait
     public function saveCacheDataForKeyParts(array $cacheKeyParts, $cacheData, ?int $lifetime = null): bool
     {
         return $this->saveCacheDataForAdapterAndKeyParts(
-            $this->getCacheAdapter(), $cacheKeyParts, $cacheData, $lifetime
+            $this->cacheAdapter, $cacheKeyParts, $cacheData, $lifetime
         );
     }
 }

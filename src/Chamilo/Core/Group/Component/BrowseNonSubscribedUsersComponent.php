@@ -42,32 +42,22 @@ use Symfony\Component\Translation\Translator;
  */
 class BrowseNonSubscribedUsersComponent extends Manager
 {
-    protected ButtonToolBarRenderer $buttonToolBarRenderer;
-
-    protected NonSubscribedUserTableRenderer $nonSubscribedUserTableRenderer;
-
-    protected RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler;
-
     private ?Group $group;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        GroupMembershipService $groupMembershipService, GroupUrlGenerator $groupUrlGenerator,
-        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupService $groupService,
-        UserService $userService, ButtonToolBarRenderer $buttonToolBarRenderer, UrlGenerator $urlGenerator,
-        NonSubscribedUserTableRenderer $nonSubscribedUserTableRenderer,
-        RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupMembershipService $groupMembershipService,
+        GroupService $groupService, GroupUrlGenerator $groupUrlGenerator, UserService $userService,
+        protected readonly ButtonToolBarRenderer $buttonToolBarRenderer,
+        protected readonly NonSubscribedUserTableRenderer $nonSubscribedUserTableRenderer,
+        protected readonly RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $groupMembershipService,
-            $groupUrlGenerator, $alertsManager, $breadcrumbTrail, $groupService, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator, $alertsManager,
+            $breadcrumbTrail, $groupMembershipService, $groupService, $groupUrlGenerator, $userService
         );
-
-        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
-        $this->nonSubscribedUserTableRenderer = $nonSubscribedUserTableRenderer;
-        $this->requestTableParameterValuesCompiler = $requestTableParameterValuesCompiler;
     }
 
     /**
@@ -85,7 +75,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $this->getBreadcrumbTrail()->add(
+        $this->breadcrumbTrail->add(
             new Breadcrumb($this->getTranslator()->trans('ViewerComponent', [], Manager::CONTEXT),
                 $this->getUrlGenerator()->fromParameters(
                     [
@@ -101,7 +91,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
         $html = [];
 
         $html[] = $this->renderHeader($currentUser);
-        $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar());
+        $html[] = $this->buttonToolBarRenderer->render($this->getButtonToolBar());
         $html[] = $output;
         $html[] = $this->renderFooter();
 
@@ -145,11 +135,6 @@ class BrowseNonSubscribedUsersComponent extends Manager
         return $buttonToolBar;
     }
 
-    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
-    {
-        return $this->buttonToolBarRenderer;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
@@ -157,7 +142,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
     protected function getGroup(): Group
     {
         if (!isset($this->group)) {
-            $this->group = $this->getGroupService()->findGroupByIdentifier($this->getGroupIdentifier());
+            $this->group = $this->groupService->findGroupByIdentifier($this->getGroupIdentifier());
         }
 
         return $this->group;
@@ -176,7 +161,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
     {
         $conditions = [];
 
-        $userIdentifiers = $this->getGroupMembershipService()->findSubscribedUserIdentifiersForGroupIdentifier(
+        $userIdentifiers = $this->groupMembershipService->findSubscribedUserIdentifiersForGroupIdentifier(
             $this->getGroupIdentifier()
         );
 
@@ -184,7 +169,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
             new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers)
         );
 
-        $query = $this->getButtonToolBarRenderer()->getSearchForm()->getQuery();
+        $query = $this->buttonToolBarRenderer->getSearchForm()->getQuery();
 
         if (isset($query) && $query != '') {
             $orConditions[] = new ContainsCondition(
@@ -202,16 +187,6 @@ class BrowseNonSubscribedUsersComponent extends Manager
         return new AndCondition($conditions);
     }
 
-    public function getNonSubscribedUserTableRenderer(): NonSubscribedUserTableRenderer
-    {
-        return $this->nonSubscribedUserTableRenderer;
-    }
-
-    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
-    {
-        return $this->requestTableParameterValuesCompiler;
-    }
-
     /**
      * @throws \TableException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
@@ -221,20 +196,19 @@ class BrowseNonSubscribedUsersComponent extends Manager
      */
     public function renderNonSubscribedUserTable(): string
     {
-        $totalNumberOfItems = $this->getUserService()->countUsers($this->getNonSubscribedUserCondition());
-        $nonSubscribedUserTableRenderer = $this->getNonSubscribedUserTableRenderer();
+        $totalNumberOfItems = $this->userService->countUsers($this->getNonSubscribedUserCondition());
 
-        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
-            $nonSubscribedUserTableRenderer->getParameterNames(),
-            $nonSubscribedUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        $tableParameterValues = $this->requestTableParameterValuesCompiler->determineParameterValues(
+            $this->nonSubscribedUserTableRenderer->getParameterNames(),
+            $this->nonSubscribedUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
         );
 
-        $users = $this->getUserService()->findUsers(
+        $users = $this->userService->findUsers(
             $this->getNonSubscribedUserCondition(), $tableParameterValues->getOffset(),
             $tableParameterValues->getNumberOfItemsPerPage(),
-            $nonSubscribedUserTableRenderer->determineOrderBy($tableParameterValues)
+            $this->nonSubscribedUserTableRenderer->determineOrderBy($tableParameterValues)
         );
 
-        return $nonSubscribedUserTableRenderer->render($tableParameterValues, $users);
+        return $this->nonSubscribedUserTableRenderer->render($tableParameterValues, $users);
     }
 }

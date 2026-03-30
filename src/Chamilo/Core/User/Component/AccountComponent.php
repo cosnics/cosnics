@@ -114,9 +114,4 @@ class AccountComponent extends ProfileComponent
 
         return new Response(implode(PHP_EOL, $html));
     }
-
-    public function getAccountFormType(): AccountFormType
-    {
-        return $this->accountFormType;
-    }
 }

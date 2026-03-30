@@ -21,11 +21,8 @@ use Symfony\Component\Translation\Translator;
  */
 class EventParser
 {
-    private Translator $translator;
-
-    public function __construct(Translator $translator)
+    public function __construct(protected Translator $translator)
     {
-        $this->translator = $translator;
     }
 
     private function determineAttendeeType(?string $sourceAttendeeType): ?AttendeeTypeEnum
@@ -162,7 +159,7 @@ class EventParser
 
     private function getSource(string $calendarName): string
     {
-        return $this->getTranslator()->trans(
+        return $this->translator->trans(
             'SourceName', ['%Calendar%' => $calendarName], Manager::CONTEXT
         );
     }
@@ -181,10 +178,5 @@ class EventParser
         }
 
         return $dateTime->getTimestamp();
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }

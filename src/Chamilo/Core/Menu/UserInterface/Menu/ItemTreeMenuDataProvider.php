@@ -15,30 +15,13 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\Menu\UserInterface\Menu
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ItemTreeMenuDataProvider extends TreeMenuDataProvider
+readonly class ItemTreeMenuDataProvider extends TreeMenuDataProvider
 {
-    protected CategoryItemRenderer $categoryItemRenderer;
-
-    protected ItemService $itemService;
-
-    protected LanguageConsulter $languageConsulter;
-
-    protected Translator $translator;
-
     public function __construct(
-        ItemService $itemService, CategoryItemRenderer $categoryItemRenderer, LanguageConsulter $languageConsulter,
-        Translator $translator
+        protected ItemService $itemService, protected CategoryItemRenderer $categoryItemRenderer,
+        protected LanguageConsulter $languageConsulter, protected Translator $translator
     )
     {
-        $this->itemService = $itemService;
-        $this->categoryItemRenderer = $categoryItemRenderer;
-        $this->languageConsulter = $languageConsulter;
-        $this->translator = $translator;
-    }
-
-    public function getCategoryItemRenderer(): CategoryItemRenderer
-    {
-        return $this->categoryItemRenderer;
     }
 
     /**
@@ -47,9 +30,8 @@ class ItemTreeMenuDataProvider extends TreeMenuDataProvider
      */
     protected function getChildDataClasses(string $parentIdentifier): ArrayCollection
     {
-        if ($parentIdentifier === DataClass::EMPTY_UUID)
-        {
-            return $this->getItemService()->findRootCategoryItems();
+        if ($parentIdentifier === DataClass::EMPTY_UUID) {
+            return $this->itemService->findRootCategoryItems();
         }
 
         return new ArrayCollection();
@@ -65,24 +47,14 @@ class ItemTreeMenuDataProvider extends TreeMenuDataProvider
         };
 
         $getText = function (Item $item) {
-            return $this->getCategoryItemRenderer()->renderTitleForCurrentLanguage($item);
+            return $this->categoryItemRenderer->renderTitleForCurrentLanguage($item);
         };
 
         $hasChildren = function (Item $item) {
-            return $this->getItemService()->countItemsByParentIdentifier($item->getId()) > 0;
+            return $this->itemService->countItemsByParentIdentifier($item->getId()) > 0;
         };
 
         return $this->__getData($uriFormat, $identifier, $getIdentifier, $getText, $hasChildren);
-    }
-
-    public function getItemService(): ItemService
-    {
-        return $this->itemService;
-    }
-
-    public function getLanguageConsulter(): LanguageConsulter
-    {
-        return $this->languageConsulter;
     }
 
     protected function getRootDataClass(): Item
@@ -90,19 +62,12 @@ class ItemTreeMenuDataProvider extends TreeMenuDataProvider
         $rootItem = new Item();
         $rootItem->setId(DataClass::EMPTY_UUID);
 
-        foreach ($this->getLanguageConsulter()->getLanguages() as $isoCode => $languageName)
-        {
+        foreach ($this->languageConsulter->getLanguages() as $isoCode => $languageName) {
             $rootItem->setTitleForIsoCode(
-                $isoCode, $this->getTranslator()->trans('Home', [], Manager::CONTEXT, $isoCode)
+                $isoCode, $this->translator->trans('Home', [], Manager::CONTEXT, $isoCode)
             );
         }
 
         return $rootItem;
     }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
 }

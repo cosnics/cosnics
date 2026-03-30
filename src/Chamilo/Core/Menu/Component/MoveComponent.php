@@ -47,9 +47,9 @@ class MoveComponent extends Manager
             throw new NoSuchParameterException(self::PARAM_ITEM);
         }
 
-        $item = $this->getItemService()->findItemByIdentifier($itemIdentifier);
+        $item = $this->itemService->findItemByIdentifier($itemIdentifier);
 
-        $success = $this->getCachedItemService()->moveItemInDirection($item, $moveDirection);
+        $success = $this->cachedItemService->moveItemInDirection($item, $moveDirection);
 
         $message = $this->getTranslator()->trans(
             $success ? 'ObjectMoved' : 'ObjectNotMoved',
@@ -57,7 +57,7 @@ class MoveComponent extends Manager
             StringUtilities::LIBRARIES
         );
 
-        $this->getAlertsManager()->addAlert(
+        $this->alertsManager->addAlert(
             new Alert(
                 $message, $success ? AlertEnum::SUCCESS : AlertEnum::DANGER
             )

@@ -58,27 +58,9 @@ class BrowseComponent extends Manager
     public const string TAB_SUBGROUPS = 'subgroups';
     public const string TAB_USERS = 'users';
 
-    protected ButtonToolBarRenderer $buttonToolBarRenderer;
-
-    protected GroupTableRenderer $groupTableRenderer;
-
-    protected GroupTreeMenuDataProvider $groupTreeMenuDataProvider;
-
-    protected GroupsTreeTraverser $groupsTreeTraverser;
-
-    protected JsTreeRenderer $jsTreeRenderer;
-
-    protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
-
     protected int $numberOfGroups;
 
     protected int $numberOfSubscribedUsers;
-
-    protected RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler;
-
-    protected SubscribedUserTableRenderer $subscribedUserTableRenderer;
-
-    protected TabsRenderer $tabsRenderer;
 
     private ?Group $group;
 
@@ -86,31 +68,23 @@ class BrowseComponent extends Manager
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        GroupMembershipService $groupMembershipService, GroupUrlGenerator $groupUrlGenerator,
-        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupService $groupService,
-        UserService $userService, UrlGenerator $urlGenerator, ButtonToolBarRenderer $buttonToolBarRenderer,
-        GroupTableRenderer $groupTableRenderer, GroupTreeMenuDataProvider $groupTreeMenuDataProvider,
-        GroupsTreeTraverser $groupsTreeTraverser, JsTreeRenderer $jsTreeRenderer,
-        MiniButtonToolBarRenderer $miniButtonToolBarRenderer, SubscribedUserTableRenderer $subscribedUserTableRenderer,
-        TabsRenderer $tabsRenderer, RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupMembershipService $groupMembershipService,
+        GroupService $groupService, GroupUrlGenerator $groupUrlGenerator, UserService $userService,
+        protected readonly ButtonToolBarRenderer $buttonToolBarRenderer,
+        protected readonly GroupTableRenderer $groupTableRenderer,
+        protected readonly GroupTreeMenuDataProvider $groupTreeMenuDataProvider,
+        protected readonly GroupsTreeTraverser $groupsTreeTraverser, protected readonly JsTreeRenderer $jsTreeRenderer,
+        protected readonly MiniButtonToolBarRenderer $miniButtonToolBarRenderer,
+        protected readonly RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler,
+        protected readonly SubscribedUserTableRenderer $subscribedUserTableRenderer,
+        protected readonly TabsRenderer $tabsRenderer
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $groupMembershipService,
-            $groupUrlGenerator, $alertsManager, $breadcrumbTrail, $groupService, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator, $alertsManager,
+            $breadcrumbTrail, $groupMembershipService, $groupService, $groupUrlGenerator, $userService
         );
-
-        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
-
-        $this->groupTableRenderer = $groupTableRenderer;
-        $this->groupTreeMenuDataProvider = $groupTreeMenuDataProvider;
-        $this->groupsTreeTraverser = $groupsTreeTraverser;
-        $this->jsTreeRenderer = $jsTreeRenderer;
-        $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
-        $this->subscribedUserTableRenderer = $subscribedUserTableRenderer;
-        $this->tabsRenderer = $tabsRenderer;
-        $this->requestTableParameterValuesCompiler = $requestTableParameterValuesCompiler;
     }
 
     /**
@@ -146,7 +120,7 @@ class BrowseComponent extends Manager
     protected function countNumberOfGroups(): int
     {
         if (!isset($this->numberOfGroups)) {
-            return $this->getGroupsTreeTraverser()->countSubGroupsForGroup($this->getGroup());
+            return $this->groupsTreeTraverser->countSubGroupsForGroup($this->getGroup());
         }
 
         return $this->numberOfGroups;
@@ -160,15 +134,10 @@ class BrowseComponent extends Manager
     {
         if (!isset($this->numberOfSubscribedUsers)) {
             $this->numberOfSubscribedUsers =
-                $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifier($this->getGroupIdentifier());
+                $this->groupMembershipService->countSubscribedUsersForGroupIdentifier($this->getGroupIdentifier());
         }
 
         return $this->numberOfSubscribedUsers;
-    }
-
-    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
-    {
-        return $this->buttonToolBarRenderer;
     }
 
     public function getButtonToolBarSearchProperties(?string $type = null): array
@@ -196,7 +165,7 @@ class BrowseComponent extends Manager
     public function getGroup(): Group
     {
         if (!isset($this->group)) {
-            $this->group = $this->getGroupService()->findGroupByIdentifier($this->getGroupIdentifier());
+            $this->group = $this->groupService->findGroupByIdentifier($this->getGroupIdentifier());
         }
 
         return $this->group;
@@ -269,36 +238,6 @@ class BrowseComponent extends Manager
         return new AndCondition($conditions);
     }
 
-    public function getGroupTableRenderer(): GroupTableRenderer
-    {
-        return $this->groupTableRenderer;
-    }
-
-    public function getGroupTreeMenuDataProvider(): GroupTreeMenuDataProvider
-    {
-        return $this->groupTreeMenuDataProvider;
-    }
-
-    public function getGroupsTreeTraverser(): GroupsTreeTraverser
-    {
-        return $this->groupsTreeTraverser;
-    }
-
-    public function getJsTreeRenderer(): JsTreeRenderer
-    {
-        return $this->jsTreeRenderer;
-    }
-
-    public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
-    {
-        return $this->miniButtonToolBarRenderer;
-    }
-
-    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
-    {
-        return $this->requestTableParameterValuesCompiler;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
@@ -320,16 +259,11 @@ class BrowseComponent extends Manager
         $buttonToolBar->addButton(
             new Button(
                 $translator->trans('Add', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('plus'),
-                $this->getGroupUrlGenerator()->getCreateUrl($this->getGroup()), DisplayTypeEnum::ICON_AND_LABEL
+                $this->groupUrlGenerator->getCreateUrl($this->getGroup()), DisplayTypeEnum::ICON_AND_LABEL
             )
         );
 
         return $buttonToolBar;
-    }
-
-    public function getSubscribedUserTableRenderer(): SubscribedUserTableRenderer
-    {
-        return $this->subscribedUserTableRenderer;
     }
 
     public function getSubscribedUsersCondition(): ?AndCondition
@@ -356,7 +290,7 @@ class BrowseComponent extends Manager
         $buttonToolBar->addButton(
             new Button(
                 label: $this->getTranslator()->trans('AddUsers'), inlineGlyph: new FontAwesomeGlyph('plus-circle'),
-                action: $this->getGroupUrlGenerator()->getSubscribeUrl($this->getGroup()),
+                action: $this->groupUrlGenerator->getSubscribeUrl($this->getGroup()),
                 display: DisplayTypeEnum::ICON_AND_LABEL
             )
         );
@@ -389,24 +323,23 @@ class BrowseComponent extends Manager
      */
     protected function renderGroupTable(): string
     {
-        $totalNumberOfItems = $this->getGroupService()->countGroups($this->getGroupTableCondition());
-        $groupTableRenderer = $this->getGroupTableRenderer();
+        $totalNumberOfItems = $this->groupService->countGroups($this->getGroupTableCondition());
 
-        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
-            $groupTableRenderer->getParameterNames(), $groupTableRenderer->getDefaultParameterValues(),
+        $tableParameterValues = $this->requestTableParameterValuesCompiler->determineParameterValues(
+            $this->groupTableRenderer->getParameterNames(), $this->groupTableRenderer->getDefaultParameterValues(),
             $totalNumberOfItems
         );
 
-        $users = $this->getGroupService()->findGroups(
+        $users = $this->groupService->findGroups(
             $this->getGroupTableCondition(), $tableParameterValues->getOffset(),
             $tableParameterValues->getNumberOfItemsPerPage(),
-            $groupTableRenderer->determineOrderBy($tableParameterValues)
+            $this->groupTableRenderer->determineOrderBy($tableParameterValues)
         );
 
         $html = [];
 
-        $html[] = $this->getButtonToolBarRenderer()->render($this->getSubGroupsToolBar());
-        $html[] = $groupTableRenderer->render($tableParameterValues, $users);
+        $html[] = $this->buttonToolBarRenderer->render($this->getSubGroupsToolBar());
+        $html[] = $this->groupTableRenderer->render($tableParameterValues, $users);
 
         return implode(PHP_EOL, $html);
     }
@@ -445,10 +378,9 @@ class BrowseComponent extends Manager
 
         );
 
-        $selectedPathIdentifiers =
-            $this->getGroupsTreeTraverser()->findParentGroupIdentifiersForGroup($this->getGroup());
+        $selectedPathIdentifiers = $this->groupsTreeTraverser->findParentGroupIdentifiersForGroup($this->getGroup());
 
-        return $this->getJsTreeRenderer()->render(
+        return $this->jsTreeRenderer->render(
             'groupMenu', DataClass::PROPERTY_ID, $dataUrl, array_reverse($selectedPathIdentifiers)
         );
     }
@@ -465,26 +397,25 @@ class BrowseComponent extends Manager
     {
         $searchCondition = $this->getButtonToolBarSearchCondition(SubscribedUser::class);
 
-        $totalNumberOfItems = $this->getGroupMembershipService()->countSubscribedUsersForGroupIdentifier(
+        $totalNumberOfItems = $this->groupMembershipService->countSubscribedUsersForGroupIdentifier(
             $this->getGroupIdentifier(), $searchCondition
         );
-        $subscribedUserTableRenderer = $this->getSubscribedUserTableRenderer();
 
-        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
-            $subscribedUserTableRenderer->getParameterNames(),
-            $subscribedUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
+        $tableParameterValues = $this->requestTableParameterValuesCompiler->determineParameterValues(
+            $this->subscribedUserTableRenderer->getParameterNames(),
+            $this->subscribedUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
         );
 
-        $users = $this->getGroupMembershipService()->findSubscribedUsersForGroupIdentifier(
+        $users = $this->groupMembershipService->findSubscribedUsersForGroupIdentifier(
             $this->getGroupIdentifier(), $searchCondition, $tableParameterValues->getOffset(),
             $tableParameterValues->getNumberOfItemsPerPage(),
-            $subscribedUserTableRenderer->determineOrderBy($tableParameterValues)
+            $this->subscribedUserTableRenderer->determineOrderBy($tableParameterValues)
         );
 
         $html = [];
 
-        $html[] = $this->getButtonToolBarRenderer()->render($this->getSubscribedUsersToolBar());
-        $html[] = $subscribedUserTableRenderer->render($tableParameterValues, $users);
+        $html[] = $this->buttonToolBarRenderer->render($this->getSubscribedUsersToolBar());
+        $html[] = $this->subscribedUserTableRenderer->render($tableParameterValues, $users);
 
         return implode(PHP_EOL, $html);
     }
@@ -520,7 +451,7 @@ class BrowseComponent extends Manager
             $tabs->add(
                 new LinkTab(
                     identifier: ActionEnum::CREATE->value, label: $translator->trans('AddGroup', [], Manager::CONTEXT),
-                    inlineGlyph: new FontAwesomeGlyph('plus'), link: $this->getGroupUrlGenerator()->getCreateUrl(
+                    inlineGlyph: new FontAwesomeGlyph('plus'), link: $this->groupUrlGenerator->getCreateUrl(
                     $this->getGroup()
                 ), display: DisplayTypeEnum::ICON_AND_LABEL
                 )
@@ -540,8 +471,8 @@ class BrowseComponent extends Manager
                     identifier: ActionEnum::TRUNCATE->value, label: $translator->trans('Truncate'),
                     inlineGlyph: new FontAwesomeGlyph(
                         'trash-alt'
-                    ), link: $this->getGroupUrlGenerator()->getTruncateUrl($group),
-                    display: DisplayTypeEnum::ICON_AND_LABEL, classes: ['text-danger']
+                    ), link: $this->groupUrlGenerator->getTruncateUrl($group), display: DisplayTypeEnum::ICON_AND_LABEL,
+                    classes: ['text-danger']
                 )
             );
         }
@@ -550,8 +481,9 @@ class BrowseComponent extends Manager
                 new LinkTab(
                     identifier: ActionEnum::BROWSE_NON_SUBSCRIBED_USERS->value, label: $translator->trans(
                     'AddUsers', [], Manager::CONTEXT
-                ), inlineGlyph: new FontAwesomeGlyph('plus-circle'), link: $this->getGroupUrlGenerator()
-                    ->getSubscribeUrl($this->getGroup()), display: DisplayTypeEnum::ICON_AND_LABEL
+                ), inlineGlyph: new FontAwesomeGlyph('plus-circle'), link: $this->groupUrlGenerator->getSubscribeUrl(
+                    $this->getGroup()
+                ), display: DisplayTypeEnum::ICON_AND_LABEL
                 )
             );
         }
@@ -567,14 +499,14 @@ class BrowseComponent extends Manager
         $tabs->add(
             new LinkTab(
                 identifier: ActionEnum::UPDATE->value, label: $translator->trans('Edit', [], StringUtilities::LIBRARIES
-            ), inlineGlyph: new FontAwesomeGlyph('pencil-alt'), link: $this->getGroupUrlGenerator()->getUpdateUrl(
+            ), inlineGlyph: new FontAwesomeGlyph('pencil-alt'), link: $this->groupUrlGenerator->getUpdateUrl(
                 $group
             ), display: DisplayTypeEnum::ICON_AND_LABEL
             )
         );
 
         if ($this->getGroup()->getId() != $this->getRootGroup()->getId()) {
-            $deleteUrl = $this->getGroupUrlGenerator()->getDeleteUrl($group);
+            $deleteUrl = $this->groupUrlGenerator->getDeleteUrl($group);
             $tabs->add(
                 new LinkTab(
                     identifier: 'Delete', label: $translator->trans('Delete', [], StringUtilities::LIBRARIES),

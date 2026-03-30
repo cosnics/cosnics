@@ -23,41 +23,18 @@ abstract class Manager extends Application
 {
     public const string CONTEXT = __NAMESPACE__;
 
-    protected AlertsManager $alertsManager;
-
-    protected BreadcrumbTrail $breadcrumbTrail;
-
-    protected GroupMembershipService $groupMembershipService;
-
-    protected GroupService $groupService;
-
-    protected GroupUrlGenerator $groupUrlGenerator;
-
-    protected UserService $userService;
-
     private ?Group $rootGroup;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        GroupMembershipService $groupMembershipService, GroupUrlGenerator $groupUrlGenerator,
-        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupService $groupService,
-        UserService $userService, UrlGenerator $urlGenerator
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        protected readonly AlertsManager $alertsManager, protected readonly BreadcrumbTrail $breadcrumbTrail,
+        protected readonly GroupMembershipService $groupMembershipService,
+        protected readonly GroupService $groupService, protected readonly GroupUrlGenerator $groupUrlGenerator,
+        protected readonly UserService $userService
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
-
-        $this->groupMembershipService = $groupMembershipService;
-        $this->groupUrlGenerator = $groupUrlGenerator;
-        $this->alertsManager = $alertsManager;
-        $this->breadcrumbTrail = $breadcrumbTrail;
-        $this->groupService = $groupService;
-        $this->userService = $userService;
-    }
-
-    public function getAlertsManager(): AlertsManager
-    {
-        return $this->alertsManager;
     }
 
     public function getApplicationAction(): string
@@ -70,29 +47,9 @@ abstract class Manager extends Application
         return self::CONTEXT;
     }
 
-    public function getBreadcrumbTrail(): BreadcrumbTrail
-    {
-        return $this->breadcrumbTrail;
-    }
-
     public function getDefaultApplicationAction(): string
     {
         return ActionEnum::BROWSE->value;
-    }
-
-    protected function getGroupMembershipService(): GroupMembershipService
-    {
-        return $this->groupMembershipService;
-    }
-
-    public function getGroupService(): GroupService
-    {
-        return $this->groupService;
-    }
-
-    public function getGroupUrlGenerator(): GroupUrlGenerator
-    {
-        return $this->groupUrlGenerator;
     }
 
     /**
@@ -102,14 +59,9 @@ abstract class Manager extends Application
     public function getRootGroup(): Group
     {
         if (!isset($this->rootGroup)) {
-            $this->rootGroup = $this->getGroupService()->findRootGroup();
+            $this->rootGroup = $this->groupService->findRootGroup();
         }
 
         return $this->rootGroup;
-    }
-
-    public function getUserService(): UserService
-    {
-        return $this->userService;
     }
 }

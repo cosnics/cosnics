@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Menu\UserInterface\Form\Service;
 
+use ArrayIterator;
 use Chamilo\Core\Menu\Architecture\Domain\ItemRendererRegistry;
 use Chamilo\Core\Menu\Architecture\Interface\ConfigurableItemInterface;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -30,8 +31,12 @@ class ItemFormDataMapper implements DataMapperInterface
 
         $forms[Item::PROPERTY_PARENT]->setData(new OptionsTreeChoice($viewData[Item::PROPERTY_PARENT], ''));
         $forms[Item::PROPERTY_HIDDEN]->setData((bool) $viewData[Item::PROPERTY_HIDDEN]);
-        $forms[Item::PROPERTY_ICON_CLASS]->setData($viewData[Item::PROPERTY_ICON_CLASS]);
-        $forms[Item::PROPERTY_TITLES]->setData($viewData[Item::PROPERTY_TITLES]);
+
+        $this->defaultMapper->mapDataToForms(
+            $viewData, new ArrayIterator(
+                [$forms[Item::PROPERTY_ICON_CLASS], $forms[Item::PROPERTY_TITLES]]
+            )
+        );
 
         try {
             $itemRenderer = $this->itemRendererRegistry->getItemRenderer($viewData[Item::PROPERTY_TYPE]);
@@ -53,8 +58,12 @@ class ItemFormDataMapper implements DataMapperInterface
 
         $viewData[Item::PROPERTY_PARENT] = $forms[Item::PROPERTY_PARENT]->getData()->getValue();
         $viewData[Item::PROPERTY_HIDDEN] = $forms[Item::PROPERTY_HIDDEN]->getData() ? 1 : 0;
-        $viewData[Item::PROPERTY_ICON_CLASS] = $forms[Item::PROPERTY_ICON_CLASS]->getData();
-        $viewData[Item::PROPERTY_TITLES] = $forms[Item::PROPERTY_TITLES]->getData();
+
+        $this->defaultMapper->mapFormsToData(
+            new ArrayIterator(
+                [$forms[Item::PROPERTY_ICON_CLASS], $forms[Item::PROPERTY_TITLES]]
+            ), $viewData
+        );
 
         try {
             $itemRenderer = $this->itemRendererRegistry->getItemRenderer($viewData[Item::PROPERTY_TYPE]);

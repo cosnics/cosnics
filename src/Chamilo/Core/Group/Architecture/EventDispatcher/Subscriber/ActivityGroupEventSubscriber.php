@@ -18,13 +18,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * @package Chamilo\Core\Group\Architecture\EventDispatcher\Subscriber
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ActivityGroupEventSubscriber implements EventSubscriberInterface
+readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
 {
-    protected GroupTrackingRepository $groupTrackingRepository;
-
-    public function __construct(GroupTrackingRepository $groupTrackingRepository)
+    public function __construct(protected GroupTrackingRepository $groupTrackingRepository)
     {
-        $this->groupTrackingRepository = $groupTrackingRepository;
     }
 
     /**
@@ -33,7 +30,7 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
      */
     public function afterCreate(AfterGroupCreateEvent $afterGroupCreateEvent): bool
     {
-        return $this->getGroupTrackingRepository()->createGroupActivity(
+        return $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::CREATED, $afterGroupCreateEvent->getGroup()->getId(),
                 $afterGroupCreateEvent->getExecutingUser()
@@ -47,7 +44,7 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
      */
     public function afterDelete(AfterGroupDeleteEvent $afterGroupDeleteEvent): bool
     {
-        return $this->getGroupTrackingRepository()->createGroupActivity(
+        return $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::DELETED, $afterGroupDeleteEvent->getGroup()->getId(),
                 $afterGroupDeleteEvent->getExecutingUser()
@@ -61,7 +58,7 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
      */
     public function afterEmptyGroup(AfterGroupEmptyEvent $afterGroupEmptyEvent): bool
     {
-        return $this->getGroupTrackingRepository()->createGroupActivity(
+        return $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::TRUNCATED, $afterGroupEmptyEvent->getGroup()->getId(),
                 $afterGroupEmptyEvent->getExecutingUser()
@@ -75,7 +72,7 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
      */
     public function afterMove(AfterGroupMoveEvent $afterGroupMoveEvent): bool
     {
-        return $this->getGroupTrackingRepository()->createGroupActivity(
+        return $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::MOVED, $afterGroupMoveEvent->getGroup()->getId(),
                 $afterGroupMoveEvent->getExecutingUser()
@@ -89,7 +86,7 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
      */
     public function afterSubscribe(AfterGroupSubscribeEvent $afterGroupSubscribeEvent): bool
     {
-        return $this->getGroupTrackingRepository()->createGroupActivity(
+        return $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::SUBSCRIBED, $afterGroupSubscribeEvent->getGroup()->getId(),
                 $afterGroupSubscribeEvent->getExecutingUser(), $afterGroupSubscribeEvent->getUser()->getId()
@@ -103,7 +100,7 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
      */
     public function afterUnsubscribe(AfterGroupUnsubscribeEvent $afterGroupUnsubscribeEvent): bool
     {
-        return $this->getGroupTrackingRepository()->createGroupActivity(
+        return $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::UNSUBSCRIBED, $afterGroupUnsubscribeEvent->getGroup()->getId(),
                 $afterGroupUnsubscribeEvent->getExecutingUser(), $afterGroupUnsubscribeEvent->getUser()->getId()
@@ -117,17 +114,12 @@ class ActivityGroupEventSubscriber implements EventSubscriberInterface
      */
     public function afterUpdate(AfterGroupUpdateEvent $afterGroupUpdateEvent): bool
     {
-        return $this->getGroupTrackingRepository()->createGroupActivity(
+        return $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::UPDATED, $afterGroupUpdateEvent->getGroup()->getId(),
                 $afterGroupUpdateEvent->getExecutingUser()
             )
         );
-    }
-
-    public function getGroupTrackingRepository(): GroupTrackingRepository
-    {
-        return $this->groupTrackingRepository;
     }
 
     public static function getSubscribedEvents(): array

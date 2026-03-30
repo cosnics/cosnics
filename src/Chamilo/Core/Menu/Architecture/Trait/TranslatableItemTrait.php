@@ -14,9 +14,9 @@ trait TranslatableItemTrait
     /**
      * @var string[]
      */
-    protected array $fallbackIsoCodes;
+    protected readonly array $fallbackIsoCodes;
 
-    protected Translator $translator;
+    protected readonly Translator $translator;
 
     public function determineItemTitleForCurrentLanguage(Item $item): string
     {

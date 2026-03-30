@@ -32,6 +32,6 @@ class StorageNoResultExceptionRenderer extends AbstractUserExceptionRenderer imp
      */
     public function renderTitle(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('StorageNoResultExceptionTitle', [], StringUtilities::LIBRARIES);
+        return $this->translator->trans('StorageNoResultExceptionTitle', [], StringUtilities::LIBRARIES);
     }
 }

@@ -9,20 +9,7 @@ namespace Chamilo\Libraries\Filesystem\Service\PackagesContentFinder;
  */
 abstract class PackagesClassFinderAware
 {
-    private PackagesClassFinder $packagesClassFinder;
-
-    public function __construct(PackagesClassFinder $packagesClassFinder = null)
+    public function __construct(protected ?PackagesClassFinder $packagesClassFinder = null)
     {
-        $this->setPackagesClassFinder($packagesClassFinder);
-    }
-
-    public function getPackagesClassFinder(): PackagesClassFinder
-    {
-        return $this->packagesClassFinder;
-    }
-
-    public function setPackagesClassFinder(PackagesClassFinder $packagesClassFinder): void
-    {
-        $this->packagesClassFinder = $packagesClassFinder;
     }
 }

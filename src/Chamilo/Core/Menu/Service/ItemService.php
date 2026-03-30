@@ -20,37 +20,20 @@ use Symfony\Component\Translation\Translator;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ItemService implements ItemServiceInterface
+readonly class ItemService implements ItemServiceInterface
 {
     public const int PARAM_DIRECTION_DOWN = 2;
     public const int PARAM_DIRECTION_UP = 1;
 
     /**
-     * @var string[]
+     * @param string[] $fallbackIsoCodes
      */
-    protected array $fallbackIsoCodes;
-
-    private DisplayOrderHandler $displayOrderHandler;
-
-    private ItemRepository $itemRepository;
-
-    private PropertyMapper $propertyMapper;
-
-    private StringUtilities $stringUtilities;
-
-    private Translator $translator;
-
     public function __construct(
-        ItemRepository $itemRepository, StringUtilities $stringUtilities, PropertyMapper $propertyMapper,
-        Translator $translator, DisplayOrderHandler $displayOrderHandler, array $fallbackIsoCodes
+        protected ItemRepository $itemRepository, protected StringUtilities $stringUtilities,
+        protected PropertyMapper $propertyMapper, protected Translator $translator,
+        protected DisplayOrderHandler $displayOrderHandler, protected array $fallbackIsoCodes
     )
     {
-        $this->itemRepository = $itemRepository;
-        $this->stringUtilities = $stringUtilities;
-        $this->propertyMapper = $propertyMapper;
-        $this->translator = $translator;
-        $this->displayOrderHandler = $displayOrderHandler;
-        $this->fallbackIsoCodes = $fallbackIsoCodes;
     }
 
     /**
@@ -58,7 +41,7 @@ class ItemService implements ItemServiceInterface
      */
     public function countItemsByParentIdentifier(string $parentIdentifier): int
     {
-        return $this->getItemRepository()->countItemsByParentIdentifier($parentIdentifier);
+        return $this->itemRepository->countItemsByParentIdentifier($parentIdentifier);
     }
 
     /**
@@ -69,11 +52,11 @@ class ItemService implements ItemServiceInterface
      */
     public function createItem(Item $item): bool
     {
-        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeCreate($item)) {
+        if (!$this->displayOrderHandler->handleDisplayOrderBeforeCreate($item)) {
             return false;
         }
 
-        if (!$this->getItemRepository()->createItem($item)) {
+        if (!$this->itemRepository->createItem($item)) {
             return false;
         }
 
@@ -124,11 +107,11 @@ class ItemService implements ItemServiceInterface
             return false;
         }
 
-        if (!$this->getItemRepository()->deleteItem($item)) {
+        if (!$this->itemRepository->deleteItem($item)) {
             return false;
         }
 
-        if (!$this->getDisplayOrderHandler()->handleDisplayOrderAfterDelete($item)) {
+        if (!$this->displayOrderHandler->handleDisplayOrderAfterDelete($item)) {
             return false;
         }
 
@@ -176,7 +159,7 @@ class ItemService implements ItemServiceInterface
      */
     public function findItemByIdentifier(string $identifier): ?Item
     {
-        return $this->getItemRepository()->findItemByIdentifier($identifier);
+        return $this->itemRepository->findItemByIdentifier($identifier);
     }
 
     /**
@@ -185,7 +168,7 @@ class ItemService implements ItemServiceInterface
      */
     public function findItems(): ArrayCollection
     {
-        return $this->getItemRepository()->findItems();
+        return $this->itemRepository->findItems();
     }
 
     /**
@@ -196,7 +179,7 @@ class ItemService implements ItemServiceInterface
      */
     public function findItemsByIdentifiers(array $identifiers): ArrayCollection
     {
-        return $this->getItemRepository()->findItemsByIdentifiers($identifiers);
+        return $this->itemRepository->findItemsByIdentifiers($identifiers);
     }
 
     /**
@@ -212,7 +195,7 @@ class ItemService implements ItemServiceInterface
         string $parentIdentifier, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        return $this->getItemRepository()->findItemsByParentIdentifier(
+        return $this->itemRepository->findItemsByParentIdentifier(
             $parentIdentifier, $count, $offset, $orderBy
         );
     }
@@ -225,7 +208,7 @@ class ItemService implements ItemServiceInterface
      */
     public function findItemsByType(string $type): ArrayCollection
     {
-        return $this->getItemRepository()->findItemsByType($type);
+        return $this->itemRepository->findItemsByType($type);
     }
 
     /**
@@ -234,7 +217,7 @@ class ItemService implements ItemServiceInterface
      */
     public function findItemsGroupedByParentIdentifier(): array
     {
-        return $this->getPropertyMapper()->groupDataClassByProperty(
+        return $this->propertyMapper->groupDataClassByProperty(
             $this->findItems(), Item::PROPERTY_PARENT
         );
     }
@@ -245,7 +228,7 @@ class ItemService implements ItemServiceInterface
      */
     public function findRootCategoryItems(): ArrayCollection
     {
-        return $this->getItemRepository()->findRootCategoryItems();
+        return $this->itemRepository->findRootCategoryItems();
     }
 
     /**
@@ -258,51 +241,12 @@ class ItemService implements ItemServiceInterface
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Service\DisplayOrderHandler
-     */
-    public function getDisplayOrderHandler(): DisplayOrderHandler
-    {
-        return $this->displayOrderHandler;
-    }
-
-    /**
-     * @return string[]
-     */
-    protected function getFallbackIsoCodes(): array
-    {
-        return $this->fallbackIsoCodes;
-    }
-
-    /**
-     * @return \Chamilo\Core\Menu\Storage\Repository\ItemRepository
-     */
-    public function getItemRepository(): ItemRepository
-    {
-        return $this->itemRepository;
-    }
-
-    /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getNextItemSortValueByParentIdentifier(string $parentIdentifier): int
     {
-        return $this->getItemRepository()->getNextItemSortValueByParentIdentifier($parentIdentifier);
-    }
-
-    public function getPropertyMapper(): PropertyMapper
-    {
-        return $this->propertyMapper;
-    }
-
-    public function getStringUtilities(): StringUtilities
-    {
-        return $this->stringUtilities;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
+        return $this->itemRepository->getNextItemSortValueByParentIdentifier($parentIdentifier);
     }
 
     /**
@@ -360,11 +304,11 @@ class ItemService implements ItemServiceInterface
      */
     public function updateItem(Item $item): bool
     {
-        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeUpdate($item)) {
+        if (!$this->displayOrderHandler->handleDisplayOrderBeforeUpdate($item)) {
             return false;
         }
 
-        if (!$this->getItemRepository()->updateItem($item)) {
+        if (!$this->itemRepository->updateItem($item)) {
             return false;
         }
 

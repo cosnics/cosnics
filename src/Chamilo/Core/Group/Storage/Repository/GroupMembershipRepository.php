@@ -27,11 +27,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class GroupMembershipRepository
 {
-    private DataClassRepository $dataClassRepository;
-
-    public function __construct(DataClassRepository $dataClassRepository)
+    public function __construct(protected DataClassRepository $dataClassRepository)
     {
-        $this->dataClassRepository = $dataClassRepository;
     }
 
     /**
@@ -75,7 +72,7 @@ class GroupMembershipRepository
             ]
         );
 
-        return $this->getDataClassRepository()->count(
+        return $this->dataClassRepository->count(
             SubscribedUser::class, new StorageParameters(condition: $condition, joins: $joins)
         );
     }
@@ -107,7 +104,7 @@ class GroupMembershipRepository
             new StaticConditionVariable($group->getId())
         );
 
-        return $this->getDataClassRepository()->deletes(GroupRelUser::class, $condition);
+        return $this->dataClassRepository->deletes(GroupRelUser::class, $condition);
     }
 
     /**
@@ -130,7 +127,7 @@ class GroupMembershipRepository
 
         $condition = new AndCondition($conditions);
 
-        return $this->getDataClassRepository()->retrieve(
+        return $this->dataClassRepository->retrieve(
             GroupRelUser::class, new StorageParameters(condition: $condition)
         );
     }
@@ -165,7 +162,7 @@ class GroupMembershipRepository
             )
         );
 
-        return $this->getDataClassRepository()->retrieve(
+        return $this->dataClassRepository->retrieve(
             GroupRelUser::class, new StorageParameters(condition: $condition, joins: $joins)
         );
     }
@@ -176,7 +173,7 @@ class GroupMembershipRepository
      */
     public function findGroupRelUserByIdentifier(string $groupRelUserIdentifier): ?GroupRelUser
     {
-        return $this->getDataClassRepository()->retrieveById(GroupRelUser::class, $groupRelUserIdentifier);
+        return $this->dataClassRepository->retrieveById(GroupRelUser::class, $groupRelUserIdentifier);
     }
 
     /**
@@ -199,7 +196,7 @@ class GroupMembershipRepository
         );
         $condition = new AndCondition($conditions);
 
-        return $this->getDataClassRepository()->retrieve(
+        return $this->dataClassRepository->retrieve(
             GroupRelUser::class, new StorageParameters(condition: $condition)
         );
     }
@@ -231,7 +228,7 @@ class GroupMembershipRepository
         )
         );
 
-        return $this->getDataClassRepository()->distinct(GroupRelUser::class, $parameters);
+        return $this->dataClassRepository->distinct(GroupRelUser::class, $parameters);
     }
 
     /**
@@ -276,17 +273,12 @@ class GroupMembershipRepository
             ]
         );
 
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieves(
             SubscribedUser::class, new StorageParameters(
                 condition: $condition, joins: $joins, retrieveProperties: $retrieveProperties, orderBy: $orderBy,
                 count: $count, offset: $offset
             )
         );
-    }
-
-    public function getDataClassRepository(): DataClassRepository
-    {
-        return $this->dataClassRepository;
     }
 
     /**
@@ -302,7 +294,7 @@ class GroupMembershipRepository
             new StaticConditionVariable($groupIdentifier)
         );
 
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieves(
             GroupRelUser::class, new StorageParameters(condition: $condition)
         );
     }
@@ -318,6 +310,6 @@ class GroupMembershipRepository
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID), $groupsIdentifiers
         );
 
-        return $this->getDataClassRepository()->deletes(GroupRelUser::class, $condition);
+        return $this->dataClassRepository->deletes(GroupRelUser::class, $condition);
     }
 }

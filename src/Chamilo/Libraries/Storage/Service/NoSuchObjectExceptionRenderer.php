@@ -23,7 +23,7 @@ class NoSuchObjectExceptionRenderer extends AbstractUserExceptionRenderer implem
      */
     public function renderMessage(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans(
+        return $this->translator->trans(
             'ObjectNotExist', [
             '%ObjectType%' => $userException->getObjectType(),
             '%ObjectIdentifier%' => $userException->getObjectIdentifier()
@@ -36,6 +36,6 @@ class NoSuchObjectExceptionRenderer extends AbstractUserExceptionRenderer implem
      */
     public function renderTitle(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('NoSuchObjectTitle', [], StringUtilities::LIBRARIES);
+        return $this->translator->trans('NoSuchObjectTitle', [], StringUtilities::LIBRARIES);
     }
 }

@@ -18,34 +18,16 @@ use Symfony\Component\Translation\Translator;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class HomeService
+readonly class HomeService
 {
     public const string PARAM_TAB_ID = 'tab';
 
-    protected BlockRendererRegistry $blockRendererFactory;
-
-    protected ClassnameUtilities $classnameUtilities;
-
-    protected SessionInterface $session;
-
-    protected Translator $translator;
-
-    private DisplayOrderHandler $displayOrderHandler;
-
-    private HomeRepository $homeRepository;
-
     public function __construct(
-        HomeRepository $homeRepository, SessionInterface $session, Translator $translator,
-        BlockRendererRegistry $blockRendererFactory, ClassnameUtilities $classnameUtilities,
-        DisplayOrderHandler $displayOrderHandler
+        protected HomeRepository $homeRepository, protected SessionInterface $session, protected Translator $translator,
+        protected BlockRendererRegistry $blockRendererFactory, protected ClassnameUtilities $classnameUtilities,
+        protected DisplayOrderHandler $displayOrderHandler
     )
     {
-        $this->homeRepository = $homeRepository;
-        $this->session = $session;
-        $this->translator = $translator;
-        $this->blockRendererFactory = $blockRendererFactory;
-        $this->classnameUtilities = $classnameUtilities;
-        $this->displayOrderHandler = $displayOrderHandler;
     }
 
     /**
@@ -53,7 +35,7 @@ class HomeService
      */
     public function countElementsByParentIdentifier(string $parentIdentifier): int
     {
-        return $this->getHomeRepository()->countElementsByParentIdentifier($parentIdentifier);
+        return $this->homeRepository->countElementsByParentIdentifier($parentIdentifier);
     }
 
     /**
@@ -64,11 +46,11 @@ class HomeService
      */
     public function createElement(Element $element): bool
     {
-        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeCreate($element)) {
+        if (!$this->displayOrderHandler->handleDisplayOrderBeforeCreate($element)) {
             return false;
         }
 
-        return $this->getHomeRepository()->createElement($element);
+        return $this->homeRepository->createElement($element);
     }
 
     /**
@@ -84,11 +66,11 @@ class HomeService
             }
         }
 
-        if (!$this->getHomeRepository()->deleteElement($element)) {
+        if (!$this->homeRepository->deleteElement($element)) {
             return false;
         }
 
-        if (!$this->getDisplayOrderHandler()->handleDisplayOrderAfterDelete($element)) {
+        if (!$this->displayOrderHandler->handleDisplayOrderAfterDelete($element)) {
             return false;
         }
 
@@ -109,7 +91,7 @@ class HomeService
      */
     public function findBlocksForTabIdentifier(string $tabIdentifier): ArrayCollection
     {
-        return $this->getHomeRepository()->findBlocksForColumnIdentifiers(
+        return $this->homeRepository->findBlocksForColumnIdentifiers(
             $this->findColumnIdentifiersForTabIdentifier($tabIdentifier)
         );
     }
@@ -120,7 +102,7 @@ class HomeService
      */
     public function findColumnIdentifiersForTabIdentifier(string $tabIdentifier): array
     {
-        return $this->getHomeRepository()->findColumnIdentifiersForTabIdentifier($tabIdentifier);
+        return $this->homeRepository->findColumnIdentifiersForTabIdentifier($tabIdentifier);
     }
 
     /**
@@ -129,7 +111,7 @@ class HomeService
      */
     public function findElementByIdentifier(string $elementIdentifier): ?Element
     {
-        return $this->getHomeRepository()->findElementByIdentifier($elementIdentifier);
+        return $this->homeRepository->findElementByIdentifier($elementIdentifier);
     }
 
     /**
@@ -138,7 +120,7 @@ class HomeService
      */
     public function findElementsByParentIdentifier(string $parentIdentifier): ArrayCollection
     {
-        return $this->getHomeRepository()->findElementsByParentIdentifier($parentIdentifier);
+        return $this->homeRepository->findElementsByParentIdentifier($parentIdentifier);
     }
 
     /**
@@ -149,29 +131,14 @@ class HomeService
         string $type, string $parentIdentifier = DataClass::EMPTY_UUID
     ): ArrayCollection
     {
-        return $this->getHomeRepository()->findElementsByTypeAndParentIdentifier(
+        return $this->homeRepository->findElementsByTypeAndParentIdentifier(
             $type, $parentIdentifier
         );
-    }
-
-    public function getBlockRendererFactory(): BlockRendererRegistry
-    {
-        return $this->blockRendererFactory;
-    }
-
-    public function getClassnameUtilities(): ClassnameUtilities
-    {
-        return $this->classnameUtilities;
     }
 
     public function getCurrentTabIdentifier(ChamiloRequest $request): int
     {
         return $request->query->get(self::PARAM_TAB_ID);
-    }
-
-    public function getDisplayOrderHandler(): DisplayOrderHandler
-    {
-        return $this->displayOrderHandler;
     }
 
     /**
@@ -180,22 +147,7 @@ class HomeService
      */
     public function getElementByIdentifier(string $elementIdentifier): ?Element
     {
-        return $this->getHomeRepository()->findElementByIdentifier($elementIdentifier);
-    }
-
-    public function getHomeRepository(): HomeRepository
-    {
-        return $this->homeRepository;
-    }
-
-    public function getSession(): SessionInterface
-    {
-        return $this->session;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
+        return $this->homeRepository->findElementByIdentifier($elementIdentifier);
     }
 
     public function isActiveTab(int $tabKey, Element $tab, ?int $currentTabIdentifier = null): bool
@@ -218,10 +170,10 @@ class HomeService
      */
     public function updateElement(Element $element): bool
     {
-        if (!$this->getDisplayOrderHandler()->handleDisplayOrderBeforeUpdate($element)) {
+        if (!$this->displayOrderHandler->handleDisplayOrderBeforeUpdate($element)) {
             return false;
         }
 
-        return $this->getHomeRepository()->updateElement($element);
+        return $this->homeRepository->updateElement($element);
     }
 }

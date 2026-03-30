@@ -2,8 +2,6 @@
 namespace Chamilo\Core\Admin\Service\Consulter;
 
 use Chamilo\Core\Admin\Storage\Repository\LanguageRepository;
-use Chamilo\Libraries\Filesystem\Service\FilesystemTools;
-use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 
 /**
  * @package Chamilo\Core\Admin\Service\Consulter
@@ -12,24 +10,8 @@ use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
  */
 class LanguageConsulter
 {
-    protected FilesystemTools $filesystemTools;
-
-    protected LanguageRepository $languageRepository;
-
-    protected SystemPathBuilder $systemPathBuilder;
-
-    public function __construct(
-        SystemPathBuilder $systemPathBuilder, FilesystemTools $filesystemTools, LanguageRepository $languageRepository
-    )
+    public function __construct(protected LanguageRepository $languageRepository)
     {
-        $this->systemPathBuilder = $systemPathBuilder;
-        $this->filesystemTools = $filesystemTools;
-        $this->languageRepository = $languageRepository;
-    }
-
-    public function getFilesystemTools(): FilesystemTools
-    {
-        return $this->filesystemTools;
     }
 
     public function getLanguageNameFromIsocode(string $isocode): string
@@ -39,17 +21,12 @@ class LanguageConsulter
         return $languages[$isocode];
     }
 
-    public function getLanguageRepository(): LanguageRepository
-    {
-        return $this->languageRepository;
-    }
-
     /**
      * @return string[]
      */
     public function getLanguages(): array
     {
-        return $this->getLanguageRepository()->findLanguagesAsArray();
+        return $this->languageRepository->findLanguagesAsArray();
     }
 
     /**
@@ -59,19 +36,12 @@ class LanguageConsulter
     {
         $languages = [];
 
-        foreach ($this->getLanguages() as $isocode => $language)
-        {
-            if ($isocode !== $isocodeToExclude)
-            {
+        foreach ($this->getLanguages() as $isocode => $language) {
+            if ($isocode !== $isocodeToExclude) {
                 $languages[$isocode] = $language;
             }
         }
 
         return $languages;
-    }
-
-    public function getSystemPathBuilder(): SystemPathBuilder
-    {
-        return $this->systemPathBuilder;
     }
 }

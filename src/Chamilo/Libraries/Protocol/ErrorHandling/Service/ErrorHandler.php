@@ -17,24 +17,16 @@ use Throwable;
  */
 class ErrorHandler
 {
-    protected ExceptionLoggerInterface $exceptionLogger;
-
-    protected ThemePathBuilder $themeSystemPathBuilder;
-
-    protected Translator $translator;
-
     public function __construct(
-        ExceptionLoggerInterface $exceptionLogger, Translator $translator, ThemePathBuilder $themeSystemPathBuilder
+        protected ExceptionLoggerInterface $exceptionLogger, protected Translator $translator,
+        protected ThemePathBuilder $themeSystemPathBuilder
     )
     {
-        $this->exceptionLogger = $exceptionLogger;
-        $this->translator = $translator;
-        $this->themeSystemPathBuilder = $themeSystemPathBuilder;
     }
 
     protected function displayGeneralErrorPage(): void
     {
-        $path = $this->getThemeSystemPathBuilder()->getTemplatePath(Manager::CONTEXT, false) . 'Error.html.tpl';
+        $path = $this->themeSystemPathBuilder->getTemplatePath(Manager::CONTEXT, false) . 'Error.html.tpl';
 
         $template = file_get_contents($path);
 
@@ -52,26 +44,11 @@ class ErrorHandler
         echo $template;
     }
 
-    public function getExceptionLogger(): ExceptionLoggerInterface
-    {
-        return $this->exceptionLogger;
-    }
-
-    public function getThemeSystemPathBuilder(): ThemePathBuilder
-    {
-        return $this->themeSystemPathBuilder;
-    }
-
     protected function getTranslation(
         string $variable, array $parameters = [], string $context = Manager::CONTEXT
     ): string
     {
-        return $this->getTranslator()->trans($variable, $parameters, $context);
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
+        return $this->translator->trans($variable, $parameters, $context);
     }
 
     public function handleError(int $errorNumber, string $errorString, string $file, int $line): bool
@@ -89,14 +66,14 @@ class ErrorHandler
 
         $exceptionLevel = $exceptionTypes[$errorNumber];
 
-        $this->getExceptionLogger()->logException(new Exception($errorString), $exceptionLevel, $file, $line);
+        $this->exceptionLogger->logException(new Exception($errorString), $exceptionLevel, $file, $line);
 
         return true;
     }
 
     public function handleException(Throwable $exception): void
     {
-        $this->getExceptionLogger()->logException($exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
+        $this->exceptionLogger->logException($exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
         $this->displayGeneralErrorPage();
     }
 
@@ -107,7 +84,7 @@ class ErrorHandler
         $allowedErrors = [E_ERROR, E_COMPILE_ERROR];
 
         if (!is_null($error) && in_array($error['type'], $allowedErrors)) {
-            $this->getExceptionLogger()->logException(
+            $this->exceptionLogger->logException(
                 new Exception($error['message'] . '. File: ' . $error['file'] . '. Line: ' . $error['line'] . '.'),
                 ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR, $error['file'], $error['line']
             );

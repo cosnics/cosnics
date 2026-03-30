@@ -2,8 +2,6 @@
 namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -12,7 +10,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class VisualContentFormType extends AbstractType
 {
-
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

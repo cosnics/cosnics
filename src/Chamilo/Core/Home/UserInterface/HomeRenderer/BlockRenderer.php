@@ -11,7 +11,7 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\Home\UserInterface\HomeRenderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class BlockRenderer
+abstract readonly class BlockRenderer
 {
     public const string BLOCK_PROPERTY_ID = 'id';
     public const string BLOCK_PROPERTY_IMAGE = 'image';
@@ -21,8 +21,7 @@ abstract class BlockRenderer
     public const int SOURCE_DEFAULT = 1;
 
     public function __construct(
-        protected readonly HomeService $homeService, protected readonly UrlGenerator $urlGenerator,
-        protected readonly Translator $translator
+        protected HomeService $homeService, protected UrlGenerator $urlGenerator, protected Translator $translator
     )
     {
     }

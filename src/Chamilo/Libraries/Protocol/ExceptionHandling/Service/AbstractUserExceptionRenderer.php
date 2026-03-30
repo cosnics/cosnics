@@ -15,56 +15,22 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class AbstractUserExceptionRenderer
 {
-    protected AlertRenderer $alertRenderer;
-
-    protected BreadcrumbGenerator $breadcrumbGenerator;
-
-    protected SecurityUtilities $securityUtilities;
-
-    protected Translator $translator;
-
     public function __construct(
-        AlertRenderer $alertRenderer, BreadcrumbGenerator $breadcrumbGenerator, SecurityUtilities $securityUtilities,
-        Translator $translator
+        protected AlertRenderer $alertRenderer, protected BreadcrumbGenerator $breadcrumbGenerator,
+        protected SecurityUtilities $securityUtilities, protected Translator $translator
     )
     {
-        $this->alertRenderer = $alertRenderer;
-        $this->breadcrumbGenerator = $breadcrumbGenerator;
-        $this->securityUtilities = $securityUtilities;
-        $this->translator = $translator;
     }
 
     public function render(UserExceptionInterface $userException): string
     {
-        $securityUtilities = $this->getSecurityUtilities();
-
-        $this->getBreadcrumbGenerator()->addRootAndTitleBreadcrumbs(
-            $securityUtilities->removeXSS($this->renderTitle($userException))
+        $this->breadcrumbGenerator->addRootAndTitleBreadcrumbs(
+            $this->securityUtilities->removeXSS($this->renderTitle($userException))
         );
 
-        return $this->getAlertRenderer()->render(
-            new Alert($securityUtilities->removeXSS($this->renderMessage($userException)), AlertEnum::DANGER)
+        return $this->alertRenderer->render(
+            new Alert($this->securityUtilities->removeXSS($this->renderMessage($userException)), AlertEnum::DANGER)
         );
-    }
-
-    public function getAlertRenderer(): AlertRenderer
-    {
-        return $this->alertRenderer;
-    }
-
-    protected function getBreadcrumbGenerator(): BreadcrumbGenerator
-    {
-        return $this->breadcrumbGenerator;
-    }
-
-    protected function getSecurityUtilities(): SecurityUtilities
-    {
-        return $this->securityUtilities;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 
     abstract public function renderMessage(UserExceptionInterface $userException): string;

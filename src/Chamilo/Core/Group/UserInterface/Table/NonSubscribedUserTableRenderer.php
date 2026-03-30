@@ -33,25 +33,16 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
 {
     public const string TABLE_IDENTIFIER = SubscribeComponent::PARAM_USER_ID;
 
-    protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
-
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
         PageNavigationCalculator $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
-        ClassnameUtilities $classnameUtilities, MiniButtonToolBarRenderer $miniButtonToolBarRenderer
+        ClassnameUtilities $classnameUtilities, protected readonly MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )
     {
-        $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
-
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
             $classnameUtilities
         );
-    }
-
-    public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
-    {
-        return $this->miniButtonToolBarRenderer;
     }
 
     public function getTableActions(): TableActions
@@ -106,12 +97,9 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
     {
-        $urlGenerator = $this->getUrlGenerator();
-        $translator = $this->getTranslator();
-
         $buttonToolBar = new MiniButtonToolBar();
 
-        $subscribeUrl = $urlGenerator->fromRequest([
+        $subscribeUrl = $this->urlGenerator->fromRequest([
             ApplicationInterface::PARAM_ACTION => ActionEnum::SUBSCRIBE->value,
             SubscribeComponent::PARAM_USER_ID => $result->getId()
 
@@ -119,11 +107,11 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
 
         $buttonToolBar->addButton(
             new Button(
-                $translator->trans('UnsubscribeSelected', [], Manager::CONTEXT), new FontAwesomeGlyph('plus-circle'),
-                $subscribeUrl, DisplayTypeEnum::ICON, classes: ['btn-link']
+                $this->translator->trans('UnsubscribeSelected', [], Manager::CONTEXT),
+                new FontAwesomeGlyph('plus-circle'), $subscribeUrl, DisplayTypeEnum::ICON, classes: ['btn-link']
             )
         );
 
-        return $this->getMiniButtonToolBarRenderer()->render($buttonToolBar);
+        return $this->miniButtonToolBarRenderer->render($buttonToolBar);
     }
 }

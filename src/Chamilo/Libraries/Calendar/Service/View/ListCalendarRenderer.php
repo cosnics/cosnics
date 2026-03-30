@@ -26,39 +26,23 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
 {
     use AgendaCalendarTrait;
 
-    protected AlertRenderer $alertRenderer;
-
-    protected EventListRenderer $eventListRenderer;
-
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, EventListRenderer $eventListRenderer,
-        WebPathBuilder $webPathBuilder, ResourceManager $resourceManager, JumpBarRenderer $jumpBarRenderer,
-        AlertRenderer $alertRenderer, ButtonToolBarRenderer $buttonToolBarRenderer
+        ButtonToolBarRenderer $buttonToolBarRenderer, JumpBarRenderer $jumpBarRenderer,
+        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, ResourceManager $resourceManager,
+        WebPathBuilder $webPathBuilder, protected AlertRenderer $alertRenderer,
+        protected EventListRenderer $eventListRenderer
     )
     {
         parent::__construct(
-            $legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer, $webPathBuilder, $resourceManager,
-            $jumpBarRenderer, $buttonToolBarRenderer
+            $legendRenderer, $urlGenerator, $translator, $buttonToolBarRenderer, $jumpBarRenderer,
+            $miniMonthCalendarRenderer, $resourceManager, $webPathBuilder
         );
-
-        $this->eventListRenderer = $eventListRenderer;
-        $this->alertRenderer = $alertRenderer;
-    }
-
-    public function getAlertRenderer(): AlertRenderer
-    {
-        return $this->alertRenderer;
     }
 
     protected function getEndTime(int $displayTime): int
     {
         return strtotime('+6 Months', $displayTime);
-    }
-
-    public function getEventListRenderer(): EventListRenderer
-    {
-        return $this->eventListRenderer;
     }
 
     /**
@@ -74,11 +58,11 @@ class ListCalendarRenderer extends SidebarCalendarRenderer
 
         $buttonToolBar->addButton(
             new Button(
-                $this->getTranslator()->trans('Today', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'),
+                $this->translator->trans('Today', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'),
                 $todayUrl, DisplayTypeEnum::ICON
             )
         );
 
-        return $this->getButtonToolBarRenderer()->render($buttonToolBar);
+        return $this->buttonToolBarRenderer->render($buttonToolBar);
     }
 }

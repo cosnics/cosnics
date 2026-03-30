@@ -13,22 +13,11 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 class CalendarDataProvider
 {
-    protected CalendarExtensionDataProviderRegistry $calendarExtensionDataProviderRegistry;
-
-    protected VisibilityRepository $visibilityRepository;
-
     public function __construct(
-        CalendarExtensionDataProviderRegistry $calendarExtensionDataProviderRegistry,
-        VisibilityRepository $visibilityRepository
+        protected CalendarExtensionDataProviderRegistry $calendarExtensionDataProviderRegistry,
+        protected VisibilityRepository $visibilityRepository
     )
     {
-        $this->visibilityRepository = $visibilityRepository;
-        $this->calendarExtensionDataProviderRegistry = $calendarExtensionDataProviderRegistry;
-    }
-
-    public function getCalendarExtensionDataProviderRegistry(): CalendarExtensionDataProviderRegistry
-    {
-        return $this->calendarExtensionDataProviderRegistry;
     }
 
     /**
@@ -39,7 +28,7 @@ class CalendarDataProvider
         $events = [];
 
         foreach (
-            $this->getCalendarExtensionDataProviderRegistry()->getCalendarExtensionDataProviders() as
+            $this->calendarExtensionDataProviderRegistry->getCalendarExtensionDataProviders() as
             $calendarExtensionDataProvider
         ) {
             $extensionEvents = $calendarExtensionDataProvider->getEvents($user, $startTime, $endTime);
@@ -58,7 +47,7 @@ class CalendarDataProvider
         $sourceNames = [];
 
         foreach (
-            $this->getCalendarExtensionDataProviderRegistry()->getCalendarExtensionDataProviders() as
+            $this->calendarExtensionDataProviderRegistry->getCalendarExtensionDataProviders() as
             $calendarExtensionDataProvider
         ) {
             $sourceNames[] = $calendarExtensionDataProvider->getName();
@@ -75,7 +64,7 @@ class CalendarDataProvider
      */
     public function getVisibilities($userIdentifier): array
     {
-        $visibilities = $this->getVisibilityRepository()->retrieveVisibilitiesByUserIdentifier(
+        $visibilities = $this->visibilityRepository->retrieveVisibilitiesByUserIdentifier(
             $userIdentifier
         );
 
@@ -86,10 +75,5 @@ class CalendarDataProvider
         }
 
         return $indexedVisibilities;
-    }
-
-    public function getVisibilityRepository(): VisibilityRepository
-    {
-        return $this->visibilityRepository;
     }
 }

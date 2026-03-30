@@ -19,14 +19,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @package Chamilo\Core\Menu\Storage\Repository
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ItemRepository
+readonly class ItemRepository
 {
-
-    private DataClassRepository $dataClassRepository;
-
-    public function __construct(DataClassRepository $dataClassRepository)
+    public function __construct(protected DataClassRepository $dataClassRepository)
     {
-        $this->dataClassRepository = $dataClassRepository;
     }
 
     /**
@@ -39,7 +35,7 @@ class ItemRepository
             new StaticConditionVariable($parentIdentifier)
         );
 
-        return $this->getDataClassRepository()->count(
+        return $this->dataClassRepository->count(
             Item::class, new StorageParameters(condition: $condition)
         );
     }
@@ -50,7 +46,7 @@ class ItemRepository
      */
     public function createItem(Item $item): bool
     {
-        return $this->getDataClassRepository()->create($item);
+        return $this->dataClassRepository->create($item);
     }
 
     /**
@@ -58,7 +54,7 @@ class ItemRepository
      */
     public function deleteItem(Item $item): bool
     {
-        return $this->getDataClassRepository()->delete($item);
+        return $this->dataClassRepository->delete($item);
     }
 
     /**
@@ -67,7 +63,7 @@ class ItemRepository
      */
     public function findItemByIdentifier(string $identifier): ?Item
     {
-        return $this->getDataClassRepository()->retrieveById(Item::class, $identifier);
+        return $this->dataClassRepository->retrieveById(Item::class, $identifier);
     }
 
     /**
@@ -80,7 +76,7 @@ class ItemRepository
         $orderBy->add(new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT)));
         $orderBy->add(new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT)));
 
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieves(
             Item::class, new StorageParameters(orderBy: $orderBy)
         );
     }
@@ -97,7 +93,7 @@ class ItemRepository
             new PropertyConditionVariable(Item::class, DataClass::PROPERTY_ID), $identifiers
         );
 
-        return $this->getDataClassRepository()->retrieves(Item::class, new StorageParameters(condition: $condition));
+        return $this->dataClassRepository->retrieves(Item::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -118,14 +114,13 @@ class ItemRepository
             new StaticConditionVariable($parentIdentifier)
         );
 
-        if (is_null($orderBy))
-        {
+        if (is_null($orderBy)) {
             $orderBy = new OrderBy();
         }
 
         $orderBy->add(new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT)));
 
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieves(
             Item::class, new StorageParameters(
                 condition: $condition, orderBy: $orderBy, count: $count, offset: $offset
             )
@@ -144,7 +139,7 @@ class ItemRepository
             new PropertyConditionVariable(Item::class, Item::PROPERTY_TYPE), new StaticConditionVariable($type)
         );
 
-        return $this->getDataClassRepository()->retrieves(Item::class, new StorageParameters(condition: $condition));
+        return $this->dataClassRepository->retrieves(Item::class, new StorageParameters(condition: $condition));
     }
 
     /**
@@ -166,16 +161,11 @@ class ItemRepository
 
         $orderBy = new OrderBy([new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT))]);
 
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieves(
             Item::class, new StorageParameters(
                 condition: new AndCondition($conditions), orderBy: $orderBy
             )
         );
-    }
-
-    protected function getDataClassRepository(): DataClassRepository
-    {
-        return $this->dataClassRepository;
     }
 
     /**
@@ -189,7 +179,7 @@ class ItemRepository
             new StaticConditionVariable($parentIdentifier)
         );
 
-        return $this->getDataClassRepository()->retrieveMaximumValue(Item::class, Item::PROPERTY_SORT, $condition);
+        return $this->dataClassRepository->retrieveMaximumValue(Item::class, Item::PROPERTY_SORT, $condition);
     }
 
     /**
@@ -197,6 +187,6 @@ class ItemRepository
      */
     public function updateItem(Item $item): bool
     {
-        return $this->getDataClassRepository()->update($item);
+        return $this->dataClassRepository->update($item);
     }
 }

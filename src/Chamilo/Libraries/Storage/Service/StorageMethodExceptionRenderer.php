@@ -43,6 +43,6 @@ class StorageMethodExceptionRenderer extends AbstractUserExceptionRenderer imple
      */
     public function renderTitle(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('StorageMethodExceptionTitle', [], StringUtilities::LIBRARIES);
+        return $this->translator->trans('StorageMethodExceptionTitle', [], StringUtilities::LIBRARIES);
     }
 }

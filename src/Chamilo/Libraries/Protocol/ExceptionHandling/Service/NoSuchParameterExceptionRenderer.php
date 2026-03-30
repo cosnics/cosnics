@@ -22,7 +22,7 @@ class NoSuchParameterExceptionRenderer extends AbstractUserExceptionRenderer imp
      */
     public function renderMessage(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans(
+        return $this->translator->trans(
             'MissingParameter', [
             '%Parameter%' => $userException->getParameter()
         ], StringUtilities::LIBRARIES
@@ -34,6 +34,6 @@ class NoSuchParameterExceptionRenderer extends AbstractUserExceptionRenderer imp
      */
     public function renderTitle(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('MissingParameterTitle', [], StringUtilities::LIBRARIES);
+        return $this->translator->trans('MissingParameterTitle', [], StringUtilities::LIBRARIES);
     }
 }

@@ -3,9 +3,11 @@ namespace Chamilo\Core\User\Service;
 
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserCreateEvent;
+use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserDeleteEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserPasswordResetEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserRegistrationEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserUpdateEvent;
+use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserDeleteEvent;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
@@ -46,8 +48,7 @@ readonly class UserService
         protected PasswordGeneratorInterface $passwordGenerator,
         protected AuthenticationValidator $authenticationValidator, protected UrlGenerator $urlGenerator,
         protected EventDispatcherInterface $eventDispatcher, private string $securityKey, protected string $siteName,
-        protected string $administratorName, protected string $administratorEmail,
-        protected bool $allowRegistration = false
+        protected string $administratorName, protected string $administratorEmail, protected bool $allowRegistration
     )
     {
     }
@@ -57,7 +58,7 @@ readonly class UserService
      */
     public function countUsers(?ConditionInterface $condition = null): int
     {
-        return $this->getUserRepository()->countUsers($condition);
+        return $this->userRepository->countUsers($condition);
     }
 
     /**
@@ -65,7 +66,7 @@ readonly class UserService
      */
     public function countUsersForSearchQuery(?string $searchQuery = null): int
     {
-        return $this->getUserRepository()->countUsersForSearchQuery($searchQuery);
+        return $this->userRepository->countUsersForSearchQuery($searchQuery);
     }
 
     /**
@@ -77,7 +78,7 @@ readonly class UserService
         ?string $searchQuery = null, array $userIdentifiers = []
     ): int
     {
-        return $this->getUserRepository()->countUsersForSearchQueryAndUserIdentifiers($searchQuery, $userIdentifiers);
+        return $this->userRepository->countUsersForSearchQueryAndUserIdentifiers($searchQuery, $userIdentifiers);
     }
 
     /**
@@ -191,8 +192,8 @@ readonly class UserService
         $user->setPlatformAdministrator($isPlatformAdmin);
         $user->setActive($active);
 
-        $password = $generatePassword ? $this->getPasswordGenerator()->generatePassword() : $password;
-        $user->setPassword($this->getHashingUtilities()->hashString($password));
+        $password = $generatePassword ? $this->passwordGenerator->generatePassword() : $password;
+        $user->setPassword($this->hashingUtilities->hashString($password));
 
         if (!$this->createUser($user, $executingUser)) {
             throw new RuntimeException('Could not create the user');
@@ -207,30 +208,29 @@ readonly class UserService
 
     public function deleteUser(User $user, ?User $executingUser = null): bool
     {
-        return false;
-
         // TODO: This needs to be implemented some day
-        //if (!$this->canUserBeDeleted($user))
-        //{
-        //return false;
-        //}
+        //        if (!$this->canUserBeDeleted($user))
+        //        {
+        //        return false;
+        //        }
 
-        //        $this->getEventDispatcher()->dispatch(new BeforeUserDeleteEvent($user));
+        $this->eventDispatcher->dispatch(new BeforeUserDeleteEvent($user));
         //
-        //        if (!$this->getUserRepository()->deleteUser($user))
+        //        if (!$this->userRepository->deleteUser($user))
         //        {
         //            return false;
         //        }
         //
-        //        $this->getEventDispatcher()->dispatch(new AfterUserDeleteEvent($user, $executingUser));
+        $this->eventDispatcher->dispatch(new AfterUserDeleteEvent($user, $executingUser));
+
         //
-        //        return true;
+        return false;
     }
 
     /** @noinspection PhpUnusedParameterInspection */
     public function determineUserKey(User $user): string
     {
-        return $this->getHashingUtilities()->hashString($this->getSecurityKey() . $user->getEmail());
+        return $this->hashingUtilities->hashString($this->securityKey . $user->getEmail());
     }
 
     /**
@@ -241,7 +241,7 @@ readonly class UserService
         ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        return $this->getUserRepository()->findActiveUsers($condition, $offset, $count, $orderBy);
+        return $this->userRepository->findActiveUsers($condition, $offset, $count, $orderBy);
     }
 
     /**
@@ -252,7 +252,7 @@ readonly class UserService
      */
     public function findEmailAddressesForUserIdentifiers(array $userIdentifiers): array
     {
-        return $this->getUserRepository()->findEmailAddressesForUserIdentifiers($userIdentifiers);
+        return $this->userRepository->findEmailAddressesForUserIdentifiers($userIdentifiers);
     }
 
     /**
@@ -261,7 +261,7 @@ readonly class UserService
      */
     public function findPlatformAdministrators(): ArrayCollection
     {
-        return $this->getUserRepository()->findPlatformAdministrators();
+        return $this->userRepository->findPlatformAdministrators();
     }
 
     /**
@@ -270,7 +270,7 @@ readonly class UserService
      */
     public function findUserByEmail(string $email): ?User
     {
-        return $this->getUserRepository()->findUserByEmail($email);
+        return $this->userRepository->findUserByEmail($email);
     }
 
     /**
@@ -279,7 +279,7 @@ readonly class UserService
      */
     public function findUserByIdentifier(string $identifier): ?User
     {
-        return $this->getUserRepository()->findUserByIdentifier($identifier);
+        return $this->userRepository->findUserByIdentifier($identifier);
     }
 
     /**
@@ -288,7 +288,7 @@ readonly class UserService
      */
     public function findUserByOfficialCode(string $officialCode): ?User
     {
-        return $this->getUserRepository()->findUserByOfficialCode($officialCode);
+        return $this->userRepository->findUserByOfficialCode($officialCode);
     }
 
     /**
@@ -297,7 +297,7 @@ readonly class UserService
      */
     public function findUserBySecurityToken(string $securityToken): ?User
     {
-        return $this->getUserRepository()->findUserBySecurityToken($securityToken);
+        return $this->userRepository->findUserBySecurityToken($securityToken);
     }
 
     /**
@@ -306,7 +306,7 @@ readonly class UserService
      */
     public function findUserByUsername(string $username): ?User
     {
-        return $this->getUserRepository()->findUserByUsername($username);
+        return $this->userRepository->findUserByUsername($username);
     }
 
     /**
@@ -315,7 +315,7 @@ readonly class UserService
      */
     public function findUserByUsernameOrEmail(string $usernameOrEmail): ?User
     {
-        return $this->getUserRepository()->findUserByUsernameOrEmail($usernameOrEmail);
+        return $this->userRepository->findUserByUsernameOrEmail($usernameOrEmail);
     }
 
     /**
@@ -324,7 +324,7 @@ readonly class UserService
      */
     public function findUserIdentifiers(): array
     {
-        return $this->getUserRepository()->findUserIdentifiers();
+        return $this->userRepository->findUserIdentifiers();
     }
 
     /**
@@ -335,7 +335,7 @@ readonly class UserService
      */
     public function findUserIdentifiersByOfficialCodes(array $officialCodes): array
     {
-        return $this->getUserRepository()->findUserIdentifiersByOfficialCodes($officialCodes);
+        return $this->userRepository->findUserIdentifiersByOfficialCodes($officialCodes);
     }
 
     /**
@@ -345,7 +345,7 @@ readonly class UserService
         array $retrieveProperties, ?ConditionInterface $condition = null, OrderBy $orderBy = new OrderBy()
     ): array
     {
-        return $this->getUserRepository()->findUserProperties($retrieveProperties, $condition, $orderBy);
+        return $this->userRepository->findUserProperties($retrieveProperties, $condition, $orderBy);
     }
 
     /**
@@ -356,7 +356,7 @@ readonly class UserService
         ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        return $this->getUserRepository()->findUsers($condition, $count, $offset, $orderBy);
+        return $this->userRepository->findUsers($condition, $count, $offset, $orderBy);
     }
 
     /**
@@ -367,7 +367,7 @@ readonly class UserService
      */
     public function findUsersByIdentifiers(array $userIdentifiers = []): ArrayCollection
     {
-        return $this->getUserRepository()->findUsersByIdentifiers($userIdentifiers);
+        return $this->userRepository->findUsersByIdentifiers($userIdentifiers);
     }
 
     /**
@@ -378,7 +378,7 @@ readonly class UserService
      */
     public function findUsersByIdentifiersOrderedByName(array $userIdentifiers): ArrayCollection
     {
-        return $this->getUserRepository()->findUsersByIdentifiersOrderedByName($userIdentifiers);
+        return $this->userRepository->findUsersByIdentifiersOrderedByName($userIdentifiers);
     }
 
     /**
@@ -388,7 +388,7 @@ readonly class UserService
     public function findUsersForSearchQuery(?string $searchQuery = null, ?int $offset = null, ?int $count = null
     ): ArrayCollection
     {
-        return $this->getUserRepository()->findUsersForSearchQuery($searchQuery, $offset, $count);
+        return $this->userRepository->findUsersForSearchQuery($searchQuery, $offset, $count);
     }
 
     /**
@@ -401,7 +401,7 @@ readonly class UserService
         ?string $searchQuery = null, array $userIdentifiers = [], ?int $offset = null, ?int $count = null
     ): ArrayCollection
     {
-        return $this->getUserRepository()->findUsersForSearchQueryAndUserIdentifiers(
+        return $this->userRepository->findUsersForSearchQueryAndUserIdentifiers(
             $searchQuery, $userIdentifiers, $offset, $count
         );
     }
@@ -414,69 +414,9 @@ readonly class UserService
         ?ConditionInterface $condition = null, ?int $offset = 0, ?int $count = - 1, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        return $this->getPropertyMapper()->mapDataClassByProperty(
+        return $this->propertyMapper->mapDataClassByProperty(
             $this->findUsers($condition, $offset, $count, $orderBy), User::PROPERTY_OFFICIAL_CODE
         );
-    }
-
-    public function getActiveMailer(): MailerInterface
-    {
-        return $this->activeMailer;
-    }
-
-    public function getAdministratorEmail(): string
-    {
-        return $this->administratorEmail;
-    }
-
-    public function getAdministratorName(): string
-    {
-        return $this->administratorName;
-    }
-
-    public function getAuthenticationValidator(): AuthenticationValidator
-    {
-        return $this->authenticationValidator;
-    }
-
-    public function getEventDispatcher(): EventDispatcherInterface
-    {
-        return $this->eventDispatcher;
-    }
-
-    protected function getHashingUtilities(): HashingAlgorithm
-    {
-        return $this->hashingUtilities;
-    }
-
-    public function getPasswordGenerator(): PasswordGeneratorInterface
-    {
-        return $this->passwordGenerator;
-    }
-
-    public function getPropertyMapper(): PropertyMapper
-    {
-        return $this->propertyMapper;
-    }
-
-    public function getSecurityKey(): string
-    {
-        return $this->securityKey;
-    }
-
-    public function getSiteName(): string
-    {
-        return $this->siteName;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
     }
 
     /**
@@ -485,7 +425,7 @@ readonly class UserService
      */
     public function getUserByOfficialCode(string $officialCode): ?User
     {
-        return $this->getUserRepository()->findUserByOfficialCode($officialCode);
+        return $this->userRepository->findUserByOfficialCode($officialCode);
     }
 
     /**
@@ -494,7 +434,7 @@ readonly class UserService
      */
     public function getUserBySecurityToken(string $securityToken): ?User
     {
-        return $this->getUserRepository()->findUserBySecurityToken($securityToken);
+        return $this->userRepository->findUserBySecurityToken($securityToken);
     }
 
     /**
@@ -503,7 +443,7 @@ readonly class UserService
      */
     public function getUserByUsernameOrEmail(string $usernameOrEmail): ?User
     {
-        return $this->getUserRepository()->findUserByUsernameOrEmail($usernameOrEmail);
+        return $this->userRepository->findUserByUsernameOrEmail($usernameOrEmail);
     }
 
     /**
@@ -515,25 +455,10 @@ readonly class UserService
         $user = $this->findUserByIdentifier($identifier);
 
         if (!$user instanceof User) {
-            return $unknownUserTranslation ?: $this->getTranslator()->trans('UserUnknown', [], Manager::CONTEXT);
+            return $unknownUserTranslation ?: $this->translator->trans('UserUnknown', [], Manager::CONTEXT);
         }
 
         return $user->getFullName();
-    }
-
-    protected function getUserRepository(): UserRepository
-    {
-        return $this->userRepository;
-    }
-
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return $this->webPathBuilder;
-    }
-
-    public function isRegistrationAllowed(): bool
-    {
-        return $this->allowRegistration;
     }
 
     public function isUsernameAvailable(string $username): bool
@@ -570,12 +495,13 @@ readonly class UserService
      */
     public function registerUserFromParameters(
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
-        bool $generatePassword, ?string $password = null, ?string $authSource = 'Platform', bool $sendEmail = false, ?User $executingUser = null
+        bool $generatePassword, ?string $password = null, ?string $authSource = 'Platform', bool $sendEmail = false,
+        ?User $executingUser = null
     ): User
     {
         $user = $this->createUserFromParameters(
             $firstName, $lastName, $username, $officialCode, $emailAddress, $generatePassword, $password, $authSource,
-            false, $this->isRegistrationAllowed(), $sendEmail, $executingUser
+            false, $this->allowRegistration, $sendEmail, $executingUser
         );
 
         $this->eventDispatcher->dispatch(new AfterUserRegistrationEvent($user));
@@ -589,11 +515,9 @@ readonly class UserService
      */
     public function sendPasswordResetLinkforUser(User $user): bool
     {
-        $translator = $this->getTranslator();
-
         if (!$user->getActive()) {
             throw new UserException(
-                $translator->trans(
+                $this->translator->trans(
                     'ResetPasswordNotPossibleForInactiveUser',
                     ['%User%' => $user->getFullName() . ' (' . $user->getUsername() . ')'], Manager::CONTEXT
                 )
@@ -604,7 +528,7 @@ readonly class UserService
 
         if (!$authentication instanceof ChangeablePasswordInterface) {
             throw new UserException(
-                $translator->trans(
+                $this->translator->trans(
                     'ResetPasswordNotPossibleForThisUser',
                     ['%User%' => $user->getFullName() . ' (' . $user->getUsername() . ')'], Manager::CONTEXT
                 )
@@ -621,21 +545,22 @@ readonly class UserService
                 ]
             );
 
-            $mailSubject = $translator->trans('LoginRequest', [], Manager::CONTEXT);
+            $mailSubject = $this->translator->trans('LoginRequest', [], Manager::CONTEXT);
 
             $mailBody = [];
             $mailBody[] = '<div style="font-family:arial, sans-serif">';
             $mailBody[] = '<p>' .
-                $translator->trans('MailResetPasswordDear', ['%User%' => $user->getFullName()], Manager::CONTEXT) .
-                '</p>';
-            $mailBody[] = '<p>' . $translator->trans('MailResetPasswordAskBody', [], Manager::CONTEXT) . '</p>';
+                $this->translator->trans('MailResetPasswordDear', ['%User%' => $user->getFullName()], Manager::CONTEXT
+                ) . '</p>';
+            $mailBody[] = '<p>' . $this->translator->trans('MailResetPasswordAskBody', [], Manager::CONTEXT) . '</p>';
             $mailBody[] =
-                '<p>' . $translator->trans('Username', [], Manager::CONTEXT) . ': ' . $user->getUsername() . '<br/>';
+                '<p>' . $this->translator->trans('Username', [], Manager::CONTEXT) . ': ' . $user->getUsername() .
+                '<br/>';
             $mailBody[] =
-                $translator->trans('MailResetPasswordLink', [], Manager::CONTEXT) . ': <a href="' . $resetLink . '">' .
-                $resetLink . '</a></p>';
-            $mailBody[] = '<p>' . $translator->trans('MailResetPasswordCloser', [], Manager::CONTEXT) . '<br/>';
-            $mailBody[] = $translator->trans(
+                $this->translator->trans('MailResetPasswordLink', [], Manager::CONTEXT) . ': <a href="' . $resetLink .
+                '">' . $resetLink . '</a></p>';
+            $mailBody[] = '<p>' . $this->translator->trans('MailResetPasswordCloser', [], Manager::CONTEXT) . '<br/>';
+            $mailBody[] = $this->translator->trans(
                     'MailResetPasswordSender', [
                     '%AdminName%' => $this->administratorName
                 ], Manager::CONTEXT
@@ -650,7 +575,7 @@ readonly class UserService
         }
         catch (Exception) {
             throw new UserException(
-                $translator->trans(
+                $this->translator->trans(
                     'SendingPasswordResetLinkNotPossibleForThisUser',
                     ['%User%' => $user->getFullName() . ' (' . $user->getUsername() . ')'], Manager::CONTEXT
                 )
@@ -770,10 +695,10 @@ readonly class UserService
             $user->setActive($active);
         }
 
-        $password = $generatePassword ? $this->getPasswordGenerator()->generatePassword() : $password;
+        $password = $generatePassword ? $this->passwordGenerator->generatePassword() : $password;
 
         if (!is_null($password)) {
-            $user->setPassword($this->getHashingUtilities()->hashString($password));
+            $user->setPassword($this->hashingUtilities->hashString($password));
         }
 
         if (!$this->updateUser($user)) {

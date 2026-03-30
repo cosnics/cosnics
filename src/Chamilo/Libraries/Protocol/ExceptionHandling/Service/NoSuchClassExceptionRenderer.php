@@ -22,7 +22,7 @@ class NoSuchClassExceptionRenderer extends AbstractUserExceptionRenderer impleme
      */
     public function renderMessage(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans(
+        return $this->translator->trans(
             'InvalidType', [
             '%ImplementationType%' => $userException->getImplementationType(),
             '%Type%' => $userException->getType()
@@ -35,6 +35,6 @@ class NoSuchClassExceptionRenderer extends AbstractUserExceptionRenderer impleme
      */
     public function renderTitle(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('InvalidTypeTitle', [], StringUtilities::LIBRARIES);
+        return $this->translator->trans('InvalidTypeTitle', [], StringUtilities::LIBRARIES);
     }
 }

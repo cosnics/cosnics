@@ -20,7 +20,7 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\Menu\Implementation\Menu
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class LanguageItemRenderer extends ItemRenderer
+readonly class LanguageItemRenderer extends ItemRenderer
 {
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
@@ -42,7 +42,7 @@ class LanguageItemRenderer extends ItemRenderer
             $html = [];
 
             foreach ($languages as $isocode => $language) {
-                $languageUrl = $this->getUrlGenerator()->fromParameters(
+                $languageUrl = $this->urlGenerator->fromParameters(
                     [
                         ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                         ApplicationInterface::PARAM_ACTION => ActionEnum::LANGUAGE->value,
@@ -90,11 +90,6 @@ class LanguageItemRenderer extends ItemRenderer
         return $this->translator->trans('LanguageItem', [], \Chamilo\Core\Menu\Manager::CONTEXT);
     }
 
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
-    }
-
     public function renderDropdown(Item $item): string
     {
         $html = [];
@@ -135,7 +130,7 @@ class LanguageItemRenderer extends ItemRenderer
             $html[] = '<ul class="dropdown-menu">';
 
             foreach ($languages as $isocode => $language) {
-                $languageUrl = $this->getUrlGenerator()->fromParameters(
+                $languageUrl = $this->urlGenerator->fromParameters(
                     [
                         ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                         ApplicationInterface::PARAM_ACTION => ActionEnum::LANGUAGE->value,

@@ -24,36 +24,27 @@ use Symfony\Component\Translation\Translator;
 class PlatformAuthentication extends Authentication
     implements AuthenticationInterface, ChangeablePasswordInterface, ChangeableUsernameInterface
 {
-    /**
-     * @var \Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm
-     */
-    protected HashingAlgorithm $hashingUtilities;
-
-    protected UrlGenerator $urlGenerator;
-
     public function __construct(
         Translator $translator, ChamiloRequest $request, UserService $userService,
-        AuthenticationValidator $authenticationValidator, HashingAlgorithm $hashingUtilities, UrlGenerator $urlGenerator
+        AuthenticationValidator $authenticationValidator, protected HashingAlgorithm $hashingUtilities,
+        protected UrlGenerator $urlGenerator
     )
     {
         parent::__construct($translator, $request, $userService, $authenticationValidator);
-        $this->hashingUtilities = $hashingUtilities;
-        $this->urlGenerator = $urlGenerator;
     }
 
     /**
      * @throws \Exception
      */
-    public function changePassword(User $user, string $oldPassword, string $newPassword, ?User $executingUser = null): bool
+    public function changePassword(User $user, string $oldPassword, string $newPassword, ?User $executingUser = null
+    ): bool
     {
         // Check whether the current password is different from the new password
         if ($oldPassword == $newPassword) {
             return false;
         }
 
-        $hashingUtilities = $this->getHashingUtilities();
-
-        $oldPasswordHash = $hashingUtilities->hashString($oldPassword);
+        $oldPasswordHash = $this->hashingUtilities->hashString($oldPassword);
 
         // Verify that the entered old password matches the stored password
         if ($oldPasswordHash != $user->getPassword()) {
@@ -61,14 +52,9 @@ class PlatformAuthentication extends Authentication
         }
 
         // Set the password
-        $user->setPassword($hashingUtilities->hashString($newPassword));
+        $user->setPassword($this->hashingUtilities->hashString($newPassword));
 
-        return $this->getUserService()->updateUser($user, $executingUser);
-    }
-
-    public function getHashingUtilities(): HashingAlgorithm
-    {
-        return $this->hashingUtilities;
+        return $this->userService->updateUser($user, $executingUser);
     }
 
     public function getPasswordRequirements(): string
@@ -79,11 +65,6 @@ class PlatformAuthentication extends Authentication
     public function getPriority(): int
     {
         return 200;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
     }
 
     /**
@@ -100,22 +81,22 @@ class PlatformAuthentication extends Authentication
             return null;
         }
 
-        $password = $this->getRequest()->request->get(self::PARAM_PASSWORD);
-        $passwordHash = $this->getHashingUtilities()->hashString($password);
+        $password = $this->request->request->get(self::PARAM_PASSWORD);
+        $passwordHash = $this->hashingUtilities->hashString($password);
 
         if ($user->getPassword() == $passwordHash) {
             return $user;
         }
 
         throw new NotAuthenticatedException(
-            $this->getTranslator()->trans('UsernameOrPasswordIncorrect', [], StringUtilities::LIBRARIES)
+            $this->translator->trans('UsernameOrPasswordIncorrect', [], StringUtilities::LIBRARIES)
         );
     }
 
     public function logout(User $user): void
     {
         $redirect = new RedirectResponse(
-            $this->getUrlGenerator()->fromParameters([],
+            $this->urlGenerator->fromParameters([],
                 [ApplicationInterface::PARAM_ACTION, ApplicationInterface::PARAM_CONTEXT])
         );
 
@@ -125,6 +106,6 @@ class PlatformAuthentication extends Authentication
 
     public function verifyPassword(User $user, string $password): bool
     {
-        return $user->getPassword() === $this->getHashingUtilities()->hashString($password);
+        return $user->getPassword() === $this->hashingUtilities->hashString($password);
     }
 }

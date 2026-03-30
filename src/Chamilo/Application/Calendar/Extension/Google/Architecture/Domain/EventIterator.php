@@ -11,26 +11,11 @@ use ArrayIterator;
  */
 class EventIterator extends ArrayIterator
 {
-    private CalendarProperties $calendarProperties;
-
     /**
      * @param \Google_Service_Calendar_Event[] $googleCalendarEvents
      */
-    public function __construct(CalendarProperties $calendarProperties, array $googleCalendarEvents)
+    public function __construct(public CalendarProperties $calendarProperties, array $googleCalendarEvents)
     {
         parent::__construct($googleCalendarEvents);
-        $this->calendarProperties = $calendarProperties;
-    }
-
-    public function getCalendarProperties(): CalendarProperties
-    {
-        return $this->calendarProperties;
-    }
-
-    public function setCalendarProperties(CalendarProperties $calendarProperties): static
-    {
-        $this->calendarProperties = $calendarProperties;
-
-        return $this;
     }
 }

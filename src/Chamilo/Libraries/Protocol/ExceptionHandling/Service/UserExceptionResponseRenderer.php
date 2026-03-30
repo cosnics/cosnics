@@ -12,20 +12,11 @@ use Chamilo\Libraries\UserInterface\Layout\Service\DefaultHeaderRenderer;
  */
 class UserExceptionResponseRenderer
 {
-    protected DefaultFooterRenderer $defaultFooterRenderer;
-
-    protected DefaultHeaderRenderer $defaultHeaderRenderer;
-
-    protected UserExceptionRendererRegistry $userExceptionRendererRegistry;
-
     public function __construct(
-        DefaultFooterRenderer $defaultFooterRenderer, DefaultHeaderRenderer $defaultHeaderRenderer,
-        UserExceptionRendererRegistry $userExceptionRendererRegistry
+        protected DefaultFooterRenderer $defaultFooterRenderer, protected DefaultHeaderRenderer $defaultHeaderRenderer,
+        protected UserExceptionRendererRegistry $userExceptionRendererRegistry
     )
     {
-        $this->defaultFooterRenderer = $defaultFooterRenderer;
-        $this->defaultHeaderRenderer = $defaultHeaderRenderer;
-        $this->userExceptionRendererRegistry = $userExceptionRendererRegistry;
     }
 
     /**
@@ -35,30 +26,15 @@ class UserExceptionResponseRenderer
     public function render(UserExceptionInterface $exception): string
     {
         $userExceptionRenderer =
-            $this->getUserExceptionRendererRegistry()->getUserExceptionRendererForUserException($exception);
+            $this->userExceptionRendererRegistry->getUserExceptionRendererForUserException($exception);
         $renderedUserException = $userExceptionRenderer->render($exception);
 
         $html = [];
 
-        $html[] = $this->getDefaultHeaderRenderer()->render();
+        $html[] = $this->defaultHeaderRenderer->render();
         $html[] = $renderedUserException;
-        $html[] = $this->getDefaultFooterRenderer()->render();
+        $html[] = $this->defaultFooterRenderer->render();
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function getDefaultFooterRenderer(): DefaultFooterRenderer
-    {
-        return $this->defaultFooterRenderer;
-    }
-
-    public function getDefaultHeaderRenderer(): DefaultHeaderRenderer
-    {
-        return $this->defaultHeaderRenderer;
-    }
-
-    public function getUserExceptionRendererRegistry(): UserExceptionRendererRegistry
-    {
-        return $this->userExceptionRendererRegistry;
     }
 }

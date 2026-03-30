@@ -19,23 +19,12 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 class ExceptionLoggerFactory
 {
-    protected array $errorHandlingConfiguration;
-
-    protected SessionInterface $session;
-
-    protected UrlGenerator $urlGenerator;
-
-    protected UserExceptionRendererRegistry $userExceptionRendererRegistry;
-
     public function __construct(
-        SessionInterface $session, UrlGenerator $urlGenerator,
-        UserExceptionRendererRegistry $userExceptionRendererRegistry, array $errorHandlingConfiguration
+        protected SessionInterface $session, protected UrlGenerator $urlGenerator,
+        protected UserExceptionRendererRegistry $userExceptionRendererRegistry,
+        protected array $errorHandlingConfiguration
     )
     {
-        $this->errorHandlingConfiguration = $errorHandlingConfiguration;
-        $this->session = $session;
-        $this->urlGenerator = $urlGenerator;
-        $this->userExceptionRendererRegistry = $userExceptionRendererRegistry;
     }
 
     /**
@@ -43,11 +32,9 @@ class ExceptionLoggerFactory
      */
     protected function createDefaultExceptionLogger(): FileExceptionLogger
     {
-        $errorHandlingConfiguration = $this->getErrorHandlingConfiguration();
-
         $fileExceptionLoggerBuilder = new FileExceptionLoggerBuilder(
-            $this->getSession(), $this->getUrlGenerator(), $this->getUserExceptionRendererRegistry(),
-            $errorHandlingConfiguration['instances']['Chamilo\Libraries\Protocol\ErrorHandling\Service\FileExceptionLoggerBuilder']
+            $this->session, $this->urlGenerator, $this->userExceptionRendererRegistry,
+            $this->errorHandlingConfiguration['instances']['Chamilo\Libraries\Protocol\ErrorHandling\Service\FileExceptionLoggerBuilder']
         );
 
         return $fileExceptionLoggerBuilder->createExceptionLogger();
@@ -102,7 +89,7 @@ class ExceptionLoggerFactory
                 }
 
                 $exceptionLoggerBuilder = new $exceptionLoggerBuilderClass(
-                    $this->getSession(), $this->getUrlGenerator(), $this->getUserExceptionRendererRegistry(),
+                    $this->session, $this->urlGenerator, $this->userExceptionRendererRegistry,
                     $errorHandlingConfiguration['instances'][$exceptionLoggerBuilderClass]
                 );
 
@@ -138,25 +125,5 @@ class ExceptionLoggerFactory
         }
 
         return new ExceptionLoggerChain($exceptionLoggers);
-    }
-
-    public function getErrorHandlingConfiguration(): array
-    {
-        return $this->errorHandlingConfiguration;
-    }
-
-    public function getSession(): SessionInterface
-    {
-        return $this->session;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
-    }
-
-    public function getUserExceptionRendererRegistry(): UserExceptionRendererRegistry
-    {
-        return $this->userExceptionRendererRegistry;
     }
 }

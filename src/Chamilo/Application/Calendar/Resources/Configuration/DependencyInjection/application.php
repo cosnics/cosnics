@@ -6,6 +6,7 @@ use Chamilo\Application\Calendar\Component\BrowseComponent;
 use Chamilo\Application\Calendar\Component\ICalComponent;
 use Chamilo\Application\Calendar\Component\PrintComponent;
 use Chamilo\Application\Calendar\Component\VisibilityComponent;
+use Chamilo\Application\Calendar\Service\VisibilityService;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 
 return static function (ContainerConfigurator $container) {
@@ -26,5 +27,7 @@ return static function (ContainerConfigurator $container) {
             '$defaultView' => '%cosnics.libraries.calendar.defaultView%'
         ]
     )->tag(ApplicationInterface::class);
-    $services->set(VisibilityComponent::class)->tag(ApplicationInterface::class);
+    $services->set(VisibilityComponent::class)->args(['$visibilityService' => service(VisibilityService::class)])->tag(
+        ApplicationInterface::class
+    );
 };

@@ -14,21 +14,13 @@ use Symfony\Component\Translation\Translator;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ColumnRenderer
+readonly class ColumnRenderer
 {
-    protected BlockRendererRegistry $blockRendererFactory;
-
-    protected HomeService $homeService;
-
-    protected Translator $translator;
-
     public function __construct(
-        HomeService $homeService, Translator $translator, BlockRendererRegistry $blockRendererFactory
+        protected HomeService $homeService, protected Translator $translator,
+        protected BlockRendererRegistry $blockRendererFactory
     )
     {
-        $this->homeService = $homeService;
-        $this->translator = $translator;
-        $this->blockRendererFactory = $blockRendererFactory;
     }
 
     /**
@@ -42,12 +34,12 @@ class ColumnRenderer
         $html[] = '<div class="col-12 col-md-' . $column->getWidth() . ' " data-tab-id="' . $column->getParentId() .
             '" data-element-id="' . $column->getId() . '" data-element-width="' . $column->getWidth() . '">';
 
-        $blocks = $this->getHomeService()->findElementsByTypeAndParentIdentifier(
+        $blocks = $this->homeService->findElementsByTypeAndParentIdentifier(
             Element::TYPE_BLOCK, $column->getId()
         );
 
         foreach ($blocks as $block) {
-            $blockRenderer = $this->getBlockRendererFactory()->getRendererForElement($block);
+            $blockRenderer = $this->blockRendererFactory->getRendererForElement($block);
             $html[] = $blockRenderer->render($block, $user);
         }
 
@@ -58,33 +50,17 @@ class ColumnRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function getBlockRendererFactory(): BlockRendererRegistry
-    {
-        return $this->blockRendererFactory;
-    }
-
-    public function getHomeService(): HomeService
-    {
-        return $this->homeService;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
     public function renderEmptyColumn(bool $isEmpty = false): string
     {
-        $translator = $this->getTranslator();
-
         $html = [];
 
         $html[] = '<div class="card text-bg-warning mb-3 ' . ($isEmpty ? '' : 'd-none') . '">';
         $html[] = '<div class="card-header">';
-        $html[] = '<h5 class="panel-title">' . $translator->trans('EmptyColumnTitle', [], Manager::CONTEXT) . '</h5>';
+        $html[] =
+            '<h5 class="panel-title">' . $this->translator->trans('EmptyColumnTitle', [], Manager::CONTEXT) . '</h5>';
         $html[] = '</div>';
         $html[] = '<div class="card-body">';
-        $html[] = $translator->trans('EmptyColumnBody', [], Manager::CONTEXT);
+        $html[] = $this->translator->trans('EmptyColumnBody', [], Manager::CONTEXT);
         $html[] = '</div>';
         $html[] = '</div>';
 

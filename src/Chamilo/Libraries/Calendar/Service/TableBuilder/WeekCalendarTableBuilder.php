@@ -160,8 +160,7 @@ class WeekCalendarTableBuilder extends CalendarTableBuilder
 
     protected function getHeaderContent(int $weekDayTime, ?string $dayUrlTemplate = null): string
     {
-        $dayLabel =
-            $this->getTranslator()->trans(date('l', $weekDayTime) . 'Short', [], StringUtilities::LIBRARIES) . ' ' .
+        $dayLabel = $this->translator->trans(date('l', $weekDayTime) . 'Short', [], StringUtilities::LIBRARIES) . ' ' .
             date('d/m', $weekDayTime);
 
         if (is_null($dayUrlTemplate)) {

@@ -23,7 +23,7 @@ class NotAllowedExceptionRenderer extends AbstractUserExceptionRenderer implemen
      */
     public function renderMessage(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('NotAllowed', [], StringUtilities::LIBRARIES);
+        return $this->translator->trans('NotAllowed', [], StringUtilities::LIBRARIES);
     }
 
     /**
@@ -31,6 +31,6 @@ class NotAllowedExceptionRenderer extends AbstractUserExceptionRenderer implemen
      */
     public function renderTitle(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('NotAllowedTitle', [], StringUtilities::LIBRARIES);
+        return $this->translator->trans('NotAllowedTitle', [], StringUtilities::LIBRARIES);
     }
 }

@@ -31,17 +31,11 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class GroupRepository
 {
-    private NestedSetDataClassRepository $nestedSetDataClassRepository;
-
-    private SearchQueryConditionGenerator $searchQueryConditionGenerator;
-
     public function __construct(
-        NestedSetDataClassRepository $nestedSetDataClassRepository,
-        SearchQueryConditionGenerator $searchQueryConditionGenerator
+        protected NestedSetDataClassRepository $nestedSetDataClassRepository,
+        protected SearchQueryConditionGenerator $searchQueryConditionGenerator
     )
     {
-        $this->nestedSetDataClassRepository = $nestedSetDataClassRepository;
-        $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
     }
 
     /**
@@ -49,7 +43,7 @@ class GroupRepository
      */
     public function countGroups(?ConditionInterface $condition = null): int
     {
-        return $this->getNestedSetDataClassRepository()->count(
+        return $this->nestedSetDataClassRepository->count(
             Group::class, new StorageParameters(condition: $condition)
         );
     }
@@ -59,7 +53,7 @@ class GroupRepository
      */
     public function countSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false): int
     {
-        return $this->getNestedSetDataClassRepository()->countDescendants($group, $recursiveSubgroups);
+        return $this->nestedSetDataClassRepository->countDescendants($group, $recursiveSubgroups);
     }
 
     /**
@@ -68,7 +62,7 @@ class GroupRepository
      */
     public function createGroup(Group $group): void
     {
-        $this->getNestedSetDataClassRepository()->create($group);
+        $this->nestedSetDataClassRepository->create($group);
     }
 
     /**
@@ -79,7 +73,7 @@ class GroupRepository
      */
     public function deleteGroup(Group $group): ArrayCollection
     {
-        return $this->getNestedSetDataClassRepository()->delete($group);
+        return $this->nestedSetDataClassRepository->delete($group);
     }
 
     /**
@@ -113,7 +107,7 @@ class GroupRepository
 
         $parameters = new StorageParameters(joins: $joins, retrieveProperties: $properties);
 
-        return $this->getNestedSetDataClassRepository()->records(Group::class, $parameters);
+        return $this->nestedSetDataClassRepository->records(Group::class, $parameters);
     }
 
     /**
@@ -144,7 +138,7 @@ class GroupRepository
 
         $parameters = new StorageParameters(joins: $joins);
 
-        return $this->getNestedSetDataClassRepository()->retrieves(Group::class, $parameters);
+        return $this->nestedSetDataClassRepository->retrieves(Group::class, $parameters);
     }
 
     /**
@@ -157,7 +151,7 @@ class GroupRepository
             new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($groupCode)
         );
 
-        return $this->getNestedSetDataClassRepository()->retrieve(
+        return $this->nestedSetDataClassRepository->retrieve(
             Group::class, new StorageParameters(condition: $condition)
         );
     }
@@ -177,7 +171,7 @@ class GroupRepository
             new StaticConditionVariable($parentIdentifier)
         );
 
-        return $this->getNestedSetDataClassRepository()->retrieve(
+        return $this->nestedSetDataClassRepository->retrieve(
             Group::class, new StorageParameters(condition: new AndCondition($conditions))
         );
     }
@@ -188,7 +182,7 @@ class GroupRepository
      */
     public function findGroupByIdentifier(string $groupId): ?Group
     {
-        return $this->getNestedSetDataClassRepository()->retrieveById(Group::class, $groupId);
+        return $this->nestedSetDataClassRepository->retrieveById(Group::class, $groupId);
     }
 
     /**
@@ -208,7 +202,7 @@ class GroupRepository
             )
         );
 
-        return $this->getNestedSetDataClassRepository()->distinct(Group::class, $parameters);
+        return $this->nestedSetDataClassRepository->distinct(Group::class, $parameters);
     }
 
     /**
@@ -226,7 +220,7 @@ class GroupRepository
     {
         $parameters = new StorageParameters(condition: $condition, orderBy: $orderBy, count: $count, offset: $offset);
 
-        return $this->getNestedSetDataClassRepository()->retrieves(Group::class, $parameters);
+        return $this->nestedSetDataClassRepository->retrieves(Group::class, $parameters);
     }
 
     /**
@@ -242,7 +236,7 @@ class GroupRepository
         $condition =
             new InCondition(new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID), $groupIdentifiers);
 
-        return $this->getNestedSetDataClassRepository()->retrieves(
+        return $this->nestedSetDataClassRepository->retrieves(
             Group::class, new StorageParameters(
                 condition: $condition, orderBy: $orderBy
             )
@@ -263,7 +257,7 @@ class GroupRepository
             condition: $this->getDirectlySubscribedGroupNestingValuesConditions($directlySubscribedGroupNestingValues)
         );
 
-        return $this->getNestedSetDataClassRepository()->retrieves(Group::class, $parameters);
+        return $this->nestedSetDataClassRepository->retrieves(Group::class, $parameters);
     }
 
     /**
@@ -279,7 +273,7 @@ class GroupRepository
             new StaticConditionVariable($parentIdentifier)
         );
 
-        return $this->getNestedSetDataClassRepository()->retrieves(
+        return $this->nestedSetDataClassRepository->retrieves(
             Group::class, new StorageParameters(
                 condition: $condition, orderBy: new OrderBy(
                 [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
@@ -302,7 +296,7 @@ class GroupRepository
         $conditions = [];
 
         if ($searchQuery && $searchQuery != '') {
-            $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
+            $conditions[] = $this->searchQueryConditionGenerator->getSearchConditions(
                 $searchQuery, [
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME),
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE)
@@ -317,7 +311,7 @@ class GroupRepository
 
         $condition = new AndCondition($conditions);
 
-        return $this->getNestedSetDataClassRepository()->retrieves(
+        return $this->nestedSetDataClassRepository->retrieves(
             Group::class, new StorageParameters(
                 condition: $condition, orderBy: new OrderBy(
                 [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
@@ -332,7 +326,7 @@ class GroupRepository
      */
     public function findParentGroupIdentifiersForGroup(Group $group, bool $includeSelf = true): array
     {
-        return $this->getNestedSetDataClassRepository()->findAncestorIdentifiers($group, $includeSelf);
+        return $this->nestedSetDataClassRepository->findAncestorIdentifiers($group, $includeSelf);
     }
 
     /**
@@ -344,7 +338,7 @@ class GroupRepository
      */
     public function findParentGroupsForGroup(Group $group, bool $includeSelf = true): ArrayCollection
     {
-        return $this->getNestedSetDataClassRepository()->findAncestors($group, $includeSelf);
+        return $this->nestedSetDataClassRepository->findAncestors($group, $includeSelf);
     }
 
     /**
@@ -353,7 +347,7 @@ class GroupRepository
      */
     public function findRootGroup(): ?Group
     {
-        return $this->getNestedSetDataClassRepository()->retrieve(
+        return $this->nestedSetDataClassRepository->retrieve(
             Group::class, new StorageParameters(
                 condition: new EqualityCondition(
                     new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
@@ -391,7 +385,7 @@ class GroupRepository
             );
         }
 
-        return $this->getNestedSetDataClassRepository()->distinct(
+        return $this->nestedSetDataClassRepository->distinct(
             Group::class, new StorageParameters(
                 condition: $childrenCondition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)]
@@ -409,7 +403,7 @@ class GroupRepository
      */
     public function findSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false): ArrayCollection
     {
-        return $this->getNestedSetDataClassRepository()->findDescendants($group, $recursiveSubgroups);
+        return $this->nestedSetDataClassRepository->findDescendants($group, $recursiveSubgroups);
     }
 
     /**
@@ -456,23 +450,13 @@ class GroupRepository
         return new OrCondition($treeConditions);
     }
 
-    public function getNestedSetDataClassRepository(): NestedSetDataClassRepository
-    {
-        return $this->nestedSetDataClassRepository;
-    }
-
-    public function getSearchQueryConditionGenerator(): SearchQueryConditionGenerator
-    {
-        return $this->searchQueryConditionGenerator;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function moveGroup(Group $group, string $parentGroupIdentifier): bool
     {
-        return $this->getNestedSetDataClassRepository()->move($group, $parentGroupIdentifier);
+        return $this->nestedSetDataClassRepository->move($group, $parentGroupIdentifier);
     }
 
     /**
@@ -480,6 +464,6 @@ class GroupRepository
      */
     public function updateGroup(Group $group): bool
     {
-        return $this->getNestedSetDataClassRepository()->update($group);
+        return $this->nestedSetDataClassRepository->update($group);
     }
 }

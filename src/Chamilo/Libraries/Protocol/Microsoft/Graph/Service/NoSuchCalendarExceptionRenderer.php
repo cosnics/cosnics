@@ -33,6 +33,6 @@ class NoSuchCalendarExceptionRenderer extends AbstractUserExceptionRenderer impl
      */
     public function renderTitle(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('NoSuchCalendarExceptionTitle', [], StringUtilities::LIBRARIES);
+        return $this->translator->trans('NoSuchCalendarExceptionTitle', [], StringUtilities::LIBRARIES);
     }
 }

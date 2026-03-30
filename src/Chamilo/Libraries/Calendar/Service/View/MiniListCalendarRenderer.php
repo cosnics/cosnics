@@ -18,18 +18,13 @@ class MiniListCalendarRenderer extends MiniCalendarRenderer
 {
     use AgendaCalendarTrait;
 
-    protected AlertRenderer $alertRenderer;
-
-    protected EventListRenderer $eventListRenderer;
-
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        EventListRenderer $eventListRenderer, AlertRenderer $alertRenderer, ButtonToolBarRenderer $buttonToolBarRenderer
+        ButtonToolBarRenderer $buttonToolBarRenderer, protected EventListRenderer $eventListRenderer,
+        protected AlertRenderer $alertRenderer
     )
     {
         parent::__construct($legendRenderer, $urlGenerator, $translator, $buttonToolBarRenderer);
-        $this->eventListRenderer = $eventListRenderer;
-        $this->alertRenderer = $alertRenderer;
     }
 
     /**
@@ -50,25 +45,15 @@ class MiniListCalendarRenderer extends MiniCalendarRenderer
         $html[] = '</h4>';
 
         $html[] = $this->renderFullCalendar($calendarTableConfiguration, $events, $displayParameters, $displayTime);
-        $html[] = $this->getLegendRenderer()->render($invisibleSources, $invisibilityContext);
+        $html[] = $this->legendRenderer->render($invisibleSources, $invisibilityContext);
 
         $html[] = '<div class="clearfix"></div>';
 
         return implode(PHP_EOL, $html);
     }
 
-    public function getAlertRenderer(): AlertRenderer
-    {
-        return $this->alertRenderer;
-    }
-
     protected function getEndTime(int $displayTime): int
     {
         return strtotime('+3 Days', $displayTime);
-    }
-
-    public function getEventListRenderer(): EventListRenderer
-    {
-        return $this->eventListRenderer;
     }
 }

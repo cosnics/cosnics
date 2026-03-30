@@ -28,31 +28,15 @@ use Symfony\Component\Translation\Translator;
  */
 class ViewOnlineComponent extends Manager
 {
-    protected OnlineService $onlineService;
-
-    protected OnlineTableRenderer $onlineTableRenderer;
-
-    protected RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler;
-
-    protected UserDetailsRenderer $userDetailsRenderer;
-
-    protected UserService $userService;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UserService $userService,
-        UrlGenerator $urlGenerator, OnlineService $onlineService, OnlineTableRenderer $onlineTableRenderer,
-        UserDetailsRenderer $userDetailsRenderer,
-        RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        protected OnlineService $onlineService, protected OnlineTableRenderer $onlineTableRenderer,
+        protected RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler,
+        protected UserDetailsRenderer $userDetailsRenderer, protected UserService $userService
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
-
-        $this->userService = $userService;
-        $this->onlineService = $onlineService;
-        $this->onlineTableRenderer = $onlineTableRenderer;
-        $this->userDetailsRenderer = $userDetailsRenderer;
-        $this->requestTableParameterValuesCompiler = $requestTableParameterValuesCompiler;
     }
 
     /**
@@ -87,17 +71,12 @@ class ViewOnlineComponent extends Manager
         return new Response(implode(PHP_EOL, $html));
     }
 
-    public function getOnlineService(): OnlineService
-    {
-        return $this->onlineService;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getOnlineTableCondition(): ConditionInterface
     {
-        $userIdentifiers = $this->getOnlineService()->findDistinctOnlineUserIdentifiers();
+        $userIdentifiers = $this->onlineService->findDistinctOnlineUserIdentifiers();
 
         if (!empty($userIdentifiers)) {
             return new InCondition(
@@ -111,26 +90,6 @@ class ViewOnlineComponent extends Manager
         }
     }
 
-    public function getOnlineTableRenderer(): OnlineTableRenderer
-    {
-        return $this->onlineTableRenderer;
-    }
-
-    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
-    {
-        return $this->requestTableParameterValuesCompiler;
-    }
-
-    public function getUserDetailsRenderer(): UserDetailsRenderer
-    {
-        return $this->userDetailsRenderer;
-    }
-
-    public function getUserService(): UserService
-    {
-        return $this->userService;
-    }
-
     /**
      * @throws \TableException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
@@ -140,25 +99,24 @@ class ViewOnlineComponent extends Manager
      */
     private function renderOnlineTable(): string
     {
-        $totalNumberOfItems = $this->getUserService()->countUsers($this->getOnlineTableCondition());
-        $onlineTableRenderer = $this->getOnlineTableRenderer();
+        $totalNumberOfItems = $this->userService->countUsers($this->getOnlineTableCondition());
 
-        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
-            $onlineTableRenderer->getParameterNames(), $onlineTableRenderer->getDefaultParameterValues(),
+        $tableParameterValues = $this->requestTableParameterValuesCompiler->determineParameterValues(
+            $this->onlineTableRenderer->getParameterNames(), $this->onlineTableRenderer->getDefaultParameterValues(),
             $totalNumberOfItems
         );
 
-        $users = $this->getUserService()->findUsers(
+        $users = $this->userService->findUsers(
             $this->getOnlineTableCondition(), $tableParameterValues->getOffset(),
             $tableParameterValues->getNumberOfItemsPerPage(),
-            $onlineTableRenderer->determineOrderBy($tableParameterValues)
+            $this->onlineTableRenderer->determineOrderBy($tableParameterValues)
         );
 
-        return $onlineTableRenderer->render($tableParameterValues, $users);
+        return $this->onlineTableRenderer->render($tableParameterValues, $users);
     }
 
     private function renderUserInformation(string $userIdentifier, User $user): string
     {
-        return $this->getUserDetailsRenderer()->renderUserDetailsForUserIdentifier($userIdentifier, $user);
+        return $this->userDetailsRenderer->renderUserDetailsForUserIdentifier($userIdentifier, $user);
     }
 }

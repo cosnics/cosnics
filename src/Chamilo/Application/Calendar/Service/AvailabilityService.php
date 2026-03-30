@@ -22,16 +22,11 @@ class AvailabilityService
     public const string PROPERTY_CALENDAR = 'calendar';
     public const string PROPERTY_COLOUR = 'colour';
 
-    private AvailabilityRepository $availabilityRepository;
-
-    private CalendarExtensionDataProviderRegistry $calendarProvider;
-
     public function __construct(
-        AvailabilityRepository $availabilityRepository, CalendarExtensionDataProviderRegistry $calendarProvider
+        protected AvailabilityRepository $availabilityRepository,
+        protected CalendarExtensionDataProviderRegistry $calendarProvider
     )
     {
-        $this->availabilityRepository = $availabilityRepository;
-        $this->calendarProvider = $calendarProvider;
     }
 
     /**
@@ -40,7 +35,7 @@ class AvailabilityService
      */
     public function createAvailability(Availability $availability): bool
     {
-        return $this->getAvailabilityRepository()->createAvailability($availability);
+        return $this->availabilityRepository->createAvailability($availability);
     }
 
     /**
@@ -67,7 +62,7 @@ class AvailabilityService
      */
     public function deleteAvailabilityByCalendarType(string $calendarType): bool
     {
-        return $this->getAvailabilityRepository()->removeAvailabilityByCalendarType($calendarType);
+        return $this->availabilityRepository->removeAvailabilityByCalendarType($calendarType);
     }
 
     /**
@@ -85,7 +80,7 @@ class AvailabilityService
      */
     public function getAvailabilitiesForUser(User $user, ?bool $isAvailable = null): ArrayCollection
     {
-        return $this->getAvailabilityRepository()->findAvailabilitiesForUser($user, $isAvailable);
+        return $this->availabilityRepository->findAvailabilitiesForUser($user, $isAvailable);
     }
 
     /**
@@ -95,7 +90,7 @@ class AvailabilityService
     public function getAvailabilitiesForUserAndCalendarType(User $user, string $calendarType, ?bool $isAvailable = null
     ): ArrayCollection
     {
-        return $this->getAvailabilityRepository()->findAvailabilitiesForUserAndCalendarType(
+        return $this->availabilityRepository->findAvailabilitiesForUserAndCalendarType(
             $user, $calendarType, $isAvailable
         );
     }
@@ -113,14 +108,9 @@ class AvailabilityService
         User $user, string $calendarType, string $calendarIdentifier
     ): Availability
     {
-        return $this->getAvailabilityRepository()->findAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
+        return $this->availabilityRepository->findAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
             $user, $calendarType, $calendarIdentifier
         );
-    }
-
-    public function getAvailabilityRepository(): AvailabilityRepository
-    {
-        return $this->availabilityRepository;
     }
 
     /**
@@ -130,22 +120,15 @@ class AvailabilityService
     {
         $availableCalendars = [];
 
-        foreach ($this->getCalendarProvider()->getCalendarExtensionDataProviders() as $calendarDataProvider)
-        {
+        foreach ($this->calendarProvider->getCalendarExtensionDataProviders() as $calendarDataProvider) {
             $calendars = $calendarDataProvider->getCalendars($user);
 
-            if (count($calendars) > 0)
-            {
+            if (count($calendars) > 0) {
                 $availableCalendars[$calendars[0]->getType()] = $calendars;
             }
         }
 
         return $availableCalendars;
-    }
-
-    public function getCalendarProvider(): CalendarExtensionDataProviderRegistry
-    {
-        return $this->calendarProvider;
     }
 
     /**
@@ -169,16 +152,14 @@ class AvailabilityService
         User $user, string $calendarType, string $calendarIdentifier
     ): bool
     {
-        try
-        {
+        try {
             $availability = $this->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
                 $user, $calendarType, $calendarIdentifier
             );
 
             return $availability->getAvailability() == 1;
         }
-        catch (StorageNoResultException)
-        {
+        catch (StorageNoResultException) {
             return false;
         }
     }
@@ -194,19 +175,15 @@ class AvailabilityService
     {
         $failedActions = 0;
 
-        foreach ($calendarAvailabilityTypes as $calendarType => $calendarAvailabilities)
-        {
-            foreach ($calendarAvailabilities as $calendarIdentifier => $settings)
-            {
-                try
-                {
+        foreach ($calendarAvailabilityTypes as $calendarType => $calendarAvailabilities) {
+            foreach ($calendarAvailabilities as $calendarIdentifier => $settings) {
+                try {
                     $this->setAvailability(
                         $user, $calendarType, $calendarIdentifier, (boolean) $settings[self::PROPERTY_AVAILABLE],
                         $settings[self::PROPERTY_COLOUR]
                     );
                 }
-                catch (Exception)
-                {
+                catch (Exception) {
                     $failedActions ++;
                 }
             }
@@ -232,8 +209,7 @@ class AvailabilityService
         User $user, string $calendarType, string $calendarIdentifier, bool $isAvailable = true, ?string $colour = null
     ): Availability
     {
-        try
-        {
+        try {
             $availability = $this->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
                 $user, $calendarType, $calendarIdentifier
             );
@@ -242,8 +218,7 @@ class AvailabilityService
                 $availability, $user, $calendarType, $calendarIdentifier, $isAvailable, $colour
             );
         }
-        catch (StorageNoResultException)
-        {
+        catch (StorageNoResultException) {
             return $this->createAvailabilityFromParameters(
                 $user, $calendarType, $calendarIdentifier, $isAvailable, $colour
             );
@@ -275,7 +250,7 @@ class AvailabilityService
      */
     public function updateAvailability(Availability $availability): bool
     {
-        return $this->getAvailabilityRepository()->updateAvailability($availability);
+        return $this->availabilityRepository->updateAvailability($availability);
     }
 
     /**

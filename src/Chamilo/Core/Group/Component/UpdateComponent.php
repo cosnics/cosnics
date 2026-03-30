@@ -38,29 +38,19 @@ use Twig\Environment;
  */
 class UpdateComponent extends Manager
 {
-    protected FormFactoryInterface $formFactory;
-
-    protected GroupFormType $groupFormType;
-
-    protected Environment $twigFormEnvironment;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        GroupMembershipService $groupMembershipService, GroupUrlGenerator $groupUrlGenerator,
-        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupService $groupService,
-        UserService $userService, UrlGenerator $urlGenerator, FormFactoryInterface $formFactory,
-        GroupFormType $groupFormType, Environment $twigFormEnvironment
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupMembershipService $groupMembershipService,
+        GroupService $groupService, GroupUrlGenerator $groupUrlGenerator, UserService $userService,
+        protected readonly FormFactoryInterface $formFactory, protected readonly GroupFormType $groupFormType,
+        protected readonly Environment $twigFormEnvironment
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $groupMembershipService,
-            $groupUrlGenerator, $alertsManager, $breadcrumbTrail, $groupService, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator, $alertsManager,
+            $breadcrumbTrail, $groupMembershipService, $groupService, $groupUrlGenerator, $userService
         );
-
-        $this->formFactory = $formFactory;
-        $this->groupFormType = $groupFormType;
-        $this->twigFormEnvironment = $twigFormEnvironment;
     }
 
     /**
@@ -83,7 +73,7 @@ class UpdateComponent extends Manager
         $groupIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID);
 
         if ($groupIdentifier) {
-            $group = $this->getGroupService()->findGroupByIdentifier($groupIdentifier);
+            $group = $this->groupService->findGroupByIdentifier($groupIdentifier);
 
             $formUri = $this->getUrlGenerator()->fromParameters(
                 [
@@ -96,7 +86,7 @@ class UpdateComponent extends Manager
             $data = $group->getDefaultProperties();
             $data[NestedSet::PROPERTY_PARENT_ID] = new OptionsTreeChoice($group->getParentId(), '');
 
-            $form = $this->getFormFactory()->create(
+            $form = $this->formFactory->create(
                 GroupFormType::class, $data, ['action' => $formUri]
             );
             $form->handleRequest($this->getRequest());
@@ -105,13 +95,13 @@ class UpdateComponent extends Manager
                 $submittedData = $form->getData();
 
                 try {
-                    $group = $this->getGroupService()->updateGroupFromParameters(
+                    $group = $this->groupService->updateGroupFromParameters(
                         $group, $submittedData[Group::PROPERTY_NAME],
                         $submittedData[NestedSet::PROPERTY_PARENT_ID]->getValue(),
                         $submittedData[Group::PROPERTY_DESCRIPTION], $submittedData[Group::PROPERTY_CODE], $currentUser
                     );
 
-                    $this->getAlertsManager()->addAlert(
+                    $this->alertsManager->addAlert(
                         new Alert(
                             $translator->trans(
                                 'ObjectUpdated', ['%Object%' => $translator->trans('Group', [], Manager::CONTEXT)],
@@ -127,7 +117,7 @@ class UpdateComponent extends Manager
                     ]));
                 }
                 catch (Throwable) {
-                    $this->getAlertsManager()->addAlert(
+                    $this->alertsManager->addAlert(
                         new Alert(
                             $translator->trans(
                                 'ObjectNotUpdated', ['%Object%' => $translator->trans('Group', [], Manager::CONTEXT)],
@@ -141,7 +131,7 @@ class UpdateComponent extends Manager
             $html = [];
 
             $html[] = $this->renderHeader($currentUser);
-            $html[] = $this->getTwigFormEnvironment()->render('form.html.twig', [
+            $html[] = $this->twigFormEnvironment->render('form.html.twig', [
                 'form' => $form->createView(),
             ]);
             $html[] = $this->renderFooter();
@@ -151,20 +141,5 @@ class UpdateComponent extends Manager
         else {
             throw new NoSuchParameterException(DataClass::PROPERTY_ID);
         }
-    }
-
-    public function getFormFactory(): FormFactoryInterface
-    {
-        return $this->formFactory;
-    }
-
-    public function getGroupFormType(): GroupFormType
-    {
-        return $this->groupFormType;
-    }
-
-    public function getTwigFormEnvironment(): Environment
-    {
-        return $this->twigFormEnvironment;
     }
 }

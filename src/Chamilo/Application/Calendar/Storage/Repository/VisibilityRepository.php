@@ -19,12 +19,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class VisibilityRepository
 {
-
-    private DataClassRepository $dataClassRepository;
-
-    public function __construct(DataClassRepository $dataClassRepository)
+    public function __construct(protected DataClassRepository $dataClassRepository)
     {
-        $this->dataClassRepository = $dataClassRepository;
     }
 
     /**
@@ -33,7 +29,7 @@ class VisibilityRepository
      */
     public function createVisibility(Visibility $visibility): bool
     {
-        return $this->getDataClassRepository()->create($visibility);
+        return $this->dataClassRepository->create($visibility);
     }
 
     /**
@@ -41,12 +37,25 @@ class VisibilityRepository
      */
     public function deleteVisibility(Visibility $visibility): bool
     {
-        return $this->getDataClassRepository()->delete($visibility);
+        return $this->dataClassRepository->delete($visibility);
     }
 
-    protected function getDataClassRepository(): DataClassRepository
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Calendar\Storage\DataClass\Visibility>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function retrieveVisibilitiesByUserIdentifier(string $userIdentifier): ArrayCollection
     {
-        return $this->dataClassRepository;
+        $conditions = [];
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Visibility::class, GenericVisibility::PROPERTY_USER_ID),
+            new StaticConditionVariable($userIdentifier)
+        );
+        $condition = new AndCondition($conditions);
+
+        return $this->dataClassRepository->retrieves(
+            Visibility::class, new StorageParameters(condition: $condition)
+        );
     }
 
     /**
@@ -66,25 +75,7 @@ class VisibilityRepository
         );
         $condition = new AndCondition($conditions);
 
-        return $this->getDataClassRepository()->retrieve(
-            Visibility::class, new StorageParameters(condition: $condition)
-        );
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Calendar\Storage\DataClass\Visibility>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function retrieveVisibilitiesByUserIdentifier(string $userIdentifier): ArrayCollection
-    {
-        $conditions = [];
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Visibility::class, GenericVisibility::PROPERTY_USER_ID),
-            new StaticConditionVariable($userIdentifier)
-        );
-        $condition = new AndCondition($conditions);
-
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieve(
             Visibility::class, new StorageParameters(condition: $condition)
         );
     }

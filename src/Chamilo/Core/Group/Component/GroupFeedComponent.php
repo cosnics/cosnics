@@ -39,28 +39,18 @@ class GroupFeedComponent extends GroupsFeedComponent
     public const string PARAM_GROUP = 'group';
     public const string PARAM_USER = 'user';
 
-    protected GroupMembershipService $groupMembershipService;
-
-    protected GroupService $groupService;
-
-    protected GroupsTreeTraverser $groupsTreeTraverser;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UserService $userService,
         UrlGenerator $urlGenerator, SearchQueryConditionGenerator $searchQueryConditionGenerator,
-        GroupService $groupService, GroupsTreeTraverser $groupsTreeTraverser,
-        GroupMembershipService $groupMembershipService
+        protected readonly GroupMembershipService $groupMembershipService,
+        protected readonly GroupService $groupService, protected readonly GroupsTreeTraverser $groupsTreeTraverser
     )
     {
         parent::__construct(
             $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $userService, $urlGenerator,
             $searchQueryConditionGenerator
         );
-
-        $this->groupService = $groupService;
-        $this->groupsTreeTraverser = $groupsTreeTraverser;
-        $this->groupMembershipService = $groupMembershipService;
     }
 
     public function getApplicationAction(): string
@@ -74,7 +64,7 @@ class GroupFeedComponent extends GroupsFeedComponent
     public function getGroupElement(Group $group): AdvancedElementFinderElement
     {
         $description = strip_tags(
-            $this->getGroupsTreeTraverser()->getFullyQualifiedNameForGroup($group) . ' [' . $group->getCode() . ']'
+            $this->groupsTreeTraverser->getFullyQualifiedNameForGroup($group) . ' [' . $group->getCode() . ']'
         );
         $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
@@ -82,21 +72,6 @@ class GroupFeedComponent extends GroupsFeedComponent
             self::PARAM_GROUP . '_' . $group->getId(), $glyph->getClassNamesString(), $group->getName(), $description,
             AdvancedElementFinderElement::TYPE_SELECTABLE_AND_FILTER
         );
-    }
-
-    public function getGroupMembershipService(): GroupMembershipService
-    {
-        return $this->groupMembershipService;
-    }
-
-    public function getGroupService(): GroupService
-    {
-        return $this->groupService;
-    }
-
-    public function getGroupsTreeTraverser(): GroupsTreeTraverser
-    {
-        return $this->groupsTreeTraverser;
     }
 
     public function getUserElement(User $user): AdvancedElementFinderElement
@@ -121,7 +96,7 @@ class GroupFeedComponent extends GroupsFeedComponent
             return [];
         }
 
-        return $this->getGroupMembershipService()->findSubscribedUserIdentifiersForGroupIdentifier($filterIdentifier);
+        return $this->groupMembershipService->findSubscribedUserIdentifiersForGroupIdentifier($filterIdentifier);
     }
 
     protected function get_filter(): string
@@ -166,7 +141,7 @@ class GroupFeedComponent extends GroupsFeedComponent
 
         $condition = new AndCondition($conditions);
 
-        return $this->getGroupService()->findGroups(
+        return $this->groupService->findGroups(
             condition: $condition, orderBy: new OrderBy(
             [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
         )

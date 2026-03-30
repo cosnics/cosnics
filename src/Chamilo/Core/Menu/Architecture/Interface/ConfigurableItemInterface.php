@@ -3,7 +3,6 @@ namespace Chamilo\Core\Menu\Architecture\Interface;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
-use Traversable;
 
 /**
  * @package Chamilo\Core\Menu\Architecture\Interface

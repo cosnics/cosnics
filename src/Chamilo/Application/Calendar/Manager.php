@@ -18,17 +18,13 @@ abstract class Manager extends Application
 {
     public const string CONTEXT = __NAMESPACE__;
 
-    protected VisibilityRepository $visibilityRepository;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        VisibilityRepository $visibilityRepository, UrlGenerator $urlGenerator
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        protected readonly VisibilityRepository $visibilityRepository
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
-
-        $this->visibilityRepository = $visibilityRepository;
     }
 
     public function getApplicationAction(): string
@@ -44,10 +40,5 @@ abstract class Manager extends Application
     public function getDefaultApplicationAction(): string
     {
         return ActionEnum::BROWSE->value;
-    }
-
-    public function getVisibilityRepository(): VisibilityRepository
-    {
-        return $this->visibilityRepository;
     }
 }

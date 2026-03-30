@@ -38,22 +38,15 @@ abstract class GroupsFeedComponent extends Manager
     public const string PROPERTY_ELEMENTS = 'elements';
     public const string PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
-    protected SearchQueryConditionGenerator $searchQueryConditionGenerator;
-
     protected int $userCount = 0;
-
-    protected UserService $userService;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UserService $userService,
-        UrlGenerator $urlGenerator, SearchQueryConditionGenerator $searchQueryConditionGenerator
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        protected UserService $userService, protected SearchQueryConditionGenerator $searchQueryConditionGenerator
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
-
-        $this->userService = $userService;
-        $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
     }
 
     /**
@@ -137,22 +130,12 @@ abstract class GroupsFeedComponent extends Manager
         return $offset;
     }
 
-    protected function getSearchQueryConditionGenerator(): SearchQueryConditionGenerator
-    {
-        return $this->searchQueryConditionGenerator;
-    }
-
     abstract public function getUserElement(User $user): AdvancedElementFinderElement;
 
     /**
      * @return int[]
      */
     abstract public function getUserIdentifiers(): array;
-
-    public function getUserService(): UserService
-    {
-        return $this->userService;
-    }
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
@@ -180,7 +163,7 @@ abstract class GroupsFeedComponent extends Manager
 
         // Set the conditions for the search query
         if ($searchQuery && $searchQuery != '') {
-            $conditions[] = $this->getSearchQueryConditionGenerator()->getSearchConditions(
+            $conditions[] = $this->searchQueryConditionGenerator->getSearchConditions(
                 $searchQuery, [
                     new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
                     new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME),
@@ -191,9 +174,9 @@ abstract class GroupsFeedComponent extends Manager
 
         $condition = new AndCondition($conditions);
 
-        $this->userCount = $this->getUserService()->countUsers($condition);
+        $this->userCount = $this->userService->countUsers($condition);
 
-        return $this->getUserService()->findUsers(
+        return $this->userService->findUsers(
             $condition, $this->getOffset(), 100, new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_SURNAME)),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME))

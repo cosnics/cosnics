@@ -25,32 +25,25 @@ class DeleteTemporaryFileComponent extends Manager
 {
     public const string PARAM_FILE = 'file';
 
-    protected ConfigurablePathBuilder $configurablePathBuilder;
-
-    protected Filesystem $filesystem;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        ConfigurablePathBuilder $configurablePathBuilder, Filesystem $filesystem, UrlGenerator $urlGenerator
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        protected ConfigurablePathBuilder $configurablePathBuilder, protected Filesystem $filesystem
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
-
-        $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->filesystem = $filesystem;
     }
 
     public function run(?User $currentUser = null): Response
     {
         $temporaryFileName = $this->getRequest()->getFromQueryOrRequest(self::PARAM_FILE);
-        $temporaryPath = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__);
+        $temporaryPath = $this->configurablePathBuilder->getTemporaryPath(__NAMESPACE__);
         $temporaryFilePath = $temporaryPath . $temporaryFileName;
 
         $translator = $this->getTranslator();
 
         try {
-            $this->getFilesystem()->remove($temporaryFilePath);
+            $this->filesystem->remove($temporaryFilePath);
 
             return JsonAjaxResult::success($translator->trans('FileRemoved', [], StringUtilities::LIBRARIES));
         }
@@ -58,16 +51,5 @@ class DeleteTemporaryFileComponent extends Manager
             return JsonAjaxResult::generalError($translator->trans('FileNotRemoved', [], StringUtilities::LIBRARIES));
         }
     }
-
     // Input parameters
-
-    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
-    {
-        return $this->configurablePathBuilder;
-    }
-
-    public function getFilesystem(): Filesystem
-    {
-        return $this->filesystem;
-    }
 }

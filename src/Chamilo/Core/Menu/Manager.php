@@ -29,32 +29,15 @@ abstract class Manager extends Application
     public const string PARAM_PARENT = 'parent';
     public const string PARAM_TYPE = 'type';
 
-    protected AlertsManager $alertsManager;
-
-    protected CachedItemService $cachedItemService;
-
-    protected ItemRendererRegistry $itemRendererRegistry;
-
-    protected ItemService $itemService;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, CachedItemService $cachedItemService,
-        ItemRendererRegistry $itemRendererRegistry, ItemService $itemService, AlertsManager $alertsManager,
-        UrlGenerator $urlGenerator
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        protected readonly CachedItemService $cachedItemService,
+        protected readonly ItemRendererRegistry $itemRendererRegistry, protected readonly ItemService $itemService,
+        protected readonly AlertsManager $alertsManager
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
-
-        $this->cachedItemService = $cachedItemService;
-        $this->itemRendererRegistry = $itemRendererRegistry;
-        $this->itemService = $itemService;
-        $this->alertsManager = $alertsManager;
-    }
-
-    public function getAlertsManager(): AlertsManager
-    {
-        return $this->alertsManager;
     }
 
     public function getApplicationAction(): string
@@ -67,23 +50,8 @@ abstract class Manager extends Application
         return self::CONTEXT;
     }
 
-    public function getCachedItemService(): CachedItemService
-    {
-        return $this->cachedItemService;
-    }
-
     public function getDefaultApplicationAction(): string
     {
         return ActionEnum::BROWSE->value;
-    }
-
-    public function getItemRendererFactory(): ItemRendererRegistry
-    {
-        return $this->itemRendererRegistry;
-    }
-
-    public function getItemService(): ItemService
-    {
-        return $this->itemService;
     }
 }

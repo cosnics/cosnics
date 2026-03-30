@@ -12,11 +12,8 @@ use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
  */
 class VisibilityService implements VisibilityServiceInterface
 {
-    private VisibilityRepository $visibilityRepository;
-
-    public function __construct(VisibilityRepository $visibilityRepository)
+    public function __construct(protected VisibilityRepository $visibilityRepository)
     {
-        $this->visibilityRepository = $visibilityRepository;
     }
 
     /**
@@ -45,7 +42,7 @@ class VisibilityService implements VisibilityServiceInterface
         $visibility->setUserId($userIdentifier);
         $visibility->setSource($source);
 
-        return $this->getVisibilityRepository()->createVisibility($visibility);
+        return $this->visibilityRepository->createVisibility($visibility);
     }
 
     /**
@@ -53,12 +50,7 @@ class VisibilityService implements VisibilityServiceInterface
      */
     public function deleteVisibility(Visibility $visibility): bool
     {
-        return $this->getVisibilityRepository()->deleteVisibility($visibility);
-    }
-
-    public function getVisibilityRepository(): VisibilityRepository
-    {
-        return $this->visibilityRepository;
+        return $this->visibilityRepository->deleteVisibility($visibility);
     }
 
     /**
@@ -67,6 +59,6 @@ class VisibilityService implements VisibilityServiceInterface
      */
     public function retrieveVisibilityForUserIdentifierAndSource(string $userIdentifier, string $source): ?Visibility
     {
-        return $this->getVisibilityRepository()->retrieveVisibilityForUserIdentifierAndSource($userIdentifier, $source);
+        return $this->visibilityRepository->retrieveVisibilityForUserIdentifierAndSource($userIdentifier, $source);
     }
 }

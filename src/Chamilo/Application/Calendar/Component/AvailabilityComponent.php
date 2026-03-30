@@ -25,24 +25,17 @@ use Symfony\Component\Translation\Translator;
  */
 class AvailabilityComponent extends Manager
 {
-    protected ActionResultRenderer $actionResultRenderer;
-
-    protected AvailabilityService $availabilityService;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        VisibilityRepository $visibilityRepository, UrlGenerator $urlGenerator,
-        ActionResultRenderer $actionResultRenderer, AvailabilityService $availabilityService
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        VisibilityRepository $visibilityRepository, protected readonly ActionResultRenderer $actionResultRenderer,
+        protected readonly AvailabilityService $availabilityService
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $visibilityRepository,
-            $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $visibilityRepository
         );
-
-        $this->actionResultRenderer = $actionResultRenderer;
-        $this->availabilityService = $availabilityService;
     }
 
     /**
@@ -54,17 +47,16 @@ class AvailabilityComponent extends Manager
     {
         $this->checkAuthorization(Manager::CONTEXT);
 
-        $availabilityService = $this->getAvailabilityService();
-        $form = $this->getAvailabilityForm($availabilityService, $currentUser);
+        $form = $this->getAvailabilityForm($this->availabilityService, $currentUser);
 
         if ($form->validate()) {
             $values = $form->exportValues();
-            $result = $availabilityService->setAvailabilities(
+            $result = $this->availabilityService->setAvailabilities(
                 $currentUser, $values[AvailabilityService::PROPERTY_CALENDAR]
             );
 
             if ($result->hasFailed()) {
-                throw new Exception($this->getActionResultRenderer()->getMessage($result));
+                throw new Exception($this->actionResultRenderer->getMessage($result));
             }
 
             return new RedirectResponse(
@@ -84,11 +76,6 @@ class AvailabilityComponent extends Manager
         }
     }
 
-    protected function getActionResultRenderer(): ActionResultRenderer
-    {
-        return $this->actionResultRenderer;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
@@ -96,13 +83,5 @@ class AvailabilityComponent extends Manager
     public function getAvailabilityForm(AvailabilityService $availabilityService, User $user): AvailabilityForm
     {
         return new AvailabilityForm($this->getUrlGenerator()->fromRequest(), $user, $availabilityService);
-    }
-
-    /**
-     * @return \Chamilo\Application\Calendar\Service\AvailabilityService
-     */
-    protected function getAvailabilityService(): AvailabilityService
-    {
-        return $this->availabilityService;
     }
 }

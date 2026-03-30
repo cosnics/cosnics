@@ -38,7 +38,6 @@ class StorageLastInsertedIdentifierExceptionRenderer extends AbstractUserExcepti
      */
     public function renderTitle(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('StorageLastInsertedIdentifierExceptionTitle', [],
-            StringUtilities::LIBRARIES);
+        return $this->translator->trans('StorageLastInsertedIdentifierExceptionTitle', [], StringUtilities::LIBRARIES);
     }
 }

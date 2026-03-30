@@ -28,27 +28,15 @@ use Symfony\Component\Translation\Translator;
  */
 class ViewLogsComponent extends Manager
 {
-    protected ConfigurablePathBuilder $configurablePathBuilder;
-
-    protected FilesystemTools $filesystemTools;
-
-    protected ResourceManager $resourceManager;
-
-    protected WebPathBuilder $webPathBuilder;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, ResourceManager $resourceManager,
-        ConfigurablePathBuilder $configurablePathBuilder, FilesystemTools $filesystemTools,
-        WebPathBuilder $webPathBuilder, UrlGenerator $urlGenerator
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        protected readonly ConfigurablePathBuilder $configurablePathBuilder,
+        protected readonly FilesystemTools $filesystemTools, protected readonly ResourceManager $resourceManager,
+        protected readonly WebPathBuilder $webPathBuilder
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
-
-        $this->resourceManager = $resourceManager;
-        $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->filesystemTools = $filesystemTools;
-        $this->webPathBuilder = $webPathBuilder;
     }
 
     /**
@@ -99,8 +87,8 @@ class ViewLogsComponent extends Manager
             0 => $translator->trans('AllLines', [], Manager::CONTEXT)
         ];
 
-        $dir = $this->getConfigurablePathBuilder()->getLogPath();
-        $content = $this->getFilesystemTools()->getDirectoryContent($dir, FileTypeFilterIterator::ONLY_FILES, false);
+        $dir = $this->configurablePathBuilder->getLogPath();
+        $content = $this->filesystemTools->getDirectoryContent($dir, FileTypeFilterIterator::ONLY_FILES, false);
 
         $phpErrorLogPath = ini_get('error_log');
         $phpErrorFileName = basename($phpErrorLogPath);
@@ -132,8 +120,8 @@ class ViewLogsComponent extends Manager
         $form->addElement(HTML_QuickForm_html::class, '</div>');
 
         $form->addElement(
-            HTML_QuickForm_html::class, $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath() . 'LogViewer.js'
+            HTML_QuickForm_html::class, $this->resourceManager->getResourceHtml(
+            $this->webPathBuilder->getJavascriptPath() . 'LogViewer.js'
         )
         );
 
@@ -155,7 +143,7 @@ class ViewLogsComponent extends Manager
             $logFilePath = $phpErrorLogPath;
         }
         else {
-            $logFilePath = $this->getConfigurablePathBuilder()->getLogPath() . $logFile;
+            $logFilePath = $this->configurablePathBuilder->getLogPath() . $logFile;
 
             if (!file_exists($logFilePath)) {
                 return '<div class="alert alert-warning">' .
@@ -189,21 +177,6 @@ class ViewLogsComponent extends Manager
         return $table->toHtml();
     }
 
-    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
-    {
-        return $this->configurablePathBuilder;
-    }
-
-    public function getFilesystemTools(): FilesystemTools
-    {
-        return $this->filesystemTools;
-    }
-
-    public function getResourceManager(): ResourceManager
-    {
-        return $this->resourceManager;
-    }
-
     public function getSelectTemplate(): string
     {
         $html = [];
@@ -223,10 +196,5 @@ class ViewLogsComponent extends Manager
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return $this->webPathBuilder;
     }
 }

@@ -26,23 +26,11 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
     public const string PARAM_TIME = 'time';
     public const string PARAM_TYPE = 'type';
 
-    protected ButtonToolBarRenderer $buttonToolBarRenderer;
-
-    protected LegendRenderer $legendRenderer;
-
-    protected Translator $translator;
-
-    protected UrlGenerator $urlGenerator;
-
     public function __construct(
-        LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        ButtonToolBarRenderer $buttonToolBarRenderer
+        protected LegendRenderer $legendRenderer, protected UrlGenerator $urlGenerator,
+        protected Translator $translator, protected ButtonToolBarRenderer $buttonToolBarRenderer
     )
     {
-        $this->legendRenderer = $legendRenderer;
-        $this->urlGenerator = $urlGenerator;
-        $this->translator = $translator;
-        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
     }
 
     /**
@@ -50,44 +38,26 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
      * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Visibility[] $invisibleSources
      */
     abstract public function render(
-        array $events, CalendarTableConfiguration $calendarTableConfiguration, array $displayParameters, int $displayTime, array $viewActions = [],
-        array $invisibleSources = [], ?string $invisibilityContext = null
+        array $events, CalendarTableConfiguration $calendarTableConfiguration, array $displayParameters,
+        int $displayTime, array $viewActions = [], array $invisibleSources = [], ?string $invisibilityContext = null
     ): string;
 
     public function determineNavigationUrl(array $parameters): string
     {
         $parameters[self::PARAM_TIME] = CalendarTableBuilder::TIME_PLACEHOLDER;
 
-        return $this->getUrlGenerator()->fromParameters($parameters);
+        return $this->urlGenerator->fromParameters($parameters);
     }
 
-    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
-    {
-        return $this->buttonToolBarRenderer;
-    }
+    abstract public function getEventsEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime
+    ): int;
 
-    abstract public function getEventsEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int;
-
-    abstract public function getEventsStartTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int;
-
-    public function getLegendRenderer(): LegendRenderer
-    {
-        return $this->legendRenderer;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
+    abstract public function getEventsStartTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime
+    ): int;
 
     public function getType(): string
     {
         return HtmlCalendarRendererTypeEnum::getTypeValue(static::class);
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
     }
 
     public function isEventSourceVisible(Event $event, array $invisibleSources = []): bool
@@ -134,10 +104,9 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
         ];
 
         $currentRendererType = $displayParameters[self::PARAM_TYPE];
-        $translator = $this->getTranslator();
 
         $button = new DropDownButtonCollection(
-            $translator->trans($currentRendererType . 'View', [], 'Chamilo\Libraries'),
+            $this->translator->trans($currentRendererType . 'View', [], 'Chamilo\Libraries'),
             new FontAwesomeGlyph('calendar-alt'), DisplayTypeEnum::ICON_AND_LABEL, [], ['dropdown-menu-right']
         );
 
@@ -146,9 +115,9 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
 
             $button->addButton(
                 new SubButton(
-                    $translator->trans($rendererType . 'View', [], 'Chamilo\Libraries'), null,
-                    $this->getUrlGenerator()->fromParameters($displayParameters), DisplayTypeEnum::LABEL, null, [],
-                    null, $currentRendererType == $rendererType
+                    $this->translator->trans($rendererType . 'View', [], 'Chamilo\Libraries'), null,
+                    $this->urlGenerator->fromParameters($displayParameters), DisplayTypeEnum::LABEL, null, [], null,
+                    $currentRendererType == $rendererType
                 )
             );
         }
@@ -170,6 +139,6 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
 
         $buttonToolBar->addButton($this->renderTypeButton($displayParameters));
 
-        return $this->getButtonToolBarRenderer()->render($buttonToolBar);
+        return $this->buttonToolBarRenderer->render($buttonToolBar);
     }
 }

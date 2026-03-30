@@ -9,13 +9,10 @@ use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
  * @package Chamilo\Core\Admin\Service
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class OnlineService
+readonly class OnlineService
 {
-    protected OnlineRepository $onlineRepository;
-
-    public function __construct(OnlineRepository $onlineRepository)
+    public function __construct(protected OnlineRepository $onlineRepository)
     {
-        $this->onlineRepository = $onlineRepository;
     }
 
     /**
@@ -29,7 +26,7 @@ class OnlineService
         $online->setUserId($userIdentifier);
         $online->setLastAccessDate($lastAccessDate);
 
-        return $this->getOnlineRepository()->createOnline($online);
+        return $this->onlineRepository->createOnline($online);
     }
 
     /**
@@ -38,7 +35,7 @@ class OnlineService
      */
     public function findDistinctOnlineUserIdentifiers(): array
     {
-        return $this->getOnlineRepository()->findDistinctOnlineUserIdentifiers();
+        return $this->onlineRepository->findDistinctOnlineUserIdentifiers();
     }
 
     /**
@@ -47,12 +44,7 @@ class OnlineService
      */
     public function findOnlineForUserIdentifier(string $userIdentifier): ?Online
     {
-        return $this->getOnlineRepository()->findOnlineForUserIdentifier($userIdentifier);
-    }
-
-    public function getOnlineRepository(): OnlineRepository
-    {
-        return $this->onlineRepository;
+        return $this->onlineRepository->findOnlineForUserIdentifier($userIdentifier);
     }
 
     /**
@@ -60,7 +52,7 @@ class OnlineService
      */
     public function updateOnline(Online $online): bool
     {
-        return $this->getOnlineRepository()->updateOnline($online);
+        return $this->onlineRepository->updateOnline($online);
     }
 
     /**
@@ -71,8 +63,7 @@ class OnlineService
     {
         $time = time();
 
-        try
-        {
+        try {
             $online = $this->findOnlineForUserIdentifier($userIdentifier);
 
             $online->setUserId($userIdentifier);
@@ -80,8 +71,7 @@ class OnlineService
 
             return $this->updateOnline($online);
         }
-        catch (StorageNoResultException)
-        {
+        catch (StorageNoResultException) {
             return $this->createOnlineForUserIdentifierAndLastAccessDate($userIdentifier, $time);
         }
     }

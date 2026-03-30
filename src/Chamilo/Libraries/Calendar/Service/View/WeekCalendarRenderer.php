@@ -22,33 +22,18 @@ use Symfony\Component\Translation\Translator;
  */
 class WeekCalendarRenderer extends SidebarTableCalendarRenderer
 {
-    protected DatetimeUtilities $datetimeUtilities;
-
-    protected EventDayRenderer $eventDayRenderer;
-
-    protected WeekCalendarTableBuilder $weekCalendarTableBuilder;
-
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, DatetimeUtilities $datetimeUtilities,
-        EventDayRenderer $eventDayRenderer, WeekCalendarTableBuilder $weekCalendarTableBuilder,
-        WebPathBuilder $webPathBuilder, ResourceManager $resourceManager, JumpBarRenderer $jumpBarRenderer,
-        ButtonToolBarRenderer $buttonToolBarRenderer
+        ButtonToolBarRenderer $buttonToolBarRenderer, JumpBarRenderer $jumpBarRenderer,
+        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, ResourceManager $resourceManager,
+        WebPathBuilder $webPathBuilder, protected EventDayRenderer $eventDayRenderer,
+        protected DatetimeUtilities $datetimeUtilities, protected WeekCalendarTableBuilder $weekCalendarTableBuilder
     )
     {
         parent::__construct(
-            $legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer, $webPathBuilder, $resourceManager,
-            $jumpBarRenderer, $buttonToolBarRenderer
+            $legendRenderer, $urlGenerator, $translator, $buttonToolBarRenderer, $jumpBarRenderer,
+            $miniMonthCalendarRenderer, $resourceManager, $webPathBuilder
         );
-
-        $this->eventDayRenderer = $eventDayRenderer;
-        $this->datetimeUtilities = $datetimeUtilities;
-        $this->weekCalendarTableBuilder = $weekCalendarTableBuilder;
-    }
-
-    public function getDatetimeUtilities(): DatetimeUtilities
-    {
-        return $this->datetimeUtilities;
     }
 
     public function getDayUrlTemplate(array $displayParameters): string
@@ -56,22 +41,17 @@ class WeekCalendarRenderer extends SidebarTableCalendarRenderer
         $displayParameters[self::PARAM_TIME] = WeekCalendarTableBuilder::TIME_PLACEHOLDER;
         $displayParameters[self::PARAM_TYPE] = HtmlCalendarRendererTypeEnum::DAY->value;
 
-        return $this->getUrlGenerator()->fromParameters($displayParameters);
-    }
-
-    public function getEventDayRenderer(): EventDayRenderer
-    {
-        return $this->eventDayRenderer;
+        return $this->urlGenerator->fromParameters($displayParameters);
     }
 
     public function getEventsEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getWeekCalendarTableBuilder()->getTableEndTime($calendarTableConfiguration, $displayTime);
+        return $this->weekCalendarTableBuilder->getTableEndTime($calendarTableConfiguration, $displayTime);
     }
 
     public function getEventsStartTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getWeekCalendarTableBuilder()->getTableStartTime($calendarTableConfiguration, $displayTime);
+        return $this->weekCalendarTableBuilder->getTableStartTime($calendarTableConfiguration, $displayTime);
     }
 
     public function getNextDisplayTime(int $displayTime): int
@@ -84,11 +64,6 @@ class WeekCalendarRenderer extends SidebarTableCalendarRenderer
         return strtotime('-1 Week', $displayTime);
     }
 
-    public function getWeekCalendarTableBuilder(): WeekCalendarTableBuilder
-    {
-        return $this->weekCalendarTableBuilder;
-    }
-
     /**
      * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
      *
@@ -99,8 +74,6 @@ class WeekCalendarRenderer extends SidebarTableCalendarRenderer
         int $displayTime, array $invisibleSources = [], ?string $invisibilityContext = null
     ): string
     {
-        $calendarTableBuilder = $this->getWeekCalendarTableBuilder();
-
         $startTime = $this->getEventsStartTime($calendarTableConfiguration, $displayTime);
         $endTime = $this->getEventsEndTime($calendarTableConfiguration, $displayTime);
 
@@ -119,7 +92,7 @@ class WeekCalendarRenderer extends SidebarTableCalendarRenderer
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
                     $tableDate < $endDate && $endDate <= $nextTableDate ||
                     $startDate <= $tableDate && $nextTableDate <= $endDate) {
-                    $eventsToShow[$tableDate][] = $this->getEventDayRenderer()->render(
+                    $eventsToShow[$tableDate][] = $this->eventDayRenderer->render(
                         $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($event, $invisibleSources)
                     );
                 }
@@ -128,7 +101,7 @@ class WeekCalendarRenderer extends SidebarTableCalendarRenderer
             $tableDate = $nextTableDate;
         }
 
-        return $calendarTableBuilder->render(
+        return $this->weekCalendarTableBuilder->render(
             $calendarTableConfiguration, $displayTime, $eventsToShow, ['table-calendar-week'],
             $this->getDayUrlTemplate($displayParameters)
         );
@@ -137,22 +110,21 @@ class WeekCalendarRenderer extends SidebarTableCalendarRenderer
     public function renderTitle(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): string
     {
         $weekNumber = date('W', $displayTime);
-        $dateTimeUtilities = $this->getDatetimeUtilities();
-        $calendarTableBuilder = $this->getWeekCalendarTableBuilder();
 
         $titleParts = [];
 
-        $titleParts[] = $this->getTranslator()->trans('Week', [], StringUtilities::LIBRARIES);
+        $titleParts[] = $this->translator->trans('Week', [], StringUtilities::LIBRARIES);
         $titleParts[] = $weekNumber;
         $titleParts[] = ':';
-        $titleParts[] = $dateTimeUtilities->formatLocaleDate(
-            $calendarTableBuilder->getTableStartTime($calendarTableConfiguration, $displayTime),
+        $titleParts[] = $this->datetimeUtilities->formatLocaleDate(
+            $this->weekCalendarTableBuilder->getTableStartTime($calendarTableConfiguration, $displayTime),
             IntlDateFormatter::FULL, IntlDateFormatter::NONE
         );
         $titleParts[] = '-';
-        $titleParts[] = $dateTimeUtilities->formatLocaleDate(
-            strtotime('+6 Days', $calendarTableBuilder->getTableStartTime($calendarTableConfiguration, $displayTime)),
-            IntlDateFormatter::FULL, IntlDateFormatter::NONE
+        $titleParts[] = $this->datetimeUtilities->formatLocaleDate(
+            strtotime(
+                '+6 Days', $this->weekCalendarTableBuilder->getTableStartTime($calendarTableConfiguration, $displayTime)
+            ), IntlDateFormatter::FULL, IntlDateFormatter::NONE
         );
 
         return implode(' ', $titleParts);

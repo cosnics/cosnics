@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Filesystem\Service;
 
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
-use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 
 /**
  * @package Chamilo\Libraries\Filesystem\Service
@@ -10,21 +9,15 @@ use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
  */
 class WebPathBuilder extends AbstractPathBuilder
 {
-    protected ChamiloRequest $request;
-
-    public function __construct(ClassnameUtilities $classnameUtilities, ChamiloRequest $request)
+    public function __construct(protected ChamiloRequest $request)
     {
-        parent::__construct($classnameUtilities);
-
-        $this->request = $request;
     }
 
     public function getBasePath(): string
     {
         if (!isset($this->cache[self::BASE])) {
-            $request = $this->getRequest();
             $this->cache[self::BASE] =
-                $request->getSchemeAndHttpHost() . $request->getBasePath() . $request->getPathInfo();
+                $this->request->getSchemeAndHttpHost() . $this->request->getBasePath() . $this->request->getPathInfo();
         }
 
         return $this->cache[self::BASE];
@@ -38,11 +31,6 @@ class WebPathBuilder extends AbstractPathBuilder
     protected function getPublicStorageBasePath(): string
     {
         return $this->getBasePath() . 'Files';
-    }
-
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
     }
 
     public function isWebUri(string $uri): bool

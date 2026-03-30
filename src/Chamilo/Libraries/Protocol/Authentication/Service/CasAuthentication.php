@@ -30,7 +30,7 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
      */
     protected function getUserByCasUserIdentifier(string $userIdentifier): ?User
     {
-        return $this->getUserService()->findUserByUsername($userIdentifier);
+        return $this->userService->findUserByUsername($userIdentifier);
     }
 
     /**
@@ -55,9 +55,9 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
         $user->setGivenName($casUserAttributes['first_name']);
         $user->setOfficialCode($casUserAttributes['person_number']);
 
-        if (!$this->getUserService()->createUser($user)) {
+        if (!$this->userService->createUser($user)) {
             throw new NotAuthenticatedException(
-                $this->getTranslator()->trans('CasUserRegistrationFailed', [], StringUtilities::LIBRARIES)
+                $this->translator->trans('CasUserRegistrationFailed', [], StringUtilities::LIBRARIES)
             );
         }
         else {

@@ -41,13 +41,8 @@ class SubscribeComponent extends Manager
 
         $userIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_ID);
 
-        $groupMembershipService = $this->getGroupMembershipService();
-        $userService = $this->getUserService();
-        $groupService = $this->getGroupService();
-        $translator = $this->getTranslator();
-
-        $this->getBreadcrumbTrail()->add(
-            new Breadcrumb($translator->trans('ViewerComponent', [], Manager::CONTEXT),
+        $this->breadcrumbTrail->add(
+            new Breadcrumb($this->translator->trans('ViewerComponent', [], Manager::CONTEXT),
                 $this->getUrlGenerator()->fromParameters(
                     [
                         self::PARAM_CONTEXT => Manager::CONTEXT,
@@ -64,18 +59,18 @@ class SubscribeComponent extends Manager
                 $userIdentifiers = [$userIdentifiers];
             }
 
-            $group = $groupService->findGroupByIdentifier($groupIdentifier);
+            $group = $this->groupService->findGroupByIdentifier($groupIdentifier);
             $containsDuplicates = false;
 
             foreach ($userIdentifiers as $userIdentifier) {
-                $userToSubscribe = $userService->findUserByIdentifier($userIdentifier);
+                $userToSubscribe = $this->userService->findUserByIdentifier($userIdentifier);
 
                 $groupUserRelation =
-                    $groupMembershipService->getGroupUserRelationByGroupAndUser($group, $userToSubscribe);
+                    $this->groupMembershipService->getGroupUserRelationByGroupAndUser($group, $userToSubscribe);
 
                 if (!$groupUserRelation instanceof GroupRelUser) {
                     try {
-                        $groupMembershipService->subscribeUserToGroup($group, $userToSubscribe, $currentUser);
+                        $this->groupMembershipService->subscribeUserToGroup($group, $userToSubscribe, $currentUser);
                     }
                     catch (RuntimeException) {
                         $failures ++;
@@ -101,9 +96,9 @@ class SubscribeComponent extends Manager
                 $message = 'SelectedUsersAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
             }
 
-            $this->getAlertsManager()->addAlert(
+            $this->alertsManager->addAlert(
                 new Alert(
-                    $translator->trans($message, [], Manager::CONTEXT),
+                    $this->translator->trans($message, [], Manager::CONTEXT),
                     $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS
                 )
             );

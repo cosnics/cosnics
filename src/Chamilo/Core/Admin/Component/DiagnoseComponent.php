@@ -18,17 +18,13 @@ use Symfony\Component\Translation\Translator;
  */
 class DiagnoseComponent extends Manager
 {
-    protected Diagnoser $diagnoser;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
-        Diagnoser $diagnoser
+        protected readonly Diagnoser $diagnoser
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
-
-        $this->diagnoser = $diagnoser;
     }
 
     /**
@@ -44,14 +40,9 @@ class DiagnoseComponent extends Manager
         $html = [];
 
         $html[] = $this->renderHeader($currentUser);
-        $html[] = $this->getDiagnoser()->render();
+        $html[] = $this->diagnoser->render();
         $html[] = $this->renderFooter();
 
         return new Response(implode(PHP_EOL, $html));
-    }
-
-    protected function getDiagnoser(): Diagnoser
-    {
-        return $this->diagnoser;
     }
 }

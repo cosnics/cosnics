@@ -26,34 +26,16 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class CalendarRepository
 {
-    protected ?string $clientId;
-
-    protected ?string $clientSecret;
-
-    protected ConfigurablePathBuilder $configurablePathBuilder;
-
-    protected ?string $developerKey;
-
-    protected UrlGenerator $urlGenerator;
-
-    protected UserSettingsService $userSettingsService;
-
     private ?Google_Service_Calendar $calendarClient = null;
 
     private ?Google_Client $googleClient = null;
 
     public function __construct(
-        ConfigurablePathBuilder $configurablePathBuilder, UrlGenerator $urlGenerator,
-        UserSettingsService $userSettingsService, ?string $clientId = null, ?string $clientSecret = null,
-        ?string $developerKey = null
+        protected ConfigurablePathBuilder $configurablePathBuilder, protected UrlGenerator $urlGenerator,
+        protected UserSettingsService $userSettingsService, protected ?string $clientId = null,
+        protected ?string $clientSecret = null, protected ?string $developerKey = null
     )
     {
-        $this->urlGenerator = $urlGenerator;
-        $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->userSettingsService = $userSettingsService;
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
-        $this->developerKey = $developerKey;
     }
 
     /**
@@ -61,7 +43,7 @@ class CalendarRepository
      */
     public function clearAccessToken(User $user): bool
     {
-        return $this->getUserSettingsService()->updateUserSetting($user, 'cosnics.libraries.protocol.google.token', '');
+        return $this->userSettingsService->updateUserSetting($user, 'cosnics.libraries.protocol.google.token', '');
     }
 
     /**
@@ -118,7 +100,7 @@ class CalendarRepository
 
     public function getAccessToken(User $user): ?string
     {
-        return $this->getUserSettingsService()->findUserSetting($user, 'cosnics.libraries.protocol.google.token');
+        return $this->userSettingsService->findUserSetting($user, 'cosnics.libraries.protocol.google.token');
     }
 
     public function getCacheIdentifier($userToken, $method, $additionalIdentifiers = []): string
@@ -144,26 +126,6 @@ class CalendarRepository
         return $this->calendarClient;
     }
 
-    public function getClientId(): ?string
-    {
-        return $this->clientId;
-    }
-
-    public function getClientSecret(): ?string
-    {
-        return $this->clientSecret;
-    }
-
-    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
-    {
-        return $this->configurablePathBuilder;
-    }
-
-    public function getDeveloperKey(): ?string
-    {
-        return $this->developerKey;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -171,10 +133,10 @@ class CalendarRepository
     {
         if (!isset($this->googleClient)) {
             $this->googleClient = new Google_Client();
-            $this->googleClient->setDeveloperKey($this->getDeveloperKey());
+            $this->googleClient->setDeveloperKey($this->developerKey);
 
-            $this->googleClient->setClientId($this->getClientId());
-            $this->googleClient->setClientSecret($this->getClientSecret());
+            $this->googleClient->setClientId($this->clientId);
+            $this->googleClient->setClientSecret($this->clientSecret);
             $this->googleClient->setScopes(['https://www.googleapis.com/auth/calendar.readonly']);
             $this->googleClient->setAccessType('offline');
             $this->googleClient->setApprovalPrompt('force');
@@ -185,7 +147,7 @@ class CalendarRepository
 
             /** @noinspection PhpParamsInspection */
             $this->googleClient->setClassConfig(
-                'Google_Cache_File', ['directory' => $this->getConfigurablePathBuilder()->getCachePath(__NAMESPACE__)]
+                'Google_Cache_File', ['directory' => $this->configurablePathBuilder->getCachePath(__NAMESPACE__)]
             );
 
             $this->googleClient->setCache(new Google_Cache_File($this->googleClient));
@@ -206,16 +168,6 @@ class CalendarRepository
         return $this->googleClient;
     }
 
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
-    }
-
-    protected function getUserSettingsService(): UserSettingsService
-    {
-        return $this->userSettingsService;
-    }
-
     public function hasAccessToken(User $user): bool
     {
         $accessToken = $this->getAccessToken($user);
@@ -225,7 +177,7 @@ class CalendarRepository
 
     public function isConfigured(): bool
     {
-        return $this->getDeveloperKey() && $this->getClientId() && $this->getClientSecret();
+        return $this->developerKey && $this->clientId && $this->clientSecret;
     }
 
     /**
@@ -239,7 +191,7 @@ class CalendarRepository
 
         $googleClient = $this->getGoogleClient($user);
 
-        $redirectUrl = $this->getUrlGenerator()->fromParameters(
+        $redirectUrl = $this->urlGenerator->fromParameters(
             [
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::LOGIN->value
@@ -281,7 +233,7 @@ class CalendarRepository
     public function saveAccessToken(User $user, string $accessToken): bool
     {
         try {
-            return $this->getUserSettingsService()->updateUserSetting(
+            return $this->userSettingsService->updateUserSetting(
                 $user, 'cosnics.libraries.protocol.google.token', $accessToken
             );
         }

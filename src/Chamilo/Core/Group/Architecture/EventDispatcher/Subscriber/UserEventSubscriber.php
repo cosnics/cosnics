@@ -9,14 +9,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * @package Chamilo\Core\Group\Architecture\EventDispatcher\Subscriber
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserEventSubscriber implements EventSubscriberInterface
+readonly class UserEventSubscriber implements EventSubscriberInterface
 {
-
-    protected GroupMembershipService $groupMembershipService;
-
-    public function __construct(GroupMembershipService $groupMembershipService)
+    public function __construct(protected GroupMembershipService $groupMembershipService)
     {
-        $this->groupMembershipService = $groupMembershipService;
     }
 
     /**
@@ -25,12 +21,7 @@ class UserEventSubscriber implements EventSubscriberInterface
      */
     public function beforeDelete(BeforeUserDeleteEvent $beforeUserDeleteEvent): bool
     {
-        return $this->getGroupMembershipService()->unsubscribeUserFromAllGroups($beforeUserDeleteEvent->getUser());
-    }
-
-    public function getGroupMembershipService(): GroupMembershipService
-    {
-        return $this->groupMembershipService;
+        return $this->groupMembershipService->unsubscribeUserFromAllGroups($beforeUserDeleteEvent->getUser());
     }
 
     public static function getSubscribedEvents(): array

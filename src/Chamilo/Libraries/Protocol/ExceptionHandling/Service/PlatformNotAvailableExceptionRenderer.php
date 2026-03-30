@@ -23,7 +23,7 @@ class PlatformNotAvailableExceptionRenderer extends AbstractUserExceptionRendere
      */
     public function renderMessage(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('PlatformNotAvailableMessage', [], StringUtilities::LIBRARIES);
+        return $this->translator->trans('PlatformNotAvailableMessage', [], StringUtilities::LIBRARIES);
     }
 
     /**
@@ -31,6 +31,6 @@ class PlatformNotAvailableExceptionRenderer extends AbstractUserExceptionRendere
      */
     public function renderTitle(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('PlatformNotAvailableTitle', [], StringUtilities::LIBRARIES);
+        return $this->translator->trans('PlatformNotAvailableTitle', [], StringUtilities::LIBRARIES);
     }
 }

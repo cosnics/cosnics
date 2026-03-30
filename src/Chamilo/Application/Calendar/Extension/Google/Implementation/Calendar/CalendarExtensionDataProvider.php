@@ -15,30 +15,13 @@ use Symfony\Component\Translation\Translator;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInterface
+readonly class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInterface
 {
-    private AvailabilityService $availabilityService;
-
-    private CalendarService $calendarService;
-
-    private EventParser $eventParser;
-
-    private Translator $translator;
-
     public function __construct(
-        AvailabilityService $availabilityService, CalendarService $calendarService, EventParser $eventParser,
-        Translator $translator
+        protected AvailabilityService $availabilityService, protected CalendarService $calendarService,
+        protected EventParser $eventParser, protected Translator $translator
     )
     {
-        $this->availabilityService = $availabilityService;
-        $this->calendarService = $calendarService;
-        $this->eventParser = $eventParser;
-        $this->translator = $translator;
-    }
-
-    public function getAvailabilityService(): AvailabilityService
-    {
-        return $this->availabilityService;
     }
 
     /**
@@ -49,7 +32,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
      */
     private function getCalendarEvents(User $user, string $calendarId, int $fromDate, int $toDate): array
     {
-        $events = $this->getCalendarService()->getEventsForCalendarIdentifierAndBetweenDates(
+        $events = $this->calendarService->getEventsForCalendarIdentifierAndBetweenDates(
             $user, $calendarId, $fromDate, $toDate
         );
 
@@ -57,7 +40,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
 
         foreach ($events as $event) {
             $parsedEvents = array_merge(
-                $parsedEvents, $this->getEventParser()->getEvents($events->getCalendarProperties(), $event)
+                $parsedEvents, $this->eventParser->getEvents($events->calendarProperties, $event)
             );
         }
 
@@ -71,7 +54,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
      */
     private function getCalendarIdentifiers(User $user): array
     {
-        $availabilities = $this->getAvailabilityService()->getAvailabilitiesForUserAndCalendarType(
+        $availabilities = $this->availabilityService->getAvailabilitiesForUserAndCalendarType(
             $user, Manager::CONTEXT
         );
 
@@ -95,11 +78,6 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
         return $calendarIdentifiers;
     }
 
-    public function getCalendarService(): CalendarService
-    {
-        return $this->calendarService;
-    }
-
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -107,18 +85,11 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
      */
     public function getCalendars(User $user): array
     {
-        $calendarService = $this->getCalendarService();
-
-        if (!$calendarService->isConfigured() || !$calendarService->isAuthenticated($user)) {
+        if (!$this->calendarService->isConfigured() || !$this->calendarService->isAuthenticated($user)) {
             return [];
         }
 
-        return $calendarService->getOwnedCalendars($user);
-    }
-
-    public function getEventParser(): EventParser
-    {
-        return $this->eventParser;
+        return $this->calendarService->getOwnedCalendars($user);
     }
 
     /**
@@ -129,9 +100,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
      */
     public function getEvents(User $user, $fromDate, $toDate): array
     {
-        $calendarService = $this->getCalendarService();
-
-        if (!$calendarService->isConfigured() || !$calendarService->isAuthenticated($user)) {
+        if (!$this->calendarService->isConfigured() || !$this->calendarService->isAuthenticated($user)) {
             return [];
         }
 
@@ -146,11 +115,6 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
 
     public function getName(): string
     {
-        return $this->getTranslator()->trans('TypeName', [], Manager::CONTEXT);
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
+        return $this->translator->trans('TypeName', [], Manager::CONTEXT);
     }
 }

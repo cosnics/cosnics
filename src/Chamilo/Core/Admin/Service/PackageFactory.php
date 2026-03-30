@@ -15,19 +15,8 @@ class PackageFactory
 {
     public const string PACKAGE_DESCRIPTOR = 'composer.json';
 
-    protected Filesystem $filesystem;
-
-    private SystemPathBuilder $systemPathBuilder;
-
-    public function __construct(SystemPathBuilder $systemPathBuilder, Filesystem $filesystem)
+    public function __construct(protected SystemPathBuilder $systemPathBuilder, protected Filesystem $filesystem)
     {
-        $this->systemPathBuilder = $systemPathBuilder;
-        $this->filesystem = $filesystem;
-    }
-
-    public function getFilesystem(): Filesystem
-    {
-        return $this->filesystem;
     }
 
     /**
@@ -35,8 +24,7 @@ class PackageFactory
      */
     public function getPackage(string $context): Package
     {
-        if (!$this->packageExists($context))
-        {
+        if (!$this->packageExists($context)) {
             throw new OutOfBoundsException('Invalid package context: ' . $context);
         }
 
@@ -45,17 +33,12 @@ class PackageFactory
 
     public function getPackagePath(string $context): string
     {
-        return $this->getSystemPathBuilder()->namespaceToFullPath($context) . self::PACKAGE_DESCRIPTOR;
-    }
-
-    public function getSystemPathBuilder(): SystemPathBuilder
-    {
-        return $this->systemPathBuilder;
+        return $this->systemPathBuilder->namespaceToFullPath($context) . self::PACKAGE_DESCRIPTOR;
     }
 
     public function packageExists(string $context): bool
     {
-        return $this->getFilesystem()->exists($this->getPackagePath($context));
+        return $this->filesystem->exists($this->getPackagePath($context));
     }
 
     public function parseComposerJson(stdClass $jsonPackageObject): Package

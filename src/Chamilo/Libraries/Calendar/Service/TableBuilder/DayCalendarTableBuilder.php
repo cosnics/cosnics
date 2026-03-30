@@ -56,8 +56,7 @@ class DayCalendarTableBuilder extends CalendarTableBuilder
         $header->setCellAttributes(0, 0, ['class' => 'table-calendar-day-hours']);
 
         $header->setHeaderContents(
-            0, 1,
-            $this->getTranslator()->trans(date('l', $displayTime) . 'Short', [], StringUtilities::LIBRARIES) . ' ' .
+            0, 1, $this->translator->trans(date('l', $displayTime) . 'Short', [], StringUtilities::LIBRARIES) . ' ' .
             date('d/m', $displayTime)
         );
 

@@ -32,23 +32,14 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
     public const string PARAM_VARIABLE = 'variable';
     public const string PROPERTY_RESULT = 'result';
 
-    protected StringUtilities $stringUtilities;
-
-    protected ThemePathBuilder $themeWebPathBuilder;
-
-    protected WebPathBuilder $webPathBuilder;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, ThemePathBuilder $themeWebPathBuilder,
-        StringUtilities $stringUtilities, WebPathBuilder $webPathBuilder, UrlGenerator $urlGenerator
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        protected ThemePathBuilder $themeWebPathBuilder, protected StringUtilities $stringUtilities,
+        protected WebPathBuilder $webPathBuilder
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
-
-        $this->themeWebPathBuilder = $themeWebPathBuilder;
-        $this->stringUtilities = $stringUtilities;
-        $this->webPathBuilder = $webPathBuilder;
     }
 
     /**
@@ -68,12 +59,12 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
                     throw new Exception('Invalid Path parameter: ' . $request->request->get(self::PARAM_PATH));
                 }
 
-                $properties[self::PROPERTY_RESULT] = $this->getWebPathBuilder()->getBasePath();
+                $properties[self::PROPERTY_RESULT] = $this->webPathBuilder->getBasePath();
                 break;
 
             // Retrieve the current theme
             case 'theme' :
-                $properties[self::PROPERTY_RESULT] = $this->getThemeWebPathBuilder()->getTheme();
+                $properties[self::PROPERTY_RESULT] = $this->themeWebPathBuilder->getTheme();
                 break;
 
             // Get a translation
@@ -82,7 +73,7 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
                 $string = $request->request->get(self::PARAM_STRING);
                 $parameters = (array) $request->request->get(self::PARAM_PARAMETERS);
 
-                $string = (string) $this->getStringUtilities()->createString($string)->upperCamelize();
+                $string = (string) $this->stringUtilities->createString($string)->upperCamelize();
                 $properties[self::PROPERTY_RESULT] = $this->getTranslator()->trans($string, $parameters, $context);
                 break;
 
@@ -113,20 +104,5 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
         $result->setProperties($properties);
 
         return $result->getResponse();
-    }
-
-    public function getStringUtilities(): StringUtilities
-    {
-        return $this->stringUtilities;
-    }
-
-    public function getThemeWebPathBuilder(): ThemePathBuilder
-    {
-        return $this->themeWebPathBuilder;
-    }
-
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return $this->webPathBuilder;
     }
 }

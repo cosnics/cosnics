@@ -34,33 +34,21 @@ use Symfony\Component\Translation\Translator;
  */
 class BrowseComponent extends Manager
 {
-    protected ButtonToolBarRenderer $buttonToolBarRenderer;
-
-    protected ItemTableRenderer $itemTableRenderer;
-
-    protected JsTreeRenderer $jsTreeRenderer;
-
     protected string $parentIdentifier;
-
-    protected RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, CachedItemService $cachedItemService,
-        ItemRendererRegistry $itemRendererRegistry, ItemService $itemService, AlertsManager $alertsManager,
-        ButtonToolBarRenderer $buttonToolBarRenderer, UrlGenerator $urlGenerator, ItemTableRenderer $itemTableRenderer,
-        JsTreeRenderer $jsTreeRenderer, RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        CachedItemService $cachedItemService, ItemRendererRegistry $itemRendererRegistry, ItemService $itemService,
+        AlertsManager $alertsManager, protected readonly ButtonToolBarRenderer $buttonToolBarRenderer,
+        protected readonly ItemTableRenderer $itemTableRenderer, protected readonly JsTreeRenderer $jsTreeRenderer,
+        protected readonly RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $cachedItemService,
-            $itemRendererRegistry, $itemService, $alertsManager, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $cachedItemService, $itemRendererRegistry, $itemService, $alertsManager
         );
-
-        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
-        $this->itemTableRenderer = $itemTableRenderer;
-        $this->jsTreeRenderer = $jsTreeRenderer;
-        $this->requestTableParameterValuesCompiler = $requestTableParameterValuesCompiler;
     }
 
     /**
@@ -81,7 +69,7 @@ class BrowseComponent extends Manager
 
         $html[] = $this->renderHeader($currentUser);
 
-        $html[] = $this->getButtonToolBarRenderer()->render($this->getButtonToolBar());
+        $html[] = $this->buttonToolBarRenderer->render($this->getButtonToolBar());
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-12 col-lg-2">';
@@ -108,7 +96,7 @@ class BrowseComponent extends Manager
 
         $dropDownButton = new DropDownButtonCollection($translator->trans('AddMenuItem', [], Manager::CONTEXT));
 
-        foreach ($this->getItemRendererFactory()->getItemRenderers() as $itemRenderer) {
+        foreach ($this->itemRendererRegistry->getItemRenderers() as $itemRenderer) {
             $dropDownButton->addButton(
                 new SubButton(
                     $itemRenderer->getRendererTypeName(), $itemRenderer->getRendererTypeGlyph(),
@@ -129,21 +117,6 @@ class BrowseComponent extends Manager
         return $buttonToolBar;
     }
 
-    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
-    {
-        return $this->buttonToolBarRenderer;
-    }
-
-    public function getItemTableRenderer(): ItemTableRenderer
-    {
-        return $this->itemTableRenderer;
-    }
-
-    public function getJsTreeRenderer(): JsTreeRenderer
-    {
-        return $this->jsTreeRenderer;
-    }
-
     public function getParentIdentifier(): string
     {
         if (!isset($this->parentIdentifier)) {
@@ -151,11 +124,6 @@ class BrowseComponent extends Manager
         }
 
         return $this->parentIdentifier;
-    }
-
-    public function getRequestTableParameterValuesCompiler(): RequestTableParameterValuesCompiler
-    {
-        return $this->requestTableParameterValuesCompiler;
     }
 
     public function renderMenu(): string
@@ -173,7 +141,7 @@ class BrowseComponent extends Manager
             $selectedPathIdentifiers = [DataClass::EMPTY_UUID, $this->getParentIdentifier()];
         }
 
-        return $this->getJsTreeRenderer()->render(
+        return $this->jsTreeRenderer->render(
             'itemMenu', Manager::PARAM_PARENT, $dataUrl, $selectedPathIdentifiers
         );
     }
@@ -187,19 +155,18 @@ class BrowseComponent extends Manager
      */
     protected function renderTable(): string
     {
-        $totalNumberOfItems = $this->getItemService()->countItemsByParentIdentifier($this->getParentIdentifier());
-        $itemTableRenderer = $this->getItemTableRenderer();
+        $totalNumberOfItems = $this->itemService->countItemsByParentIdentifier($this->getParentIdentifier());
 
-        $tableParameterValues = $this->getRequestTableParameterValuesCompiler()->determineParameterValues(
-            $itemTableRenderer->getParameterNames(), $itemTableRenderer->getDefaultParameterValues(),
+        $tableParameterValues = $this->requestTableParameterValuesCompiler->determineParameterValues(
+            $this->itemTableRenderer->getParameterNames(), $this->itemTableRenderer->getDefaultParameterValues(),
             $totalNumberOfItems
         );
 
-        $items = $this->getItemService()->findItemsByParentIdentifier(
+        $items = $this->itemService->findItemsByParentIdentifier(
             $this->getParentIdentifier(), $tableParameterValues->getNumberOfItemsPerPage(),
-            $tableParameterValues->getOffset(), $itemTableRenderer->determineOrderBy($tableParameterValues)
+            $tableParameterValues->getOffset(), $this->itemTableRenderer->determineOrderBy($tableParameterValues)
         );
 
-        return $itemTableRenderer->render($tableParameterValues, $items);
+        return $this->itemTableRenderer->render($tableParameterValues, $items);
     }
 }

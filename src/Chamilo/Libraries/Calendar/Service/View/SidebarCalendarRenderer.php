@@ -16,26 +16,14 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
 {
-    protected JumpBarRenderer $jumpBarRenderer;
-
-    protected MiniMonthCalendarRenderer $miniMonthCalendarRenderer;
-
-    protected ResourceManager $resourceManager;
-
-    protected WebPathBuilder $webPathBuilder;
-
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, WebPathBuilder $webPathBuilder,
-        ResourceManager $resourceManager, JumpBarRenderer $jumpBarRenderer, ButtonToolBarRenderer $buttonToolBarRenderer
+        ButtonToolBarRenderer $buttonToolBarRenderer, protected JumpBarRenderer $jumpBarRenderer,
+        protected MiniMonthCalendarRenderer $miniMonthCalendarRenderer, protected ResourceManager $resourceManager,
+        protected WebPathBuilder $webPathBuilder
     )
     {
         parent::__construct($legendRenderer, $urlGenerator, $translator, $buttonToolBarRenderer);
-
-        $this->miniMonthCalendarRenderer = $miniMonthCalendarRenderer;
-        $this->webPathBuilder = $webPathBuilder;
-        $this->resourceManager = $resourceManager;
-        $this->jumpBarRenderer = $jumpBarRenderer;
     }
 
     /**
@@ -84,39 +72,19 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
             $calendarTableConfiguration, $events, $displayParameters, $displayTime, $viewActions, $invisibleSources,
             $invisibilityContext
         );
-        $html[] = $this->getLegendRenderer()->render($invisibleSources, $invisibilityContext);
-        $html[] = $this->getJumpBarRenderer()->render(
+        $html[] = $this->legendRenderer->render($invisibleSources, $invisibilityContext);
+        $html[] = $this->jumpBarRenderer->render(
             $this->determineNavigationUrl($displayParameters), $displayTime
         );
         $html[] = '</div>';
 
         $html[] = '<div class="clearfix"></div>';
 
-        $html[] = $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath() . 'Calendar/EventTooltip.js'
+        $html[] = $this->resourceManager->getResourceHtml(
+            $this->webPathBuilder->getJavascriptPath() . 'Calendar/EventTooltip.js'
         );
 
         return implode(PHP_EOL, $html);
-    }
-
-    protected function getJumpBarRenderer(): JumpBarRenderer
-    {
-        return $this->jumpBarRenderer;
-    }
-
-    public function getMiniMonthCalendarRenderer(): MiniMonthCalendarRenderer
-    {
-        return $this->miniMonthCalendarRenderer;
-    }
-
-    public function getResourceManager(): ResourceManager
-    {
-        return $this->resourceManager;
-    }
-
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return $this->webPathBuilder;
     }
 
     /**
@@ -140,7 +108,7 @@ abstract class SidebarCalendarRenderer extends HtmlCalendarRenderer
         int $displayTime, array $viewActions = [], ?array $visibleSources = null, ?string $invisibilityContext = null
     ): string
     {
-        return $this->getMiniMonthCalendarRenderer()->render(
+        return $this->miniMonthCalendarRenderer->render(
             $events, $calendarTableConfiguration, $displayParameters, $displayTime, $viewActions, $visibleSources,
             $invisibilityContext
         );

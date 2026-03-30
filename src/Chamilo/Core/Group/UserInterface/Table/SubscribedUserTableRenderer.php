@@ -35,34 +35,17 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
 {
     public const string TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
 
-    protected GroupUrlGenerator $groupUrlGenerator;
-
-    protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
-
     public function __construct(
         Translator $translator, UrlGenerator $urlGenerator, ListHtmlTableRenderer $htmlTableRenderer,
         PageNavigationCalculator $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
-        GroupUrlGenerator $groupUrlGenerator, ClassnameUtilities $classnameUtilities,
-        MiniButtonToolBarRenderer $miniButtonToolBarRenderer
+        ClassnameUtilities $classnameUtilities, protected readonly GroupUrlGenerator $groupUrlGenerator,
+        protected readonly MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )
     {
-        $this->groupUrlGenerator = $groupUrlGenerator;
-        $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
-
         parent::__construct(
             $translator, $urlGenerator, $htmlTableRenderer, $pager, $dataClassPropertyTableColumnFactory,
             $classnameUtilities
         );
-    }
-
-    public function getGroupUrlGenerator(): GroupUrlGenerator
-    {
-        return $this->groupUrlGenerator;
-    }
-
-    public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
-    {
-        return $this->miniButtonToolBarRenderer;
     }
 
     public function getTableActions(): TableActions
@@ -104,20 +87,18 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
     {
-        $translator = $this->getTranslator();
-
         $buttonToolBar = new MiniButtonToolBar();
 
-        $unsubscribeUrl = $this->getGroupUrlGenerator()->getUnsubscribeUserUrl($result);
+        $unsubscribeUrl = $this->groupUrlGenerator->getUnsubscribeUserUrl($result);
 
         $buttonToolBar->addButton(
             new Button(
-                label: $translator->trans('UnsubscribeSelected', [], Manager::CONTEXT),
+                label: $this->translator->trans('UnsubscribeSelected', [], Manager::CONTEXT),
                 inlineGlyph: new FontAwesomeGlyph('times'), action: $unsubscribeUrl, display: DisplayTypeEnum::ICON,
                 classes: ['btn-link']
             )
         );
 
-        return $this->getMiniButtonToolBarRenderer()->render($buttonToolBar);
+        return $this->miniButtonToolBarRenderer->render($buttonToolBar);
     }
 }

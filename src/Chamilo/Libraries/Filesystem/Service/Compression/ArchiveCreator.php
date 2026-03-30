@@ -19,23 +19,11 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  */
 class ArchiveCreator
 {
-    protected ConfigurablePathBuilder $configurablePathBuilder;
-
-    protected ZipArchiveFilecompression $fileCompression;
-
-    protected Filesystem $filesystem;
-
-    protected FilesystemTools $filesystemTools;
-
     public function __construct(
-        Filesystem $filesystem, FilesystemTools $filesystemTools, ZipArchiveFilecompression $fileCompression,
-        ConfigurablePathBuilder $configurablePathBuilder
+        protected Filesystem $filesystem, protected FilesystemTools $filesystemTools,
+        protected ZipArchiveFilecompression $fileCompression, protected ConfigurablePathBuilder $configurablePathBuilder
     )
     {
-        $this->filesystem = $filesystem;
-        $this->filesystemTools = $filesystemTools;
-        $this->fileCompression = $fileCompression;
-        $this->configurablePathBuilder = $configurablePathBuilder;
     }
 
     public function createAndDownloadArchive(Archive $archive, Request $request): static
@@ -70,20 +58,15 @@ class ArchiveCreator
 
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT, $archive->getName() . '.zip',
-            $this->getFilesystemTools()->createSafeName($archive->getName()) . '.zip'
+            $this->filesystemTools->createSafeName($archive->getName()) . '.zip'
         );
 
         return $response;
     }
 
-    public function getFilesystemTools(): FilesystemTools
-    {
-        return $this->filesystemTools;
-    }
-
     protected function handleArchiveFile(ArchiveFile $archiveFile, string $temporaryPath): static
     {
-        $fileName = $this->getFilesystemTools()->createUniqueName($temporaryPath, $archiveFile->getName());
+        $fileName = $this->filesystemTools->createUniqueName($temporaryPath, $archiveFile->getName());
         $filePath = $temporaryPath . DIRECTORY_SEPARATOR . $fileName;
         $originalPath = $archiveFile->getOriginalPath();
 
@@ -99,7 +82,7 @@ class ArchiveCreator
 
     protected function handleArchiveFolder(ArchiveFolder $archiveFolder, string $temporaryPath): static
     {
-        $folderName = $this->getFilesystemTools()->createUniqueName($temporaryPath, $archiveFolder->getName());
+        $folderName = $this->filesystemTools->createUniqueName($temporaryPath, $archiveFolder->getName());
         $folderPath = $temporaryPath . DIRECTORY_SEPARATOR . $folderName;
         $this->filesystem->mkdir($folderPath);
 

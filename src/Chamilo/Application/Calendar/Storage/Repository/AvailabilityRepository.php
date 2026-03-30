@@ -19,12 +19,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class AvailabilityRepository
 {
-
-    private DataClassRepository $dataClassRepository;
-
-    public function __construct(DataClassRepository $dataClassRepository)
+    public function __construct(protected DataClassRepository $dataClassRepository)
     {
-        $this->dataClassRepository = $dataClassRepository;
     }
 
     /**
@@ -33,7 +29,7 @@ class AvailabilityRepository
      */
     public function createAvailability(Availability $availability): bool
     {
-        return $this->getDataClassRepository()->create($availability);
+        return $this->dataClassRepository->create($availability);
     }
 
     /**
@@ -52,8 +48,7 @@ class AvailabilityRepository
             new StaticConditionVariable($user->getId())
         );
 
-        if (!is_null($isAvailable))
-        {
+        if (!is_null($isAvailable)) {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(Availability::class, Availability::PROPERTY_AVAILABILITY),
                 new StaticConditionVariable((integer) $isAvailable)
@@ -62,7 +57,7 @@ class AvailabilityRepository
 
         $condition = new AndCondition($conditions);
 
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieves(
             Availability::class, new StorageParameters(condition: $condition)
         );
     }
@@ -90,8 +85,7 @@ class AvailabilityRepository
             new StaticConditionVariable($calendarType)
         );
 
-        if (!is_null($isAvailable))
-        {
+        if (!is_null($isAvailable)) {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(Availability::class, Availability::PROPERTY_AVAILABILITY),
                 new StaticConditionVariable((integer) $isAvailable)
@@ -100,7 +94,7 @@ class AvailabilityRepository
 
         $condition = new AndCondition($conditions);
 
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieves(
             Availability::class, new StorageParameters(condition: $condition)
         );
     }
@@ -128,14 +122,9 @@ class AvailabilityRepository
         );
         $condition = new AndCondition($conditions);
 
-        return $this->getDataClassRepository()->retrieve(
+        return $this->dataClassRepository->retrieve(
             Availability::class, new StorageParameters(condition: $condition)
         );
-    }
-
-    protected function getDataClassRepository(): DataClassRepository
-    {
-        return $this->dataClassRepository;
     }
 
     /**
@@ -148,7 +137,7 @@ class AvailabilityRepository
             new StaticConditionVariable($calendarType)
         );
 
-        return $this->getDataClassRepository()->deletes(Availability::class, $condition);
+        return $this->dataClassRepository->deletes(Availability::class, $condition);
     }
 
     /**
@@ -156,6 +145,6 @@ class AvailabilityRepository
      */
     public function updateAvailability(Availability $availability): bool
     {
-        return $this->getDataClassRepository()->update($availability);
+        return $this->dataClassRepository->update($availability);
     }
 }

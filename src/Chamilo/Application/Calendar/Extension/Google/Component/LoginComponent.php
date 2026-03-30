@@ -23,7 +23,7 @@ class LoginComponent extends Manager
      */
     public function run(?User $currentUser = null): Response
     {
-        $isSuccessful = $this->getCalendarService()->login(
+        $isSuccessful = $this->calendarService->login(
             $currentUser, $this->getRequest()->query->get(CalendarService::PARAM_AUTHORIZATION_CODE)
         );
 

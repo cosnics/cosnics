@@ -35,30 +35,12 @@ class AuthenticationValidator
      */
     protected array $authentications;
 
-    protected array $enabledSources;
-
-    protected EventDispatcherInterface $eventDispatcher;
-
-    protected ChamiloRequest $request;
-
-    protected SessionInterface $session;
-
-    protected Translator $translator;
-
-    protected UrlGenerator $urlGenerator;
-
     public function __construct(
-        ChamiloRequest $request, Translator $translator, SessionInterface $session, UrlGenerator $urlGenerator,
-        EventDispatcherInterface $eventDispatcher, array $enabledSources = []
+        protected ChamiloRequest $request, protected Translator $translator, protected SessionInterface $session,
+        protected UrlGenerator $urlGenerator, protected EventDispatcherInterface $eventDispatcher,
+        protected array $enabledSources = []
     )
     {
-        $this->request = $request;
-        $this->translator = $translator;
-        $this->session = $session;
-        $this->urlGenerator = $urlGenerator;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->enabledSources = $enabledSources;
-
         $this->authentications = [];
     }
 
@@ -87,36 +69,6 @@ class AuthenticationValidator
         return $this->authentications;
     }
 
-    public function getEnabledSources(): array
-    {
-        return $this->enabledSources;
-    }
-
-    public function getEventDispatcher(): EventDispatcherInterface
-    {
-        return $this->eventDispatcher;
-    }
-
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
-    }
-
-    public function getSession(): SessionInterface
-    {
-        return $this->session;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
-    }
-
     public function isAuthenticated(): bool
     {
         $userIdentifier = $this->session->get(AuthenticationValidator::SESSION_USER_ID);
@@ -126,7 +78,7 @@ class AuthenticationValidator
 
     public function isSourceEnabled(string $authenticationSource): bool
     {
-        return in_array($authenticationSource, $this->getEnabledSources());
+        return in_array($authenticationSource, $this->enabledSources);
     }
 
     /**
@@ -134,7 +86,7 @@ class AuthenticationValidator
      */
     public function logout(User $user): void
     {
-        $this->getEventDispatcher()->dispatch(new BeforeUserLogoutEvent($user, $this->request->getClientIp()));
+        $this->eventDispatcher->dispatch(new BeforeUserLogoutEvent($user, $this->request->getClientIp()));
 
         $this->session->invalidate();
 
@@ -144,7 +96,7 @@ class AuthenticationValidator
             }
         }
 
-        throw new UserException($this->getTranslator()->trans('LogoutFailed', [], StringUtilities::LIBRARIES));
+        throw new UserException($this->translator->trans('LogoutFailed', [], StringUtilities::LIBRARIES));
     }
 
     protected function redirectAfterLogin(): void
@@ -191,7 +143,7 @@ class AuthenticationValidator
         }
 
         throw new NotAuthenticatedException(
-            $this->getTranslator()->trans('AuthenticationValidationFailed', [], StringUtilities::LIBRARIES)
+            $this->translator->trans('AuthenticationValidationFailed', [], StringUtilities::LIBRARIES)
         );
     }
 
@@ -211,12 +163,12 @@ class AuthenticationValidator
 
         if (!$user->getActive() && !$user->isPlatformAdministrator()) {
             throw new NotAuthenticatedException(
-                $this->getTranslator()->trans('AccountNotActive', [], StringUtilities::LIBRARIES)
+                $this->translator->trans('AccountNotActive', [], StringUtilities::LIBRARIES)
             );
         }
 
         $this->setAuthenticatedUser($user);
-        $this->getEventDispatcher()->dispatch(new AfterUserLoginEvent($user, $this->request->getClientIp()));
+        $this->eventDispatcher->dispatch(new AfterUserLoginEvent($user, $this->request->getClientIp()));
 
         if ($redirectAfterLogin) {
             $this->redirectAfterLogin();

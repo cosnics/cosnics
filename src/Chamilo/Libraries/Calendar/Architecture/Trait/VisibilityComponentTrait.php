@@ -17,11 +17,13 @@ trait VisibilityComponentTrait
 {
     public const string PARAM_SOURCE = 'source';
 
+    protected VisibilityServiceInterface $visibilityService;
+
     public function run(?User $currentUser = null): Response
     {
         $source = $this->getRequest()->getFromQueryOrRequest(self::PARAM_SOURCE);
 
-        if ($this->getVisibilityService()->changeVisibility($currentUser->getId(), $source)) {
+        if ($this->visibilityService->changeVisibility($currentUser->getId(), $source)) {
             return JsonAjaxResult::success();
         }
         else {
@@ -43,6 +45,4 @@ trait VisibilityComponentTrait
     }
 
     abstract public function getTranslator(): Translator;
-
-    abstract public function getVisibilityService(): VisibilityServiceInterface;
 }

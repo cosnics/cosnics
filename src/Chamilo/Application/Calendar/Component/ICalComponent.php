@@ -31,34 +31,19 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
 {
     public const string PARAM_DOWNLOAD = 'download';
 
-    protected AlertRenderer $alertRenderer;
-
-    protected AuthenticationValidator $authenticationValidator;
-
-    protected CalendarDataProvider $calendarDataProvider;
-
-    protected ICalCalendarRenderer $iCalCalendarRenderer;
-
-    protected SecurityTokenAuthentication $securityTokenAuthentication;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, AlertRenderer $alertRenderer,
-        VisibilityRepository $visibilityRepository, UrlGenerator $urlGenerator,
-        AuthenticationValidator $authenticationValidator, CalendarDataProvider $calendarDataProvider,
-        ICalCalendarRenderer $iCalCalendarRenderer, SecurityTokenAuthentication $securityTokenAuthentication,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        VisibilityRepository $visibilityRepository, protected AlertRenderer $alertRenderer,
+        protected AuthenticationValidator $authenticationValidator,
+        protected CalendarDataProvider $calendarDataProvider, protected ICalCalendarRenderer $iCalCalendarRenderer,
+        protected SecurityTokenAuthentication $securityTokenAuthentication
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $visibilityRepository,
-            $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $visibilityRepository
         );
-
-        $this->alertRenderer = $alertRenderer;
-        $this->authenticationValidator = $authenticationValidator;
-        $this->calendarDataProvider = $calendarDataProvider;
-        $this->iCalCalendarRenderer = $iCalCalendarRenderer;
-        $this->securityTokenAuthentication = $securityTokenAuthentication;
     }
 
     /**
@@ -67,10 +52,8 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
      */
     public function run(?User $currentUser = null): Response
     {
-        $authenticationValidator = $this->getAuthenticationValidator();
-
-        if (!$authenticationValidator->isAuthenticated()) {
-            $authenticationValidator->validateForAuthentication($this->getSecurityTokenAuthentication(), false, false);
+        if (!$this->authenticationValidator->isAuthenticated()) {
+            $this->authenticationValidator->validateForAuthentication($this->securityTokenAuthentication, false, false);
 
             if ($currentUser instanceof User) {
                 return $this->renderCalendar($currentUser);
@@ -110,7 +93,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
                     ]
                 );
 
-                $includedCalendars = implode(', ', $this->getCalendarRendererProvider()->getSourceNames());
+                $includedCalendars = implode(', ', $this->calendarDataProvider->getSourceNames());
 
                 $translator = $this->getTranslator();
                 $html = [];
@@ -133,7 +116,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
                 );
 
                 foreach ($notificationMessages as $notificationMessage) {
-                    $html[] = $this->getAlertRenderer()->render($notificationMessage);
+                    $html[] = $this->alertRenderer->render($notificationMessage);
                 }
                 $html[] = $this->renderFooter();
 
@@ -142,38 +125,13 @@ class ICalComponent extends Manager implements NoAuthenticationSupportInterface
         }
     }
 
-    public function getAlertRenderer(): AlertRenderer
-    {
-        return $this->alertRenderer;
-    }
-
-    protected function getAuthenticationValidator(): AuthenticationValidator
-    {
-        return $this->authenticationValidator;
-    }
-
-    private function getCalendarRendererProvider(): CalendarDataProvider
-    {
-        return $this->calendarDataProvider;
-    }
-
-    public function getICalCalendarRenderer(): ICalCalendarRenderer
-    {
-        return $this->iCalCalendarRenderer;
-    }
-
-    protected function getSecurityTokenAuthentication(): SecurityTokenAuthentication
-    {
-        return $this->securityTokenAuthentication;
-    }
-
     /**
      * @throws \Exception
      */
     private function renderCalendar(User $user): Response
     {
-        $iCalRenderer = $this->getICalCalendarRenderer();
-        $events = $this->getCalendarRendererProvider()->getEvents(
+        $iCalRenderer = $this->iCalCalendarRenderer;
+        $events = $this->calendarDataProvider->getEvents(
             $user, $iCalRenderer->getEventsStartTime(), $iCalRenderer->getEventsEndTime()
         );
 

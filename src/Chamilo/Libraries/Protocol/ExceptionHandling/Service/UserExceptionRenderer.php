@@ -30,6 +30,6 @@ class UserExceptionRenderer extends AbstractUserExceptionRenderer implements Use
      */
     public function renderTitle(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('SomethingWentWrong', [], StringUtilities::LIBRARIES);
+        return $this->translator->trans('SomethingWentWrong', [], StringUtilities::LIBRARIES);
     }
 }

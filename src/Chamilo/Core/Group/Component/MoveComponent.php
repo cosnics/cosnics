@@ -34,29 +34,19 @@ use Twig\Environment;
  */
 class MoveComponent extends Manager
 {
-    protected FormFactoryInterface $formFactory;
-
-    protected GroupMoveFormType $groupMoveFormType;
-
-    protected Environment $twigFormEnvironment;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        GroupMembershipService $groupMembershipService, GroupUrlGenerator $groupUrlGenerator,
-        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupService $groupService,
-        UserService $userService, UrlGenerator $urlGenerator, FormFactoryInterface $formFactory,
-        Environment $twigFormEnvironment, GroupMoveFormType $groupMoveFormType
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupMembershipService $groupMembershipService,
+        GroupService $groupService, GroupUrlGenerator $groupUrlGenerator, UserService $userService,
+        protected FormFactoryInterface $formFactory, protected GroupMoveFormType $groupMoveFormType,
+        protected Environment $twigFormEnvironment
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $groupMembershipService,
-            $groupUrlGenerator, $alertsManager, $breadcrumbTrail, $groupService, $userService, $urlGenerator,
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator, $alertsManager,
+            $breadcrumbTrail, $groupMembershipService, $groupService, $groupUrlGenerator, $userService
         );
-
-        $this->formFactory = $formFactory;
-        $this->twigFormEnvironment = $twigFormEnvironment;
-        $this->groupMoveFormType = $groupMoveFormType;
     }
 
     /**
@@ -77,7 +67,7 @@ class MoveComponent extends Manager
 
         $groupIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID);
 
-        $group = $this->getGroupService()->findGroupByIdentifier($groupIdentifier);
+        $group = $this->groupService->findGroupByIdentifier($groupIdentifier);
 
         $formUri = $this->getUrlGenerator()->fromParameters(
             [
@@ -87,7 +77,7 @@ class MoveComponent extends Manager
             ]
         );
 
-        $form = $this->getFormFactory()->create(
+        $form = $this->formFactory->create(
             GroupMoveFormType::class, $group->getDefaultProperties(),
             ['action' => $formUri, 'disabledGroupIdentifiers' => [$groupIdentifier]]
         );
@@ -96,7 +86,7 @@ class MoveComponent extends Manager
         if ($form->isSubmitted() && $form->isValid()) {
             $submittedData = $form->getData();
 
-            $success = $this->getGroupService()->moveGroup(
+            $success = $this->groupService->moveGroup(
                 $group, $submittedData[NestedSet::PROPERTY_PARENT_ID], $currentUser
             );
 
@@ -105,7 +95,7 @@ class MoveComponent extends Manager
                 StringUtilities::LIBRARIES
             );
 
-            $this->getAlertsManager()->addAlert(
+            $this->alertsManager->addAlert(
                 new Alert(
                     $message, $success ? AlertEnum::SUCCESS : AlertEnum::DANGER
                 )
@@ -121,27 +111,12 @@ class MoveComponent extends Manager
             $html = [];
 
             $html[] = $this->renderHeader($currentUser);
-            $html[] = $this->getTwigFormEnvironment()->render('form.html.twig', [
+            $html[] = $this->twigFormEnvironment->render('form.html.twig', [
                 'form' => $form->createView(),
             ]);
             $html[] = $this->renderFooter();
 
             return new Response(implode(PHP_EOL, $html));
         }
-    }
-
-    public function getFormFactory(): FormFactoryInterface
-    {
-        return $this->formFactory;
-    }
-
-    public function getGroupMoveFormType(): GroupMoveFormType
-    {
-        return $this->groupMoveFormType;
-    }
-
-    public function getTwigFormEnvironment(): Environment
-    {
-        return $this->twigFormEnvironment;
     }
 }

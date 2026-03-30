@@ -21,7 +21,7 @@ use Symfony\Component\Translation\Translator;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DayBlockRenderer extends BlockRenderer
+readonly class DayBlockRenderer extends BlockRenderer
 {
     public const string CONFIGURATION_HOUR_STEP = 'hour_step';
     public const string CONFIGURATION_TIME_END = 'time_end';

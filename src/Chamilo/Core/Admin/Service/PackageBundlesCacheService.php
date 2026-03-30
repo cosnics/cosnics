@@ -19,12 +19,10 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
     use SimpleCacheAdapterHandlerTrait;
     use SimpleCacheDataPreLoaderTrait;
 
-    protected PackageBundlesGenerator $packageBundlesGenerator;
-
-    public function __construct(AdapterInterface $cacheAdapter, PackageBundlesGenerator $packageBundlesGenerator)
+    public function __construct(
+        protected readonly AdapterInterface $cacheAdapter, protected PackageBundlesGenerator $packageBundlesGenerator
+    )
     {
-        $this->cacheAdapter = $cacheAdapter;
-        $this->packageBundlesGenerator = $packageBundlesGenerator;
     }
 
     /**
@@ -32,12 +30,7 @@ class PackageBundlesCacheService implements CacheDataPreLoaderInterface
      */
     public function getDataForCache(): array
     {
-        return $this->getPackageBundlesGenerator()->getPackages();
-    }
-
-    public function getPackageBundlesGenerator(): PackageBundlesGenerator
-    {
-        return $this->packageBundlesGenerator;
+        return $this->packageBundlesGenerator->getPackages();
     }
 
     /**

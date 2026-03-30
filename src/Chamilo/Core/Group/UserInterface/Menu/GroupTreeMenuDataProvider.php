@@ -10,13 +10,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @package Chamilo\Core\Group\UserInterface\Menu
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class GroupTreeMenuDataProvider extends TreeMenuDataProvider
+readonly class GroupTreeMenuDataProvider extends TreeMenuDataProvider
 {
-    protected GroupService $groupService;
-
-    public function __construct(GroupService $groupService)
+    public function __construct(protected GroupService $groupService)
     {
-        $this->groupService = $groupService;
     }
 
     /**
@@ -25,7 +22,7 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
      */
     protected function getChildDataClasses(string $parentIdentifier): ArrayCollection
     {
-        return $this->getGroupService()->findGroupsForParentIdentifier($parentIdentifier);
+        return $this->groupService->findGroupsForParentIdentifier($parentIdentifier);
     }
 
     /**
@@ -48,18 +45,12 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
         return $this->__getData($uriFormat, $identifier, $getIdentifier, $getText, $hasChildren);
     }
 
-    public function getGroupService(): GroupService
-    {
-        return $this->groupService;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     protected function getRootDataClass(): Group
     {
-        return $this->getGroupService()->findRootGroup();
+        return $this->groupService->findRootGroup();
     }
-
 }

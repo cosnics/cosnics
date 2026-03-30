@@ -48,8 +48,6 @@ class LegendRenderer
      */
     public function render(array $invisibleSources, ?string $invisibilityContext = null): string
     {
-        $translator = $this->getTranslator();
-
         $result = [];
 
         if ($this->hasSources()) {
@@ -58,7 +56,8 @@ class LegendRenderer
             $result[] = '<div class="panel panel-default table-calendar-legend">';
             $result[] = '<div class="panel-heading">';
             $result[] =
-                '<h4 class="panel-title">' . $translator->trans('Legend', [], 'Chamilo\Libraries\Calendar') . '</h4>';
+                '<h4 class="panel-title">' . $this->translator->trans('Legend', [], 'Chamilo\Libraries\Calendar') .
+                '</h4>';
             $result[] = '</div>';
             $result[] = '<ul class="list-group">';
 
@@ -94,14 +93,14 @@ class LegendRenderer
                 $result[] = 'var calendarVisibilityContext = ' . json_encode($invisibilityContext) . ';';
                 $result[] = '</script>';
 
-                $result[] = $this->getResourceManager()->getResourceHtml(
-                    $this->getWebPathBuilder()->getJavascriptPath() . 'Calendar/Highlight.js'
+                $result[] = $this->resourceManager->getResourceHtml(
+                    $this->webPathBuilder->getJavascriptPath() . 'Calendar/Highlight.js'
                 );
 
                 if ($visibleSources == 0) {
-                    $this->getNotificationMessageManager()->addAlert(
+                    $this->notificationMessageManager->addAlert(
                         new Alert(
-                            $translator->trans('AllEventSourcesHidden', [], 'Chamilo\Libraries\Calendar'),
+                            $this->translator->trans('AllEventSourcesHidden', [], 'Chamilo\Libraries\Calendar'),
                             AlertEnum::WARNING
                         )
                     );
@@ -122,16 +121,6 @@ class LegendRenderer
         }
 
         return $this->getSourceKey($source);
-    }
-
-    public function getNotificationMessageManager(): AlertsManager
-    {
-        return $this->notificationMessageManager;
-    }
-
-    public function getResourceManager(): ResourceManager
-    {
-        return $this->resourceManager;
     }
 
     /**
@@ -156,7 +145,7 @@ class LegendRenderer
         $sourceKey = array_search($source, $this->getSources());
 
         if ($sourceKey === false) {
-            throw new Exception($this->getTranslator()->trans('InvalidLegendSource', [], 'Chamilo\Libraries\Calendar'));
+            throw new Exception($this->translator->trans('InvalidLegendSource', [], 'Chamilo\Libraries\Calendar'));
         }
         else {
             return $sourceKey;
@@ -179,16 +168,6 @@ class LegendRenderer
         $this->sources = $sources;
 
         return $this;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return $this->webPathBuilder;
     }
 
     /**

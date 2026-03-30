@@ -14,7 +14,7 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
  * @package Chamilo\Core\User\Service\Menu
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class AccountItemRenderer extends MenuItemRenderer implements SelectableItemInterface
+readonly class AccountItemRenderer extends MenuItemRenderer implements SelectableItemInterface
 {
     public function getRendererTypeGlyph(): InlineGlyph
     {

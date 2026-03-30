@@ -19,7 +19,7 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\User\Service\Menu
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class WidgetItemRenderer extends ItemRenderer
+readonly class WidgetItemRenderer extends ItemRenderer
 {
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
@@ -32,7 +32,7 @@ class WidgetItemRenderer extends ItemRenderer
 
     public function render(Item $item, User $user): string
     {
-        $userPicture = $this->getUserPictureProvider()->getUserPictureAsBase64String($user);
+        $userPicture = $this->userPictureProvider->getUserPictureAsBase64String($user);
 
         $html = [];
 
@@ -62,7 +62,7 @@ class WidgetItemRenderer extends ItemRenderer
         $html[] = '<li><hr class="dropdown-divider"></li>';
 
         // Change user profile picture
-        if ($this->canChangeUserPicture()) {
+        if ($this->canChangeUserPicture) {
             $html[] = '<li>';
             $html[] = '<a class="dropdown-item" href="' . $this->getPictureUrl() . '">';
             $html[] = '<div>' . $this->translator->trans('EditProfilePicture', [], Manager::CONTEXT) . '</div>';
@@ -101,11 +101,6 @@ class WidgetItemRenderer extends ItemRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function canChangeUserPicture(): bool
-    {
-        return $this->canChangeUserPicture;
-    }
-
     public function getAccountUrl(): string
     {
         return $this->getUserUrl(ActionEnum::ACCOUNT->value);
@@ -136,19 +131,9 @@ class WidgetItemRenderer extends ItemRenderer
         return $this->getUserUrl(ActionEnum::CONFIGURE->value);
     }
 
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
-    }
-
-    public function getUserPictureProvider(): UserPictureProviderInterface
-    {
-        return $this->userPictureProvider;
-    }
-
     public function getUserUrl(string $action): string
     {
-        return $this->getUrlGenerator()->fromParameters(
+        return $this->urlGenerator->fromParameters(
             [ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT, ApplicationInterface::PARAM_ACTION => $action]
         );
     }

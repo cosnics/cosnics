@@ -13,13 +13,13 @@ use QuickformException;
  */
 trait ButtonToolBarSearchFormTrait
 {
-    abstract public function getButtonToolBarRenderer(): ButtonToolBarRenderer;
+    protected readonly ButtonToolBarRenderer $buttonToolBarRenderer;
 
     public function getButtonToolBarSearchCondition(?string $type = null): ?AndCondition
     {
         $searchProperties = $this->getButtonToolBarSearchProperties($type);
 
-        return $this->getButtonToolBarRenderer()->getConditions($searchProperties);
+        return $this->buttonToolBarRenderer->getConditions($searchProperties);
     }
 
     /**
@@ -32,7 +32,7 @@ trait ButtonToolBarSearchFormTrait
     public function setButtonToolBarSearchFormRequestQuery(): void
     {
         try {
-            $searchForm = $this->getButtonToolBarRenderer()->getSearchForm();
+            $searchForm = $this->buttonToolBarRenderer->getSearchForm();
 
             if (!$searchForm->clearFormSubmitted()) {
                 $this->getRequest()->query->set(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, $searchForm->getQuery());

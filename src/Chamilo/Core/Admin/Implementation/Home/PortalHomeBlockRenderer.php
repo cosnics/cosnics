@@ -10,7 +10,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
  * @package Chamilo\Core\Admin\Implementation\Home
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class PortalHomeBlockRenderer extends BlockRenderer
+readonly class PortalHomeBlockRenderer extends BlockRenderer
 {
     public const string CONTEXT = Manager::CONTEXT;
 

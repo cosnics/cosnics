@@ -10,11 +10,8 @@ use Chamilo\Libraries\Storage\Repository\DataClassRepository;
  */
 class GroupTrackingRepository
 {
-    private DataClassRepository $dataClassRepository;
-
-    public function __construct(DataClassRepository $dataClassRepository)
+    public function __construct(protected DataClassRepository $dataClassRepository)
     {
-        $this->dataClassRepository = $dataClassRepository;
     }
 
     /**
@@ -23,12 +20,6 @@ class GroupTrackingRepository
      */
     public function createGroupActivity(GroupActivity $groupActivity): bool
     {
-        return $this->getDataClassRepository()->create($groupActivity);
+        return $this->dataClassRepository->create($groupActivity);
     }
-
-    public function getDataClassRepository(): DataClassRepository
-    {
-        return $this->dataClassRepository;
-    }
-
 }

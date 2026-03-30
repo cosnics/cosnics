@@ -22,19 +22,15 @@ use Symfony\Component\Translation\Translator;
  */
 class LogoutComponent extends Manager
 {
-    protected AvailabilityService $availabilityService;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, CalendarService $calendarService,
-        UrlGenerator $urlGenerator, AvailabilityService $availabilityService
+        UrlGenerator $urlGenerator, protected readonly AvailabilityService $availabilityService
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $calendarService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator,  $urlGenerator, $calendarService
         );
-
-        $this->availabilityService = $availabilityService;
     }
 
     /**
@@ -43,10 +39,10 @@ class LogoutComponent extends Manager
      */
     public function run(?User $currentUser = null): Response
     {
-        $isSuccessful = $this->getCalendarService()->logout($currentUser);
+        $isSuccessful = $this->calendarService->logout($currentUser);
 
         if ($isSuccessful) {
-            $this->getAvailabilityService()->deleteAvailabilityByCalendarType(Manager::CONTEXT);
+            $this->availabilityService->deleteAvailabilityByCalendarType(Manager::CONTEXT);
         }
 
         return new RedirectResponse(
@@ -54,10 +50,5 @@ class LogoutComponent extends Manager
                 [ApplicationInterface::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::CONTEXT]
             )
         );
-    }
-
-    protected function getAvailabilityService(): AvailabilityService
-    {
-        return $this->availabilityService;
     }
 }

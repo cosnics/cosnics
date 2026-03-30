@@ -22,14 +22,13 @@ use HTML_QuickForm_static;
 use HTML_QuickForm_text;
 use Symfony\Component\Translation\Translator;
 
-class LoginBlockRenderer extends BlockRenderer
+readonly class LoginBlockRenderer extends BlockRenderer
 {
     public const string CONTEXT = Manager::CONTEXT;
 
     public function __construct(
-        HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator,
-        protected readonly ChamiloRequest $request, protected readonly bool $canRetrievePassword,
-        protected readonly bool $canRegister
+        HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator, protected ChamiloRequest $request,
+        protected bool $canRetrievePassword, protected bool $canRegister
     )
     {
         parent::__construct($homeService, $urlGenerator, $translator);
@@ -43,7 +42,7 @@ class LoginBlockRenderer extends BlockRenderer
         $html = [];
 
         if (!$user instanceof User) {
-            $message = $this->getRequest()->query->get(AuthenticationValidator::PARAM_AUTHENTICATION_ERROR);
+            $message = $this->request->query->get(AuthenticationValidator::PARAM_AUTHENTICATION_ERROR);
 
             if ($message) {
                 $html[] =
@@ -155,10 +154,5 @@ class LoginBlockRenderer extends BlockRenderer
         $form->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
         return $form->render();
-    }
-
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
     }
 }

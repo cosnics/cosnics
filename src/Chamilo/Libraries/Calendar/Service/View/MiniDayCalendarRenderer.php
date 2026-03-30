@@ -15,20 +15,13 @@ use Symfony\Component\Translation\Translator;
  */
 class MiniDayCalendarRenderer extends MiniCalendarRenderer
 {
-    protected DayCalendarTableBuilder $dayCalendarTableBuilder;
-
-    protected EventDayRenderer $eventDayRenderer;
-
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        EventDayRenderer $eventDayRenderer, DayCalendarTableBuilder $dayCalendarTableBuilder,
-        ButtonToolBarRenderer $buttonToolBarRenderer
+        ButtonToolBarRenderer $buttonToolBarRenderer, protected EventDayRenderer $eventDayRenderer,
+        protected DayCalendarTableBuilder $dayCalendarTableBuilder
     )
     {
         parent::__construct($legendRenderer, $urlGenerator, $translator, $buttonToolBarRenderer);
-
-        $this->eventDayRenderer = $eventDayRenderer;
-        $this->dayCalendarTableBuilder = $dayCalendarTableBuilder;
     }
 
     /**
@@ -44,29 +37,19 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
     {
         $html = [];
         $html[] = $this->renderFullCalendar($calendarTableConfiguration, $events, $displayTime, $invisibleSources);
-        $html[] = $this->getLegendRenderer()->render($invisibleSources, $invisibilityContext);
+        $html[] = $this->legendRenderer->render($invisibleSources, $invisibilityContext);
 
         return implode(PHP_EOL, $html);
     }
 
-    public function getDayCalendarTableBuilder(): DayCalendarTableBuilder
-    {
-        return $this->dayCalendarTableBuilder;
-    }
-
-    public function getEventDayRenderer(): EventDayRenderer
-    {
-        return $this->eventDayRenderer;
-    }
-
     public function getEventsEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getDayCalendarTableBuilder()->getTableEndTime($calendarTableConfiguration, $displayTime);
+        return $this->dayCalendarTableBuilder->getTableEndTime($calendarTableConfiguration, $displayTime);
     }
 
     public function getEventsStartTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getDayCalendarTableBuilder()->getTableStartTime($calendarTableConfiguration, $displayTime);
+        return $this->dayCalendarTableBuilder->getTableStartTime($calendarTableConfiguration, $displayTime);
     }
 
     /**
@@ -80,8 +63,6 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
         array $invisibleSources = []
     ): string
     {
-        $calendarTableBuilder = $this->getDayCalendarTableBuilder();
-
         $startTime = $this->getEventsStartTime($calendarTableConfiguration, $displayTime);
         $endTime = $this->getEventsEndTime($calendarTableConfiguration, $displayTime);
 
@@ -100,7 +81,7 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
                     $tableDate < $endDate && $endDate < $nextTableDate ||
                     $startDate <= $tableDate && $nextTableDate <= $endDate) {
-                    $eventsToShow[$tableDate][] = $this->getEventDayRenderer()->render(
+                    $eventsToShow[$tableDate][] = $this->eventDayRenderer->render(
                         $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($event, $invisibleSources)
 
                     );
@@ -110,7 +91,7 @@ class MiniDayCalendarRenderer extends MiniCalendarRenderer
             $tableDate = $nextTableDate;
         }
 
-        return $calendarTableBuilder->render(
+        return $this->dayCalendarTableBuilder->render(
             $calendarTableConfiguration, $displayTime, $eventsToShow, ['table-calendar-mini']
         );
     }

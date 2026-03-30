@@ -15,16 +15,10 @@ use Chamilo\Libraries\Storage\Repository\DataClassRepository;
  * @package Chamilo\Core\Admin\Storage\Repository
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class OnlineRepository
+readonly class OnlineRepository
 {
-    protected DataClassRepository $dataClassRepository;
-
-    protected int $timeLimit;
-
-    public function __construct(DataClassRepository $dataClassRepository, int $timeLimit = 600)
+    public function __construct(protected DataClassRepository $dataClassRepository, protected int $timeLimit = 600)
     {
-        $this->dataClassRepository = $dataClassRepository;
-        $this->timeLimit = $timeLimit;
     }
 
     /**
@@ -33,7 +27,7 @@ class OnlineRepository
      */
     public function createOnline(Online $online): bool
     {
-        return $this->getDataClassRepository()->create($online);
+        return $this->dataClassRepository->create($online);
     }
 
     /**
@@ -43,7 +37,7 @@ class OnlineRepository
     public function findDistinctOnlineUserIdentifiers(): array
     {
         $pastTime = strtotime(
-            '-' . $this->getTimeLimit() . ' seconds', time()
+            '-' . $this->timeLimit . ' seconds', time()
         );
 
         $condition = new ComparisonCondition(
@@ -51,7 +45,7 @@ class OnlineRepository
             ComparisonTypeEnum::GREATER_THAN, new StaticConditionVariable($pastTime)
         );
 
-        return $this->getDataClassRepository()->distinct(
+        return $this->dataClassRepository->distinct(
             Online::class, new StorageParameters(
                 condition: $condition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(Online::class, Online::PROPERTY_USER_ID)]
@@ -71,19 +65,9 @@ class OnlineRepository
             new StaticConditionVariable($userIdentifier)
         );
 
-        return $this->getDataClassRepository()->retrieve(
+        return $this->dataClassRepository->retrieve(
             Online::class, new StorageParameters(condition: $condition)
         );
-    }
-
-    protected function getDataClassRepository(): DataClassRepository
-    {
-        return $this->dataClassRepository;
-    }
-
-    public function getTimeLimit(): int
-    {
-        return $this->timeLimit;
     }
 
     /**
@@ -91,6 +75,6 @@ class OnlineRepository
      */
     public function updateOnline(Online $online): bool
     {
-        return $this->getDataClassRepository()->update($online);
+        return $this->dataClassRepository->update($online);
     }
 }

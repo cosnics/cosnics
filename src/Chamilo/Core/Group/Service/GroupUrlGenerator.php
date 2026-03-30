@@ -18,24 +18,15 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
  */
 class GroupUrlGenerator
 {
-    protected DataClassUrlGenerator $dataClassUrlGenerator;
-
-    protected UrlGenerator $urlGenerator;
-
-    public function __construct(UrlGenerator $urlGenerator, DataClassUrlGenerator $dataClassUrlGenerator)
+    public function __construct(
+        protected UrlGenerator $urlGenerator, protected DataClassUrlGenerator $dataClassUrlGenerator
+    )
     {
-        $this->urlGenerator = $urlGenerator;
-        $this->dataClassUrlGenerator = $dataClassUrlGenerator;
     }
 
     public function getCreateUrl(Group $parentGroup): string
     {
         return $this->getGroupActionUrl(ActionEnum::CREATE->value, $parentGroup);
-    }
-
-    public function getDataClassUrlGenerator(): DataClassUrlGenerator
-    {
-        return $this->dataClassUrlGenerator;
     }
 
     public function getDeleteUrl(Group $group): string
@@ -48,7 +39,7 @@ class GroupUrlGenerator
      */
     protected function getGroupActionUrl(string $action, Group $group, array $additionalParameters = []): string
     {
-        return $this->getDataClassUrlGenerator()->getActionUrl(
+        return $this->dataClassUrlGenerator->getActionUrl(
             Manager::CONTEXT, ApplicationInterface::PARAM_ACTION, DataClass::PROPERTY_ID, $action, $group,
             $additionalParameters
         );
@@ -78,7 +69,7 @@ class GroupUrlGenerator
 
     public function getUnsubscribeUserUrl(SubscribedUser $subscribedUser): string
     {
-        return $this->getUrlGenerator()->fromParameters(
+        return $this->urlGenerator->fromParameters(
             [
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::UNSUBSCRIBE->value,
@@ -90,11 +81,6 @@ class GroupUrlGenerator
     public function getUpdateUrl(Group $group): string
     {
         return $this->getGroupActionUrl(ActionEnum::UPDATE->value, $group);
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
     }
 
     public function getViewUrl(Group $group): string

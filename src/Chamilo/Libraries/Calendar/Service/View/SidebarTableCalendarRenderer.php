@@ -26,7 +26,6 @@ abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
     public function renderNavigation(array $displayParameters, int $displayTime): string
     {
         $urlFormat = $this->determineNavigationUrl($displayParameters);
-        $translator = $this->getTranslator();
 
         $previousTime = $this->getPreviousDisplayTime($displayTime);
         $nextTime = $this->getNextDisplayTime($displayTime);
@@ -40,8 +39,8 @@ abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
 
         $buttonToolBar->addButton(
             new Button(
-                $translator->trans('Today', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'), $todayUrl,
-                DisplayTypeEnum::ICON
+                $this->translator->trans('Today', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('home'),
+                $todayUrl, DisplayTypeEnum::ICON
             )
         );
 
@@ -49,17 +48,17 @@ abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
 
         $buttonGroup->addButton(
             new Button(
-                $translator->trans('Previous', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('caret-left'),
-                $previousUrl, DisplayTypeEnum::ICON
+                $this->translator->trans('Previous', [], StringUtilities::LIBRARIES),
+                new FontAwesomeGlyph('caret-left'), $previousUrl, DisplayTypeEnum::ICON
             )
         );
         $buttonGroup->addButton(
             new Button(
-                $translator->trans('Next', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('caret-right'),
+                $this->translator->trans('Next', [], StringUtilities::LIBRARIES), new FontAwesomeGlyph('caret-right'),
                 $nextUrl, DisplayTypeEnum::ICON
             )
         );
 
-        return $this->getButtonToolBarRenderer()->render($buttonToolBar);
+        return $this->buttonToolBarRenderer->render($buttonToolBar);
     }
 }

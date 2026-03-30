@@ -18,17 +18,13 @@ abstract class Manager extends Application
 {
     public const string CONTEXT = __NAMESPACE__;
 
-    protected CalendarService $calendarService;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, CalendarService $calendarService,
-        UrlGenerator $urlGenerator
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        protected CalendarService $calendarService
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
-
-        $this->calendarService = $calendarService;
     }
 
     public function getApplicationAction(): string
@@ -39,11 +35,6 @@ abstract class Manager extends Application
     public function getApplicationContext(): string
     {
         return self::CONTEXT;
-    }
-
-    public function getCalendarService(): CalendarService
-    {
-        return $this->calendarService;
     }
 
     public function getDefaultApplicationAction(): string

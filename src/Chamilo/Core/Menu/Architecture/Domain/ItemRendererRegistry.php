@@ -5,7 +5,6 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Menu\Architecture\Domain
@@ -13,15 +12,6 @@ use Symfony\Component\Translation\Translator;
  */
 class ItemRendererRegistry extends ArrayCollection
 {
-    protected Translator $translator;
-
-    public function __construct(Translator $translator)
-    {
-        parent::__construct();
-
-        $this->translator = $translator;
-    }
-
     public function addItemRenderer(ItemRenderer $itemRenderer): void
     {
         $this->set(get_class($itemRenderer), $itemRenderer);
@@ -61,10 +51,5 @@ class ItemRendererRegistry extends ArrayCollection
     public function getItemRenderers(): array
     {
         return $this->toArray();
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }

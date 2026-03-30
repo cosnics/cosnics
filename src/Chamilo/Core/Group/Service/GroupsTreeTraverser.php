@@ -14,19 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class GroupsTreeTraverser
 {
-    protected GroupMembershipService $groupMembershipService;
-
     protected GroupRepository $groupRepository;
-
-    /**
-     * @var int[][]
-     */
-    protected array $groupUserIdentifiers = [];
-
-    /**
-     * @var int[]
-     */
-    protected array $groupUsersCount = [];
 
     /**
      * @var int[][]
@@ -61,11 +49,10 @@ class GroupsTreeTraverser
     protected array $userSubscribedGroups = [];
 
     public function __construct(
-        GroupRepository $groupRepository, GroupMembershipService $groupMembershipService, PropertyMapper $propertyMapper
+        GroupRepository $groupRepository, PropertyMapper $propertyMapper
     )
     {
         $this->groupRepository = $groupRepository;
-        $this->groupMembershipService = $groupMembershipService;
         $this->propertyMapper = $propertyMapper;
     }
 
@@ -76,22 +63,17 @@ class GroupsTreeTraverser
     {
         $cacheKey = md5(serialize([$group->getId(), $recursiveSubgroups]));
 
-        if (!array_key_exists($cacheKey, $this->subGroupsCount))
-        {
-            if ($group->getRightValue() == $group->getLeftValue() + 1)
-            {
+        if (!array_key_exists($cacheKey, $this->subGroupsCount)) {
+            if ($group->getRightValue() == $group->getLeftValue() + 1) {
                 $this->subGroupsCount[$cacheKey] = 0;
             }
-            elseif ($group->getRightValue() == $group->getLeftValue() + 3)
-            {
+            elseif ($group->getRightValue() == $group->getLeftValue() + 3) {
                 $this->subGroupsCount[$cacheKey] = 1;
             }
-            elseif ($recursiveSubgroups)
-            {
+            elseif ($recursiveSubgroups) {
                 $this->subGroupsCount[$cacheKey] = ($group->getRightValue() - $group->getLeftValue() - 1) / 2;
             }
-            else
-            {
+            else {
                 $this->subGroupsCount[$cacheKey] = $this->groupRepository->countSubGroupsForGroup($group);
             }
         }
@@ -100,53 +82,22 @@ class GroupsTreeTraverser
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function countUsersForGroup(Group $group, bool $includeSubGroups = false, bool $recursiveSubgroups = false
-    ): int
-    {
-        $cacheKey = md5(serialize([$group->getId(), $includeSubGroups, $recursiveSubgroups]));
-
-        if (!array_key_exists($cacheKey, $this->groupUsersCount))
-        {
-            if ($includeSubGroups)
-            {
-                $groupIdentifiers = $this->findSubGroupIdentifiersForGroup($group, $recursiveSubgroups);
-            }
-            else
-            {
-                $groupIdentifiers = [];
-            }
-
-            $groupIdentifiers[] = $group->getId();
-
-            $this->groupUsersCount[$cacheKey] =
-                $this->groupMembershipService->countSubscribedUsersForGroupIdentifiers($groupIdentifiers);
-        }
-
-        return $this->groupUsersCount[$cacheKey];
-    }
-
-    /**
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function findAllSubscribedGroupIdentifiersForUserIdentifier(string $userIdentifier): array
     {
-        if (!array_key_exists($userIdentifier, $this->userSubscribedGroupIdentifiers))
-        {
+        if (!array_key_exists($userIdentifier, $this->userSubscribedGroupIdentifiers)) {
             $directlySubscribedGroupNestingValues =
                 $this->findDirectlySubscribedGroupNestingValuesForUserIdentifier($userIdentifier);
 
-            if (count($directlySubscribedGroupNestingValues) > 0)
-            {
+            if (count($directlySubscribedGroupNestingValues) > 0) {
                 $this->userSubscribedGroupIdentifiers[$userIdentifier] =
                     $this->groupRepository->findGroupIdentifiersForDirectlySubscribedGroupNestingValues(
                         $directlySubscribedGroupNestingValues
                     );
             }
-            else
-            {
+            else {
                 $this->userSubscribedGroupIdentifiers[$userIdentifier] = [];
             }
         }
@@ -162,20 +113,17 @@ class GroupsTreeTraverser
      */
     public function findAllSubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection
     {
-        if (!array_key_exists($userIdentifier, $this->userSubscribedGroups))
-        {
+        if (!array_key_exists($userIdentifier, $this->userSubscribedGroups)) {
             $directlySubscribedGroupNestingValues =
                 $this->findDirectlySubscribedGroupNestingValuesForUserIdentifier($userIdentifier);
 
-            if (count($directlySubscribedGroupNestingValues) > 0)
-            {
+            if (count($directlySubscribedGroupNestingValues) > 0) {
                 $this->userSubscribedGroups[$userIdentifier] =
                     $this->groupRepository->findGroupsForDirectlySubscribedGroupNestingValues(
                         $directlySubscribedGroupNestingValues
                     );
             }
-            else
-            {
+            else {
                 $this->userSubscribedGroups[$userIdentifier] = new ArrayCollection([]);
             }
         }
@@ -213,8 +161,7 @@ class GroupsTreeTraverser
     {
         $cacheKey = md5(serialize([$group->getId(), $includeSelf]));
 
-        if (!array_key_exists($cacheKey, $this->parentGroupIdentifiers))
-        {
+        if (!array_key_exists($cacheKey, $this->parentGroupIdentifiers)) {
             $this->parentGroupIdentifiers[$cacheKey] =
                 $this->groupRepository->findParentGroupIdentifiersForGroup($group, $includeSelf);
         }
@@ -242,8 +189,7 @@ class GroupsTreeTraverser
     {
         $cacheKey = md5(serialize([$group->getId(), $recursiveSubgroups]));
 
-        if (!array_key_exists($cacheKey, $this->subGroupIdentifiers))
-        {
+        if (!array_key_exists($cacheKey, $this->subGroupIdentifiers)) {
             $this->subGroupIdentifiers[$cacheKey] =
                 $this->groupRepository->findSubGroupIdentifiersForGroup($group, $recursiveSubgroups);
         }
@@ -259,8 +205,7 @@ class GroupsTreeTraverser
     {
         $cacheKey = md5(serialize([$group->getId(), $recursiveSubgroups]));
 
-        if (!array_key_exists($cacheKey, $this->subGroups))
-        {
+        if (!array_key_exists($cacheKey, $this->subGroups)) {
             $subGroups = $this->groupRepository->findSubGroupsForGroup($group, $recursiveSubgroups);
 
             $this->subGroups[$cacheKey] =
@@ -268,36 +213,6 @@ class GroupsTreeTraverser
         }
 
         return $this->subGroups[$cacheKey];
-    }
-
-    /**
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findUserIdentifiersForGroup(
-        Group $group, bool $includeSubGroups = false, bool $recursiveSubgroups = false
-    ): array
-    {
-        $cacheKey = md5(serialize([$group->getId(), $includeSubGroups, $recursiveSubgroups]));
-
-        if (!array_key_exists($cacheKey, $this->groupUserIdentifiers))
-        {
-            if ($includeSubGroups)
-            {
-                $groupIdentifiers = $this->findSubGroupIdentifiersForGroup($group, $recursiveSubgroups);
-            }
-            else
-            {
-                $groupIdentifiers = [];
-            }
-
-            $groupIdentifiers[] = $group->getId();
-
-            $this->groupUserIdentifiers[$cacheKey] =
-                $this->groupMembershipService->findSubscribedUserIdentifiersForGroupIdentifiers($groupIdentifiers);
-        }
-
-        return $this->groupUserIdentifiers[$cacheKey];
     }
 
     /**
@@ -309,8 +224,7 @@ class GroupsTreeTraverser
 
         $names = [];
 
-        foreach ($parentGroups as $parentGroup)
-        {
+        foreach ($parentGroups as $parentGroup) {
             $names[] = $parentGroup->getName();
         }
 

@@ -21,31 +21,11 @@ use Symfony\Component\Translation\Translator;
  */
 class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInterface
 {
-    private AvailabilityService $availabilityService;
-
-    private CalendarService $calendarService;
-
-    private EventParser $eventParser;
-
-    private FilesystemAdapter $filesystemAdapter;
-
-    private Translator $translator;
-
     public function __construct(
-        FilesystemAdapter $filesystemAdapter, AvailabilityService $availabilityService,
-        CalendarService $calendarService, EventParser $eventParser, Translator $translator
+        protected FilesystemAdapter $filesystemAdapter, protected AvailabilityService $availabilityService,
+        protected CalendarService $calendarService, protected EventParser $eventParser, protected Translator $translator
     )
     {
-        $this->filesystemAdapter = $filesystemAdapter;
-        $this->availabilityService = $availabilityService;
-        $this->calendarService = $calendarService;
-        $this->eventParser = $eventParser;
-        $this->translator = $translator;
-    }
-
-    protected function getAvailabilityService(): AvailabilityService
-    {
-        return $this->availabilityService;
     }
 
     protected function getCalendarByIdentifier(string $calendarIdentifier, User $user): AvailableCalendar
@@ -53,7 +33,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
         $availableCalendar = new AvailableCalendar();
 
         try {
-            $calendar = $this->getCalendarService()->getCalendarByIdentifier($calendarIdentifier, $user);
+            $calendar = $this->calendarService->getCalendarByIdentifier($calendarIdentifier, $user);
             $availableCalendar->setType(Manager::CONTEXT);
             $availableCalendar->setIdentifier($calendar->getId());
             $availableCalendar->setName($calendar->getName());
@@ -72,7 +52,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
     protected function getCalendarEvents(string $calendarIdentifier, User $user, int $fromDate, int $toDate): array
     {
         try {
-            $events = $this->getCalendarService()->findEventsForCalendarIdentifierAndBetweenDates(
+            $events = $this->calendarService->findEventsForCalendarIdentifierAndBetweenDates(
                 $user, $calendarIdentifier, $fromDate, $toDate
             );
 
@@ -80,8 +60,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
             $parsedEvents = [];
 
             foreach ($events as $event) {
-                $parsedEvents =
-                    array_merge($parsedEvents, $this->getEventParser()->getEvents($availableCalendar, $event));
+                $parsedEvents = array_merge($parsedEvents, $this->eventParser->getEvents($availableCalendar, $event));
             }
 
             return $parsedEvents;
@@ -96,7 +75,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
      */
     protected function getCalendarIdentifiers(User $user): array
     {
-        $availabilities = $this->getAvailabilityService()->getAvailabilitiesForUserAndCalendarType(
+        $availabilities = $this->availabilityService->getAvailabilitiesForUserAndCalendarType(
             $user, Manager::CONTEXT
         );
 
@@ -120,29 +99,22 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
         return $calendarIdentifiers;
     }
 
-    protected function getCalendarService(): CalendarService
-    {
-        return $this->calendarService;
-    }
-
     /**
      * @return \Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar[]
      */
     public function getCalendars(?User $user = null): array
     {
-        $filesystemAdapter = $this->getFilesystemAdapter();
-
         try {
             $identifier = [__METHOD__, $user->getId()];
             $identifierString = md5(serialize($identifier));
 
-            $cacheItem = $filesystemAdapter->getItem($identifierString);
+            $cacheItem = $this->filesystemAdapter->getItem($identifierString);
 
             if (!$cacheItem->isHit()) {
                 try {
                     $availableCalendars = [];
 
-                    $ownedCalendars = $this->getCalendarService()->listOwnedCalendars($user);
+                    $ownedCalendars = $this->calendarService->listOwnedCalendars($user);
 
                     foreach ($ownedCalendars as $ownedCalendar) {
                         $availableCalendar = new AvailableCalendar();
@@ -159,7 +131,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
                 }
 
                 $cacheItem->set($availableCalendars);
-                $filesystemAdapter->save($cacheItem);
+                $this->filesystemAdapter->save($cacheItem);
             }
 
             return $cacheItem->get();
@@ -169,19 +141,12 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
         }
     }
 
-    public function getEventParser(): EventParser
-    {
-        return $this->eventParser;
-    }
-
     /**
      * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getEvents(User $user, int $fromDate, int $toDate): array
     {
-        $filesystemAdapter = $this->getFilesystemAdapter();
-
         try {
             $calendarIdentifiers = $this->getCalendarIdentifiers($user);
 
@@ -194,7 +159,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
             ];
             $identifierString = md5(serialize($identifier));
 
-            $cacheItem = $filesystemAdapter->getItem($identifierString);
+            $cacheItem = $this->filesystemAdapter->getItem($identifierString);
 
             if (!$cacheItem->isHit()) {
                 $events = [];
@@ -208,7 +173,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
                 }
 
                 $cacheItem->set($events);
-                $filesystemAdapter->save($cacheItem);
+                $this->filesystemAdapter->save($cacheItem);
             }
 
             return $cacheItem->get();
@@ -218,18 +183,8 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
         }
     }
 
-    protected function getFilesystemAdapter(): FilesystemAdapter
-    {
-        return $this->filesystemAdapter;
-    }
-
     public function getName(): string
     {
-        return $this->getTranslator()->trans('TypeName', [], 'Chamilo\Application\Calendar\Extension\Office365');
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
+        return $this->translator->trans('TypeName', [], 'Chamilo\Application\Calendar\Extension\Office365');
     }
 }

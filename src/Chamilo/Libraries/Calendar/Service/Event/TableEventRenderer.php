@@ -35,7 +35,7 @@ abstract class TableEventRenderer extends EventRenderer
     ): string
     {
         $eventClasses = $this->getEventClasses($isEventSourceVisible);
-        $sourceClasses = $this->getLegendRenderer()->getSourceClasses(
+        $sourceClasses = $this->legendRenderer->getSourceClasses(
             $event->getSource(), $isFadedEvent
         );
 
@@ -90,7 +90,7 @@ abstract class TableEventRenderer extends EventRenderer
         $html = [];
 
         $html[] = '<div class="' . $this->determineEventClasses($event, $isFadedEvent, $isEventSourceVisible) .
-            '" data-source-key="' . $this->getLegendRenderer()->addSource($event->getSource()) . '">';
+            '" data-source-key="' . $this->legendRenderer->addSource($event->getSource()) . '">';
         $html[] = '<div class="event-data">';
 
         return implode(PHP_EOL, $html);

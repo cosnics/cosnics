@@ -28,7 +28,7 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\Menu\Implementation\Menu
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ApplicationItemRenderer extends ItemRenderer
+readonly class ApplicationItemRenderer extends ItemRenderer
     implements SelectableItemInterface, TranslatableItemInterface, ConfigurableItemInterface
 {
     use TranslatableItemTrait;
@@ -126,7 +126,7 @@ class ApplicationItemRenderer extends ItemRenderer
         $application = $item->getSetting(self::CONFIGURATION_APPLICATION);
 
         if ($application == 'root') {
-            return $this->getUrlGenerator()->fromParameters();
+            return $this->urlGenerator->fromParameters();
         }
 
         $parameters = [];
@@ -149,7 +149,7 @@ class ApplicationItemRenderer extends ItemRenderer
             }
         }
 
-        return $this->getUrlGenerator()->fromParameters($parameters);
+        return $this->urlGenerator->fromParameters($parameters);
     }
 
     /**
@@ -157,7 +157,7 @@ class ApplicationItemRenderer extends ItemRenderer
      */
     protected function getApplicationOptions(): array
     {
-        $packages = $this->getPackageBundlesCacheService()->getPackages();
+        $packages = $this->packageBundlesCacheService->getPackages();
 
         $activeApplications = [];
 
@@ -190,16 +190,6 @@ class ApplicationItemRenderer extends ItemRenderer
         ];
     }
 
-    public function getFormTypeBuilder(): FormTypeBuilder
-    {
-        return $this->formTypeBuilder;
-    }
-
-    public function getPackageBundlesCacheService(): PackageBundlesCacheService
-    {
-        return $this->packageBundlesCacheService;
-    }
-
     public function getRendererTypeGlyph(): InlineGlyph
     {
         return new FontAwesomeGlyph('cube', ['fa-fw']);
@@ -208,11 +198,6 @@ class ApplicationItemRenderer extends ItemRenderer
     public function getRendererTypeName(): string
     {
         return $this->translator->trans('ApplicationItem', [], Manager::CONTEXT);
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
     }
 
     public function isSelected(Item $item, User $user): bool

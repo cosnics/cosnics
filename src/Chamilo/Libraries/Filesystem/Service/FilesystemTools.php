@@ -14,28 +14,21 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  */
 class FilesystemTools
 {
-    protected Filesystem $filesystem;
-
-    protected StringUtilities $stringUtilities;
-
     public function __construct(
-        Filesystem $filesystem, StringUtilities $stringUtilities
+        protected Filesystem $filesystem, protected StringUtilities $stringUtilities
     )
     {
-        $this->filesystem = $filesystem;
-        $this->stringUtilities = $stringUtilities;
     }
 
     public function createSafeName(string $desiredName): string
     {
-        $asciiString = $this->getStringUtilities()->createString($desiredName)->toAscii()->__toString();
+        $asciiString = $this->stringUtilities->createString($desiredName)->toAscii()->__toString();
 
         return preg_replace('/[:;!\x20\x2F\x5C]/', '_', $asciiString);
     }
 
     public function createSafeNames(string $path): void
     {
-        $filesystem = $this->getFilesystem();
         $list = $this->getDirectoryContent($path);
 
         // Sort everything, so renaming a file or directory has no impact on
@@ -48,12 +41,12 @@ class FilesystemTools
                     $safeName = $this->createUniqueName(dirname($entry), basename($entry));
                     $destination = dirname($entry) . '/' . $safeName;
 
-                    $filesystem->copy($entry, $destination);
-                    $filesystem->remove($entry);
+                    $this->filesystem->copy($entry, $destination);
+                    $this->filesystem->remove($entry);
                 }
                 elseif (is_dir($entry)) {
                     $safeName = $this->createUniqueName($entry);
-                    $filesystem->rename($entry, $safeName);
+                    $this->filesystem->rename($entry, $safeName);
                 }
             }
         }
@@ -170,16 +163,6 @@ class FilesystemTools
         $binaryFileResponse->headers->set('Content-transfer-encoding', 'binary');
 
         return $binaryFileResponse;
-    }
-
-    public function getFilesystem(): Filesystem
-    {
-        return $this->filesystem;
-    }
-
-    public function getStringUtilities(): StringUtilities
-    {
-        return $this->stringUtilities;
     }
 
     /**

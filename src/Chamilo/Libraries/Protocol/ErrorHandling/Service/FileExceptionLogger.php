@@ -60,11 +60,6 @@ class FileExceptionLogger implements ExceptionLoggerInterface
         return $this->logPath;
     }
 
-    public function getUserExceptionRendererRegistry(): UserExceptionRendererRegistry
-    {
-        return $this->userExceptionRendererRegistry;
-    }
-
     /**
      * @throws \Exception
      */

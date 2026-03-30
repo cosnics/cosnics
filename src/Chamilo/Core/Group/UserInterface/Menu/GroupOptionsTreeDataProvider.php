@@ -10,13 +10,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @package Chamilo\Core\Group\UserInterface\Menu
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class GroupOptionsTreeDataProvider extends OptionsTreeDataProvider
+readonly class GroupOptionsTreeDataProvider extends OptionsTreeDataProvider
 {
-    protected GroupService $groupService;
-
-    public function __construct(GroupService $groupService)
+    public function __construct(protected GroupService $groupService)
     {
-        $this->groupService = $groupService;
     }
 
     /**
@@ -24,7 +21,7 @@ class GroupOptionsTreeDataProvider extends OptionsTreeDataProvider
      */
     protected function getChildDataClasses(string $parentIdentifier): ArrayCollection
     {
-        return $this->getGroupService()->findGroupsForParentIdentifier($parentIdentifier);
+        return $this->groupService->findGroupsForParentIdentifier($parentIdentifier);
     }
 
     /**
@@ -49,12 +46,7 @@ class GroupOptionsTreeDataProvider extends OptionsTreeDataProvider
      */
     protected function getDataClassByIdentifier(string $identifier): Group
     {
-        return $this->getGroupService()->findGroupByIdentifier($identifier);
-    }
-
-    public function getGroupService(): GroupService
-    {
-        return $this->groupService;
+        return $this->groupService->findGroupByIdentifier($identifier);
     }
 
     /**
@@ -63,6 +55,6 @@ class GroupOptionsTreeDataProvider extends OptionsTreeDataProvider
      */
     protected function getRootDataClass(): Group
     {
-        return $this->getGroupService()->findRootGroup();
+        return $this->groupService->findRootGroup();
     }
 }

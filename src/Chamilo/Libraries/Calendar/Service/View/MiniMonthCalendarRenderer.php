@@ -21,26 +21,14 @@ use Symfony\Component\Translation\Translator;
  */
 class MiniMonthCalendarRenderer extends MiniCalendarRenderer
 {
-    protected EventMiniMonthRenderer $eventMiniMonthRenderer;
-
-    protected MiniMonthCalendarTableBuilder $miniMonthCalendarTableBuilder;
-
-    protected ResourceManager $resourceManager;
-
-    protected WebPathBuilder $webPathBuilder;
-
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        EventMiniMonthRenderer $eventMiniMonthRenderer, MiniMonthCalendarTableBuilder $miniMonthCalendarTableBuilder,
-        WebPathBuilder $webPathBuilder, ResourceManager $resourceManager, ButtonToolBarRenderer $buttonToolBarRenderer
+        ButtonToolBarRenderer $buttonToolBarRenderer, protected EventMiniMonthRenderer $eventMiniMonthRenderer,
+        protected MiniMonthCalendarTableBuilder $miniMonthCalendarTableBuilder,
+        protected WebPathBuilder $webPathBuilder, protected ResourceManager $resourceManager
     )
     {
         parent::__construct($legendRenderer, $urlGenerator, $translator, $buttonToolBarRenderer);
-
-        $this->eventMiniMonthRenderer = $eventMiniMonthRenderer;
-        $this->miniMonthCalendarTableBuilder = $miniMonthCalendarTableBuilder;
-        $this->webPathBuilder = $webPathBuilder;
-        $this->resourceManager = $resourceManager;
     }
 
     /**
@@ -71,34 +59,14 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function getEventMiniMonthRenderer(): EventMiniMonthRenderer
-    {
-        return $this->eventMiniMonthRenderer;
-    }
-
     public function getEventsEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getMiniMonthCalendarTableBuilder()->getTableEndTime($calendarTableConfiguration, $displayTime);
+        return $this->miniMonthCalendarTableBuilder->getTableEndTime($calendarTableConfiguration, $displayTime);
     }
 
     public function getEventsStartTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getMiniMonthCalendarTableBuilder()->getTableStartTime($calendarTableConfiguration, $displayTime);
-    }
-
-    public function getMiniMonthCalendarTableBuilder(): MiniMonthCalendarTableBuilder
-    {
-        return $this->miniMonthCalendarTableBuilder;
-    }
-
-    public function getResourceManager(): ResourceManager
-    {
-        return $this->resourceManager;
-    }
-
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return $this->webPathBuilder;
+        return $this->miniMonthCalendarTableBuilder->getTableStartTime($calendarTableConfiguration, $displayTime);
     }
 
     public function isFadedEvent(int $displayTime, Event $event): bool
@@ -121,8 +89,6 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
         int $displayTime, array $invisibleSources = []
     ): string
     {
-        $calendarTableBuilder = $this->getMiniMonthCalendarTableBuilder();
-
         $startTime = $this->getEventsStartTime($calendarTableConfiguration, $displayTime);
         $endTime = $this->getEventsEndTime($calendarTableConfiguration, $displayTime);
 
@@ -140,9 +106,9 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
                     $tableDate < $endDate && $endDate <= $nextTableDate ||
                     $startDate <= $tableDate && $nextTableDate <= $endDate) {
-                    $this->getLegendRenderer()->addSource($event->getSource());
+                    $this->legendRenderer->addSource($event->getSource());
 
-                    $eventsToShow[$tableDate][] = $this->getEventMiniMonthRenderer()->render(
+                    $eventsToShow[$tableDate][] = $this->eventMiniMonthRenderer->render(
                         $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($event, $invisibleSources),
                         $this->isFadedEvent($displayTime, $event)
                     );
@@ -155,15 +121,15 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
         $html = [];
 
         $html[] = '<div class="table-calendar-mini-container">';
-        $html[] = $calendarTableBuilder->render(
+        $html[] = $this->miniMonthCalendarTableBuilder->render(
             $calendarTableConfiguration, $displayTime, $eventsToShow, ['table-calendar-mini'],
             $this->determineNavigationUrl($displayParameters)
         );
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
 
-        $html[] = $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath() . 'Calendar/EventTooltip.js'
+        $html[] = $this->resourceManager->getResourceHtml(
+            $this->webPathBuilder->getJavascriptPath() . 'Calendar/EventTooltip.js'
         );
 
         return implode(PHP_EOL, $html);
@@ -208,7 +174,7 @@ class MiniMonthCalendarRenderer extends MiniCalendarRenderer
 
     public function renderTitle(int $displayTime): string
     {
-        return $this->getTranslator()->trans(date('F', $displayTime) . 'Long', [], StringUtilities::LIBRARIES) . ' ' .
+        return $this->translator->trans(date('F', $displayTime) . 'Long', [], StringUtilities::LIBRARIES) . ' ' .
             date('Y', $displayTime);
     }
 }

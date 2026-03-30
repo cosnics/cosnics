@@ -14,33 +14,23 @@ use ZipArchive;
  */
 class ZipArchiveFilecompression
 {
-    protected ConfigurablePathBuilder $configurablePathBuilder;
-
-    protected Filesystem $filesystem;
-
-    protected FilesystemTools $filesystemTools;
-
     public function __construct(
-        Filesystem $filesystem, FilesystemTools $filesystemTools, ConfigurablePathBuilder $configurablePathBuilder
+        protected Filesystem $filesystem, protected FilesystemTools $filesystemTools,
+        protected ConfigurablePathBuilder $configurablePathBuilder
     )
     {
-        $this->filesystem = $filesystem;
-        $this->filesystemTools = $filesystemTools;
-        $this->configurablePathBuilder = $configurablePathBuilder;
     }
 
     public function createArchive(string $path, ?string $fileName = null, string $fileExtension = 'cpo'): string
     {
-        $filesystemTools = $this->getFilesystemTools();
-
         $pathToBeZipped = realpath($path);
         $temporaryPath = $this->createTemporaryDirectory();
 
         if (!isset($fileName)) {
-            $fileName = $filesystemTools->createUniqueName($temporaryPath, uniqid());
+            $fileName = $this->filesystemTools->createUniqueName($temporaryPath, uniqid());
         }
 
-        $archiveFileName = $filesystemTools->createSafeName($fileName) . '.' . $fileExtension;
+        $archiveFileName = $this->filesystemTools->createSafeName($fileName) . '.' . $fileExtension;
 
         $archiveFilePath = $temporaryPath . $archiveFileName;
 
@@ -72,8 +62,8 @@ class ZipArchiveFilecompression
 
     protected function createTemporaryDirectory(): string
     {
-        $path = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__) . uniqid() . DIRECTORY_SEPARATOR;
-        $this->getFilesystem()->mkdir($path);
+        $path = $this->configurablePathBuilder->getTemporaryPath(__NAMESPACE__) . uniqid() . DIRECTORY_SEPARATOR;
+        $this->filesystem->mkdir($path);
 
         return $path;
     }
@@ -103,15 +93,10 @@ class ZipArchiveFilecompression
         }
 
         if ($withSafeNames) {
-            $this->getFilesystemTools()->createSafeNames($extractedFilesDirectory);
+            $this->filesystemTools->createSafeNames($extractedFilesDirectory);
         }
 
         return $extractedFilesDirectory;
-    }
-
-    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
-    {
-        return $this->configurablePathBuilder;
     }
 
     /**
@@ -136,16 +121,6 @@ class ZipArchiveFilecompression
         });
 
         return $filesInfo;
-    }
-
-    public function getFilesystem(): Filesystem
-    {
-        return $this->filesystem;
-    }
-
-    public function getFilesystemTools(): FilesystemTools
-    {
-        return $this->filesystemTools;
     }
 
     /**

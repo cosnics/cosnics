@@ -23,27 +23,15 @@ class BrowseComponent extends Manager
 {
     public const string PARAM_TAB = 'tab';
 
-    protected ActionProviderRegistry $actionProviderRegistry;
-
-    protected PackageBundlesCacheService $packageBundlesCacheService;
-
-    protected StringUtilities $stringUtilities;
-
-    protected TabsRenderer $tabsRenderer;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, StringUtilities $stringUtilities,
-        UrlGenerator $urlGenerator, ActionProviderRegistry $actionProviderRegistry,
-        PackageBundlesCacheService $packageBundlesCacheService, TabsRenderer $tabsRenderer
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        protected ActionProviderRegistry $actionProviderRegistry,
+        protected PackageBundlesCacheService $packageBundlesCacheService, protected StringUtilities $stringUtilities,
+        protected TabsRenderer $tabsRenderer
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
-
-        $this->stringUtilities = $stringUtilities;
-        $this->actionProviderRegistry = $actionProviderRegistry;
-        $this->packageBundlesCacheService = $packageBundlesCacheService;
-        $this->tabsRenderer = $tabsRenderer;
     }
 
     /**
@@ -65,11 +53,6 @@ class BrowseComponent extends Manager
         return new Response(implode(PHP_EOL, $html));
     }
 
-    public function getActionProvider(): ActionProviderRegistry
-    {
-        return $this->actionProviderRegistry;
-    }
-
     /**
      * @return string
      */
@@ -77,22 +60,7 @@ class BrowseComponent extends Manager
     {
         $currentTab = $this->getRequest()->query->get(self::PARAM_TAB, Manager::CONTEXT);
 
-        return $this->getStringUtilities()->createString($currentTab)->md5()->toString();
-    }
-
-    public function getPackageBundlesCacheService(): PackageBundlesCacheService
-    {
-        return $this->packageBundlesCacheService;
-    }
-
-    public function getStringUtilities(): StringUtilities
-    {
-        return $this->stringUtilities;
-    }
-
-    protected function getTabsRenderer(): TabsRenderer
-    {
-        return $this->tabsRenderer;
+        return $this->stringUtilities->createString($currentTab)->md5()->toString();
     }
 
     /**
@@ -100,9 +68,9 @@ class BrowseComponent extends Manager
      */
     protected function renderTabs(): string
     {
-        $tabsCollection = $this->getActionProvider()->getTabsCollection();
+        $tabsCollection = $this->actionProviderRegistry->getTabsCollection();
         $tabsCollection->sortByLabel();
 
-        return $this->getTabsRenderer()->renderNavigationAndContent('admin', $tabsCollection, $this->getCurrentTab());
+        return $this->tabsRenderer->renderNavigationAndContent('admin', $tabsCollection, $this->getCurrentTab());
     }
 }

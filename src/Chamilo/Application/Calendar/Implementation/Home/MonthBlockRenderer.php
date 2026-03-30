@@ -24,7 +24,7 @@ use Symfony\Component\Translation\Translator;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class MonthBlockRenderer extends BlockRenderer
+readonly class MonthBlockRenderer extends BlockRenderer
 {
     public const string CONTEXT = Manager::CONTEXT;
 

@@ -17,31 +17,11 @@ class OwnedCalendarsCacheService
 {
     use SingleCacheAdapterHandlerTrait;
 
-    protected int $defaultLifetime;
-
-    protected UserSettingsService $userSettingsService;
-
-    private CalendarRepository $calendarRepository;
-
     public function __construct(
-        AdapterInterface $cacheAdapter, CalendarRepository $calendarRepository,
-        UserSettingsService $userSettingsService, int $defaultLifetime = 3600
+        protected readonly AdapterInterface $cacheAdapter, protected CalendarRepository $calendarRepository,
+        protected UserSettingsService $userSettingsService, protected int $defaultLifetime = 3600
     )
     {
-        $this->cacheAdapter = $cacheAdapter;
-        $this->calendarRepository = $calendarRepository;
-        $this->userSettingsService = $userSettingsService;
-        $this->defaultLifetime = $defaultLifetime;
-    }
-
-    public function getCalendarRepository(): CalendarRepository
-    {
-        return $this->calendarRepository;
-    }
-
-    public function getDefaultLifetime(): int
-    {
-        return $this->defaultLifetime;
     }
 
     /**
@@ -58,20 +38,15 @@ class OwnedCalendarsCacheService
         $cacheIdentifier = $this->getCacheKeyForParts([__METHOD__, $user->getId()]);
 
         if (!$this->hasCacheDataForKey($cacheIdentifier)) {
-            $lifetime = $this->getUserSettingsService()->findUserSetting(
-                $user, 'cosnics.libraries.storage.cache.external.defaultLifetime', $this->getDefaultLifetime()
+            $lifetime = $this->userSettingsService->findUserSetting(
+                $user, 'cosnics.libraries.storage.cache.external.defaultLifetime', $this->defaultLifetime
             );
 
             $this->saveCacheDataForKey(
-                $cacheIdentifier, $this->getCalendarRepository()->findOwnedCalendars($user), $lifetime
+                $cacheIdentifier, $this->calendarRepository->findOwnedCalendars($user), $lifetime
             );
         }
 
         return $this->readCacheDataForKey($cacheIdentifier);
-    }
-
-    public function getUserSettingsService(): UserSettingsService
-    {
-        return $this->userSettingsService;
     }
 }

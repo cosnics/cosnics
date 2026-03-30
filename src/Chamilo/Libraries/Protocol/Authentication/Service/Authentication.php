@@ -17,23 +17,11 @@ abstract class Authentication
     public const string PARAM_LOGIN = 'login';
     public const string PARAM_PASSWORD = 'password';
 
-    protected AuthenticationValidator $authenticationValidator;
-
-    protected ChamiloRequest $request;
-
-    protected Translator $translator;
-
-    protected UserService $userService;
-
     public function __construct(
-        Translator $translator, ChamiloRequest $request, UserService $userService,
-        AuthenticationValidator $authenticationValidator
+        protected Translator $translator, protected ChamiloRequest $request, protected UserService $userService,
+        protected AuthenticationValidator $authenticationValidator
     )
     {
-        $this->translator = $translator;
-        $this->request = $request;
-        $this->userService = $userService;
-        $this->authenticationValidator = $authenticationValidator;
     }
 
     /**
@@ -41,27 +29,11 @@ abstract class Authentication
      */
     public function checkAuthenticationSource(bool $checkIfAuthenticationSourceIsEnabled = true): void
     {
-        if ($checkIfAuthenticationSourceIsEnabled &&
-            !$this->getAuthenticationValidator()->isSourceEnabled(static::class)) {
+        if ($checkIfAuthenticationSourceIsEnabled && !$this->authenticationValidator->isSourceEnabled(static::class)) {
             throw new NotAuthenticatedException(
-                $this->getTranslator()->trans('AuthSourceNotActive', [], StringUtilities::LIBRARIES)
+                $this->translator->trans('AuthSourceNotActive', [], StringUtilities::LIBRARIES)
             );
         }
-    }
-
-    public function getAuthenticationValidator(): AuthenticationValidator
-    {
-        return $this->authenticationValidator;
-    }
-
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 
     /**
@@ -71,19 +43,17 @@ abstract class Authentication
      */
     protected function getUserFromCredentialsRequest(): ?User
     {
-        $translator = $this->getTranslator();
-
-        $username = $this->getRequest()->request->get(self::PARAM_LOGIN);
+        $username = $this->request->request->get(self::PARAM_LOGIN);
 
         if (empty($username)) {
             return null;
         }
 
-        $user = $this->getUserService()->getUserByUsernameOrEmail($username);
+        $user = $this->userService->getUserByUsernameOrEmail($username);
 
         if (!$user instanceof User) {
             throw new NotAuthenticatedException(
-                $translator->trans('InvalidUsername', [], StringUtilities::LIBRARIES)
+                $this->translator->trans('InvalidUsername', [], StringUtilities::LIBRARIES)
             );
         }
 
@@ -92,10 +62,5 @@ abstract class Authentication
         }
 
         return $user;
-    }
-
-    public function getUserService(): UserService
-    {
-        return $this->userService;
     }
 }

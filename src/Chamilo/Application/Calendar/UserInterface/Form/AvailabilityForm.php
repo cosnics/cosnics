@@ -16,8 +16,6 @@ use HTML_QuickForm_static;
  */
 class AvailabilityForm extends FormValidator
 {
-    private AvailabilityService $availabilityService;
-
     /**
      * @var \Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar[][]
      */
@@ -29,12 +27,11 @@ class AvailabilityForm extends FormValidator
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \QuickformException
      */
-    public function __construct(string $actionUrl, User $user, AvailabilityService $availabilityService)
+    public function __construct(string $actionUrl, User $user, protected AvailabilityService $availabilityService)
     {
         parent::__construct('Availability', self::FORM_METHOD_POST, $actionUrl);
 
         $this->user = $user;
-        $this->availabilityService = $availabilityService;
 
         $this->build();
         $this->setValues();
@@ -73,18 +70,13 @@ class AvailabilityForm extends FormValidator
         $this->addSaveResetButtons();
     }
 
-    public function getAvailabilityService(): AvailabilityService
-    {
-        return $this->availabilityService;
-    }
-
     /**
      * @return \Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar[][]
      */
     public function getAvailableCalendars(): array
     {
         if (!isset($this->availableCalendars)) {
-            $this->availableCalendars = $this->getAvailabilityService()->getAvailableCalendars($this->getUser());
+            $this->availableCalendars = $this->availabilityService->getAvailableCalendars($this->getUser());
         }
 
         return $this->availableCalendars;
@@ -102,7 +94,7 @@ class AvailabilityForm extends FormValidator
     private function setValues(): void
     {
         $defaultValues = [];
-        $calendarAvailabilities = $this->getAvailabilityService()->getAvailabilitiesForUser($this->getUser());
+        $calendarAvailabilities = $this->availabilityService->getAvailabilitiesForUser($this->getUser());
 
         foreach ($calendarAvailabilities as $calendarAvailability) {
             $defaultValues[AvailabilityService::PROPERTY_CALENDAR][$calendarAvailability->getCalendarType(

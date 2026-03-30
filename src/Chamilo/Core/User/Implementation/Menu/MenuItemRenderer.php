@@ -8,18 +8,17 @@ use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
-use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\User\Service\Menu
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class MenuItemRenderer extends ItemRenderer
+abstract readonly class MenuItemRenderer extends ItemRenderer
 {
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,
-        protected ClassnameUtilities $classnameUtilities, protected UrlGenerator $urlGenerator
+        protected UrlGenerator $urlGenerator
     )
     {
         parent::__construct($translator, $itemCacheService, $request);
@@ -51,11 +50,6 @@ abstract class MenuItemRenderer extends ItemRenderer
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function getClassnameUtilities(): ClassnameUtilities
-    {
-        return $this->classnameUtilities;
     }
 
     abstract public function getUrl(): string;

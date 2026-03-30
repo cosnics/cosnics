@@ -153,7 +153,6 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
      */
     public function setHeader(CalendarTableConfiguration $calendarTableConfiguration, HTML_Table $table): void
     {
-        $translator = $this->getTranslator();
         $header = $table->getHeader();
 
         $setting = $calendarTableConfiguration->getFirstDayOfWeek();
@@ -161,26 +160,26 @@ class MonthCalendarTableBuilder extends CalendarTableBuilder
         if ($setting == 'sunday') {
             $header->addRow(
                 [
-                    $translator->trans('SundayShort', [], StringUtilities::LIBRARIES),
-                    $translator->trans('MondayShort', [], StringUtilities::LIBRARIES),
-                    $translator->trans('TuesdayShort', [], StringUtilities::LIBRARIES),
-                    $translator->trans('WednesdayShort', [], StringUtilities::LIBRARIES),
-                    $translator->trans('ThursdayShort', [], StringUtilities::LIBRARIES),
-                    $translator->trans('FridayShort', [], StringUtilities::LIBRARIES),
-                    $translator->trans('SaturdayShort', [], StringUtilities::LIBRARIES)
+                    $this->translator->trans('SundayShort', [], StringUtilities::LIBRARIES),
+                    $this->translator->trans('MondayShort', [], StringUtilities::LIBRARIES),
+                    $this->translator->trans('TuesdayShort', [], StringUtilities::LIBRARIES),
+                    $this->translator->trans('WednesdayShort', [], StringUtilities::LIBRARIES),
+                    $this->translator->trans('ThursdayShort', [], StringUtilities::LIBRARIES),
+                    $this->translator->trans('FridayShort', [], StringUtilities::LIBRARIES),
+                    $this->translator->trans('SaturdayShort', [], StringUtilities::LIBRARIES)
                 ]
             );
         }
         else {
             $header->addRow(
                 [
-                    $translator->trans('MondayShort', [], StringUtilities::LIBRARIES),
-                    $translator->trans('TuesdayShort', [], StringUtilities::LIBRARIES),
-                    $translator->trans('WednesdayShort', [], StringUtilities::LIBRARIES),
-                    $translator->trans('ThursdayShort', [], StringUtilities::LIBRARIES),
-                    $translator->trans('FridayShort', [], StringUtilities::LIBRARIES),
-                    $translator->trans('SaturdayShort', [], StringUtilities::LIBRARIES),
-                    $translator->trans('SundayShort', [], StringUtilities::LIBRARIES)
+                    $this->translator->trans('MondayShort', [], StringUtilities::LIBRARIES),
+                    $this->translator->trans('TuesdayShort', [], StringUtilities::LIBRARIES),
+                    $this->translator->trans('WednesdayShort', [], StringUtilities::LIBRARIES),
+                    $this->translator->trans('ThursdayShort', [], StringUtilities::LIBRARIES),
+                    $this->translator->trans('FridayShort', [], StringUtilities::LIBRARIES),
+                    $this->translator->trans('SaturdayShort', [], StringUtilities::LIBRARIES),
+                    $this->translator->trans('SundayShort', [], StringUtilities::LIBRARIES)
                 ]
             );
         }

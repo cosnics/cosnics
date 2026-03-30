@@ -22,11 +22,6 @@ readonly class UserUrlGenerator
         return $this->getUserActionUrl(ActionEnum::LOGIN_AS->value, $user);
     }
 
-    public function getDataClassUrlGenerator(): DataClassUrlGenerator
-    {
-        return $this->dataClassUrlGenerator;
-    }
-
     public function getDeleteUrl(User $user): string
     {
         return $this->getUserActionUrl(ActionEnum::DELETE->value, $user);

@@ -19,13 +19,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @package Chamilo\Core\Home\Storage\Repository
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class HomeRepository
+readonly class HomeRepository
 {
-    protected DataClassRepository $dataClassRepository;
-
-    public function __construct(DataClassRepository $dataClassRepository)
+    public function __construct(protected DataClassRepository $dataClassRepository)
     {
-        $this->dataClassRepository = $dataClassRepository;
     }
 
     /**
@@ -38,7 +35,7 @@ class HomeRepository
             new StaticConditionVariable($parentIdentifier)
         );
 
-        return $this->getDataClassRepository()->count(
+        return $this->dataClassRepository->count(
             Element::class, new StorageParameters(condition: $condition)
         );
     }
@@ -49,7 +46,7 @@ class HomeRepository
      */
     public function createElement(Element $element): bool
     {
-        return $this->getDataClassRepository()->create($element);
+        return $this->dataClassRepository->create($element);
     }
 
     /**
@@ -57,7 +54,7 @@ class HomeRepository
      */
     public function deleteElement(Element $element): bool
     {
-        return $this->getDataClassRepository()->delete($element);
+        return $this->dataClassRepository->delete($element);
     }
 
     /**
@@ -79,7 +76,7 @@ class HomeRepository
             new StaticConditionVariable(Element::TYPE_BLOCK)
         );
 
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieves(
             Element::class, new StorageParameters(condition: new AndCondition($conditions))
         );
     }
@@ -103,7 +100,7 @@ class HomeRepository
             new StaticConditionVariable(Element::TYPE_COLUMN)
         );
 
-        return $this->getDataClassRepository()->distinct(
+        return $this->dataClassRepository->distinct(
             Element::class, new StorageParameters(
                 condition: new AndCondition($conditions), retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(Element::class, DataClass::PROPERTY_ID)]
@@ -118,7 +115,7 @@ class HomeRepository
      */
     public function findElementByIdentifier(string $elementIdentifier): ?Element
     {
-        return $this->getDataClassRepository()->retrieveById(Element::class, $elementIdentifier);
+        return $this->dataClassRepository->retrieveById(Element::class, $elementIdentifier);
     }
 
     /**
@@ -134,7 +131,7 @@ class HomeRepository
             new StaticConditionVariable($parentIdentifier)
         );
 
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieves(
             Element::class, new StorageParameters(condition: $condition)
         );
     }
@@ -168,12 +165,7 @@ class HomeRepository
         ])
         );
 
-        return $this->getDataClassRepository()->retrieves(Element::class, $parameters);
-    }
-
-    protected function getDataClassRepository(): DataClassRepository
-    {
-        return $this->dataClassRepository;
+        return $this->dataClassRepository->retrieves(Element::class, $parameters);
     }
 
     /**
@@ -181,6 +173,6 @@ class HomeRepository
      */
     public function updateElement(Element $element): bool
     {
-        return $this->getDataClassRepository()->update($element);
+        return $this->dataClassRepository->update($element);
     }
 }

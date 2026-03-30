@@ -27,12 +27,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class GroupService
 {
-    protected EventDispatcherInterface $eventDispatcher;
-
-    protected GroupMembershipService $groupMembershipService;
-
-    protected GroupRepository $groupRepository;
-
     /**
      * @var string[]
      */
@@ -42,10 +36,6 @@ class GroupService
      * @var int[]
      */
     protected array $groupUsersCount = [];
-
-    protected GroupsTreeTraverser $groupsTreeTraverser;
-
-    protected PropertyMapper $propertyMapper;
 
     protected array $subGroupIdentifiers = [];
 
@@ -70,16 +60,11 @@ class GroupService
     protected array $userSubscribedGroups = [];
 
     public function __construct(
-        GroupRepository $groupRepository, GroupMembershipService $groupMembershipService,
-        PropertyMapper $propertyMapper, EventDispatcherInterface $eventDispatcher,
-        GroupsTreeTraverser $groupsTreeTraverser
+        protected GroupRepository $groupRepository, protected GroupMembershipService $groupMembershipService,
+        protected PropertyMapper $propertyMapper, protected EventDispatcherInterface $eventDispatcher,
+        protected GroupsTreeTraverser $groupsTreeTraverser
     )
     {
-        $this->groupRepository = $groupRepository;
-        $this->groupMembershipService = $groupMembershipService;
-        $this->propertyMapper = $propertyMapper;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->groupsTreeTraverser = $groupsTreeTraverser;
     }
 
     /**
@@ -87,7 +72,7 @@ class GroupService
      */
     public function countGroups(?ConditionInterface $condition = null): int
     {
-        return $this->getGroupRepository()->countGroups($condition);
+        return $this->groupRepository->countGroups($condition);
     }
 
     /**
@@ -96,8 +81,8 @@ class GroupService
      */
     public function createGroup(Group $group, ?User $executingUser = null): void
     {
-        $this->getGroupRepository()->createGroup($group);
-        $this->getEventDispatcher()->dispatch(new AfterGroupCreateEvent($group, $executingUser));
+        $this->groupRepository->createGroup($group);
+        $this->eventDispatcher->dispatch(new AfterGroupCreateEvent($group, $executingUser));
     }
 
     /**
@@ -126,19 +111,19 @@ class GroupService
     public function deleteGroup(Group $group, ?User $executingUser = null): bool
     {
         $subGroupIds = [];
-        $impactedUserIds = $this->groupsTreeTraverser->findUserIdentifiersForGroup($group, true, true);
+        $impactedUserIds = $this->groupMembershipService->findUserIdentifiersForGroup($group, true, true);
 
-        $deletedGroups = $this->getGroupRepository()->deleteGroup($group);
+        $deletedGroups = $this->groupRepository->deleteGroup($group);
 
         foreach ($deletedGroups as $deletedGroup) {
             $subGroupIds[] = $deletedGroup->getId();
         }
 
-        if (!$this->getGroupMembershipService()->removeUsersFromGroupsByIdsAfterRemoval($subGroupIds)) {
+        if (!$this->groupMembershipService->removeUsersFromGroupsByIdsAfterRemoval($subGroupIds)) {
             return false;
         }
 
-        $this->getEventDispatcher()->dispatch(
+        $this->eventDispatcher->dispatch(
             new AfterGroupDeleteEvent($group, $subGroupIds, $impactedUserIds, $executingUser)
         );
 
@@ -215,7 +200,7 @@ class GroupService
         ?ConditionInterface $condition = null, ?int $offset = 0, ?int $count = - 1, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        return $this->getGroupRepository()->findGroups($condition, $count, $offset, $orderBy);
+        return $this->groupRepository->findGroups($condition, $count, $offset, $orderBy);
     }
 
     /**
@@ -267,7 +252,7 @@ class GroupService
      */
     public function findGroupsForParentIdentifier(string $parentIdentifier = DataClass::EMPTY_UUID): ArrayCollection
     {
-        return $this->getGroupRepository()->findGroupsForParentIdentifier($parentIdentifier);
+        return $this->groupRepository->findGroupsForParentIdentifier($parentIdentifier);
     }
 
     /**
@@ -281,7 +266,7 @@ class GroupService
         ?string $searchQuery = null, string $parentIdentifier = DataClass::EMPTY_UUID
     ): ArrayCollection
     {
-        return $this->getGroupRepository()->findGroupsForSearchQueryAndParentIdentifier(
+        return $this->groupRepository->findGroupsForSearchQueryAndParentIdentifier(
             $searchQuery, $parentIdentifier
         );
     }
@@ -301,26 +286,6 @@ class GroupService
         return $group;
     }
 
-    public function getEventDispatcher(): EventDispatcherInterface
-    {
-        return $this->eventDispatcher;
-    }
-
-    public function getGroupMembershipService(): GroupMembershipService
-    {
-        return $this->groupMembershipService;
-    }
-
-    public function getGroupRepository(): GroupRepository
-    {
-        return $this->groupRepository;
-    }
-
-    public function getPropertyMapper(): PropertyMapper
-    {
-        return $this->propertyMapper;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -330,11 +295,11 @@ class GroupService
         $oldParentGroup = $this->findGroupByIdentifier($group->getParentId());
         $newParentGroup = $this->findGroupByIdentifier($parentGroupIdentifier);
 
-        if (!$this->getGroupRepository()->moveGroup($group, $parentGroupIdentifier)) {
+        if (!$this->groupRepository->moveGroup($group, $parentGroupIdentifier)) {
             return false;
         }
 
-        $this->getEventDispatcher()->dispatch(
+        $this->eventDispatcher->dispatch(
             new AfterGroupMoveEvent($group, $oldParentGroup, $newParentGroup, $executingUser)
         );
 
@@ -353,7 +318,7 @@ class GroupService
      */
     public function subscribeUserToGroupByCode(string $groupCode, User $user, ?User $executingUser = null): GroupRelUser
     {
-        return $this->getGroupMembershipService()->subscribeUserToGroup(
+        return $this->groupMembershipService->subscribeUserToGroup(
             $this->findGroupByCode($groupCode), $user, $executingUser
         );
     }
@@ -364,7 +329,7 @@ class GroupService
      */
     public function truncateGroup(Group $group, ?User $executingUser = null): bool
     {
-        return $this->getGroupMembershipService()->unsubscribeAllUsersFromGroup($group, $executingUser);
+        return $this->groupMembershipService->unsubscribeAllUsersFromGroup($group, $executingUser);
     }
 
     /**
@@ -372,11 +337,11 @@ class GroupService
      */
     public function updateGroup(Group $group, ?User $executingUser = null): bool
     {
-        if (!$this->getGroupRepository()->updateGroup($group)) {
+        if (!$this->groupRepository->updateGroup($group)) {
             return false;
         }
 
-        $this->getEventDispatcher()->dispatch(new AfterGroupUpdateEvent($group, $executingUser));
+        $this->eventDispatcher->dispatch(new AfterGroupUpdateEvent($group, $executingUser));
 
         return true;
     }

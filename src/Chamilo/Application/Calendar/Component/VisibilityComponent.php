@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Calendar\Component;
 
 use Chamilo\Application\Calendar\Manager;
-use Chamilo\Application\Calendar\Service\VisibilityService;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Calendar\Architecture\Interface\VisibilityServiceInterface;
@@ -16,24 +15,15 @@ class VisibilityComponent extends Manager
 {
     use VisibilityComponentTrait;
 
-    protected VisibilityService $visibilityService;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        VisibilityRepository $visibilityRepository, UrlGenerator $urlGenerator, VisibilityService $visibilityService
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        VisibilityRepository $visibilityRepository, protected VisibilityServiceInterface $visibilityService
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $visibilityRepository,
-            $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $visibilityRepository
         );
-
-        $this->visibilityService = $visibilityService;
-    }
-
-    public function getVisibilityService(): VisibilityServiceInterface
-    {
-        return $this->visibilityService;
     }
 }

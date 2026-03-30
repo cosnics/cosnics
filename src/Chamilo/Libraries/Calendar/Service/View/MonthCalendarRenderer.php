@@ -21,24 +21,18 @@ use Symfony\Component\Translation\Translator;
  */
 class MonthCalendarRenderer extends SidebarTableCalendarRenderer
 {
-    protected EventMonthRenderer $eventMonthRenderer;
-
-    protected MonthCalendarTableBuilder $monthCalendarTableBuilder;
-
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, EventMonthRenderer $eventMonthRenderer,
-        MonthCalendarTableBuilder $monthCalendarTableBuilder, WebPathBuilder $webPathBuilder,
-        ResourceManager $resourceManager, JumpBarRenderer $jumpBarRenderer, ButtonToolBarRenderer $buttonToolBarRenderer
+        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, WebPathBuilder $webPathBuilder,
+        ResourceManager $resourceManager, JumpBarRenderer $jumpBarRenderer,
+        ButtonToolBarRenderer $buttonToolBarRenderer, protected EventMonthRenderer $eventMonthRenderer,
+        protected MonthCalendarTableBuilder $monthCalendarTableBuilder
     )
     {
         parent::__construct(
-            $legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer, $webPathBuilder, $resourceManager,
-            $jumpBarRenderer, $buttonToolBarRenderer
+            $legendRenderer, $urlGenerator, $translator, $buttonToolBarRenderer, $jumpBarRenderer,
+            $miniMonthCalendarRenderer, $resourceManager, $webPathBuilder
         );
-
-        $this->eventMonthRenderer = $eventMonthRenderer;
-        $this->monthCalendarTableBuilder = $monthCalendarTableBuilder;
     }
 
     public function getDayUrlTemplate(array $displayParameters): string
@@ -46,27 +40,17 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
         $displayParameters[self::PARAM_TIME] = MonthCalendarTableBuilder::TIME_PLACEHOLDER;
         $displayParameters[self::PARAM_TYPE] = HtmlCalendarRendererTypeEnum::DAY->value;
 
-        return $this->getUrlGenerator()->fromParameters($displayParameters);
-    }
-
-    public function getEventMonthRenderer(): EventMonthRenderer
-    {
-        return $this->eventMonthRenderer;
+        return $this->urlGenerator->fromParameters($displayParameters);
     }
 
     public function getEventsEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getMonthCalendarTableBuilder()->getTableEndTime($calendarTableConfiguration, $displayTime);
+        return $this->monthCalendarTableBuilder->getTableEndTime($calendarTableConfiguration, $displayTime);
     }
 
     public function getEventsStartTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getMonthCalendarTableBuilder()->getTableStartTime($calendarTableConfiguration, $displayTime);
-    }
-
-    public function getMonthCalendarTableBuilder(): MonthCalendarTableBuilder
-    {
-        return $this->monthCalendarTableBuilder;
+        return $this->monthCalendarTableBuilder->getTableStartTime($calendarTableConfiguration, $displayTime);
     }
 
     public function getNextDisplayTime(int $displayTime): int
@@ -99,7 +83,6 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
         int $displayTime, array $invisibleSources = [], ?string $invisibilityContext = null
     ): string
     {
-        $calendarTableBuilder = $this->getMonthCalendarTableBuilder();
         $startTime = $this->getEventsStartTime($calendarTableConfiguration, $displayTime);
         $endTime = $this->getEventsEndTime($calendarTableConfiguration, $displayTime);
 
@@ -117,7 +100,7 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
                     $tableDate < $endDate && $endDate <= $nextTableDate ||
                     $startDate <= $tableDate && $nextTableDate <= $endDate) {
-                    $eventsToShow[$tableDate][] = $this->getEventMonthRenderer()->render(
+                    $eventsToShow[$tableDate][] = $this->eventMonthRenderer->render(
                         $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($event, $invisibleSources),
                         $this->isFadedEvent($displayTime, $event)
                     );
@@ -130,7 +113,7 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
         $html = [];
 
         $html[] = '<div class="month-calendar">';
-        $html[] = $calendarTableBuilder->render(
+        $html[] = $this->monthCalendarTableBuilder->render(
             $calendarTableConfiguration, $displayTime, $eventsToShow, ['table-calendar-month'],
             $this->getDayUrlTemplate($displayParameters)
         );
@@ -141,7 +124,7 @@ class MonthCalendarRenderer extends SidebarTableCalendarRenderer
 
     public function renderTitle(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): string
     {
-        return $this->getTranslator()->trans(date('F', $displayTime) . 'Long', [], StringUtilities::LIBRARIES) . ' ' .
+        return $this->translator->trans(date('F', $displayTime) . 'Long', [], StringUtilities::LIBRARIES) . ' ' .
             date('Y', $displayTime);
     }
 }

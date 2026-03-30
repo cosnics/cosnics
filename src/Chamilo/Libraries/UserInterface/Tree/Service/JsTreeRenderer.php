@@ -7,9 +7,9 @@ use Chamilo\Libraries\Service\Resource\ResourceManager;
  * @package Chamilo\Libraries\UserInterface\Tree\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class JsTreeRenderer
+readonly class JsTreeRenderer
 {
-    public function __construct(protected readonly ResourceManager $resourceManager)
+    public function __construct(protected ResourceManager $resourceManager)
     {
     }
 

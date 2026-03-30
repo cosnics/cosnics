@@ -31,63 +31,47 @@ use Symfony\Component\Translation\Translator;
  */
 class PrintComponent extends BrowseComponent
 {
-    protected BaseFooterRenderer $baseFooterRenderer;
-
-    protected BaseHeaderRenderer $baseHeaderRenderer;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        VisibilityRepository $visibilityRepository, ThemePathBuilder $themeWebPathBuilder, PageHeaders $pageHeaders,
-        WebPathBuilder $webPathBuilder, UserService $userService, UrlGenerator $urlGenerator,
-        BaseHeaderRenderer $baseHeaderRenderer, BaseFooterRenderer $baseFooterRenderer,
-        CalendarDataProvider $calendarDataProvider,
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        VisibilityRepository $visibilityRepository, CalendarDataProvider $calendarDataProvider,
         CalendarExtensionActionProviderRegistry $calendarExtensionActionProviderRegistry,
         CalendarExtensionDataProviderRegistry $calendarExtensionDataProviderRegistry,
-        HtmlCalendarRendererFactory $htmlCalendarRendererFactory,
-        CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder, UserSettingsService $userSettingsService,
-        string $defaultView
+        CalendarDataProvider $calendarRendererProvider,
+        CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder, string $defaultView,
+        HtmlCalendarRendererFactory $htmlCalendarRendererFactory, PageHeaders $pageHeaders,
+        ThemePathBuilder $themeWebPathBuilder, UserService $userService, UserSettingsService $userSettingsService,
+        WebPathBuilder $webPathBuilder, protected BaseFooterRenderer $baseFooterRenderer,
+        protected BaseHeaderRenderer $baseHeaderRenderer, ?int $currentTime = null
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $visibilityRepository,
-            $themeWebPathBuilder, $pageHeaders, $webPathBuilder, $userService, $urlGenerator, $calendarDataProvider,
-            $calendarExtensionActionProviderRegistry, $calendarExtensionDataProviderRegistry,
-            $htmlCalendarRendererFactory, $calendarTableConfigurationBuilder, $userSettingsService, $defaultView
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $visibilityRepository, $calendarDataProvider, $calendarExtensionActionProviderRegistry,
+            $calendarExtensionDataProviderRegistry, $calendarRendererProvider, $calendarTableConfigurationBuilder,
+            $defaultView, $htmlCalendarRendererFactory, $pageHeaders, $themeWebPathBuilder, $userService,
+            $userSettingsService, $webPathBuilder, $currentTime
         );
-
-        $this->baseHeaderRenderer = $baseHeaderRenderer;
-        $this->baseFooterRenderer = $baseFooterRenderer;
     }
 
     public function run(?User $currentUser = null): Response
     {
         $this->checkAuthorization(Manager::CONTEXT);
 
-        $this->getPageHeaders()->addCss(
+        $this->pageHeaders->addCss(
             $this->getWebPathBuilder()->getCssPath(Manager::CONTEXT) . 'print.' .
-            $this->getThemeWebPathBuilder()->getTheme() . '.min.css', 'print'
+            $this->themeWebPathBuilder->getTheme() . '.min.css', 'print'
         );
 
         $html = [];
 
-        $html[] = $this->getHeaderRenderer()->render();
+        $html[] = $this->baseHeaderRenderer->render();
         $html[] = $this->renderCalendar($currentUser);
         $html[] = '<script>';
         $html[] = 'window.print();';
         $html[] = '</script>';
-        $html[] = $this->getFooterRenderer()->render();
+        $html[] = $this->baseFooterRenderer->render();
 
         return new Response(implode(PHP_EOL, $html));
-    }
-
-    protected function getFooterRenderer(): BaseFooterRenderer
-    {
-        return $this->baseFooterRenderer;
-    }
-
-    protected function getHeaderRenderer(): BaseHeaderRenderer
-    {
-        return $this->baseHeaderRenderer;
     }
 }

@@ -41,7 +41,7 @@ class DeleteComponent extends Manager
         $parentIdentifier = 0;
 
         foreach ($items as $item) {
-            if (!$this->getCachedItemService()->deleteItem($item)) {
+            if (!$this->cachedItemService->deleteItem($item)) {
                 $failures ++;
             }
 
@@ -73,7 +73,7 @@ class DeleteComponent extends Manager
             );
         }
 
-        $this->getAlertsManager()->addAlert(
+        $this->alertsManager->addAlert(
             new Alert(
                 $translator->trans($message, [], \Chamilo\Core\Group\Manager::CONTEXT),
                 $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS
@@ -104,6 +104,6 @@ class DeleteComponent extends Manager
             $itemIdentifiers = [$itemIdentifiers];
         }
 
-        return $this->getItemService()->findItemsByIdentifiers($itemIdentifiers);
+        return $this->itemService->findItemsByIdentifiers($itemIdentifiers);
     }
 }

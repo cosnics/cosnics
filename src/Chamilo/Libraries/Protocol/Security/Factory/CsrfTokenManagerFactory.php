@@ -31,11 +31,8 @@ class CsrfTokenManagerFactory
 
         $csrfGenerator = new UriSafeTokenGenerator();
         $csrfStorage = new SessionTokenStorage($requestStack);
-        $csrfManager = new CsrfTokenManager($csrfGenerator, $csrfStorage);
 
-        return new CsrfTokenManager(
-            new UriSafeTokenGenerator(), new SessionTokenStorage($requestStack)
-        );
+        return new CsrfTokenManager($csrfGenerator, $csrfStorage);
     }
 
     public function getRequest(): ChamiloRequest

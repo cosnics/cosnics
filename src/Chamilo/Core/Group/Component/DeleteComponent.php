@@ -26,8 +26,6 @@ class DeleteComponent extends Manager
      */
     public function run(?User $currentUser = null): Response
     {
-        $translator = $this->getTranslator();
-        $groupService = $this->getGroupService();
         $ids = $this->getRequest()->getFromRequestOrQuery(DataClass::PROPERTY_ID);
 
         if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
@@ -42,41 +40,43 @@ class DeleteComponent extends Manager
             }
 
             foreach ($ids as $id) {
-                $group = $groupService->findGroupByIdentifier($id);
+                $group = $this->groupService->findGroupByIdentifier($id);
 
-                if (!$groupService->deleteGroup($group, $currentUser)) {
+                if (!$this->groupService->deleteGroup($group, $currentUser)) {
                     $failures ++;
                 }
             }
 
             if ($failures) {
                 if (count($ids) == 1) {
-                    $message = $translator->trans(
-                        'ObjectNotDeleted', ['%Object%' => $translator->trans('SelectedGroup', [], Manager::CONTEXT)],
+                    $message = $this->translator->trans(
+                        'ObjectNotDeleted',
+                        ['%Object%' => $this->translator->trans('SelectedGroup', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
                     );
                 }
                 else {
-                    $message = $translator->trans(
-                        'ObjectsNotDeleted', ['%Object%' => $translator->trans('SelectedGroups', [], Manager::CONTEXT)],
+                    $message = $this->translator->trans(
+                        'ObjectsNotDeleted',
+                        ['%Object%' => $this->translator->trans('SelectedGroups', [], Manager::CONTEXT)],
                         StringUtilities::LIBRARIES
                     );
                 }
             }
             elseif (count($ids) == 1) {
-                $message = $translator->trans(
-                    'ObjectDeleted', ['%Object%' => $translator->trans('SelectedGroup', [], Manager::CONTEXT)],
+                $message = $this->translator->trans(
+                    'ObjectDeleted', ['%Object%' => $this->translator->trans('SelectedGroup', [], Manager::CONTEXT)],
                     StringUtilities::LIBRARIES
                 );
             }
             else {
-                $message = $translator->trans(
-                    'ObjectsDeleted', ['%Object%' => $translator->trans('SelectedGroups', [], Manager::CONTEXT)],
+                $message = $this->translator->trans(
+                    'ObjectsDeleted', ['%Object%' => $this->translator->trans('SelectedGroups', [], Manager::CONTEXT)],
                     StringUtilities::LIBRARIES
                 );
             }
 
-            $this->getAlertsManager()->addAlert(
+            $this->alertsManager->addAlert(
                 new Alert(
                     $message, $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS
                 )

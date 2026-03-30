@@ -21,83 +21,21 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class AbstractCasAuthentication extends Authentication implements AuthenticationInterface
 {
-    protected ?string $certificatePath;
-
-    protected bool $checkCertificate;
-
-    protected bool $enableLog;
-
-    protected string $host;
-
-    protected ?string $logPath;
-
-    protected Logger $logger;
-
-    protected int $port;
-
-    protected SessionInterface $session;
-
-    protected string $uri;
-
     public function __construct(
         Translator $translator, ChamiloRequest $request, UserService $userService,
-        AuthenticationValidator $authenticationValidator, SessionInterface $session, Logger $logger, string $host = '',
-        bool $enableLog = false, bool $checkCertificate = false, ?string $certificatePath = null,
-        ?string $logPath = null, int $port = 443, string $uri = ''
+        AuthenticationValidator $authenticationValidator, protected SessionInterface $session, protected Logger $logger,
+        protected string $host = '', protected bool $enableLog = false, protected bool $checkCertificate = false,
+        protected ?string $certificatePath = null, protected ?string $logPath = null, protected int $port = 443,
+        protected string $uri = ''
     )
     {
         parent::__construct($translator, $request, $userService, $authenticationValidator);
-
-        $this->session = $session;
-        $this->logger = $logger;
-        $this->host = $host;
-        $this->enableLog = $enableLog;
-        $this->checkCertificate = $checkCertificate;
-        $this->certificatePath = $certificatePath;
-        $this->logPath = $logPath;
-        $this->port = $port;
-        $this->uri = $uri;
     }
 
     abstract protected function getCasUserIdentifierFromAttributes(string $casUser, array $casUserAttributes = []
     ): string;
 
-    public function getCertificatePath(): ?string
-    {
-        return $this->certificatePath;
-    }
-
-    public function getHost(): string
-    {
-        return $this->host;
-    }
-
-    public function getLogPath(): ?string
-    {
-        return $this->logPath;
-    }
-
-    public function getLogger(): Logger
-    {
-        return $this->logger;
-    }
-
-    public function getPort(): int
-    {
-        return $this->port;
-    }
-
     abstract public function getPriority(): int;
-
-    public function getSession(): SessionInterface
-    {
-        return $this->session;
-    }
-
-    public function getUri(): ?string
-    {
-        return $this->uri;
-    }
 
     abstract protected function getUserByCasUserIdentifier(string $userIdentifier): ?User;
 
@@ -107,24 +45,21 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
     protected function initializeClient(): void
     {
         if (!$this->isConfigured()) {
-            throw new Exception($this->getTranslator()->trans('CheckCASConfiguration'));
+            throw new Exception($this->translator->trans('CheckCASConfiguration'));
         }
         elseif (!phpCAS::isInitialized()) {
-            $request = $this->getRequest();
-
             // initialize phpCAS
             if ($this->isLogEnabled()) {
                 phpCAS::setLogger($this->logger);
             }
 
             phpCAS::client(
-                SAML_VERSION_1_1, $this->getHost(), $this->getPort(), $this->getUri(), $request->getSchemeAndHttpHost(),
-                false
+                SAML_VERSION_1_1, $this->host, $this->port, $this->uri, $this->request->getSchemeAndHttpHost(), false
             );
 
             // SSL validation for the CAS server
             if ($this->isCertificateCheckEnabled()) {
-                phpCAS::setCasServerCACert($this->getCertificatePath());
+                phpCAS::setCasServerCACert($this->certificatePath);
             }
             else {
                 phpCAS::setNoCasServerValidation();
@@ -139,15 +74,15 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
     protected function isConfigured(): bool
     {
-        if (!$this->getHost()) {
+        if (!$this->host) {
             return false;
         }
 
-        if ($this->isLogEnabled() && !$this->getLogPath()) {
+        if ($this->isLogEnabled() && !$this->logPath) {
             return false;
         }
 
-        if ($this->isCertificateCheckEnabled() && !$this->getCertificatePath()) {
+        if ($this->isCertificateCheckEnabled() && !$this->certificatePath) {
             return false;
         }
 
@@ -168,7 +103,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
         $this->initializeClient();
 
         $authenticationException = new NotAuthenticatedException(
-            $this->getTranslator()->trans('CasAuthenticationError', [], StringUtilities::LIBRARIES)
+            $this->translator->trans('CasAuthenticationError', [], StringUtilities::LIBRARIES)
         );
 
         try {
@@ -186,8 +121,8 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
                 if ($userAttributes && isset($userAttributes['surrogatePrincipal'])) {
                     $surrogateUserName = array_pop($userAttributes['surrogatePrincipal']);
-                    $surrogateUser = $this->getUserService()->findUserByUsername($surrogateUserName);
-                    $this->getSession()->set(AuthenticationValidator::PARAM_AS_ADMIN, $surrogateUser->getId());
+                    $surrogateUser = $this->userService->findUserByUsername($surrogateUserName);
+                    $this->session->set(AuthenticationValidator::PARAM_AS_ADMIN, $surrogateUser->getId());
                 }
 
                 return $user;

@@ -27,46 +27,14 @@ use Symfony\Component\Translation\Translator;
  */
 class MenuRenderer
 {
-    protected array $brandPath;
-
-    protected LinkItemRenderer $linkItemRenderer;
-
-    protected string $siteName;
-
-    private ChamiloRequest $chamiloRequest;
-
-    private CachedItemService $itemCacheService;
-
-    private ItemRendererRegistry $itemRendererFactory;
-
-    private SessionInterface $session;
-
-    private ThemePathBuilder $themeWebPathBuilder;
-
-    private Translator $translator;
-
-    private UrlGenerator $urlGenerator;
-
-    private WebPathBuilder $webPathBuilder;
-
     public function __construct(
-        CachedItemService $itemCacheService, ItemRendererRegistry $itemRendererFactory, ChamiloRequest $chamiloRequest,
-        WebPathBuilder $webPathBuilder, ThemePathBuilder $themeWebPathBuilder, UrlGenerator $urlGenerator,
-        Translator $translator, LinkItemRenderer $linkItemRenderer, SessionInterface $session, string $siteName,
-        array $brandPath = []
+        protected CachedItemService $itemCacheService, protected ItemRendererRegistry $itemRendererFactory,
+        protected ChamiloRequest $chamiloRequest, protected WebPathBuilder $webPathBuilder,
+        protected ThemePathBuilder $themeWebPathBuilder, protected UrlGenerator $urlGenerator,
+        protected Translator $translator, protected LinkItemRenderer $linkItemRenderer,
+        protected SessionInterface $session, protected string $siteName, protected array $brandPath
     )
     {
-        $this->itemCacheService = $itemCacheService;
-        $this->itemRendererFactory = $itemRendererFactory;
-        $this->chamiloRequest = $chamiloRequest;
-        $this->webPathBuilder = $webPathBuilder;
-        $this->themeWebPathBuilder = $themeWebPathBuilder;
-        $this->siteName = $siteName;
-        $this->brandPath = $brandPath;
-        $this->urlGenerator = $urlGenerator;
-        $this->session = $session;
-        $this->translator = $translator;
-        $this->linkItemRenderer = $linkItemRenderer;
     }
 
     public function render(?User $user = null): string
@@ -81,7 +49,7 @@ class MenuRenderer
             foreach ($this->findRootItems() as $item) {
                 if (!$item->isHidden()) {
                     try {
-                        $itemRenderer = $this->getItemRendererFactory()->getItemRendererForItem($item);
+                        $itemRenderer = $this->itemRendererFactory->getItemRendererForItem($item);
                         $itemHtml = $itemRenderer->render($item, $user);
 
                         if (!empty($itemHtml)) {
@@ -106,7 +74,7 @@ class MenuRenderer
      */
     public function findRootItems(): ArrayCollection
     {
-        return $this->getItemCacheService()->findItemsByParentIdentifier(DataClass::EMPTY_UUID);
+        return $this->itemCacheService->findItemsByParentIdentifier(DataClass::EMPTY_UUID);
     }
 
     public function getBrandPath(?string $component = null, ?string $defaultValue = null): array|string
@@ -118,59 +86,9 @@ class MenuRenderer
         return $this->brandPath;
     }
 
-    public function getChamiloRequest(): ChamiloRequest
-    {
-        return $this->chamiloRequest;
-    }
-
-    public function getItemCacheService(): CachedItemService
-    {
-        return $this->itemCacheService;
-    }
-
-    public function getItemRendererFactory(): ItemRendererRegistry
-    {
-        return $this->itemRendererFactory;
-    }
-
-    public function getLinkItemRenderer(): LinkItemRenderer
-    {
-        return $this->linkItemRenderer;
-    }
-
-    public function getSession(): SessionInterface
-    {
-        return $this->session;
-    }
-
-    public function getSiteName(): string
-    {
-        return $this->siteName;
-    }
-
-    public function getThemeWebPathBuilder(): ThemePathBuilder
-    {
-        return $this->themeWebPathBuilder;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
-    }
-
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return $this->webPathBuilder;
-    }
-
     protected function isLoggedInAs(): bool
     {
-        return !is_null($this->getSession()->get('_as_admin'));
+        return !is_null($this->session->get('_as_admin'));
     }
 
     public function renderBrand(): string
@@ -179,11 +97,11 @@ class MenuRenderer
         $brandFilename = $this->getBrandPath('filename', 'LogoHeader');
         $brandExtension = $this->getBrandPath('extension', 'png');
 
-        $brandWebPath = $this->getThemeWebPathBuilder()->getImagePath($brandContext, $brandFilename, $brandExtension);
+        $brandWebPath = $this->themeWebPathBuilder->getImagePath($brandContext, $brandFilename, $brandExtension);
 
-        $basePath = $this->getWebPathBuilder()->getBasePath();
+        $basePath = $this->webPathBuilder->getBasePath();
 
-        return '<a class="navbar-brand" href="' . $basePath . '">' . '<img alt="' . $this->getSiteName() . '" src="' .
+        return '<a class="navbar-brand" href="' . $basePath . '">' . '<img alt="' . $this->siteName . '" src="' .
             $brandWebPath . '"></a>';
     }
 
@@ -230,12 +148,10 @@ class MenuRenderer
 
     protected function renderLoggedInAs(?User $user = null): string
     {
-        $translator = $this->getTranslator();
-
         $html = [];
 
         if ($this->isLoggedInAs()) {
-            $link = $this->getUrlGenerator()->fromParameters([
+            $link = $this->urlGenerator->fromParameters([
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::LOGIN_AS->value
             ]);
@@ -246,11 +162,11 @@ class MenuRenderer
             $linkItem->setIconClass('mask');
             $linkItem->setParentId(DataClass::EMPTY_UUID);
             $linkItem->setTitleForIsoCode(
-                $translator->getLocale(), $translator->trans('Back', [], StringUtilities::LIBRARIES)
+                $this->translator->getLocale(), $this->translator->trans('Back', [], StringUtilities::LIBRARIES)
             );
             $linkItem->setSetting(LinkItemRenderer::CONFIGURATION_URL, $link);
 
-            $html[] = $this->getLinkItemRenderer()->render($linkItem, $user);
+            $html[] = $this->linkItemRenderer->render($linkItem, $user);
         }
 
         return implode(PHP_EOL, $html);

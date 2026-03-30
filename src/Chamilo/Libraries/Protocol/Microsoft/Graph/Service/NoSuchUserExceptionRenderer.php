@@ -32,6 +32,6 @@ class NoSuchUserExceptionRenderer extends AbstractUserExceptionRenderer implemen
      */
     public function renderTitle(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('NoSuchUserExceptionTitle', [], StringUtilities::LIBRARIES);
+        return $this->translator->trans('NoSuchUserExceptionTitle', [], StringUtilities::LIBRARIES);
     }
 }

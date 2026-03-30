@@ -31,6 +31,6 @@ class NoSuchGroupExceptionRenderer extends AbstractUserExceptionRenderer impleme
      */
     public function renderTitle(UserExceptionInterface $userException): string
     {
-        return $this->getTranslator()->trans('NoSuchGroupExceptionTitle', [], StringUtilities::LIBRARIES);
+        return $this->translator->trans('NoSuchGroupExceptionTitle', [], StringUtilities::LIBRARIES);
     }
 }

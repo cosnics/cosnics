@@ -20,53 +20,28 @@ use Symfony\Component\Translation\Translator;
  */
 class DayCalendarRenderer extends SidebarTableCalendarRenderer
 {
-    protected DatetimeUtilities $datetimeUtilities;
-
-    protected DayCalendarTableBuilder $dayCalendarTableBuilder;
-
-    protected EventDayRenderer $eventDayRenderer;
-
     public function __construct(
         LegendRenderer $legendRenderer, UrlGenerator $urlGenerator, Translator $translator,
-        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, DatetimeUtilities $datetimeUtilities,
-        EventDayRenderer $eventDayRenderer, DayCalendarTableBuilder $dayCalendarTableBuilder,
-        WebPathBuilder $webPathBuilder, ResourceManager $resourceManager, JumpBarRenderer $jumpBarRenderer,
-        ButtonToolBarRenderer $buttonToolBarRenderer
+        ButtonToolBarRenderer $buttonToolBarRenderer, JumpBarRenderer $jumpBarRenderer,
+        MiniMonthCalendarRenderer $miniMonthCalendarRenderer, ResourceManager $resourceManager,
+        WebPathBuilder $webPathBuilder, protected DatetimeUtilities $datetimeUtilities,
+        protected DayCalendarTableBuilder $dayCalendarTableBuilder, protected EventDayRenderer $eventDayRenderer
     )
     {
         parent::__construct(
-            $legendRenderer, $urlGenerator, $translator, $miniMonthCalendarRenderer, $webPathBuilder, $resourceManager,
-            $jumpBarRenderer, $buttonToolBarRenderer
+            $legendRenderer, $urlGenerator, $translator, $buttonToolBarRenderer, $jumpBarRenderer,
+            $miniMonthCalendarRenderer, $resourceManager, $webPathBuilder
         );
-
-        $this->eventDayRenderer = $eventDayRenderer;
-        $this->datetimeUtilities = $datetimeUtilities;
-        $this->dayCalendarTableBuilder = $dayCalendarTableBuilder;
-    }
-
-    public function getDatetimeUtilities(): DatetimeUtilities
-    {
-        return $this->datetimeUtilities;
-    }
-
-    public function getDayCalendarTableBuilder(): DayCalendarTableBuilder
-    {
-        return $this->dayCalendarTableBuilder;
-    }
-
-    public function getEventDayRenderer(): EventDayRenderer
-    {
-        return $this->eventDayRenderer;
     }
 
     public function getEventsEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getDayCalendarTableBuilder()->getTableEndTime($calendarTableConfiguration, $displayTime);
+        return $this->dayCalendarTableBuilder->getTableEndTime($calendarTableConfiguration, $displayTime);
     }
 
     public function getEventsStartTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
-        return $this->getDayCalendarTableBuilder()->getTableStartTime($calendarTableConfiguration, $displayTime);
+        return $this->dayCalendarTableBuilder->getTableStartTime($calendarTableConfiguration, $displayTime);
     }
 
     public function getNextDisplayTime(int $displayTime): int
@@ -89,8 +64,6 @@ class DayCalendarRenderer extends SidebarTableCalendarRenderer
         int $displayTime, array $invisibleSources = [], ?string $invisibilityContext = null
     ): string
     {
-        $calendarTableBuilder = $this->getDayCalendarTableBuilder();
-
         $startTime = $this->getEventsStartTime($calendarTableConfiguration, $displayTime);
         $endTime = $this->getEventsEndTime($calendarTableConfiguration, $displayTime);
 
@@ -109,7 +82,7 @@ class DayCalendarRenderer extends SidebarTableCalendarRenderer
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
                     $tableDate < $endDate && $endDate < $nextTableDate ||
                     $startDate <= $tableDate && $nextTableDate <= $endDate) {
-                    $eventsToShow[$tableDate][] = $this->getEventDayRenderer()->render(
+                    $eventsToShow[$tableDate][] = $this->eventDayRenderer->render(
                         $event, $tableDate, $nextTableDate, $this->isEventSourceVisible($event, $invisibleSources)
 
                     );
@@ -119,14 +92,14 @@ class DayCalendarRenderer extends SidebarTableCalendarRenderer
             $tableDate = $nextTableDate;
         }
 
-        return $calendarTableBuilder->render(
+        return $this->dayCalendarTableBuilder->render(
             $calendarTableConfiguration, $displayTime, $eventsToShow, ['table-calendar-day']
         );
     }
 
     public function renderTitle(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): string
     {
-        return $this->getDatetimeUtilities()->formatLocaleDate(
+        return $this->datetimeUtilities->formatLocaleDate(
             $displayTime, IntlDateFormatter::FULL, IntlDateFormatter::NONE
         );
     }

@@ -20,14 +20,9 @@ use Symfony\Component\Translation\Translator;
  */
 class JumpBarRenderer
 {
-    protected ButtonToolBarRenderer $buttonToolBarRenderer;
-
-    private Translator $translator;
-
-    public function __construct(Translator $translator, ButtonToolBarRenderer $buttonToolBarRenderer)
+    public function __construct(protected Translator $translator, protected ButtonToolBarRenderer $buttonToolBarRenderer
+    )
     {
-        $this->translator = $translator;
-        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
     }
 
     /**
@@ -36,7 +31,7 @@ class JumpBarRenderer
     public function render(string $navigationUrl, int $currentTime): string
     {
         try {
-            return $this->getButtonToolBarRenderer()->render($this->getButtonToolBar($navigationUrl, $currentTime));
+            return $this->buttonToolBarRenderer->render($this->getButtonToolBar($navigationUrl, $currentTime));
         }
         catch (QuickformException) {
             return '';
@@ -49,7 +44,7 @@ class JumpBarRenderer
         $buttonGroup = new ButtonGroup();
 
         $buttonToolBar->addButton(
-            new Button($this->getTranslator()->trans('JumpTo', [], StringUtilities::LIBRARIES), null, null,
+            new Button($this->translator->trans('JumpTo', [], StringUtilities::LIBRARIES), null, null,
                 DisplayTypeEnum::LABEL, null, ['btn-link'])
         );
         $buttonToolBar->addButton($buttonGroup);
@@ -107,11 +102,6 @@ class JumpBarRenderer
         return $buttonToolBar;
     }
 
-    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
-    {
-        return $this->buttonToolBarRenderer;
-    }
-
     /**
      * @return int[]
      */
@@ -132,21 +122,19 @@ class JumpBarRenderer
      */
     public function getMonths(): array
     {
-        $translator = $this->getTranslator();
-
         $monthNames = [
-            $translator->trans('JanuaryLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('FebruaryLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('MarchLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('AprilLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('MayLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('JuneLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('JulyLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('AugustLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('SeptemberLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('OctoberLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('NovemberLong', [], StringUtilities::LIBRARIES),
-            $translator->trans('DecemberLong', [], StringUtilities::LIBRARIES)
+            $this->translator->trans('JanuaryLong', [], StringUtilities::LIBRARIES),
+            $this->translator->trans('FebruaryLong', [], StringUtilities::LIBRARIES),
+            $this->translator->trans('MarchLong', [], StringUtilities::LIBRARIES),
+            $this->translator->trans('AprilLong', [], StringUtilities::LIBRARIES),
+            $this->translator->trans('MayLong', [], StringUtilities::LIBRARIES),
+            $this->translator->trans('JuneLong', [], StringUtilities::LIBRARIES),
+            $this->translator->trans('JulyLong', [], StringUtilities::LIBRARIES),
+            $this->translator->trans('AugustLong', [], StringUtilities::LIBRARIES),
+            $this->translator->trans('SeptemberLong', [], StringUtilities::LIBRARIES),
+            $this->translator->trans('OctoberLong', [], StringUtilities::LIBRARIES),
+            $this->translator->trans('NovemberLong', [], StringUtilities::LIBRARIES),
+            $this->translator->trans('DecemberLong', [], StringUtilities::LIBRARIES)
         ];
 
         $months = [];
@@ -156,11 +144,6 @@ class JumpBarRenderer
         }
 
         return $months;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 
     /**

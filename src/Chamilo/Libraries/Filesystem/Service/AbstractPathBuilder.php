@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Filesystem\Service;
 
-use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 
 /**
@@ -40,24 +39,12 @@ abstract class AbstractPathBuilder
      */
     protected array $cache = [];
 
-    protected ClassnameUtilities $classnameUtilities;
-
     /**
      * @var string[]
      */
     protected array $namespacePathMap = [];
 
-    public function __construct(ClassnameUtilities $classnameUtilities)
-    {
-        $this->classnameUtilities = $classnameUtilities;
-    }
-
     abstract public function getBasePath(): string;
-
-    public function getClassnameUtilities(): ClassnameUtilities
-    {
-        return $this->classnameUtilities;
-    }
 
     public function getConfigurationPath(string $namespace = 'Chamilo\Libraries'): string
     {

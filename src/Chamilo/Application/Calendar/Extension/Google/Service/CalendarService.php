@@ -18,43 +18,17 @@ class CalendarService
 {
     public const string PARAM_AUTHORIZATION_CODE = 'code';
 
-    private CalendarRepository $calendarRepository;
-
-    private ConfigurablePathBuilder $configurablePathBuilder;
-
-    private EventsCacheService $eventsCacheService;
-
-    private OwnedCalendarsCacheService $ownedCalendarsCacheService;
-
     public function __construct(
-        CalendarRepository $calendarRepository, ConfigurablePathBuilder $configurablePathBuilder,
-        EventsCacheService $eventsCacheService, OwnedCalendarsCacheService $ownedCalendarsCacheService
+        protected CalendarRepository $calendarRepository, protected ConfigurablePathBuilder $configurablePathBuilder,
+        protected EventsCacheService $eventsCacheService,
+        protected OwnedCalendarsCacheService $ownedCalendarsCacheService
     )
     {
-        $this->calendarRepository = $calendarRepository;
-        $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->eventsCacheService = $eventsCacheService;
-        $this->ownedCalendarsCacheService = $ownedCalendarsCacheService;
     }
 
-    private function getCalendarProperties(string $summary, string $description, string $timeZone): CalendarProperties
+    protected function getCalendarProperties(string $summary, string $description, string $timeZone): CalendarProperties
     {
         return new CalendarProperties($summary, $description, $timeZone);
-    }
-
-    public function getCalendarRepository(): CalendarRepository
-    {
-        return $this->calendarRepository;
-    }
-
-    protected function getConfigurablePathBuilder(): ConfigurablePathBuilder
-    {
-        return $this->configurablePathBuilder;
-    }
-
-    public function getEventsCacheService(): EventsCacheService
-    {
-        return $this->eventsCacheService;
     }
 
     /**
@@ -65,7 +39,7 @@ class CalendarService
         User $user, string $calendarIdentifier, ?int $fromDate = null, ?int $toDate = null
     ): EventIterator
     {
-        $googleCalendarEvents = $this->getEventsCacheService()->getEventsForCalendarIdentifierAndBetweenDates(
+        $googleCalendarEvents = $this->eventsCacheService->getEventsForCalendarIdentifierAndBetweenDates(
             $user, $calendarIdentifier, $fromDate, $toDate
         );
 
@@ -89,22 +63,17 @@ class CalendarService
             return [];
         }
 
-        return $this->getOwnedCalendarsCacheService()->getOwnedCalendars($user);
-    }
-
-    public function getOwnedCalendarsCacheService(): OwnedCalendarsCacheService
-    {
-        return $this->ownedCalendarsCacheService;
+        return $this->ownedCalendarsCacheService->getOwnedCalendars($user);
     }
 
     public function isAuthenticated(User $user): bool
     {
-        return $this->getCalendarRepository()->hasAccessToken($user);
+        return $this->calendarRepository->hasAccessToken($user);
     }
 
     public function isConfigured(): bool
     {
-        return $this->getCalendarRepository()->isConfigured();
+        return $this->calendarRepository->isConfigured();
     }
 
     /**
@@ -112,7 +81,7 @@ class CalendarService
      */
     public function login(User $user, $authenticationCode = null): bool
     {
-        return $this->getCalendarRepository()->login($user, $authenticationCode);
+        return $this->calendarRepository->login($user, $authenticationCode);
     }
 
     /**
@@ -121,6 +90,6 @@ class CalendarService
      */
     public function logout(User $user): bool
     {
-        return $this->getCalendarRepository()->logout($user);
+        return $this->calendarRepository->logout($user);
     }
 }

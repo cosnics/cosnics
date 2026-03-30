@@ -5,7 +5,6 @@ use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Core\Home\Architecture\Domain
@@ -15,15 +14,6 @@ use Symfony\Component\Translation\Translator;
  */
 class BlockRendererRegistry extends ArrayCollection
 {
-    protected Translator $translator;
-
-    public function __construct(Translator $translator)
-    {
-        parent::__construct();
-
-        $this->translator = $translator;
-    }
-
     public function addBlockRenderer(BlockRenderer $blockRenderer): void
     {
         $this->set(get_class($blockRenderer), $blockRenderer);
@@ -63,10 +53,5 @@ class BlockRendererRegistry extends ArrayCollection
     public function getRendererForElement(Element $block): BlockRenderer
     {
         return $this->getBlockRenderer($block->getBlockType());
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }

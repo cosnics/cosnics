@@ -21,7 +21,7 @@ use Throwable;
  * @package Chamilo\Core\Menu\Implementation\Menu
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInterface
+readonly class CategoryItemRenderer extends ItemRenderer implements TranslatableItemInterface
 {
     use TranslatableItemTrait;
 

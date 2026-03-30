@@ -62,7 +62,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
     {
         $translator = $this->getTranslator();
 
-        if (!$this->canUserRegister($currentUser)) {
+        if (!$this->userCanRegister($currentUser)) {
             throw new NotAllowedException();
         }
 
@@ -130,7 +130,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
         return new Response(implode(PHP_EOL, $html));
     }
 
-    public function canUserRegister(?User $currentUser = null): bool
+    public function userCanRegister(?User $currentUser = null): bool
     {
         if ($currentUser instanceof User && $currentUser->isPlatformAdministrator()) {
             return true;

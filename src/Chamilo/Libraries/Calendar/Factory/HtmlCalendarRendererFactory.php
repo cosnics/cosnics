@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Calendar\Factory;
 use Chamilo\Libraries\Calendar\Service\View\HtmlCalendarRenderer;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Calendar\Factory
@@ -12,15 +11,6 @@ use Symfony\Component\Translation\Translator;
  */
 class HtmlCalendarRendererFactory extends ArrayCollection
 {
-    protected Translator $translator;
-
-    public function __construct(Translator $translator)
-    {
-        parent::__construct();
-
-        $this->translator = $translator;
-    }
-
     public function addHtmlCalendarRenderer(HtmlCalendarRenderer $htmlCalendarRenderer): void
     {
         $this->set($htmlCalendarRenderer->getType(), $htmlCalendarRenderer);
@@ -36,10 +26,5 @@ class HtmlCalendarRendererFactory extends ArrayCollection
         }
 
         return $this->get($rendererType);
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }

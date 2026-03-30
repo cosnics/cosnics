@@ -28,22 +28,18 @@ use Symfony\Component\Translation\Translator;
  */
 class GroupTreeDataComponent extends Manager
 {
-    protected JsTreeMenuDataProvider $jsTreeMenuDataProvider;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        GroupMembershipService $groupMembershipService, GroupUrlGenerator $groupUrlGenerator,
-        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupService $groupService,
-        UserService $userService, UrlGenerator $urlGenerator, JsTreeMenuDataProvider $jsTreeMenuDataProvider
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupMembershipService $groupMembershipService,
+        GroupService $groupService, GroupUrlGenerator $groupUrlGenerator, UserService $userService,
+        protected readonly JsTreeMenuDataProvider $jsTreeMenuDataProvider
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $groupMembershipService,
-            $groupUrlGenerator, $alertsManager, $breadcrumbTrail, $groupService, $userService, $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator, $alertsManager,
+            $breadcrumbTrail, $groupMembershipService, $groupService, $groupUrlGenerator, $userService
         );
-
-        $this->jsTreeMenuDataProvider = $jsTreeMenuDataProvider;
     }
 
     /**
@@ -64,7 +60,7 @@ class GroupTreeDataComponent extends Manager
         );
 
         return new JsonResponse(
-            data: $this->getJsTreeDataProvider()->getData(
+            data: $this->jsTreeMenuDataProvider->getData(
                 $urlFormat, $this->getCurrentGroupIdentifier()
             )
         );
@@ -73,10 +69,5 @@ class GroupTreeDataComponent extends Manager
     public function getCurrentGroupIdentifier(): ?string
     {
         return $this->getRequest()->query->get(DataClass::PROPERTY_ID);
-    }
-
-    public function getJsTreeDataProvider(): JsTreeMenuDataProvider
-    {
-        return $this->jsTreeMenuDataProvider;
     }
 }

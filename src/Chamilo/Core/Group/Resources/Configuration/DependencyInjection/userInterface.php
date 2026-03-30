@@ -3,6 +3,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Core\Group\UserInterface\Form\GroupFormType;
 use Chamilo\Core\Group\UserInterface\Form\GroupMoveFormType;
+use Chamilo\Core\Group\UserInterface\Form\Service\GroupFormDataMapper;
 use Chamilo\Core\Group\UserInterface\Form\Service\GroupMoveFormDataMapper;
 use Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeDataProvider;
 use Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider;
@@ -39,4 +40,5 @@ return static function (ContainerConfigurator $container) {
     )->tag(FormTypeInterface::class);
 
     $services->set(GroupMoveFormDataMapper::class);
+    $services->set(GroupFormDataMapper::class);
 };

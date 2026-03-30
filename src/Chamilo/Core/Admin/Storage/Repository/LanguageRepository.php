@@ -13,16 +13,12 @@ use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author  Magali Gillard <magali.gillard@ehb.be>
  */
-class LanguageRepository
+readonly class LanguageRepository
 {
-    protected FilesystemTools $filesystemTools;
-
-    protected SystemPathBuilder $systemPathBuilder;
-
-    public function __construct(SystemPathBuilder $systemPathBuilder, FilesystemTools $filesystemTools)
+    public function __construct(
+        protected SystemPathBuilder $systemPathBuilder, protected FilesystemTools $filesystemTools
+    )
     {
-        $this->systemPathBuilder = $systemPathBuilder;
-        $this->filesystemTools = $filesystemTools;
     }
 
     /**
@@ -30,9 +26,9 @@ class LanguageRepository
      */
     public function findLanguages(): ArrayCollection
     {
-        $languagesPath = $this->getSystemPathBuilder()->getTranslationPath();
+        $languagesPath = $this->systemPathBuilder->getTranslationPath();
         $languageFiles =
-            $this->getFilesystemTools()->getDirectoryContent($languagesPath, FileTypeFilterIterator::ONLY_FILES, false);
+            $this->filesystemTools->getDirectoryContent($languagesPath, FileTypeFilterIterator::ONLY_FILES, false);
 
         $languages = new ArrayCollection();
 
@@ -62,15 +58,5 @@ class LanguageRepository
         }
 
         return $languageValues;
-    }
-
-    public function getFilesystemTools(): FilesystemTools
-    {
-        return $this->filesystemTools;
-    }
-
-    public function getSystemPathBuilder(): SystemPathBuilder
-    {
-        return $this->systemPathBuilder;
     }
 }

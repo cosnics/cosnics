@@ -12,7 +12,7 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
  * @package Chamilo\Core\User\Service\Menu
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class LogoutItemRenderer extends MenuItemRenderer
+readonly class LogoutItemRenderer extends MenuItemRenderer
 {
     public function getRendererTypeGlyph(): InlineGlyph
     {

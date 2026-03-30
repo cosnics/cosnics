@@ -25,20 +25,13 @@ use Symfony\Component\Uid\Uuid;
  */
 class UploadTemporaryFileComponent extends Manager
 {
-    protected ConfigurablePathBuilder $configurablePathBuilder;
-
-    protected Filesystem $filesystem;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        ConfigurablePathBuilder $configurablePathBuilder, Filesystem $filesystem, UrlGenerator $urlGenerator
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        protected ConfigurablePathBuilder $configurablePathBuilder, protected Filesystem $filesystem
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
-
-        $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->filesystem = $filesystem;
     }
 
     /**
@@ -54,9 +47,9 @@ class UploadTemporaryFileComponent extends Manager
             );
         }
 
-        $temporaryPath = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__);
+        $temporaryPath = $this->configurablePathBuilder->getTemporaryPath(__NAMESPACE__);
 
-        $this->getFilesystem()->mkdir($temporaryPath);
+        $this->filesystem->mkdir($temporaryPath);
 
         $fileName = md5(Uuid::v7()->__toString());
         $temporaryFilePath = $temporaryPath . $fileName;
@@ -74,11 +67,6 @@ class UploadTemporaryFileComponent extends Manager
 
             return $jsonAjaxResult->getResponse();
         }
-    }
-
-    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
-    {
-        return $this->configurablePathBuilder;
     }
 
     /**
@@ -104,10 +92,5 @@ class UploadTemporaryFileComponent extends Manager
         }
 
         return $file;
-    }
-
-    public function getFilesystem(): Filesystem
-    {
-        return $this->filesystem;
     }
 }

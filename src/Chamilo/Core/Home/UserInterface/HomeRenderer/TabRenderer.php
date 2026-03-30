@@ -13,15 +13,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
  */
 class TabRenderer
 {
-
-    protected ColumnRenderer $columnRenderer;
-
-    protected HomeService $homeService;
-
-    public function __construct(HomeService $homeService, ColumnRenderer $columnRenderer)
+    public function __construct(protected HomeService $homeService, protected ColumnRenderer $columnRenderer)
     {
-        $this->homeService = $homeService;
-        $this->columnRenderer = $columnRenderer;
     }
 
     /**
@@ -32,8 +25,7 @@ class TabRenderer
         Element $tab, int $tabKey, ?int $currentTabIdentifier = null, ?User $user = null
     ): string
     {
-        $columnRenderer = $this->getColumnRenderer();
-        $isActiveTab = $this->getHomeService()->isActiveTab($tabKey, $tab, $currentTabIdentifier);
+        $isActiveTab = $this->homeService->isActiveTab($tabKey, $tab, $currentTabIdentifier);
 
         $html = [];
 
@@ -41,27 +33,16 @@ class TabRenderer
             '<div class="row portal-tab ' . ($isActiveTab ? 'show' : 'hidden') . '" data-element-id="' . $tab->getId() .
             '">';
 
-        $columns = $this->getHomeService()->findElementsByTypeAndParentIdentifier(
+        $columns = $this->homeService->findElementsByTypeAndParentIdentifier(
             Element::TYPE_COLUMN, $tab->getId()
         );
 
-        foreach ($columns as $column)
-        {
-            $html[] = $columnRenderer->render($column, $user);
+        foreach ($columns as $column) {
+            $html[] = $this->columnRenderer->render($column, $user);
         }
 
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function getColumnRenderer(): ColumnRenderer
-    {
-        return $this->columnRenderer;
-    }
-
-    public function getHomeService(): HomeService
-    {
-        return $this->homeService;
     }
 }

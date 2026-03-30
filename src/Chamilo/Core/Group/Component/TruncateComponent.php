@@ -34,10 +34,6 @@ class TruncateComponent extends Manager
 
         $groupIdentifiers = $this->getRequest()->getFromRequestOrQuery(DataClass::PROPERTY_ID);
 
-        $groupMembershipService = $this->getGroupMembershipService();
-        $groupService = $this->getGroupService();
-        $translator = $this->getTranslator();
-
         $failures = 0;
 
         if (!empty($groupIdentifiers)) {
@@ -46,10 +42,10 @@ class TruncateComponent extends Manager
             }
 
             foreach ($groupIdentifiers as $groupIdentifier) {
-                $group = $groupService->findGroupByIdentifier($groupIdentifier);
+                $group = $this->groupService->findGroupByIdentifier($groupIdentifier);
 
                 try {
-                    $groupMembershipService->emptyGroup($group, $currentUser);
+                    $this->groupMembershipService->emptyGroup($group, $currentUser);
                 }
                 catch (RuntimeException) {
                     $failures ++;
@@ -71,9 +67,9 @@ class TruncateComponent extends Manager
                 $message = 'SelectedGroupsEmptied';
             }
 
-            $this->getAlertsManager()->addAlert(
+            $this->alertsManager->addAlert(
                 new Alert(
-                    $translator->trans($message, [], Manager::CONTEXT),
+                    $this->translator->trans($message, [], Manager::CONTEXT),
                     $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS
                 )
             );

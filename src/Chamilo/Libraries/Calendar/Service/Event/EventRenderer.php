@@ -11,11 +11,8 @@ use Chamilo\Libraries\Calendar\Service\LegendRenderer;
  */
 abstract class EventRenderer
 {
-    private LegendRenderer $legendRenderer;
-
-    public function __construct(LegendRenderer $legendRenderer)
+    public function __construct(protected LegendRenderer $legendRenderer)
     {
-        $this->legendRenderer = $legendRenderer;
     }
 
     public function getEventClasses(bool $isEventSourceVisible = true): string
@@ -27,17 +24,5 @@ abstract class EventRenderer
         }
 
         return $eventClasses;
-    }
-
-    public function getLegendRenderer(): LegendRenderer
-    {
-        return $this->legendRenderer;
-    }
-
-    public function setLegendRenderer(LegendRenderer $legendRenderer): EventRenderer
-    {
-        $this->legendRenderer = $legendRenderer;
-
-        return $this;
     }
 }

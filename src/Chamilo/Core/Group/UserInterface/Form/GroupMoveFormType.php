@@ -43,25 +43,23 @@ class GroupMoveFormType extends AbstractType
     {
         $builder->setDataMapper($this->groupMoveFormDataMapper);
 
-        $translator = $this->getTranslator();
-
         $name = $this->formTypeBuilder->createText(
-            $builder, Group::PROPERTY_NAME, $translator->trans('Name', [], Manager::CONTEXT), false
+            $builder, Group::PROPERTY_NAME, $this->translator->trans('Name', [], Manager::CONTEXT), false
         )->setDisabled(true);
         $builder->add($name);
 
         $builder->add(
             $this->formTypeBuilder->createSelect(
-                $builder, NestedSet::PROPERTY_PARENT_ID, $translator->trans('NewLocation', [], Manager::CONTEXT), true,
-                $this->getOptionsTreeRenderer()->getOptions(
-                    disabledIdentifiers: $this->determineDisabledGroupIdentifiers(
-                        $options[self::OPTION_DISABLED_IDENTIFIERS]
-                    )
-                )->toArray()
+                $builder, NestedSet::PROPERTY_PARENT_ID, $this->translator->trans('NewLocation', [], Manager::CONTEXT),
+                true, $this->optionsTreeRenderer->getOptions(
+                disabledIdentifiers: $this->determineDisabledGroupIdentifiers(
+                    $options[self::OPTION_DISABLED_IDENTIFIERS]
+                )
+            )->toArray()
             )
         );
 
-        $this->getFormButtonTypeBuilder()->addSaveAndResetButton($builder);
+        $this->formButtonTypeBuilder->addSaveAndResetButton($builder);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -97,9 +95,9 @@ class GroupMoveFormType extends AbstractType
 
         foreach ($rootDisabledGroupIdentifiers as $rootDisabledGroupIdentifier) {
             try {
-                $disabledGroup = $this->getGroupService()->findGroupByIdentifier($rootDisabledGroupIdentifier);
+                $disabledGroup = $this->groupService->findGroupByIdentifier($rootDisabledGroupIdentifier);
                 $disabledSubgroupIdentifiers =
-                    $this->getGroupsTreeTraverser()->findSubGroupIdentifiersForGroup($disabledGroup, true);
+                    $this->groupsTreeTraverser->findSubGroupIdentifiersForGroup($disabledGroup, true);
 
                 $disabledGroupIdentifiers[] = $rootDisabledGroupIdentifier;
                 $disabledGroupIdentifiers = array_merge($disabledGroupIdentifiers, $disabledSubgroupIdentifiers);
@@ -109,35 +107,5 @@ class GroupMoveFormType extends AbstractType
         }
 
         return $disabledGroupIdentifiers;
-    }
-
-    public function getFormButtonTypeBuilder(): FormButtonTypeBuilder
-    {
-        return $this->formButtonTypeBuilder;
-    }
-
-    public function getFormTypeBuilder(): FormTypeBuilder
-    {
-        return $this->formTypeBuilder;
-    }
-
-    public function getGroupService(): GroupService
-    {
-        return $this->groupService;
-    }
-
-    public function getGroupsTreeTraverser(): GroupsTreeTraverser
-    {
-        return $this->groupsTreeTraverser;
-    }
-
-    public function getOptionsTreeRenderer(): OptionsTreeRenderer
-    {
-        return $this->optionsTreeRenderer;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }

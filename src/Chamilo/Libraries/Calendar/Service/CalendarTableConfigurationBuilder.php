@@ -11,29 +11,12 @@ use Chamilo\Libraries\Calendar\Architecture\Domain\CalendarTableConfiguration;
  */
 class CalendarTableConfigurationBuilder
 {
-    protected int $defaultEndHour;
-
-    protected string $defaultFirstDayOfWeek;
-
-    protected bool $defaultHideNonWorkingHours;
-
-    protected int $defaultHourStep;
-
-    protected int $defaultStartHour;
-
-    protected UserSettingsService $userSettingsService;
-
     public function __construct(
-        UserSettingsService $userSettingsService, string $defaultFirstDayOfWeek, bool $defaultHideNonWorkingHours,
-        int $defaultStartHour, int $defaultEndHour, int $defaultHourStep
+        protected UserSettingsService $userSettingsService, protected string $defaultFirstDayOfWeek,
+        protected bool $defaultHideNonWorkingHours, protected int $defaultStartHour, protected int $defaultEndHour,
+        protected int $defaultHourStep
     )
     {
-        $this->userSettingsService = $userSettingsService;
-        $this->defaultEndHour = $defaultEndHour;
-        $this->defaultFirstDayOfWeek = $defaultFirstDayOfWeek;
-        $this->defaultHideNonWorkingHours = $defaultHideNonWorkingHours;
-        $this->defaultHourStep = $defaultHourStep;
-        $this->defaultStartHour = $defaultStartHour;
     }
 
     public function buildConfiguration(?User $user): CalendarTableConfiguration
@@ -44,88 +27,58 @@ class CalendarTableConfigurationBuilder
         );
     }
 
-    public function getDefaultEndHour(): int
-    {
-        return $this->defaultEndHour;
-    }
-
-    public function getDefaultFirstDayOfWeek(): string
-    {
-        return $this->defaultFirstDayOfWeek;
-    }
-
-    public function getDefaultHideNonWorkingHours(): bool
-    {
-        return $this->defaultHideNonWorkingHours;
-    }
-
-    public function getDefaultHourStep(): int
-    {
-        return $this->defaultHourStep;
-    }
-
-    public function getDefaultStartHour(): int
-    {
-        return $this->defaultStartHour;
-    }
-
     public function getEndHour(?User $user): int
     {
         if ($user instanceof User) {
-            return $this->getUserSettingsService()->findUserSetting(
-                $user, 'cosnics.libraries.calendar.workingHoursEnd', $this->getDefaultEndHour()
+            return $this->userSettingsService->findUserSetting(
+                $user, 'cosnics.libraries.calendar.workingHoursEnd', $this->defaultEndHour
             );
         }
 
-        return $this->getDefaultEndHour();
+        return $this->defaultEndHour;
     }
 
     protected function getFirstDayOfWeek(?User $user): ?string
     {
         if ($user instanceof User) {
-            return $this->getUserSettingsService()->findUserSetting(
-                $user, 'cosnics.libraries.calendar.firstDayOfWeek', $this->getDefaultFirstDayOfWeek()
+            return $this->userSettingsService->findUserSetting(
+                $user, 'cosnics.libraries.calendar.firstDayOfWeek', $this->defaultFirstDayOfWeek
             );
         }
 
-        return $this->getDefaultFirstDayOfWeek();
+        return $this->defaultFirstDayOfWeek;
     }
 
     public function getHideNonWorkingHours(?User $user): bool
     {
         if ($user instanceof User) {
-            return $this->getUserSettingsService()->findUserSetting(
-                $user, 'cosnics.libraries.calendar.hideNonWorkingHours', $this->getDefaultHideNonWorkingHours()
+            return $this->userSettingsService->findUserSetting(
+                $user, 'cosnics.libraries.calendar.hideNonWorkingHours', $this->defaultHideNonWorkingHours
             );
         }
 
-        return $this->getDefaultHideNonWorkingHours();
+        return $this->defaultHideNonWorkingHours;
     }
 
     public function getHourStep(?User $user): int
     {
         if ($user instanceof User) {
-            return $this->getUserSettingsService()->findUserSetting(
-                $user, 'cosnics.libraries.calendar.hourStep', $this->getDefaultHourStep()
+            return $this->userSettingsService->findUserSetting(
+                $user, 'cosnics.libraries.calendar.hourStep', $this->defaultHourStep
             );
         }
 
-        return $this->getDefaultHourStep();
+        return $this->defaultHourStep;
     }
 
     public function getStartHour(?User $user): int
     {
         if ($user instanceof User) {
-            return $this->getUserSettingsService()->findUserSetting(
-                $user, 'cosnics.libraries.calendar.workingHoursStart', $this->getDefaultStartHour()
+            return $this->userSettingsService->findUserSetting(
+                $user, 'cosnics.libraries.calendar.workingHoursStart', $this->defaultStartHour
             );
         }
 
-        return $this->getDefaultStartHour();
-    }
-
-    public function getUserSettingsService(): UserSettingsService
-    {
-        return $this->userSettingsService;
+        return $this->defaultStartHour;
     }
 }

@@ -23,23 +23,11 @@ use Symfony\Component\Translation\Translator;
  */
 class CalendarExtensionActionProvider implements CalendarExtensionActionProviderInterface
 {
-    protected CalendarService $calendarService;
-
-    protected Translator $translator;
-
-    protected UrlGenerator $urlGenerator;
-
-    protected UserSettingsService $userSettingsService;
-
     public function __construct(
-        UrlGenerator $urlGenerator, Translator $translator, CalendarService $calendarService,
-        UserSettingsService $userSettingsService
+        protected UrlGenerator $urlGenerator, protected Translator $translator,
+        protected CalendarService $calendarService, protected UserSettingsService $userSettingsService
     )
     {
-        $this->urlGenerator = $urlGenerator;
-        $this->translator = $translator;
-        $this->calendarService = $calendarService;
-        $this->userSettingsService = $userSettingsService;
     }
 
     /**
@@ -47,22 +35,19 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
      */
     public function getAdditional(User $user): array
     {
-        if (!$this->getCalendarService()->isConfigured()) {
+        if (!$this->calendarService->isConfigured()) {
             return [];
         }
 
-        $translator = $this->getTranslator();
-
         $dropdownButton = new DropDownButtonCollection(
-            $translator->trans('TypeName', [], Manager::CONTEXT), new FontAwesomeGlyph('google', [], null, 'fab'),
+            $this->translator->trans('TypeName', [], Manager::CONTEXT), new FontAwesomeGlyph('google', [], null, 'fab'),
             DisplayTypeEnum::ICON_AND_LABEL, [], ['dropdown-menu-right']
         );
 
-        $accessToken =
-            $this->getUserSettingsService()->findUserSetting($user, 'cosnics.libraries.protocol.google.token');
+        $accessToken = $this->userSettingsService->findUserSetting($user, 'cosnics.libraries.protocol.google.token');
 
         if (!$accessToken) {
-            $link = $this->getUrlGenerator()->fromParameters(
+            $link = $this->urlGenerator->fromParameters(
                 [
                     ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                     ApplicationInterface::PARAM_ACTION => ActionEnum::LOGIN->value
@@ -71,13 +56,13 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
 
             $dropdownButton->addButton(
                 new SubButton(
-                    $translator->trans('GoogleCalendarLogin', [], Manager::CONTEXT),
+                    $this->translator->trans('GoogleCalendarLogin', [], Manager::CONTEXT),
                     new FontAwesomeGlyph('sign-in-alt'), $link
                 )
             );
         }
         else {
-            $link = $this->getUrlGenerator()->fromParameters(
+            $link = $this->urlGenerator->fromParameters(
                 [
                     ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                     ApplicationInterface::PARAM_ACTION => ActionEnum::LOGOUT->value
@@ -86,7 +71,7 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
 
             $dropdownButton->addButton(
                 new SubButton(
-                    $translator->trans('GoogleCalendarLogout', [], Manager::CONTEXT),
+                    $this->translator->trans('GoogleCalendarLogout', [], Manager::CONTEXT),
                     new FontAwesomeGlyph('sign-out-alt'), $link
                 )
             );
@@ -95,31 +80,11 @@ class CalendarExtensionActionProvider implements CalendarExtensionActionProvider
         return [$dropdownButton];
     }
 
-    public function getCalendarService(): CalendarService
-    {
-        return $this->calendarService;
-    }
-
     /**
      * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface[]
      */
     public function getPrimary(User $user): array
     {
         return [];
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
-    }
-
-    public function getUserSettingsService(): UserSettingsService
-    {
-        return $this->userSettingsService;
     }
 }

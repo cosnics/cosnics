@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @package Chamilo\Libraries\UserInterface\Tree\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class OptionsTreeDataProvider
+abstract readonly class OptionsTreeDataProvider
 {
     protected function __getData(Closure $getIdentifier, Closure $getText, ?string $identifier): TreeNode
     {

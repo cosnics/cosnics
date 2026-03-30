@@ -7,7 +7,6 @@ use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use IntlDateFormatter;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Calendar\Service\Event
@@ -15,22 +14,12 @@ use Symfony\Component\Translation\Translator;
  */
 class EventListRenderer extends EventRenderer
 {
-    protected DatetimeUtilities $datetimeUtilities;
-
-    protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer;
-
-    protected Translator $translator;
-
     public function __construct(
-        LegendRenderer $legendRenderer, Translator $translator, DatetimeUtilities $datetimeUtilities,
-        MiniButtonToolBarRenderer $miniButtonToolBarRenderer
+        LegendRenderer $legendRenderer, protected DatetimeUtilities $datetimeUtilities,
+        protected MiniButtonToolBarRenderer $miniButtonToolBarRenderer
     )
     {
         parent::__construct($legendRenderer);
-
-        $this->translator = $translator;
-        $this->datetimeUtilities = $datetimeUtilities;
-        $this->miniButtonToolBarRenderer = $miniButtonToolBarRenderer;
     }
 
     /**
@@ -40,9 +29,7 @@ class EventListRenderer extends EventRenderer
      */
     public function render(Event $event, bool $isEventSourceVisible = true, array $eventActions = []): string
     {
-        $legend = $this->getLegendRenderer();
-
-        $sourceClasses = $legend->getSourceClasses($event->getSource());
+        $sourceClasses = $this->legendRenderer->getSourceClasses($event->getSource());
         $eventClasses = implode(' ', ['event-container', $sourceClasses]);
 
         $html = [];
@@ -54,8 +41,8 @@ class EventListRenderer extends EventRenderer
             $rowClasses = '';
         }
 
-        $html[] =
-            '<div class="row' . $rowClasses . '" data-source-key="' . $legend->addSource($event->getSource()) . '">';
+        $html[] = '<div class="row' . $rowClasses . '" data-source-key="' .
+            $this->legendRenderer->addSource($event->getSource()) . '">';
 
         $html[] = '<div class="col-1">';
         $html[] = '<span class="' . $eventClasses . '"></span>';
@@ -88,20 +75,8 @@ class EventListRenderer extends EventRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function getDatetimeUtilities(): DatetimeUtilities
-    {
-        return $this->datetimeUtilities;
-    }
-
-    public function getMiniButtonToolBarRenderer(): MiniButtonToolBarRenderer
-    {
-        return $this->miniButtonToolBarRenderer;
-    }
-
     public function getRange(Event $event): string
     {
-        $datetimeUtilities = $this->getDatetimeUtilities();
-
         $html = [];
 
         $dateFormat = IntlDateFormatter::SHORT;
@@ -113,22 +88,17 @@ class EventListRenderer extends EventRenderer
             }
 
             $html[] = '<div class="calendar-event-range">' . htmlentities(
-                    $datetimeUtilities->formatLocaleDate($event->getStartDate(), $dateFormat, $timeFormat) . ' - ' .
-                    $datetimeUtilities->formatLocaleDate($event->getEndDate(), $dateFormat, $timeFormat)
+                    $this->datetimeUtilities->formatLocaleDate($event->getStartDate(), $dateFormat, $timeFormat) .
+                    ' - ' . $this->datetimeUtilities->formatLocaleDate($event->getEndDate(), $dateFormat, $timeFormat)
                 ) . '</div>';
         }
         else {
-            $html[] = '<div class="calendar-event-range">' . $datetimeUtilities->formatLocaleDate(
+            $html[] = '<div class="calendar-event-range">' . $this->datetimeUtilities->formatLocaleDate(
                     $event->getStartDate(), $dateFormat, $timeFormat
                 ) . '</div>';
         }
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 
     /**
@@ -147,7 +117,7 @@ class EventListRenderer extends EventRenderer
             }
 
             $html[] = '<div style="float: right; margin-top: 2px;">';
-            $html[] = $this->getMiniButtonToolBarRenderer()->render($buttonToolBar);
+            $html[] = $this->miniButtonToolBarRenderer->render($buttonToolBar);
             $html[] = '</div>';
         }
 

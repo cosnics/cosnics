@@ -27,16 +27,15 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
     public function login(bool $checkIfAuthenticationSourceIsEnabled = true): ?User
     {
         $this->checkAuthenticationSource($checkIfAuthenticationSourceIsEnabled);
-        $translator = $this->getTranslator();
 
-        $securityToken = $this->getRequest()->query->get(User::PROPERTY_SECURITY_TOKEN);
+        $securityToken = $this->request->query->get(User::PROPERTY_SECURITY_TOKEN);
 
         if ($securityToken) {
-            $user = $this->getUserService()->getUserBySecurityToken($securityToken);
+            $user = $this->userService->getUserBySecurityToken($securityToken);
 
             if (!$user instanceof User) {
                 throw new NotAuthenticatedException(
-                    $translator->trans('InvalidSecurityToken', [], StringUtilities::LIBRARIES)
+                    $this->translator->trans('InvalidSecurityToken', [], StringUtilities::LIBRARIES)
                 );
             }
 
@@ -44,7 +43,7 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
         }
         else {
             throw new NotAuthenticatedException(
-                $translator->trans('NoSecurityToken', [], StringUtilities::LIBRARIES)
+                $this->translator->trans('NoSecurityToken', [], StringUtilities::LIBRARIES)
             );
         }
     }

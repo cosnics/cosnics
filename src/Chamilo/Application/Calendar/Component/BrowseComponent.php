@@ -45,62 +45,24 @@ use Symfony\Component\Translation\Translator;
  */
 class BrowseComponent extends Manager
 {
-    protected CalendarDataProvider $calendarDataProvider;
-
-    protected CalendarExtensionActionProviderRegistry $calendarExtensionActionProviderRegistry;
-
-    protected CalendarExtensionDataProviderRegistry $calendarExtensionDataProviderRegistry;
-
-    protected CalendarDataProvider $calendarRendererProvider;
-
-    protected CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder;
-
-    protected string $defaultView;
-
-    protected HtmlCalendarRendererFactory $htmlCalendarRendererFactory;
-
-    protected PageHeaders $pageHeaders;
-
-    protected ThemePathBuilder $themeWebPathBuilder;
-
-    protected UserService $userService;
-
-    protected UserSettingsService $userSettingsService;
-
-    protected WebPathBuilder $webPathBuilder;
-
-    private int $currentTime;
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
-        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator,
-        VisibilityRepository $visibilityRepository, ThemePathBuilder $themeWebPathBuilder, PageHeaders $pageHeaders,
-        WebPathBuilder $webPathBuilder, UserService $userService, UrlGenerator $urlGenerator,
-        CalendarDataProvider $calendarDataProvider,
-        CalendarExtensionActionProviderRegistry $calendarExtensionActionProviderRegistry,
-        CalendarExtensionDataProviderRegistry $calendarExtensionDataProviderRegistry,
-        HtmlCalendarRendererFactory $htmlCalendarRendererFactory,
-        CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder, UserSettingsService $userSettingsService,
-        string $defaultView
+        DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
+        VisibilityRepository $visibilityRepository, protected CalendarDataProvider $calendarDataProvider,
+        protected CalendarExtensionActionProviderRegistry $calendarExtensionActionProviderRegistry,
+        protected CalendarExtensionDataProviderRegistry $calendarExtensionDataProviderRegistry,
+        protected CalendarDataProvider $calendarRendererProvider,
+        protected CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder, protected string $defaultView,
+        protected HtmlCalendarRendererFactory $htmlCalendarRendererFactory, protected PageHeaders $pageHeaders,
+        protected ThemePathBuilder $themeWebPathBuilder, protected UserService $userService,
+        protected UserSettingsService $userSettingsService, protected WebPathBuilder $webPathBuilder,
+        protected ?int $currentTime = null
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $visibilityRepository,
-            $urlGenerator
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
+            $visibilityRepository
         );
-
-        $this->themeWebPathBuilder = $themeWebPathBuilder;
-        $this->pageHeaders = $pageHeaders;
-        $this->webPathBuilder = $webPathBuilder;
-        $this->userService = $userService;
-        $this->calendarDataProvider = $calendarDataProvider;
-        $this->calendarExtensionActionProviderRegistry = $calendarExtensionActionProviderRegistry;
-        $this->calendarExtensionDataProviderRegistry = $calendarExtensionDataProviderRegistry;
-        $this->htmlCalendarRendererFactory = $htmlCalendarRendererFactory;
-        $this->calendarTableConfigurationBuilder = $calendarTableConfigurationBuilder;
-        $this->userSettingsService = $userSettingsService;
-
-        $this->defaultView = $defaultView;
     }
 
     /**
@@ -113,9 +75,9 @@ class BrowseComponent extends Manager
         $this->checkAuthorization(Manager::CONTEXT, $currentUser);
         $this->checkLoggedInAs();
 
-        $this->getPageHeaders()->addCss(
+        $this->pageHeaders->addCss(
             $this->getWebPathBuilder()->getCssPath(Manager::CONTEXT) . 'print.' .
-            $this->getThemeWebPathBuilder()->getTheme() . '.min.css', 'print'
+            $this->themeWebPathBuilder->getTheme() . '.min.css', 'print'
         );
 
         $html = [];
@@ -139,36 +101,11 @@ class BrowseComponent extends Manager
         $asAdmin = $this->getRequest()->getSession()->get('_as_admin');
 
         if ($asAdmin && $asAdmin > 0) {
-            $user = $this->getUserService()->findUserByIdentifier($asAdmin);
+            $user = $this->userService->findUserByIdentifier($asAdmin);
             if (!$user instanceof User || !$user->isPlatformAdministrator()) {
                 throw new NotAllowedException();
             }
         }
-    }
-
-    protected function getCalendarDataProvider(): CalendarDataProvider
-    {
-        return $this->calendarDataProvider;
-    }
-
-    protected function getCalendarExtensionActionProvider(): CalendarExtensionActionProviderRegistry
-    {
-        return $this->calendarExtensionActionProviderRegistry;
-    }
-
-    protected function getCalendarExtensionDataProvider(): CalendarExtensionDataProviderRegistry
-    {
-        return $this->calendarExtensionDataProviderRegistry;
-    }
-
-    protected function getCalendarRendererFactory(): HtmlCalendarRendererFactory
-    {
-        return $this->htmlCalendarRendererFactory;
-    }
-
-    public function getCalendarTableConfigurationBuilder(): CalendarTableConfigurationBuilder
-    {
-        return $this->calendarTableConfigurationBuilder;
     }
 
     public function getCurrentRendererTime(): int
@@ -190,8 +127,8 @@ class BrowseComponent extends Manager
         $rendererType = $this->getRequest()->query->get(HtmlCalendarRenderer::PARAM_TYPE);
 
         if (!$rendererType) {
-            $rendererType = $this->getUserSettingsService()->findUserSetting(
-                $user, 'cosnics.libraries.calendar.defaultView', $this->getDefaultView()
+            $rendererType = $this->userSettingsService->findUserSetting(
+                $user, 'cosnics.libraries.calendar.defaultView', $this->defaultView
             );
 
             if ($rendererType == HtmlCalendarRendererTypeEnum::MONTH->value) {
@@ -208,11 +145,6 @@ class BrowseComponent extends Manager
         }
 
         return $rendererType;
-    }
-
-    public function getDefaultView(): string
-    {
-        return $this->defaultView;
     }
 
     protected function getGeneralActions(User $user): ButtonGroup
@@ -277,26 +209,6 @@ class BrowseComponent extends Manager
         return $buttonGroup;
     }
 
-    public function getPageHeaders(): PageHeaders
-    {
-        return $this->pageHeaders;
-    }
-
-    public function getThemeWebPathBuilder(): ThemePathBuilder
-    {
-        return $this->themeWebPathBuilder;
-    }
-
-    public function getUserService(): UserService
-    {
-        return $this->userService;
-    }
-
-    public function getUserSettingsService(): UserSettingsService
-    {
-        return $this->userSettingsService;
-    }
-
     /**
      * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonInterface[]
      */
@@ -307,8 +219,9 @@ class BrowseComponent extends Manager
         $primaryExtensionActions = [];
         $additionalExtensionActions = [];
 
-        foreach ($this->getCalendarExtensionActionProvider()->getCalendarExtenstionActionProviders() as $actionProvider)
-        {
+        foreach (
+            $this->calendarExtensionActionProviderRegistry->getCalendarExtenstionActionProviders() as $actionProvider
+        ) {
             $primaryExtensionActions = array_merge($primaryExtensionActions, $actionProvider->getPrimary($user));
             $additionalExtensionActions = array_merge(
                 $additionalExtensionActions, $actionProvider->getAdditional($user)
@@ -334,7 +247,7 @@ class BrowseComponent extends Manager
      */
     protected function renderCalendar(User $user): string
     {
-        $renderer = $this->getCalendarRendererFactory()->getHtmlCalendarRenderer($this->getCurrentRendererType($user));
+        $renderer = $this->htmlCalendarRendererFactory->getHtmlCalendarRenderer($this->getCurrentRendererType($user));
 
         $displayParameters = [
             self::PARAM_CONTEXT => Manager::CONTEXT,
@@ -343,17 +256,16 @@ class BrowseComponent extends Manager
             HtmlCalendarRenderer::PARAM_TIME => $this->getCurrentRendererTime()
         ];
 
-        $calendarTableConfiguration = $this->getCalendarTableConfigurationBuilder()->buildConfiguration($user);
+        $calendarTableConfiguration = $this->calendarTableConfigurationBuilder->buildConfiguration($user);
 
-        $events = $this->getCalendarDataProvider()->getEvents(
+        $events = $this->calendarDataProvider->getEvents(
             $user, $renderer->getEventsStartTime($calendarTableConfiguration, $this->getCurrentRendererTime()),
             $renderer->getEventsEndTime($calendarTableConfiguration, $this->getCurrentRendererTime())
         );
 
         return $renderer->render(
             $events, $calendarTableConfiguration, $displayParameters, $this->getCurrentRendererTime(),
-            $this->getViewActions($user), $this->getCalendarDataProvider()->getVisibilities($user->getId()),
-            Manager::CONTEXT
+            $this->getViewActions($user), $this->calendarDataProvider->getVisibilities($user->getId()), Manager::CONTEXT
         );
     }
 

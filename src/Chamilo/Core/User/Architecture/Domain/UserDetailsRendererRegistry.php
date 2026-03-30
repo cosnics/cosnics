@@ -22,11 +22,6 @@ class UserDetailsRendererRegistry extends ArrayCollection
         $this->set(get_class($userDetailsRenderer), $userDetailsRenderer);
     }
 
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */

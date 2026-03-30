@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @package Chamilo\Libraries\UserInterface\Tree\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class TreeMenuDataProvider
+abstract readonly class TreeMenuDataProvider
 {
     protected function __getData(
         string $uriFormat, ?string $identifier, Closure $getIdentifier, Closure $getText, Closure $hasChildNodes
