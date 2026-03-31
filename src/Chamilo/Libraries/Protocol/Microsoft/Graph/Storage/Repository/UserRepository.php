@@ -13,16 +13,8 @@ use Microsoft\Graph\GraphServiceClient;
  */
 class UserRepository
 {
-    private GraphServiceClient $graphServiceClient;
-
-    public function __construct(GraphServiceClient $graphServiceClient)
+    public function __construct(protected GraphServiceClient $graphServiceClient)
     {
-        $this->graphServiceClient = $graphServiceClient;
-    }
-
-    protected function getGraphServiceClient(): GraphServiceClient
-    {
-        return $this->graphServiceClient;
     }
 
     /**
@@ -31,7 +23,7 @@ class UserRepository
     public function getUser(User $user): ?\Microsoft\Graph\Generated\Models\User
     {
         try {
-            $graphUser = $this->getGraphServiceClient()->users()->byUserId($user->getEmail())->get()->wait();
+            $graphUser = $this->graphServiceClient->users()->byUserId($user->getEmail())->get()->wait();
 
             if ($graphUser instanceof \Microsoft\Graph\Generated\Models\User) {
                 return $graphUser;

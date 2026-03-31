@@ -12,11 +12,8 @@ use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
  */
 class SymfonyCacheAdapterFactory
 {
-    protected ConfigurablePathBuilder $configurablePathBuilder;
-
-    public function __construct(ConfigurablePathBuilder $configurablePathBuilder)
+    public function __construct(protected ConfigurablePathBuilder $configurablePathBuilder)
     {
-        $this->configurablePathBuilder = $configurablePathBuilder;
     }
 
     public function createArrayAdapter(int $defaultLifetime = 0): ArrayAdapter
@@ -27,7 +24,7 @@ class SymfonyCacheAdapterFactory
     public function createFilesystemAdapter(string $namespace, int $defaultLifetime = 0): FilesystemAdapter
     {
         return new FilesystemAdapter(
-            md5($namespace), $defaultLifetime, $this->getConfigurablePathBuilder()->getConfiguredCachePath()
+            md5($namespace), $defaultLifetime, $this->configurablePathBuilder->getConfiguredCachePath()
         );
     }
 
@@ -37,12 +34,7 @@ class SymfonyCacheAdapterFactory
     public function createPhpFilesAdapter(string $namespace, int $defaultLifetime = 0): PhpFilesAdapter
     {
         return new PhpFilesAdapter(
-            md5($namespace), $defaultLifetime, $this->getConfigurablePathBuilder()->getConfiguredCachePath()
+            md5($namespace), $defaultLifetime, $this->configurablePathBuilder->getConfiguredCachePath()
         );
-    }
-
-    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
-    {
-        return $this->configurablePathBuilder;
     }
 }

@@ -19,39 +19,28 @@ use Symfony\Component\Translation\Translator;
  */
 class TranslatorFactory
 {
-    protected ConfigurablePathBuilder $configurablePathBuilder;
-
-    protected Filesystem $filesystem;
-
-    protected TranslationBundlesGenerator $internationalizationBundlesGenerator;
-
-    protected SystemPathBuilder $systemPathBuilder;
-
     public function __construct(
-        Filesystem $filesystem, ConfigurablePathBuilder $configurablePathBuilder, SystemPathBuilder $systemPathBuilder,
-        TranslationBundlesGenerator $internationalizationBundlesGenerator
+        protected Filesystem $filesystem, protected ConfigurablePathBuilder $configurablePathBuilder,
+        protected SystemPathBuilder $systemPathBuilder,
+        protected TranslationBundlesGenerator $internationalizationBundlesGenerator
     )
     {
-        $this->filesystem = $filesystem;
-        $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->systemPathBuilder = $systemPathBuilder;
-        $this->internationalizationBundlesGenerator = $internationalizationBundlesGenerator;
     }
 
     protected function addOptimizedTranslationResources(Translator $translator): void
     {
-        $packageNamespaces = $this->getInternationalizationBundlesGenerator()->getPackageNamespaces();
+        $packageNamespaces = $this->internationalizationBundlesGenerator->getPackageNamespaces();
 
         $translationCachePath = $this->getTranslationCachePath();
 
         if (!is_dir($translationCachePath)) {
-            $this->getFilesystem()->mkdir($translationCachePath);
+            $this->filesystem->mkdir($translationCachePath);
         }
 
         $translationResourcesOptimizer = new TranslationResourcesOptimizer(
             new YamlFileLoader(), new PackagesTranslationResourcesFinder(
             new PackagesFilesFinder(
-                $this->getSystemPathBuilder(), $packageNamespaces
+                $this->systemPathBuilder, $packageNamespaces
             )
         ), $translationCachePath
         );
@@ -75,28 +64,8 @@ class TranslatorFactory
         return $translator;
     }
 
-    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
-    {
-        return $this->configurablePathBuilder;
-    }
-
-    public function getFilesystem(): Filesystem
-    {
-        return $this->filesystem;
-    }
-
-    public function getInternationalizationBundlesGenerator(): TranslationBundlesGenerator
-    {
-        return $this->internationalizationBundlesGenerator;
-    }
-
-    public function getSystemPathBuilder(): SystemPathBuilder
-    {
-        return $this->systemPathBuilder;
-    }
-
     public function getTranslationCachePath(): string
     {
-        return $this->getConfigurablePathBuilder()->getCachePath(__NAMESPACE__);
+        return $this->configurablePathBuilder->getCachePath(__NAMESPACE__);
     }
 }

@@ -12,48 +12,17 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 class Bootstrap
 {
-    protected ErrorHandler $errorHandler;
-
-    protected ChamiloRequest $request;
-
-    protected SessionInterface $session;
-
-    protected bool $showErrors;
-
     public function __construct(
-        ChamiloRequest $request, ErrorHandler $errorHandler, SessionInterface $session, bool $showErrors = false
+        protected ChamiloRequest $request, protected ErrorHandler $errorHandler, protected SessionInterface $session,
+        protected bool $showErrors = false
     )
     {
-        $this->request = $request;
-        $this->session = $session;
-        $this->errorHandler = $errorHandler;
-        $this->showErrors = $showErrors;
-    }
-
-    protected function getErrorHandler(): ErrorHandler
-    {
-        return $this->errorHandler;
-    }
-
-    protected function getRequest(): ChamiloRequest
-    {
-        return $this->request;
-    }
-
-    protected function getSession(): SessionInterface
-    {
-        return $this->session;
-    }
-
-    protected function getShowErrors(): bool
-    {
-        return $this->showErrors;
     }
 
     protected function registerErrorHandlers(): Bootstrap
     {
-        if (!$this->getShowErrors()) {
-            $this->getErrorHandler()->registerErrorHandlers();
+        if (!$this->showErrors) {
+            $this->errorHandler->registerErrorHandlers();
         }
 
         return $this;
@@ -67,8 +36,8 @@ class Bootstrap
     protected function startSession(): Bootstrap
     {
         ini_set('session.gc_probability', 1);
-        $this->getSession()->start();
-        $this->getRequest()->setSession($this->getSession());
+        $this->session->start();
+        $this->request->setSession($this->session);
 
         return $this;
     }

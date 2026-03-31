@@ -10,11 +10,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class OptionsTreeRenderer
 {
-    protected OptionsTreeDataProvider $optionsTreeDataProvider;
-
-    public function __construct(OptionsTreeDataProvider $optionsTreeDataProvider)
+    public function __construct(protected OptionsTreeDataProvider $optionsTreeDataProvider)
     {
-        $this->optionsTreeDataProvider = $optionsTreeDataProvider;
     }
 
     /**
@@ -24,17 +21,12 @@ class OptionsTreeRenderer
         ?string $identifier = null, array $excludedIdentifiers = [], array $disabledIdentifiers = []
     ): ArrayCollection
     {
-        $treeNodes = $this->getOptionsTreeDataProvider()->getData($identifier, $excludedIdentifiers);
+        $treeNodes = $this->optionsTreeDataProvider->getData($identifier, $excludedIdentifiers);
 
         $optionTreeChoices = new ArrayCollection();
         $this->processTreeNodes($optionTreeChoices, $treeNodes, 0, $disabledIdentifiers);
 
         return $optionTreeChoices;
-    }
-
-    public function getOptionsTreeDataProvider(): OptionsTreeDataProvider
-    {
-        return $this->optionsTreeDataProvider;
     }
 
     /**

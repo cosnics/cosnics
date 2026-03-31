@@ -2,8 +2,6 @@
 namespace Chamilo\Libraries\Filesystem\Service;
 
 use Chamilo\Core\Admin\Service\Finder\BasicBundlesGenerator;
-use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Composer\Package\Loader\JsonLoader;
 use Composer\Script\Event;
 use Exception;
@@ -16,7 +14,7 @@ class BuildUtilities
 {
     public static function processComposer(Event $event): void
     {
-        $systemPathBuilder = new SystemPathBuilder(new ClassnameUtilities(new StringUtilities()));
+        $systemPathBuilder = new SystemPathBuilder();
 
         $basicBundlesGenerator = new BasicBundlesGenerator($systemPathBuilder);
         $packageNamespaces = $basicBundlesGenerator->getPackageNamespaces();

@@ -15,11 +15,8 @@ class HashingAlgorithmFactory
      */
     protected array $hashingAlgorithms = [];
 
-    private string $configuredHashingAlgorithm;
-
-    public function __construct(string $configuredHashingAlgorithm)
+    public function __construct(protected string $configuredHashingAlgorithm)
     {
-        $this->configuredHashingAlgorithm = $configuredHashingAlgorithm;
     }
 
     public function addHashingAlgorithm(HashingAlgorithm $hashingAlgorithm): void
@@ -32,27 +29,12 @@ class HashingAlgorithmFactory
      */
     public function getActiveHashingAlgorithm(): HashingAlgorithm
     {
-        $className = $this->getConfiguredHashingAlgorithm();
-
-        if (!isset($this->hashingAlgorithms[$className])) {
+        if (!isset($this->hashingAlgorithms[$this->configuredHashingAlgorithm])) {
             throw new NoSuchClassException(
-                $className, HashingAlgorithm::class
+                $this->configuredHashingAlgorithm, HashingAlgorithm::class
             );
         }
 
-        return $this->hashingAlgorithms[$className];
-    }
-
-    public function getConfiguredHashingAlgorithm(): string
-    {
-        return $this->configuredHashingAlgorithm;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm[]
-     */
-    public function getHashingAlgorithms(): array
-    {
-        return $this->hashingAlgorithms;
+        return $this->hashingAlgorithms[$this->configuredHashingAlgorithm];
     }
 }

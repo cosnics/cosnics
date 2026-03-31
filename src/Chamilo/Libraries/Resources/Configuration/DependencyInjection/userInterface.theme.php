@@ -12,11 +12,11 @@ return static function (ContainerConfigurator $container) {
     $services->set('Chamilo\Libraries\UserInterface\Theme\Service\ThemeSystemPathBuilder', ThemePathBuilder::class)
         ->args([
             '$pathBuilder' => service(SystemPathBuilder::class),
-            '$theme' => '%cosnics.libraries.userInterface.theme%',
+            '$theme' => '%cosnics.libraries.userInterface.theme%'
         ]);
 
     $services->set('Chamilo\Libraries\UserInterface\Theme\Service\ThemeWebPathBuilder', ThemePathBuilder::class)->args([
         '$pathBuilder' => service(WebPathBuilder::class),
-        '$theme' => '%cosnics.libraries.userInterface.theme%',
+        '$theme' => '%cosnics.libraries.userInterface.theme%'
     ]);
 };

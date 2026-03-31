@@ -12,51 +12,27 @@ use Chamilo\Libraries\UserInterface\Breadcrumb\Service\BreadcrumbGenerator;
  */
 class ApplicationHeaderRenderer
 {
-    protected BreadcrumbGenerator $breadcrumbGenerator;
-
-    protected DefaultHeaderRenderer $defaultHeaderRenderer;
-
-    protected ChamiloRequest $request;
-
     public function __construct(
-        DefaultHeaderRenderer $baseHeaderRenderer, BreadcrumbGenerator $breadcrumbGenerator, ChamiloRequest $request
+        protected DefaultHeaderRenderer $defaultHeaderRenderer, protected BreadcrumbGenerator $breadcrumbGenerator,
+        protected ChamiloRequest $request
     )
     {
-        $this->defaultHeaderRenderer = $baseHeaderRenderer;
-        $this->breadcrumbGenerator = $breadcrumbGenerator;
-        $this->request = $request;
     }
-
 
     public function render(ApplicationInterface $application, ?User $user = null): string
     {
-        $this->getBreadcrumbGenerator()->addDefaultApplicationBreadcrumbs(
+        $this->breadcrumbGenerator->addDefaultApplicationBreadcrumbs(
             $application->getApplicationContext(), $this->getCurrentAction($application),
             $application->getDefaultApplicationAction()
         );
 
-        return $this->getDefaultHeaderRenderer()->render($user);
-    }
-
-    public function getBreadcrumbGenerator(): BreadcrumbGenerator
-    {
-        return $this->breadcrumbGenerator;
+        return $this->defaultHeaderRenderer->render($user);
     }
 
     public function getCurrentAction(ApplicationInterface $application): string
     {
-        return $this->getRequest()->query->get(
+        return $this->request->query->get(
             ApplicationInterface::PARAM_ACTION, $application->getDefaultApplicationAction()
         );
-    }
-
-    public function getDefaultHeaderRenderer(): DefaultHeaderRenderer
-    {
-        return $this->defaultHeaderRenderer;
-    }
-
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
     }
 }

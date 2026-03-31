@@ -10,11 +10,15 @@ use Exception;
  * @package Chamilo\Libraries\Protocol\Error\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserExceptionRendererRegistry extends ArrayCollection
+class UserExceptionRendererRegistry
 {
+    public function __construct(protected ArrayCollection $userExceptionRenderers = new ArrayCollection())
+    {
+    }
+
     public function addUserExceptionRenderer(UserExceptionRendererInterface $userExceptionRenderer): void
     {
-        $this->set(get_class($userExceptionRenderer), $userExceptionRenderer);
+        $this->userExceptionRenderers->set(get_class($userExceptionRenderer), $userExceptionRenderer);
     }
 
     /**
@@ -26,11 +30,11 @@ class UserExceptionRendererRegistry extends ArrayCollection
      */
     public function getUserExceptionRenderer(string $userExceptionRendererClassName): UserExceptionRendererInterface
     {
-        if (!$this->containsKey($userExceptionRendererClassName)) {
+        if (!$this->userExceptionRenderers->containsKey($userExceptionRendererClassName)) {
             throw new Exception($userExceptionRendererClassName . ' is not a valid UserExceptionRendererInterface');
         }
 
-        return $this->get($userExceptionRendererClassName);
+        return $this->userExceptionRenderers->get($userExceptionRendererClassName);
     }
 
     /**

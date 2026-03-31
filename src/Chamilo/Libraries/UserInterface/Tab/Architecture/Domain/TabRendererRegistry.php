@@ -10,11 +10,15 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @package Chamilo\Libraries\UserInterface\Tab\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class TabRendererRegistry extends ArrayCollection
+class TabRendererRegistry
 {
+    public function __construct(protected ArrayCollection $tabRenderers = new ArrayCollection())
+    {
+    }
+
     public function addTabRenderer(TabRendererInterface $tabRenderer): void
     {
-        $this->set(get_class($tabRenderer), $tabRenderer);
+        $this->tabRenderers->set(get_class($tabRenderer), $tabRenderer);
     }
 
     /**
@@ -30,7 +34,7 @@ class TabRendererRegistry extends ArrayCollection
             throw new NoSuchClassException($tabRendererClassName, TabRendererInterface::class);
         }
 
-        return $this->get($tabRendererClassName);
+        return $this->tabRenderers->get($tabRendererClassName);
     }
 
     /**
@@ -43,6 +47,6 @@ class TabRendererRegistry extends ArrayCollection
 
     public function hasTabRenderer(string $tabRendererClass): bool
     {
-        return $this->containsKey($tabRendererClass);
+        return $this->tabRenderers->containsKey($tabRendererClass);
     }
 }

@@ -11,45 +11,29 @@ use Chamilo\Libraries\UserInterface\Alert\Architecture\Interface\AlertStorageInt
  */
 class AlertsManager
 {
-    protected AlertStorageInterface $alertStorage;
-
-    protected AlertsRenderer $alertsRenderer;
-
     public function __construct(
-        AlertStorageInterface $alertStorage, AlertsRenderer $alertsRenderer
+        protected AlertStorageInterface $alertStorage, protected AlertsRenderer $alertsRenderer
     )
     {
-        $this->alertStorage = $alertStorage;
-        $this->alertsRenderer = $alertsRenderer;
     }
 
     public function render(): string
     {
-        $alerts = $this->getAlertStorage()->retrieve();
+        $alerts = $this->alertStorage->retrieve();
 
-        $this->getAlertStorage()->clear();
+        $this->alertStorage->clear();
 
-        return $this->getAlertsRenderer()->render($alerts);
+        return $this->alertsRenderer->render($alerts);
     }
 
     public function addAlert(Alert $alert): static
     {
-        $alerts = $this->getAlertStorage()->retrieve();
+        $alerts = $this->alertStorage->retrieve();
 
         $alerts[] = $alert;
 
-        $this->getAlertStorage()->store($alerts);
+        $this->alertStorage->store($alerts);
 
         return $this;
-    }
-
-    public function getAlertStorage(): AlertStorageInterface
-    {
-        return $this->alertStorage;
-    }
-
-    public function getAlertsRenderer(): AlertsRenderer
-    {
-        return $this->alertsRenderer;
     }
 }

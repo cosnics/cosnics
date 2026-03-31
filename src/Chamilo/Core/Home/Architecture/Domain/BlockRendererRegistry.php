@@ -12,11 +12,15 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @author  Magali Gillard <magali.gillard@ehb.be>
  * @author  Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BlockRendererRegistry extends ArrayCollection
+class BlockRendererRegistry
 {
+    public function __construct(protected ArrayCollection $blockRenderers = new ArrayCollection())
+    {
+    }
+
     public function addBlockRenderer(BlockRenderer $blockRenderer): void
     {
-        $this->set(get_class($blockRenderer), $blockRenderer);
+        $this->blockRenderers->set(get_class($blockRenderer), $blockRenderer);
     }
 
     /**
@@ -24,27 +28,11 @@ class BlockRendererRegistry extends ArrayCollection
      */
     public function getBlockRenderer(string $blockRendererType): BlockRenderer
     {
-        if (!$this->containsKey($blockRendererType)) {
+        if (!$this->blockRenderers->containsKey($blockRendererType)) {
             throw new NoSuchClassException($blockRendererType, BlockRenderer::class);
         }
 
-        return $this->get($blockRendererType);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getBlockRendererTypes(): array
-    {
-        return $this->getKeys();
-    }
-
-    /**
-     * @return \Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer[]
-     */
-    public function getBlockRenderers(): array
-    {
-        return $this->toArray();
+        return $this->blockRenderers->get($blockRendererType);
     }
 
     /**

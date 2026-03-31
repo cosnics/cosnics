@@ -27,7 +27,7 @@ class RegularExpressionConditionTranslator extends ConditionTranslator implement
     {
         $string = [];
 
-        $string[] = $this->getConditionVariableTranslatorCollection()->translate(
+        $string[] = $this->conditionVariableTranslatorRegistry->translate(
             $querybuilder, $regularExpressionCondition->getConditionVariable(), $enableAliasing
         );
         $string[] = 'REGEXP';

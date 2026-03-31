@@ -38,6 +38,9 @@ class ConfigurationFormType extends AbstractType
     {
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $context = $options['context'];
@@ -126,8 +129,8 @@ class ConfigurationFormType extends AbstractType
             $builder->add(
                 $formTypeBuilder->createMessage(
                     $builder, 'no_settings',
-                    $translator->trans('NoConfigurableSettingsLabel', [], StringUtilities::LIBRARIES),
                     $translator->trans('NoConfigurableSettingsMessage', [], StringUtilities::LIBRARIES),
+                    $translator->trans('NoConfigurableSettingsLabel', [], StringUtilities::LIBRARIES),
                     AlertEnum::WARNING
                 )
             );

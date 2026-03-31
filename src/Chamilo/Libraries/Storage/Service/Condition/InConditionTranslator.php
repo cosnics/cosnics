@@ -30,7 +30,7 @@ class InConditionTranslator extends ConditionTranslator implements ConditionTran
         $values = $inCondition->getValues();
 
         if (count($values) > 0) {
-            $string[] = $this->getConditionVariableTranslatorCollection()->translate(
+            $string[] = $this->conditionVariableTranslatorRegistry->translate(
                 $querybuilder, $inCondition->getConditionVariable(), $enableAliasing
             );
             $string[] = 'IN';

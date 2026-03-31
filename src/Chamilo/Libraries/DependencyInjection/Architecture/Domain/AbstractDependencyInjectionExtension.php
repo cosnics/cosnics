@@ -2,8 +2,6 @@
 namespace Chamilo\Libraries\DependencyInjection\Architecture\Domain;
 
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
-use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 
 /**
@@ -15,6 +13,6 @@ abstract class AbstractDependencyInjectionExtension extends Extension
 {
     public function getSystemPathBuilder(): SystemPathBuilder
     {
-        return new SystemPathBuilder(new ClassnameUtilities(new StringUtilities()));
+        return new SystemPathBuilder();
     }
 }

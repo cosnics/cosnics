@@ -29,11 +29,8 @@ use Exception;
  */
 class NestedSetDataClassRepository
 {
-    protected DataClassRepository $dataClassRepository;
-
-    public function __construct(DataClassRepository $dataClassRepository)
+    public function __construct(protected DataClassRepository $dataClassRepository)
     {
-        $this->dataClassRepository = $dataClassRepository;
     }
 
     /**
@@ -41,7 +38,7 @@ class NestedSetDataClassRepository
      */
     public function count(string $dataClassName, StorageParameters $parameters): int
     {
-        return $this->getDataClassRepository()->count($dataClassName, $parameters);
+        return $this->dataClassRepository->count($dataClassName, $parameters);
     }
 
     /**
@@ -50,7 +47,7 @@ class NestedSetDataClassRepository
     public function countAncestors(NestedSet $nestedSet, bool $includeSelf = true, ?ConditionInterface $condition = null
     ): int
     {
-        return $this->getDataClassRepository()->count(
+        return $this->dataClassRepository->count(
             get_class($nestedSet),
             new StorageParameters(condition: $this->getAncestorsCondition($nestedSet, $includeSelf, $condition))
         );
@@ -62,7 +59,7 @@ class NestedSetDataClassRepository
     public function countDescendants(NestedSet $nestedSet, bool $recursive = true, ?ConditionInterface $condition = null
     ): int
     {
-        return $this->getDataClassRepository()->count(
+        return $this->dataClassRepository->count(
             get_class($nestedSet), new StorageParameters(
                 condition: $this->getDescendantsCondition(
                     $nestedSet, $recursive, false, $condition
@@ -77,7 +74,7 @@ class NestedSetDataClassRepository
     public function countSiblings(NestedSet $nestedSet, bool $includeSelf = true, ?ConditionInterface $condition = null
     ): int
     {
-        return $this->getDataClassRepository()->count(
+        return $this->dataClassRepository->count(
             get_class($nestedSet),
             new StorageParameters(condition: $this->getSiblingsCondition($nestedSet, $includeSelf, $condition))
         );
@@ -135,7 +132,7 @@ class NestedSetDataClassRepository
         //
         // Use a transaction to guarantee this.
 
-        return $this->getDataClassRepository()->transactional(
+        return $this->dataClassRepository->transactional(
             function () use ($nestedSet, $insertAfter) { // Correct the left and right values wherever necessary.
                 if (!$this->preInsert($nestedSet, $insertAfter)) {
                     return false;
@@ -147,7 +144,7 @@ class NestedSetDataClassRepository
                 $nestedSet->setLeftValue($insertAfter + 1);
                 $nestedSet->setRightValue($insertAfter + 2);
 
-                return $this->getDataClassRepository()->create($nestedSet);
+                return $this->dataClassRepository->create($nestedSet);
             }
         );
     }
@@ -164,7 +161,7 @@ class NestedSetDataClassRepository
         // Deleting a node from a nested set requires multiple updates which have to be performed atomically and
         // consistently. Use a transaction to guarantee this.
 
-        return $this->getDataClassRepository()->transactional(
+        return $this->dataClassRepository->transactional(
             function () use ($nestedSet, $condition) {
                 // Since we want to hold on to this information until after all nodes have been deleted
                 // We have to copy the content of this result set into a temporary array
@@ -175,7 +172,7 @@ class NestedSetDataClassRepository
                 $deleteCondition = $this->getDescendantsCondition($nestedSet, true, true, $condition);
 
                 // Delete this node as well as its offspring
-                if (!$this->getDataClassRepository()->deletes(get_class($nestedSet), $deleteCondition)) {
+                if (!$this->dataClassRepository->deletes(get_class($nestedSet), $deleteCondition)) {
                     throw new Exception('Nested Set delete failed');
                 }
 
@@ -195,7 +192,7 @@ class NestedSetDataClassRepository
      */
     public function distinct(string $dataClassName, StorageParameters $parameters): array
     {
-        return $this->getDataClassRepository()->distinct($dataClassName, $parameters);
+        return $this->dataClassRepository->distinct($dataClassName, $parameters);
     }
 
     /**
@@ -206,7 +203,7 @@ class NestedSetDataClassRepository
         NestedSet $nestedSet, bool $includeSelf = true, ?ConditionInterface $condition = null
     ): array
     {
-        return $this->getDataClassRepository()->distinct(
+        return $this->dataClassRepository->distinct(
             get_class($nestedSet), new StorageParameters(
                 condition: $this->getAncestorsCondition($nestedSet, $includeSelf, $condition),
                 retrieveProperties: new RetrieveProperties(
@@ -227,7 +224,7 @@ class NestedSetDataClassRepository
     public function findAncestors(NestedSet $nestedSet, bool $includeSelf = true, ?ConditionInterface $condition = null
     ): ArrayCollection
     {
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieves(
             get_class($nestedSet), new StorageParameters(
                 condition: $this->getAncestorsCondition($nestedSet, $includeSelf, $condition),
                 orderBy: $this->getPostOrderBy($nestedSet)
@@ -246,7 +243,7 @@ class NestedSetDataClassRepository
     public function findDescendants(NestedSet $nestedSet, bool $recursive = true, ?ConditionInterface $condition = null
     ): ArrayCollection
     {
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieves(
             get_class($nestedSet), new StorageParameters(
                 condition: $this->getDescendantsCondition($nestedSet, $recursive, false, $condition)
             )
@@ -264,7 +261,7 @@ class NestedSetDataClassRepository
          */
         $nestedSetClass = get_class($nestedSet);
 
-        return $this->getDataClassRepository()->retrieveById($nestedSetClass, $nestedSetIdentifier);
+        return $this->dataClassRepository->retrieveById($nestedSetClass, $nestedSetIdentifier);
     }
 
     /**
@@ -278,7 +275,7 @@ class NestedSetDataClassRepository
     public function findSiblings(NestedSet $nestedSet, bool $includeSelf = true, ?ConditionInterface $condition = null
     ): ArrayCollection
     {
-        return $this->getDataClassRepository()->retrieves(
+        return $this->dataClassRepository->retrieves(
             get_class($nestedSet), new StorageParameters(
                 condition: $this->getSiblingsCondition($nestedSet, $includeSelf, $condition),
                 orderBy: $this->getPreOrderBy($nestedSet)
@@ -327,11 +324,6 @@ class NestedSetDataClassRepository
         }
 
         return new AndCondition($conditions);
-    }
-
-    public function getDataClassRepository(): DataClassRepository
-    {
-        return $this->dataClassRepository;
     }
 
     /**
@@ -401,7 +393,7 @@ class NestedSetDataClassRepository
          */
         $nestedSetClass = get_class($nestedSet);
 
-        return $this->getDataClassRepository()->retrieveById($nestedSetClass, $nestedSet->getParentId());
+        return $this->dataClassRepository->retrieveById($nestedSetClass, $nestedSet->getParentId());
     }
 
     /**
@@ -556,7 +548,7 @@ class NestedSetDataClassRepository
         //
         // Use a transaction to guarantee this.
 
-        return $this->getDataClassRepository()->transactional(
+        return $this->dataClassRepository->transactional(
             function () use ($nestedSet, $insertAfter, $condition
             ) { // Step 0: Compute the auxiliary values used by this
                 // algorithm
@@ -635,7 +627,7 @@ class NestedSetDataClassRepository
                     )
                 );
 
-                if (!$this->getDataClassRepository()->updates(
+                if (!$this->dataClassRepository->updates(
                     get_class($nestedSet), new UpdateProperties($properties), $updateCondition
                 )) {
                     return false;
@@ -661,7 +653,7 @@ class NestedSetDataClassRepository
                 $nestedSet->setLeftValue($finalLeft);
                 $nestedSet->setRightValue($finalRight);
 
-                if (!$this->getDataClassRepository()->update($nestedSet)) {
+                if (!$this->dataClassRepository->update($nestedSet)) {
                     return false;
                 }
 
@@ -723,7 +715,7 @@ class NestedSetDataClassRepository
             )
         );
 
-        if (!$this->getDataClassRepository()->updates(
+        if (!$this->dataClassRepository->updates(
             get_class($nestedSet), new UpdateProperties($properties), $updateCondition
         )) {
             return false;
@@ -760,7 +752,7 @@ class NestedSetDataClassRepository
         $properties = [];
         $properties[] = $rightValueDataClassProperty;
 
-        if (!$this->getDataClassRepository()->updates(
+        if (!$this->dataClassRepository->updates(
             get_class($nestedSet), new UpdateProperties($properties), $updateCondition
         )) {
             return false;
@@ -814,7 +806,7 @@ class NestedSetDataClassRepository
             )
         );
 
-        if (!$this->getDataClassRepository()->updates(
+        if (!$this->dataClassRepository->updates(
             get_class($nestedSet), new UpdateProperties($properties), $updateCondition
         )) {
             return false;
@@ -849,7 +841,7 @@ class NestedSetDataClassRepository
             )
         );
 
-        if (!$this->getDataClassRepository()->updates(
+        if (!$this->dataClassRepository->updates(
             get_class($nestedSet), new UpdateProperties($properties), $updateCondition
         )) {
             return false;
@@ -864,7 +856,7 @@ class NestedSetDataClassRepository
      */
     public function record(string $dataClassName, StorageParameters $parameters): array
     {
-        return $this->getDataClassRepository()->record($dataClassName, $parameters);
+        return $this->dataClassRepository->record($dataClassName, $parameters);
     }
 
     /**
@@ -872,7 +864,7 @@ class NestedSetDataClassRepository
      */
     public function records(string $dataClassName, StorageParameters $parameters): ArrayCollection
     {
-        return $this->getDataClassRepository()->records($dataClassName, $parameters);
+        return $this->dataClassRepository->records($dataClassName, $parameters);
     }
 
     /**
@@ -886,7 +878,7 @@ class NestedSetDataClassRepository
      */
     public function retrieve(string $dataClassName, StorageParameters $parameters)
     {
-        return $this->getDataClassRepository()->retrieve($dataClassName, $parameters);
+        return $this->dataClassRepository->retrieve($dataClassName, $parameters);
     }
 
     /**
@@ -901,7 +893,7 @@ class NestedSetDataClassRepository
      */
     public function retrieveById(string $dataClassName, string $identifier)
     {
-        return $this->getDataClassRepository()->retrieveById($dataClassName, $identifier);
+        return $this->dataClassRepository->retrieveById($dataClassName, $identifier);
     }
 
     /**
@@ -915,7 +907,7 @@ class NestedSetDataClassRepository
      */
     public function retrieves(string $dataClassName, StorageParameters $parameters): ArrayCollection
     {
-        return $this->getDataClassRepository()->retrieves($dataClassName, $parameters);
+        return $this->dataClassRepository->retrieves($dataClassName, $parameters);
     }
 
     /**
@@ -923,7 +915,7 @@ class NestedSetDataClassRepository
      */
     public function update(NestedSet $nestedSet): bool
     {
-        return $this->getDataClassRepository()->update($nestedSet);
+        return $this->dataClassRepository->update($nestedSet);
     }
 
     /**

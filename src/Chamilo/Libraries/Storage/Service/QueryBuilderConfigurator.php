@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\Service;
 
-use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorCollection;
-use Chamilo\Libraries\Storage\Architecture\Domain\ConditionVariableTranslatorCollection;
+use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorRegistry;
+use Chamilo\Libraries\Storage\Architecture\Domain\ConditionVariableTranslatorRegistry;
 use Chamilo\Libraries\Storage\Architecture\Domain\Enum\JoinTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\GroupBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Joins;
@@ -20,21 +20,12 @@ use Doctrine\DBAL\Query\QueryBuilder;
  */
 class QueryBuilderConfigurator
 {
-    protected ConditionTranslatorCollection $conditionTranslatorCollection;
-
-    protected ConditionVariableTranslatorCollection $conditionVariableTranslatorCollection;
-
-    protected StorageAliasGenerator $storageAliasGenerator;
-
     public function __construct(
-        ConditionTranslatorCollection $conditionTranslatorCollection,
-        ConditionVariableTranslatorCollection $conditionVariableTranslatorCollection,
-        StorageAliasGenerator $storageAliasGenerator
+        protected ConditionTranslatorRegistry $conditionTranslatorRegistry,
+        protected ConditionVariableTranslatorRegistry $conditionVariableTranslatorRegistry,
+        protected StorageAliasGenerator $storageAliasGenerator
     )
     {
-        $this->conditionTranslatorCollection = $conditionTranslatorCollection;
-        $this->conditionVariableTranslatorCollection = $conditionVariableTranslatorCollection;
-        $this->storageAliasGenerator = $storageAliasGenerator;
     }
 
     /**
@@ -73,21 +64,6 @@ class QueryBuilderConfigurator
         }
 
         $this->processCondition($queryBuilder, $condition, false);
-    }
-
-    public function getConditionTranslatorCollection(): ConditionTranslatorCollection
-    {
-        return $this->conditionTranslatorCollection;
-    }
-
-    public function getConditionVariableTranslatorCollection(): ConditionVariableTranslatorCollection
-    {
-        return $this->conditionVariableTranslatorCollection;
-    }
-
-    public function getStorageAliasGenerator(): StorageAliasGenerator
-    {
-        return $this->storageAliasGenerator;
     }
 
     /**
@@ -133,8 +109,6 @@ class QueryBuilderConfigurator
         QueryBuilder $queryBuilder, string $dataClassStorageUnitName, Joins $joins = new Joins()
     ): void
     {
-        $storageAliasGenerator = $this->getStorageAliasGenerator();
-
         foreach ($joins as $join) {
             $joinCondition = $this->translateCondition($queryBuilder, $join->getCondition());
 
@@ -144,8 +118,8 @@ class QueryBuilderConfigurator
             $joinDataClassName = $join->getDataClassName();
             $joinDataClassStorageUnitName = $joinDataClassName::getStorageUnitName();
 
-            $fromAlias = $storageAliasGenerator->getTableAlias($dataClassStorageUnitName);
-            $joinAlias = $storageAliasGenerator->getTableAlias($joinDataClassStorageUnitName);
+            $fromAlias = $this->storageAliasGenerator->getTableAlias($dataClassStorageUnitName);
+            $joinAlias = $this->storageAliasGenerator->getTableAlias($joinDataClassStorageUnitName);
 
             switch ($join->getType()) {
                 case JoinTypeEnum::NORMAL :
@@ -206,7 +180,7 @@ class QueryBuilderConfigurator
         QueryBuilder $queryBuilder, ConditionInterface $condition, ?bool $enableAliasing = true
     ): string
     {
-        return $this->getConditionTranslatorCollection()->translate(
+        return $this->conditionTranslatorRegistry->translate(
             $queryBuilder, $condition, $enableAliasing
         );
     }
@@ -218,7 +192,7 @@ class QueryBuilderConfigurator
         QueryBuilder $queryBuilder, ConditionVariableInterface $conditionVariable, ?bool $enableAliasing = true
     ): string
     {
-        return $this->getConditionVariableTranslatorCollection()->translate(
+        return $this->conditionVariableTranslatorRegistry->translate(
             $queryBuilder, $conditionVariable, $enableAliasing
         );
     }

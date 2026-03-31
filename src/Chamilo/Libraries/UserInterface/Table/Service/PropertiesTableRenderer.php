@@ -11,11 +11,8 @@ use Symfony\Component\Translation\Translator;
  */
 class PropertiesTableRenderer
 {
-    protected Translator $translator;
-
-    public function __construct(Translator $translator)
+    public function __construct(protected Translator $translator)
     {
-        $this->translator = $translator;
     }
 
     /**
@@ -47,17 +44,11 @@ class PropertiesTableRenderer
             $htmlTable->setColAttributes(0, ['class' => 'header', 'style' => 'vertical-align: middle;']);
         }
         else {
-            $rowNumber =
-                $htmlTable->addRow([$this->getTranslator()->trans('NoResults', [], StringUtilities::LIBRARIES)]);
+            $rowNumber = $htmlTable->addRow([$this->translator->trans('NoResults', [], StringUtilities::LIBRARIES)]);
             $htmlTable->setCellAttributes($rowNumber, 0, 'style="font-style: italic;text-align:center;" colspan=2');
         }
 
         return $htmlTable->toHtml();
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }
 

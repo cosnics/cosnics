@@ -24,7 +24,7 @@ abstract class MultipleAggregateConditionTranslator extends ConditionTranslator
 
             foreach ($multipleAggregateCondition->getConditions() as $condition) {
                 $translation =
-                    $this->getConditionTranslatorCollection()->translate($querybuilder, $condition, $enableAliasing);
+                    $this->conditionTranslatorRegistry->translate($querybuilder, $condition, $enableAliasing);
 
                 if (!empty($translation)) {
                     $string[] = $translation;

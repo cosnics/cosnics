@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\Service;
 
-use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
-
 /**
  *
  * @package Chamilo\Libraries\Storage\Service
@@ -21,14 +19,9 @@ class StorageAliasGenerator
      */
     private array $aliases = [];
 
-    private ClassnameUtilities $classnameUtilities;
-
-    public function __construct(ClassnameUtilities $classnameUtilities)
+    public function __construct()
     {
-        $this->classnameUtilities = $classnameUtilities;
-
-        foreach ($this->getTypes() as $type)
-        {
+        foreach ($this->getTypes() as $type) {
             $this->aliases[$type] = [];
         }
     }
@@ -41,18 +34,6 @@ class StorageAliasGenerator
         return $this->aliases;
     }
 
-    public function getClassnameUtilities(): ClassnameUtilities
-    {
-        return $this->classnameUtilities;
-    }
-
-    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities): StorageAliasGenerator
-    {
-        $this->classnameUtilities = $classnameUtilities;
-
-        return $this;
-    }
-
     /**
      * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $class
      */
@@ -63,27 +44,22 @@ class StorageAliasGenerator
 
     public function getTableAlias(string $tableName): string
     {
-        if (array_key_exists($tableName, $this->aliases[self::TYPE_TABLE]))
-        {
+        if (array_key_exists($tableName, $this->aliases[self::TYPE_TABLE])) {
             return $this->aliases[self::TYPE_TABLE][$tableName];
         }
-        else
-        {
+        else {
             $possibleName = 'alias_';
             $parts = explode('_', $tableName);
 
-            foreach ($parts as $part)
-            {
+            foreach ($parts as $part) {
                 $possibleName .= $part[0];
             }
 
-            if (in_array($possibleName, $this->aliases[self::TYPE_TABLE]))
-            {
+            if (in_array($possibleName, $this->aliases[self::TYPE_TABLE])) {
                 $originalName = $possibleName;
                 $index = 'a';
 
-                while (in_array($possibleName, $this->aliases[self::TYPE_TABLE]))
-                {
+                while (in_array($possibleName, $this->aliases[self::TYPE_TABLE])) {
                     $possibleName = $originalName . '_' . $index;
                     $index ++;
                 }

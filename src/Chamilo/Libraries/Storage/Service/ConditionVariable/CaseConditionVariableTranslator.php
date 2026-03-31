@@ -33,7 +33,7 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
         $strings[] = 'CASE ';
 
         foreach ($caseConditionVariable->get() as $caseElement) {
-            $strings[] = $this->getConditionVariableTranslatorCollection()->translate(
+            $strings[] = $this->conditionVariableTranslatorRegistry->translate(
                 $querybuilder, $caseElement, $enableAliasing
             );
         }

@@ -16,16 +16,10 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 abstract class FileBasedCacheService implements CacheDataPreLoaderInterface
 {
-    protected ConfigurablePathBuilder $configurablePathBuilder;
-
-    protected Filesystem $filesystem;
-
     public function __construct(
-        ConfigurablePathBuilder $configurablePathBuilder, Filesystem $filesystem
+        protected ConfigurablePathBuilder $configurablePathBuilder, protected Filesystem $filesystem
     )
     {
-        $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->filesystem = $filesystem;
     }
 
     public function clearCacheData(): bool
@@ -34,16 +28,6 @@ abstract class FileBasedCacheService implements CacheDataPreLoaderInterface
     }
 
     abstract public function getCachePath(): string;
-
-    public function getConfigurablePathBuilder(): ConfigurablePathBuilder
-    {
-        return $this->configurablePathBuilder;
-    }
-
-    public function getFilesystem(): Filesystem
-    {
-        return $this->filesystem;
-    }
 
     abstract public function initializeCache();
 
@@ -58,7 +42,7 @@ abstract class FileBasedCacheService implements CacheDataPreLoaderInterface
     {
         if (file_exists($cachePath)) {
             try {
-                $this->getFilesystem()->remove($cachePath);
+                $this->filesystem->remove($cachePath);
             }
             catch (Exception) {
                 throw new RuntimeException(sprintf('Unable to remove the cache path "%s".', $cachePath));

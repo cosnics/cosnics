@@ -221,9 +221,7 @@ class DependencyInjectionContainerBuilder
     protected function getSystemPathBuilder(): SystemPathBuilder
     {
         if (!isset($this->systemPathBuilder)) {
-            $this->systemPathBuilder = new SystemPathBuilder(
-                new ClassnameUtilities($this->getStringUtilities())
-            );
+            $this->systemPathBuilder = new SystemPathBuilder();
         }
 
         return $this->systemPathBuilder;
@@ -232,9 +230,7 @@ class DependencyInjectionContainerBuilder
     protected function getWebPathBuilder(): WebPathBuilder
     {
         if (!isset($this->webPathBuilder)) {
-            $this->webPathBuilder = new WebPathBuilder(
-                new ClassnameUtilities($this->getStringUtilities()), $this->getRequest()
-            );
+            $this->webPathBuilder = new WebPathBuilder($this->getRequest());
         }
 
         return $this->webPathBuilder;

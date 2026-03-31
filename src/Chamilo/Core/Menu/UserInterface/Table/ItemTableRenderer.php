@@ -74,12 +74,12 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         $parameters[ApplicationInterface::PARAM_CONTEXT] = Manager::CONTEXT;
         $parameters[Manager::PARAM_ITEM] = $item->getId();
 
-        return $this->getUrlGenerator()->fromParameters($parameters);
+        return $this->urlGenerator->fromParameters($parameters);
     }
 
     public function getTableActions(): TableActions
     {
-        $deleteUrl = $this->getUrlGenerator()->fromParameters(
+        $deleteUrl = $this->urlGenerator->fromParameters(
             [
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::DELETE->value
@@ -89,7 +89,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         $actions->addAction(
             new TableAction(
-                $deleteUrl, $this->getTranslator()->trans('RemoveSelected', [], StringUtilities::LIBRARIES)
+                $deleteUrl, $this->translator->trans('RemoveSelected', [], StringUtilities::LIBRARIES)
             )
         );
 
@@ -98,16 +98,16 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     protected function initializeColumns(): void
     {
-        $translator = $this->getTranslator();
-
-        $this->addColumn(new StaticTableColumn(self::PROPERTY_TYPE, $translator->trans('Type', [], Manager::CONTEXT)));
-
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(Item::class, Item::PROPERTY_SORT, null, false)
+            new StaticTableColumn(self::PROPERTY_TYPE, $this->translator->trans('Type', [], Manager::CONTEXT))
         );
 
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+            $this->dataClassPropertyTableColumnFactory->getColumn(Item::class, Item::PROPERTY_SORT, null, false)
+        );
+
+        $this->addColumn(
+            $this->dataClassPropertyTableColumnFactory->getColumn(
                 Item::class, Item::PROPERTY_TITLES, null, false
             )
         );
@@ -144,13 +144,12 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         $isOnlyItem = $numberOfSiblings == 1;
         $isLastItem = $result->getSort() == $numberOfSiblings;
 
-        $translator = $this->getTranslator();
-
         $buttonToolBar = new MiniButtonToolBar();
 
         $buttonToolBar->addButton(
             new Button(
-                label: $translator->trans('Edit', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
+                label: $this->translator->trans('Edit', [], StringUtilities::LIBRARIES),
+                inlineGlyph: new FontAwesomeGlyph(
                 'pencil-alt'
             ), action: $this->getItemEditingUrl($result), display: DisplayTypeEnum::ICON, classes: ['btn-link']
             )
@@ -159,7 +158,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         if ($isFirstItem || $isOnlyItem) {
             $buttonToolBar->addButton(
                 new Button(
-                    label: $translator->trans('MoveUpNA', [], StringUtilities::LIBRARIES),
+                    label: $this->translator->trans('MoveUpNA', [], StringUtilities::LIBRARIES),
                     inlineGlyph: new FontAwesomeGlyph('up-long', ['text-muted']), display: DisplayTypeEnum::ICON,
                     classes: ['btn-link']
                 )
@@ -168,7 +167,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         else {
             $buttonToolBar->addButton(
                 new Button(
-                    label: $translator->trans('MoveUp', [], StringUtilities::LIBRARIES),
+                    label: $this->translator->trans('MoveUp', [], StringUtilities::LIBRARIES),
                     inlineGlyph: new FontAwesomeGlyph('up-long'), action: $this->getItemMovingUrl(
                     $result, ItemService::PARAM_DIRECTION_UP
                 ), display: DisplayTypeEnum::ICON, classes: ['btn-link']
@@ -179,7 +178,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         if ($isLastItem || $isOnlyItem) {
             $buttonToolBar->addButton(
                 new Button(
-                    label: $translator->trans('MoveDownNA', [], StringUtilities::LIBRARIES),
+                    label: $this->translator->trans('MoveDownNA', [], StringUtilities::LIBRARIES),
                     inlineGlyph: new FontAwesomeGlyph('down-long', ['text-muted']), display: DisplayTypeEnum::ICON,
                     classes: ['btn-link']
                 )
@@ -188,7 +187,7 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
         else {
             $buttonToolBar->addButton(
                 new Button(
-                    label: $translator->trans('MoveDown', [], StringUtilities::LIBRARIES),
+                    label: $this->translator->trans('MoveDown', [], StringUtilities::LIBRARIES),
                     inlineGlyph: new FontAwesomeGlyph('down-long'), action: $this->getItemMovingUrl(
                     $result, ItemService::PARAM_DIRECTION_DOWN
                 ), display: DisplayTypeEnum::ICON, classes: ['btn-link']
@@ -198,10 +197,11 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         $buttonToolBar->addButton(
             new Button(
-                label: $translator->trans('Delete', [], StringUtilities::LIBRARIES), inlineGlyph: new FontAwesomeGlyph(
+                label: $this->translator->trans('Delete', [], StringUtilities::LIBRARIES),
+                inlineGlyph: new FontAwesomeGlyph(
                 'times'
             ), action: $this->getItemDeletingUrl($result), display: DisplayTypeEnum::ICON,
-                confirmationMessage: $this->getTranslator()->trans(
+                confirmationMessage: $this->translator->trans(
                     'ConfirmChosenAction', [], StringUtilities::LIBRARIES
                 ), classes: ['btn-link']
             )

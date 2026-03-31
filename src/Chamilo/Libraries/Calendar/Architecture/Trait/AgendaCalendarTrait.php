@@ -14,6 +14,12 @@ use Symfony\Component\Translation\Translator;
  */
 trait AgendaCalendarTrait
 {
+    protected AlertRenderer $alertRenderer;
+
+    protected EventListRenderer $eventListRenderer;
+
+    protected Translator $translator;
+
     /**
      * @param \Chamilo\Libraries\Calendar\Architecture\Domain\Event[] $events
      *
@@ -46,11 +52,7 @@ trait AgendaCalendarTrait
         return $structuredEvents;
     }
 
-    protected AlertRenderer $alertRenderer;
-
     abstract protected function getEndTime(int $displayTime): int;
-
-    protected EventListRenderer $eventListRenderer;
 
     public function getEventsEndTime(CalendarTableConfiguration $calendarTableConfiguration, int $displayTime): int
     {
@@ -61,8 +63,6 @@ trait AgendaCalendarTrait
     {
         return $displayTime;
     }
-
-    protected Translator $translator;
 
     abstract public function isEventSourceVisible(Event $event, array $invisibleSources = []): bool;
 
@@ -112,7 +112,7 @@ trait AgendaCalendarTrait
 
                 foreach ($dateEvents as $dateEvent) {
                     $html[] = '<li class="list-group-item ">';
-                    $html[] = $this->getEventListRenderer()->render(
+                    $html[] = $this->eventListRenderer->render(
                         $dateEvent, $this->isEventSourceVisible($dateEvent, $invisibleSources), $dateEvent->getActions()
                     );
                     $html[] = '</li>';
@@ -127,9 +127,9 @@ trait AgendaCalendarTrait
             $html[] = '</div>';
         }
         else {
-            $html[] = $this->getAlertRenderer()->render(
+            $html[] = $this->alertRenderer->render(
                 new Alert(
-                    $this->getTranslator()->trans('NoUpcomingEvents', [], 'Chamilo\Libraries')
+                    $this->translator->trans('NoUpcomingEvents', [], 'Chamilo\Libraries')
                 )
             );
         }

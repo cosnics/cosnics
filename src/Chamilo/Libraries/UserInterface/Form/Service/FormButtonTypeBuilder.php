@@ -18,21 +18,16 @@ use Symfony\Component\Translation\Translator;
  */
 class FormButtonTypeBuilder
 {
-    protected Translator $translator;
-
-    public function __construct(Translator $translator)
+    public function __construct(protected Translator $translator)
     {
-        $this->translator = $translator;
     }
 
     public function addSaveAndResetButton(FormBuilderInterface $builder): void
     {
-        $translator = $this->getTranslator();
-
-        $saveText = $translator->trans('Save', [], StringUtilities::LIBRARIES);
+        $saveText = $this->translator->trans('Save', [], StringUtilities::LIBRARIES);
         $saveGlyph = new FontAwesomeGlyph('check', ['me-1'], $saveText, 'fas');
 
-        $resetText = $translator->trans('Reset', [], StringUtilities::LIBRARIES);
+        $resetText = $this->translator->trans('Reset', [], StringUtilities::LIBRARIES);
         $resetGlyph = new FontAwesomeGlyph('trash-alt', ['me-1'], $resetText, 'fas');
 
         $buttons = [];
@@ -80,10 +75,8 @@ class FormButtonTypeBuilder
         string $name = 'reset'
     ): FormBuilderInterface
     {
-        $translator = $this->getTranslator();
-
         if (!$labelText) {
-            $labelText = $translator->trans('Reset', [], StringUtilities::LIBRARIES);
+            $labelText = $this->translator->trans('Reset', [], StringUtilities::LIBRARIES);
         }
 
         if (!$labelGlyph) {
@@ -99,10 +92,8 @@ class FormButtonTypeBuilder
         string $name = 'submit'
     ): FormBuilderInterface
     {
-        $translator = $this->getTranslator();
-
         if (!$labelText) {
-            $labelText = $translator->trans('Submit', [], StringUtilities::LIBRARIES);
+            $labelText = $this->translator->trans('Submit', [], StringUtilities::LIBRARIES);
         }
 
         if (!$labelGlyph) {
@@ -110,10 +101,5 @@ class FormButtonTypeBuilder
         }
 
         return $this->createButton($builder, $name, $labelText, $labelGlyph, ['btn', 'btn-success'], SubmitType::class);
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }

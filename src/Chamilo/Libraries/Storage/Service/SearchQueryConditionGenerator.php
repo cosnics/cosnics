@@ -11,8 +11,12 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
  */
 class SearchQueryConditionGenerator
 {
-    public function getSearchConditions(string $searchQuery, array $properties): ?AndCondition
+    public function getSearchConditions(?string $searchQuery = null, array $properties = []): ?AndCondition
     {
+        if (is_null($searchQuery) || count($properties) === 0) {
+            return null;
+        }
+
         $searchQueryParts = $this->splitSearchQuery($searchQuery);
 
         if (is_null($searchQueryParts)) {

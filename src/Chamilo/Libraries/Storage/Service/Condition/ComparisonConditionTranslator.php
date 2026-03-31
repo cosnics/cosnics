@@ -30,7 +30,7 @@ class ComparisonConditionTranslator extends ConditionTranslator implements Condi
 
         $rightConditionVariable = $comparisonCondition->getRightConditionVariable();
 
-        $string[] = $this->getConditionVariableTranslatorCollection()->translate(
+        $string[] = $this->conditionVariableTranslatorRegistry->translate(
             $querybuilder, $comparisonCondition->getLeftConditionVariable(), $enableAliasing
         );
 
@@ -42,7 +42,7 @@ class ComparisonConditionTranslator extends ConditionTranslator implements Condi
 
         $string[] = $comparisonCondition->getOperator()->toString();
 
-        $string[] = $this->getConditionVariableTranslatorCollection()->translate(
+        $string[] = $this->conditionVariableTranslatorRegistry->translate(
             $querybuilder, $rightConditionVariable, $enableAliasing
         );
 

@@ -30,7 +30,6 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageHeaders;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
-use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use DateTime;
 use Detection\MobileDetect;
 use Exception;
@@ -54,9 +53,8 @@ class BrowseComponent extends Manager
         protected CalendarDataProvider $calendarRendererProvider,
         protected CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder, protected string $defaultView,
         protected HtmlCalendarRendererFactory $htmlCalendarRendererFactory, protected PageHeaders $pageHeaders,
-        protected ThemePathBuilder $themeWebPathBuilder, protected UserService $userService,
-        protected UserSettingsService $userSettingsService, protected WebPathBuilder $webPathBuilder,
-        protected ?int $currentTime = null
+        protected UserService $userService, protected UserSettingsService $userSettingsService,
+        protected WebPathBuilder $webPathBuilder, protected string $theme, protected ?int $currentTime = null
     )
     {
         parent::__construct(
@@ -76,8 +74,7 @@ class BrowseComponent extends Manager
         $this->checkLoggedInAs();
 
         $this->pageHeaders->addCss(
-            $this->getWebPathBuilder()->getCssPath(Manager::CONTEXT) . 'print.' .
-            $this->themeWebPathBuilder->getTheme() . '.min.css', 'print'
+            $this->getWebPathBuilder()->getCssPath(Manager::CONTEXT) . 'print.' . $this->theme . '.min.css', 'print'
         );
 
         $html = [];

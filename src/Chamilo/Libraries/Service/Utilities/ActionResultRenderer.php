@@ -12,52 +12,42 @@ use Symfony\Component\Translation\Translator;
  */
 class ActionResultRenderer
 {
-    protected Translator $translator;
-
-    public function __construct(Translator $translator)
+    public function __construct(protected Translator $translator)
     {
-        $this->translator = $translator;
     }
 
     public function getMessage(ActionResult $actionResult): string
     {
-        $translator = $this->getTranslator();
-
         $parameters = [];
-        $parameters['ACTION'] =
-            $translator->trans('ActionResultAction' . $actionResult->getActionType(), [], $actionResult->getContext());
+        $parameters['ACTION'] = $this->translator->trans('ActionResultAction' . $actionResult->getActionType(), [],
+            $actionResult->getContext());
 
         if ($actionResult->isSingleAction()) {
-            $parameters['%Object%'] = $translator->trans(
+            $parameters['%Object%'] = $this->translator->trans(
                 'ActionResultSingleEntity' . $actionResult->getEntityType(), [], $actionResult->getContext()
             );
 
             if ($actionResult->hasFailed()) {
-                return $translator->trans('ActionResultSingleFailureMessage', $parameters);
+                return $this->translator->trans('ActionResultSingleFailureMessage', $parameters);
             }
             else {
-                return $translator->trans('ActionResultSingleSuccessMessage', $parameters);
+                return $this->translator->trans('ActionResultSingleSuccessMessage', $parameters);
             }
         }
         else {
-            $parameters['%Object%'] = $translator->trans(
+            $parameters['%Object%'] = $this->translator->trans(
                 'ActionResultMultipleEntity' . $actionResult->getEntityType(), [], $actionResult->getContext()
             );
 
             if ($actionResult->hasSucceeded()) {
-                return $translator->trans('ActionResultMultipleSuccessMessage', $parameters);
+                return $this->translator->trans('ActionResultMultipleSuccessMessage', $parameters);
             }
             elseif ($actionResult->hasFailedCompletely()) {
-                return $translator->trans('ActionResultMultipleFailureMessage', $parameters);
+                return $this->translator->trans('ActionResultMultipleFailureMessage', $parameters);
             }
             else {
-                return $translator->trans('ActionResultSomeFailureMessage', $parameters);
+                return $this->translator->trans('ActionResultSomeFailureMessage', $parameters);
             }
         }
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }

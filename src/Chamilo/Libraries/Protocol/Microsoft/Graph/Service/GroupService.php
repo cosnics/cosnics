@@ -16,19 +16,10 @@ use RuntimeException;
  */
 class GroupService
 {
-    protected string $groupBaseUri;
-
-    protected GroupRepository $groupRepository;
-
-    protected UserService $userService;
-
     public function __construct(
-        UserService $userService, GroupRepository $groupRepository, string $groupBaseUri
+        protected UserService $userService, protected GroupRepository $groupRepository, protected string $groupBaseUri
     )
     {
-        $this->userService = $userService;
-        $this->groupRepository = $groupRepository;
-        $this->groupBaseUri = $groupBaseUri;
     }
 
     /**
@@ -44,7 +35,7 @@ class GroupService
                 throw new NoSuchUserException($user);
             }
 
-            return $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
+            return $this->groupRepository->subscribeMemberInGroup($groupId, $azureUserIdentifier);
         }
 
         return true;
@@ -63,7 +54,7 @@ class GroupService
                 throw new NoSuchUserException($user);
             }
 
-            return $this->getGroupRepository()->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
+            return $this->groupRepository->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
         }
 
         return true;
@@ -81,8 +72,8 @@ class GroupService
             throw new NoSuchUserException($owner);
         }
 
-        $group = $this->getGroupRepository()->createGroup($groupName);
-        $this->getGroupRepository()->subscribeOwnerInGroup($group->getId(), $azureUserIdentifier);
+        $group = $this->groupRepository->createGroup($groupName);
+        $this->groupRepository->subscribeOwnerInGroup($group->getId(), $azureUserIdentifier);
 
         return $group->getId();
     }
@@ -107,7 +98,7 @@ class GroupService
      */
     public function getDefaultGroupPlanId(string $groupId): ?string
     {
-        $groupPlans = $this->getGroupRepository()->listGroupPlans($groupId);
+        $groupPlans = $this->groupRepository->listGroupPlans($groupId);
 
         if (empty($groupPlans)) {
             return null;
@@ -122,7 +113,7 @@ class GroupService
      */
     protected function getEntraUserIdentifier(User $user): ?string
     {
-        return $this->getUserService()->getAndSaveUserIdentifier($user);
+        return $this->userService->getAndSaveUserIdentifier($user);
     }
 
     /**
@@ -134,11 +125,6 @@ class GroupService
         return $this->groupRepository->getGroup($groupId);
     }
 
-    public function getGroupBaseUri(): string
-    {
-        return $this->groupBaseUri;
-    }
-
     /**
      * @return string[]
      * @throws \Exception
@@ -147,7 +133,7 @@ class GroupService
     {
         $userIdentifiers = [];
 
-        $groupMembers = $this->getGroupRepository()->listGroupMembers($groupId);
+        $groupMembers = $this->groupRepository->listGroupMembers($groupId);
         foreach ($groupMembers as $groupMember) {
             $userIdentifiers[] = $groupMember->getId();
         }
@@ -163,7 +149,7 @@ class GroupService
     {
         $userIdentifiers = [];
 
-        $groupOwners = $this->getGroupRepository()->listGroupOwners($groupId);
+        $groupOwners = $this->groupRepository->listGroupOwners($groupId);
         foreach ($groupOwners as $groupOwner) {
             $userIdentifiers[] = $groupOwner->getId();
         }
@@ -179,16 +165,11 @@ class GroupService
     {
         $groupPlanIds = [];
 
-        foreach ($this->getGroupRepository()->listGroupPlans($groupId) as $groupPlan) {
+        foreach ($this->groupRepository->listGroupPlans($groupId) as $groupPlan) {
             $groupPlanIds[] = $groupPlan->getId();
         }
 
         return $groupPlanIds;
-    }
-
-    protected function getGroupRepository(): GroupRepository
-    {
-        return $this->groupRepository;
     }
 
     /**
@@ -198,7 +179,7 @@ class GroupService
     {
         $group = $this->groupRepository->getGroup($groupId);
 
-        return str_replace('%GroupId', $group->getMailNickname(), $this->getGroupBaseUri());
+        return str_replace('%GroupId', $group->getMailNickname(), $this->groupBaseUri);
     }
 
     /**
@@ -215,11 +196,6 @@ class GroupService
         return $planId;
     }
 
-    protected function getUserService(): UserService
-    {
-        return $this->userService;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -232,7 +208,7 @@ class GroupService
         }
 
         try {
-            $this->getGroupRepository()->getGroupMember($groupId, $azureUserIdentifier);
+            $this->groupRepository->getGroupMember($groupId, $azureUserIdentifier);
 
             return true;
         }
@@ -250,7 +226,7 @@ class GroupService
                 return false;
             }
 
-            $this->getGroupRepository()->getGroupOwner($groupId, $azureUserIdentifier);
+            $this->groupRepository->getGroupOwner($groupId, $azureUserIdentifier);
 
             return true;
         }
@@ -266,7 +242,7 @@ class GroupService
     {
         $groupMembers = $this->getGroupMembers($groupId);
         foreach ($groupMembers as $groupMember) {
-            if (!$this->getGroupRepository()->removeMemberFromGroup($groupId, $groupMember)) {
+            if (!$this->groupRepository->removeMemberFromGroup($groupId, $groupMember)) {
                 return false;
             }
         }
@@ -282,7 +258,7 @@ class GroupService
         $groupOwners = $this->getGroupOwners($groupId);
 
         foreach ($groupOwners as $groupOwner) {
-            if (!$this->getGroupRepository()->removeOwnerFromGroup($groupId, $groupOwner)) {
+            if (!$this->groupRepository->removeOwnerFromGroup($groupId, $groupOwner)) {
                 return false;
             }
         }
@@ -299,7 +275,7 @@ class GroupService
         if ($this->isMemberOfGroup($groupId, $user)) {
             $azureUserIdentifier = $this->getEntraUserIdentifier($user);
 
-            return $this->getGroupRepository()->removeMemberFromGroup($groupId, $azureUserIdentifier);
+            return $this->groupRepository->removeMemberFromGroup($groupId, $azureUserIdentifier);
         }
 
         return false;
@@ -314,7 +290,7 @@ class GroupService
         if ($this->isOwnerOfGroup($groupId, $user)) {
             $azureUserIdentifier = $this->getEntraUserIdentifier($user);
 
-            return $this->getGroupRepository()->removeOwnerFromGroup($groupId, $azureUserIdentifier);
+            return $this->groupRepository->removeOwnerFromGroup($groupId, $azureUserIdentifier);
         }
 
         return false;
@@ -331,12 +307,12 @@ class GroupService
     public function syncUsersToGroup(string $groupId, array $users = [], ?array $excludedUsersForRemoval = []): void
     {
         try {
-            $this->getGroupRepository()->getGroup($groupId);
+            $this->groupRepository->getGroup($groupId);
 
             $currentAzureUserIdentifiers = [];
 
             foreach ($users as $user) {
-                $azureUserIdentifier = $this->getUserService()->getUserIdentifier($user);
+                $azureUserIdentifier = $this->userService->getUserIdentifier($user);
                 if (!empty($azureUserIdentifier)) {
                     $currentAzureUserIdentifiers[] = $azureUserIdentifier;
                 }
@@ -344,7 +320,7 @@ class GroupService
 
             $excludedUsersForRemovalIdentifiers = [];
             foreach ($excludedUsersForRemoval as $user) {
-                $azureUserIdentifier = $this->getUserService()->getUserIdentifier($user);
+                $azureUserIdentifier = $this->userService->getUserIdentifier($user);
                 if (!empty($azureUserIdentifier)) {
                     $excludedUsersForRemovalIdentifiers[] = $azureUserIdentifier;
                 }
@@ -375,6 +351,6 @@ class GroupService
 
     public function updateGroupName(string $groupId, string $groupName): bool
     {
-        return $this->getGroupRepository()->updateGroup($groupId, $groupName);
+        return $this->groupRepository->updateGroup($groupId, $groupName);
     }
 }

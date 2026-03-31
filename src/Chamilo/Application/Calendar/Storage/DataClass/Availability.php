@@ -14,7 +14,6 @@ use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
 class Availability extends DataClass implements UuidDataClassInterface
 {
     public const string CONTEXT = Manager::CONTEXT;
-
     public const string PROPERTY_AVAILABILITY = 'availability';
     public const string PROPERTY_CALENDAR_ID = 'calendar_id';
     public const string PROPERTY_CALENDAR_TYPE = 'calendar_type';
@@ -36,7 +35,7 @@ class Availability extends DataClass implements UuidDataClassInterface
         return $this->getDefaultProperty(self::PROPERTY_CALENDAR_TYPE);
     }
 
-    public function getColour(): string
+    public function getColour(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_COLOUR);
     }
@@ -60,6 +59,11 @@ class Availability extends DataClass implements UuidDataClassInterface
     public static function getStorageUnitName(): string
     {
         return 'calendar_availability';
+    }
+
+    public function getUniqueIdentifier(): string
+    {
+        return md5(serialize([$this->getCalendarType(), $this->getCalendarId()]));
     }
 
     public function getUserId(): string
@@ -98,7 +102,7 @@ class Availability extends DataClass implements UuidDataClassInterface
         return $this;
     }
 
-    public function setColour(string $colour): static
+    public function setColour(?string $colour): static
     {
         $this->setDefaultProperty(self::PROPERTY_COLOUR, $colour);
 

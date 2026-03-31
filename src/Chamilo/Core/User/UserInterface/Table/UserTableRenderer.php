@@ -49,12 +49,9 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
     public function getTableActions(): TableActions
     {
-        $urlGenerator = $this->getUrlGenerator();
-        $translator = $this->getTranslator();
-
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
-        $deleteUrl = $urlGenerator->fromParameters(
+        $deleteUrl = $this->urlGenerator->fromParameters(
             [
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::DELETE->value
@@ -63,11 +60,11 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         $actions->addAction(
             new TableAction(
-                $deleteUrl, $translator->trans('RemoveSelected', [], StringUtilities::LIBRARIES)
+                $deleteUrl, $this->translator->trans('RemoveSelected', [], StringUtilities::LIBRARIES)
             )
         );
 
-        $activateUrl = $urlGenerator->fromParameters(
+        $activateUrl = $this->urlGenerator->fromParameters(
             [
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::ACTIVE->value,
@@ -77,11 +74,11 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         $actions->addAction(
             new TableAction(
-                $activateUrl, $translator->trans('ActivateSelected', [], StringUtilities::LIBRARIES), false
+                $activateUrl, $this->translator->trans('ActivateSelected', [], StringUtilities::LIBRARIES), false
             )
         );
 
-        $deactivateUrl = $urlGenerator->fromParameters(
+        $deactivateUrl = $this->urlGenerator->fromParameters(
             [
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::ACTIVE->value,
@@ -91,11 +88,11 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         $actions->addAction(
             new TableAction(
-                $deactivateUrl, $translator->trans('DeactivateSelected', [], StringUtilities::LIBRARIES)
+                $deactivateUrl, $this->translator->trans('DeactivateSelected', [], StringUtilities::LIBRARIES)
             )
         );
 
-        $resetPasswordUrl = $urlGenerator->fromParameters(
+        $resetPasswordUrl = $this->urlGenerator->fromParameters(
             [
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::RESET_PASSWORD_MULTI->value
@@ -104,7 +101,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
         $actions->addAction(
             new TableAction(
-                $resetPasswordUrl, $translator->trans('ResetPassword')
+                $resetPasswordUrl, $this->translator->trans('ResetPassword')
             )
         );
 
@@ -114,25 +111,25 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
     protected function initializeColumns(): void
     {
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_OFFICIAL_CODE)
+            $this->dataClassPropertyTableColumnFactory->getColumn(User::class, User::PROPERTY_OFFICIAL_CODE)
         );
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_SURNAME)
+            $this->dataClassPropertyTableColumnFactory->getColumn(User::class, User::PROPERTY_SURNAME)
         );
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_GIVEN_NAME)
+            $this->dataClassPropertyTableColumnFactory->getColumn(User::class, User::PROPERTY_GIVEN_NAME)
         );
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_USERNAME)
+            $this->dataClassPropertyTableColumnFactory->getColumn(User::class, User::PROPERTY_USERNAME)
         );
-        $this->addColumn($this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_EMAIL));
+        $this->addColumn($this->dataClassPropertyTableColumnFactory->getColumn(User::class, User::PROPERTY_EMAIL));
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+            $this->dataClassPropertyTableColumnFactory->getColumn(
                 User::class, User::PROPERTY_PLATFORM_ADMINISTRATOR
             )
         );
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_ACTIVE)
+            $this->dataClassPropertyTableColumnFactory->getColumn(User::class, User::PROPERTY_ACTIVE)
         );
     }
 
@@ -163,7 +160,6 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
     {
-        $translator = $this->getTranslator();
         $isPlatformAdministrator = $this->currentUser instanceof User && $this->currentUser->isPlatformAdministrator();
 
         $buttonToolBar = new MiniButtonToolBar();
@@ -173,7 +169,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
             $buttonToolBar->addButton(
                 new Button(
-                    label: $translator->trans('Edit', [], StringUtilities::LIBRARIES),
+                    label: $this->translator->trans('Edit', [], StringUtilities::LIBRARIES),
                     inlineGlyph: new FontAwesomeGlyph('pencil-alt'), action: $editUrl, display: DisplayTypeEnum::ICON,
                     classes: ['btn-link']
                 )
@@ -183,7 +179,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
             $buttonToolBar->addButton(
                 new Button(
-                    label: $translator->trans('Detail', [], Manager::CONTEXT), inlineGlyph: new FontAwesomeGlyph(
+                    label: $this->translator->trans('Detail', [], Manager::CONTEXT), inlineGlyph: new FontAwesomeGlyph(
                     'info-circle'
                 ), action: $detailUrl, display: DisplayTypeEnum::ICON, classes: ['btn-link']
                 )
@@ -196,9 +192,9 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
                 $buttonToolBar->addButton(
                     new Button(
-                        label: $translator->trans('Delete', [], StringUtilities::LIBRARIES),
+                        label: $this->translator->trans('Delete', [], StringUtilities::LIBRARIES),
                         inlineGlyph: new FontAwesomeGlyph('times'), action: $deleteUrl, display: DisplayTypeEnum::ICON,
-                        confirmationMessage: $this->getTranslator()->trans(
+                        confirmationMessage: $this->translator->trans(
                             'ConfirmChosenAction', [], StringUtilities::LIBRARIES
                         ), classes: ['btn-link']
                     )
@@ -208,7 +204,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
 
                 $buttonToolBar->addButton(
                     new Button(
-                        label: $translator->trans('LoginAsUser', [], Manager::CONTEXT),
+                        label: $this->translator->trans('LoginAsUser', [], Manager::CONTEXT),
                         inlineGlyph: new FontAwesomeGlyph('mask'), action: $changeUserUrl,
                         display: DisplayTypeEnum::ICON, classes: ['btn-link']
                     )
@@ -217,7 +213,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
             else {
                 $buttonToolBar->addButton(
                     new Button(
-                        label: $translator->trans('DeleteNA', [], StringUtilities::LIBRARIES),
+                        label: $this->translator->trans('DeleteNA', [], StringUtilities::LIBRARIES),
                         inlineGlyph: new FontAwesomeGlyph('times', ['text-muted']), display: DisplayTypeEnum::ICON,
                         classes: ['btn-link']
                     )
@@ -227,7 +223,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
         else {
             $buttonToolBar->addButton(
                 new Button(
-                    label: $translator->trans('DeleteNA', [], StringUtilities::LIBRARIES),
+                    label: $this->translator->trans('DeleteNA', [], StringUtilities::LIBRARIES),
                     inlineGlyph: new FontAwesomeGlyph('times', ['text-muted']), display: DisplayTypeEnum::ICON,
                     classes: ['btn-link']
                 )

@@ -11,39 +11,22 @@ use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
  */
 class SessionFactory
 {
-    private ?string $securityKey;
-
-    private SessionStorageInterface $sessionStorage;
-
-    public function __construct(SessionStorageInterface $sessionStorage, ?string $securityKey = null)
+    public function __construct(protected SessionStorageInterface $sessionStorage, protected ?string $securityKey = null
+    )
     {
-        $this->sessionStorage = $sessionStorage;
-        $this->securityKey = $securityKey;
-    }
-
-    public function getSecurityKey(): ?string
-    {
-        return $this->securityKey;
     }
 
     public function getSession(): Session
     {
-        $session = new Session($this->getSessionStorage());
+        $session = new Session($this->sessionStorage);
 
-        $sessionKey = $this->getSecurityKey();
-
-        if (is_null($sessionKey)) {
-            $sessionKey = 'cosnics_sid';
+        if (is_null($this->securityKey)) {
+            $this->securityKey = 'cosnics_sid';
         }
 
-        $session->setName($sessionKey);
+        $session->setName($this->securityKey);
 
         return $session;
-    }
-
-    public function getSessionStorage(): SessionStorageInterface
-    {
-        return $this->sessionStorage;
     }
 }
 

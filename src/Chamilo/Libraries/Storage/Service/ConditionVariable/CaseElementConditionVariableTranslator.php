@@ -34,7 +34,7 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
 
         if ($caseElementConditionVariable->getCondition() instanceof ConditionInterface) {
             $strings[] = 'WHEN';
-            $strings[] = $this->getConditionTranslatorCollection()->translate(
+            $strings[] = $this->conditionTranslatorRegistry->translate(
                 $querybuilder, $caseElementConditionVariable->getCondition(), $enableAliasing
             );
             $strings[] = 'THEN';
@@ -43,7 +43,7 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
             $strings[] = 'ELSE';
         }
 
-        $strings[] = $this->getConditionVariableTranslatorCollection()->translate(
+        $strings[] = $this->conditionVariableTranslatorRegistry->translate(
             $querybuilder, $caseElementConditionVariable->getStatement(), $enableAliasing
         );
 

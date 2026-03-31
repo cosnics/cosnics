@@ -1,14 +1,18 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\ButtonToolBar\Service;
 
+use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonRendererRegistry;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererInterface;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait\ButtonRendererClassesTrait;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Form\ButtonSearchForm;
-use QuickformException;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\SearchFormType;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\SubmitButton;
+use Twig\Environment;
 
 /**
  * @package Chamilo\Libraries\UserInterface\ButtonToolBar\Service
@@ -20,38 +24,53 @@ class ButtonToolBarRenderer extends AbstractButtonCollectionButtonRenderer imple
 {
     use ButtonRendererClassesTrait;
 
-    protected SearchQueryConditionGenerator $searchQueryConditionGenerator;
-
     public function __construct(
-        SearchQueryConditionGenerator $searchQueryConditionGenerator, ButtonRendererRegistry $buttonRendererCollection
+        ButtonRendererRegistry $buttonRendererRegistry,
+        protected SearchQueryConditionGenerator $searchQueryConditionGenerator,
+        protected readonly FormFactoryInterface $formFactory, protected readonly Environment $twigFormEnvironment,
+        protected ChamiloRequest $request
     )
     {
-        $this->searchQueryConditionGenerator = $searchQueryConditionGenerator;
-
-        parent::__construct($buttonRendererCollection);
+        parent::__construct($buttonRendererRegistry);
     }
 
     /**
-     * @throws \QuickformException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function render(ButtonToolBar $buttonToolBar): string
     {
         $html = [];
 
         $html[] = '<div';
-        $html[] = 'class="' . $this->renderClasses($buttonToolBar, ['btn-toolbar', 'mb-3'], ['justify-content-between']) .
+        $html[] =
+            'class="' . $this->renderClasses($buttonToolBar, ['btn-toolbar', 'mb-3'], ['justify-content-between']) .
             '" role="toolbar">';
 
         foreach ($buttonToolBar->getButtons() as $button) {
-            $html[] =
-                $this->getButtonRendererCollection()->getButtonRenderer($button->getButtonRendererClassName())->render(
-                    $button
-                );
+            $html[] = $this->buttonRendererRegistry->getButtonRenderer($button->getButtonRendererClassName())->render(
+                $button
+            );
         }
 
         if ($buttonToolBar->getSearchUrl()) {
-            $html[] = $this->getSearchForm($buttonToolBar->getSearchUrl())->render();
+            $data = [];
+
+            if (!empty($this->getSearchQuery())) {
+                $data[SearchFormType::PARAM_SIMPLE_SEARCH_QUERY] = $this->getSearchQuery();
+            }
+
+            $form = $this->getSearchForm($buttonToolBar->getSearchUrl(), $data);
+
+            if (empty($this->getSearchQuery())) {
+                $form->remove('cancel');
+            }
+
+            $html[] = $this->twigFormEnvironment->render('searchForm.html.twig', [
+                'form' => $form->createView(),
+            ]);
         }
 
         $html[] = '</div>';
@@ -69,41 +88,27 @@ class ButtonToolBarRenderer extends AbstractButtonCollectionButtonRenderer imple
      */
     public function getConditions(array $properties = []): ?AndCondition
     {
-        if (!is_array($properties)) {
-            $properties = [$properties];
-        }
-
-        $query = $this->getSearchQuery();
-
-        if ($query && count($properties)) {
-            $searchQueryConditionGenerator = new SearchQueryConditionGenerator();
-
-            return $searchQueryConditionGenerator->getSearchConditions($query, $properties);
-        }
-
-        return null;
+        return $this->searchQueryConditionGenerator->getSearchConditions($this->getSearchQuery(), $properties);
     }
 
-    /**
-     * @throws \QuickformException
-     */
-    public function getSearchForm(string $searchUri = ''): ButtonSearchForm
+    public function getSearchForm(string $searchUri = '', array $data = []): FormInterface
     {
-        return new ButtonSearchForm($searchUri);
+        return $this->formFactory->create(SearchFormType::class, $data, ['action' => $searchUri]);
     }
 
     public function getSearchQuery(): ?string
     {
-        try {
-            return $this->getSearchForm()->getQuery();
-        }
-        catch (QuickformException) {
-            return null;
-        }
-    }
+        $form = $this->getSearchForm();
+        $form->handleRequest($this->request);
+        $cancelButton = $form->get('cancel');
 
-    public function getSearchQueryConditionGenerator(): SearchQueryConditionGenerator
-    {
-        return $this->searchQueryConditionGenerator;
+        if ($form->isSubmitted() && $form->isValid() && $cancelButton instanceof SubmitButton &&
+            !$cancelButton->isClicked()) {
+            $this->request->query->set(
+                SearchFormType::PARAM_SIMPLE_SEARCH_QUERY, $form->getData()[SearchFormType::PARAM_SIMPLE_SEARCH_QUERY]
+            );
+        }
+
+        return $this->request->query->get(SearchFormType::PARAM_SIMPLE_SEARCH_QUERY);
     }
 }

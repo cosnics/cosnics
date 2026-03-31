@@ -13,8 +13,7 @@ abstract class AbstractButtonCollectionButtonRenderer implements ButtonRendererI
 {
     use ButtonRendererCollectionTrait;
 
-    public function __construct(ButtonRendererRegistry $buttonRendererCollection)
+    public function __construct(protected ButtonRendererRegistry $buttonRendererRegistry)
     {
-        $this->setButtonRendererCollection($buttonRendererCollection);
     }
 }

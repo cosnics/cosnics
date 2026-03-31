@@ -12,14 +12,10 @@ use Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumb
  */
 class RequestTableParameterValuesCompiler
 {
-    protected PageNavigationCalculator $pager;
-
-    protected ChamiloRequest $request;
-
-    public function __construct(ChamiloRequest $request, PageNavigationCalculator $pager)
+    public function __construct(
+        protected ChamiloRequest $request, protected PageNavigationCalculator $pageNavigationCalculator
+    )
     {
-        $this->request = $request;
-        $this->pager = $pager;
     }
 
     /**
@@ -28,7 +24,7 @@ class RequestTableParameterValuesCompiler
      */
     protected function determineNumberOfRowsPerPage(array $parameterNames, array $defaultParameterValues): int
     {
-        return $this->getRequest()->query->get(
+        return $this->request->query->get(
             $parameterNames[TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE],
             $defaultParameterValues[TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE]
         );
@@ -37,7 +33,7 @@ class RequestTableParameterValuesCompiler
     protected function determineOffset(int $pageNumber, int $numberOfItemsPerPage, int $totalNumberOfItems): int
     {
         try {
-            return $this->getPager()->getCurrentRangeOffset(
+            return $this->pageNavigationCalculator->getCurrentRangeOffset(
                 $pageNumber, $numberOfItemsPerPage, $totalNumberOfItems
             );
         }
@@ -52,7 +48,7 @@ class RequestTableParameterValuesCompiler
      */
     protected function determineOrderColumnDirection(array $parameterNames, array $defaultParameterValues): int
     {
-        return $this->getRequest()->query->get(
+        return $this->request->query->get(
             $parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION],
             $defaultParameterValues[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION]
         );
@@ -64,7 +60,7 @@ class RequestTableParameterValuesCompiler
      */
     protected function determineOrderColumnIndex(array $parameterNames, array $defaultParameterValues): int
     {
-        return $this->getRequest()->query->get(
+        return $this->request->query->get(
             $parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX],
             $defaultParameterValues[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX]
         );
@@ -75,7 +71,7 @@ class RequestTableParameterValuesCompiler
      */
     protected function determinePageNumber(array $parameterNames): int
     {
-        return $this->getRequest()->query->get(
+        return $this->request->query->get(
             $parameterNames[AbstractBaseTableParameters::PARAM_PAGE_NUMBER], 1
         );
     }
@@ -108,7 +104,7 @@ class RequestTableParameterValuesCompiler
         $tableParameterValues->setPageNumber($pageNumber);
 
         $tableParameterValues->setSelectAll(
-            $this->getRequest()->query->get(
+            $this->request->query->get(
                 $parameterNames[TableParameterValues::PARAM_SELECT_ALL], 0
             )
         );
@@ -124,15 +120,5 @@ class RequestTableParameterValuesCompiler
         );
 
         return $tableParameterValues;
-    }
-
-    public function getPager(): PageNavigationCalculator
-    {
-        return $this->pager;
-    }
-
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
     }
 }

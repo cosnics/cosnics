@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Storage\Repository;
 
 use Chamilo\Libraries\Protocol\ErrorHandling\Architecture\Interface\ExceptionLoggerInterface;
-use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorCollection;
+use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorRegistry;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException;
@@ -30,27 +30,13 @@ use Throwable;
  */
 class DataClassDatabase implements DataClassDatabaseInterface
 {
-    protected ConditionTranslatorCollection $conditionTranslatorCollection;
-
-    protected Connection $connection;
-
-    protected ExceptionLoggerInterface $exceptionLogger;
-
-    protected QueryBuilderConfigurator $queryBuilderConfigurator;
-
-    protected StorageAliasGenerator $storageAliasGenerator;
-
-
     public function __construct(
-        Connection $connection, StorageAliasGenerator $storageAliasGenerator, ExceptionLoggerInterface $exceptionLogger,
-        ConditionTranslatorCollection $conditionPartTranslatorService, QueryBuilderConfigurator $parametersProcessor
+        protected Connection $connection, protected StorageAliasGenerator $storageAliasGenerator,
+        protected ExceptionLoggerInterface $exceptionLogger,
+        protected ConditionTranslatorRegistry $conditionTranslatorRegistry,
+        protected QueryBuilderConfigurator $queryBuilderConfigurator
     )
     {
-        $this->connection = $connection;
-        $this->storageAliasGenerator = $storageAliasGenerator;
-        $this->exceptionLogger = $exceptionLogger;
-        $this->conditionTranslatorCollection = $conditionPartTranslatorService;
-        $this->queryBuilderConfigurator = $parametersProcessor;
     }
 
     /**
@@ -64,7 +50,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $sqlQuery = $queryBuilder->getSQL();
 
             try {
-                return $this->getConnection()->executeQuery(
+                return $this->connection->executeQuery(
                     $sqlQuery, $queryBuilder->getParameters(), $queryBuilder->getParameterTypes()
                 );
             }
@@ -88,10 +74,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     protected function buildFromQuery(string $dataClassStorageUnitName, StorageParameters $parameters): QueryBuilder
     {
-        $queryBuilder = $this->getConnection()->createQueryBuilder();
+        $queryBuilder = $this->connection->createQueryBuilder();
 
         $queryBuilder->from($dataClassStorageUnitName, $this->getAlias($dataClassStorageUnitName));
-        $this->getQueryBuilderConfigurator()->applyParameters(
+        $this->queryBuilderConfigurator->applyParameters(
             $queryBuilder, $parameters, $dataClassStorageUnitName
         );
 
@@ -171,7 +157,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     public function create(string $dataClassStorageUnitName, array $record): bool
     {
         try {
-            $this->getConnection()->insert($dataClassStorageUnitName, $record);
+            $this->connection->insert($dataClassStorageUnitName, $record);
 
             return true;
         }
@@ -190,13 +176,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
     public function delete(string $dataClassStorageUnitName, ?ConditionInterface $condition = null): bool
     {
         try {
-            $queryBuilder = $this->getConnection()->createQueryBuilder();
+            $queryBuilder = $this->connection->createQueryBuilder();
 
             $queryBuilder->delete($dataClassStorageUnitName);
 
             if (isset($condition)) {
                 $queryBuilder->where(
-                    $this->getConditionTranslatorCollection()->translate($queryBuilder, $condition, false)
+                    $this->conditionTranslatorRegistry->translate($queryBuilder, $condition, false)
                 );
             }
 
@@ -266,22 +252,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     public function getAlias(string $dataClassStorageUnitName): string
     {
-        return $this->getStorageAliasGenerator()->getTableAlias($dataClassStorageUnitName);
-    }
-
-    public function getConditionTranslatorCollection(): ConditionTranslatorCollection
-    {
-        return $this->conditionTranslatorCollection;
-    }
-
-    public function getConnection(): Connection
-    {
-        return $this->connection;
-    }
-
-    public function getExceptionLogger(): ExceptionLoggerInterface
-    {
-        return $this->exceptionLogger;
+        return $this->storageAliasGenerator->getTableAlias($dataClassStorageUnitName);
     }
 
     /**
@@ -290,10 +261,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
     public function getLastInsertedIdentifier(string $dataClassStorageUnitName): int|string
     {
         try {
-            $lastInsertedId = $this->getConnection()->lastInsertId();
+            $lastInsertedId = $this->connection->lastInsertId();
 
             if (!$lastInsertedId) {
-                $lastInsertedId = $this->getConnection()->lastInsertId();
+                $lastInsertedId = $this->connection->lastInsertId();
             }
 
             return $lastInsertedId;
@@ -305,19 +276,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
     }
 
-    public function getQueryBuilderConfigurator(): QueryBuilderConfigurator
-    {
-        return $this->queryBuilderConfigurator;
-    }
-
-    public function getStorageAliasGenerator(): StorageAliasGenerator
-    {
-        return $this->storageAliasGenerator;
-    }
-
     protected function handleError(Throwable $throwable): void
     {
-        $this->getExceptionLogger()->logException(
+        $this->exceptionLogger->logException(
             new Exception('[Message: ' . $throwable->getMessage() . ']')
         );
     }
@@ -331,7 +292,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             return 'NULL';
         }
 
-        return $this->getConnection()->quote($value);
+        return $this->connection->quote($value);
     }
 
     /**
@@ -423,7 +384,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
                 }
             };
 
-            return $this->getConnection()->transactional($throwOnFalse);
+            return $this->connection->transactional($throwOnFalse);
         }
         catch (Exception) {
             return false;
@@ -442,9 +403,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
             return true;
         }
 
-        $queryBuilder = $this->getConnection()->createQueryBuilder();
+        $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder->update($dataClassStorageUnitName);
-        $this->getQueryBuilderConfigurator()->applyUpdate($queryBuilder, $properties, $condition);
+        $this->queryBuilderConfigurator->applyUpdate($queryBuilder, $properties, $condition);
         $sqlQuery = $queryBuilder->getSQL();
 
         try {

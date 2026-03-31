@@ -29,36 +29,19 @@ abstract class AbstractTableRenderer
     public const int DEFAULT_ORDER_COLUMN_INDEX = 0;
     public const string TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
 
-    protected ClassnameUtilities $classnameUtilities;
-
     /**
      * @var \Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn[]
      */
     protected array $columns = [];
 
-    protected DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory;
-
-    protected AbstractHtmlTableRenderer $htmlTableRenderer;
-
-    protected PageNavigationCalculator $pager;
-
-    protected Translator $translator;
-
-    protected UrlGenerator $urlGenerator;
-
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, AbstractHtmlTableRenderer $htmlTableRenderer,
-        PageNavigationCalculator $pager, DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
-        ClassnameUtilities $classnameUtilities
+        protected Translator $translator, protected UrlGenerator $urlGenerator,
+        protected AbstractHtmlTableRenderer $htmlTableRenderer,
+        protected PageNavigationCalculator $pageNavigationCalculator,
+        protected DataClassPropertyTableColumnFactory $dataClassPropertyTableColumnFactory,
+        protected ClassnameUtilities $classnameUtilities
     )
     {
-        $this->translator = $translator;
-        $this->urlGenerator = $urlGenerator;
-        $this->htmlTableRenderer = $htmlTableRenderer;
-        $this->pager = $pager;
-        $this->dataClassPropertyTableColumnFactory = $dataClassPropertyTableColumnFactory;
-        $this->classnameUtilities = $classnameUtilities;
-
         $this->initializeColumns();
     }
 
@@ -75,7 +58,7 @@ abstract class AbstractTableRenderer
         $tableName = $tableName ?: $this->determineTableName();
         $tableActions = $this instanceof TableActionsSupport ? $this->getTableActions() : null;
 
-        return $this->getHtmlTableRenderer()->render(
+        return $this->htmlTableRenderer->render(
             $this->getColumns(), $this->processData($tableData, $parameterValues), $tableName,
             $this->getParameterNames($tableName), $parameterValues, $tableActions
         );
@@ -111,7 +94,7 @@ abstract class AbstractTableRenderer
     protected function determineTableName(): string
     {
         try {
-            return $this->getClassnameUtilities()->getClassnameFromNamespace(static::class, true);
+            return $this->classnameUtilities->getClassnameFromNamespace(static::class, true);
         }
         catch (Exception) {
             return 'table';
@@ -139,11 +122,6 @@ abstract class AbstractTableRenderer
         return implode('', $html);
     }
 
-    public function getClassnameUtilities(): ClassnameUtilities
-    {
-        return $this->classnameUtilities;
-    }
-
     public function getColumn(int $index): ?TableColumn
     {
         return $this->columns[$index];
@@ -167,11 +145,6 @@ abstract class AbstractTableRenderer
         return $this;
     }
 
-    public function getDataClassPropertyTableColumnFactory(): DataClassPropertyTableColumnFactory
-    {
-        return $this->dataClassPropertyTableColumnFactory;
-    }
-
     /**
      * @return int[]
      */
@@ -185,11 +158,6 @@ abstract class AbstractTableRenderer
         ];
     }
 
-    public function getHtmlTableRenderer(): AbstractHtmlTableRenderer
-    {
-        return $this->htmlTableRenderer;
-    }
-
     public function getOrderProperty(int $columnNumber, int $orderDirection): ?OrderProperty
     {
         $column = $this->getSortableColumn($columnNumber);
@@ -199,11 +167,6 @@ abstract class AbstractTableRenderer
         }
 
         return null;
-    }
-
-    public function getPager(): PageNavigationCalculator
-    {
-        return $this->pager;
     }
 
     /**
@@ -254,7 +217,7 @@ abstract class AbstractTableRenderer
         $tableResultPosition->setNumberOfItemsPerPage($parameterValues->getNumberOfItemsPerPage());
         $tableResultPosition->setTotalNumberOfItems($parameterValues->getTotalNumberOfItems());
         $tableResultPosition->setTotalNumberOfPages(
-            $this->getPager()->getNumberOfPages(
+            $this->pageNavigationCalculator->getNumberOfPages(
                 $parameterValues->getNumberOfItemsPerPage(), $parameterValues->getTotalNumberOfItems()
             )
         );
@@ -262,16 +225,6 @@ abstract class AbstractTableRenderer
         $tableResultPosition->setOrderColumnDirection($parameterValues->getOrderColumnDirection());
 
         return $tableResultPosition;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
     }
 
     public function hasTableActions(): bool

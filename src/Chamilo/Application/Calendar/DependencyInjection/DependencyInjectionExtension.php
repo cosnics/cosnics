@@ -32,7 +32,8 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'architecture.domain.php',
                 'implementation.home.php',
                 'service.php',
-                'storage.php'
+                'storage.php',
+                'userInterface.php'
             ]
         ];
     }

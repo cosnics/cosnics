@@ -12,14 +12,8 @@ use Symfony\Component\Translation\Translator;
  */
 class DataClassPropertyTableColumnFactory
 {
-    protected StringUtilities $stringUtilities;
-
-    protected Translator $translator;
-
-    public function __construct(Translator $translator, StringUtilities $stringUtilities)
+    public function __construct(protected Translator $translator, protected StringUtilities $stringUtilities)
     {
-        $this->translator = $translator;
-        $this->stringUtilities = $stringUtilities;
     }
 
     public function getColumn(
@@ -28,24 +22,13 @@ class DataClassPropertyTableColumnFactory
     ): DataClassPropertyTableColumn
     {
         if (!$title) {
-            $title = $this->getTranslator()->trans(
-                $this->getStringUtilities()->createString($property)->upperCamelize()->__toString(), [],
-                $className::CONTEXT
+            $title = $this->translator->trans(
+                $this->stringUtilities->createString($property)->upperCamelize()->__toString(), [], $className::CONTEXT
             );
         }
 
         return new DataClassPropertyTableColumn(
             $className, $property, $title, $sortable, $headerCssClasses, $contentCssClasses
         );
-    }
-
-    public function getStringUtilities(): StringUtilities
-    {
-        return $this->stringUtilities;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }

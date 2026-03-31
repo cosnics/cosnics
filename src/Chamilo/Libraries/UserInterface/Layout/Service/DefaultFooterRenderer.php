@@ -13,37 +13,15 @@ use Symfony\Component\Translation\Translator;
 class DefaultFooterRenderer
 {
     /**
-     * @var string[]
+     * @param string[] $administratorData
+     * @param string[] $institutionData
      */
-    protected array $administratorData;
-
-    protected BaseFooterRenderer $baseFooterRenderer;
-
-    /**
-     * @var string[]
-     */
-    protected array $institutionData;
-
-    private SessionInterface $session;
-
-    private StringUtilities $stringUtilities;
-
-    private Translator $translator;
-
-    private UrlGenerator $urlGenerator;
-
     public function __construct(
-        BaseFooterRenderer $baseFooterRenderer, StringUtilities $stringUtilities, Translator $translator,
-        SessionInterface $session, UrlGenerator $urlGenerator, array $administratorData, array $institutionData
+        protected BaseFooterRenderer $baseFooterRenderer, protected StringUtilities $stringUtilities,
+        protected Translator $translator, protected SessionInterface $session, protected UrlGenerator $urlGenerator,
+        protected array $administratorData, protected array $institutionData
     )
     {
-        $this->baseFooterRenderer = $baseFooterRenderer;
-        $this->stringUtilities = $stringUtilities;
-        $this->translator = $translator;
-        $this->session = $session;
-        $this->urlGenerator = $urlGenerator;
-        $this->administratorData = $administratorData;
-        $this->institutionData = $institutionData;
     }
 
     public function render(): string
@@ -53,27 +31,14 @@ class DefaultFooterRenderer
         $html[] = '</div>';
         $html[] = '</div>';
 
-        $html[] = $this->getBaseFooterRenderer()->renderHeader();
+        $html[] = $this->baseFooterRenderer->renderHeader();
         $html[] = $this->getContainerHeader();
         $html[] = implode(' | ', $this->getLinks());
         $html[] = '&nbsp;&copy;&nbsp;' . date('Y');
         $html[] = $this->getContainerFooter();
-        $html[] = $this->getBaseFooterRenderer()->renderFooter();
+        $html[] = $this->baseFooterRenderer->renderFooter();
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getAdministratorData(): array
-    {
-        return $this->administratorData;
-    }
-
-    public function getBaseFooterRenderer(): BaseFooterRenderer
-    {
-        return $this->baseFooterRenderer;
     }
 
     protected function getContainerFooter(): string
@@ -99,73 +64,39 @@ class DefaultFooterRenderer
     /**
      * @return string[]
      */
-    public function getInstitutionData(): array
-    {
-        return $this->institutionData;
-    }
-
-    /**
-     * @return string[]
-     */
     protected function getLinks(): array
     {
-        $translator = $this->getTranslator();
-        $stringUtilities = $this->getStringUtilities();
-
-        $institutionData = $this->getInstitutionData();
-        $administratorData = $this->getAdministratorData();
-
-        $administratorEmail = $administratorData['email'];
-        $administratorUri = $administratorData['uri'];
-        $administratorName = $administratorData['name'];
+        $administratorEmail = $this->administratorData['email'];
+        $administratorUri = $this->administratorData['uri'];
+        $administratorName = $this->administratorData['name'];
 
         $links = [];
 
         $links[] =
-            '<a href="' . $institutionData['uri'] . '" target="about:blank">' . $institutionData['name'] . '</a>';
+            '<a href="' . $this->institutionData['uri'] . '" target="about:blank">' . $this->institutionData['name'] .
+            '</a>';
 
         if (!empty($administratorEmail) && !empty($administratorUri)) {
-            $email = $stringUtilities->encryptMailLink($administratorEmail, $administratorName);
-            $links[] = $translator->trans(
+            $email = $this->stringUtilities->encryptMailLink($administratorEmail, $administratorName);
+            $links[] = $this->translator->trans(
                 'ManagerContactWebsite', ['%Email%' => $email, '%Website%' => $administratorUri],
                 StringUtilities::LIBRARIES
             );
         }
         else {
             if (!empty($administratorEmail)) {
-                $links[] = $translator->trans('Manager', [], StringUtilities::LIBRARIES) . ': ' .
-                    $stringUtilities->encryptMailLink(
+                $links[] = $this->translator->trans('Manager', [], StringUtilities::LIBRARIES) . ': ' .
+                    $this->stringUtilities->encryptMailLink(
                         $administratorEmail, $administratorName
                     );
             }
 
             if (!empty($administratorUri)) {
-                $links[] =
-                    $translator->trans('Support', [], StringUtilities::LIBRARIES) . ': <a href="' . $administratorUri .
-                    '">' . $administratorName . '</a>';
+                $links[] = $this->translator->trans('Support', [], StringUtilities::LIBRARIES) . ': <a href="' .
+                    $administratorUri . '">' . $administratorName . '</a>';
             }
         }
 
         return $links;
-    }
-
-    public function getSession(): SessionInterface
-    {
-        return $this->session;
-    }
-
-    public function getStringUtilities(): StringUtilities
-    {
-        return $this->stringUtilities;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
     }
 }

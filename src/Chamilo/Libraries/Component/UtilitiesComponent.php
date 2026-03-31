@@ -11,7 +11,6 @@ use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
-use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
@@ -35,8 +34,7 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
-        protected ThemePathBuilder $themeWebPathBuilder, protected StringUtilities $stringUtilities,
-        protected WebPathBuilder $webPathBuilder
+        protected StringUtilities $stringUtilities, protected WebPathBuilder $webPathBuilder, protected string $theme
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
@@ -64,7 +62,7 @@ class UtilitiesComponent extends Manager implements NoVisitTraceComponentInterfa
 
             // Retrieve the current theme
             case 'theme' :
-                $properties[self::PROPERTY_RESULT] = $this->themeWebPathBuilder->getTheme();
+                $properties[self::PROPERTY_RESULT] = $this->theme;
                 break;
 
             // Get a translation

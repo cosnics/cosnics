@@ -13,23 +13,11 @@ use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
  */
 class ThemePathBuilder
 {
-    protected FilesystemTools $filesystemTools;
-
-    private AbstractPathBuilder $pathBuilder;
-
-    private StringUtilities $stringUtilities;
-
-    private string $theme;
-
     public function __construct(
-        StringUtilities $stringUtilities, AbstractPathBuilder $pathBuilder, FilesystemTools $filesystemTools,
-        string $theme
+        protected StringUtilities $stringUtilities, protected AbstractPathBuilder $pathBuilder,
+        protected FilesystemTools $filesystemTools, protected string $theme
     )
     {
-        $this->stringUtilities = $stringUtilities;
-        $this->pathBuilder = $pathBuilder;
-        $this->filesystemTools = $filesystemTools;
-        $this->theme = $theme;
     }
 
     /**
@@ -40,13 +28,12 @@ class ThemePathBuilder
         $availableThemes = [];
 
         $path = $this->getCssPath(Manager::CONTEXT, false);
-        $directories =
-            $this->getFilesystemTools()->getDirectoryContent($path, FileTypeFilterIterator::ONLY_FILES, false);
+        $directories = $this->filesystemTools->getDirectoryContent($path, FileTypeFilterIterator::ONLY_FILES, false);
 
         foreach ($directories as $directory) {
             if (!str_starts_with($directory, '.')) {
                 $availableThemes[$directory] =
-                    (string) $this->getStringUtilities()->createString($directory)->upperCamelize();
+                    (string) $this->stringUtilities->createString($directory)->upperCamelize();
             }
         }
 
@@ -55,10 +42,10 @@ class ThemePathBuilder
 
     public function getCssPath(string $namespace, bool $includeTheme = true): string
     {
-        $cssPath = $this->getPathBuilder()->getCssPath($namespace);
+        $cssPath = $this->pathBuilder->getCssPath($namespace);
 
         if ($includeTheme) {
-            $cssPath .= $this->getTheme() . $this->getDirectorySeparator();
+            $cssPath .= $this->theme . $this->getDirectorySeparator();
         }
 
         return $cssPath;
@@ -66,17 +53,12 @@ class ThemePathBuilder
 
     public function getDirectorySeparator(): string
     {
-        return $this->getPathBuilder()->getDirectorySeparator();
+        return $this->pathBuilder->getDirectorySeparator();
     }
 
     public function getFavouriteIcon(): string
     {
         return $this->getImagePath(StringUtilities::LIBRARIES, 'Favicon', 'ico');
-    }
-
-    public function getFilesystemTools(): FilesystemTools
-    {
-        return $this->filesystemTools;
     }
 
     public function getImagePath(string $context, string $image, string $extension = 'png'): string
@@ -86,32 +68,17 @@ class ThemePathBuilder
 
     public function getImagesPath(string $context): string
     {
-        return $this->getPathBuilder()->getImagesPath($context) . $this->getTheme() . $this->getDirectorySeparator();
-    }
-
-    public function getPathBuilder(): AbstractPathBuilder
-    {
-        return $this->pathBuilder;
-    }
-
-    public function getStringUtilities(): StringUtilities
-    {
-        return $this->stringUtilities;
+        return $this->pathBuilder->getImagesPath($context) . $this->theme . $this->getDirectorySeparator();
     }
 
     public function getTemplatePath(string $namespace, bool $includeTheme = true): string
     {
-        $cssPath = $this->getPathBuilder()->getTemplatesPath($namespace);
+        $cssPath = $this->pathBuilder->getTemplatesPath($namespace);
 
         if ($includeTheme) {
-            $cssPath .= $this->getTheme() . $this->getDirectorySeparator();
+            $cssPath .= $this->theme . $this->getDirectorySeparator();
         }
 
         return $cssPath;
-    }
-
-    public function getTheme(): string
-    {
-        return $this->theme;
     }
 }

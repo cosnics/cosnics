@@ -10,16 +10,10 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 class SecurityUtilities
 {
-    private ChamiloRequest $chamiloRequest;
-
-    private SessionInterface $session;
-
     public function __construct(
-        SessionInterface $session, ChamiloRequest $chamiloRequest
+        protected SessionInterface $session, protected ChamiloRequest $request
     )
     {
-        $this->session = $session;
-        $this->chamiloRequest = $chamiloRequest;
     }
 
     /**
@@ -28,18 +22,15 @@ class SecurityUtilities
      */
     public function checkToken(string $tokenType = 'post'): bool
     {
-        $session = $this->getSession();
-        $request = $this->getChamiloRequest();
-
-        $sessionToken = $session->get('sec_token');
+        $sessionToken = $this->session->get('sec_token');
         $tokenTypeValue = $tokenType;
 
         if ($tokenType == 'get') {
-            $tokenTypeValue = $request->query->get('sec_token');
+            $tokenTypeValue = $this->request->query->get('sec_token');
         }
 
         if ($tokenType == 'post') {
-            $tokenTypeValue = $request->request->get('sec_token');
+            $tokenTypeValue = $this->request->request->get('sec_token');
         }
 
         if (isset($sessionToken) && isset($tokenTypeValue) && $sessionToken === $tokenTypeValue) {
@@ -47,16 +38,6 @@ class SecurityUtilities
         }
 
         return false;
-    }
-
-    public function getChamiloRequest(): ChamiloRequest
-    {
-        return $this->chamiloRequest;
-    }
-
-    public function getSession(): SessionInterface
-    {
-        return $this->session;
     }
 
     /**

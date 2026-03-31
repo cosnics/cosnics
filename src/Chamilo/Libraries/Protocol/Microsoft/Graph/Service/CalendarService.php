@@ -13,14 +13,8 @@ use Microsoft\Graph\Generated\Models\Calendar;
  */
 class CalendarService
 {
-    protected CalendarRepository $calendarRepository;
-
-    protected UserService $userService;
-
-    public function __construct(UserService $userService, CalendarRepository $calendarRepository)
+    public function __construct(protected UserService $userService, protected CalendarRepository $calendarRepository)
     {
-        $this->userService = $userService;
-        $this->calendarRepository = $calendarRepository;
     }
 
     /**
@@ -32,7 +26,7 @@ class CalendarService
     ): array
     {
         try {
-            return $this->getCalendarRepository()->findEventsForCalendarIdentifierAndBetweenDates(
+            return $this->calendarRepository->findEventsForCalendarIdentifierAndBetweenDates(
                 $this->getUserIdentifier($user), $calendarIdentifier, $fromDate, $toDate
             );
         }
@@ -48,14 +42,9 @@ class CalendarService
      */
     public function getCalendarByIdentifier(string $calendarIdentifier, User $user): Calendar
     {
-        return $this->getCalendarRepository()->getCalendarByIdentifier(
+        return $this->calendarRepository->getCalendarByIdentifier(
             $this->getUserIdentifier($user), $calendarIdentifier
         );
-    }
-
-    protected function getCalendarRepository(): CalendarRepository
-    {
-        return $this->calendarRepository;
     }
 
     /**
@@ -64,16 +53,7 @@ class CalendarService
      */
     protected function getUserIdentifier(User $user): ?string
     {
-        return $this->getUserService()->getAndSaveUserIdentifier($user);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Protocol\Microsoft\Graph\Service\UserService
-     */
-    protected function getUserService(): UserService
-    {
-        return $this->userService;
+        return $this->userService->getAndSaveUserIdentifier($user);
     }
 
     /**
@@ -83,7 +63,7 @@ class CalendarService
     public function listOwnedCalendars(User $user): array
     {
         try {
-            return $this->getCalendarRepository()->listOwnedCalendars($this->getUserIdentifier($user));
+            return $this->calendarRepository->listOwnedCalendars($this->getUserIdentifier($user));
         }
         catch (NoSuchUserException) {
             return [];

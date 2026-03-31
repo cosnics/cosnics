@@ -8,11 +8,8 @@ namespace Chamilo\Libraries\UserInterface\Alert\Service;
  */
 class AlertsRenderer
 {
-    protected AlertRenderer $alertRenderer;
-
-    public function __construct(AlertRenderer $alertRenderer)
+    public function __construct(protected AlertRenderer $alertRenderer)
     {
-        $this->alertRenderer = $alertRenderer;
     }
 
     /**
@@ -29,16 +26,11 @@ class AlertsRenderer
         $html[] = '<div class="alerts position-fixed top-0 end-0 m-3">';
 
         foreach ($alerts as $alert) {
-            $html[] = $this->getAlertRenderer()->render($alert);
+            $html[] = $this->alertRenderer->render($alert);
         }
 
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function getAlertRenderer(): AlertRenderer
-    {
-        return $this->alertRenderer;
     }
 }

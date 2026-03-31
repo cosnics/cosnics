@@ -23,11 +23,8 @@ use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDisplayOrderSuppor
  */
 class DisplayOrderRepository
 {
-    private DataClassRepository $dataClassRepository;
-
-    public function __construct(DataClassRepository $dataClassRepository)
+    public function __construct(protected DataClassRepository $dataClassRepository)
     {
-        $this->dataClassRepository = $dataClassRepository;
     }
 
     /**
@@ -49,7 +46,7 @@ class DisplayOrderRepository
             $dataClass, ComparisonTypeEnum::GREATER_THAN_OR_EQUAL, $displayOrder
         );
 
-        return $this->getDataClassRepository()->updates(
+        return $this->dataClassRepository->updates(
             $this->determinePropertyDataClassName($dataClass),
             $this->getDisplayOrderUpdateDataClassProperties($dataClass, 1), new AndCondition($conditions)
         );
@@ -85,7 +82,7 @@ class DisplayOrderRepository
             $condition = null;
         }
 
-        return $this->getDataClassRepository()->count(
+        return $this->dataClassRepository->count(
             $this->determinePropertyDataClassName($dataClass), new StorageParameters(condition: $condition)
         );
     }
@@ -111,7 +108,7 @@ class DisplayOrderRepository
             $dataClass, ComparisonTypeEnum::GREATER_THAN, $displayOrder
         );
 
-        return $this->getDataClassRepository()->updates(
+        return $this->dataClassRepository->updates(
             $this->determinePropertyDataClassName($dataClass),
             $this->getDisplayOrderUpdateDataClassProperties($dataClass, - 1), new AndCondition($conditions)
         );
@@ -141,7 +138,7 @@ class DisplayOrderRepository
             condition: $condition, retrieveProperties: $this->getDisplayOrderDataClassProperties($dataClass)
         );
 
-        return $this->getDataClassRepository()->record($dataClassName, $parameters);
+        return $this->dataClassRepository->record($dataClassName, $parameters);
     }
 
     /**
@@ -150,23 +147,10 @@ class DisplayOrderRepository
      */
     public function findNextDisplayOrderValue(DataClassDisplayOrderSupport $dataClass): int
     {
-        return $this->getDataClassRepository()->retrieveNextValue(
+        return $this->dataClassRepository->retrieveNextValue(
             $this->determinePropertyDataClassName($dataClass), $dataClass->getDisplayOrderPropertyName(),
             $this->getDisplayOrderCondition($dataClass)
         );
-    }
-
-    public function getDataClassRepository(): DataClassRepository
-    {
-        return $this->dataClassRepository;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\Repository\DataClassRepository $dataClassRepository
-     */
-    public function setDataClassRepository(DataClassRepository $dataClassRepository): void
-    {
-        $this->dataClassRepository = $dataClassRepository;
     }
 
     protected function getDisplayOrderCondition(DataClassDisplayOrderSupport $dataClass): ?AndCondition
@@ -244,5 +228,13 @@ class DisplayOrderRepository
         );
 
         return new UpdateProperties([new UpdateProperty($displayOrderPropertyConditionVariable, $updateVariable)]);
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Repository\DataClassRepository $dataClassRepository
+     */
+    public function setDataClassRepository(DataClassRepository $dataClassRepository): void
+    {
+        $this->dataClassRepository = $dataClassRepository;
     }
 }

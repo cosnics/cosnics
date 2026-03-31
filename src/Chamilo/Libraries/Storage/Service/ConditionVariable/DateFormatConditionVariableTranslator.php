@@ -34,7 +34,7 @@ class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
 
         $strings[] = '(';
 
-        $strings[] = $this->getConditionVariableTranslatorCollection()->translate(
+        $strings[] = $this->conditionVariableTranslatorRegistry->translate(
             $querybuilder, $dateFormatConditionVariable->getConditionVariable(), $enableAliasing
         );
         $strings[] = ', ';

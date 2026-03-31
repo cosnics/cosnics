@@ -30,7 +30,7 @@ class PropertiesConditionVariableTranslator extends ConditionVariableTranslator
         $className = $propertiesConditionVariable->getDataClassName();
 
         if ($enableAliasing) {
-            return $this->getStorageAliasGenerator()->getDataClassAlias($className) . '.*';
+            return $this->storageAliasGenerator->getDataClassAlias($className) . '.*';
         }
         else {
             return '*';

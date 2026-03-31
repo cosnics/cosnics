@@ -52,27 +52,17 @@ class SymfonyCacheAdapterManager
     }
 
     /**
-     * @return \Symfony\Component\Cache\Adapter\AdapterInterface[]
-     */
-    public function getCacheAdapters(): array
-    {
-        return $this->cacheAdapters;
-    }
-
-    /**
      * @param string[] $cacheAdapterAliases
      *
      * @return \Symfony\Component\Cache\Adapter\AdapterInterface[]
      */
     protected function getCacheAdaptersByAliases(array $cacheAdapterAliases = []): array
     {
-        $cacheAdapters = $this->getCacheAdapters();
-
         if (empty($cacheAdapterAliases)) {
-            return $cacheAdapters;
+            return $this->cacheAdapters;
         }
 
-        return array_filter($cacheAdapters, function ($cacheAdapterAlias) use ($cacheAdapterAliases) {
+        return array_filter($this->cacheAdapters, function ($cacheAdapterAlias) use ($cacheAdapterAliases) {
             return array_key_exists(get_class($cacheAdapterAlias), $cacheAdapterAliases);
         }, ARRAY_FILTER_USE_KEY);
     }

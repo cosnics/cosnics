@@ -20,7 +20,8 @@ return static function (ContainerConfigurator $container) {
         [
             '$themeWebPathBuilder' => service('Chamilo\Libraries\UserInterface\Theme\Service\ThemeWebPathBuilder'),
             '$siteName' => '%cosnics.libraries.userInterface.layout.site.name%',
-            '$institutionName' => '%cosnics.libraries.userInterface.layout.institution.name%'
+            '$institutionName' => '%cosnics.libraries.userInterface.layout.institution.name%',
+            '$theme' => '%cosnics.libraries.userInterface.theme%'
         ]
     );
 

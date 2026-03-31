@@ -13,18 +13,19 @@ return static function (ContainerConfigurator $container) {
     $services = $container->services();
     $services->defaults()->public()->autowire()->autoconfigure();
 
-    $services->set(AvailabilityComponent::class)->tag(ApplicationInterface::class);
+    $services->set(AvailabilityComponent::class)->args(['$twigFormEnvironment' => service('Twig\Environment\Form')])
+        ->tag(ApplicationInterface::class);
     $services->set(BrowseComponent::class)->args(
         [
-            '$themeWebPathBuilder' => service('Chamilo\Libraries\UserInterface\Theme\Service\ThemeWebPathBuilder'),
-            '$defaultView' => '%cosnics.libraries.calendar.defaultView%'
+            '$defaultView' => '%cosnics.libraries.calendar.defaultView%',
+            '$theme' => '%cosnics.libraries.userInterface.theme%'
         ]
     )->tag(ApplicationInterface::class);
     $services->set(ICalComponent::class)->tag(ApplicationInterface::class);
     $services->set(PrintComponent::class)->args(
         [
-            '$themeWebPathBuilder' => service('Chamilo\Libraries\UserInterface\Theme\Service\ThemeWebPathBuilder'),
-            '$defaultView' => '%cosnics.libraries.calendar.defaultView%'
+            '$defaultView' => '%cosnics.libraries.calendar.defaultView%',
+            '$theme' => '%cosnics.libraries.userInterface.theme%'
         ]
     )->tag(ApplicationInterface::class);
     $services->set(VisibilityComponent::class)->args(['$visibilityService' => service(VisibilityService::class)])->tag(

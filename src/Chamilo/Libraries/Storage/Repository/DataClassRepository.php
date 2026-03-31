@@ -35,23 +35,12 @@ class DataClassRepository
 {
     public const string ALIAS_MAX_SORT = 'max_sort';
 
-    private DataClassDatabaseInterface $dataClassDatabase;
-
-    private DataClassFactory $dataClassFactory;
-
-    private DataClassRepositoryCache $dataClassRepositoryCache;
-
-    private bool $queryCacheEnabled;
-
     public function __construct(
-        DataClassRepositoryCache $dataClassRepositoryCache, DataClassDatabaseInterface $dataClassDatabase,
-        DataClassFactory $dataClassFactory, bool $queryCacheEnabled = true
+        protected DataClassRepositoryCache $dataClassRepositoryCache,
+        protected DataClassDatabaseInterface $dataClassDatabase, protected DataClassFactory $dataClassFactory,
+        protected bool $queryCacheEnabled = true
     )
     {
-        $this->dataClassRepositoryCache = $dataClassRepositoryCache;
-        $this->dataClassDatabase = $dataClassDatabase;
-        $this->dataClassFactory = $dataClassFactory;
-        $this->queryCacheEnabled = $queryCacheEnabled;
     }
 
     /**
@@ -72,7 +61,7 @@ class DataClassRepository
             )
         );
 
-        return $this->getDataClassDatabase()->count(
+        return $this->dataClassDatabase->count(
             $this->determineDataClassStorageUnitName($dataClassName), $parameters
         );
     }
@@ -89,7 +78,7 @@ class DataClassRepository
             new FunctionConditionVariable(FunctionTypeEnum::COUNT, new StaticConditionVariable(1))
         );
 
-        return $this->getDataClassDatabase()->countGrouped($dataClassName::getStorageUnitName(), $parameters);
+        return $this->dataClassDatabase->countGrouped($dataClassName::getStorageUnitName(), $parameters);
     }
 
     /**
@@ -103,7 +92,7 @@ class DataClassRepository
             new RetrieveProperties([new DistinctConditionVariable($parameters->getRetrieveProperties()->toArray())])
         );
 
-        return $this->getDataClassDatabase()->distinct($dataClassName::getStorageUnitName(), $parameters);
+        return $this->dataClassDatabase->distinct($dataClassName::getStorageUnitName(), $parameters);
     }
 
     /**
@@ -119,7 +108,7 @@ class DataClassRepository
 
         $parameters->returnSingleResult();
 
-        return $this->getDataClassDatabase()->retrieve(
+        return $this->dataClassDatabase->retrieve(
             $this->determineDataClassStorageUnitName($dataClassName), $parameters
         );
     }
@@ -133,7 +122,7 @@ class DataClassRepository
     {
         $this->applyDataClassPropertiesToParameters($dataClassName, $parameters);
 
-        $records = $this->getDataClassDatabase()->retrieves($dataClassName::getStorageUnitName(), $parameters);
+        $records = $this->dataClassDatabase->retrieves($dataClassName::getStorageUnitName(), $parameters);
 
         return new ArrayCollection($records);
     }
@@ -149,7 +138,7 @@ class DataClassRepository
      */
     protected function __retrieve(string $dataClassName, StorageParameters $parameters)
     {
-        return $this->getDataClassFactory()->getDataClass(
+        return $this->dataClassFactory->getDataClass(
             $dataClassName, $this->__record($dataClassName, $parameters)
         );
     }
@@ -170,7 +159,7 @@ class DataClassRepository
         $dataClasses = [];
 
         foreach ($records as $record) {
-            $dataClasses[] = $this->getDataClassFactory()->getDataClass($dataClassName, $record);
+            $dataClasses[] = $this->dataClassFactory->getDataClass($dataClassName, $record);
         }
 
         return new ArrayCollection($dataClasses);
@@ -204,8 +193,8 @@ class DataClassRepository
      */
     public function count(string $dataClassName, StorageParameters $parameters = new StorageParameters()): int
     {
-        if ($this->isQueryCacheEnabled()) {
-            return $this->getDataClassRepositoryCache()->addForCount(
+        if ($this->queryCacheEnabled) {
+            return $this->dataClassRepositoryCache->addForCount(
                 $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
                 return $this->__count($dataClassName, $parameters);
             }
@@ -224,8 +213,8 @@ class DataClassRepository
         string $dataClassName, StorageParameters $parameters = new StorageParameters()
     ): array
     {
-        if ($this->isQueryCacheEnabled()) {
-            return $this->getDataClassRepositoryCache()->addForCountGrouped(
+        if ($this->queryCacheEnabled) {
+            return $this->dataClassRepositoryCache->addForCountGrouped(
                 $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
                 return $this->__countGrouped($dataClassName, $parameters);
             }
@@ -257,12 +246,12 @@ class DataClassRepository
         if ($this->createRecord($dataClassName, $objectProperties)) {
             if (!$dataClass instanceof UuidDataClassInterface) {
                 $dataClass->setId(
-                    (string) $this->getDataClassDatabase()->getLastInsertedIdentifier($dataClass::getStorageUnitName())
+                    (string) $this->dataClassDatabase->getLastInsertedIdentifier($dataClass::getStorageUnitName())
                 );
             }
 
-            if ($this->isQueryCacheEnabled()) {
-                $this->getDataClassRepositoryCache()->addForRetrieve(
+            if ($this->queryCacheEnabled) {
+                $this->dataClassRepositoryCache->addForRetrieve(
                     $dataClassName, $this->buildRetrieveByIdentifierParameters($dataClassName, $dataClass->getId()),
                     function () use ($dataClass) {
                         return $dataClass;
@@ -285,7 +274,7 @@ class DataClassRepository
      */
     public function createRecord(string $dataClassName, array $record): bool
     {
-        return $this->getDataClassDatabase()->create($dataClassName::getStorageUnitName(), $record);
+        return $this->dataClassDatabase->create($dataClassName::getStorageUnitName(), $record);
     }
 
     /**
@@ -310,12 +299,12 @@ class DataClassRepository
      */
     public function deletes(string $dataClassName, ConditionInterface $condition): bool
     {
-        if (!$this->getDataClassDatabase()->delete($dataClassName::getStorageUnitName(), $condition)) {
+        if (!$this->dataClassDatabase->delete($dataClassName::getStorageUnitName(), $condition)) {
             return false;
         }
 
-        if ($this->isQueryCacheEnabled()) {
-            return $this->getDataClassRepositoryCache()->truncateClass($dataClassName);
+        if ($this->queryCacheEnabled) {
+            return $this->dataClassRepositoryCache->truncateClass($dataClassName);
         }
         else {
             return true;
@@ -336,8 +325,8 @@ class DataClassRepository
      */
     public function distinct(string $dataClassName, StorageParameters $parameters = new StorageParameters()): array
     {
-        if ($this->isQueryCacheEnabled()) {
-            return $this->getDataClassRepositoryCache()->addForDistinct(
+        if ($this->queryCacheEnabled) {
+            return $this->dataClassRepositoryCache->addForDistinct(
                 $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
                 return $this->__distinct($dataClassName, $parameters);
             }
@@ -346,26 +335,6 @@ class DataClassRepository
         else {
             return $this->__distinct($dataClassName, $parameters);
         }
-    }
-
-    public function getDataClassDatabase(): DataClassDatabaseInterface
-    {
-        return $this->dataClassDatabase;
-    }
-
-    public function getDataClassFactory(): DataClassFactory
-    {
-        return $this->dataClassFactory;
-    }
-
-    public function getDataClassRepositoryCache(): DataClassRepositoryCache
-    {
-        return $this->dataClassRepositoryCache;
-    }
-
-    protected function isQueryCacheEnabled(): bool
-    {
-        return $this->queryCacheEnabled;
     }
 
     /**
@@ -434,8 +403,8 @@ class DataClassRepository
      */
     public function record(string $dataClassName, StorageParameters $parameters = new StorageParameters()): ?array
     {
-        if ($this->isQueryCacheEnabled()) {
-            return $this->getDataClassRepositoryCache()->addForRecord(
+        if ($this->queryCacheEnabled) {
+            return $this->dataClassRepositoryCache->addForRecord(
                 $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
                 return $this->__record($dataClassName, $parameters);
             }
@@ -457,8 +426,8 @@ class DataClassRepository
         string $dataClassName, StorageParameters $parameters = new StorageParameters()
     ): ArrayCollection
     {
-        if ($this->isQueryCacheEnabled()) {
-            $recordIterator = $this->getDataClassRepositoryCache()->addForRecords(
+        if ($this->queryCacheEnabled) {
+            $recordIterator = $this->dataClassRepositoryCache->addForRecords(
                 $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
                 return $this->__records($dataClassName, $parameters);
             }
@@ -485,9 +454,9 @@ class DataClassRepository
         string $dataClassName, StorageParameters $parameters = new StorageParameters()
     )
     {
-        //        if ($this->isQueryCacheEnabled())
+        //        if ($this->queryCacheEnabled)
         //        {
-        //            return $this->getDataClassRepositoryCache()->addForRetrieve(
+        //            return $this->dataClassRepositoryCache->addForRetrieve(
         //                $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
         //                return $this->__retrieve($dataClassName, $parameters);
         //            }
@@ -536,7 +505,7 @@ class DataClassRepository
         )
         );
 
-        $record = $this->getDataClassDatabase()->retrieve($dataClassName::getStorageUnitName(), $parameters);
+        $record = $this->dataClassDatabase->retrieve($dataClassName::getStorageUnitName(), $parameters);
 
         return (int) $record[self::ALIAS_MAX_SORT];
     }
@@ -564,8 +533,8 @@ class DataClassRepository
         string $dataClassName, StorageParameters $parameters = new StorageParameters()
     ): ArrayCollection
     {
-        if ($this->isQueryCacheEnabled()) {
-            $arrayCollection = $this->getDataClassRepositoryCache()->addForRetrieves(
+        if ($this->queryCacheEnabled) {
+            $arrayCollection = $this->dataClassRepositoryCache->addForRetrieves(
                 $dataClassName, $parameters, function () use ($dataClassName, $parameters) {
                 return $this->__retrieves($dataClassName, $parameters);
             }
@@ -581,7 +550,7 @@ class DataClassRepository
 
     public function transactional(callable $function): mixed
     {
-        return $this->getDataClassDatabase()->transactional($function);
+        return $this->dataClassDatabase->transactional($function);
     }
 
     /**
@@ -620,10 +589,10 @@ class DataClassRepository
      */
     public function updates(string $dataClassName, UpdateProperties $properties, ConditionInterface $condition): bool
     {
-        $this->getDataClassDatabase()->update($dataClassName::getStorageUnitName(), $properties, $condition);
+        $this->dataClassDatabase->update($dataClassName::getStorageUnitName(), $properties, $condition);
 
-        if ($this->isQueryCacheEnabled()) {
-            $this->getDataClassRepositoryCache()->truncateClass($dataClassName);
+        if ($this->queryCacheEnabled) {
+            $this->dataClassRepositoryCache->truncateClass($dataClassName);
         }
 
         return true;

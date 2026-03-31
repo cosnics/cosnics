@@ -56,30 +56,27 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
     public function getTableActions(): TableActions
     {
-        $translator = $this->getTranslator();
-        $urlGenerator = $this->getUrlGenerator();
-
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
-        $removeUrl = $urlGenerator->fromParameters([
+        $removeUrl = $this->urlGenerator->fromParameters([
             ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
             ApplicationInterface::PARAM_ACTION => ActionEnum::DELETE->value
         ]);
 
         $actions->addAction(
             new TableAction(
-                $removeUrl, $translator->trans('RemoveSelected', [], StringUtilities::LIBRARIES)
+                $removeUrl, $this->translator->trans('RemoveSelected', [], StringUtilities::LIBRARIES)
             )
         );
 
-        $truncateUrl = $urlGenerator->fromParameters([
+        $truncateUrl = $this->urlGenerator->fromParameters([
             ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
             ApplicationInterface::PARAM_ACTION => ActionEnum::TRUNCATE->value
         ]);
 
         $actions->addAction(
             new TableAction(
-                $truncateUrl, $translator->trans('TruncateSelected', [], Manager::CONTEXT)
+                $truncateUrl, $this->translator->trans('TruncateSelected', [], Manager::CONTEXT)
             )
         );
 
@@ -88,26 +85,25 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
     protected function initializeColumns(): void
     {
-        $translator = $this->getTranslator();
-
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_NAME)
+            $this->dataClassPropertyTableColumnFactory->getColumn(Group::class, Group::PROPERTY_NAME)
         );
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_CODE)
+            $this->dataClassPropertyTableColumnFactory->getColumn(Group::class, Group::PROPERTY_CODE)
         );
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(Group::class, Group::PROPERTY_DESCRIPTION)
+            $this->dataClassPropertyTableColumnFactory->getColumn(Group::class, Group::PROPERTY_DESCRIPTION)
         );
         $this->addColumn(
             new StaticTableColumn(
-                self::COLUMN_USERS, $translator->trans(self::COLUMN_USERS, [], \Chamilo\Core\User\Manager::CONTEXT)
+                self::COLUMN_USERS,
+                $this->translator->trans(self::COLUMN_USERS, [], \Chamilo\Core\User\Manager::CONTEXT)
             )
         );
         $this->addColumn(
             new StaticTableColumn(
                 self::COLUMN_SUBGROUPS,
-                $translator->trans(self::COLUMN_SUBGROUPS, [], \Chamilo\Core\User\Manager::CONTEXT)
+                $this->translator->trans(self::COLUMN_SUBGROUPS, [], \Chamilo\Core\User\Manager::CONTEXT)
             )
         );
     }
@@ -194,8 +190,8 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
                     label: $this->translator->trans('Truncate', [], Manager::CONTEXT),
                     inlineGlyph: new FontAwesomeGlyph(
                         'trash-alt'
-                    ), action: $truncateUrl, display: DisplayTypeEnum::ICON, confirmationMessage: $this->getTranslator()
-                    ->trans(
+                    ), action: $truncateUrl, display: DisplayTypeEnum::ICON,
+                    confirmationMessage: $this->translator->trans(
                         'ConfirmChosenAction', [], StringUtilities::LIBRARIES
                     ), classes: ['btn-link']
                 )
@@ -219,8 +215,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
                 label: $this->translator->trans('Delete', [], StringUtilities::LIBRARIES),
                 inlineGlyph: new FontAwesomeGlyph(
                     'times'
-                ), action: $deleteUrl, display: DisplayTypeEnum::ICON, confirmationMessage: $this->getTranslator()
-                ->trans(
+                ), action: $deleteUrl, display: DisplayTypeEnum::ICON, confirmationMessage: $this->translator->trans(
                     'ConfirmChosenAction', [], StringUtilities::LIBRARIES
                 ), classes: ['btn-link']
             )

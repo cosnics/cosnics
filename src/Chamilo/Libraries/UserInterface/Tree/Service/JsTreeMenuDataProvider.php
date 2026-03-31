@@ -9,11 +9,8 @@ use stdClass;
  */
 class JsTreeMenuDataProvider
 {
-    protected TreeMenuDataProvider $treeMenuDataProvider;
-
-    public function __construct(TreeMenuDataProvider $treeMenuDataProvider)
+    public function __construct(protected TreeMenuDataProvider $treeMenuDataProvider)
     {
-        $this->treeMenuDataProvider = $treeMenuDataProvider;
     }
 
     /**
@@ -44,13 +41,8 @@ class JsTreeMenuDataProvider
 
     public function getData(string $uriFormat, ?string $itemIdentifier): array
     {
-        $data = $this->getTreeMenuDataProvider()->getData($uriFormat, $itemIdentifier);
+        $data = $this->treeMenuDataProvider->getData($uriFormat, $itemIdentifier);
 
         return $this->convertTreeNodes($data);
-    }
-
-    public function getTreeMenuDataProvider(): TreeMenuDataProvider
-    {
-        return $this->treeMenuDataProvider;
     }
 }

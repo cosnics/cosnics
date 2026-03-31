@@ -42,7 +42,7 @@ class UpdateComponent extends Manager
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
         protected readonly FormFactoryInterface $formFactory, protected readonly Environment $twigEnvironment,
-        protected readonly bool $userCanChangePicture, protected readonly UserFormType $userFormType,
+        protected readonly bool $userCanChangePicture,
         protected readonly ?UserPictureProviderInterface $userPictureProvider
     )
     {

@@ -16,27 +16,15 @@ use Doctrine\DBAL\Query\QueryBuilder;
  * @template-implements \Doctrine\Common\Collections\Selectable<TKey,\Chamilo\Libraries\Storage\Architecture\Interface\ConditionTranslatorInterface>
  * @psalm-consistent-constructor
  */
-class ConditionTranslatorCollection extends ArrayCollection
+class ConditionTranslatorRegistry
 {
+    public function __construct(protected ArrayCollection $conditionTranslators = new ArrayCollection())
+    {
+    }
+
     public function addConditionTranslator(ConditionTranslatorInterface $conditionTranslator): void
     {
-        $this->set(get_class($conditionTranslator), $conditionTranslator);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getConditionTranslatorTypes(): array
-    {
-        return $this->getKeys();
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Architecture\Interface\ConditionTranslatorInterface[]
-     */
-    public function getConditionTranslators(): array
-    {
-        return $this->toArray();
+        $this->conditionTranslators->set(get_class($conditionTranslator), $conditionTranslator);
     }
 
     /**
@@ -54,12 +42,12 @@ class ConditionTranslatorCollection extends ArrayCollection
             );
         }
 
-        return $this->get($conditionTranslatorClassName);
+        return $this->conditionTranslators->get($conditionTranslatorClassName);
     }
 
     public function hasConditionTranslator(string $conditionTranslatorClass): bool
     {
-        return $this->containsKey($conditionTranslatorClass);
+        return $this->conditionTranslators->containsKey($conditionTranslatorClass);
     }
 
     /**

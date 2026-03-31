@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection\CompilerPass;
 
-use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorCollection;
+use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorRegistry;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionTranslatorInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,9 +15,9 @@ class ConditionTranslatorCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if ($container->hasDefinition(ConditionTranslatorCollection::class)) {
+        if ($container->hasDefinition(ConditionTranslatorRegistry::class)) {
             $taggedServices = $container->findTaggedServiceIds(ConditionTranslatorInterface::class);
-            $definition = $container->getDefinition(ConditionTranslatorCollection::class);
+            $definition = $container->getDefinition(ConditionTranslatorRegistry::class);
 
             foreach ($taggedServices as $taggedServiceId => $tags) {
                 $definition->addMethodCall('addConditionTranslator', [new Reference($taggedServiceId)]);

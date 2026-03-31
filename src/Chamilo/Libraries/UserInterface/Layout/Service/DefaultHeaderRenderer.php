@@ -13,43 +13,26 @@ use Chamilo\Libraries\UserInterface\Breadcrumb\Service\BreadcrumbTrailRenderer;
  */
 class DefaultHeaderRenderer
 {
-    protected BaseHeaderRenderer $baseHeaderRenderer;
-
-    protected BreadcrumbTrail $breadcrumbTrail;
-
-    protected BreadcrumbTrailRenderer $breadcrumbTrailRenderer;
-
-    protected MenuRenderer $menuRenderer;
-
-    protected AlertsManager $notificationMessageManager;
-
     public function __construct(
-        BaseHeaderRenderer $baseHeaderRenderer, BreadcrumbTrail $breadcrumbTrail,
-        AlertsManager $notificationMessageManager, BreadcrumbTrailRenderer $breadcrumbTrailRenderer,
-        MenuRenderer $menuRenderer
+        protected BaseHeaderRenderer $baseHeaderRenderer, protected BreadcrumbTrail $breadcrumbTrail,
+        protected AlertsManager $notificationMessageManager, protected BreadcrumbTrailRenderer $breadcrumbTrailRenderer,
+        protected MenuRenderer $menuRenderer
     )
     {
-        $this->baseHeaderRenderer = $baseHeaderRenderer;
-        $this->breadcrumbTrail = $breadcrumbTrail;
-        $this->notificationMessageManager = $notificationMessageManager;
-        $this->breadcrumbTrailRenderer = $breadcrumbTrailRenderer;
-        $this->menuRenderer = $menuRenderer;
     }
 
     public function render(?User $user = null): string
     {
         $html = [];
 
-        $html[] = $this->getBaseHeaderRenderer()->renderHeader();
+        $html[] = $this->baseHeaderRenderer->renderHeader();
 
         $html[] = '<header>';
 
-        $html[] = $this->getMenuRenderer()->render($user);
+        $html[] = $this->menuRenderer->render($user);
 
-        $breadcrumbtrail = $this->getBreadcrumbTrail();
-
-        if ($breadcrumbtrail->count() > 0) {
-            $html[] = $this->getBreadcrumbTrailRenderer()->render($breadcrumbtrail);
+        if ($this->breadcrumbTrail->count() > 0) {
+            $html[] = $this->breadcrumbTrailRenderer->render($this->breadcrumbTrail);
         }
 
         $html[] = '</header>';
@@ -60,42 +43,15 @@ class DefaultHeaderRenderer
         $html[] = '<div class="col-12 clearfix">';
         $html[] = $this->renderPageTitle();
 
-        $html[] = $this->getNotificationMessageManager()->render();
+        $html[] = $this->notificationMessageManager->render();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function getBaseHeaderRenderer(): BaseHeaderRenderer
-    {
-        return $this->baseHeaderRenderer;
-    }
-
-    public function getBreadcrumbTrail(): BreadcrumbTrail
-    {
-        return $this->breadcrumbTrail;
-    }
-
-    public function getBreadcrumbTrailRenderer(): BreadcrumbTrailRenderer
-    {
-        return $this->breadcrumbTrailRenderer;
-    }
-
-    public function getMenuRenderer(): MenuRenderer
-    {
-        return $this->menuRenderer;
-    }
-
-    public function getNotificationMessageManager(): AlertsManager
-    {
-        return $this->notificationMessageManager;
-    }
-
     protected function renderPageTitle(): string
     {
-        $breadcrumbTrail = $this->getBreadcrumbTrail();
-
-        if ($breadcrumbTrail->count() > 0) {
-            $pageTitle = $breadcrumbTrail->last()->getName();
+        if ($this->breadcrumbTrail->count() > 0) {
+            $pageTitle = $this->breadcrumbTrail->last()->getName();
 
             return '<h3 title="' . htmlentities(strip_tags($pageTitle)) . '">' . $pageTitle . '</h3>';
         }

@@ -12,11 +12,8 @@ use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
  */
 class BreadcrumbTrailRenderer
 {
-    private StringUtilities $stringUtilities;
-
-    public function __construct(StringUtilities $stringUtilities)
+    public function __construct(protected StringUtilities $stringUtilities)
     {
-        $this->stringUtilities = $stringUtilities;
     }
 
     public function render(BreadcrumbTrail $breadcrumbTrail): string
@@ -36,11 +33,6 @@ class BreadcrumbTrailRenderer
         return implode(PHP_EOL, $html);
     }
 
-    public function getStringUtilities(): StringUtilities
-    {
-        return $this->stringUtilities;
-    }
-
     public function renderBreadcrumb(Breadcrumb $breadcrumb): string
     {
         $html = [];
@@ -52,7 +44,7 @@ class BreadcrumbTrailRenderer
             $html[] = $breadcrumb->getInlineGlyph()->render();
         }
         else {
-            $html[] = $this->getStringUtilities()->truncate($breadcrumb->getName(), 50);
+            $html[] = $this->stringUtilities->truncate($breadcrumb->getName(), 50);
         }
 
         $html[] = '</a>';

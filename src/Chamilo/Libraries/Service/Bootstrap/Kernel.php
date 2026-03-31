@@ -30,47 +30,15 @@ class Kernel
     public const string PARAM_SESSION_STATE = 'session_state';
     public const string PARAM_STATE = 'state';
 
-    protected ApplicationFactory $applicationFactory;
-
-    protected AuthenticationValidator $authenticationValidator;
-
-    protected ?User $currentUser;
-
-    protected EventDispatcherInterface $eventDispatcher;
-
-    protected ExceptionLoggerInterface $exceptionLogger;
-
-    protected bool $maintenanceMode;
-
-    protected ChamiloRequest $request;
-
-    protected SessionInterface $session;
-
-    protected ?string $timezone;
-
-    protected UrlGenerator $urlGenerator;
-
-    protected UserExceptionResponseRenderer $userExceptionResponseRenderer;
-
     public function __construct(
-        ChamiloRequest $request, SessionInterface $session, ApplicationFactory $applicationFactory,
-        ExceptionLoggerInterface $exceptionLogger, AuthenticationValidator $authenticationValidator,
-        UrlGenerator $urlGenerator, EventDispatcherInterface $eventDispatcher,
-        UserExceptionResponseRenderer $userExceptionResponseRenderer, string $timezone, ?User $currentUser = null,
-        bool $maintenanceMode = false
+        protected ChamiloRequest $request, protected SessionInterface $session,
+        protected ApplicationFactory $applicationFactory, protected ExceptionLoggerInterface $exceptionLogger,
+        protected AuthenticationValidator $authenticationValidator, protected UrlGenerator $urlGenerator,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected UserExceptionResponseRenderer $userExceptionResponseRenderer, protected ?string $timezone = null,
+        protected ?User $currentUser = null, protected bool $maintenanceMode = false
     )
     {
-        $this->request = $request;
-        $this->applicationFactory = $applicationFactory;
-        $this->session = $session;
-        $this->exceptionLogger = $exceptionLogger;
-        $this->urlGenerator = $urlGenerator;
-        $this->currentUser = $currentUser;
-        $this->authenticationValidator = $authenticationValidator;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->maintenanceMode = $maintenanceMode;
-        $this->timezone = $timezone;
-        $this->userExceptionResponseRenderer = $userExceptionResponseRenderer;
     }
 
     /**
@@ -79,10 +47,10 @@ class Kernel
      */
     protected function checkAuthentication(): static
     {
-        $application = $this->getApplicationFactory()->getApplicationComponent($this->getContext(), $this->getAction());
+        $application = $this->applicationFactory->getApplicationComponent($this->getContext(), $this->getAction());
 
         if (!$application instanceof NoAuthenticationSupportInterface) {
-            $this->getAuthenticationValidator()->validate();
+            $this->authenticationValidator->validate();
         }
 
         return $this;
@@ -94,10 +62,9 @@ class Kernel
     protected function checkPlatformAvailability(): static
     {
         if ($this->isMaintenanceMode()) {
-            $asAdmin = $this->getSession()->get('_as_admin');
+            $asAdmin = $this->session->get('_as_admin');
 
-            if ($this->getCurrentUser() instanceof User && !$this->getCurrentUser()->isPlatformAdministrator() &&
-                !$asAdmin) {
+            if ($this->currentUser instanceof User && !$this->currentUser->isPlatformAdministrator() && !$asAdmin) {
                 throw new PlatformNotAvailableException();
             }
         }
@@ -107,22 +74,22 @@ class Kernel
 
     protected function configureTimezone(): static
     {
-        date_default_timezone_set($this->getTimezone());
+        if ($this->timezone) {
+            date_default_timezone_set($this->timezone);
+        }
 
         return $this;
     }
 
     protected function getAction(): ?string
     {
-        $request = $this->getRequest();
-
-        $getAction = $request->query->get(ApplicationInterface::PARAM_ACTION);
+        $getAction = $this->request->query->get(ApplicationInterface::PARAM_ACTION);
 
         if ($getAction) {
             return $getAction;
         }
 
-        $postAction = $request->request->get(ApplicationInterface::PARAM_ACTION);
+        $postAction = $this->request->request->get(ApplicationInterface::PARAM_ACTION);
 
         if ($postAction) {
             return $postAction;
@@ -131,59 +98,9 @@ class Kernel
         return null;
     }
 
-    protected function getApplicationFactory(): ApplicationFactory
-    {
-        return $this->applicationFactory;
-    }
-
-    protected function getAuthenticationValidator(): AuthenticationValidator
-    {
-        return $this->authenticationValidator;
-    }
-
     protected function getContext(): ?string
     {
-        return $this->getRequest()->getFromQueryOrRequest(ApplicationInterface::PARAM_CONTEXT, Manager::CONTEXT);
-    }
-
-    protected function getCurrentUser(): ?User
-    {
-        return $this->currentUser;
-    }
-
-    protected function getEventDispatcher(): EventDispatcherInterface
-    {
-        return $this->eventDispatcher;
-    }
-
-    protected function getExceptionLogger(): ExceptionLoggerInterface
-    {
-        return $this->exceptionLogger;
-    }
-
-    protected function getRequest(): ChamiloRequest
-    {
-        return $this->request;
-    }
-
-    protected function getSession(): SessionInterface
-    {
-        return $this->session;
-    }
-
-    protected function getTimezone(): ?string
-    {
-        return $this->timezone;
-    }
-
-    protected function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
-    }
-
-    protected function getUserExceptionResponseRenderer(): UserExceptionResponseRenderer
-    {
-        return $this->userExceptionResponseRenderer;
+        return $this->request->getFromQueryOrRequest(ApplicationInterface::PARAM_CONTEXT, Manager::CONTEXT);
     }
 
     /**
@@ -194,9 +111,9 @@ class Kernel
      */
     protected function handleOAuth2(): static
     {
-        $code = $this->getRequest()->query->get(self::PARAM_CODE);
-        $state = $this->getRequest()->query->get(self::PARAM_STATE);
-        $sessionState = $this->getRequest()->query->get(self::PARAM_SESSION_STATE); // Not provided in OAUTH2 v2.0
+        $code = $this->request->query->get(self::PARAM_CODE);
+        $state = $this->request->query->get(self::PARAM_STATE);
+        $sessionState = $this->request->query->get(self::PARAM_SESSION_STATE); // Not provided in OAUTH2 v2.0
 
         if (!$code || !$state) {
             return $this;
@@ -224,7 +141,7 @@ class Kernel
             $landingPageParameters[self::PARAM_SESSION_STATE] = $sessionState;
         }
 
-        $response = new RedirectResponse($this->getUrlGenerator()->fromParameters($landingPageParameters));
+        $response = new RedirectResponse($this->urlGenerator->fromParameters($landingPageParameters));
         $response->send();
         exit;
     }
@@ -242,16 +159,15 @@ class Kernel
         try {
             $this->configureTimezone()->handleOAuth2()->checkAuthentication()->checkPlatformAvailability();
 
-            $application =
-                $this->getApplicationFactory()->getApplicationComponent($this->getContext(), $this->getAction());
+            $application = $this->applicationFactory->getApplicationComponent($this->getContext(), $this->getAction());
             $this->traceVisit($application);
 
-            $response = $application->run($this->getCurrentUser());
+            $response = $application->run($this->currentUser);
         }
         catch (UserExceptionInterface $exception) {
-            $this->getExceptionLogger()->logException($exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING);
+            $this->exceptionLogger->logException($exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING);
 
-            $response = new Response($this->getUserExceptionResponseRenderer()->render($exception));
+            $response = new Response($this->userExceptionResponseRenderer->render($exception));
         }
 
         $this->sendResponse($response);
@@ -264,9 +180,9 @@ class Kernel
 
     protected function traceVisit(ApplicationInterface $application): static
     {
-        if (!$application instanceof NoVisitTraceComponentInterface && $this->getCurrentUser() instanceof User) {
-            $this->getEventDispatcher()->dispatch(
-                new AfterUserEnterPageEvent($this->getCurrentUser(), $this->getRequest()->getRequestUri())
+        if (!$application instanceof NoVisitTraceComponentInterface && $this->currentUser instanceof User) {
+            $this->eventDispatcher->dispatch(
+                new AfterUserEnterPageEvent($this->currentUser, $this->request->getRequestUri())
             );
         }
 

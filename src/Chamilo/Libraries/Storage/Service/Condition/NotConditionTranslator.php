@@ -29,7 +29,7 @@ class NotConditionTranslator extends ConditionTranslator implements ConditionTra
 
         $string[] = 'NOT';
         $string[] = '(';
-        $string[] = $this->getConditionTranslatorCollection()->translate(
+        $string[] = $this->conditionTranslatorRegistry->translate(
             $querybuilder, $notCondition->getCondition(), $enableAliasing
         );
         $string[] = ')';

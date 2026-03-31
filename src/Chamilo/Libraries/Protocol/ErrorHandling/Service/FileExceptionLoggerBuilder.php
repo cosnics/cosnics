@@ -12,23 +12,12 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 {
-    protected array $errorHandlingConfiguration;
-
-    protected SessionInterface $session;
-
-    protected UrlGenerator $urlGenerator;
-
-    protected UserExceptionRendererRegistry $userExceptionRendererRegistry;
-
     public function __construct(
-        SessionInterface $session, UrlGenerator $urlGenerator,
-        UserExceptionRendererRegistry $userExceptionRendererRegistry, array $errorHandlingConfiguration = []
+        protected SessionInterface $session, protected UrlGenerator $urlGenerator,
+        protected UserExceptionRendererRegistry $userExceptionRendererRegistry,
+        protected array $errorHandlingConfiguration = []
     )
     {
-        $this->session = $session;
-        $this->urlGenerator = $urlGenerator;
-        $this->errorHandlingConfiguration = $errorHandlingConfiguration;
-        $this->userExceptionRendererRegistry = $userExceptionRendererRegistry;
     }
 
     /**
@@ -36,30 +25,8 @@ class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
      */
     public function createExceptionLogger(): FileExceptionLogger
     {
-        $errorHandlingConfiguration = $this->getErrorHandlingConfiguration();
-
         return new FileExceptionLogger(
-            $this->getUserExceptionRendererRegistry(), $errorHandlingConfiguration['logsPath']
+            $this->userExceptionRendererRegistry, $this->errorHandlingConfiguration['logsPath']
         );
-    }
-
-    public function getErrorHandlingConfiguration(): array
-    {
-        return $this->errorHandlingConfiguration;
-    }
-
-    public function getSession(): SessionInterface
-    {
-        return $this->session;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
-    }
-
-    public function getUserExceptionRendererRegistry(): UserExceptionRendererRegistry
-    {
-        return $this->userExceptionRendererRegistry;
     }
 }

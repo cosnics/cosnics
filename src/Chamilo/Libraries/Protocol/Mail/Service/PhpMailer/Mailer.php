@@ -16,19 +16,16 @@ class Mailer extends AbstractMailer
 {
     protected PHPMailer $phpMailer;
 
-    protected SystemPathBuilder $systemPathBuilder;
-
     /**
      * @throws \PHPMailer\PHPMailer\Exception
      */
     public function __construct(
-        SystemPathBuilder $systemPathBuilder, string $administratorName, string $administratorEmail,
+        protected SystemPathBuilder $systemPathBuilder, string $administratorName, string $administratorEmail,
         ?string $noRepyEmail = null
     )
     {
         parent::__construct($administratorName, $administratorEmail, $noRepyEmail);
 
-        $this->systemPathBuilder = $systemPathBuilder;
         $this->initializePhpMailer();
     }
 
@@ -104,11 +101,6 @@ class Mailer extends AbstractMailer
         $this->phpMailer->FromName = $this->determineFromName($mail);
     }
 
-    public function getSystemPathBuilder(): SystemPathBuilder
-    {
-        return $this->systemPathBuilder;
-    }
-
     /**
      * @throws \PHPMailer\PHPMailer\Exception
      */
@@ -116,7 +108,7 @@ class Mailer extends AbstractMailer
     {
         if (!isset($this->phpMailer)) {
             global $phpMailerConfiguration;
-            require_once($this->getSystemPathBuilder()->getStoragePath() . 'configuration/phpmailer.conf.php');
+            require_once($this->systemPathBuilder->getStoragePath() . 'configuration/phpmailer.conf.php');
 
             $this->phpMailer = new PHPMailer();
 

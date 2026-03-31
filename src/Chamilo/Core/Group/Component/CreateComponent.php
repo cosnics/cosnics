@@ -41,8 +41,7 @@ class CreateComponent extends Manager
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupMembershipService $groupMembershipService,
         GroupService $groupService, GroupUrlGenerator $groupUrlGenerator, UserService $userService,
-        protected readonly FormFactoryInterface $formFactory, protected readonly GroupFormType $groupFormType,
-        protected readonly Environment $twigFormEnvironment
+        protected readonly FormFactoryInterface $formFactory, protected readonly Environment $twigFormEnvironment
     )
     {
         parent::__construct(

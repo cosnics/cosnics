@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Storage\Service;
 use Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException;
 use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDisplayOrderSupport;
 use Chamilo\Libraries\Storage\Repository\DisplayOrderRepository;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Storage\Service
@@ -12,14 +11,8 @@ use Symfony\Component\Translation\Translator;
  */
 class DisplayOrderHandler
 {
-    private DisplayOrderRepository $displayOrderRepository;
-
-    private Translator $translator;
-
-    public function __construct(DisplayOrderRepository $displayOrderRepository, Translator $translator)
+    public function __construct(protected DisplayOrderRepository $displayOrderRepository)
     {
-        $this->displayOrderRepository = $displayOrderRepository;
-        $this->translator = $translator;
     }
 
     /**
@@ -27,7 +20,7 @@ class DisplayOrderHandler
      */
     protected function addDisplayOrderToContext(DataClassDisplayOrderSupport $dataClass): bool
     {
-        return $this->getDisplayOrderRepository()->addDisplayOrderToContext($dataClass);
+        return $this->displayOrderRepository->addDisplayOrderToContext($dataClass);
     }
 
     /**
@@ -35,7 +28,7 @@ class DisplayOrderHandler
      */
     protected function countOtherDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass): int
     {
-        return $this->getDisplayOrderRepository()->countOtherDisplayOrdersInContext($dataClass);
+        return $this->displayOrderRepository->countOtherDisplayOrdersInContext($dataClass);
     }
 
     /**
@@ -47,7 +40,7 @@ class DisplayOrderHandler
             $dataClass->getDefaultProperties(), array_flip($dataClass->getDisplayOrderContextPropertyNames())
         );
 
-        return $this->getDisplayOrderRepository()->deleteDisplayOrderFromContext(
+        return $this->displayOrderRepository->deleteDisplayOrderFromContext(
             $dataClass, $displayOrderContextProperties, $this->getDisplayOrderValue($dataClass)
         );
     }
@@ -65,7 +58,7 @@ class DisplayOrderHandler
             $displayOrderPropertiesRecord, array_flip($dataClass->getDisplayOrderContextPropertyNames())
         );
 
-        return $this->getDisplayOrderRepository()->deleteDisplayOrderFromContext(
+        return $this->displayOrderRepository->deleteDisplayOrderFromContext(
             $dataClass, $displayOrderContextProperties, $displayOrderPropertiesRecord[$displayOrderPropertyName]
         );
     }
@@ -76,7 +69,7 @@ class DisplayOrderHandler
      */
     protected function findNextDisplayOrderValue(DataClassDisplayOrderSupport $dataClass): int
     {
-        return $this->getDisplayOrderRepository()->findNextDisplayOrderValue($dataClass);
+        return $this->displayOrderRepository->findNextDisplayOrderValue($dataClass);
     }
 
     /**
@@ -87,7 +80,7 @@ class DisplayOrderHandler
      */
     protected function findPreviousDisplayOrderPropertiesRecord(DataClassDisplayOrderSupport $dataClass): array
     {
-        return $this->getDisplayOrderRepository()->findDisplayOrderPropertiesRecord($dataClass);
+        return $this->displayOrderRepository->findDisplayOrderPropertiesRecord($dataClass);
     }
 
     protected function getDisplayOrderContextAsString(DataClassDisplayOrderSupport $dataClass): string
@@ -105,11 +98,6 @@ class DisplayOrderHandler
         return implode(', ', $displayOrderContext);
     }
 
-    public function getDisplayOrderRepository(): DisplayOrderRepository
-    {
-        return $this->displayOrderRepository;
-    }
-
     protected function getDisplayOrderValue(DataClassDisplayOrderSupport $dataClass): ?int
     {
         return $dataClass->getDefaultProperty($dataClass->getDisplayOrderPropertyName());
@@ -123,11 +111,6 @@ class DisplayOrderHandler
     ): ?int
     {
         return (int) $displayOrderPropertiesRecord[$dataClass->getDisplayOrderPropertyName()];
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 
     /**

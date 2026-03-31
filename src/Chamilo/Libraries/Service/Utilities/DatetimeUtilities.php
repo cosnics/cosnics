@@ -14,11 +14,8 @@ use Symfony\Component\Translation\Translator;
  */
 class DatetimeUtilities
 {
-    private Translator $translator;
-
-    public function __construct(Translator $translator)
+    public function __construct(protected Translator $translator)
     {
-        $this->translator = $translator;
     }
 
     public function formatLocaleDate(
@@ -27,7 +24,7 @@ class DatetimeUtilities
     ): string
     {
         if (!$locale) {
-            $locale = $this->getTranslator()->getLocale();
+            $locale = $this->translator->getLocale();
         }
 
         if (!$timezone) {
@@ -99,11 +96,6 @@ class DatetimeUtilities
         }
 
         return $dateTime->format($format);
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 
     /**

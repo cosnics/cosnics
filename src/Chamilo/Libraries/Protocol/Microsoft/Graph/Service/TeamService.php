@@ -14,22 +14,16 @@ use Microsoft\Graph\Generated\Models\Team;
  */
 class TeamService
 {
-    protected GroupService $groupService;
-
-    protected TeamRepository $teamRepository;
-
     public function __construct(
-        GroupService $groupService, TeamRepository $teamRepository
+        protected GroupService $groupService, protected TeamRepository $teamRepository
     )
     {
-        $this->groupService = $groupService;
-        $this->teamRepository = $teamRepository;
     }
 
     public function addTeamToGroup(string $groupId, int $retryCounter = 0): void
     {
         try {
-            $this->getTeamRepository()->createTeam($groupId);
+            $this->teamRepository->createTeam($groupId);
         }
         catch (Exception|ClientException $exception) {
             if ($exception->getCode() == 404 && $retryCounter < 3) {
@@ -48,16 +42,11 @@ class TeamService
      */
     public function createTeamByName(User $owner, string $teamName): string
     {
-        $groupId = $this->getGroupService()->createGroupByName($owner, $teamName);
+        $groupId = $this->groupService->createGroupByName($owner, $teamName);
 
         $this->addTeamToGroup($groupId);
 
         return $groupId;
-    }
-
-    public function getGroupService(): GroupService
-    {
-        return $this->groupService;
     }
 
     /**
@@ -65,12 +54,7 @@ class TeamService
      */
     public function getTeam(string $groupId): Team
     {
-        return $this->getTeamRepository()->getTeam($groupId);
-    }
-
-    public function getTeamRepository(): TeamRepository
-    {
-        return $this->teamRepository;
+        return $this->teamRepository->getTeam($groupId);
     }
 
     /**

@@ -15,16 +15,11 @@ use Throwable;
 class ExceptionLoggerChain implements ExceptionLoggerInterface
 {
     /**
-     * @var \Chamilo\Libraries\Protocol\ErrorHandling\Architecture\Interface\ExceptionLoggerInterface[]
-     */
-    protected array $exceptionLoggers;
-
-    /**
      * @param \Chamilo\Libraries\Protocol\ErrorHandling\Architecture\Interface\ExceptionLoggerInterface[] $exceptionLoggers
      *
      * @throws \Exception
      */
-    public function __construct(array $exceptionLoggers)
+    public function __construct(protected array $exceptionLoggers)
     {
         if (empty($exceptionLoggers)) {
             throw new Exception(
@@ -42,8 +37,6 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
                 );
             }
         }
-
-        $this->exceptionLoggers = $exceptionLoggers;
     }
 
     public function addJavascriptExceptionLogger(PageHeaders $pageConfiguration): void

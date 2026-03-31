@@ -16,16 +16,8 @@ class ActionsTabRenderer implements TabRendererInterface, TabNavigationRendererI
 {
     use TabNavigatonRendererTrait;
 
-    private ActionRenderer $actionRenderer;
-
-    public function __construct(ActionRenderer $actionRenderer)
+    public function __construct(protected ActionRenderer $actionRenderer)
     {
-        $this->actionRenderer = $actionRenderer;
-    }
-
-    public function getActionRenderer(): ActionRenderer
-    {
-        return $this->actionRenderer;
     }
 
     public function getTabType(): string
@@ -48,7 +40,7 @@ class ActionsTabRenderer implements TabRendererInterface, TabNavigationRendererI
         $html[] = '<ul class="list-group">';
 
         foreach ($tab->getActions() as $action) {
-            $html[] = $this->getActionRenderer()->render($action);
+            $html[] = $this->actionRenderer->render($action);
         }
 
         $html[] = '</ul>';

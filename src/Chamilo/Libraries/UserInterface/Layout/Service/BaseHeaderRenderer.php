@@ -14,29 +14,12 @@ use Symfony\Component\Translation\Translator;
  */
 class BaseHeaderRenderer
 {
-    protected string $institutionName;
-
-    protected string $siteName;
-
-    protected Translator $translator;
-
-    private PageHeaders $pageConfiguration;
-
-    private ThemePathBuilder $themeWebPathBuilder;
-
-    private WebPathBuilder $webPathBuilder;
-
     public function __construct(
-        PageHeaders $pageConfiguration, WebPathBuilder $webPathBuilder, ThemePathBuilder $themeWebPathBuilder,
-        Translator $translator, string $siteName, string $institutionName
+        protected PageHeaders $pageConfiguration, protected WebPathBuilder $webPathBuilder,
+        protected ThemePathBuilder $themeWebPathBuilder, protected Translator $translator, protected string $siteName,
+        protected string $institutionName, protected string $theme
     )
     {
-        $this->pageConfiguration = $pageConfiguration;
-        $this->webPathBuilder = $webPathBuilder;
-        $this->themeWebPathBuilder = $themeWebPathBuilder;
-        $this->translator = $translator;
-        $this->siteName = $siteName;
-        $this->institutionName = $institutionName;
     }
 
     public function render(): string
@@ -51,78 +34,47 @@ class BaseHeaderRenderer
 
     protected function addDefaultHeaders(): void
     {
-        $pathBuilder = $this->getWebPathBuilder();
-        $themeWebPathBuilder = $this->getThemeWebPathBuilder();
-        $pageConfiguration = $this->getPageConfiguration();
+        $this->pageConfiguration->addHtml('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
+        $this->pageConfiguration->addHtml('<meta name="viewport" content="width=device-width, initial-scale=1">');
+        $this->pageConfiguration->addHtml('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
 
-        $pageConfiguration->addHtml('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
-        $pageConfiguration->addHtml('<meta name="viewport" content="width=device-width, initial-scale=1">');
-        $pageConfiguration->addHtml('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
+        $cssPath = $this->webPathBuilder->getCssPath('Chamilo/Libraries');
+        $javascriptPath = $this->webPathBuilder->getJavascriptPath('Chamilo/Libraries');
 
-        $cssPath = $pathBuilder->getCssPath('Chamilo/Libraries');
-        $javascriptPath = $pathBuilder->getJavascriptPath('Chamilo/Libraries');
-
-        $pageConfiguration->addCss($cssPath . 'cosnics.vendor.bootstrap.min.css');
-        $pageConfiguration->addCss($cssPath . 'cosnics.vendor.jquery.min.css');
-        $pageConfiguration->addCss($cssPath . 'cosnics.vendor.min.css');
-        $pageConfiguration->addCss($cssPath . 'cosnics.common.' . $themeWebPathBuilder->getTheme() . '.min.css');
-
-        $pageConfiguration->addLink($pathBuilder->getBasePath(), 'top');
-        $pageConfiguration->addLink($themeWebPathBuilder->getFavouriteIcon(), 'shortcut icon', null, 'image/x-icon');
-
-        $pageConfiguration->addHtml(
-            '<script>var rootWebPath="' . $pathBuilder->getBasePath() . '";</script>'
+        $this->pageConfiguration->addCss($cssPath . 'cosnics.vendor.bootstrap.min.css');
+        $this->pageConfiguration->addCss($cssPath . 'cosnics.vendor.jquery.min.css');
+        $this->pageConfiguration->addCss($cssPath . 'cosnics.vendor.min.css');
+        $this->pageConfiguration->addCss(
+            $cssPath . 'cosnics.common.' . $this->theme . '.min.css'
         );
 
-        $pageConfiguration->addJavascript($javascriptPath . 'cosnics.vendor.jquery.min.js');
-        $pageConfiguration->addJavascript($javascriptPath . 'cosnics.vendor.bootstrap.min.js');
-        $pageConfiguration->addJavascript($javascriptPath . 'cosnics.vendor.angular.min.js');
-        $pageConfiguration->addJavascript($javascriptPath . 'cosnics.vendor.min.js');
-        $pageConfiguration->addJavascript($javascriptPath . 'cosnics.common.min.js');
+        $this->pageConfiguration->addLink($this->webPathBuilder->getBasePath(), 'top');
+        $this->pageConfiguration->addLink(
+            $this->themeWebPathBuilder->getFavouriteIcon(), 'shortcut icon', null, 'image/x-icon'
+        );
 
-        $pageConfiguration->addHtml('<title>' . $this->getPageTitle() . '</title>');
-    }
+        $this->pageConfiguration->addHtml(
+            '<script>var rootWebPath="' . $this->webPathBuilder->getBasePath() . '";</script>'
+        );
 
-    public function getInstitutionName(): string
-    {
-        return $this->institutionName;
-    }
+        $this->pageConfiguration->addJavascript($javascriptPath . 'cosnics.vendor.jquery.min.js');
+        $this->pageConfiguration->addJavascript($javascriptPath . 'cosnics.vendor.bootstrap.min.js');
+        $this->pageConfiguration->addJavascript($javascriptPath . 'cosnics.vendor.angular.min.js');
+        $this->pageConfiguration->addJavascript($javascriptPath . 'cosnics.vendor.min.js');
+        $this->pageConfiguration->addJavascript($javascriptPath . 'cosnics.common.min.js');
 
-    public function getPageConfiguration(): PageHeaders
-    {
-        return $this->pageConfiguration;
+        $this->pageConfiguration->addHtml('<title>' . $this->getPageTitle() . '</title>');
     }
 
     protected function getPageTitle(): string
     {
-        return $this->getInstitutionName() . ' - ' . $this->getSiteName();
-    }
-
-    public function getSiteName(): string
-    {
-        return $this->siteName;
-    }
-
-    public function getThemeWebPathBuilder(): ThemePathBuilder
-    {
-        return $this->themeWebPathBuilder;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return $this->webPathBuilder;
+        return $this->institutionName . ' - ' . $this->siteName;
     }
 
     public function renderHeader(): string
     {
         $this->addDefaultHeaders();
-        $pageConfiguration = $this->getPageConfiguration();
-        $locale = $this->getTranslator()->getLocale();
+        $locale = $this->translator->getLocale();
 
         $html = [];
 
@@ -130,7 +82,7 @@ class BaseHeaderRenderer
         $html[] = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $locale . '" lang="' . $locale . '">';
         $html[] = '<head>';
 
-        foreach ($pageConfiguration->getHtmlHeaders() as $htmlHeader) {
+        foreach ($this->pageConfiguration->getHtmlHeaders() as $htmlHeader) {
             $html[] = $htmlHeader;
         }
 

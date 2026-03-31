@@ -15,16 +15,8 @@ use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabNavigationRend
  */
 class TabsRenderer
 {
-    protected TabRendererRegistry $tabRendererRegistry;
-
-    public function __construct(TabRendererRegistry $tabRendererRegistry)
+    public function __construct(protected TabRendererRegistry $tabRendererRegistry)
     {
-        $this->tabRendererRegistry = $tabRendererRegistry;
-    }
-
-    public function getTabRendererRegistry(): TabRendererRegistry
-    {
-        return $this->tabRendererRegistry;
     }
 
     /**

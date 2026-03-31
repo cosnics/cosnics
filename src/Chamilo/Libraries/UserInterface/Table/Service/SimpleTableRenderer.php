@@ -13,14 +13,10 @@ use Symfony\Component\Translation\Translator;
  */
 class SimpleTableRenderer
 {
-    protected SimpleTableCellRendererInterface $cellRenderer;
-
-    protected Translator $translator;
-
-    public function __construct(Translator $translator, SimpleTableCellRendererInterface $cellRenderer)
+    public function __construct(
+        protected Translator $translator, protected SimpleTableCellRendererInterface $cellRenderer
+    )
     {
-        $this->translator = $translator;
-        $this->cellRenderer = $cellRenderer;
     }
 
     /**
@@ -30,7 +26,7 @@ class SimpleTableRenderer
     {
         $htmlTable = new HTML_Table(['class' => 'table table-striped table-bordered table-hover table-responsive']);
 
-        $defaultProperties = $this->getCellRenderer()->getProperties();
+        $defaultProperties = $this->cellRenderer->getProperties();
 
         $this->buildTableHeader($htmlTable, $defaultProperties);
         $this->buildTableData($htmlTable, $dataArray, $defaultProperties);
@@ -48,30 +44,29 @@ class SimpleTableRenderer
         HTML_Table $htmlTable, array $dataArray, array $defaultProperties
     ): void
     {
-        $cellRenderer = $this->getCellRenderer();
-
         if (count($dataArray) > 0) {
             foreach ($dataArray as $data) {
                 $contents = [];
 
                 foreach ($defaultProperties as $index => $defaultproperty) {
-                    $contents[] = $cellRenderer->renderCell($index, $data);
+                    $contents[] = $this->cellRenderer->renderCell($index, $data);
                 }
 
-                if ($cellRenderer instanceof SimpleTableCellRendererModificationInterface) {
-                    $contents[] = $cellRenderer->getModificationLinks($data);
+                if ($this->cellRenderer instanceof SimpleTableCellRendererModificationInterface) {
+                    $contents[] = $this->cellRenderer->getModificationLinks($data);
                 }
 
                 $htmlTable->addRow($contents);
             }
         }
         else {
-            $rownumber =
-                $htmlTable->addRow([$this->getTranslator()->trans('NoResults', [], StringUtilities::LIBRARIES)]);
+            $rownumber = $htmlTable->addRow([$this->translator->trans('NoResults', [], StringUtilities::LIBRARIES)]);
 
             $htmlTable->setCellAttributes(
-                $rownumber, 0,
-                ['style' => '"font-style: italic;text-align:center;" colspan=' . count($cellRenderer->getProperties())]
+                $rownumber, 0, [
+                    'style' => '"font-style: italic;text-align:center;" colspan=' .
+                        count($this->cellRenderer->getProperties())
+                ]
             );
         }
     }
@@ -81,15 +76,14 @@ class SimpleTableRenderer
      */
     public function buildTableHeader(HTML_Table $htmlTable, array $defaultProperties): void
     {
-        $cellrenderer = $this->getCellRenderer();
-        $prefix = $cellrenderer->getPrefix();
-        $namespace = $cellrenderer->getNamespace();
+        $prefix = $this->cellRenderer->getPrefix();
+        $namespace = $this->cellRenderer->getNamespace();
         $counter = 0;
 
         foreach ($defaultProperties as $defaultproperty) {
             if ($defaultproperty) {
                 $htmlTable->setHeaderContents(
-                    0, $counter, $this->getTranslator()->trans($prefix . $defaultproperty, [], $namespace)
+                    0, $counter, $this->translator->trans($prefix . $defaultproperty, [], $namespace)
                 );
             }
             else {
@@ -99,18 +93,8 @@ class SimpleTableRenderer
             $counter ++;
         }
 
-        if ($cellrenderer instanceof SimpleTableCellRendererModificationInterface) {
+        if ($this->cellRenderer instanceof SimpleTableCellRendererModificationInterface) {
             $htmlTable->setHeaderContents(0, $counter, '');
         }
-    }
-
-    public function getCellRenderer(): SimpleTableCellRendererInterface
-    {
-        return $this->cellRenderer;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }

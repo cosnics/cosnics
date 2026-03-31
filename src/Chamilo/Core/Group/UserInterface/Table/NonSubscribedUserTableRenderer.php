@@ -47,19 +47,16 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
 
     public function getTableActions(): TableActions
     {
-        $translator = $this->getTranslator();
-        $urlGenerator = $this->getUrlGenerator();
-
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
-        $unsubscribeUrl = $urlGenerator->fromRequest([
+        $unsubscribeUrl = $this->urlGenerator->fromRequest([
             ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
             ApplicationInterface::PARAM_ACTION => ActionEnum::SUBSCRIBE->value
         ]);
 
         $actions->addAction(
             new TableAction(
-                $unsubscribeUrl, $translator->trans('SubscribeSelected', [], Manager::CONTEXT), false
+                $unsubscribeUrl, $this->translator->trans('SubscribeSelected', [], Manager::CONTEXT), false
             )
         );
 
@@ -69,21 +66,21 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
     protected function initializeColumns(): void
     {
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_SURNAME)
+            $this->dataClassPropertyTableColumnFactory->getColumn(User::class, User::PROPERTY_SURNAME)
         );
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_GIVEN_NAME)
+            $this->dataClassPropertyTableColumnFactory->getColumn(User::class, User::PROPERTY_GIVEN_NAME)
         );
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_USERNAME)
-        );
-
-        $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(User::class, User::PROPERTY_EMAIL)
+            $this->dataClassPropertyTableColumnFactory->getColumn(User::class, User::PROPERTY_USERNAME)
         );
 
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(
+            $this->dataClassPropertyTableColumnFactory->getColumn(User::class, User::PROPERTY_EMAIL)
+        );
+
+        $this->addColumn(
+            $this->dataClassPropertyTableColumnFactory->getColumn(
                 User::class, User::PROPERTY_PLATFORM_ADMINISTRATOR
             )
         );

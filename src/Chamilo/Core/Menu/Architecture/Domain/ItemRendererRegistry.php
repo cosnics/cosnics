@@ -10,11 +10,15 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @package Chamilo\Core\Menu\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ItemRendererRegistry extends ArrayCollection
+class ItemRendererRegistry
 {
+    public function __construct(protected ArrayCollection $itemRenderers = new ArrayCollection())
+    {
+    }
+
     public function addItemRenderer(ItemRenderer $itemRenderer): void
     {
-        $this->set(get_class($itemRenderer), $itemRenderer);
+        $this->itemRenderers->set(get_class($itemRenderer), $itemRenderer);
     }
 
     /**
@@ -22,11 +26,11 @@ class ItemRendererRegistry extends ArrayCollection
      */
     public function getItemRenderer(string $itemRendererType): ItemRenderer
     {
-        if (!$this->containsKey($itemRendererType)) {
+        if (!$this->itemRenderers->containsKey($itemRendererType)) {
             throw new NoSuchClassException($itemRendererType, ItemRenderer::class);
         }
 
-        return $this->get($itemRendererType);
+        return $this->itemRenderers->get($itemRendererType);
     }
 
     /**
@@ -38,18 +42,10 @@ class ItemRendererRegistry extends ArrayCollection
     }
 
     /**
-     * @return string[]
-     */
-    public function getItemRendererTypes(): array
-    {
-        return $this->getKeys();
-    }
-
-    /**
      * @return \Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer[]
      */
     public function getItemRenderers(): array
     {
-        return $this->toArray();
+        return $this->itemRenderers->toArray();
     }
 }

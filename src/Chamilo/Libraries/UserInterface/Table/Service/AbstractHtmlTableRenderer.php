@@ -33,33 +33,13 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class AbstractHtmlTableRenderer
 {
-    protected ButtonToolBarRenderer $buttonToolBarRenderer;
-
-    protected PageNavigationRenderer $pagerRenderer;
-
-    protected ResourceManager $resourceManager;
-
-    protected SecurityUtilities $security;
-
-    protected Translator $translator;
-
-    protected UrlGenerator $urlGenerator;
-
-    protected WebPathBuilder $webPathBuilder;
-
     public function __construct(
-        Translator $translator, UrlGenerator $urlGenerator, PageNavigationRenderer $pagerRenderer,
-        SecurityUtilities $security, ResourceManager $resourceManager, WebPathBuilder $webPathBuilder,
-        ButtonToolBarRenderer $buttonToolBarRenderer
+        protected Translator $translator, protected UrlGenerator $urlGenerator,
+        protected PageNavigationRenderer $pagerRenderer, protected SecurityUtilities $securityUtilities,
+        protected ResourceManager $resourceManager, protected WebPathBuilder $webPathBuilder,
+        protected ButtonToolBarRenderer $buttonToolBarRenderer
     )
     {
-        $this->urlGenerator = $urlGenerator;
-        $this->translator = $translator;
-        $this->pagerRenderer = $pagerRenderer;
-        $this->security = $security;
-        $this->resourceManager = $resourceManager;
-        $this->webPathBuilder = $webPathBuilder;
-        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
     }
 
     public function getActionsButtonToolBar(TableActions $tableActions): ButtonToolBar
@@ -100,11 +80,6 @@ abstract class AbstractHtmlTableRenderer
         return $buttonToolBar;
     }
 
-    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
-    {
-        return $this->buttonToolBarRenderer;
-    }
-
     /**
      * @throws \TableException
      */
@@ -114,7 +89,7 @@ abstract class AbstractHtmlTableRenderer
 
         $htmlTable->setCellAttributes(0, 0, 'style="font-style: italic;text-align:center;" colspan=' . $cols);
         $htmlTable->setCellContents(
-            0, 0, $this->getTranslator()->trans('NoSearchResults', [], StringUtilities::LIBRARIES)
+            0, 0, $this->translator->trans('NoSearchResults', [], StringUtilities::LIBRARIES)
         );
 
         $html = [];
@@ -128,31 +103,9 @@ abstract class AbstractHtmlTableRenderer
 
     abstract public function getFormClasses(): string;
 
-    public function getPagerRenderer(): PageNavigationRenderer
-    {
-        return $this->pagerRenderer;
-    }
-
-    public function getResourceManager(): ResourceManager
-    {
-        return $this->resourceManager;
-    }
-
-    public function setResourceManager(ResourceManager $resourceManager): AbstractHtmlTableRenderer
-    {
-        $this->resourceManager = $resourceManager;
-
-        return $this;
-    }
-
-    public function getSecurity(): SecurityUtilities
-    {
-        return $this->security;
-    }
-
     public function getTableActionsJavascript(): string
     {
-        return $this->getResourceManager()->getResourceHtml($this->getTableActionsJavascriptPath());
+        return $this->resourceManager->getResourceHtml($this->getTableActionsJavascriptPath());
     }
 
     abstract public function getTableActionsJavascriptPath(): string;
@@ -160,28 +113,6 @@ abstract class AbstractHtmlTableRenderer
     abstract public function getTableClasses(): string;
 
     abstract public function getTableContainerClasses(): string;
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
-    }
-
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return $this->webPathBuilder;
-    }
-
-    public function setWebPathBuilder(WebPathBuilder $webPathBuilder): AbstractHtmlTableRenderer
-    {
-        $this->webPathBuilder = $webPathBuilder;
-
-        return $this;
-    }
 
     /**
      * @param \Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn[] $tableColumns
@@ -266,7 +197,7 @@ abstract class AbstractHtmlTableRenderer
     {
         $html = [];
 
-        $html[] = $this->getButtonToolBarRenderer()->render($this->getActionsButtonToolBar($tableActions));
+        $html[] = $this->buttonToolBarRenderer->render($this->getActionsButtonToolBar($tableActions));
         $html[] =
             '<input type="hidden" name="' . $tableName . '_namespace" value="' . $tableActions->getNamespace() . '"/>';
         $html[] = '<input type="hidden" name="table_name" value="' . $tableName . '"/>';
@@ -281,7 +212,7 @@ abstract class AbstractHtmlTableRenderer
         TableParameterValues $parameterValues, array $parameterNames
     ): string
     {
-        return $this->getPagerRenderer()->renderPaginationWithPageLimit(
+        return $this->pagerRenderer->renderPaginationWithPageLimit(
             $parameterValues, $parameterNames[AbstractBaseTableParameters::PARAM_PAGE_NUMBER]
         );
     }
@@ -298,7 +229,7 @@ abstract class AbstractHtmlTableRenderer
             return '';
         }
 
-        return $this->getPagerRenderer()->renderItemsPerPageSelector(
+        return $this->pagerRenderer->renderItemsPerPageSelector(
             $parameterValues, $parameterNames[TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE]
         );
     }
@@ -314,10 +245,10 @@ abstract class AbstractHtmlTableRenderer
     {
         $currentFirstOrderDirection = $parameterValues->getOrderColumnDirection();
         $subButtons = [];
-        $translator = $this->getTranslator();
+        $translator = $this->translator;
 
         if ($this->hasSortableColumns($tableColumns)) {
-            $propertyUrl = $this->getUrlGenerator()->fromRequest(
+            $propertyUrl = $this->urlGenerator->fromRequest(
                 [$parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION] => SORT_ASC]
             );
             $isSelected = $currentFirstOrderDirection == SORT_ASC;
@@ -327,7 +258,7 @@ abstract class AbstractHtmlTableRenderer
                 $propertyUrl, DisplayTypeEnum::ICON_AND_LABEL, null, [], null, $isSelected
             );
 
-            $propertyUrl = $this->getUrlGenerator()->fromRequest(
+            $propertyUrl = $this->urlGenerator->fromRequest(
                 [$parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION] => SORT_DESC]
             );
             $isSelected = $currentFirstOrderDirection == SORT_DESC;
@@ -356,7 +287,7 @@ abstract class AbstractHtmlTableRenderer
         if ($this->hasSortableColumns($tableColumns)) {
             $buttonToolBar = new ButtonToolBar();
             $dropDownButton = new DropDownButtonCollection();
-            $translator = $this->getTranslator();
+            $translator = $this->translator;
 
             $currentFirstOrderColumn = $parameterValues->getOrderColumnIndex();
             $currentFirstOrderDirection = $parameterValues->getOrderColumnDirection();
@@ -394,7 +325,7 @@ abstract class AbstractHtmlTableRenderer
 
             $buttonToolBar->addButton($dropDownButton);
 
-            $html[] = $this->getButtonToolBarRenderer()->render($buttonToolBar);
+            $html[] = $this->buttonToolBarRenderer->render($buttonToolBar);
         }
 
         return implode(PHP_EOL, $html);
@@ -415,14 +346,14 @@ abstract class AbstractHtmlTableRenderer
         if ($this->hasSortableColumns($tableColumns)) {
             foreach ($tableColumns as $index => $tableColumn) {
                 if ($tableColumn instanceof AbstractSortableTableColumn) {
-                    $propertyUrl = $this->getUrlGenerator()->fromRequest(
+                    $propertyUrl = $this->urlGenerator->fromRequest(
                         [$parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX] => $index]
                     );
 
                     $isSelected = $currentOrderColumnIndex == $index;
 
                     $subButtons[] = new SubButton(
-                        $this->getSecurity()->removeXSS($tableColumn->getTitle()), null, $propertyUrl,
+                        $this->securityUtilities->removeXSS($tableColumn->getTitle()), null, $propertyUrl,
                         DisplayTypeEnum::LABEL, null, [], null, $isSelected
                     );
                 }

@@ -21,17 +21,12 @@ use function Sentry\init;
  */
 class SentryExceptionLogger implements ExceptionLoggerInterface
 {
-    protected string $sentryConnectionString;
-
-    protected SessionInterface $session;
-
-    protected UrlGenerator $urlGenerator;
-
     /**
      * @throws \Exception
      */
     public function __construct(
-        SessionInterface $session, UrlGenerator $urlGenerator, string $sentryConnectionString
+        protected SessionInterface $session, protected UrlGenerator $urlGenerator,
+        protected string $sentryConnectionString
     )
     {
         if (!class_exists('\Sentry\SentrySdk')) {
@@ -41,10 +36,6 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         if (empty($sentryConnectionString)) {
             throw new Exception('The given connection string for sentry can not be empty');
         }
-
-        $this->sentryConnectionString = $sentryConnectionString;
-        $this->session = $session;
-        $this->urlGenerator = $urlGenerator;
 
         init(
             [
@@ -77,7 +68,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
     public function addJavascriptExceptionLogger(PageHeaders $pageConfiguration): void
     {
         $matches = [];
-        preg_match('/https:\/\/(.*)@/', $this->getSentryConnectionString(), $matches);
+        preg_match('/https:\/\/(.*)@/', $this->sentryConnectionString, $matches);
 
         $sentryKey = $matches[1];
 
@@ -88,7 +79,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
                 crossorigin="anonymous"
             ></script>';
 
-        $userId = $this->getSession()->get(AuthenticationValidator::SESSION_USER_ID);
+        $userId = $this->session->get(AuthenticationValidator::SESSION_USER_ID);
 
         $profilePage = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['SCRIPT_NAME'] .
             '?application=Chamilo\\\\Core\\\\User&go=UserDetail&user_id=' . $userId;
@@ -110,16 +101,6 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
         $html[] = '</script>';
 
         $pageConfiguration->addHtml(implode(PHP_EOL, $html));
-    }
-
-    public function getSentryConnectionString(): string
-    {
-        return $this->sentryConnectionString;
-    }
-
-    public function getSession(): SessionInterface
-    {
-        return $this->session;
     }
 
     public function logException(

@@ -7,7 +7,6 @@ namespace Chamilo\Application\Calendar\Architecture\Domain;
  */
 class AvailableCalendar
 {
-
     private string $description;
 
     private string $identifier;
@@ -62,5 +61,10 @@ class AvailableCalendar
         $this->type = $type;
 
         return $this;
+    }
+
+    public function getUniqueIdentifier(): string
+    {
+        return md5(serialize([$this->getType(), $this->getIdentifier()]));
     }
 }

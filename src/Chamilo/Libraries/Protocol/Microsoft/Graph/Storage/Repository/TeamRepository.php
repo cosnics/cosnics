@@ -12,11 +12,8 @@ use Microsoft\Graph\GraphServiceClient;
  */
 class TeamRepository
 {
-    protected GraphServiceClient $graphServiceClient;
-
-    public function __construct(GraphServiceClient $graphServiceClient)
+    public function __construct(protected GraphServiceClient $graphServiceClient)
     {
-        $this->graphServiceClient = $graphServiceClient;
     }
 
     /**
@@ -30,12 +27,7 @@ class TeamRepository
         $team = new Team();
         $team->setMemberSettings($memberSettings);
 
-        return $this->getGraphServiceClient()->groups()->byGroupId($groupId)->team()->put($team)->wait();
-    }
-
-    public function getGraphServiceClient(): GraphServiceClient
-    {
-        return $this->graphServiceClient;
+        return $this->graphServiceClient->groups()->byGroupId($groupId)->team()->put($team)->wait();
     }
 
     /**
@@ -44,7 +36,7 @@ class TeamRepository
     public function getTeam(string $groupId): Team
     {
         try {
-            $team = $this->getGraphServiceClient()->teams()->byTeamId($groupId)->get()->wait();
+            $team = $this->graphServiceClient->teams()->byTeamId($groupId)->get()->wait();
 
             if (!$team instanceof Team) {
                 throw new Exception('Team not found: ' . $groupId);

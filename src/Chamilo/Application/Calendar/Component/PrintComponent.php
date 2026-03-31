@@ -19,7 +19,6 @@ use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\BaseFooterRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\BaseHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
-use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
 
@@ -39,28 +38,27 @@ class PrintComponent extends BrowseComponent
         CalendarExtensionDataProviderRegistry $calendarExtensionDataProviderRegistry,
         CalendarDataProvider $calendarRendererProvider,
         CalendarTableConfigurationBuilder $calendarTableConfigurationBuilder, string $defaultView,
-        HtmlCalendarRendererFactory $htmlCalendarRendererFactory, PageHeaders $pageHeaders,
-        ThemePathBuilder $themeWebPathBuilder, UserService $userService, UserSettingsService $userSettingsService,
-        WebPathBuilder $webPathBuilder, protected BaseFooterRenderer $baseFooterRenderer,
-        protected BaseHeaderRenderer $baseHeaderRenderer, ?int $currentTime = null
+        HtmlCalendarRendererFactory $htmlCalendarRendererFactory, PageHeaders $pageHeaders, UserService $userService,
+        UserSettingsService $userSettingsService, WebPathBuilder $webPathBuilder,
+        protected BaseFooterRenderer $baseFooterRenderer, protected BaseHeaderRenderer $baseHeaderRenderer,
+        string $theme, ?int $currentTime = null
     )
     {
         parent::__construct(
             $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator,
             $visibilityRepository, $calendarDataProvider, $calendarExtensionActionProviderRegistry,
             $calendarExtensionDataProviderRegistry, $calendarRendererProvider, $calendarTableConfigurationBuilder,
-            $defaultView, $htmlCalendarRendererFactory, $pageHeaders, $themeWebPathBuilder, $userService,
-            $userSettingsService, $webPathBuilder, $currentTime
+            $defaultView, $htmlCalendarRendererFactory, $pageHeaders, $userService, $userSettingsService,
+            $webPathBuilder, $theme, $currentTime
         );
     }
 
     public function run(?User $currentUser = null): Response
     {
-        $this->checkAuthorization(Manager::CONTEXT);
+        $this->checkAuthorization(Manager::CONTEXT, $currentUser);
 
         $this->pageHeaders->addCss(
-            $this->getWebPathBuilder()->getCssPath(Manager::CONTEXT) . 'print.' .
-            $this->themeWebPathBuilder->getTheme() . '.min.css', 'print'
+            $this->getWebPathBuilder()->getCssPath(Manager::CONTEXT) . 'print.' . $this->theme . '.min.css', 'print'
         );
 
         $html = [];

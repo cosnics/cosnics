@@ -13,23 +13,12 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 {
-    protected array $errorHandlingConfiguration;
-
-    protected SessionInterface $session;
-
-    protected UrlGenerator $urlGenerator;
-
-    protected UserExceptionRendererRegistry $userExceptionRendererRegistry;
-
     public function __construct(
-        SessionInterface $session, UrlGenerator $urlGenerator,
-        UserExceptionRendererRegistry $userExceptionRendererRegistry, array $errorHandlingConfiguration = []
+        protected SessionInterface $session, protected UrlGenerator $urlGenerator,
+        protected UserExceptionRendererRegistry $userExceptionRendererRegistry,
+        protected array $errorHandlingConfiguration = []
     )
     {
-        $this->errorHandlingConfiguration = $errorHandlingConfiguration;
-        $this->session = $session;
-        $this->urlGenerator = $urlGenerator;
-        $this->userExceptionRendererRegistry = $userExceptionRendererRegistry;
     }
 
     /**
@@ -37,9 +26,7 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
      */
     public function createExceptionLogger(): SentryExceptionLogger
     {
-        $errorHandlingConfiguration = $this->getErrorHandlingConfiguration();
-
-        $clientDSNKey = $errorHandlingConfiguration['dsn'];
+        $clientDSNKey = $this->errorHandlingConfiguration['dsn'];
 
         if (empty($clientDSNKey)) {
             throw new Exception(
@@ -49,21 +36,6 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
             );
         }
 
-        return new SentryExceptionLogger($this->getSession(), $this->getUrlGenerator(), $clientDSNKey);
-    }
-
-    public function getErrorHandlingConfiguration(): array
-    {
-        return $this->errorHandlingConfiguration;
-    }
-
-    public function getSession(): SessionInterface
-    {
-        return $this->session;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
+        return new SentryExceptionLogger($this->session, $this->urlGenerator, $clientDSNKey);
     }
 }

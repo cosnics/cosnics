@@ -26,43 +26,11 @@ class PageNavigationRenderer
     public const string PAGE_SELECTOR_TRANSLATION_TITLE = 'title';
     public const string PAGE_SELECTOR_TRANSLATION_TITLE_ALL = 'title_all';
 
-    protected ButtonToolBarRenderer $buttonToolBarRenderer;
-
-    protected PageNavigationCalculator $pager;
-
-    protected Translator $translator;
-
-    protected UrlGenerator $urlGenerator;
-
     public function __construct(
-        Translator $translator, PageNavigationCalculator $pager, UrlGenerator $urlGenerator,
-        ButtonToolBarRenderer $buttonToolBarRenderer
+        protected Translator $translator, protected PageNavigationCalculator $pageNavigationCalculator,
+        protected UrlGenerator $urlGenerator, protected ButtonToolBarRenderer $buttonToolBarRenderer
     )
     {
-        $this->translator = $translator;
-        $this->pager = $pager;
-        $this->urlGenerator = $urlGenerator;
-        $this->buttonToolBarRenderer = $buttonToolBarRenderer;
-    }
-
-    public function getButtonToolBarRenderer(): ButtonToolBarRenderer
-    {
-        return $this->buttonToolBarRenderer;
-    }
-
-    public function getPager(): PageNavigationCalculator
-    {
-        return $this->pager;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
     }
 
     /**
@@ -70,20 +38,19 @@ class PageNavigationRenderer
      */
     public function renderCurrentRange(TableParameterValues $parameterValues): string
     {
-        $pager = $this->getPager();
         $variables = [];
 
-        $variables['%Start%'] = $pager->getCurrentRangeStart(
+        $variables['%Start%'] = $this->pageNavigationCalculator->getCurrentRangeStart(
             $parameterValues->getPageNumber(), $parameterValues->getNumberOfItemsPerPage(),
             $parameterValues->getTotalNumberOfItems()
         );
-        $variables['%End%'] = $pager->getCurrentRangeEnd(
+        $variables['%End%'] = $this->pageNavigationCalculator->getCurrentRangeEnd(
             $parameterValues->getPageNumber(), $parameterValues->getNumberOfItemsPerPage(),
             $parameterValues->getTotalNumberOfItems()
         );
         $variables['%Total%'] = $parameterValues->getTotalNumberOfItems();
 
-        return $this->getTranslator()->trans('ShowingStartToEndOfTotalEntries', $variables, StringUtilities::LIBRARIES);
+        return $this->translator->trans('ShowingStartToEndOfTotalEntries', $variables, StringUtilities::LIBRARIES);
     }
 
     protected function renderDirectionPaginationItem(
@@ -97,8 +64,7 @@ class PageNavigationRenderer
         $html[] = '<a class="page-link" aria-label="' . $translation . '"';
 
         if (!$isDisabled) {
-            $html[] =
-                ' href="' . $this->getUrlGenerator()->fromRequest([$pageNumberParameterName => $targetPage]) . '"';
+            $html[] = ' href="' . $this->urlGenerator->fromRequest([$pageNumberParameterName => $targetPage]) . '"';
         }
         $html[] = '>';
 
@@ -120,7 +86,6 @@ class PageNavigationRenderer
     ): string
     {
         $buttonToolBar = new ButtonToolBar();
-        $translator = $this->getTranslator();
 
         $defaultTranslationVariables[ApplicationInterface::PARAM_CONTEXT] = StringUtilities::LIBRARIES;
         $defaultTranslationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE] = 'ShowNumberOfItemsPerPage';
@@ -132,13 +97,13 @@ class PageNavigationRenderer
         $numberOfItemsPerPage = $parameterValues->getNumberOfItemsPerPage();
 
         if ($numberOfItemsPerPage >= $parameterValues->getTotalNumberOfItems()) {
-            $dropDownButtonLabel = $translator->trans(
+            $dropDownButtonLabel = $this->translator->trans(
                 $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL], [],
                 $translationVariables[ApplicationInterface::PARAM_CONTEXT]
             );
         }
         else {
-            $dropDownButtonLabel = $translator->trans(
+            $dropDownButtonLabel = $this->translator->trans(
                 $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE], ['%Number%' => $numberOfItemsPerPage],
                 $translationVariables[ApplicationInterface::PARAM_CONTEXT]
             );
@@ -157,10 +122,10 @@ class PageNavigationRenderer
 
             $dropDownButton->addButton(
                 new SubButton(
-                    $translator->trans(
+                    $this->translator->trans(
                         $translationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW], ['%Number%' => $nr],
                         $translationVariables[ApplicationInterface::PARAM_CONTEXT]
-                    ), null, $this->getUrlGenerator()->fromRequest(
+                    ), null, $this->urlGenerator->fromRequest(
                     [$itemsPerPageParameterName => $numberrOfRowsOption]
                 ), DisplayTypeEnum::LABEL, null, [], null,
                     $numberrOfRowsOption == $parameterValues->getNumberOfRowsPerPage()
@@ -171,10 +136,10 @@ class PageNavigationRenderer
         if ($parameterValues->getTotalNumberOfItems() < PageNavigationCalculator::DISPLAY_PER_PAGE_LIMIT) {
             $dropDownButton->addButton(
                 new SubButton(
-                    $translator->trans(
+                    $this->translator->trans(
                         $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL], [],
                         $translationVariables[ApplicationInterface::PARAM_CONTEXT]
-                    ), null, $this->getUrlGenerator()->fromRequest(
+                    ), null, $this->urlGenerator->fromRequest(
                     [$itemsPerPageParameterName => PageNavigationCalculator::DISPLAY_ALL]
                 ), DisplayTypeEnum::LABEL, null, [], null,
                     $numberOfItemsPerPage == $parameterValues->getTotalNumberOfItems()
@@ -182,7 +147,7 @@ class PageNavigationRenderer
             );
         }
 
-        return $this->getButtonToolBarRenderer()->render($buttonToolBar);
+        return $this->buttonToolBarRenderer->render($buttonToolBar);
     }
 
     /**
@@ -206,8 +171,6 @@ class PageNavigationRenderer
         int $end, bool $includeRange = true
     ): string
     {
-        $translator = $this->getTranslator();
-
         $html = [];
 
         $html[] = '<ul class="pagination pagination-sm float-end">';
@@ -219,30 +182,30 @@ class PageNavigationRenderer
 
             $html[] = $this->renderDirectionPaginationItem(
                 $pageNumberParameterName, $isDisabled, new FontAwesomeGlyph('angles-left', ['fa-2xs']),
-                $translator->trans('First', [], StringUtilities::LIBRARIES), 1
+                $this->translator->trans('First', [], StringUtilities::LIBRARIES), 1
             );
 
             $html[] = $this->renderDirectionPaginationItem(
                 $pageNumberParameterName, $isDisabled, new FontAwesomeGlyph('angle-left', ['fa-2xs']),
-                $translator->trans('Previous', [], StringUtilities::LIBRARIES), $currentPageNumber - 1
+                $this->translator->trans('Previous', [], StringUtilities::LIBRARIES), $currentPageNumber - 1
             );
 
             for ($i = $start; $i <= $end; $i ++) {
                 $html[] = '<li class="page-item' . ($currentPageNumber == $i ? ' active' : '') .
                     '"><a class="page-link" href="' .
-                    $this->getUrlGenerator()->fromRequest([$pageNumberParameterName => $i]) . '">' . $i . '</a></li>';
+                    $this->urlGenerator->fromRequest([$pageNumberParameterName => $i]) . '">' . $i . '</a></li>';
             }
 
             $isDisabled = ($currentPageNumber == $numberOfPages);
 
             $html[] = $this->renderDirectionPaginationItem(
                 $pageNumberParameterName, $isDisabled, new FontAwesomeGlyph('angle-right', ['fa-2xs']),
-                $translator->trans('Next', [], StringUtilities::LIBRARIES), $currentPageNumber + 1
+                $this->translator->trans('Next', [], StringUtilities::LIBRARIES), $currentPageNumber + 1
             );
 
             $html[] = $this->renderDirectionPaginationItem(
                 $pageNumberParameterName, $isDisabled, new FontAwesomeGlyph('angles-right', ['fa-2xs']),
-                $translator->trans('Last', [], StringUtilities::LIBRARIES), $numberOfPages
+                $this->translator->trans('Last', [], StringUtilities::LIBRARIES), $numberOfPages
             );
         }
 
@@ -267,7 +230,7 @@ class PageNavigationRenderer
         bool $includeRange = true
     ): string
     {
-        $numberOfPages = $this->getPager()->getNumberOfPages(
+        $numberOfPages = $this->pageNavigationCalculator->getNumberOfPages(
             $parameterValues->getNumberOfItemsPerPage(), $parameterValues->getTotalNumberOfItems()
         );
 

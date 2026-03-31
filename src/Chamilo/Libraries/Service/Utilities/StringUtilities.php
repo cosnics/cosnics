@@ -13,11 +13,8 @@ class StringUtilities
 {
     public const string LIBRARIES = 'Chamilo\Libraries';
 
-    private string $encoding;
-
-    public function __construct(string $encoding = 'UTF-8')
+    public function __construct(protected string $encoding = 'UTF-8')
     {
-        $this->encoding = $encoding;
     }
 
     /**
@@ -29,7 +26,7 @@ class StringUtilities
      */
     public function createString(string $string): Stringy
     {
-        return Stringy::create($string, $this->getEncoding());
+        return Stringy::create($string, $this->encoding);
     }
 
     public function encryptMailLink(string $email, ?string $clickableText = null): string
@@ -63,11 +60,6 @@ class StringUtilities
 
         // return encrypted mailto hyperlink
         return '<a href="' . $hmail . '">' . $hclickableText . '</a>';
-    }
-
-    public function getEncoding(): string
-    {
-        return $this->encoding;
     }
 
     public function hasValue(mixed $string, bool $forHumans = false): bool

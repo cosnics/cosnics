@@ -39,8 +39,7 @@ class MoveComponent extends Manager
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AlertsManager $alertsManager, BreadcrumbTrail $breadcrumbTrail, GroupMembershipService $groupMembershipService,
         GroupService $groupService, GroupUrlGenerator $groupUrlGenerator, UserService $userService,
-        protected FormFactoryInterface $formFactory, protected GroupMoveFormType $groupMoveFormType,
-        protected Environment $twigFormEnvironment
+        protected FormFactoryInterface $formFactory, protected Environment $twigFormEnvironment
     )
     {
         parent::__construct(

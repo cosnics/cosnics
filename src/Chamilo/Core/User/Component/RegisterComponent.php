@@ -41,9 +41,8 @@ class RegisterComponent extends Manager implements NoAuthenticationSupportInterf
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         AuthenticationValidator $authenticationValidator, UserUrlGenerator $userUrlGenerator,
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
-        protected readonly FormFactoryInterface $formFactory, protected readonly RegisterFormType $registerFormType,
-        protected readonly Environment $twigEnvironment, protected readonly bool $userCanRegister,
-        protected readonly ?UserPictureProviderInterface $userPictureProvider
+        protected readonly FormFactoryInterface $formFactory, protected readonly Environment $twigEnvironment,
+        protected readonly bool $userCanRegister, protected readonly ?UserPictureProviderInterface $userPictureProvider
     )
     {
         parent::__construct(

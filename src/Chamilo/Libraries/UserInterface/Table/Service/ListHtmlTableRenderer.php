@@ -54,7 +54,7 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
 
     public function getTableActionsJavascriptPath(): string
     {
-        return $this->getWebPathBuilder()->getJavascriptPath(StringUtilities::LIBRARIES) . 'SortableTable.js';
+        return $this->webPathBuilder->getJavascriptPath(StringUtilities::LIBRARIES) . 'SortableTable.js';
     }
 
     public function getTableClasses(): string
@@ -112,7 +112,7 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
             $this->setColumnHeader(
                 $htmlTable, $parameterNames, $parameterValues, $key,
                 ($tableActions instanceof TableActions && $tableActions->hasActions() ? $key + 1 : $key),
-                $this->getSecurity()->removeXSS($tableColumn->getTitle()),
+                $this->securityUtilities->removeXSS($tableColumn->getTitle()),
                 $tableColumn instanceof AbstractSortableTableColumn && $tableColumn->isSortable(), $headerAttributes
             );
         }
@@ -164,8 +164,8 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
                 $parameterNames[AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION] => $currentOrderColumnDirection
             ];
 
-            $content = '<a href="' . $this->getUrlGenerator()->fromRequest($queryParameters) . '">' . $label . '</a> ' .
-                $glyph;
+            $content =
+                '<a href="' . $this->urlGenerator->fromRequest($queryParameters) . '">' . $label . '</a> ' . $glyph;
         }
         else {
             $content = $label;

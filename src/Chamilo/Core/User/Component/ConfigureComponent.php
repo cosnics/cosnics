@@ -57,7 +57,6 @@ class ConfigureComponent extends ProfileComponent
         MailerInterface $activeMailer, AlertsManager $alertsManager, UserService $userService,
         FormFactoryInterface $formFactory, TabsRenderer $tabsRenderer, Environment $twigEnvironment,
         bool $userCanChangePicture, ?UserPictureProviderInterface $userPictureProvider,
-        protected readonly ConfigurationFormType $configurationFormType,
         protected readonly PackageBundlesCacheService $packageBundlesCacheService,
         protected readonly ParameterBagInterface $platformParameterBag,
         protected readonly SystemPathBuilder $systemPathBuilder,
@@ -78,6 +77,7 @@ class ConfigureComponent extends ProfileComponent
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function run(?User $currentUser = null): Response
     {

@@ -42,8 +42,7 @@ class UpdateComponent extends Manager
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         CachedItemService $cachedItemService, ItemRendererRegistry $itemRendererRegistry, ItemService $itemService,
         AlertsManager $alertsManager, protected readonly BreadcrumbTrail $breadcrumbTrail,
-        protected readonly FormFactoryInterface $formFactory, protected readonly ItemFormType $itemFormType,
-        protected readonly Environment $twigFormEnvironment
+        protected readonly FormFactoryInterface $formFactory, protected readonly Environment $twigFormEnvironment
     )
     {
         parent::__construct(

@@ -13,16 +13,10 @@ use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository
  */
 class UserService
 {
-    protected UserRepository $userRepository;
-
-    protected UserSettingsService $userSettingsService;
-
     public function __construct(
-        UserRepository $userRepository, UserSettingsService $userSettingsService
+        protected UserRepository $userRepository, protected UserSettingsService $userSettingsService
     )
     {
-        $this->userRepository = $userRepository;
-        $this->userSettingsService = $userSettingsService;
     }
 
     /**
@@ -31,14 +25,14 @@ class UserService
      */
     public function getAndSaveUserIdentifier(User $user): ?string
     {
-        $userIdentifier = $this->getUserSettingsService()->findUserSetting(
+        $userIdentifier = $this->userSettingsService->findUserSetting(
             $user, 'cosnics.libraries.protocol.microsoft.graph.externalUserIdentifier'
         );
 
         if (empty($userIdentifier)) {
             $userIdentifier = $this->getUserIdentifier($user);
 
-            $this->getUserSettingsService()->updateUserSetting(
+            $this->userSettingsService->updateUserSetting(
                 $user, 'cosnics.libraries.protocol.microsoft.graph.externalUserIdentifier', $userIdentifier
             );
         }
@@ -71,7 +65,7 @@ class UserService
      */
     public function getUser(User $user): \Microsoft\Graph\Generated\Models\User
     {
-        return $this->getUserRepository()->getUser($user);
+        return $this->userRepository->getUser($user);
     }
 
     /**
@@ -86,15 +80,5 @@ class UserService
         }
 
         return $graphUser->getId();
-    }
-
-    public function getUserRepository(): UserRepository
-    {
-        return $this->userRepository;
-    }
-
-    public function getUserSettingsService(): UserSettingsService
-    {
-        return $this->userSettingsService;
     }
 }

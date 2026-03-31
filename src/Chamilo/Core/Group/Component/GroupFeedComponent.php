@@ -48,7 +48,7 @@ class GroupFeedComponent extends GroupsFeedComponent
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $userService, $urlGenerator,
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator, $userService,
             $searchQueryConditionGenerator
         );
     }

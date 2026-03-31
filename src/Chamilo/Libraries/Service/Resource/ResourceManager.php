@@ -51,14 +51,6 @@ class ResourceManager
         return $this->renderResourceHtml($path);
     }
 
-    /**
-     * @return string[]
-     */
-    public function getResources(): array
-    {
-        return $this->resources;
-    }
-
     public function hasResourceAlreadyBeenLoaded(string $path): bool
     {
         return in_array($path, $this->resources);

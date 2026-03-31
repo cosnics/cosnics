@@ -28,7 +28,7 @@ class MiniButtonToolBarRenderer extends AbstractButtonCollectionButtonRenderer i
         $html[] = '<div class="btn-group btn-group-sm">';
 
         foreach ($miniButtonToolBar->getButtons() as $button) {
-            $html[] = $this->getButtonRendererCollection()->getButtonRendererForButton($button)->render($button);
+            $html[] = $this->buttonRendererRegistry->getButtonRendererForButton($button)->render($button);
         }
 
         $html[] = '</div>';

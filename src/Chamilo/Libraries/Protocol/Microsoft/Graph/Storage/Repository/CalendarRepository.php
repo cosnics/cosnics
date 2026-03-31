@@ -16,11 +16,8 @@ use Microsoft\Graph\GraphServiceClient;
  */
 class CalendarRepository
 {
-    private GraphServiceClient $graphServiceClient;
-
-    public function __construct(GraphServiceClient $graphServiceClient)
+    public function __construct(protected GraphServiceClient $graphServiceClient)
     {
-        $this->graphServiceClient = $graphServiceClient;
     }
 
     /**
@@ -37,7 +34,7 @@ class CalendarRepository
                 )
             );
 
-            return $this->getGraphServiceClient()->users()->byUserId($userIdentifier)->calendars()->byCalendarId(
+            return $this->graphServiceClient->users()->byUserId($userIdentifier)->calendars()->byCalendarId(
                 $calendarIdentifier
             )->calendarView()->get($configuration)->wait()->getValue();
         }
@@ -52,7 +49,7 @@ class CalendarRepository
     public function getCalendarByIdentifier(string $userIdentifier, string $calendarIdentifier): Calendar
     {
         try {
-            $calendar = $this->getGraphServiceClient()->users()->byUserId($userIdentifier)->calendars()->byCalendarId(
+            $calendar = $this->graphServiceClient->users()->byUserId($userIdentifier)->calendars()->byCalendarId(
                 $calendarIdentifier
             )->get()->wait();
 
@@ -67,18 +64,13 @@ class CalendarRepository
         }
     }
 
-    protected function getGraphServiceClient(): GraphServiceClient
-    {
-        return $this->graphServiceClient;
-    }
-
     /**
      * @return \Microsoft\Graph\Generated\Models\Calendar[]
      */
     public function listOwnedCalendars(string $azureUserIdentifier): array
     {
         try {
-            return $this->getGraphServiceClient()->users()->byUserId($azureUserIdentifier)->calendars()->get()->wait()
+            return $this->graphServiceClient->users()->byUserId($azureUserIdentifier)->calendars()->get()->wait()
                 ->getValue();
         }
         catch (Exception) {

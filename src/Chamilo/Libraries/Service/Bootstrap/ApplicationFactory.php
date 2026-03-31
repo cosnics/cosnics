@@ -24,12 +24,8 @@ class ApplicationFactory
      */
     protected ArrayCollection $contextDefaults;
 
-    protected Translator $translator;
-
-    public function __construct(Translator $translator)
+    public function __construct(protected Translator $translator)
     {
-        $this->translator = $translator;
-
         $this->contextComponents = new ArrayCollection();
         $this->contextDefaults = new ArrayCollection();
     }
@@ -64,7 +60,7 @@ class ApplicationFactory
 
         if (!$applicationComponents->containsKey($context)) {
             throw new UserException(
-                $this->getTranslator()->trans(
+                $this->translator->trans(
                     'InvalidApplicationContext', ['%Context%' => $context], StringUtilities::LIBRARIES
                 )
             );
@@ -74,7 +70,7 @@ class ApplicationFactory
 
         if (!$contextComponents->containsKey($action)) {
             throw new UserException(
-                $this->getTranslator()->trans(
+                $this->translator->trans(
                     'InvalidApplicationAction', ['%Context%' => $context, '%Action%' => $action],
                     StringUtilities::LIBRARIES
                 )
@@ -98,10 +94,5 @@ class ApplicationFactory
     public function getContextDefaults(): ArrayCollection
     {
         return $this->contextDefaults;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }

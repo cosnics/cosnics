@@ -16,17 +16,11 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class ArrayCollectionTableRenderer
 {
-    protected ListHtmlTableRenderer $htmlTableRenderer;
-
-    protected PageNavigationCalculator $pager;
-
-    protected ChamiloRequest $request;
-
-    public function __construct(ChamiloRequest $request, PageNavigationCalculator $pager, ListHtmlTableRenderer $htmlTableRenderer)
+    public function __construct(
+        protected ChamiloRequest $request, protected PageNavigationCalculator $pageNavigationCalculator,
+        protected ListHtmlTableRenderer $listHtmlTableRenderer
+    )
     {
-        $this->request = $request;
-        $this->pager = $pager;
-        $this->htmlTableRenderer = $htmlTableRenderer;
     }
 
     /**
@@ -44,7 +38,7 @@ class ArrayCollectionTableRenderer
             $tableData, $defaultOrderColumnIndex, $defaultOrderDirection, $defaultNumberOfItemsPerPage
         );
 
-        return $this->getHtmlTableRenderer()->render(
+        return $this->listHtmlTableRenderer->render(
             $tableColumns, $this->getData($parameterValues, $tableColumns, $tableData), $tableName,
             $this->determineParameterNames($tableName), $parameterValues
         );
@@ -52,7 +46,7 @@ class ArrayCollectionTableRenderer
 
     protected function determineNumberOfRowsPerPage(string $tableName, int $defaultNumberOfItemsPerPage = 20): int
     {
-        return $this->getRequest()->query->get(
+        return $this->request->query->get(
             $this->determineParameterName($tableName, TableParameterValues::PARAM_NUMBER_OF_ROWS_PER_PAGE),
             $defaultNumberOfItemsPerPage
         );
@@ -61,7 +55,9 @@ class ArrayCollectionTableRenderer
     protected function determineOffset(int $pageNumber, int $numberOfItemsPerPage, int $totalNumberOfItems): int
     {
         try {
-            return $this->getPager()->getCurrentRangeOffset($pageNumber, $numberOfItemsPerPage, $totalNumberOfItems);
+            return $this->pageNavigationCalculator->getCurrentRangeOffset(
+                $pageNumber, $numberOfItemsPerPage, $totalNumberOfItems
+            );
         }
         catch (InvalidPageNumberException) {
             return 0;
@@ -70,7 +66,7 @@ class ArrayCollectionTableRenderer
 
     protected function determineOrderColumnDirection(string $tableName, int $defaultOrderDirection = SORT_ASC): int
     {
-        return $this->getRequest()->query->get(
+        return $this->request->query->get(
             $this->determineParameterName($tableName, AbstractBaseTableParameters::PARAM_ORDER_COLUMN_DIRECTION),
             $defaultOrderDirection
         );
@@ -78,7 +74,7 @@ class ArrayCollectionTableRenderer
 
     protected function determineOrderColumnIndex(string $tableName, int $defaultOrderColumnIndex = 0): int
     {
-        return $this->getRequest()->query->get(
+        return $this->request->query->get(
             $this->determineParameterName($tableName, AbstractBaseTableParameters::PARAM_ORDER_COLUMN_INDEX),
             $defaultOrderColumnIndex
         );
@@ -86,7 +82,7 @@ class ArrayCollectionTableRenderer
 
     protected function determinePageNumber(string $tableName): int
     {
-        return $this->getRequest()->query->get(
+        return $this->request->query->get(
             $this->determineParameterName($tableName, AbstractBaseTableParameters::PARAM_PAGE_NUMBER), 1
         );
     }
@@ -167,21 +163,6 @@ class ArrayCollectionTableRenderer
         return new ArrayCollection(
             $tableData->slice($parameterValues->getOffset(), $parameterValues->getNumberOfRowsPerPage())
         );
-    }
-
-    public function getHtmlTableRenderer(): ListHtmlTableRenderer
-    {
-        return $this->htmlTableRenderer;
-    }
-
-    public function getPager(): PageNavigationCalculator
-    {
-        return $this->pager;
-    }
-
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
     }
 
     public function isDateColumn(ArrayCollection $data, int $column): bool

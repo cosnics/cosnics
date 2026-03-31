@@ -12,7 +12,7 @@ class DependencyInjectionCacheService extends FileBasedCacheService
 {
     public function getCachePath(): string
     {
-        return $this->getConfigurablePathBuilder()->getCachePath(__NAMESPACE__);
+        return $this->configurablePathBuilder->getCachePath(__NAMESPACE__);
     }
 
     /**

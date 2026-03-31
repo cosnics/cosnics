@@ -15,14 +15,8 @@ use Symfony\Component\HttpFoundation\ParameterBag;
  */
 class UrlGenerator
 {
-    private ChamiloRequest $request;
-
-    private WebPathBuilder $webPathBuilder;
-
-    public function __construct(ChamiloRequest $request, WebPathBuilder $webPathBuilder)
+    public function __construct(protected ChamiloRequest $request, protected WebPathBuilder $webPathBuilder)
     {
-        $this->request = $request;
-        $this->webPathBuilder = $webPathBuilder;
     }
 
     /**
@@ -53,7 +47,7 @@ class UrlGenerator
      */
     public function fromRequest(array $parameters = [], array $filters = [], ?string $anchor = null): string
     {
-        return $this->generate(new ParameterBag($this->getRequest()->query->all()), $parameters, $filters, $anchor);
+        return $this->generate(new ParameterBag($this->request->query->all()), $parameters, $filters, $anchor);
     }
 
     protected function generate(
@@ -68,7 +62,7 @@ class UrlGenerator
 
         $urlParts = [];
 
-        $urlParts[] = $this->getWebPathBuilder()->getBasePath();
+        $urlParts[] = $this->webPathBuilder->getBasePath();
 
         if ($parameterBag->count()) {
             $urlParts[] = '?' . urldecode(http_build_query($parameterBag->all()));
@@ -79,15 +73,5 @@ class UrlGenerator
         }
 
         return implode('', $urlParts);
-    }
-
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
-    }
-
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return $this->webPathBuilder;
     }
 }

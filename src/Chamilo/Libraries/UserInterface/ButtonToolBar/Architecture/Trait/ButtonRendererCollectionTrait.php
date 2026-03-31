@@ -11,19 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 trait ButtonRendererCollectionTrait
 {
-    protected ButtonRendererRegistry $buttonRendererCollection;
-
-    public function getButtonRendererCollection(): ButtonRendererRegistry
-    {
-        return $this->buttonRendererCollection;
-    }
-
-    public function setButtonRendererCollection(ButtonRendererRegistry $buttonRendererCollection): static
-    {
-        $this->buttonRendererCollection = $buttonRendererCollection;
-
-        return $this;
-    }
+    protected ButtonRendererRegistry $buttonRendererRegistry;
 
     public function renderSubButtons(ArrayCollection $buttons): string
     {
@@ -31,7 +19,7 @@ trait ButtonRendererCollectionTrait
 
         foreach ($buttons as $button) {
             try {
-                $html[] = $this->getButtonRendererCollection()->getButtonRendererForButton($button)->render($button);
+                $html[] = $this->buttonRendererRegistry->getButtonRendererForButton($button)->render($button);
             }
             catch (NoSuchClassException) {
             }

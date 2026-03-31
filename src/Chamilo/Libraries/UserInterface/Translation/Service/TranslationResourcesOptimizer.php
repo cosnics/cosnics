@@ -13,20 +13,12 @@ use Symfony\Component\Translation\MessageCatalogue;
  */
 class TranslationResourcesOptimizer
 {
-    private string $optimizedTranslationsCachePath;
-
-    private LoaderInterface $translationLoader;
-
-    private TranslationResourcesFinderInterface $translationResourcesFinder;
-
     public function __construct(
-        LoaderInterface $translationLoader, TranslationResourcesFinderInterface $translationResourcesFinder,
-        string $optimizedTranslationsCachePath = ''
+        protected LoaderInterface $translationLoader,
+        protected TranslationResourcesFinderInterface $translationResourcesFinder,
+        protected string $optimizedTranslationsCachePath = ''
     )
     {
-        $this->setTranslationLoader($translationLoader);
-        $this->setTranslationResourcesFinder($translationResourcesFinder);
-        $this->setOptimizedTranslationsCachePath($optimizedTranslationsCachePath);
     }
 
     /**
@@ -47,43 +39,6 @@ class TranslationResourcesOptimizer
         }
     }
 
-    public function getOptimizedTranslationsCachePath(): string
-    {
-        return $this->optimizedTranslationsCachePath;
-    }
-
-    /**
-     * @throws \InvalidArgumentException
-     */
-    public function setOptimizedTranslationsCachePath(string $optimizedTranslationsCachePath): void
-    {
-        if (empty($optimizedTranslationsCachePath)) {
-            throw new InvalidArgumentException('You must provide a valid cache path');
-        }
-
-        $this->optimizedTranslationsCachePath = $optimizedTranslationsCachePath;
-    }
-
-    public function getTranslationLoader(): LoaderInterface
-    {
-        return $this->translationLoader;
-    }
-
-    public function setTranslationLoader(LoaderInterface $translationLoader): void
-    {
-        $this->translationLoader = $translationLoader;
-    }
-
-    public function getTranslationResourcesFinder(): TranslationResourcesFinderInterface
-    {
-        return $this->translationResourcesFinder;
-    }
-
-    public function setTranslationResourcesFinder(TranslationResourcesFinderInterface $translationResourcesFinder): void
-    {
-        $this->translationResourcesFinder = $translationResourcesFinder;
-    }
-
     /**
      * @return string[]
      */
@@ -95,10 +50,8 @@ class TranslationResourcesOptimizer
         foreach ($foundResources as $locale => $localeFoundResources) {
             $messageCatalogue = new MessageCatalogue($locale);
 
-            $translationLoader = $this->getTranslationLoader();
-
             foreach ($localeFoundResources as $domain => $resource) {
-                $messageCatalogue->addCatalogue($translationLoader->load($resource, $locale, $domain));
+                $messageCatalogue->addCatalogue($this->translationLoader->load($resource, $locale, $domain));
             }
 
             $resourcePath = $cachePath . '/' . $locale . '.php';
@@ -127,5 +80,17 @@ class TranslationResourcesOptimizer
         }
 
         return $resources;
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     */
+    public function setOptimizedTranslationsCachePath(string $optimizedTranslationsCachePath): void
+    {
+        if (empty($optimizedTranslationsCachePath)) {
+            throw new InvalidArgumentException('You must provide a valid cache path');
+        }
+
+        $this->optimizedTranslationsCachePath = $optimizedTranslationsCachePath;
     }
 }

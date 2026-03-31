@@ -2,8 +2,8 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Interface\UserExceptionRendererInterface;
-use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorCollection;
-use Chamilo\Libraries\Storage\Architecture\Domain\ConditionVariableTranslatorCollection;
+use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorRegistry;
+use Chamilo\Libraries\Storage\Architecture\Domain\ConditionVariableTranslatorRegistry;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionTranslatorInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
@@ -91,8 +91,8 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(QueryBuilderConfigurator::class);
 
-    $services->set(ConditionTranslatorCollection::class);
-    $services->set(ConditionVariableTranslatorCollection::class);
+    $services->set(ConditionTranslatorRegistry::class);
+    $services->set(ConditionVariableTranslatorRegistry::class);
 
     $services->set(CaseConditionVariableTranslator::class)->tag(ConditionVariableTranslatorInterface::class);
     $services->set(CaseElementConditionVariableTranslator::class)->tag(ConditionVariableTranslatorInterface::class);

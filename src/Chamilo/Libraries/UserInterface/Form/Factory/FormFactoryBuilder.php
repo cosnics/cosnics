@@ -48,20 +48,12 @@ class FormFactoryBuilder
      */
     protected ArrayCollection $additionalFormTypes;
 
-    protected CsrfTokenManagerInterface $csrfTokenManager;
-
-    protected Translator $translator;
-
-    protected ValidatorInterface $validator;
-
     public function __construct(
-        ValidatorInterface $validator, CsrfTokenManagerInterface $csrfTokenManager, Translator $translator
+        protected ValidatorInterface $validator, protected CsrfTokenManagerInterface $csrfTokenManager,
+        protected Translator $translator
     )
     {
         $this->additionalFormTypes = new ArrayCollection();
-        $this->validator = $validator;
-        $this->csrfTokenManager = $csrfTokenManager;
-        $this->translator = $translator;
     }
 
     public function addAdditionalFormType(FormTypeInterface $formType): FormFactoryBuilder
@@ -76,9 +68,9 @@ class FormFactoryBuilder
         $formFactoryBuilder = Forms::createFormFactoryBuilder();
 
         $formFactoryBuilder->addExtension(new HttpFoundationExtension());
-        $formFactoryBuilder->addExtension(new CsrfExtension($this->getCsrfTokenManager()));
+        $formFactoryBuilder->addExtension(new CsrfExtension($this->csrfTokenManager));
         $formFactoryBuilder->addExtension(
-            new ValidatorExtension(validator: $this->getValidator(), translator: $this->getTranslator())
+            new ValidatorExtension(validator: $this->validator, translator: $this->translator)
         );
         $formFactoryBuilder->addTypes($this->getAdditionalFormTypes()->toArray());
 
@@ -88,20 +80,5 @@ class FormFactoryBuilder
     public function getAdditionalFormTypes(): ArrayCollection
     {
         return $this->additionalFormTypes;
-    }
-
-    public function getCsrfTokenManager(): CsrfTokenManagerInterface
-    {
-        return $this->csrfTokenManager;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    public function getValidator(): ValidatorInterface
-    {
-        return $this->validator;
     }
 }

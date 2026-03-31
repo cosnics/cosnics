@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\Service;
 
-use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorCollection;
-use Chamilo\Libraries\Storage\Architecture\Domain\ConditionVariableTranslatorCollection;
+use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorRegistry;
+use Chamilo\Libraries\Storage\Architecture\Domain\ConditionVariableTranslatorRegistry;
 
 /**
  * @package Chamilo\Libraries\Storage\Service
@@ -12,26 +12,10 @@ use Chamilo\Libraries\Storage\Architecture\Domain\ConditionVariableTranslatorCol
  */
 abstract class ConditionTranslator
 {
-    protected ConditionTranslatorCollection $conditionTranslatorCollection;
-
-    protected ConditionVariableTranslatorCollection $conditionVariableTranslatorCollection;
-
     public function __construct(
-        ConditionTranslatorCollection $conditionTranslatorCollection,
-        ConditionVariableTranslatorCollection $conditionVariableTranslatorCollection
+        protected ConditionTranslatorRegistry $conditionTranslatorRegistry,
+        protected ConditionVariableTranslatorRegistry $conditionVariableTranslatorRegistry
     )
     {
-        $this->conditionTranslatorCollection = $conditionTranslatorCollection;
-        $this->conditionVariableTranslatorCollection = $conditionVariableTranslatorCollection;
-    }
-
-    public function getConditionTranslatorCollection(): ConditionTranslatorCollection
-    {
-        return $this->conditionTranslatorCollection;
-    }
-
-    public function getConditionVariableTranslatorCollection(): ConditionVariableTranslatorCollection
-    {
-        return $this->conditionVariableTranslatorCollection;
     }
 }

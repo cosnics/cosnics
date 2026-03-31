@@ -19,19 +19,11 @@ use Twig\RuntimeLoader\FactoryRuntimeLoader;
  */
 class TwigFormRendererFactory
 {
-    protected SystemPathBuilder $systemPathBuilder;
-
-    protected ThemePathBuilder $themeSystemPathBuilder;
-
-    protected Translator $translator;
-
     public function __construct(
-        SystemPathBuilder $systemPathBuilder, ThemePathBuilder $themeSystemPathBuilder, Translator $translator
+        protected SystemPathBuilder $systemPathBuilder, protected ThemePathBuilder $themeSystemPathBuilder,
+        protected Translator $translator
     )
     {
-        $this->systemPathBuilder = $systemPathBuilder;
-        $this->themeSystemPathBuilder = $themeSystemPathBuilder;
-        $this->translator = $translator;
     }
 
     /**
@@ -39,12 +31,11 @@ class TwigFormRendererFactory
      */
     public function getFormRenderer(): Environment
     {
-        $loader =
-            new FilesystemLoader([$this->getThemeSystemPathBuilder()->getTemplatePath(StringUtilities::LIBRARIES)]);
-        $loader->addPath($this->getSystemPathBuilder()->getVendorPath() . 'symfony\twig-bridge\Resources\views\Form');
+        $loader = new FilesystemLoader([$this->themeSystemPathBuilder->getTemplatePath(StringUtilities::LIBRARIES)]);
+        $loader->addPath($this->systemPathBuilder->getVendorPath() . 'symfony\twig-bridge\Resources\views\Form');
 
         $twig = new Environment($loader);
-        $twig->addExtension(new TranslationExtension($this->getTranslator()));
+        $twig->addExtension(new TranslationExtension($this->translator));
 
         $formEngine = new TwigRendererEngine(
             ['form.bootstrap.html.twig'], $twig
@@ -57,20 +48,5 @@ class TwigFormRendererFactory
         ]));
 
         return $twig;
-    }
-
-    protected function getSystemPathBuilder(): SystemPathBuilder
-    {
-        return $this->systemPathBuilder;
-    }
-
-    public function getThemeSystemPathBuilder(): ThemePathBuilder
-    {
-        return $this->themeSystemPathBuilder;
-    }
-
-    protected function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }

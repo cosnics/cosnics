@@ -13,20 +13,11 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class ResourceGenerator
 {
-    protected Filesystem $filesystem;
-
-    private PackageBundlesCacheService $packageBundlesCacheService;
-
-    private SystemPathBuilder $systemPathBuilder;
-
     public function __construct(
-        PackageBundlesCacheService $packageBundlesCacheService, SystemPathBuilder $systemPathBuilder,
-        Filesystem $filesystem
+        protected PackageBundlesCacheService $packageBundlesCacheService,
+        protected SystemPathBuilder $systemPathBuilder, protected Filesystem $filesystem
     )
     {
-        $this->packageBundlesCacheService = $packageBundlesCacheService;
-        $this->systemPathBuilder = $systemPathBuilder;
-        $this->filesystem = $filesystem;
     }
 
     /**
@@ -38,7 +29,7 @@ class ResourceGenerator
         stdClass $resourceDefinition, array &$resourceFiles, Package $package
     ): void
     {
-        $path = $this->getSystemPathBuilder()->namespaceToFullPath($package->getContext());
+        $path = $this->systemPathBuilder->namespaceToFullPath($package->getContext());
 
         if (is_array($resourceDefinition->input)) {
             foreach ($resourceDefinition->input as $resourceDefinitionFile) {
@@ -58,8 +49,7 @@ class ResourceGenerator
      */
     protected function aggregateResources(): array
     {
-        $packageBundlesCacheService = $this->getPackageBundlesCacheService();
-        $packages = $packageBundlesCacheService->getPackages();
+        $packages = $this->packageBundlesCacheService->getPackages();
 
         $resourceFiles = [];
 
@@ -80,21 +70,6 @@ class ResourceGenerator
         foreach ($aggregatedResourceFiles as $outputPath => $inputPaths) {
             $this->writeResource($outputPath, $inputPaths);
         }
-    }
-
-    public function getFilesystem(): Filesystem
-    {
-        return $this->filesystem;
-    }
-
-    public function getPackageBundlesCacheService(): PackageBundlesCacheService
-    {
-        return $this->packageBundlesCacheService;
-    }
-
-    public function getSystemPathBuilder(): SystemPathBuilder
-    {
-        return $this->systemPathBuilder;
     }
 
     protected function isOutputPathDirectory(string $outputPath): bool
@@ -122,7 +97,7 @@ class ResourceGenerator
      */
     protected function writeResource(string $outputPath, array $inputPaths): void
     {
-        $basePath = $this->getSystemPathBuilder()->getBasePath();
+        $basePath = $this->systemPathBuilder->getBasePath();
         $baseWebPath = realpath($basePath . '..') . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR;
 
         $fullOutputSourcePath = $basePath . $this->parseResourcePath($outputPath);
@@ -142,7 +117,7 @@ class ResourceGenerator
     protected function writeResourcesFile(string $outputPath, array $inputPaths): void
     {
         if (count($inputPaths) == 1) {
-            $this->getFilesystem()->copy($inputPaths[0], $outputPath, true);
+            $this->filesystem->copy($inputPaths[0], $outputPath, true);
         }
         else {
             $resourceContent = [];
@@ -151,7 +126,7 @@ class ResourceGenerator
                 $resourceContent[] = file_get_contents($inputPath);
             }
 
-            $this->getFilesystem()->dumpFile($outputPath, implode(PHP_EOL, $resourceContent));
+            $this->filesystem->dumpFile($outputPath, implode(PHP_EOL, $resourceContent));
         }
     }
 
@@ -161,7 +136,7 @@ class ResourceGenerator
     protected function writeResourcesFolder(string $outputPath, array $inputPaths): void
     {
         foreach ($inputPaths as $inputPath) {
-            $this->getFilesystem()->mirror($inputPath, $outputPath);
+            $this->filesystem->mirror($inputPath, $outputPath);
         }
     }
 }

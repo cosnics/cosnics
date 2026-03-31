@@ -10,16 +10,18 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\User\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserDetailsRendererRegistry extends ArrayCollection
+class UserDetailsRendererRegistry
 {
-    public function __construct(protected readonly Translator $translator)
+    public function __construct(
+        protected readonly Translator $translator,
+        protected ArrayCollection $userDetailsRenderers = new ArrayCollection()
+    )
     {
-        parent::__construct();
     }
 
     public function addUserDetailsRenderer(UserDetailsRendererInterface $userDetailsRenderer): void
     {
-        $this->set(get_class($userDetailsRenderer), $userDetailsRenderer);
+        $this->userDetailsRenderers->set(get_class($userDetailsRenderer), $userDetailsRenderer);
     }
 
     /**
@@ -27,19 +29,11 @@ class UserDetailsRendererRegistry extends ArrayCollection
      */
     public function getUserDetailsRenderer(string $userDetailsRendererType): UserDetailsRendererInterface
     {
-        if (!$this->containsKey($userDetailsRendererType)) {
+        if (!$this->userDetailsRenderers->containsKey($userDetailsRendererType)) {
             throw new NoSuchClassException($userDetailsRendererType, UserDetailsRendererInterface::class);
         }
 
-        return $this->get($userDetailsRendererType);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getUserDetailsRendererTypes(): array
-    {
-        return $this->getKeys();
+        return $this->userDetailsRenderers->get($userDetailsRendererType);
     }
 
     /**
@@ -47,6 +41,6 @@ class UserDetailsRendererRegistry extends ArrayCollection
      */
     public function getUserDetailsRenderers(): array
     {
-        return $this->toArray();
+        return $this->userDetailsRenderers->toArray();
     }
 }

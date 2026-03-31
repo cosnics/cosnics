@@ -33,7 +33,7 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
 
         if ($distinctConditionVariable->hasConditionVariables()) {
             foreach ($distinctConditionVariable->get() as $conditionVariable) {
-                $distinctStrings[] = $this->getConditionVariableTranslatorCollection()->translate(
+                $distinctStrings[] = $this->conditionVariableTranslatorRegistry->translate(
                     $querybuilder, $conditionVariable, $enableAliasing
                 );
             }

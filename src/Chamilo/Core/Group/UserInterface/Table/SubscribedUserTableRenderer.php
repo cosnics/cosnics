@@ -50,19 +50,16 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
 
     public function getTableActions(): TableActions
     {
-        $translator = $this->getTranslator();
-        $urlGenerator = $this->getUrlGenerator();
-
         $actions = new TableActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
 
-        $unsubscribeUrl = $urlGenerator->fromParameters([
+        $unsubscribeUrl = $this->urlGenerator->fromParameters([
             ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
             ApplicationInterface::PARAM_ACTION => ActionEnum::UNSUBSCRIBE->value
         ]);
 
         $actions->addAction(
             new TableAction(
-                $unsubscribeUrl, $translator->trans('UnsubscribeSelected', [], Manager::CONTEXT), false
+                $unsubscribeUrl, $this->translator->trans('UnsubscribeSelected', [], Manager::CONTEXT), false
             )
         );
 
@@ -72,10 +69,10 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
     protected function initializeColumns(): void
     {
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(SubscribedUser::class, User::PROPERTY_GIVEN_NAME)
+            $this->dataClassPropertyTableColumnFactory->getColumn(SubscribedUser::class, User::PROPERTY_GIVEN_NAME)
         );
         $this->addColumn(
-            $this->getDataClassPropertyTableColumnFactory()->getColumn(SubscribedUser::class, User::PROPERTY_SURNAME)
+            $this->dataClassPropertyTableColumnFactory->getColumn(SubscribedUser::class, User::PROPERTY_SURNAME)
         );
     }
 

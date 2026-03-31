@@ -16,28 +16,16 @@ use Doctrine\DBAL\Query\QueryBuilder;
  * @template-implements \Doctrine\Common\Collections\Selectable<TKey,\Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface>
  * @psalm-consistent-constructor
  */
-class ConditionVariableTranslatorCollection extends ArrayCollection
+class ConditionVariableTranslatorRegistry
 {
+    public function __construct(protected ArrayCollection $conditionVariableTranslators = new ArrayCollection())
+    {
+    }
+
     public function addConditionVariableTranslator(ConditionVariableTranslatorInterface $conditionVariableTranslator
     ): void
     {
-        $this->set(get_class($conditionVariableTranslator), $conditionVariableTranslator);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getConditionVariableTranslatorTypes(): array
-    {
-        return $this->getKeys();
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface[]
-     */
-    public function getConditionVariableTranslators(): array
-    {
-        return $this->toArray();
+        $this->conditionVariableTranslators->set(get_class($conditionVariableTranslator), $conditionVariableTranslator);
     }
 
     /**
@@ -55,12 +43,12 @@ class ConditionVariableTranslatorCollection extends ArrayCollection
             );
         }
 
-        return $this->get($conditionVariableTranslatorClassName);
+        return $this->conditionVariableTranslators->get($conditionVariableTranslatorClassName);
     }
 
     public function hasConditionVariableTranslator(string $conditionPartTranslatorClass): bool
     {
-        return $this->containsKey($conditionPartTranslatorClass);
+        return $this->conditionVariableTranslators->containsKey($conditionPartTranslatorClass);
     }
 
     /**

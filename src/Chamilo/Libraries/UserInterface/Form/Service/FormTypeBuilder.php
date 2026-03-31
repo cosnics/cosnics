@@ -62,7 +62,7 @@ class FormTypeBuilder
         $options['required'] = $required;
         $options['constraints'] = $constraints;
 
-        if ($includeRowAttr) {
+        if ($includeRowAttr && !array_key_exists('row_attr', $options)) {
             $options['row_attr'] = self::DEFAULT_ROW_ATTRIBUTES;
         }
     }
@@ -130,7 +130,7 @@ class FormTypeBuilder
     }
 
     public function createMessage(
-        FormBuilderInterface $builder, string $name, string $label, string $message,
+        FormBuilderInterface $builder, string $name, string $message, ?string $label = null,
         AlertEnum $messageType = AlertEnum::INFO, array $options = []
     ): FormBuilderInterface
     {

@@ -10,21 +10,13 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 class AlertSessionStorage implements AlertStorageInterface
 {
-    protected SessionInterface $session;
-
-    public function __construct(SessionInterface $session)
+    public function __construct(protected SessionInterface $session)
     {
-        $this->session = $session;
     }
 
     public function clear(): void
     {
-        $this->getSession()->remove(static::class);
-    }
-
-    public function getSession(): SessionInterface
-    {
-        return $this->session;
+        $this->session->remove(static::class);
     }
 
     /**
@@ -32,7 +24,7 @@ class AlertSessionStorage implements AlertStorageInterface
      */
     public function retrieve(): array
     {
-        $serializedSessionAlerts = $this->getSession()->get(static::class);
+        $serializedSessionAlerts = $this->session->get(static::class);
 
         if (!$serializedSessionAlerts) {
             return [];
@@ -46,6 +38,6 @@ class AlertSessionStorage implements AlertStorageInterface
      */
     public function store(array $alerts = []): void
     {
-        $this->getSession()->set(static::class, serialize($alerts));
+        $this->session->set(static::class, serialize($alerts));
     }
 }

@@ -21,39 +21,14 @@ use Symfony\Component\Translation\Translator;
  */
 class Diagnoser
 {
-    protected ConfigurablePathBuilder $configurablePathBuilder;
-
-    protected Connection $connection;
-
-    protected DatetimeUtilities $datetimeUtilities;
-
-    protected SimpleTableRenderer $diagnoserTableRenderer;
-
-    protected int $installationDate;
-
-    protected ChamiloRequest $request;
-
-    protected SystemPathBuilder $systemPathBuilder;
-
-    protected TabsRenderer $tabsRenderer;
-
-    protected Translator $translator;
-
     public function __construct(
-        Connection $connection, ChamiloRequest $request, SystemPathBuilder $systemPathBuilder,
-        ConfigurablePathBuilder $configurablePathBuilder, Translator $translator, DatetimeUtilities $datetimeUtilities,
-        TabsRenderer $tabsRenderer, SimpleTableRenderer $diagnoserTableRenderer, int $installationDate
+        protected Connection $connection, protected ChamiloRequest $request,
+        protected SystemPathBuilder $systemPathBuilder, protected ConfigurablePathBuilder $configurablePathBuilder,
+        protected Translator $translator, protected DatetimeUtilities $datetimeUtilities,
+        protected TabsRenderer $tabsRenderer, protected SimpleTableRenderer $diagnoserTableRenderer,
+        protected int $installationDate
     )
     {
-        $this->connection = $connection;
-        $this->request = $request;
-        $this->systemPathBuilder = $systemPathBuilder;
-        $this->configurablePathBuilder = $configurablePathBuilder;
-        $this->translator = $translator;
-        $this->datetimeUtilities = $datetimeUtilities;
-        $this->tabsRenderer = $tabsRenderer;
-        $this->diagnoserTableRenderer = $diagnoserTableRenderer;
-        $this->installationDate = $installationDate;
     }
 
     /**
@@ -67,7 +42,7 @@ class Diagnoser
 
         foreach ($sections as $section) {
             $data = call_user_func([$this, 'get' . $section . 'Data']);
-            $table = $this->getDiagnoserTableRenderer()->render($data);
+            $table = $this->diagnoserTableRenderer->render($data);
 
             $tabs->add(
                 new ContentTab(
@@ -76,7 +51,7 @@ class Diagnoser
             );
         }
 
-        return $this->getTabsRenderer()->renderNavigationAndContent('diagnoser', $tabs);
+        return $this->tabsRenderer->renderNavigationAndContent('diagnoser', $tabs);
     }
 
     public function buildSetting(
@@ -138,8 +113,7 @@ class Diagnoser
             );
         }
 
-        $date = $this->getInstallationDate();
-        $date = $this->getDatetimeUtilities()->formatLocaleDate($date);
+        $date = $this->datetimeUtilities->formatLocaleDate($this->installationDate);
         $array[] = $this->buildSetting(
             StatusEnum::OK, '[INFORMATION]', $this->getTranslation('InstallDate'), '', $date, '', null,
             $this->getTranslation('InstallDateInfo')
@@ -176,21 +150,6 @@ class Diagnoser
         );
 
         return $array;
-    }
-
-    public function getDatetimeUtilities(): DatetimeUtilities
-    {
-        return $this->datetimeUtilities;
-    }
-
-    public function getDiagnoserTableRenderer(): SimpleTableRenderer
-    {
-        return $this->diagnoserTableRenderer;
-    }
-
-    public function getInstallationDate(): int
-    {
-        return $this->installationDate;
     }
 
     public function getLink(string $title, string $url): string
@@ -390,11 +349,6 @@ class Diagnoser
         }
 
         return $array;
-    }
-
-    public function getTabsRenderer(): TabsRenderer
-    {
-        return $this->tabsRenderer;
     }
 
     public function getTranslation(

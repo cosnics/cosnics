@@ -13,21 +13,15 @@ use Symfony\Component\Translation\Translator;
  */
 class MailerFactory
 {
-    protected string $configuredMailerClass;
-
     /**
      * @var \Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface[]
      */
     protected array $mailers = [];
 
-    protected Translator $translator;
-
     public function __construct(
-        Translator $translator, string $configuredMailerClass
+        protected Translator $translator, protected string $configuredMailerClass
     )
     {
-        $this->translator = $translator;
-        $this->configuredMailerClass = $configuredMailerClass;
     }
 
     public function addMailer(MailerInterface $mailer): static
@@ -40,16 +34,11 @@ class MailerFactory
     public function getActiveMailer(): MailerInterface
     {
         try {
-            return $this->getMailer($this->getConfiguredMailerClass());
+            return $this->getMailer($this->configuredMailerClass);
         }
         catch (NoSuchClassException) {
             return $this->getDefaultMailer();
         }
-    }
-
-    public function getConfiguredMailerClass(): string
-    {
-        return $this->configuredMailerClass;
     }
 
     public function getDefaultMailer(): MailerInterface
@@ -69,18 +58,5 @@ class MailerFactory
         }
 
         return $this->mailers[$mailerClass];
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface[]
-     */
-    public function getMailers(): array
-    {
-        return $this->mailers;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 }

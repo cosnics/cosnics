@@ -8,13 +8,19 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @package Chamilo\Application\Calendar\Service
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CalendarExtensionDataProviderRegistry extends ArrayCollection
+class CalendarExtensionDataProviderRegistry
 {
+    public function __construct(protected ArrayCollection $calendarExtensionDataProviders = new ArrayCollection())
+    {
+    }
+
     public function addCalendarExtensionDataProvider(
         CalendarExtensionDataProviderInterface $calendarExtensionDataProvider
     ): void
     {
-        $this->set(get_class($calendarExtensionDataProvider), $calendarExtensionDataProvider);
+        $this->calendarExtensionDataProviders->set(
+            get_class($calendarExtensionDataProvider), $calendarExtensionDataProvider
+        );
     }
 
     /**
@@ -22,6 +28,6 @@ class CalendarExtensionDataProviderRegistry extends ArrayCollection
      */
     public function getCalendarExtensionDataProviders(): array
     {
-        return $this->toArray();
+        return $this->calendarExtensionDataProviders->toArray();
     }
 }

@@ -37,28 +37,18 @@ class CacheDataPreLoaderManager
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Architecture\Interface\CacheDataPreLoaderInterface[]
-     */
-    public function getCacheDataPreLoaderServices(): array
-    {
-        return $this->cacheDataPreLoaderServices;
-    }
-
-    /**
      * @param string[] $cacheDataPreLoaderServiceAliases
      *
      * @return \Chamilo\Libraries\Storage\Architecture\Interface\CacheDataPreLoaderInterface[]
      */
     protected function getCacheDataPreLoaderServicesByAliases(array $cacheDataPreLoaderServiceAliases = []): array
     {
-        $cacheDataPreLoaderServices = $this->getCacheDataPreLoaderServices();
-
         if (empty($cacheDataPreLoaderServiceAliases)) {
-            return $cacheDataPreLoaderServices;
+            return $this->cacheDataPreLoaderServices;
         }
 
         return array_filter(
-            $cacheDataPreLoaderServices,
+            $this->cacheDataPreLoaderServices,
             function ($cacheDataPreLoaderServiceAlias) use ($cacheDataPreLoaderServiceAliases) {
                 return array_key_exists(get_class($cacheDataPreLoaderServiceAlias), $cacheDataPreLoaderServiceAliases);
             }, ARRAY_FILTER_USE_KEY

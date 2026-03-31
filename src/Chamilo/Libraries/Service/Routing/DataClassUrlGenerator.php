@@ -10,11 +10,8 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
  */
 class DataClassUrlGenerator
 {
-    protected UrlGenerator $urlGenerator;
-
-    public function __construct(UrlGenerator $urlGenerator)
+    public function __construct(protected UrlGenerator $urlGenerator)
     {
-        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -31,13 +28,6 @@ class DataClassUrlGenerator
             $dataClassParameterName => $dataClass->getId()
         ];
 
-        return $this->getUrlGenerator()->fromParameters(
-            array_merge($parameters, $additionalParameters)
-        );
-    }
-
-    public function getUrlGenerator(): UrlGenerator
-    {
-        return $this->urlGenerator;
+        return $this->urlGenerator->fromParameters(array_merge($parameters, $additionalParameters));
     }
 }

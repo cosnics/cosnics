@@ -166,36 +166,6 @@ class AvailabilityService
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string[][][] $calendarAvailabilityTypes
-     *
-     * @return \Chamilo\Libraries\Architecture\Domain\ActionResult
-     * @throws \Exception
-     */
-    public function setAvailabilities(User $user, array $calendarAvailabilityTypes = []): ActionResult
-    {
-        $failedActions = 0;
-
-        foreach ($calendarAvailabilityTypes as $calendarType => $calendarAvailabilities) {
-            foreach ($calendarAvailabilities as $calendarIdentifier => $settings) {
-                try {
-                    $this->setAvailability(
-                        $user, $calendarType, $calendarIdentifier, (boolean) $settings[self::PROPERTY_AVAILABLE],
-                        $settings[self::PROPERTY_COLOUR]
-                    );
-                }
-                catch (Exception) {
-                    $failedActions ++;
-                }
-            }
-        }
-
-        return new ActionResult(
-            count($calendarAvailabilityTypes), $failedActions, __NAMESPACE__, __FUNCTION__, 'Availability'
-        );
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
      * @param string $calendarIdentifier
      * @param bool $isAvailable
@@ -205,7 +175,7 @@ class AvailabilityService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function setAvailability(
+    public function saveAvailability(
         User $user, string $calendarType, string $calendarIdentifier, bool $isAvailable = true, ?string $colour = null
     ): Availability
     {
@@ -223,6 +193,36 @@ class AvailabilityService
                 $user, $calendarType, $calendarIdentifier, $isAvailable, $colour
             );
         }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function setAvailabilitiesFromParameters(User $user, array $availabilityData = []): ActionResult
+    {
+        $failedActions = 0;
+        $numberOfCalendars = 0;
+
+        $calendars = $this->getAvailableCalendars($user);
+
+        foreach ($calendars as $calendarType => $calendarTypeCalendars) {
+            foreach ($calendarTypeCalendars as $calendarTypeCalendar) {
+                try {
+                    $numberOfCalendars ++;
+                    $this->saveAvailability(
+                        $user, $calendarType, $calendarTypeCalendar->getIdentifier(),
+                        (boolean) $availabilityData[$calendarTypeCalendar->getUniqueIdentifier()]
+                    );
+                }
+                catch (Exception) {
+                    $failedActions ++;
+                }
+            }
+        }
+
+        return new ActionResult(
+            $numberOfCalendars, $failedActions, __NAMESPACE__, __FUNCTION__, 'Availability'
+        );
     }
 
     /**

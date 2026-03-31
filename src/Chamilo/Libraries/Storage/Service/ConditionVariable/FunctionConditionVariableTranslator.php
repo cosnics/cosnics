@@ -57,7 +57,7 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
             $strings[] = ' ';
         }
 
-        $strings[] = $this->getConditionVariableTranslatorCollection()->translate(
+        $strings[] = $this->conditionVariableTranslatorRegistry->translate(
             $querybuilder, $functionConditionVariable->getConditionVariable(), $enableAliasing
         );
 

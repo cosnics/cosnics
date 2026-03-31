@@ -18,7 +18,7 @@ return static function (ContainerConfigurator $container) {
     $services->defaults()->public()->autowire()->autoconfigure();
 
     $services->set(ButtonRendererRegistry::class);
-    $services->set(ButtonToolBarRenderer::class);
+    $services->set(ButtonToolBarRenderer::class)->args(['$twigFormEnvironment' => service('Twig\Environment\Form')]);
     $services->set(MiniButtonToolBarRenderer::class);
     $services->set(ButtonGroupRenderer::class)->tag(ButtonRendererInterface::class);
     $services->set(ButtonRenderer::class)->tag(ButtonRendererInterface::class);

@@ -65,8 +65,9 @@ abstract class AbstractUserFormType extends AbstractType
             $builder->add(
                 $this->formTypeBuilder->createMessage(
                     $builder, self::PROPERTY_LOCKOUT,
-                    $this->translator->trans('LockOutWarningLabel', [], Manager::CONTEXT),
-                    $this->translator->trans('LockOutWarningMessage', [], Manager::CONTEXT), AlertEnum::WARNING
+                    $this->translator->trans('LockOutWarningMessage', [], Manager::CONTEXT),
+                    $this->translator->trans('LockOutWarningLabel', [], Manager::CONTEXT), AlertEnum::WARNING
+
                 )
             );
         }

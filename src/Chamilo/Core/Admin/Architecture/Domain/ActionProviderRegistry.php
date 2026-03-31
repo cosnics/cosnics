@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Admin\Architecture\Domain;
 
 use Chamilo\Core\Admin\Architecture\Interface\ActionProviderInterface;
-use Chamilo\Core\Admin\UserInterface\Form\AdminSearchForm;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\SearchFormType;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\NamespaceIdentGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Enum\IdentGlyphSizeEnum;
@@ -11,48 +11,49 @@ use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\Action;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\ActionsTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Translation\Translator;
+use Twig\Environment;
 
 /**
  * @package Chamilo\Core\Admin\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ActionProviderRegistry extends ArrayCollection
+class ActionProviderRegistry
 {
     public function __construct(
-        protected Translator $translator, protected StringUtilities $stringUtilities
+        protected Translator $translator, protected StringUtilities $stringUtilities,
+        protected readonly FormFactoryInterface $formFactory, protected readonly Environment $twigFormEnvironment,
+        protected ArrayCollection $actionProviders = new ArrayCollection()
     )
     {
-        parent::__construct();
     }
 
     public function addActionProvider(ActionProviderInterface $actionProvider): void
     {
-        $this->set($actionProvider->getContext(), $actionProvider);
+        $this->actionProviders->set($actionProvider->getContext(), $actionProvider);
     }
 
-    public function existsForContext(string $context): bool
+    public function getSearchForm(string $searchUri = '', array $data = []): FormInterface
     {
-        return $this->containsKey($context);
+        $form = $this->formFactory->create(SearchFormType::class, $data, ['action' => $searchUri]);
+        $form->remove('cancel');
+
+        return $form;
     }
 
     /**
-     * @return \Chamilo\Core\Admin\Architecture\Interface\ActionProviderInterface[]
-     */
-    public function getActionProviders(): array
-    {
-        return $this->toArray();
-    }
-
-    /**
-     * @throws \QuickformException
+     * @throws \Twig\Error\SyntaxError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\LoaderError
      */
     public function getTabsCollection(): TabsCollection
     {
         $tabsCollection = new TabsCollection();
         $index = 0;
 
-        foreach ($this->getActionProviders() as $actionProvider) {
+        foreach ($this->actionProviders as $actionProvider) {
             $index ++;
 
             $actions = $actionProvider->getActions();
@@ -67,10 +68,14 @@ class ActionProviderRegistry extends ArrayCollection
             $actionsTab->setActions($actions->toArray());
 
             if ($actions->getSearchUrl()) {
-                $searchForm = new AdminSearchForm($actions->getSearchUrl(), (string) $index);
+                $form = $this->getSearchForm($actions->getSearchUrl());
+                $formHtml = $this->twigFormEnvironment->render('searchForm.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+
                 $actionsTab->addAction(
                     new Action(
-                        $searchForm->render(), null, new FontAwesomeGlyph(
+                        $formHtml, null, new FontAwesomeGlyph(
                             'search', ['fa-fw', 'fa-2x'], null, 'fas'
                         )
                     )

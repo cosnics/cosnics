@@ -15,11 +15,8 @@ use Symfony\Component\Security\Csrf\TokenStorage\SessionTokenStorage;
  */
 class CsrfTokenManagerFactory
 {
-    protected ChamiloRequest $request;
-
-    public function __construct(ChamiloRequest $request)
+    public function __construct(protected ChamiloRequest $request)
     {
-        $this->request = $request;
     }
 
     /**
@@ -27,16 +24,11 @@ class CsrfTokenManagerFactory
      */
     public function buildCsrfTokenManager(): CsrfTokenManagerInterface
     {
-        $requestStack = new RequestStack([$this->getRequest()]);
+        $requestStack = new RequestStack([$this->request]);
 
         $csrfGenerator = new UriSafeTokenGenerator();
         $csrfStorage = new SessionTokenStorage($requestStack);
 
         return new CsrfTokenManager($csrfGenerator, $csrfStorage);
-    }
-
-    public function getRequest(): ChamiloRequest
-    {
-        return $this->request;
     }
 }

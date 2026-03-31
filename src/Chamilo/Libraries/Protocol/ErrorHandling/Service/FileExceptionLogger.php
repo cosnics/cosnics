@@ -14,14 +14,12 @@ use Throwable;
  */
 class FileExceptionLogger implements ExceptionLoggerInterface
 {
-    protected string $logPath;
-
-    protected UserExceptionRendererRegistry $userExceptionRendererRegistry;
-
     /**
      * @throws \Exception
      */
-    public function __construct(UserExceptionRendererRegistry $userExceptionRendererRegistry, string $logPath)
+    public function __construct(
+        protected UserExceptionRendererRegistry $userExceptionRendererRegistry, protected string $logPath
+    )
     {
         if (empty($logPath)) {
             throw new Exception('The given log path can not be empty');
@@ -32,9 +30,6 @@ class FileExceptionLogger implements ExceptionLoggerInterface
                 sprintf('The given log path either does not exist or is not a valid directory. (%s)', $logPath)
             );
         }
-
-        $this->logPath = $logPath;
-        $this->userExceptionRendererRegistry = $userExceptionRendererRegistry;
     }
 
     public function addJavascriptExceptionLogger(PageHeaders $pageConfiguration)
@@ -55,11 +50,6 @@ class FileExceptionLogger implements ExceptionLoggerInterface
         }
     }
 
-    public function getLogPath(): string
-    {
-        return $this->logPath;
-    }
-
     /**
      * @throws \Exception
      */
@@ -71,14 +61,14 @@ class FileExceptionLogger implements ExceptionLoggerInterface
             return;
         }
 
-        $logFile = $this->getLogPath() . DIRECTORY_SEPARATOR . 'cosnics.error.fatal.log';
+        $logFile = $this->logPath . DIRECTORY_SEPARATOR . 'cosnics.error.fatal.log';
         $fileHandler = fopen($logFile, 'a');
 
         $type = $this->determineExceptionLevelString($exceptionLevel);
 
         if ($exception instanceof UserExceptionInterface) {
             $userExceptionRenderer =
-                $this->getUserExceptionRendererRegistry()->getUserExceptionRendererForUserException($exception);
+                $this->userExceptionRendererRegistry->getUserExceptionRendererForUserException($exception);
             $exceptionMessage = $userExceptionRenderer->renderMessage($exception);
         }
         else {

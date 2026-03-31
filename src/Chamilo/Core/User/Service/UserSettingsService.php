@@ -22,6 +22,9 @@ readonly class UserSettingsService
         return $user->getSetting($variable, $defaultValue);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     */
     public function isSettingAvailable(string $context, array $setting): bool
     {
         $settingsConnector = $this->settingsConnectorRegistry->getSettingsConnectorForContext($context);
@@ -56,7 +59,8 @@ readonly class UserSettingsService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updateUserSetting(User $user, string $variable, mixed $value = null, ?User $executingUser = null): bool
+    public function updateUserSetting(User $user, string $variable, mixed $value = null, ?User $executingUser = null
+    ): bool
     {
         $user->setSetting($variable, $value);
 
@@ -65,8 +69,11 @@ readonly class UserSettingsService
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
-    public function updateUserSettingsFromParameters(User $user, string $context, array $values, ?User $executingUser = null): bool
+    public function updateUserSettingsFromParameters(
+        User $user, string $context, array $values, ?User $executingUser = null
+    ): bool
     {
         $problems = 0;
         $configuration = $this->userSettingsParser->determineConfigurablePackageContextSettings($context);

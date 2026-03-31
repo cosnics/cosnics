@@ -13,6 +13,8 @@ return static function (ContainerConfigurator $container) {
     $services->set(DeleteTemporaryFileComponent::class)->tag(ApplicationInterface::class);
     $services->set(UploadTemporaryFileComponent::class)->tag(ApplicationInterface::class);
     $services->set(UtilitiesComponent::class)->args(
-        ['$themeWebPathBuilder' => service('Chamilo\Libraries\UserInterface\Theme\Service\ThemeWebPathBuilder')]
+        [
+            '$theme' => '%cosnics.libraries.userInterface.theme%'
+        ]
     )->tag(ApplicationInterface::class);
 };

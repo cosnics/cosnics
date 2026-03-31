@@ -5,7 +5,6 @@ use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\LinkTab;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabNavigationInterface;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabNavigationRendererInterface;
 use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabRendererInterface;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Tab\Service
@@ -13,21 +12,9 @@ use Symfony\Component\Translation\Translator;
  */
 class LinkTabRenderer implements TabRendererInterface, TabNavigationRendererInterface
 {
-    protected Translator $translator;
-
-    public function __construct(Translator $translator)
-    {
-        $this->translator = $translator;
-    }
-
     public function getTabType(): string
     {
         return LinkTab::class;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
     }
 
     protected function renderClasses(TabNavigationInterface $tab, ?string $selectedTab = null): string

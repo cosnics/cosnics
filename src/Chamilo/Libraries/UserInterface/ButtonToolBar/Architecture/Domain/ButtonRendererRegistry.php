@@ -10,11 +10,15 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @package Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ButtonRendererRegistry extends ArrayCollection
+class ButtonRendererRegistry
 {
+    public function __construct(protected ArrayCollection $buttonRenderers = new ArrayCollection())
+    {
+    }
+
     public function addButtonRenderer(ButtonRendererInterface $buttonRenderer): void
     {
-        $this->set(get_class($buttonRenderer), $buttonRenderer);
+        $this->buttonRenderers->set(get_class($buttonRenderer), $buttonRenderer);
     }
 
     /**
@@ -30,7 +34,7 @@ class ButtonRendererRegistry extends ArrayCollection
             throw new NoSuchClassException($buttonRendererClassName, ButtonRendererInterface::class);
         }
 
-        return $this->get($buttonRendererClassName);
+        return $this->buttonRenderers->get($buttonRendererClassName);
     }
 
     /**
@@ -41,24 +45,8 @@ class ButtonRendererRegistry extends ArrayCollection
         return $this->getButtonRenderer($button->getButtonRendererClassName());
     }
 
-    /**
-     * @return string[]
-     */
-    public function getButtonRendererTypes(): array
-    {
-        return $this->getKeys();
-    }
-
-    /**
-     * @return \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Interface\ButtonRendererInterface[]
-     */
-    public function getButtonRenderers(): array
-    {
-        return $this->toArray();
-    }
-
     public function hasButtonRenderer(string $buttonRendererClass): bool
     {
-        return $this->containsKey($buttonRendererClass);
+        return $this->buttonRenderers->containsKey($buttonRendererClass);
     }
 }

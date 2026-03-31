@@ -11,16 +11,8 @@ use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
  */
 class PdoSessionHandlerFactory
 {
-    private Connection $connection;
-
-    public function __construct(Connection $connection)
+    public function __construct(protected Connection $connection)
     {
-        $this->connection = $connection;
-    }
-
-    public function getConnection(): Connection
-    {
-        return $this->connection;
     }
 
     /**
@@ -28,7 +20,7 @@ class PdoSessionHandlerFactory
      */
     public function getPdoSessionHandler(): PdoSessionHandler
     {
-        return new PdoSessionHandler($this->getConnection()->getNativeConnection(), [
+        return new PdoSessionHandler($this->connection->getNativeConnection(), [
             'db_table' => 'user_session',
             'db_id_col' => 'session_id',
             'db_data_col' => 'data',

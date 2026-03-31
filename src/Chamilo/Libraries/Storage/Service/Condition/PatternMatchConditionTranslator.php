@@ -36,7 +36,7 @@ class PatternMatchConditionTranslator extends ConditionTranslator implements Con
     {
         $string = [];
 
-        $string[] = $this->getConditionVariableTranslatorCollection()->translate(
+        $string[] = $this->conditionVariableTranslatorRegistry->translate(
             $querybuilder, $patternMatchCondition->getConditionVariable(), $enableAliasing
         );
         $string[] = 'LIKE';

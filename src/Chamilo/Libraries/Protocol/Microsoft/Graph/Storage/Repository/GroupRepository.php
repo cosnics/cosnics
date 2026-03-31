@@ -18,14 +18,8 @@ use Symfony\Component\Uid\Uuid;
  */
 class GroupRepository
 {
-    protected GraphServiceClient $graphServiceClient;
-
-    protected string $platformPrefix;
-
-    public function __construct(GraphServiceClient $graphServiceClient, string $platformPrefix = '')
+    public function __construct(protected GraphServiceClient $graphServiceClient, protected string $platformPrefix = '')
     {
-        $this->platformPrefix = $platformPrefix;
-        $this->graphServiceClient = $graphServiceClient;
     }
 
     /**
@@ -45,7 +39,7 @@ class GroupRepository
             $group->setSecurityEnabled(false);
             $group->setVisibility('Private');
 
-            $createdGroup = $this->getGraphServiceClient()->groups()->post($group)->wait();
+            $createdGroup = $this->graphServiceClient->groups()->post($group)->wait();
 
             if (!$createdGroup instanceof Group) {
                 throw new Exception('Group (' . $groupName . ') not created');
@@ -68,7 +62,7 @@ class GroupRepository
             $plan->setOwner($groupIdentifier);
             $plan->setTitle($planName);
 
-            $plannerPlan = $this->getGraphServiceClient()->planner()->plans()->post($plan)->wait();
+            $plannerPlan = $this->graphServiceClient->planner()->plans()->post($plan)->wait();
 
             if (!$plannerPlan instanceof PlannerPlan) {
                 throw new Exception('Plan (' . $planName . ') not be created for group (' . $groupIdentifier . ')');
@@ -81,18 +75,13 @@ class GroupRepository
         }
     }
 
-    public function getGraphServiceClient(): GraphServiceClient
-    {
-        return $this->graphServiceClient;
-    }
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchGroupException
      */
     public function getGroup(string $groupIdentifier): Group
     {
         try {
-            $group = $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->get()->wait();
+            $group = $this->graphServiceClient->groups()->byGroupId($groupIdentifier)->get()->wait();
 
             if (!$group instanceof Group) {
                 throw new NoSuchGroupException('Group not found: ' . $groupIdentifier);
@@ -111,10 +100,9 @@ class GroupRepository
     public function getGroupMember(string $groupIdentifier, string $azureUserIdentifier): User
     {
         try {
-            $user =
-                $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->members()->byDirectoryObjectId(
-                    $azureUserIdentifier
-                )->graphUser()->get()->wait();
+            $user = $this->graphServiceClient->groups()->byGroupId($groupIdentifier)->members()->byDirectoryObjectId(
+                $azureUserIdentifier
+            )->graphUser()->get()->wait();
 
             if (!$user instanceof User) {
                 throw new Exception('Group member not found: ' . $groupIdentifier);
@@ -133,10 +121,9 @@ class GroupRepository
     public function getGroupOwner(string $groupIdentifier, string $azureUserIdentifier): User
     {
         try {
-            $user =
-                $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->owners()->byDirectoryObjectId(
-                    $azureUserIdentifier
-                )->graphUser()->get()->wait();
+            $user = $this->graphServiceClient->groups()->byGroupId($groupIdentifier)->owners()->byDirectoryObjectId(
+                $azureUserIdentifier
+            )->graphUser()->get()->wait();
 
             if (!$user instanceof User) {
                 throw new Exception('Group owner not found: ' . $groupIdentifier);
@@ -149,11 +136,6 @@ class GroupRepository
         }
     }
 
-    public function getPlatformPrefix(): string
-    {
-        return $this->platformPrefix;
-    }
-
     /**
      * @return array<\Microsoft\Graph\Generated\Models\User>
      * @throws \Exception
@@ -162,8 +144,8 @@ class GroupRepository
     {
         try {
             $groupMembers =
-                $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->members()->graphUser()->get()
-                    ->wait()->getValue();
+                $this->graphServiceClient->groups()->byGroupId($groupIdentifier)->members()->graphUser()->get()->wait()
+                    ->getValue();
 
             if (!is_array($groupMembers)) {
                 throw new Exception('Group members not found: ' . $groupIdentifier);
@@ -184,8 +166,8 @@ class GroupRepository
     {
         try {
             $groupOwners =
-                $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->owners()->graphUser()->get()
-                    ->wait()->getValue();
+                $this->graphServiceClient->groups()->byGroupId($groupIdentifier)->owners()->graphUser()->get()->wait()
+                    ->getValue();
 
             if (!is_array($groupOwners)) {
                 throw new Exception('Group owners not found: ' . $groupIdentifier);
@@ -206,7 +188,7 @@ class GroupRepository
     {
         try {
             $plannerPlans =
-                $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->planner()->plans()->get()->wait()
+                $this->graphServiceClient->groups()->byGroupId($groupIdentifier)->planner()->plans()->get()->wait()
                     ->getValue();
 
             if (!is_array($plannerPlans)) {
@@ -223,7 +205,7 @@ class GroupRepository
     public function removeMemberFromGroup(string $groupIdentifier, string $azureUserIdentifier): bool
     {
         try {
-            $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->members()->byDirectoryObjectId(
+            $this->graphServiceClient->groups()->byGroupId($groupIdentifier)->members()->byDirectoryObjectId(
                 $azureUserIdentifier
             )->ref()->delete();
 
@@ -237,7 +219,7 @@ class GroupRepository
     public function removeOwnerFromGroup(string $groupIdentifier, string $azureUserIdentifier): bool
     {
         try {
-            $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->owners()->byDirectoryObjectId(
+            $this->graphServiceClient->groups()->byGroupId($groupIdentifier)->owners()->byDirectoryObjectId(
                 $azureUserIdentifier
             )->ref()->delete();
 
@@ -256,8 +238,8 @@ class GroupRepository
                 'https://graph.microsoft.com/v1.0/users/' . $azureUserIdentifier
             );
 
-            $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->members()->ref()->post($reference)
-                ->wait();
+            $this->graphServiceClient->groups()->byGroupId($groupIdentifier)->members()->ref()->post($reference)->wait(
+            );
 
             return true;
         }
@@ -274,8 +256,7 @@ class GroupRepository
                 'https://graph.microsoft.com/v1.0/users/' . $azureUserIdentifier
             );
 
-            $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->owners()->ref()->post($reference)
-                ->wait();
+            $this->graphServiceClient->groups()->byGroupId($groupIdentifier)->owners()->ref()->post($reference)->wait();
 
             return true;
         }
@@ -291,7 +272,7 @@ class GroupRepository
             $group->setDescription($groupName);
             $group->setDisplayName($groupName);
 
-            $this->getGraphServiceClient()->groups()->byGroupId($groupIdentifier)->patch($group);
+            $this->graphServiceClient->groups()->byGroupId($groupIdentifier)->patch($group);
 
             return true;
         }

@@ -15,12 +15,11 @@ use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonGroup;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
-use Chamilo\Libraries\UserInterface\ButtonToolBar\Form\ButtonSearchForm;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Trait\ButtonToolBarSearchFormTrait;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
@@ -35,6 +34,8 @@ use Symfony\Component\Translation\Translator;
  */
 class BrowseComponent extends Manager
 {
+    use ButtonToolBarSearchFormTrait;
+
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
@@ -104,7 +105,7 @@ class BrowseComponent extends Manager
         return $buttonToolBar;
     }
 
-    public function getUserTableCondition(): ?ConditionInterface
+    public function getButtonToolBarSearchProperties(?string $type = null): array
     {
         $searchProperties = [];
         $searchProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME);
@@ -113,7 +114,7 @@ class BrowseComponent extends Manager
         $searchProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE);
         $searchProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL);
 
-        return $this->buttonToolBarRenderer->getConditions($searchProperties);
+        return $searchProperties;
     }
 
     /**
@@ -125,11 +126,9 @@ class BrowseComponent extends Manager
      */
     protected function renderTable(): string
     {
-        $this->getRequest()->query->set(
-            ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, $this->buttonToolBarRenderer->getSearchForm()->getQuery()
-        );
+        $searchCondition = $this->getButtonToolBarSearchCondition();
 
-        $totalNumberOfItems = $this->userService->countUsers($this->getUserTableCondition());
+        $totalNumberOfItems = $this->userService->countUsers($searchCondition);
 
         $tableParameterValues = $this->requestTableParameterValuesCompiler->determineParameterValues(
             $this->userTableRenderer->getParameterNames(), $this->userTableRenderer->getDefaultParameterValues(),
@@ -137,8 +136,7 @@ class BrowseComponent extends Manager
         );
 
         $users = $this->userService->findUsers(
-            $this->getUserTableCondition(), $tableParameterValues->getOffset(),
-            $tableParameterValues->getNumberOfItemsPerPage(),
+            $searchCondition, $tableParameterValues->getOffset(), $tableParameterValues->getNumberOfItemsPerPage(),
             $this->userTableRenderer->determineOrderBy($tableParameterValues)
         );
 
