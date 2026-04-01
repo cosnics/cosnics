@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\PropertyAccess\PropertyPath;
@@ -216,6 +217,16 @@ class FormTypeBuilder
         $this->applyCommonOptions($options, $label, $required, $constraints, true);
 
         return $builder->create($name, TextType::class, $options);
+    }
+
+    public function createTextarea(
+        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $constraints = [],
+        array $options = []
+    ): FormBuilderInterface
+    {
+        $this->applyCommonOptions($options, $label, $required, $constraints, true);
+
+        return $builder->create($name, TextareaType::class, $options);
     }
 
     public function createVisualContent(
