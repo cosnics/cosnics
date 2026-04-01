@@ -22,20 +22,12 @@ use Symfony\Component\Translation\Translator;
 class ElementFinderFormType extends AbstractType
 {
     public const int DEFAULT_HEIGHT = 300;
-    public const int DEFAULT_WIDTH = 292;
 
-    protected ResourceManager $resourceManager;
-
-    protected Translator $translator;
-
-    protected WebPathBuilder $webPathBuilder;
-
-    public function __construct(ResourceManager $resourceManager, WebPathBuilder $webPathBuilder, Translator $translator
+    public function __construct(
+        protected ResourceManager $resourceManager, protected WebPathBuilder $webPathBuilder,
+        protected Translator $translator
     )
     {
-        $this->resourceManager = $resourceManager;
-        $this->webPathBuilder = $webPathBuilder;
-        $this->translator = $translator;
     }
 
     /**
@@ -83,20 +75,19 @@ class ElementFinderFormType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        $translator = $this->getTranslator();
-
         $view->vars['translations'] = [
-            'show' => $translator->trans('Show', [], StringUtilities::LIBRARIES),
-            'hide' => $translator->trans('Hide', [], StringUtilities::LIBRARIES),
-            'selectElementType' => $translator->trans('SelectElementType', [], StringUtilities::LIBRARIES)
+            'show' => $this->translator->trans('Show', [], StringUtilities::LIBRARIES),
+            'hide' => $this->translator->trans('Hide', [], StringUtilities::LIBRARIES),
+            'add' => $this->translator->trans('AddToSelection', [], StringUtilities::LIBRARIES),
+            'remove' => $this->translator->trans('RemoveFromSelection', [], StringUtilities::LIBRARIES),
+            'selectElementType' => $this->translator->trans('SelectElementType', [], StringUtilities::LIBRARIES)
         ];
 
         $view->vars['height'] = $options['height'];
-        $view->vars['width'] = $options['width'];
         $view->vars['collapsed'] = $options['collapsed'];
 
-        $view->vars['elementFinderPlugin'] = $this->getResourceManager()->getResourceHtml(
-            $this->getWebPathBuilder()->getJavascriptPath() . 'Jquery/jquery.advelementfinder.js'
+        $view->vars['elementFinderPlugin'] = $this->resourceManager->getResourceHtml(
+            $this->webPathBuilder->getJavascriptPath() . 'Jquery/jquery.advelementfinder.js'
         );
 
         $this->addElementTypes($view, $options);
@@ -112,7 +103,6 @@ class ElementFinderFormType extends AbstractType
         $resolver->setDefaults(
             [
                 'height' => self::DEFAULT_HEIGHT,
-                'width' => self::DEFAULT_WIDTH,
                 'collapsed' => false,
                 'elementTypes' => null,
                 'elementFinderConfiguration' => [],
@@ -132,20 +122,5 @@ class ElementFinderFormType extends AbstractType
     public function getBlockPrefix(): string
     {
         return 'element_finder';
-    }
-
-    public function getResourceManager(): ResourceManager
-    {
-        return $this->resourceManager;
-    }
-
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    public function getWebPathBuilder(): WebPathBuilder
-    {
-        return $this->webPathBuilder;
     }
 }

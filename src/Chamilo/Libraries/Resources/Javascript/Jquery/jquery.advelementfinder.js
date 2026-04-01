@@ -391,7 +391,7 @@
                 function elementTypeSelected(e) {
                     // Remove all the filter boxes
                     $('.filter_box', self).remove();
-                    delete (selectedFilter);
+                    selectedFilter = undefined;
 
                     // Clear search field
                     $('.element_query', self).val('');
@@ -500,7 +500,8 @@
                     var elementType = getElementTypeById(selectedTypeId);
 
                     var query = $('.element_query', self).val();
-                    var result = loadElements(elementType, query,
+                    var result = loadElements(
+                        elementType, query,
                         selectedFilter
                     );
 
@@ -536,7 +537,8 @@
                             // Add a dummy option
                             var option = createFilterOption(
                                 -1,
-                                getTranslation('SelectFilter', null,
+                                getTranslation(
+                                    'SelectFilter', null,
                                     'Chamilo\\Libraries'
                                 )
                             );
@@ -560,7 +562,8 @@
                         processTree();
                     }
                     else {
-                        inactiveBox.html(getTranslation('NoSearchResults',
+                        inactiveBox.html(getTranslation(
+                            'NoSearchResults',
                             null, 'Chamilo\\Libraries'
                         ));
                     }
@@ -585,8 +588,8 @@
                  */
                 function loadElements(elementType, query, filter) {
                     var parameters = {
-                        'application': elementType.application,
-                        'go': elementType.go,
+                        'context': elementType.context,
+                        'action': elementType.action,
                         'query': query,
                         'filter': filter,
                         'offset': offset
@@ -668,7 +671,8 @@
                  * Builds the layout of an element
                  */
                 function buildElement(element, parent) {
-                    var elementLi = createElement(element.id,
+                    var elementLi = createElement(
+                        element.id,
                         element.classes, element.title,
                         element.description
                     );
@@ -759,7 +763,7 @@
                     activeBox.html('');
                     activatedElements = [];
                     lastSelectedElements = [];
-                    delete (selectedFilter);
+                    selectedFilter = undefined;
 
                     if (settings.elementTypes.length == 1) {
                         $('#element_types_selector', self).prop(
@@ -803,12 +807,14 @@
 
                     // Declare the events for the element type changer
                     // combobox
-                    $(self).on('change', '#element_types_selector',
+                    $(self).on(
+                        'change', '#element_types_selector',
                         elementTypeSelected
                     );
 
                     // Declare the events for the filter boxes
-                    $(self).on('change', '.filter_box > select',
+                    $(self).on(
+                        'change', '.filter_box > select',
                         filterBoxSelected
                     );
 
@@ -823,7 +829,8 @@
                         'a:not(.disabled, .category)',
                         elementDoubleClicked
                     );
-                    $(self).on('click', 'a.disabled, a.category, a.filter',
+                    $(self).on(
+                        'click', 'a.disabled, a.category, a.filter',
                         function () {
                             return false;
                         }
@@ -841,10 +848,12 @@
                     });
 
                     // Declare the events for the buttons
-                    $(self).on('click', '#activate_button',
+                    $(self).on(
+                        'click', '#activate_button',
                         activateElements
                     );
-                    $(self).on('click', '#deactivate_button',
+                    $(self).on(
+                        'click', '#deactivate_button',
                         deactivateElements
                     );
 

@@ -22,20 +22,20 @@
             "type": "Chamilo\\Application",
             "resources": [
                 {
-                    "output": "Chamilo/Application/Calendar/Resources/Css/print.Aqua.min.css",
-                    "input": "Resources/Css/Aqua/Print.min.css"
+                    "output": "Chamilo/Application/Calendar/Resources/Css/print.Aqua.css",
+                    "input": "Resources/Css/Aqua/Print.css"
                 },
                 {
-                    "output": "Chamilo/Application/Calendar/Resources/Css/print.Ruby.min.css",
-                    "input": "Resources/Css/Aqua/Print.min.css"
+                    "output": "Chamilo/Application/Calendar/Resources/Css/print.Ruby.css",
+                    "input": "Resources/Css/Aqua/Print.css"
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
-                    "input": "Resources/Css/Aqua/Stylesheet.min.css"
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.css",
+                    "input": "Resources/Css/Aqua/Stylesheet.css"
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
-                    "input": "Resources/Css/Aqua/Stylesheet.min.css"
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.css",
+                    "input": "Resources/Css/Aqua/Stylesheet.css"
                 }
             ]
         }

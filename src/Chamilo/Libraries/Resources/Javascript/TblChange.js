@@ -7,8 +7,6 @@ var second;
 var clock_set = 0;
 
 /**
- * Opens calendar window.
- *
  * @param   string      form name
  * @param   string      field name
  */

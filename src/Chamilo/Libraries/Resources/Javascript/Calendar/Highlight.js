@@ -8,8 +8,8 @@ $(function () {
             type: "POST",
             url: getPath('WEB_PATH') + 'index.php',
             data: {
-                'application': calendarVisibilityContext,
-                'go': 'Visibility',
+                'context': calendarVisibilityContext,
+                'action': 'Visibility',
                 'source': eventSource
             },
             async: false

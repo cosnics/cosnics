@@ -111,35 +111,48 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="element_finder_container">
-                <div class="element_finder_search">
-                    <input type="text" class="element_query" id="search_field" name=""/>
-                    <button id="{{ id }}_collapse_button" class="normal hide mini" {% if collapsed %}style="display:none;"{% endif %}>{{ translations.hide }}</button>
-                </div>
-                <div class="clear"></div>
-                <div class="element_finder_elements">
-                    <div class="element_finder_inactive">
-                        <div id="inactive_elements" class="inactive_elements" style="height: {{ height }}px; width: {{ width }}px; overflow: auto;"></div>
-                        <div class="clear"></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="element_finder_search form-group mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <span class="fas fa-search"></span>
+                            </span>
+                            <input class="element_query form-control" id="search_field" name="" type="text">
+                        </div>
+                        <!--<button id="{{ id }}_collapse_button" class="normal hide mini" {% if collapsed %}style="display:none;"{% endif %}>{{ translations.hide }}</button>-->
                     </div>
-                    <div class="element_finder_buttons" style="height: {{ height }}px;">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <div class="element_finder_inactive mb-3">
+                        <div id="inactive_elements" class="inactive_elements" style="height: {{ height }}px; overflow: auto;"></div>
+                    </div>
+                    <div class="element_finder_buttons form-group">
                         <div class="element_finder_buttons_container">
-                            <input type="button" id="activate_button" class="activate_elements" name="{{ id }}_activate">
-                            <br/>
-                            <input type="button" id="deactivate_button" class="deactivate_elements" name="{{ id }}_deactivate">
+                            <button id="activate_button" class="btn btn-default btn-primary activate_elements form-control" name="activate_{{ id }}">
+                                <span class="inline-glyph fas fa-arrow-alt-circle-right"></span>&nbsp;{{ translations.add }}
+                            </button>
                         </div>
                     </div>
-                    <div class="element_finder_active">
-                        <div id="active_elements" class="active_elements" style="height: {{ height }}px; width: {{ width }}px; overflow: auto;"></div>
-                        <div class="clear"></div>
-                    </div>
-                    <div class="clear"></div>
                 </div>
-                <div class="clear"></div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="element_finder_active mb-3">
+                        <div id="active_elements" class="active_elements" style="height: {{ height }}px; overflow: auto;"></div>
+                    </div>
+                    <div class="element_finder_buttons form-group">
+                        <div class="element_finder_buttons_container">
+                            <button id="deactivate_button" class="btn btn-default btn-danger deactivate_elements form-control" name="deactivate_{{ id }}">
+                                <span class="inline-glyph fas fa-arrow-alt-circle-left"></span>&nbsp;{{ translations.remove }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        {{ element_finder_plugin|raw }}
+        {{ elementFinderPlugin|raw }}
 
         {% set defaultValuesString = '' %}
         {% if value %}

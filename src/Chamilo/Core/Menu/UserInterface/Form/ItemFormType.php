@@ -12,9 +12,7 @@ use Chamilo\Libraries\UserInterface\Form\Service\FormButtonTypeBuilder;
 use Chamilo\Libraries\UserInterface\Form\Service\FormTypeBuilder;
 use Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\Translator;
 
@@ -95,15 +93,6 @@ class ItemFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['itemType' => null]);
-
-        $normalizer = static function (Options $options, $itemType) {
-            if (!is_string($itemType)) {
-                throw new LogicException('$itemType should be a string.');
-            }
-
-            return $itemType;
-        };
-
-        $resolver->setNormalizer('itemType', $normalizer);
+        $resolver->setAllowedTypes('itemType', ['string']);
     }
 }

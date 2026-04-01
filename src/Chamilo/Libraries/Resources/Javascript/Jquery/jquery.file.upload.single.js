@@ -28,8 +28,8 @@ dropzoneCallbacks.chamilo = {
                 var temporaryFileName = $(file.previewElement).data('temporary-file-name');
 
                 var parameters = {
-                    'application': 'Chamilo\\Libraries\\Ajax',
-                    'go': 'DeleteTemporaryFile',
+                    'context': 'Chamilo\\Libraries\\Ajax',
+                    'action': 'DeleteTemporaryFile',
                     'file': temporaryFileName
                 };
 

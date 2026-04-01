@@ -15,9 +15,7 @@ use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Chamilo\Libraries\UserInterface\Form\Service\FormButtonTypeBuilder;
 use Chamilo\Libraries\UserInterface\Form\Service\FormTypeBuilder;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -339,29 +337,9 @@ abstract class AbstractUserFormType extends AbstractType
     {
         $resolver->setDefaults(['user' => null, 'executingUser' => null, 'isLockoutRisk' => false]);
 
-        $resolver->setNormalizer('user', static function (Options $options, $user) {
-            if (!$user instanceof User && !is_null($user)) {
-                throw new LogicException('The user must be an instance of User or null.');
-            }
-
-            return $user;
-        });
-
-        $resolver->setNormalizer('executingUser', static function (Options $options, $user) {
-            if (!$user instanceof User) {
-                throw new LogicException('The executing user must be an instance of User.');
-            }
-
-            return $user;
-        });
-
-        $resolver->setNormalizer('isLockoutRisk', static function (Options $options, $isLockoutRisk) {
-            if (!is_bool($isLockoutRisk)) {
-                throw new LogicException('$isLockoutRisk must be a boolean.');
-            }
-
-            return $isLockoutRisk;
-        });
+        $resolver->setAllowedTypes('user', [User::class, 'null']);
+        $resolver->setAllowedTypes('executingUser', [User::class]);
+        $resolver->setAllowedTypes('isLockoutRisk', ['bool']);
     }
 
     /**

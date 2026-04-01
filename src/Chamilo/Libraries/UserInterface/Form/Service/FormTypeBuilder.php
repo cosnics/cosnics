@@ -11,6 +11,7 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\VisualContentFormTy
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -89,6 +90,15 @@ class FormTypeBuilder
         }
 
         return $builder->create($name, CheckboxType::class, $options);
+    }
+
+    public function createDate(
+        FormBuilderInterface $builder, string $name, string $label, array $constraints = [], array $options = []
+    ): FormBuilderInterface
+    {
+        $this->applyCommonOptions($options, $label, false, $constraints, false);
+
+        return $builder->create($name, DateType::class, $options);
     }
 
     public function createEmail(

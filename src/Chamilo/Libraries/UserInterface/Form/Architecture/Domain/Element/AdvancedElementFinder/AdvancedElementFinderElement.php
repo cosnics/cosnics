@@ -32,6 +32,7 @@ class AdvancedElementFinderElement
         $this->setTitle($title);
         $this->setDescription($description);
         $this->setType($type);
+        $this->setChildren([]);
     }
 
     public function addChild(AdvancedElementFinderElement $child): static
@@ -88,7 +89,7 @@ class AdvancedElementFinderElement
     /**
      * @param \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement[] $children
      */
-    public function setChildren(array $children): static
+    public function setChildren(array $children = []): static
     {
         $this->setProperty(self::PROPERTY_CHILDREN, $children);
 

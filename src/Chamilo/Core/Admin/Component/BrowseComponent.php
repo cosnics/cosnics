@@ -21,8 +21,6 @@ use Symfony\Component\Translation\Translator;
  */
 class BrowseComponent extends Manager
 {
-    public const string PARAM_TAB = 'tab';
-
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
@@ -36,7 +34,9 @@ class BrowseComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     * @throws \QuickformException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function run(?User $currentUser = null): Response
     {
@@ -58,13 +58,15 @@ class BrowseComponent extends Manager
      */
     public function getCurrentTab(): string
     {
-        $currentTab = $this->getRequest()->query->get(self::PARAM_TAB, Manager::CONTEXT);
+        $default = $this->stringUtilities->createString(Manager::CONTEXT)->md5()->toString();
 
-        return $this->stringUtilities->createString($currentTab)->md5()->toString();
+        return $this->getRequest()->query->get(TabsRenderer::PARAM_TAB, $default);
     }
 
     /**
-     * @throws \QuickformException
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \Twig\Error\LoaderError
      */
     protected function renderTabs(): string
     {

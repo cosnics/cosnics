@@ -89,39 +89,6 @@ footer.chamilo-footer {
     --callout-color: var(--bs-danger-text-emphasis);
 }
 
-/***********************
- *  MODAL DIALOGS CSS  *
- ***********************/
-#help-modal-overlay {
-    background-color: black;
-    cursor: wait;
-}
-
-#help-modal-container {
-    background-color: #ffffff;
-    border: 1px solid black;
-    border-radius: 5px;
-    bottom: 100px;
-    left: 100px;
-    padding: 10px;
-    position: fixed;
-    right: 100px;
-    top: 100px;
-}
-
-a.help-modal-close {
-    background-color: red;
-    border-radius: 8px;
-    cursor: pointer;
-    display: inline;
-    height: 16px;
-    position: absolute;
-    right: 5px;
-    top: 5px;
-    width: 16px;
-    z-index: 3200;
-}
-
 /***********
  * Various *
  ***********/

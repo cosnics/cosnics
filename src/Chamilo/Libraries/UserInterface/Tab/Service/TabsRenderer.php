@@ -15,6 +15,8 @@ use Chamilo\Libraries\UserInterface\Tab\Architecture\Interface\TabNavigationRend
  */
 class TabsRenderer
 {
+    public const string PARAM_TAB = 'tab';
+
     public function __construct(protected TabRendererRegistry $tabRendererRegistry)
     {
     }

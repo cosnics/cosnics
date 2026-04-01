@@ -26,114 +26,119 @@
                     "input": "Resources/Javascript/"
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Plugin/",
-                    "input": "Resources/Plugin/"
+                    "output": "Chamilo/Libraries/Resources/Plugin/JQuery/images/",
+                    "input": "Resources/Plugin/JQuery/images/"
+                },
+                {
+                    "output": "Chamilo/Libraries/Resources/Plugin/TinyMCE/",
+                    "input": "Resources/Plugin/TinyMCE/"
+                },
+                {
+                    "output": "Chamilo/Libraries/Resources/Plugin/FontAwesome/v7/webfonts/",
+                    "input": "Resources/Plugin/FontAwesome/v7/webfonts/"
                 },
                 {
                     "output": "Chamilo/Libraries/Resources/Images/",
                     "input": "Resources/Images/"
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Javascript/cosnics.vendor.jquery.min.js",
+                    "output": "Chamilo/Libraries/Resources/Javascript/cosnics.vendor.jquery.js",
                     "input": [
-                        "Resources/Plugin/Jquery/jquery.min.js",
-                        "Resources/Plugin/Jquery/jquery.browser.min.js",
-                        "Resources/Plugin/Jquery/jquery-ui.min.js",
-                        "Resources/Plugin/Jquery/jquery.timeout.interval.idle.min.js",
-                        "Resources/Plugin/Jquery/jquery.mousewheel.min.js",
-                        "Resources/Plugin/Jquery/jquery.scrollable.pack.js",
-                        "Resources/Plugin/Jquery/jquery.xml2json.pack.js",
-                        "Resources/Plugin/Jquery/jquery.json.min.js",
-                        "Resources/Plugin/Jquery/jquery.query.min.js"
+                        "Resources/Plugin/Jquery/jquery.js",
+                        "Resources/Plugin/Jquery/jquery.browser.js",
+                        "Resources/Plugin/Jquery/jquery-ui.js",
+                        "Resources/Plugin/Jquery/jquery.timeout.interval.idle.js",
+                        "Resources/Plugin/Jquery/jquery.mousewheel.js",
+                        "Resources/Plugin/Jquery/jquery.scrollable.js",
+                        "Resources/Plugin/Jquery/jquery.xml2json.js",
+                        "Resources/Plugin/Jquery/jquery.json.js",
+                        "Resources/Plugin/Jquery/jquery.query.js"
                     ]
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Javascript/cosnics.vendor.bootstrap.min.js",
+                    "output": "Chamilo/Libraries/Resources/Javascript/cosnics.vendor.bootstrap.js",
                     "input": [
-                        "Resources/Plugin/Bootstrap/v5/js/bootstrap.bundle.min.js"
+                        "Resources/Plugin/Bootstrap/v5/js/bootstrap.bundle.js"
                     ]
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Javascript/cosnics.vendor.angular.min.js",
+                    "output": "Chamilo/Libraries/Resources/Javascript/cosnics.vendor.angular.js",
                     "input": [
-                        "Resources/Plugin/AngularJS/angular.min.js",
-                        "Resources/Plugin/AngularJS/angular-route.min.js",
-                        "Resources/Plugin/AngularJS/angular-sanitize.min.js",
-                        "Resources/Plugin/AngularJS-UI-Bootstrap/ui-bootstrap.min.js"
+                        "Resources/Plugin/AngularJS/angular.js",
+                        "Resources/Plugin/AngularJS/angular-route.js",
+                        "Resources/Plugin/AngularJS/angular-sanitize.js",
+                        "Resources/Plugin/AngularJS-UI-Bootstrap/ui-bootstrap-tpls-2.5.0.js"
                     ]
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Javascript/cosnics.vendor.min.js",
+                    "output": "Chamilo/Libraries/Resources/Javascript/cosnics.vendor.js",
                     "input": [
-                        "Resources/Plugin/Dropzone/dropzone.min.js",
-                        "Resources/Plugin/PhpJs/phpjs.min.js"
+                        "Resources/Plugin/Dropzone/dropzone.js",
+                        "Resources/Plugin/PhpJs/phpjs.js"
                     ]
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Javascript/cosnics.common.min.js",
+                    "output": "Chamilo/Libraries/Resources/Javascript/cosnics.common.js",
                     "input": [
-                        "Resources/Javascript/Jquery/jquery.treeMenu.min.js",
-                        "Resources/Javascript/Utilities.min.js",
-                        "Resources/Javascript/Help.min.js",
-                        "Resources/Javascript/Visit.min.js"
+                        "Resources/Javascript/Jquery/jquery.treeMenu.js",
+                        "Resources/Javascript/Utilities.js",
+                        "Resources/Javascript/Visit.js"
                     ]
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/cosnics.vendor.bootstrap.min.css",
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.vendor.bootstrap.css",
                     "input": [
-                        "Resources/Plugin/Bootstrap/v5/css/bootstrap.min.css"
+                        "Resources/Plugin/Bootstrap/v5/css/bootstrap.css"
                     ]
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/cosnics.vendor.jquery.min.css",
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.vendor.jquery.css",
                     "input": [
-                        "Resources/Plugin/Jquery/jquery-ui.min.css",
-                        "Resources/Plugin/JqueryContextMenu/jquery.contextMenu.min.css"
+                        "Resources/Plugin/Jquery/jquery-ui.css"
                     ]
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/cosnics.vendor.min.css",
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.vendor.css",
                     "input": [
-                        "Resources/Plugin/FontAwesome/v7/css/all.min.css",
-                        "Resources/Plugin/ConnectIdents/ConnectIdents.min.css",
-                        "Resources/Plugin/Dropzone/dropzone.min.css",
-                        "Resources/Plugin/Highlight/github.min.css"
+                        "Resources/Plugin/FontAwesome/v7/css/all.css",
+                        "Resources/Plugin/ConnectIdents/ConnectIdents.css",
+                        "Resources/Plugin/Dropzone/dropzone.css"
                     ]
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.css",
                     "input": [
-                        "Resources/Css/Aqua/General.min.css",
-                        "Resources/Css/Aqua/Form.min.css",
-                        "Resources/Css/Aqua/Table.min.css",
-                        "Resources/Css/Aqua/Tabs.min.css",
-                        "Resources/Css/Aqua/Tree.min.css",
-                        "Resources/Css/Aqua/Bootstrap.min.css",
-                        "Resources/Css/Aqua/Stylesheet.min.css",
-                        "Resources/Css/Aqua/Calendar.min.css"
+                        "Resources/Css/Aqua/General.css",
+                        "Resources/Css/Aqua/Form.css",
+                        "Resources/Css/Aqua/Table.css",
+                        "Resources/Css/Aqua/Tabs.css",
+                        "Resources/Css/Aqua/Tree.css",
+                        "Resources/Css/Aqua/Bootstrap.css",
+                        "Resources/Css/Aqua/Stylesheet.css",
+                        "Resources/Css/Aqua/Calendar.css"
                     ]
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.min.css",
+                    "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Ruby.css",
                     "input": [
-                        "Resources/Css/Aqua/General.min.css",
-                        "Resources/Css/Aqua/Form.min.css",
-                        "Resources/Css/Aqua/Table.min.css",
-                        "Resources/Css/Aqua/Tabs.min.css",
-                        "Resources/Css/Aqua/Tree.min.css",
-                        "Resources/Css/Aqua/Bootstrap.min.css",
-                        "Resources/Css/Aqua/Stylesheet.min.css",
-                        "Resources/Css/Ruby/Stylesheet.min.css",
-                        "Resources/Css/Ruby/Calendar.min.css"
+                        "Resources/Css/Aqua/General.css",
+                        "Resources/Css/Aqua/Form.css",
+                        "Resources/Css/Aqua/Table.css",
+                        "Resources/Css/Aqua/Tabs.css",
+                        "Resources/Css/Aqua/Tree.css",
+                        "Resources/Css/Aqua/Bootstrap.css",
+                        "Resources/Css/Aqua/Stylesheet.css",
+                        "Resources/Css/Ruby/Stylesheet.css",
+                        "Resources/Css/Ruby/Calendar.css"
                     ]
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/ErrorPages.Aqua.min.css",
-                    "input": "Resources/Css/Aqua/ErrorPages.min.css"
+                    "output": "Chamilo/Libraries/Resources/Css/ErrorPages.Aqua.css",
+                    "input": "Resources/Css/Aqua/ErrorPages.css"
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Css/ErrorPages.Ruby.min.css",
-                    "input": "Resources/Css/Ruby/ErrorPages.min.css"
+                    "output": "Chamilo/Libraries/Resources/Css/ErrorPages.Ruby.css",
+                    "input": "Resources/Css/Ruby/ErrorPages.css"
                 }
             ]
         }

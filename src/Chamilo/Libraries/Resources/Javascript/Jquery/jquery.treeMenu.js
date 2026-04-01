@@ -156,7 +156,8 @@
                     "#" + id + " ul li:not(:has(ul)) > div.lastExpand",
                     expandItemAndLoadChildren
                 );
-                $(document).on('click',
+                $(document).on(
+                    'click',
                     "#" + id + " ul li:has(ul) > div.expand", expandItem
                 );
                 $(document).on(

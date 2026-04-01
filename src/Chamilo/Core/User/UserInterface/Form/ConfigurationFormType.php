@@ -148,5 +148,7 @@ class ConfigurationFormType extends AbstractType
 
             return $context;
         });
+
+        $resolver->setAllowedTypes('context', ['string']);
     }
 }

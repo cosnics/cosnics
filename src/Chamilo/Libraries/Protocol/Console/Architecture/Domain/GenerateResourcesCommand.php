@@ -23,7 +23,7 @@ class GenerateResourcesCommand extends ChamiloCommand
 
     protected function configure(): void
     {
-        $this->setName('chamilo:generate_resources')->setDescription(
+        $this->setName('chamilo:resources:generate')->setDescription(
             $this->translator->trans('GenerateResourcesCommandDescription', [], StringUtilities::LIBRARIES)
         );
     }

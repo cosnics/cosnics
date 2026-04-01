@@ -54,8 +54,6 @@ class ActionProviderRegistry
         $index = 0;
 
         foreach ($this->actionProviders as $actionProvider) {
-            $index ++;
-
             $actions = $actionProvider->getActions();
 
             $actionsTab = new ActionsTab(
