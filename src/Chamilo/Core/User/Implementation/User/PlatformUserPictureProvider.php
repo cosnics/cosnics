@@ -9,6 +9,7 @@ use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
 use Chamilo\Libraries\Filesystem\Service\FilesystemTools;
+use Chamilo\Libraries\Filesystem\Service\ImageConverter;
 use Chamilo\Libraries\Filesystem\Service\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
@@ -29,7 +30,8 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
     public function __construct(
         protected ConfigurablePathBuilder $configurablePathBuilder, protected ThemePathBuilder $themeSystemPathBuilder,
         protected WebPathBuilder $webPathBuilder, protected Filesystem $filesystem,
-        protected FilesystemTools $filesystemTools, protected UserService $userService
+        protected FilesystemTools $filesystemTools, protected UserService $userService,
+        protected ImageConverter $imageConverter
     )
     {
     }
@@ -98,28 +100,9 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
         }
     }
 
-    /**
-     * @param string $filePath
-     *
-     * @return string
-     */
-    public function getPictureAsBase64String(string $filePath): string
-    {
-        $type = exif_imagetype($filePath);
-        $mime = image_type_to_mime_type($type);
-
-        $fileResource = fopen($filePath, 'r');
-        $imageBinary = fread($fileResource, filesize($filePath));
-        $imgString = base64_encode($imageBinary);
-
-        fclose($fileResource);
-
-        return 'data:' . $mime . ';base64,' . $imgString;
-    }
-
     public function getUnknownUserPictureAsBase64String(): string
     {
-        return $this->getPictureAsBase64String($this->getUnknownUserPicturePath());
+        return $this->imageConverter->getPictureAsBase64String($this->getUnknownUserPicturePath());
     }
 
     private function getUnknownUserPicturePath(): string
@@ -130,7 +113,7 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
     public function getUserPictureAsBase64String(User $user, bool $useFallback = true): ?string
     {
         try {
-            return $this->getPictureAsBase64String($this->getUserPicturePath($user, $useFallback));
+            return $this->imageConverter->getPictureAsBase64String($this->getUserPicturePath($user, $useFallback));
         }
         catch (Exception) {
             return null;

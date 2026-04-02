@@ -25,7 +25,6 @@ class PictureFormType extends AbstractType
     {
         parent::buildView($view, $form, $options);
 
-        $view->vars['pictureUri'] = $options['pictureUri'];
         $view->vars['noPictureLabel'] = $options['noPictureLabel'];
 
         if (count($options['pictureStyles']) > 0) {
@@ -39,11 +38,9 @@ class PictureFormType extends AbstractType
 
         $resolver->setDefaults([
             'compound' => false,
-            'mapped' => false,
             'label' => $translator->trans('Picture', [], StringUtilities::LIBRARIES),
             'label_html' => true,
             'noPictureLabel' => $translator->trans('noPicture', [], StringUtilities::LIBRARIES),
-            'pictureUri' => null,
             'pictureStyles' => []
         ]);
     }

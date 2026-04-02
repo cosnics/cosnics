@@ -284,7 +284,7 @@ abstract class AbstractUserFormType extends AbstractType
                     $this->formTypeBuilder->createPicture(
                         builder: $builder, name: self::PROPERTY_PICTURE_CURRENT, label: $this->translator->trans(
                         'CurrentPicture', [], Manager::CONTEXT
-                    ), pictureUri: $encodedUserPicture, noPictureLabel: $this->translator->trans(
+                    ), noPictureLabel: $this->translator->trans(
                         'NoCurrentPicture', [], Manager::CONTEXT
                     ), pictureStyles: ['max-height' => '250px']
                     )

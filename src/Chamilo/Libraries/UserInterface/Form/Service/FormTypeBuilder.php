@@ -5,6 +5,8 @@ use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\CategoryFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlEditorFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlFormType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\LayoutColumnFormType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\LayoutRowFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\MessageFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\PictureFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\VisualContentFormType;
@@ -34,6 +36,25 @@ class FormTypeBuilder
 
     public function __construct(protected readonly Translator $translator)
     {
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface[][][] $layout
+     */
+    public function addLayout(FormBuilderInterface $builder, array $layout): void
+    {
+        foreach ($layout as $rowName => $columns) {
+            $row = $builder->create('row_' . $rowName, LayoutRowFormType::class);
+            foreach ($columns as $columnName => $elements) {
+                $column = $builder->create('column' . $rowName . '_' . $columnName, LayoutColumnFormType::class);
+
+                foreach ($elements as $element) {
+                    $column->add($element);
+                }
+                $row->add($column);
+            }
+            $builder->add($row);
+        }
     }
 
     protected function applyChoiceOptions(
@@ -97,7 +118,7 @@ class FormTypeBuilder
         FormBuilderInterface $builder, string $name, string $label, array $constraints = [], array $options = []
     ): FormBuilderInterface
     {
-        $this->applyCommonOptions($options, $label, false, $constraints, false);
+        $this->applyCommonOptions($options, $label, false, $constraints);
 
         return $builder->create($name, DateType::class, $options);
     }
@@ -168,14 +189,13 @@ class FormTypeBuilder
     }
 
     public function createPicture(
-        FormBuilderInterface $builder, string $name, string $label, ?string $pictureUri = null,
+        FormBuilderInterface $builder, string $name, string $label,
         ?string $noPictureLabel = null, array $pictureStyles = [], array $options = []
     ): FormBuilderInterface
     {
         $this->applyCommonOptions($options, $label);
 
         $options['pictureStyles'] = $pictureStyles;
-        $options['pictureUri'] = $pictureUri;
 
         if ($noPictureLabel) {
             $options['noPictureLabel'] = $noPictureLabel;
@@ -220,11 +240,13 @@ class FormTypeBuilder
     }
 
     public function createTextarea(
-        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $constraints = [],
-        array $options = []
+        FormBuilderInterface $builder, string $name, string $label, string $height = '150px;', bool $required = true,
+        array $constraints = [], array $options = []
     ): FormBuilderInterface
     {
         $this->applyCommonOptions($options, $label, $required, $constraints, true);
+
+        $options['attr']['style'] = ($options['attr']['style'] ?? '') . (' height: ' . $height);
 
         return $builder->create($name, TextareaType::class, $options);
     }

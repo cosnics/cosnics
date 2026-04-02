@@ -7,7 +7,7 @@ use Chamilo\Libraries\UserInterface\Layout\Service\BaseFooterRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\BaseHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultHeaderRenderer;
-use Chamilo\Libraries\UserInterface\Layout\Service\PanelRenderer;
+use Chamilo\Libraries\UserInterface\Layout\Service\CardRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\ProgressBarRenderer;
 
 return static function (ContainerConfigurator $container) {
@@ -42,6 +42,6 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(ApplicationHeaderRenderer::class);
 
-    $services->set(PanelRenderer::class);
+    $services->set(CardRenderer::class);
     $services->set(ProgressBarRenderer::class);
 };

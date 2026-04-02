@@ -43,7 +43,7 @@ readonly class WidgetItemRenderer extends ItemRenderer
 
         if ($item->showIcon()) {
             $html[] =
-                '<img class="img-profile img-thumbnail rounded-circle" src="' . $userPicture . '" title="' . $title .
+                '<img class="img-profile img-thumbnail rounded-circle object-fit-cover" src="' . $userPicture . '" title="' . $title .
                 '" alt="' . $title . '" />';
         }
 

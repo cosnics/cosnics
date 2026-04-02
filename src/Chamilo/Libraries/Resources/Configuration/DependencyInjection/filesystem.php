@@ -6,6 +6,7 @@ use Chamilo\Libraries\Filesystem\Service\Compression\ArchiveCreator;
 use Chamilo\Libraries\Filesystem\Service\Compression\ZipArchiveFilecompression;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
 use Chamilo\Libraries\Filesystem\Service\FilesystemTools;
+use Chamilo\Libraries\Filesystem\Service\ImageConverter;
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use HTMLPurifier;
@@ -29,4 +30,6 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(ArchiveCreator::class);
     $services->set(ZipArchiveFilecompression::class);
+
+    $services->set(ImageConverter::class);
 };

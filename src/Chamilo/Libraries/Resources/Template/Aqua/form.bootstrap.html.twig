@@ -45,7 +45,7 @@
 {%- endblock message_widget -%}
 
 {%- block category_row -%}
-    <h4 class="form-category">{{ label|raw }}</h4>
+    <h4 class="form-category border-bottom">{{ label|raw }}</h4>
 {%- endblock category_row -%}
 
 {%- block html_editor_row -%}
@@ -168,9 +168,9 @@
 {% endblock %}
 
 {%- block picture_widget -%}
-    {% if pictureUri %}
+    {% if value %}
         <div>
-            <img class="img-thumbnail" src="{{ pictureUri|raw }}" style="{% for property, value in pictureStyles %}{{ property }}: {{ value }};{% endfor %}" title="{{ label }}"/>
+            <img class="img-thumbnail" src="{{ value|raw }}" style="{% for property, value in pictureStyles %}{{ property }}: {{ value }};{% endfor %}" title="{{ label }}"/>
         </div>
     {% else %}
         <div role="alert" class="callout callout-info mb-3">
@@ -178,3 +178,27 @@
         </div>
     {% endif %}
 {%- endblock picture_widget -%}
+
+{%- block layout_row_row -%}
+    <div class="row mb-3 {{ attr.class|default('') }}">
+        {{ block('layout_row_widget') }}
+    </div>
+{%- endblock layout_row_row -%}
+
+{%- block layout_row_widget -%}
+    {%- for child in form %}
+        {{- form_row(child) -}}
+    {% endfor -%}
+{%- endblock layout_row_widget -%}
+
+{%- block layout_column_row -%}
+    <div class="col mb-3 {{ attr.class|default('') }}">
+        {{ block('layout_column_widget') }}
+    </div>
+{%- endblock layout_column_row -%}
+
+{%- block layout_column_widget -%}
+    {%- for child in form %}
+        {{- form_row(child) -}}
+    {% endfor -%}
+{%- endblock layout_column_widget -%}

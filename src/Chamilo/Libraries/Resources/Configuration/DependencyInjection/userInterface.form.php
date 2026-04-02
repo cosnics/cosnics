@@ -6,6 +6,8 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\CategoryFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\ElementFinderFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlEditorFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\HtmlFormType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\LayoutColumnFormType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\LayoutRowFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\MessageFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\PictureFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\SearchFormType;
@@ -53,6 +55,8 @@ return static function (ContainerConfigurator $container) {
     $services->set(HtmlEditorFormType::class)->tag(FormTypeInterface::class);
     $services->set(ElementFinderFormType::class)->tag(FormTypeInterface::class);
     $services->set(PictureFormType::class)->tag(FormTypeInterface::class);
+    $services->set(LayoutRowFormType::class)->tag(FormTypeInterface::class);
+    $services->set(LayoutColumnFormType::class)->tag(FormTypeInterface::class);
 
     $services->set(SearchFormType::class)->tag(FormTypeInterface::class);
 };
