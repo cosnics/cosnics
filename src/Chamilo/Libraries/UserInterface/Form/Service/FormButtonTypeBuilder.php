@@ -27,13 +27,23 @@ class FormButtonTypeBuilder
         $saveText = $this->translator->trans('Save', [], StringUtilities::LIBRARIES);
         $saveGlyph = new FontAwesomeGlyph('check', ['me-1'], $saveText, 'fas');
 
+        $this->addSubmitAndResetButton($builder, $saveText, $saveGlyph);
+    }
+
+    public function addSubmitAndResetButton(
+        FormBuilderInterface $builder, string $submitText, ?InlineGlyph $submitGlyph, string $submitName = 'submit',
+        array $classes = ['btn', 'btn-primary']
+    ): void
+    {
         $resetText = $this->translator->trans('Reset', [], StringUtilities::LIBRARIES);
         $resetGlyph = new FontAwesomeGlyph('trash-alt', ['me-1'], $resetText, 'fas');
 
         $buttons = [];
 
-        $buttons[] = $this->createSubmitButton($builder, $saveText, $saveGlyph);
-        $buttons[] = $this->createResetButton($builder, $resetText, $resetGlyph);
+        $buttons[] = $this->createSubmitButton(
+            builder: $builder, labelText: $submitText, labelGlyph: $submitGlyph, name: $submitName, classes: $classes
+        );
+        $buttons[] = $this->createResetButton(builder: $builder, labelText: $resetText, labelGlyph: $resetGlyph);
 
         $options['buttons'] = $buttons;
 
@@ -89,7 +99,7 @@ class FormButtonTypeBuilder
 
     public function createSubmitButton(
         FormBuilderInterface $builder, ?string $labelText = null, ?InlineGlyph $labelGlyph = null,
-        string $name = 'submit'
+        string $name = 'submit', array $classes = ['btn', 'btn-success']
     ): FormBuilderInterface
     {
         if (!$labelText) {
@@ -100,6 +110,6 @@ class FormButtonTypeBuilder
             $labelGlyph = new FontAwesomeGlyph('check', ['me-1'], $labelText, 'fas');
         }
 
-        return $this->createButton($builder, $name, $labelText, $labelGlyph, ['btn', 'btn-success'], SubmitType::class);
+        return $this->createButton($builder, $name, $labelText, $labelGlyph, $classes, SubmitType::class);
     }
 }

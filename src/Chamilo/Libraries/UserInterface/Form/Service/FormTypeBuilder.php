@@ -58,7 +58,7 @@ class FormTypeBuilder
     }
 
     protected function applyChoiceOptions(
-        array &$options, array $choices, null|callable|string|PropertyPath $value = 'value',
+        array &$options, iterable $choices, null|callable|string|PropertyPath $value = 'value',
         null|bool|callable|string|PropertyPath $label = 'label',
         null|array|callable|string|PropertyPath $attributes = 'attributes', null|bool|string $translationDomain = false
     ): void
@@ -189,8 +189,8 @@ class FormTypeBuilder
     }
 
     public function createPicture(
-        FormBuilderInterface $builder, string $name, string $label,
-        ?string $noPictureLabel = null, array $pictureStyles = [], array $options = []
+        FormBuilderInterface $builder, string $name, string $label, ?string $noPictureLabel = null,
+        array $pictureStyles = [], array $options = []
     ): FormBuilderInterface
     {
         $this->applyCommonOptions($options, $label);
@@ -205,7 +205,7 @@ class FormTypeBuilder
     }
 
     public function createRadio(
-        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $choices = [],
+        FormBuilderInterface $builder, string $name, string $label, bool $required = true, iterable $choices = [],
         array $constraints = [], array $options = []
     ): FormBuilderInterface
     {
@@ -219,7 +219,7 @@ class FormTypeBuilder
     }
 
     public function createSelect(
-        FormBuilderInterface $builder, string $name, string $label, bool $required = true, array $choices = [],
+        FormBuilderInterface $builder, string $name, string $label, bool $required = true, iterable $choices = [],
         array $constraints = [], array $options = []
     ): FormBuilderInterface
     {
