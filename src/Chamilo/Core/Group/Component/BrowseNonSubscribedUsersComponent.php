@@ -169,7 +169,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
             new InCondition(new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers)
         );
 
-        $query = $this->buttonToolBarRenderer->getSearchForm()->getQuery();
+        $query = $this->buttonToolBarRenderer->getSearchQuery();
 
         if (isset($query) && $query != '') {
             $orConditions[] = new ContainsCondition(

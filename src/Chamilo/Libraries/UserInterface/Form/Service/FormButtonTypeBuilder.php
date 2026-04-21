@@ -32,7 +32,7 @@ class FormButtonTypeBuilder
 
     public function addSubmitAndResetButton(
         FormBuilderInterface $builder, string $submitText, ?InlineGlyph $submitGlyph, string $submitName = 'submit',
-        array $classes = ['btn', 'btn-primary']
+        array $submitClasses = ['btn', 'btn-primary']
     ): void
     {
         $resetText = $this->translator->trans('Reset', [], StringUtilities::LIBRARIES);
@@ -41,7 +41,7 @@ class FormButtonTypeBuilder
         $buttons = [];
 
         $buttons[] = $this->createSubmitButton(
-            builder: $builder, labelText: $submitText, labelGlyph: $submitGlyph, name: $submitName, classes: $classes
+            builder: $builder, labelText: $submitText, labelGlyph: $submitGlyph, name: $submitName, classes: $submitClasses
         );
         $buttons[] = $this->createResetButton(builder: $builder, labelText: $resetText, labelGlyph: $resetGlyph);
 
