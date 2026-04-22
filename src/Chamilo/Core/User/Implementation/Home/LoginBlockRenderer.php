@@ -20,7 +20,9 @@ use HTML_QuickForm_password;
 use HTML_QuickForm_Rule_Required;
 use HTML_QuickForm_static;
 use HTML_QuickForm_text;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Translation\Translator;
+use Twig\Environment;
 
 readonly class LoginBlockRenderer extends BlockRenderer
 {
@@ -28,6 +30,7 @@ readonly class LoginBlockRenderer extends BlockRenderer
 
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator, protected ChamiloRequest $request,
+        protected  FormFactoryInterface $formFactory, protected  Environment $twigEnvironment,
         protected bool $canRetrievePassword, protected bool $canRegister
     )
     {

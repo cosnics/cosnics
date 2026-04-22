@@ -50,7 +50,10 @@ return static function (ContainerConfigurator $container) {
     $services->set(LoginAsComponent::class)->tag(ApplicationInterface::class);
     $services->set(UsersFeedComponent::class)->tag(ApplicationInterface::class);
     $services->set(ResetPasswordComponent::class)->args(
-        ['$userCanRetrievePassword' => '%cosnics.application.user.rights.retrievePassword%']
+        [
+            '$userCanRetrievePassword' => '%cosnics.application.user.rights.retrievePassword%',
+            '$twigEnvironment' => service('Twig\Environment\Form')
+        ]
     )->tag(ApplicationInterface::class);
     $services->set(ActiveComponent::class)->tag(ApplicationInterface::class);
     $services->set(UpdateUserPictureComponent::class)->args(

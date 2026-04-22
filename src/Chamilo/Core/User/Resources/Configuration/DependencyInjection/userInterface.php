@@ -3,7 +3,9 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Core\User\UserInterface\Form\AccountFormType;
 use Chamilo\Core\User\UserInterface\Form\ConfigurationFormType;
+use Chamilo\Core\User\UserInterface\Form\LoginFormType;
 use Chamilo\Core\User\UserInterface\Form\RegisterFormType;
+use Chamilo\Core\User\UserInterface\Form\ResetPasswordFormType;
 use Chamilo\Core\User\UserInterface\Form\UserFormType;
 use Chamilo\Core\User\UserInterface\Form\UserPictureUpdateFormType;
 use Chamilo\Core\User\UserInterface\Table\UserTableRenderer;
@@ -70,4 +72,6 @@ return static function (ContainerConfigurator $container) {
     ])->tag(FormTypeInterface::class);
 
     $services->set(ConfigurationFormType::class)->tag(FormTypeInterface::class);
+    $services->set(ResetPasswordFormType::class)->tag(FormTypeInterface::class);
+    $services->set(LoginFormType::class)->tag(FormTypeInterface::class);
 };

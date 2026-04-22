@@ -11,7 +11,8 @@ return static function (ContainerConfigurator $container) {
     $services->set(LoginBlockRenderer::class)->args(
         [
             '$canRetrievePassword' => '%cosnics.application.user.rights.retrievePassword%',
-            '$canRegister' => '%cosnics.application.user.rights.register%'
+            '$canRegister' => '%cosnics.application.user.rights.register%',
+            '$twigEnvironment' => service('Twig\Environment\Form')
         ]
     )->tag(
         BlockRenderer::class
