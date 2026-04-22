@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -141,6 +142,15 @@ class FormTypeBuilder
         $this->applyCommonOptions($options, $label, $required, $constraints);
 
         return $builder->create($name, FileType::class, $options);
+    }
+
+    public function createHidden(
+        FormBuilderInterface $builder, string $name, array $constraints = [], array $options = []
+    ): FormBuilderInterface
+    {
+        $this->applyCommonOptions(options: $options, required: true, constraints: $constraints);
+
+        return $builder->create($name, HiddenType::class, $options);
     }
 
     public function createHtml(FormBuilderInterface $builder, string $name, string $html, array $options = []

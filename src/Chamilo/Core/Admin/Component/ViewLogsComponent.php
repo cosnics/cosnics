@@ -10,13 +10,13 @@ use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Resource\ResourceManager;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_submit;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonToolBar;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
-use HTML_QuickForm_html;
 use HTML_Table;
 use Symfony\Component\Finder\Iterator\FileTypeFilterIterator;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +33,8 @@ class ViewLogsComponent extends Manager
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         protected readonly ConfigurablePathBuilder $configurablePathBuilder,
         protected readonly FilesystemTools $filesystemTools, protected readonly ResourceManager $resourceManager,
-        protected readonly WebPathBuilder $webPathBuilder
+        protected readonly WebPathBuilder $webPathBuilder,
+        protected readonly ButtonToolBarRenderer $buttonToolBarRenderer
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
@@ -50,82 +51,12 @@ class ViewLogsComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $form = $this->buildForm();
-
         $html[] = $this->renderHeader($currentUser);
-        $html[] = $form->render();
-
-        if ($form->validate()) {
-            $logFile = $form->exportValue('log_file');
-            $lineCount = $form->exportValue('line_count');
-        }
-        else {
-            $phpErrorLogPath = ini_get('error_log');
-            $logFile = basename($phpErrorLogPath);
-            $lineCount = 10;
-        }
-
-        $html[] = $this->displayLogfileTable($logFile, $lineCount);
+        $html[] = $this->renderButtonToolBar();
+        $html[] = $this->displayLogfileTable($this->getLogFile(), $this->getLineCount());
         $html[] = $this->renderFooter();
 
         return new Response(implode(PHP_EOL, $html));
-    }
-
-    /**
-     * @throws \QuickformException
-     */
-    public function buildForm(): FormValidator
-    {
-        $form =
-            new FormValidator('logviewer', FormValidator::FORM_METHOD_POST, $this->getUrlGenerator()->fromRequest());
-        $translator = $this->getTranslator();
-
-        $lines = [
-            10 => '10 ' . $translator->trans('Lines', [], Manager::CONTEXT),
-            20 => '20 ' . $translator->trans('Lines', [], Manager::CONTEXT),
-            50 => '50 ' . $translator->trans('Lines', [], Manager::CONTEXT),
-            0 => $translator->trans('AllLines', [], Manager::CONTEXT)
-        ];
-
-        $dir = $this->configurablePathBuilder->getLogPath();
-        $content = $this->filesystemTools->getDirectoryContent($dir, FileTypeFilterIterator::ONLY_FILES, false);
-
-        $phpErrorLogPath = ini_get('error_log');
-        $phpErrorFileName = basename($phpErrorLogPath);
-
-        $files = [$phpErrorFileName => $phpErrorFileName];
-
-        foreach ($content->name('*.log') as $file) {
-            $files[$file->getFilename()] = $file->getFilename();
-        }
-
-        $form->addElement(HTML_QuickForm_html::class, '<div class="row">');
-
-        $form->addElement(HTML_QuickForm_html::class, '<div class="col-auto">');
-        $form->addSelect('log_file', $translator->trans('LogFile', [], Manager::CONTEXT), $files, false);
-        $form->getRenderer()->setElementTemplate($this->getSelectTemplate(), 'log_file');
-        $form->addElement(HTML_QuickForm_html::class, '</div>');
-
-        $form->addElement(HTML_QuickForm_html::class, '<div class="col-auto">');
-        $form->addSelect('line_count', $translator->trans('Linecount', [], Manager::CONTEXT), $lines, false);
-        $form->getRenderer()->setElementTemplate($this->getSelectTemplate(), 'line_count');
-        $form->addElement(HTML_QuickForm_html::class, '</div>');
-
-        $form->addElement(HTML_QuickForm_html::class, '<div class="col-auto">');
-        $form->addElement(
-            HTML_QuickForm_button_submit::class, 'submit', $translator->trans('Ok', [], StringUtilities::LIBRARIES),
-            ['class' => 'positive finish']
-        );
-        $form->addElement(HTML_QuickForm_html::class, '</div>');
-        $form->addElement(HTML_QuickForm_html::class, '</div>');
-
-        $form->addElement(
-            HTML_QuickForm_html::class, $this->resourceManager->getResourceHtml(
-            $this->webPathBuilder->getJavascriptPath() . 'LogViewer.js'
-        )
-        );
-
-        return $form;
     }
 
     /**
@@ -177,6 +108,18 @@ class ViewLogsComponent extends Manager
         return $table->toHtml();
     }
 
+    protected function getLineCount(): int
+    {
+        return $this->request->query->get('line_count', 10);
+    }
+
+    protected function getLogFile(): string
+    {
+        $phpErrorLogPath = ini_get('error_log');
+
+        return $this->request->query->get('log_file', basename($phpErrorLogPath));
+    }
+
     public function getSelectTemplate(): string
     {
         $html = [];
@@ -196,5 +139,69 @@ class ViewLogsComponent extends Manager
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function renderButtonToolBar(): string
+    {
+        $buttonToolBar = new ButtonToolBar();
+
+        $fileButton = new DropDownButtonCollection($this->translator->trans('LogFiles', [], Manager::CONTEXT),
+            new FontAwesomeGlyph('file-alt', ['me-1'], null, 'fas'));
+
+        $dir = $this->configurablePathBuilder->getLogPath();
+        $content = $this->filesystemTools->getDirectoryContent($dir, FileTypeFilterIterator::ONLY_FILES, false);
+
+        $phpErrorLogPath = ini_get('error_log');
+        $phpErrorFileName = basename($phpErrorLogPath);
+
+        $fileButton->addButton(
+            new SubButton(
+                label: $phpErrorFileName, action: $this->urlGenerator->fromRequest(
+                ['log_file' => $phpErrorFileName]
+            ), state: $this->getLogFile() == $phpErrorFileName
+            )
+        );
+
+        foreach ($content->name('*.log') as $file) {
+            $fileButton->addButton(
+                new SubButton(
+                    label: $file->getFilename(), action: $this->urlGenerator->fromRequest(
+                    ['log_file' => $file->getFilename()]
+                ), state: $this->getLogFile() == $file->getFilename()
+                )
+            );
+        }
+
+        $buttonToolBar->addButton($fileButton);
+
+        $linesButton = new DropDownButtonCollection($this->translator->trans('Lines', [], Manager::CONTEXT),
+            new FontAwesomeGlyph('hashtag', ['me-1'], null, 'fas'));
+
+        $linesButton->addButton(
+            new SubButton(
+                label: '10 ' . $this->translator->trans('Lines', [], Manager::CONTEXT),
+                action: $this->urlGenerator->fromRequest(['line_count' => 10]), state: $this->getLineCount() == 10
+            )
+        );
+        $linesButton->addButton(
+            new SubButton(
+                label: '20 ' . $this->translator->trans('Lines', [], Manager::CONTEXT),
+                action: $this->urlGenerator->fromRequest(['line_count' => 20]), state: $this->getLineCount() == 20
+            )
+        );
+        $linesButton->addButton(
+            new SubButton(
+                label: '50 ' . $this->translator->trans('Lines', [], Manager::CONTEXT),
+                action: $this->urlGenerator->fromRequest(['line_count' => 50]), state: $this->getLineCount() == 50
+            )
+        );
+        $linesButton->addButton(
+            new SubButton(label: $this->translator->trans('AllLines', [], Manager::CONTEXT),
+                action: $this->urlGenerator->fromRequest(['line_count' => 0]), state: $this->getLineCount() == 0)
+        );
+
+        $buttonToolBar->addButton($linesButton);
+
+        return $this->buttonToolBarRenderer->render($buttonToolBar);
     }
 }
