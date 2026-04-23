@@ -32,13 +32,13 @@ class ButtonsFormType extends AbstractType
                 throw new LogicException('Buttons should be an array.');
             }
 
-            foreach ($buttons as $button) {
-                if (!$button instanceof ButtonBuilder) {
-                    throw new LogicException(
-                        'Buttons should be either a ButtonTypeInterface or a SubmitButtonTypeInterface.'
-                    );
-                }
-            }
+//            foreach ($buttons as $button) {
+//                if (!$button instanceof ButtonBuilder) {
+//                    throw new LogicException(
+//                        'Buttons should be either a ButtonTypeInterface or a SubmitButtonTypeInterface.'
+//                    );
+//                }
+//            }
 
             return $buttons;
         });

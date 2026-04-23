@@ -73,5 +73,10 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(ConfigurationFormType::class)->tag(FormTypeInterface::class);
     $services->set(ResetPasswordFormType::class)->tag(FormTypeInterface::class);
-    $services->set(LoginFormType::class)->tag(FormTypeInterface::class);
+    $services->set(LoginFormType::class)->args(
+        [
+            '$canRetrievePassword' => '%cosnics.application.user.rights.retrievePassword%',
+            '$canRegister' => '%cosnics.application.user.rights.register%'
+        ]
+    )->tag(FormTypeInterface::class);
 };

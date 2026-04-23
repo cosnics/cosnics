@@ -85,7 +85,6 @@ abstract readonly class BlockRenderer
 
         $html[] = $this->renderContentFooter();
         $html[] = '</div>';
-        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -99,7 +98,6 @@ abstract readonly class BlockRenderer
             $block->getId() . '">';
         $html[] = $this->displayTitle($block);
         $html[] = $this->renderContentHeader($block);
-        $html[] = '<div style="overflow:auto;">';
 
         return implode(PHP_EOL, $html);
     }

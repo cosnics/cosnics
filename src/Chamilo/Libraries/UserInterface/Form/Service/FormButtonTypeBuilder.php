@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\UserInterface\Form\Service;
 
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\ButtonsFormType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\VisualButtonFormType;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 use Symfony\Component\Form\Exception\InvalidConfigurationException;
@@ -41,13 +42,12 @@ class FormButtonTypeBuilder
         $buttons = [];
 
         $buttons[] = $this->createSubmitButton(
-            builder: $builder, labelText: $submitText, labelGlyph: $submitGlyph, name: $submitName, classes: $submitClasses
+            builder: $builder, labelText: $submitText, labelGlyph: $submitGlyph, name: $submitName,
+            classes: $submitClasses
         );
         $buttons[] = $this->createResetButton(builder: $builder, labelText: $resetText, labelGlyph: $resetGlyph);
 
-        $options['buttons'] = $buttons;
-
-        $builder->add('buttons', ButtonsFormType::class, $options);
+        $builder->add('buttons', ButtonsFormType::class, ['buttons' => $buttons]);
     }
 
     public function createButton(
@@ -111,5 +111,36 @@ class FormButtonTypeBuilder
         }
 
         return $this->createButton($builder, $name, $labelText, $labelGlyph, $classes, SubmitType::class);
+    }
+
+    public function createVisualButton(
+        FormBuilderInterface $builder, string $name, string $uri, ?string $labelText = null,
+        ?InlineGlyph $labelGlyph = null, array $classes = ['btn', 'btn-light'], array $options = []
+    ): FormBuilderInterface
+    {
+        if (!$labelText && !$labelGlyph) {
+            throw new InvalidConfigurationException('Either a label or a glyph must be provided for the button');
+        }
+
+        $label = [];
+
+        if ($labelGlyph) {
+            $label[] = $labelGlyph->render();
+        }
+
+        if ($labelText) {
+            $label[] = $labelText;
+        }
+
+        if (empty($classes)) {
+            $classes = ['btn', 'btn-light'];
+        }
+
+        $options['label'] = implode('&nbsp;', $label);
+        $options['label_html'] = true;
+        $options['attr'] = ['class' => implode(' ', $classes)];
+        $options['uri'] = $uri;
+
+        return $builder->create($name, VisualButtonFormType::class, $options);
     }
 }

@@ -9,6 +9,7 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\LayoutColumnFormTyp
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\LayoutRowFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\MessageFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\PictureFormType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\VisualButtonFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\VisualContentFormType;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -260,6 +261,8 @@ class FormTypeBuilder
 
         return $builder->create($name, TextareaType::class, $options);
     }
+
+
 
     public function createVisualContent(
         FormBuilderInterface $builder, string $name, string $label, array $options = []

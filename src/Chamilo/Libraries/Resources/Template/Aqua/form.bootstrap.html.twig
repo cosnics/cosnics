@@ -202,3 +202,15 @@
         {{- form_row(child) -}}
     {% endfor -%}
 {%- endblock layout_column_widget -%}
+
+{%- block visual_button_row -%}
+    <div{% with {attr: row_attr|merge({class: row_attr.class|default('mb-3')|trim})} %}{{ block('attributes') }}{% endwith %}>
+        {{- block('visual_button_widget') -}}
+    </div>
+{%- endblock visual_button_row %}
+
+{%- block visual_button_widget -%}
+    <a href="{{ uri }}" {{ block('button_attributes') }}>
+        {{- block('form_label_content') -}}
+    </a>
+{%- endblock visual_button_widget -%}

@@ -7,19 +7,14 @@ use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\UserInterface\Form\LoginFormType;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\HTML_QuickForm_button_submit;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\FormValidator;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
+use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
-use HTML_QuickForm_html;
-use HTML_QuickForm_password;
-use HTML_QuickForm_Rule_Required;
-use HTML_QuickForm_static;
-use HTML_QuickForm_text;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Translation\Translator;
 use Twig\Environment;
@@ -30,15 +25,17 @@ readonly class LoginBlockRenderer extends BlockRenderer
 
     public function __construct(
         HomeService $homeService, UrlGenerator $urlGenerator, Translator $translator, protected ChamiloRequest $request,
-        protected  FormFactoryInterface $formFactory, protected  Environment $twigEnvironment,
-        protected bool $canRetrievePassword, protected bool $canRegister
+        protected FormFactoryInterface $formFactory, protected Environment $twigEnvironment,
+        protected ButtonRenderer $buttonRenderer, protected bool $canRetrievePassword, protected bool $canRegister
     )
     {
         parent::__construct($homeService, $urlGenerator, $translator);
     }
 
     /**
-     * @throws \QuickformException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function displayContent(Element $block, ?User $user = null): string
     {
@@ -53,7 +50,15 @@ readonly class LoginBlockRenderer extends BlockRenderer
                     '</div>';
             }
 
-            $html[] = $this->displayLoginForm();
+            $form = $this->formFactory->create(
+                type: LoginFormType::class, options: [
+                'action' => $this->urlGenerator->fromRequest()
+            ]
+            );
+
+            $html[] = $this->twigEnvironment->render('form.html.twig', [
+                'form' => $form->createView(),
+            ]);
         }
         else {
             $profilePhotoUrl = $this->urlGenerator->fromParameters(
@@ -64,98 +69,29 @@ readonly class LoginBlockRenderer extends BlockRenderer
                 ]
             );
 
-            $logoutLink = $this->urlGenerator->fromParameters(
+            $html[] =
+                '<img src="' . htmlspecialchars($profilePhotoUrl) . '" alt="' . htmlspecialchars($user->getFullName()) .
+                '"  class="img-thumbnail" style="max-width: 100%; max-height:100px" />';
+            $html[] = '<h3>' . htmlspecialchars($user->getFullName()) . '</h3>';
+            $html[] = '<p>' . htmlspecialchars($user->getEmail()) . '</p>';
+
+            $logoutUri = $this->urlGenerator->fromParameters(
                 [
                     ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                     ApplicationInterface::PARAM_ACTION => ActionEnum::LOGOUT->value
                 ]
             );
 
-            $html[] =
-                '<img src="' . htmlspecialchars($profilePhotoUrl) . '" alt="' . htmlspecialchars($user->getFullName()) .
-                '"  class="img-thumbnail" style="max-width: 100%; max-height:100px" />';
-            $html[] = '<h3>' . htmlspecialchars($user->getFullName()) . '</h3>';
-            $html[] = '<p>' . htmlspecialchars($user->getEmail()) . '</p>';
-            $html[] = '<p><a href="' . $logoutLink . '" class="btn btn-danger" role="button">' . htmlspecialchars(
-                    $this->translator->trans('Logout', [], Manager::CONTEXT)
-                ) . '</a></p>';
+            $logoutText = $this->translator->trans('Logout', [], Manager::CONTEXT);
+            $logoutGlyph = new FontAwesomeGlyph('sign-out-alt', ['me-1'], $logoutText, 'fas');
+
+            $button = new Button($logoutText, $logoutGlyph, $logoutUri, classes: ['btn', 'btn-danger']);
+
+            $html[] = '<p>';
+            $html[] = $this->buttonRenderer->render($button);
+            $html[] = '</p>';
         }
 
         return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * @throws \QuickformException
-     */
-    public function displayLoginForm(): string
-    {
-        $form = new FormValidator('formLogin', FormValidator::FORM_METHOD_POST);
-        $renderer = $form->defaultRenderer();
-        $renderer->setElementTemplate('<div class="row">{label}<br />{element}</div>');
-        $form->setRequiredNote('');
-        $html = '<script>$(document).ready(function(){document.formLogin.login.focus();});</script>';
-        $form->addElement(HTML_QuickForm_html::class, $html);
-        $form->addElement(
-            HTML_QuickForm_text::class, 'login', $this->translator->trans('Username', [], Manager::CONTEXT),
-            ['style' => 'width: 90%;']
-        );
-        $form->addRule('login', $this->translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
-            HTML_QuickForm_Rule_Required::class);
-        $form->addElement(
-            HTML_QuickForm_password::class, 'password', $this->translator->trans('Password', [], Manager::CONTEXT),
-            ['style' => 'width: 90%;']
-        );
-        $form->addRule(
-            'password', $this->translator->trans('ThisFieldIsRequired', [], StringUtilities::LIBRARIES),
-            HTML_QuickForm_Rule_Required::class
-        );
-
-        $buttons = [];
-        $buttons[] = $form->createElement(
-            HTML_QuickForm_button_submit::class, 'submitAuth', $this->translator->trans('Login', [], Manager::CONTEXT),
-            null, null, new FontAwesomeGlyph('sign-in-alt')
-        );
-
-        if ($this->canRegister) {
-            $link = $this->urlGenerator->fromParameters(
-                [
-                    ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
-                    ApplicationInterface::PARAM_ACTION => ActionEnum::REGISTER->value
-                ]
-            );
-
-            $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
-
-            $buttons[] = $form->createElement(
-                HTML_QuickForm_static::class, null, null,
-                '<a href="' . htmlspecialchars($link) . '" class="btn btn-light">' . $glyph->render() . ' ' .
-                htmlspecialchars(
-                    $this->translator->trans('Reg', [], Manager::CONTEXT)
-                ) . '</a>'
-            );
-        }
-
-        if ($this->canRetrievePassword) {
-            $link = $this->urlGenerator->fromParameters(
-                [
-                    ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
-                    ApplicationInterface::PARAM_ACTION => ActionEnum::RESET_PASSWORD->value
-                ]
-            );
-
-            $glyph = new FontAwesomeGlyph('question-circle', [], null, 'fas');
-
-            $buttons[] = $form->createElement(
-                HTML_QuickForm_static::class, null, null,
-                '<a href="' . htmlspecialchars($link) . '" class="btn btn-light">' . $glyph->render() . ' ' .
-                htmlspecialchars(
-                    $this->translator->trans('ResetPassword', [], Manager::CONTEXT)
-                ) . '</a>'
-            );
-        }
-
-        $form->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-
-        return $form->render();
     }
 }

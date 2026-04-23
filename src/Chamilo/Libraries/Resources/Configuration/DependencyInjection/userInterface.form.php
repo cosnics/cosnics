@@ -11,6 +11,7 @@ use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\LayoutRowFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\MessageFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\PictureFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\SearchFormType;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\VisualButtonFormType;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\VisualContentFormType;
 use Chamilo\Libraries\UserInterface\Form\Factory\FormFactoryBuilder;
 use Chamilo\Libraries\UserInterface\Form\Factory\TwigFormRendererFactory;
@@ -50,6 +51,7 @@ return static function (ContainerConfigurator $container) {
     $services->set(ButtonsFormType::class)->tag(FormTypeInterface::class);
     $services->set(HtmlFormType::class)->tag(FormTypeInterface::class);
     $services->set(VisualContentFormType::class)->tag(FormTypeInterface::class);
+    $services->set(VisualButtonFormType::class)->tag(FormTypeInterface::class);
     $services->set(MessageFormType::class)->tag(FormTypeInterface::class);
     $services->set(CategoryFormType::class)->tag(FormTypeInterface::class);
     $services->set(HtmlEditorFormType::class)->tag(FormTypeInterface::class);

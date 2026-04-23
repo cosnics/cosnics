@@ -56,7 +56,7 @@ readonly class DayBlockRenderer extends BlockRenderer
             );
         }
 
-        return '<div style="max-height: 500px; overflow: auto;">' . $this->miniDayCalendarRenderer->renderFullCalendar(
+        return '<div style="max-height: 500px;">' . $this->miniDayCalendarRenderer->renderFullCalendar(
                 $calendarTableConfiguration, $events, $this->getDisplayTime()
             ) . '</div>';
     }
