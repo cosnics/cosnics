@@ -3,15 +3,10 @@ namespace Chamilo\Libraries\Storage\Repository;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClassRepositoryCache;
-use Chamilo\Libraries\Storage\Architecture\Domain\Enum\ComparisonTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\Enum\FunctionTypeEnum;
-use Chamilo\Libraries\Storage\Architecture\Domain\Enum\OperationTypeEnum;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\DistinctConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\FunctionConditionVariable;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
@@ -335,66 +330,6 @@ class DataClassRepository
         else {
             return $this->__distinct($dataClassName, $parameters);
         }
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function moveDisplayOrders(
-        string $dataClassName, string $displayOrderProperty, ?int $start = 1, ?int $end = null,
-        ?ConditionInterface $displayOrderCondition = null
-    ): bool
-    {
-        if ($start == $end) {
-            return false;
-        }
-
-        $displayOrderPropertyVariable = new PropertyConditionVariable($dataClassName, $displayOrderProperty);
-
-        $conditions = [];
-        $direction = 0;
-
-        if (is_null($end) || $start < $end) {
-            $startOperator = ComparisonTypeEnum::GREATER_THAN;
-            $direction = - 1;
-        }
-
-        if (!is_null($end)) {
-            if ($start < $end) {
-                $endOperator = ComparisonTypeEnum::LESS_THAN_OR_EQUAL;
-            }
-            else {
-                $startOperator = ComparisonTypeEnum::LESS_THAN;
-                $endOperator = ComparisonTypeEnum::GREATER_THAN_OR_EQUAL;
-                $direction = 1;
-            }
-        }
-
-        $startVariable = new StaticConditionVariable($start);
-
-        $conditions[] = new ComparisonCondition($displayOrderPropertyVariable, $startOperator, $startVariable);
-
-        if (!is_null($end)) {
-            $endVariable = new StaticConditionVariable($end);
-
-            $conditions[] = new ComparisonCondition($displayOrderPropertyVariable, $endOperator, $endVariable);
-        }
-
-        if ($displayOrderCondition) {
-            $conditions[] = $displayOrderCondition;
-        }
-
-        $condition = new AndCondition($conditions);
-
-        $updateVariable = new OperationConditionVariable(
-            $displayOrderPropertyVariable, OperationTypeEnum::ADDITION, new StaticConditionVariable($direction)
-        );
-
-        $properties = new UpdateProperties();
-
-        $properties->add(new UpdateProperty($displayOrderPropertyVariable, $updateVariable));
-
-        return $this->updates($dataClassName, $properties, $condition);
     }
 
     /**

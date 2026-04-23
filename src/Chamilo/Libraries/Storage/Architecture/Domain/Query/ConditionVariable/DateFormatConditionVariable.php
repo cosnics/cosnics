@@ -45,13 +45,6 @@ class DateFormatConditionVariable implements ConditionVariableInterface
         return $this->conditionVariable;
     }
 
-    public function setConditionVariable(ConditionVariableInterface $conditionVariable): static
-    {
-        $this->conditionVariable = $conditionVariable;
-
-        return $this;
-    }
-
     /**
      * @return class-string<\Chamilo\Libraries\Storage\Service\ConditionVariable\DateFormatConditionVariableTranslator>
      */

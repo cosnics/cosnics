@@ -59,26 +59,6 @@ abstract class NestedSet extends DataClass
         return !($this->getLeftValue() == ($this->getRightValue() - 1));
     }
 
-    public function isAncestorOf(NestedSet $nestedSet): bool
-    {
-        if ($this->getLeftValue() < $nestedSet->getLeftValue() &&
-            $nestedSet->getRightValue() < $this->getRightValue()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function isDescendantOf(NestedSet $nestedSet): bool
-    {
-        if ($this->getLeftValue() > $nestedSet->getLeftValue() &&
-            $nestedSet->getRightValue() > $this->getRightValue()) {
-            return true;
-        }
-
-        return false;
-    }
-
     public function isRoot(): bool
     {
         return ($this->getParentId() == 0);

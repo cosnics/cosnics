@@ -229,12 +229,4 @@ class DisplayOrderRepository
 
         return new UpdateProperties([new UpdateProperty($displayOrderPropertyConditionVariable, $updateVariable)]);
     }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\Repository\DataClassRepository $dataClassRepository
-     */
-    public function setDataClassRepository(DataClassRepository $dataClassRepository): void
-    {
-        $this->dataClassRepository = $dataClassRepository;
-    }
 }

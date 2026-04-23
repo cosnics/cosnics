@@ -68,13 +68,6 @@ class OperationConditionVariable implements ConditionVariableInterface
         return $this->leftConditionVariable;
     }
 
-    public function setLeftConditionVariable(ConditionVariableInterface $leftConditionVariable): static
-    {
-        $this->leftConditionVariable = $leftConditionVariable;
-
-        return $this;
-    }
-
     public function getOperator(): OperationTypeEnum
     {
         return $this->operator;
@@ -90,12 +83,5 @@ class OperationConditionVariable implements ConditionVariableInterface
     public function getRightConditionVariable(): ConditionVariableInterface
     {
         return $this->rightConditionVariable;
-    }
-
-    public function setRightConditionVariable(ConditionVariableInterface $rightConditionVariable): static
-    {
-        $this->rightConditionVariable = $rightConditionVariable;
-
-        return $this;
     }
 }

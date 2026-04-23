@@ -52,13 +52,6 @@ class Join implements HashableInterface
         return $this->dataClassName;
     }
 
-    public function setDataClassName(string $dataClassName): static
-    {
-        $this->dataClassName = $dataClassName;
-
-        return $this;
-    }
-
     public function getHashParts(): array
     {
         $hashParts = [];

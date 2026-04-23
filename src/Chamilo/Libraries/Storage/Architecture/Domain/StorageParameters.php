@@ -3,10 +3,7 @@ namespace Chamilo\Libraries\Storage\Architecture\Domain;
 
 use Chamilo\Libraries\Protocol\Security\Architecture\Interface\HashableInterface;
 use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\GroupBy;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Join;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Joins;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
@@ -53,43 +50,6 @@ class StorageParameters implements HashableInterface
         $this->setHavingCondition($havingCondition);
         $this->setCount($count);
         $this->setOffset($offset);
-    }
-
-    public function addConditionUsingAnd(?ConditionInterface $condition = null): static
-    {
-        if ($condition instanceof ConditionInterface) {
-            if ($this->getCondition() instanceof ConditionInterface) {
-                $this->setCondition(new AndCondition([$this->getCondition(), $condition]));
-            }
-            else {
-                $this->setCondition($condition);
-            }
-        }
-
-        return $this;
-    }
-
-    public function addConditionUsingOr(?ConditionInterface $condition = null): static
-    {
-        if ($condition instanceof ConditionInterface) {
-            if ($this->getCondition() instanceof ConditionInterface) {
-                $this->setCondition(new OrCondition([$this->getCondition(), $condition]));
-            }
-            else {
-                $this->setCondition($condition);
-            }
-        }
-
-        return $this;
-    }
-
-    public function addJoin(?Join $join = null): static
-    {
-        if ($join instanceof Join) {
-            $this->getJoins()->add($join);
-        }
-
-        return $this;
     }
 
     public function getCondition(): ?ConditionInterface

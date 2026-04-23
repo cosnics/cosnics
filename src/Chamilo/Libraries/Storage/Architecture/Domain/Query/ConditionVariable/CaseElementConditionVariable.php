@@ -73,11 +73,4 @@ class CaseElementConditionVariable implements ConditionVariableInterface
     {
         return $this->statement;
     }
-
-    public function setStatement(ConditionVariableInterface $statement): static
-    {
-        $this->statement = $statement;
-
-        return $this;
-    }
 }

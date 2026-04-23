@@ -38,22 +38,8 @@ class UpdateProperty implements HashableInterface
         return $this->propertyConditionVariable;
     }
 
-    public function setPropertyConditionVariable(ConditionVariableInterface $propertyConditionVariable): UpdateProperty
-    {
-        $this->propertyConditionVariable = $propertyConditionVariable;
-
-        return $this;
-    }
-
     public function getValueConditionVariable(): ConditionVariableInterface
     {
         return $this->valueConditionVariable;
-    }
-
-    public function setValueConditionVariable(ConditionVariableInterface $valueConditionVariable): UpdateProperty
-    {
-        $this->valueConditionVariable = $valueConditionVariable;
-
-        return $this;
     }
 }

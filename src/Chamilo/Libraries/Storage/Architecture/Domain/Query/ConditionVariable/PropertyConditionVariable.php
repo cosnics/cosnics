@@ -63,11 +63,4 @@ class PropertyConditionVariable extends PropertiesConditionVariable implements C
     {
         return $this->propertyName;
     }
-
-    public function setPropertyName(string $propertyName): static
-    {
-        $this->propertyName = $propertyName;
-
-        return $this;
-    }
 }

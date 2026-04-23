@@ -33,24 +33,9 @@ class OrderProperty implements HashableInterface
         return $this->conditionVariable;
     }
 
-    public function setConditionVariable(StaticConditionVariable|PropertyConditionVariable $conditionVariable
-    ): OrderProperty
-    {
-        $this->conditionVariable = $conditionVariable;
-
-        return $this;
-    }
-
     public function getDirection(): int
     {
         return $this->direction;
-    }
-
-    public function setDirection(int $direction): OrderProperty
-    {
-        $this->direction = $direction;
-
-        return $this;
     }
 
     public function getHashParts(): array

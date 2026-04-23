@@ -121,18 +121,4 @@ class DataClassRepositoryCache
 
         return true;
     }
-
-    /**
-     * @param string[] $classes
-     */
-    public function truncateClasses(array $classes = []): bool
-    {
-        foreach ($classes as $class) {
-            if (!$this->truncateClass($class)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 }

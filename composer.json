@@ -65,6 +65,7 @@
         "symfony/validator": "7.4.*",
         "symfony/yaml": "7.4.*",
         "twig/twig": "3.21.*",
+        "untt/oauth2-microsoft": "0.*",
         "voku/stringy": "6.*"
     },
     "repositories": [

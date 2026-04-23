@@ -47,22 +47,8 @@ class StaticConditionVariable implements ConditionVariableInterface
         return $this->quote;
     }
 
-    public function setQuote(bool $quote): static
-    {
-        $this->quote = $quote;
-
-        return $this;
-    }
-
     public function getValue(): mixed
     {
         return $this->value;
-    }
-
-    public function setValue(mixed $value): static
-    {
-        $this->value = $value;
-
-        return $this;
     }
 }

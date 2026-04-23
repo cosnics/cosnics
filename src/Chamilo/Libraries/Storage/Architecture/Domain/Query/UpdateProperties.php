@@ -22,17 +22,6 @@ class UpdateProperties extends ArrayCollection implements HashableInterface
 {
     use HashableTrait;
 
-    public function getFirst(?UpdateProperty $defaultUpdateProperty = null): ?UpdateProperty
-    {
-        if (!$this->isEmpty()) {
-            $this->first();
-
-            return $this->current();
-        }
-
-        return $defaultUpdateProperty;
-    }
-
     /**
      * @return string[]
      */

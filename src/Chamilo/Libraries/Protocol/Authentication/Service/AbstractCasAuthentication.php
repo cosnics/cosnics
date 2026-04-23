@@ -95,7 +95,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
     }
 
     /**
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      */
     public function login(bool $checkIfAuthenticationSourceIsEnabled = true): ?User
     {

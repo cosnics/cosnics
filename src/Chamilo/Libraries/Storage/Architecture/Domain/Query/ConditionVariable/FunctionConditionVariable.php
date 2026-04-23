@@ -48,13 +48,6 @@ class FunctionConditionVariable implements ConditionVariableInterface
         return $this->conditionVariable;
     }
 
-    public function setConditionVariable(ConditionVariableInterface $conditionVariable): FunctionConditionVariable
-    {
-        $this->conditionVariable = $conditionVariable;
-
-        return $this;
-    }
-
     /**
      * @return class-string<\Chamilo\Libraries\Storage\Service\ConditionVariable\FunctionConditionVariableTranslator>
      */
@@ -66,13 +59,6 @@ class FunctionConditionVariable implements ConditionVariableInterface
     public function getFunction(): FunctionTypeEnum
     {
         return $this->function;
-    }
-
-    public function setFunction(FunctionTypeEnum $function): static
-    {
-        $this->function = $function;
-
-        return $this;
     }
 
     public function getHashParts(): array

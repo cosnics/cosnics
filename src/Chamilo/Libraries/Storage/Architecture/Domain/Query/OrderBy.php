@@ -27,17 +27,6 @@ class OrderBy extends ArrayCollection implements HashableInterface
         );
     }
 
-    public function getFirst(?OrderProperty $defaultOrderProperty = null): ?OrderProperty
-    {
-        if (!$this->isEmpty()) {
-            $this->first();
-
-            return $this->current();
-        }
-
-        return $defaultOrderProperty;
-    }
-
     public function getHashParts(): array
     {
         $hashes = [];
