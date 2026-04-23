@@ -9,21 +9,21 @@ class SystemPathBuilder extends AbstractPathBuilder
 {
     public function getBasePath(): string
     {
-        if (!isset($this->cache[self::BASE])) {
+        if (!isset($this->cache[self::BASE_PATH])) {
             $directorySeparator = $this->getDirectorySeparator();
 
-            $this->cache[self::BASE] = realpath(
+            $this->cache[self::BASE_PATH] = realpath(
                     __DIR__ . $directorySeparator . '..' . $directorySeparator . '..' . $directorySeparator . '..' .
                     $directorySeparator . '..' . $directorySeparator
                 ) . $directorySeparator;
         }
 
-        return $this->cache[self::BASE];
+        return $this->cache[self::BASE_PATH];
     }
 
     public function getConfigurationStoragePath(): string
     {
-        return $this->cache[self::CONFIGURATION_STORAGE] =
+        return $this->cache[self::CONFIGURATION_STORAGE_PATH] =
             $this->getStoragePath() . 'configuration' . $this->getDirectorySeparator();
     }
 
@@ -48,7 +48,7 @@ class SystemPathBuilder extends AbstractPathBuilder
     {
         $directorySeparator = $this->getDirectorySeparator();
 
-        return $this->cache[self::ROOT] =
+        return $this->cache[self::ROOT_PATH] =
             realpath($this->getBasePath() . '..' . $directorySeparator) . $directorySeparator;
     }
 
@@ -58,7 +58,7 @@ class SystemPathBuilder extends AbstractPathBuilder
 
         $basePath = $this->getRootPath() . $directorySeparator . 'files';
 
-        return $this->cache[self::STORAGE][(string) $namespace] = $basePath . $directorySeparator .
+        return $this->cache[self::STORAGE_PATH][(string) $namespace] = $basePath . $directorySeparator .
             ($namespace ? $this->namespaceToPath($namespace) . $directorySeparator : '');
     }
 
@@ -66,6 +66,6 @@ class SystemPathBuilder extends AbstractPathBuilder
     {
         $directorySeparator = $this->getDirectorySeparator();
 
-        return $this->cache[self::VENDOR] = $this->getRootPath() . $directorySeparator . 'vendor' . $directorySeparator;
+        return $this->cache[self::VENDOR_PATH] = $this->getRootPath() . $directorySeparator . 'vendor' . $directorySeparator;
     }
 }

@@ -14,13 +14,6 @@ class LanguageConsulter
     {
     }
 
-    public function getLanguageNameFromIsocode(string $isocode): string
-    {
-        $languages = $this->getLanguages();
-
-        return $languages[$isocode];
-    }
-
     /**
      * @return string[]
      */

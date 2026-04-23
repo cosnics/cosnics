@@ -265,11 +265,4 @@ class BrowseComponent extends Manager
             $this->getViewActions($user), $this->calendarDataProvider->getVisibilities($user->getId()), Manager::CONTEXT
         );
     }
-
-    public function setCurrentRendererTime(int $currentTime): static
-    {
-        $this->currentTime = $currentTime;
-
-        return $this;
-    }
 }

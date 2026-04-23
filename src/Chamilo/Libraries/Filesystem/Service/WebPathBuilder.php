@@ -15,12 +15,12 @@ class WebPathBuilder extends AbstractPathBuilder
 
     public function getBasePath(): string
     {
-        if (!isset($this->cache[self::BASE])) {
-            $this->cache[self::BASE] =
+        if (!isset($this->cache[self::BASE_PATH])) {
+            $this->cache[self::BASE_PATH] =
                 $this->request->getSchemeAndHttpHost() . $this->request->getBasePath() . $this->request->getPathInfo();
         }
 
-        return $this->cache[self::BASE];
+        return $this->cache[self::BASE_PATH];
     }
 
     public function getDirectorySeparator(): string

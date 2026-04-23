@@ -90,7 +90,7 @@ class GroupFeedComponent extends GroupsFeedComponent
      */
     public function getUserIdentifiers(): array
     {
-        $filterIdentifier = $this->get_filter();
+        $filterIdentifier = $this->getFilter();
 
         if (!$filterIdentifier) {
             return [];
@@ -99,7 +99,7 @@ class GroupFeedComponent extends GroupsFeedComponent
         return $this->groupMembershipService->findSubscribedUserIdentifiersForGroupIdentifier($filterIdentifier);
     }
 
-    protected function get_filter(): string
+    protected function getFilter(): string
     {
         $filter = $this->getRequest()->request->get(self::PARAM_FILTER);
 
@@ -124,7 +124,7 @@ class GroupFeedComponent extends GroupsFeedComponent
             $conditions[] = new OrCondition($nameConditions);
         }
 
-        $filterIdentifier = $this->get_filter();
+        $filterIdentifier = $this->getFilter();
 
         if ($filterIdentifier) {
             $conditions[] = new EqualityCondition(

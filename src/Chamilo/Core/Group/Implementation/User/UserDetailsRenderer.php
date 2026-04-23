@@ -70,7 +70,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
             $table->setCellAttributes(2, 0, ['colspan' => 2, 'style' => 'text-align: center;']);
         }
         else {
-            $i = 2;
+            $rowIndex = 2;
 
             foreach ($groups as $group) {
                 $viewUrl = $this->urlGenerator->fromParameters(
@@ -83,10 +83,10 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
                 $url = '<a href="' . $viewUrl . '">';
 
-                $table->setCellContents($i, 0, $url . $group->getCode() . '</a>');
-                $table->setCellAttributes($i, 0, ['style' => 'width: 150px;']);
-                $table->setCellContents($i, 1, $url . $group->getName() . '</a>');
-                $i ++;
+                $table->setCellContents($rowIndex, 0, $url . $group->getCode() . '</a>');
+                $table->setCellAttributes($rowIndex, 0, ['style' => 'width: 150px;']);
+                $table->setCellContents($rowIndex, 1, $url . $group->getName() . '</a>');
+                $rowIndex ++;
             }
         }
 

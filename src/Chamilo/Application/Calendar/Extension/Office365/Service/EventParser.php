@@ -122,7 +122,7 @@ class EventParser
             $event = new Event(
                 $sourceEvent->getId(), $startDate, $endDate, $sourceEvent->getWebLink(), $sourceEvent->getSubject(),
                 strip_tags($sourceEvent->getBody()->getContent(), '<br>'),
-                $sourceEvent->getLocation()->getDisplayName(), $this->getSource($availableCalendar->getName()),
+                $sourceEvent->getLocation()->getDisplayName(), $this->getSource($availableCalendar->name),
                 Manager::CONTEXT, $this->getOrganizer($sourceEvent->getOrganizer()),
                 $this->getAttendees($sourceEvent->getAttendees())
             );

@@ -23,10 +23,6 @@ use Symfony\Component\Translation\Translator;
  */
 readonly class DayBlockRenderer extends BlockRenderer
 {
-    public const string CONFIGURATION_HOUR_STEP = 'hour_step';
-    public const string CONFIGURATION_TIME_END = 'time_end';
-    public const string CONFIGURATION_TIME_HIDE = 'time_hide';
-    public const string CONFIGURATION_TIME_START = 'time_start';
     public const string CONTEXT = Manager::CONTEXT;
 
     public function __construct(

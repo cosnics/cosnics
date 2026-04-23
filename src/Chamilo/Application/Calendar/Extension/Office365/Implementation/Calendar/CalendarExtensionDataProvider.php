@@ -30,20 +30,14 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
 
     protected function getCalendarByIdentifier(string $calendarIdentifier, User $user): AvailableCalendar
     {
-        $availableCalendar = new AvailableCalendar();
-
         try {
             $calendar = $this->calendarService->getCalendarByIdentifier($calendarIdentifier, $user);
-            $availableCalendar->setType(Manager::CONTEXT);
-            $availableCalendar->setIdentifier($calendar->getId());
-            $availableCalendar->setName($calendar->getName());
+
+            return new AvailableCalendar(Manager::CONTEXT, $calendar->getId(), $calendar->getName());
         }
         catch (Exception) {
-            $availableCalendar->setIdentifier($calendarIdentifier);
-            $availableCalendar->setName('NOT FOUND');
+            return new AvailableCalendar(Manager::CONTEXT, $calendarIdentifier, 'NOT FOUND');
         }
-
-        return $availableCalendar;
     }
 
     /**
@@ -85,7 +79,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
             $availableCalendars = $this->getCalendars($user);
 
             foreach ($availableCalendars as $availableCalendar) {
-                $calendarIdentifiers[] = $availableCalendar->getIdentifier();
+                $calendarIdentifiers[] = $availableCalendar->identifier;
             }
         }
         else {
@@ -117,13 +111,8 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
                     $ownedCalendars = $this->calendarService->listOwnedCalendars($user);
 
                     foreach ($ownedCalendars as $ownedCalendar) {
-                        $availableCalendar = new AvailableCalendar();
-
-                        $availableCalendar->setType(Manager::CONTEXT);
-                        $availableCalendar->setIdentifier($ownedCalendar->getId());
-                        $availableCalendar->setName($ownedCalendar->getName());
-
-                        $availableCalendars[] = $availableCalendar;
+                        $availableCalendars[] =
+                            new AvailableCalendar(Manager::CONTEXT, $ownedCalendar->getId(), $ownedCalendar->getName());
                     }
                 }
                 catch (Exception) {

@@ -13,13 +13,6 @@ use Symfony\Component\Translation\Translator;
  */
 abstract readonly class BlockRenderer
 {
-    public const string BLOCK_PROPERTY_ID = 'id';
-    public const string BLOCK_PROPERTY_IMAGE = 'image';
-    public const string BLOCK_PROPERTY_NAME = 'name';
-    public const string PARAM_ACTION = 'block_action';
-    public const int SOURCE_AJAX = 2;
-    public const int SOURCE_DEFAULT = 1;
-
     public function __construct(
         protected HomeService $homeService, protected UrlGenerator $urlGenerator, protected Translator $translator
     )

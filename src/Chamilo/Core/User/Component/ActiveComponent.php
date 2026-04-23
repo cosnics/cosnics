@@ -32,24 +32,24 @@ class ActiveComponent extends Manager
 
         $this->checkAuthorization(Manager::CONTEXT, $currentUser, 'ManageUsers');
 
-        $ids = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_ID);
+        $identifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_ID);
 
         $active = $this->getState();
 
-        if (!is_array($ids)) {
-            $ids = [$ids];
+        if (!is_array($identifiers)) {
+            $identifiers = [$identifiers];
         }
 
-        if (count($ids) > 0) {
+        if (count($identifiers) > 0) {
             $failures = 0;
 
-            foreach ($ids as $id) {
+            foreach ($identifiers as $identifier) {
                 if (!$currentUser->isPlatformAdministrator()) {
                     $failures ++;
                     continue;
                 }
 
-                $userToActivate = $this->userService->findUserByIdentifier($id);
+                $userToActivate = $this->userService->findUserByIdentifier($identifier);
                 $userToActivate->setActive($active);
 
                 if (!$this->userService->updateUser($userToActivate, $currentUser)) {
@@ -58,14 +58,14 @@ class ActiveComponent extends Manager
             }
 
             if ($failures) {
-                if (count($ids) == 1) {
+                if (count($identifiers) == 1) {
                     $message = $active ? 'UserNotActivated' : 'UserNotDeactivated';
                 }
                 else {
                     $message = $active ? 'UsersNotActivated' : 'UsersNotDeactivated';
                 }
             }
-            elseif (count($ids) == 1) {
+            elseif (count($identifiers) == 1) {
                 $message = $active ? 'UserActivated' : 'UserDeactivated';
             }
             else {

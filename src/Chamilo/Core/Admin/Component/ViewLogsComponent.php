@@ -94,18 +94,19 @@ class ViewLogsComponent extends Manager
             $lines = array_slice($lines, 0, $lineCount);
         }
 
-        foreach ($lines as $i => $line) {
+        foreach ($lines as $lineIndex => $lineContent) {
             $lineClass = null;
 
-            if (str_contains($line, 'error') || str_contains($line, '[ERROR]') || str_contains($line, '[FATAL]')) {
+            if (str_contains($lineContent, 'error') || str_contains($lineContent, '[ERROR]') ||
+                str_contains($lineContent, '[FATAL]')) {
                 $lineClass = 'text-bg-danger';
             }
-            elseif (str_contains($line, 'warning') || str_contains($line, '[WARNING]')) {
+            elseif (str_contains($lineContent, 'warning') || str_contains($lineContent, '[WARNING]')) {
                 $lineClass = 'text-bg-warning';
             }
 
-            $table->setCellContents($i, 0, $line);
-            $table->setCellAttributes($i, 0, ['class' => $lineClass]);
+            $table->setCellContents($lineIndex, 0, $lineContent);
+            $table->setCellAttributes($lineIndex, 0, ['class' => $lineClass]);
         }
 
         return $table->toHtml();
@@ -121,27 +122,6 @@ class ViewLogsComponent extends Manager
         $phpErrorLogPath = ini_get('error_log');
 
         return $this->request->query->get('log_file', basename($phpErrorLogPath));
-    }
-
-    public function getSelectTemplate(): string
-    {
-        $html = [];
-        $glyph = new FontAwesomeGlyph('asterisk', ['text-danger', 'fa-2xs'], null, 'fas');
-
-        $html[] = '<div class="mb-3 clearfix">';
-        $html[] = '    {element}';
-        $html[] = '    <label class="visually-hidden">';
-        $html[] = '        {label}';
-        $html[] = '        <!-- BEGIN required -->';
-        $html[] = '        <span class="text-danger ms-1">' . $glyph->render() . '</span>';
-        $html[] = '        <!-- END required -->';
-        $html[] = '    </label>';
-        $html[] = '    <!-- BEGIN error -->';
-        $html[] = '    <div class="invalid-feedback">{error}</div>';
-        $html[] = '    <!-- END error -->';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
     }
 
     /**

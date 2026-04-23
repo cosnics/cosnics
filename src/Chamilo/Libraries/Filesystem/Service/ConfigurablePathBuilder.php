@@ -9,13 +9,13 @@ namespace Chamilo\Libraries\Filesystem\Service;
  */
 class ConfigurablePathBuilder
 {
-    public const int ARCHIVE = 4;
-    public const int CACHE = 2;
-    public const int GARBAGE = 7;
-    public const int LOG = 3;
-    public const int PROFILE_PICTURE = 6;
-    public const int TEMPORARY = 1;
-    public const int USER_PICTURES = 8;
+    public const int ARCHIVE_PATH = 4;
+    public const int CACHE_PATH = 2;
+    public const int GARBAGE_PATH = 7;
+    public const int LOG_PATH = 3;
+    public const int PROFILE_PICTURE_PATH = 6;
+    public const int TEMPORARY_PATH = 1;
+    public const int USER_PICTURES_PATH = 8;
 
     /**
      * @var string[]
@@ -50,7 +50,7 @@ class ConfigurablePathBuilder
 
     public function getArchivePath(): string
     {
-        return $this->cache[self::ARCHIVE] = $this->getConfiguredArchivePath();
+        return $this->cache[self::ARCHIVE_PATH] = $this->getConfiguredArchivePath();
     }
 
     /**
@@ -75,7 +75,7 @@ class ConfigurablePathBuilder
     {
         $completeNamespace = ($namespace ? 'cache\\' . $namespace : 'cache');
 
-        return $this->cache[self::CACHE][$completeNamespace] = $this->getConfiguredCachePath() . md5(
+        return $this->cache[self::CACHE_PATH][$completeNamespace] = $this->getConfiguredCachePath() . md5(
                 $namespace
             ) . DIRECTORY_SEPARATOR;
     }
@@ -150,29 +150,29 @@ class ConfigurablePathBuilder
 
     public function getGarbagePath(): string
     {
-        return $this->cache[self::GARBAGE] = $this->getConfiguredGarbagePath();
+        return $this->cache[self::GARBAGE_PATH] = $this->getConfiguredGarbagePath();
     }
 
     public function getLogPath(): string
     {
-        return $this->cache[self::LOG] = $this->getConfiguredLogsPath();
+        return $this->cache[self::LOG_PATH] = $this->getConfiguredLogsPath();
     }
 
     public function getProfilePicturePath(): string
     {
-        return $this->cache[self::PROFILE_PICTURE] = $this->getConfiguredUserPicturesPath();
+        return $this->cache[self::PROFILE_PICTURE_PATH] = $this->getConfiguredUserPicturesPath();
     }
 
     public function getTemporaryPath(?string $namespace = null): string
     {
         $completeNamespace = ($namespace ? 'temp\\' . $namespace : 'temp');
 
-        return $this->cache[self::TEMPORARY][$completeNamespace] =
+        return $this->cache[self::TEMPORARY_PATH][$completeNamespace] =
             $this->getConfiguredTempPath() . md5($namespace) . DIRECTORY_SEPARATOR;
     }
 
     public function getUserPicturesPath(): string
     {
-        return $this->cache[self::USER_PICTURES] = $this->getConfiguredUserPicturesPath();
+        return $this->cache[self::USER_PICTURES_PATH] = $this->getConfiguredUserPicturesPath();
     }
 }

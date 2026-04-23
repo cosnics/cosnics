@@ -27,7 +27,7 @@ class Event
 
     private ?int $endDate;
 
-    private ?string $id;
+    private ?string $identifier;
 
     private ?string $location;
 
@@ -46,12 +46,12 @@ class Event
      * @param \Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button[] $actions
      */
     public function __construct(
-        ?string $id = null, ?int $startDate = null, ?int $endDate = null, ?string $url = null, ?string $title = null,
+        ?string $identifier = null, ?int $startDate = null, ?int $endDate = null, ?string $url = null, ?string $title = null,
         ?string $content = null, ?string $location = null, ?string $source = null, ?string $context = null,
         ?EventAttendee $organizer = null, array $attendees = [], array $actions = []
     )
     {
-        $this->id = $id;
+        $this->identifier = $identifier;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->url = $url;
@@ -125,14 +125,14 @@ class Event
         return $this;
     }
 
-    public function getId(): ?string
+    public function getIdentifier(): ?string
     {
-        return $this->id;
+        return $this->identifier;
     }
 
-    public function setId(?string $id): Event
+    public function setIdentifier(?string $identifier): Event
     {
-        $this->id = $id;
+        $this->identifier = $identifier;
 
         return $this;
     }

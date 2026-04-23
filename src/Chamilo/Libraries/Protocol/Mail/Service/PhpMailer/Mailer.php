@@ -62,15 +62,15 @@ class Mailer extends AbstractMailer
      */
     protected function addRecipients(Mail $mail): void
     {
-        foreach ($mail->getTo() as $recipient) {
+        foreach ($mail->getRecipients() as $recipient) {
             $this->phpMailer->addAddress($recipient, $recipient);
         }
 
-        foreach ($mail->getCc() as $recipient) {
+        foreach ($mail->getCarbonCopies() as $recipient) {
             $this->phpMailer->addCC($recipient, $recipient);
         }
 
-        foreach ($mail->getBcc() as $recipient) {
+        foreach ($mail->getBlindCarbonCopies() as $recipient) {
             $this->phpMailer->addBCC($recipient, $recipient);
         }
     }
@@ -161,7 +161,7 @@ class Mailer extends AbstractMailer
     {
         $recipientsFailed = [];
 
-        foreach ($mail->getTo() as $recipient) {
+        foreach ($mail->getRecipients() as $recipient) {
             $this->phpMailer->addAddress($recipient, $recipient);
 
             try {

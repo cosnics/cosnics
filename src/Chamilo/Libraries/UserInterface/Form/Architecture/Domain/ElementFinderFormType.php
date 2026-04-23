@@ -35,13 +35,12 @@ class ElementFinderFormType extends AbstractType
      */
     protected function addConfigurationJson(FormView $view, array $options): void
     {
-        $configuration_json = '';
+        $configurationJson = '';
         foreach ($options['elementFinderConfiguration'] as $name => $value) {
-            $configuration_json .= ' ' . $name . ': ' . $value . ', ';
+            $configurationJson .= ' ' . $name . ': ' . $value . ', ';
         }
-        $configuration_json = substr($configuration_json, 0, strlen($configuration_json) - 2);
 
-        $view->vars['configurationJson'] = $configuration_json;
+        $view->vars['configurationJson'] = substr($configurationJson, 0, strlen($configurationJson) - 2);
     }
 
     /**

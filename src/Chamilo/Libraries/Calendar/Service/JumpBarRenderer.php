@@ -104,8 +104,8 @@ class JumpBarRenderer
         $numberDays = date('t', $currentTime);
         $days = [];
 
-        for ($i = 1; $i <= $numberDays; $i ++) {
-            $days[$i] = $i;
+        for ($dayIndex = 1; $dayIndex <= $numberDays; $dayIndex ++) {
+            $days[$dayIndex] = $dayIndex;
         }
 
         return $days;
@@ -148,8 +148,8 @@ class JumpBarRenderer
         $year = (int) date('Y', $currentTime);
         $years = [];
 
-        for ($i = $year - 5; $i <= $year + 5; $i ++) {
-            $years[$i] = $i;
+        for ($yearIndex = $year - 5; $yearIndex <= $year + 5; $yearIndex ++) {
+            $years[$yearIndex] = $yearIndex;
         }
 
         return $years;

@@ -85,14 +85,9 @@ class CalendarRepository
         $availableCalendars = [];
 
         foreach ($calendarItems as $calendarItem) {
-            $availableCalendar = new AvailableCalendar();
-
-            $availableCalendar->setType(Manager::CONTEXT);
-            $availableCalendar->setIdentifier($calendarItem->id);
-            $availableCalendar->setName($calendarItem->summary);
-            $availableCalendar->setDescription($calendarItem->description);
-
-            $availableCalendars[] = $availableCalendar;
+            $availableCalendars[] = new AvailableCalendar(
+                Manager::CONTEXT, $calendarItem->id, $calendarItem->summary, $calendarItem->description
+            );
         }
 
         return $availableCalendars;
@@ -101,17 +96,6 @@ class CalendarRepository
     public function getAccessToken(User $user): ?string
     {
         return $this->userSettingsService->findUserSetting($user, 'cosnics.libraries.protocol.google.token');
-    }
-
-    public function getCacheIdentifier($userToken, $method, $additionalIdentifiers = []): string
-    {
-        $identifiers = [];
-
-        $identifiers[] = $userToken;
-        $identifiers[] = $method;
-        $identifiers[] = $additionalIdentifiers;
-
-        return md5(serialize($identifiers));
     }
 
     /**

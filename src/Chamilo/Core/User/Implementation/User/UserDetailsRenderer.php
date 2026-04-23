@@ -71,9 +71,9 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
         $userPicture = $this->userPictureProvider->getUserPictureAsBase64String($user);
 
-        foreach ($attributes as $i => $attribute) {
+        foreach ($attributes as $rowIndex => $attribute) {
             $table->setCellContents(
-                $i, 0, $this->translator->trans(
+                $rowIndex, 0, $this->translator->trans(
                 $this->stringUtilities->createString($attribute)->upperCamelize()->toString(), [], Manager::CONTEXT
             ), 'th'
             );
@@ -92,7 +92,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
                 default => $value,
             };
 
-            $table->setCellContents($i, 1, $value);
+            $table->setCellContents($rowIndex, 1, $value);
         }
 
         return $table->toHtml();

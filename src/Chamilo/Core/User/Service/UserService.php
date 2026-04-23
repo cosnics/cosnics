@@ -64,26 +64,6 @@ readonly class UserService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countUsersForSearchQuery(?string $searchQuery = null): int
-    {
-        return $this->userRepository->countUsersForSearchQuery($searchQuery);
-    }
-
-    /**
-     * @param string[] $userIdentifiers
-     *
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function countUsersForSearchQueryAndUserIdentifiers(
-        ?string $searchQuery = null, array $userIdentifiers = []
-    ): int
-    {
-        return $this->userRepository->countUsersForSearchQueryAndUserIdentifiers($searchQuery, $userIdentifiers);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
     public function createNewPasswordForUser(User $user, ?User $executingUser = null): bool
     {
         $translator = $this->translator;
@@ -234,37 +214,6 @@ readonly class UserService
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findActiveUsers(
-        ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
-    ): ArrayCollection
-    {
-        return $this->userRepository->findActiveUsers($condition, $offset, $count, $orderBy);
-    }
-
-    /**
-     * @param string[] $userIdentifiers
-     *
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findEmailAddressesForUserIdentifiers(array $userIdentifiers): array
-    {
-        return $this->userRepository->findEmailAddressesForUserIdentifiers($userIdentifiers);
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findPlatformAdministrators(): ArrayCollection
-    {
-        return $this->userRepository->findPlatformAdministrators();
-    }
-
-    /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
@@ -295,15 +244,6 @@ readonly class UserService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function findUserBySecurityToken(string $securityToken): ?User
-    {
-        return $this->userRepository->findUserBySecurityToken($securityToken);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     */
     public function findUserByUsername(string $username): ?User
     {
         return $this->userRepository->findUserByUsername($username);
@@ -319,15 +259,6 @@ readonly class UserService
     }
 
     /**
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findUserIdentifiers(): array
-    {
-        return $this->userRepository->findUserIdentifiers();
-    }
-
-    /**
      * @param string[] $officialCodes
      *
      * @return string[]
@@ -336,16 +267,6 @@ readonly class UserService
     public function findUserIdentifiersByOfficialCodes(array $officialCodes): array
     {
         return $this->userRepository->findUserIdentifiersByOfficialCodes($officialCodes);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findUserProperties(
-        array $retrieveProperties, ?ConditionInterface $condition = null, OrderBy $orderBy = new OrderBy()
-    ): array
-    {
-        return $this->userRepository->findUserProperties($retrieveProperties, $condition, $orderBy);
     }
 
     /**
@@ -368,42 +289,6 @@ readonly class UserService
     public function findUsersByIdentifiers(array $userIdentifiers = []): ArrayCollection
     {
         return $this->userRepository->findUsersByIdentifiers($userIdentifiers);
-    }
-
-    /**
-     * @param string[] $userIdentifiers
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findUsersByIdentifiersOrderedByName(array $userIdentifiers): ArrayCollection
-    {
-        return $this->userRepository->findUsersByIdentifiersOrderedByName($userIdentifiers);
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findUsersForSearchQuery(?string $searchQuery = null, ?int $offset = null, ?int $count = null
-    ): ArrayCollection
-    {
-        return $this->userRepository->findUsersForSearchQuery($searchQuery, $offset, $count);
-    }
-
-    /**
-     * @param string[] $userIdentifiers
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findUsersForSearchQueryAndUserIdentifiers(
-        ?string $searchQuery = null, array $userIdentifiers = [], ?int $offset = null, ?int $count = null
-    ): ArrayCollection
-    {
-        return $this->userRepository->findUsersForSearchQueryAndUserIdentifiers(
-            $searchQuery, $userIdentifiers, $offset, $count
-        );
     }
 
     /**
@@ -444,21 +329,6 @@ readonly class UserService
     public function getUserByUsernameOrEmail(string $usernameOrEmail): ?User
     {
         return $this->userRepository->findUserByUsernameOrEmail($usernameOrEmail);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     */
-    public function getUserFullNameByIdentifier(string $identifier, ?string $unknownUserTranslation = null): ?string
-    {
-        $user = $this->findUserByIdentifier($identifier);
-
-        if (!$user instanceof User) {
-            return $unknownUserTranslation ?: $this->translator->trans('UserUnknown', [], Manager::CONTEXT);
-        }
-
-        return $user->getFullName();
     }
 
     public function isUsernameAvailable(string $username): bool

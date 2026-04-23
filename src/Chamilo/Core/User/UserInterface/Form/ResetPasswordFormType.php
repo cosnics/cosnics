@@ -31,8 +31,7 @@ class ResetPasswordFormType extends AbstractType
 
         $builder->add(
             $this->formTypeBuilder->createEmail(
-                builder: $builder, name: User::PROPERTY_EMAIL, label: $emailLabel, required: true,
-                constraints: [new Assert\Email()]
+                builder: $builder, name: User::PROPERTY_EMAIL, label: $emailLabel, constraints: [new Assert\Email()]
             )
         );
 

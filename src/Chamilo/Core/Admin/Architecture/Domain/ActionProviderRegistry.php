@@ -51,7 +51,6 @@ class ActionProviderRegistry
     public function getTabsCollection(): TabsCollection
     {
         $tabsCollection = new TabsCollection();
-        $index = 0;
 
         foreach ($this->actionProviders as $actionProvider) {
             $actions = $actionProvider->getActions();

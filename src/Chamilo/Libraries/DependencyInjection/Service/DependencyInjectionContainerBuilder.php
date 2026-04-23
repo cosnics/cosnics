@@ -10,8 +10,6 @@ use Chamilo\Libraries\DependencyInjection\Architecture\Interface\ICompilerPassEx
 use Chamilo\Libraries\Filesystem\Service\PackagesContentFinder\PackagesClassFinder;
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
-use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
-use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -45,11 +43,7 @@ class DependencyInjectionContainerBuilder
 
     private ?string $cacheFile;
 
-    private ClassnameUtilities $classnameUtilities;
-
     private ?ContainerExtensionFinderInterface $containerExtensionFinder;
-
-    private StringUtilities $stringUtilities;
 
     public function __construct(
         ?ContainerBuilder $builder = null, ?ContainerExtensionFinderInterface $containerExtensionFinder = null,
@@ -110,15 +104,6 @@ class DependencyInjectionContainerBuilder
         return $container;
     }
 
-    protected function getClassnameUtilities(): ClassnameUtilities
-    {
-        if (!isset($this->classnameUtilities)) {
-            $this->classnameUtilities = new ClassnameUtilities($this->getStringUtilities());
-        }
-
-        return $this->classnameUtilities;
-    }
-
     public function getContainerExtensionFinder(): ContainerExtensionFinderInterface
     {
         if (!isset($this->containerExtensionFinder)) {
@@ -132,12 +117,6 @@ class DependencyInjectionContainerBuilder
         return $this->containerExtensionFinder;
     }
 
-    public function setContainerExtensionFinder(?ContainerExtensionFinderInterface $containerExtensionFinder = null
-    ): void
-    {
-        $this->containerExtensionFinder = $containerExtensionFinder;
-    }
-
     protected function getDefaultCacheFilePath(): string
     {
         return realpath(
@@ -145,14 +124,6 @@ class DependencyInjectionContainerBuilder
                 DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR
             ) . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'symfony' . DIRECTORY_SEPARATOR .
             'DependencyInjection.php';
-    }
-
-    protected function getDefaultLogsPath(): string
-    {
-        return realpath(
-                __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' .
-                DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR
-            ) . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR;
     }
 
     protected function getFilesystem(): Filesystem
@@ -209,15 +180,6 @@ class DependencyInjectionContainerBuilder
         return $this->request;
     }
 
-    protected function getStringUtilities(): StringUtilities
-    {
-        if (!isset($this->stringUtilities)) {
-            $this->stringUtilities = new StringUtilities();
-        }
-
-        return $this->stringUtilities;
-    }
-
     protected function getSystemPathBuilder(): SystemPathBuilder
     {
         if (!isset($this->systemPathBuilder)) {
@@ -225,15 +187,6 @@ class DependencyInjectionContainerBuilder
         }
 
         return $this->systemPathBuilder;
-    }
-
-    protected function getWebPathBuilder(): WebPathBuilder
-    {
-        if (!isset($this->webPathBuilder)) {
-            $this->webPathBuilder = new WebPathBuilder($this->getRequest());
-        }
-
-        return $this->webPathBuilder;
     }
 
     /**

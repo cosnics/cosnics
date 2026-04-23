@@ -141,16 +141,6 @@ readonly class UserSettingsParser
         return $this->systemPathBuilder->namespaceToFullPath($packageContext) . 'Resources/Settings/settings.xml';
     }
 
-    protected function getConfigurablePackagePath(Package $package): string
-    {
-        return $this->getConfigurablePackageContextPath($package->getContext());
-    }
-
-    protected function isConfigurablePackage(Package $package): bool
-    {
-        return $this->isConfigurablePackageContext($package->getContext());
-    }
-
     protected function isConfigurablePackageContext(string $packageContext): bool
     {
         return file_exists($this->getConfigurablePackageContextPath($packageContext));

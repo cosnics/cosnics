@@ -106,8 +106,8 @@ class ZipArchiveFilecompression
     {
         $filesInfo = [];
 
-        for ($i = 0; $i < $zipArchive->numFiles; $i ++) {
-            $fileInfo = $zipArchive->statIndex($i);
+        for ($fileIndex = 0; $fileIndex < $zipArchive->numFiles; $fileIndex ++) {
+            $fileInfo = $zipArchive->statIndex($fileIndex);
 
             if (!str_contains($fileInfo['name'], '.') || str_contains($fileInfo['name'], '__MACOSX')) {
                 continue;

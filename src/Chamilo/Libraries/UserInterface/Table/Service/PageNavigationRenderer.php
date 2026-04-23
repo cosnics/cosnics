@@ -79,9 +79,6 @@ class PageNavigationRenderer
      * @param string[] $translationVariables
      *
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
      */
     public function renderItemsPerPageSelector(
         TableParameterValues $parameterValues, string $itemsPerPageParameterName, array $translationVariables = []
@@ -116,16 +113,16 @@ class PageNavigationRenderer
         $buttonToolBar->addButton($dropDownButton);
 
         for (
-            $nr = PageNavigationCalculator::DISPLAY_PER_INCREMENT;
-            $nr <= $parameterValues->getTotalNumberOfItems() && $nr <= 100;
-            $nr += PageNavigationCalculator::DISPLAY_PER_INCREMENT
+            $number = PageNavigationCalculator::DISPLAY_PER_INCREMENT;
+            $number <= $parameterValues->getTotalNumberOfItems() && $number <= 100;
+            $number += PageNavigationCalculator::DISPLAY_PER_INCREMENT
         ) {
-            $numberrOfRowsOption = ($nr / $parameterValues->getNumberOfColumnsPerPage());
+            $numberrOfRowsOption = ($number / $parameterValues->getNumberOfColumnsPerPage());
 
             $dropDownButton->addButton(
                 new SubButton(
                     $this->translator->trans(
-                        $translationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW], ['%Number%' => $nr],
+                        $translationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW], ['%Number%' => $number],
                         $translationVariables[ApplicationInterface::PARAM_CONTEXT]
                     ), null, $this->urlGenerator->fromRequest(
                     [$itemsPerPageParameterName => $numberrOfRowsOption]
@@ -192,10 +189,11 @@ class PageNavigationRenderer
                 $this->translator->trans('Previous', [], StringUtilities::LIBRARIES), $currentPageNumber - 1
             );
 
-            for ($i = $start; $i <= $end; $i ++) {
-                $html[] = '<li class="page-item' . ($currentPageNumber == $i ? ' active' : '') .
+            for ($startIndex = $start; $startIndex <= $end; $startIndex ++) {
+                $html[] = '<li class="page-item' . ($currentPageNumber == $startIndex ? ' active' : '') .
                     '"><a class="page-link" href="' .
-                    $this->urlGenerator->fromRequest([$pageNumberParameterName => $i]) . '">' . $i . '</a></li>';
+                    $this->urlGenerator->fromRequest([$pageNumberParameterName => $startIndex]) . '">' . $startIndex .
+                    '</a></li>';
             }
 
             $isDisabled = ($currentPageNumber == $numberOfPages);

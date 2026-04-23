@@ -27,38 +27,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class GroupService
 {
-    /**
-     * @var string[]
-     */
-    protected array $groupUserIdentifiers = [];
-
-    /**
-     * @var int[]
-     */
-    protected array $groupUsersCount = [];
-
-    protected array $subGroupIdentifiers = [];
-
-    /**
-     * @var \Chamilo\Core\Group\Storage\DataClass\Group[][]
-     */
-    protected array $subGroups = [];
-
-    /**
-     * @var int[]
-     */
-    protected array $subGroupsCount = [];
-
-    /**
-     * @var string[]
-     */
-    protected array $userSubscribedGroupIdentifiers = [];
-
-    /**
-     * @var \Chamilo\Core\Group\Storage\DataClass\Group[][]
-     */
-    protected array $userSubscribedGroups = [];
-
     public function __construct(
         protected GroupRepository $groupRepository, protected GroupMembershipService $groupMembershipService,
         protected PropertyMapper $propertyMapper, protected EventDispatcherInterface $eventDispatcher,

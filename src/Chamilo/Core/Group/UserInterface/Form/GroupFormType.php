@@ -13,8 +13,12 @@ use Chamilo\Libraries\UserInterface\Form\Service\FormButtonTypeBuilder;
 use Chamilo\Libraries\UserInterface\Form\Service\FormTypeBuilder;
 use Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Group\UserInterface\Form
@@ -22,6 +26,9 @@ use Symfony\Component\Translation\Translator;
  */
 class GroupFormType extends AbstractType
 {
+    public const string OPTION_DISABLED_IDENTIFIERS = 'disabledGroupIdentifiers';
+    public const string OPTION_EXCLUDED_IDENTIFIERS = 'excludedGroupIdentifiers';
+
     public function __construct(
         protected readonly FormTypeBuilder $formTypeBuilder,
         protected readonly FormButtonTypeBuilder $formButtonTypeBuilder, protected readonly Translator $translator,
@@ -51,7 +58,9 @@ class GroupFormType extends AbstractType
         $builder->add(
             $this->formTypeBuilder->createSelect(
                 $builder, NestedSet::PROPERTY_PARENT_ID, $this->translator->trans('NewLocation', [], Manager::CONTEXT),
-                true, $this->optionsTreeRenderer->getOptions()->toArray()
+                true, $this->optionsTreeRenderer->getOptions(disabledIdentifiers: $this->determineDisabledGroupIdentifiers(
+                $options[self::OPTION_DISABLED_IDENTIFIERS]
+            ))->toArray()
             )
         );
 
@@ -82,5 +91,32 @@ class GroupFormType extends AbstractType
         }
 
         return $disabledGroupIdentifiers;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            self::OPTION_EXCLUDED_IDENTIFIERS => [],
+            self::OPTION_DISABLED_IDENTIFIERS => []
+        ]);
+
+        $normalizer = static function (Options $options, $identifiers) {
+            if (!is_array($identifiers)) {
+                throw new LogicException('identifiers should be an array.');
+            }
+
+            foreach ($identifiers as $identifier) {
+                if (!Uuid::isValid($identifier)) {
+                    throw new LogicException(
+                        'identifier should be a valid UUID.'
+                    );
+                }
+            }
+
+            return $identifiers;
+        };
+
+        $resolver->setNormalizer(self::OPTION_EXCLUDED_IDENTIFIERS, $normalizer);
+        $resolver->setNormalizer(self::OPTION_DISABLED_IDENTIFIERS, $normalizer);
     }
 }

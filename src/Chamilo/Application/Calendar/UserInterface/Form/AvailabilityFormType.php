@@ -47,7 +47,7 @@ class AvailabilityFormType extends AbstractType
             foreach ($ownedCalendars as $ownedCalendar) {
                 $builder->add(
                     $this->formTypeBuilder->createCheckbox(
-                        $builder, $ownedCalendar->getUniqueIdentifier(), $ownedCalendar->getName()
+                        $builder, $ownedCalendar->getUniqueIdentifier(), $ownedCalendar->name
                     )
                 );
             }

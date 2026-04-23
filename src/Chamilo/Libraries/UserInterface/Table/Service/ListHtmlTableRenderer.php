@@ -22,9 +22,9 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
     /**
      * @param \Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn[] $tableColumns
      *
-     * @throws \TableException
-     * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
+     * @throws \TableException
      */
     public function render(
         array $tableColumns, ArrayCollection $tableRows, string $tableName, array $parameterNames,

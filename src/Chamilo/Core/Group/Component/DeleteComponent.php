@@ -26,7 +26,7 @@ class DeleteComponent extends Manager
      */
     public function run(?User $currentUser = null): Response
     {
-        $ids = $this->getRequest()->getFromRequestOrQuery(DataClass::PROPERTY_ID);
+        $identifiers = $this->getRequest()->getFromRequestOrQuery(DataClass::PROPERTY_ID);
 
         if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
@@ -34,13 +34,13 @@ class DeleteComponent extends Manager
 
         $failures = 0;
 
-        if (!empty($ids)) {
-            if (!is_array($ids)) {
-                $ids = [$ids];
+        if (!empty($identifiers)) {
+            if (!is_array($identifiers)) {
+                $identifiers = [$identifiers];
             }
 
-            foreach ($ids as $id) {
-                $group = $this->groupService->findGroupByIdentifier($id);
+            foreach ($identifiers as $identifier) {
+                $group = $this->groupService->findGroupByIdentifier($identifier);
 
                 if (!$this->groupService->deleteGroup($group, $currentUser)) {
                     $failures ++;
@@ -48,7 +48,7 @@ class DeleteComponent extends Manager
             }
 
             if ($failures) {
-                if (count($ids) == 1) {
+                if (count($identifiers) == 1) {
                     $message = $this->translator->trans(
                         'ObjectNotDeleted',
                         ['%Object%' => $this->translator->trans('SelectedGroup', [], Manager::CONTEXT)],
@@ -63,7 +63,7 @@ class DeleteComponent extends Manager
                     );
                 }
             }
-            elseif (count($ids) == 1) {
+            elseif (count($identifiers) == 1) {
                 $message = $this->translator->trans(
                     'ObjectDeleted', ['%Object%' => $this->translator->trans('SelectedGroup', [], Manager::CONTEXT)],
                     StringUtilities::LIBRARIES

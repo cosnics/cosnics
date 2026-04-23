@@ -29,12 +29,12 @@ class ElementFinderDataTransformer implements DataTransformerInterface
         }
 
         foreach ($values as $value) {
-            $split_by_underscores = explode('_', $value);
+            $splitByUnderscores = explode('_', $value);
 
-            $id = array_pop($split_by_underscores);
-            $type = implode('_', $split_by_underscores);
+            $identifier = array_pop($splitByUnderscores);
+            $type = implode('_', $splitByUnderscores);
 
-            $results[$type][] = $id;
+            $results[$type][] = $identifier;
         }
 
         return $results;

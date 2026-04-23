@@ -64,7 +64,7 @@ class AdvancedElementFinderElement
     }
 
     /**
-     * @return \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement[]
+     * @return \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElement[]
      */
     public function getChildren(): array
     {
@@ -87,9 +87,9 @@ class AdvancedElementFinderElement
     }
 
     /**
-     * @param \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement[] $children
+     * @param \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElement[] $children
      */
-    public function setChildren(array $children = []): static
+    public function setChildren(array $children): static
     {
         $this->setProperty(self::PROPERTY_CHILDREN, $children);
 

@@ -266,11 +266,6 @@ class BrowseComponent extends Manager
         return $buttonToolBar;
     }
 
-    public function getSubscribedUsersCondition(): ?AndCondition
-    {
-        return $this->getButtonToolBarSearchCondition(SubscribedUser::class);
-    }
-
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException

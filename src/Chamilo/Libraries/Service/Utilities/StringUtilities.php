@@ -42,16 +42,16 @@ class StringUtilities
         // encrypt email
         $hmail = '';
 
-        for ($i = 0; $i < strlen($email); $i ++) {
-            $hmail .= '&#' . ord($email[$i]) . ';';
+        for ($characterIndex = 0; $characterIndex < strlen($email); $characterIndex ++) {
+            $hmail .= '&#' . ord($email[$characterIndex]) . ';';
         }
 
         // encrypt clickable text if @ is present
         $hclickableText = '';
 
         if (strpos($clickableText, '@')) {
-            for ($i = 0; $i < strlen($clickableText); $i ++) {
-                $hclickableText .= '&#' . ord($clickableText[$i]) . ';';
+            for ($characterIndex = 0; $characterIndex < strlen($clickableText); $characterIndex ++) {
+                $hclickableText .= '&#' . ord($clickableText[$characterIndex]) . ';';
             }
         }
         else {

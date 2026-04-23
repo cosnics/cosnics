@@ -86,7 +86,7 @@ class UpdateComponent extends Manager
             $data[NestedSet::PROPERTY_PARENT_ID] = new OptionsTreeChoice($group->getParentId(), '');
 
             $form = $this->formFactory->create(
-                GroupFormType::class, $data, ['action' => $formUri]
+                GroupFormType::class, $data, ['action' => $formUri, 'disabledGroupIdentifiers' => [$groupIdentifier]]
             );
             $form->handleRequest($this->getRequest());
 

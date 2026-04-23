@@ -12,7 +12,7 @@ class Haval256HashingAlgorithm extends HashingAlgorithm
 {
     public function hashFile(string $filePath): string
     {
-        return hash_file('haval256,5', $$filePath);
+        return hash_file('haval256,5', $filePath);
     }
 
     public function hashString(string $value): string

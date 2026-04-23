@@ -21,11 +21,6 @@ class Package extends DataClass
     public const string TYPE_APPLICATION = 'Chamilo\Application';
     public const string TYPE_CORE = 'Chamilo\Core';
 
-    public function getComposerJsonObject(): stdClass
-    {
-        return unserialize($this->getDefaultProperty(self::PROPERTY_COMPOSER_JSON_OBJECT));
-    }
-
     public function getContext(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_CONTEXT);

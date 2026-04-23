@@ -56,10 +56,10 @@ class SearchQueryConditionGenerator
         preg_match_all('/(?:"([^"]+)"|""|(\S+))/', $pattern, $matches);
         $parts = [];
 
-        for ($i = 1; $i <= 2; $i ++) {
-            foreach ($matches[$i] as $m) {
-                if (!is_null($m) && strlen($m) > 0) {
-                    $parts[] = $m;
+        for ($splitIndex = 1; $splitIndex <= 2; $splitIndex ++) {
+            foreach ($matches[$splitIndex] as $match) {
+                if (!is_null($match) && strlen($match) > 0) {
+                    $parts[] = $match;
                 }
             }
         }

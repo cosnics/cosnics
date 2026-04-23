@@ -32,10 +32,6 @@ readonly class LinkItemRenderer extends ItemRenderer
 
     public const string CONFIGURATION_TARGET = 'target';
     public const string CONFIGURATION_URL = 'url';
-    public const string TARGET_BLANK = '_blank';
-    public const string TARGET_PARENT = '_parent';
-    public const string TARGET_SELF = '_self';
-    public const string TARGET_TOP = '_top';
 
     public function __construct(
         Translator $translator, CachedItemService $itemCacheService, ChamiloRequest $request,

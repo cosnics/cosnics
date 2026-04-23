@@ -23,12 +23,12 @@ class Mailer extends AbstractMailer
     {
         $headers = [];
 
-        $cc = $mail->getCc();
-        if (!empty($cc)) {
-            $headers[] = 'Cc: ' . implode(', ', $cc);
+        $carbonCopies = $mail->getCarbonCopies();
+        if (!empty($carbonCopies)) {
+            $headers[] = 'Cc: ' . implode(', ', $carbonCopies);
         }
 
-        $bcc = $mail->getBcc();
+        $bcc = $mail->getBlindCarbonCopies();
         if (!empty($bcc)) {
             $headers[] = 'Bcc: ' . implode(', ', $bcc);
         }
@@ -40,12 +40,12 @@ class Mailer extends AbstractMailer
         $headers = implode(PHP_EOL, $headers);
 
         if ($mail->getSendIndividually()) {
-            foreach ($mail->getTo() as $recipient) {
+            foreach ($mail->getRecipients() as $recipient) {
                 $this->send($mail, $recipient, $headers);
             }
         }
         else {
-            $this->send($mail, implode(',', $mail->getTo()), $headers);
+            $this->send($mail, implode(',', $mail->getRecipients()), $headers);
         }
     }
 }

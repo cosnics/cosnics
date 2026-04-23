@@ -82,7 +82,7 @@ class ICalCalendarRenderer extends CalendarRenderer
 
         $uniqueIdentifiers = [
             $providedEvent->getSource(),
-            $providedEvent->getId(),
+            $providedEvent->getIdentifier(),
             $providedEvent->getStartDate(),
             $providedEvent->getEndDate()
         ];
@@ -129,7 +129,7 @@ class ICalCalendarRenderer extends CalendarRenderer
     private function addTimeZone(): void
     {
         try {
-            $tz = new DateTimeZone(date_default_timezone_get());
+            $dateTimeZone = new DateTimeZone(date_default_timezone_get());
 
             $currentYear = (int) date('Y');
             $startYear = $currentYear - 1;
@@ -145,23 +145,25 @@ class ICalCalendarRenderer extends CalendarRenderer
             // Collect transitions
             $transitions = [];
             for ($year = $startYear; $year <= $endYear; $year ++) {
-                $yearStart = new DateTime("$year-01-01", $tz);
-                $yearEnd = new DateTime(($year + 1) . '-01-01', $tz);
+                $yearStart = new DateTime("$year-01-01", $dateTimeZone);
+                $yearEnd = new DateTime(($year + 1) . '-01-01', $dateTimeZone);
 
-                foreach ($tz->getTransitions($yearStart->getTimestamp(), $yearEnd->getTimestamp()) as $t) {
-                    $transitions[] = $t;
+                foreach (
+                    $dateTimeZone->getTransitions($yearStart->getTimestamp(), $yearEnd->getTimestamp()) as $transition
+                ) {
+                    $transitions[] = $transition;
                 }
             }
 
             // Keep track of last offsets to properly set TZOFFSETFROM/TZOFFSETTO
             $lastOffsets = [];
 
-            foreach ($transitions as $t) {
-                $dt = new DateTime($t['time'], $tz);
-                $isDST = $t['isdst'];
-                $name = $t['abbr'];
+            foreach ($transitions as $transition) {
+                $dateTime = new DateTime($transition['time'], $dateTimeZone);
+                $isDST = $transition['isdst'];
+                $name = $transition['abbr'];
 
-                $offsetSeconds = $t['offset'];
+                $offsetSeconds = $transition['offset'];
                 $hours = floor(abs($offsetSeconds) / 3600);
                 $minutes = floor((abs($offsetSeconds) % 3600) / 60);
                 $sign = ($offsetSeconds >= 0 ? '+' : '-');
@@ -173,7 +175,7 @@ class ICalCalendarRenderer extends CalendarRenderer
 
                 $type = $isDST ? 'DAYLIGHT' : 'STANDARD';
                 $comp = new Component($this->getCalendar(), $type);
-                $comp->DTSTART = $dt->format('Ymd\THis');
+                $comp->DTSTART = $dateTime->format('Ymd\THis');
                 $comp->TZOFFSETFROM = $previousOffset;
                 $comp->TZOFFSETTO = $tzoffset;
                 $comp->TZNAME = $name;

@@ -12,7 +12,7 @@ class Md5HashingAlgorithm extends HashingAlgorithm
 {
     public function hashFile(string $filePath): string
     {
-        return md5_file($$filePath);
+        return md5_file($filePath);
     }
 
     public function hashString(string $value): string

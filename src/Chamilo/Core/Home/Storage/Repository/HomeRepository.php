@@ -5,12 +5,10 @@ use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderProperty;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -26,114 +24,12 @@ readonly class HomeRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function countElementsByParentIdentifier(string $parentIdentifier): int
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($parentIdentifier)
-        );
-
-        return $this->dataClassRepository->count(
-            Element::class, new StorageParameters(condition: $condition)
-        );
-    }
-
-    /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function createElement(Element $element): bool
     {
         return $this->dataClassRepository->create($element);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function deleteElement(Element $element): bool
-    {
-        return $this->dataClassRepository->delete($element);
-    }
-
-    /**
-     * @param string[] $columnIdentifiers
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findBlocksForColumnIdentifiers(array $columnIdentifiers): ArrayCollection
-    {
-        $conditions = [];
-
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID), $columnIdentifiers
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE),
-            new StaticConditionVariable(Element::TYPE_BLOCK)
-        );
-
-        return $this->dataClassRepository->retrieves(
-            Element::class, new StorageParameters(condition: new AndCondition($conditions))
-        );
-    }
-
-    /**
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findColumnIdentifiersForTabIdentifier(string $tabIdentifier): array
-    {
-        $conditions = [];
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID), new StaticConditionVariable(
-                $tabIdentifier
-            )
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE),
-            new StaticConditionVariable(Element::TYPE_COLUMN)
-        );
-
-        return $this->dataClassRepository->distinct(
-            Element::class, new StorageParameters(
-                condition: new AndCondition($conditions), retrieveProperties: new RetrieveProperties(
-                [new PropertyConditionVariable(Element::class, DataClass::PROPERTY_ID)]
-            )
-            )
-        );
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     */
-    public function findElementByIdentifier(string $elementIdentifier): ?Element
-    {
-        return $this->dataClassRepository->retrieveById(Element::class, $elementIdentifier);
-    }
-
-    /**
-     * @param string $parentIdentifier
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Home\Storage\DataClass\Element>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findElementsByParentIdentifier(string $parentIdentifier): ArrayCollection
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($parentIdentifier)
-        );
-
-        return $this->dataClassRepository->retrieves(
-            Element::class, new StorageParameters(condition: $condition)
-        );
     }
 
     /**
@@ -166,13 +62,5 @@ readonly class HomeRepository
         );
 
         return $this->dataClassRepository->retrieves(Element::class, $parameters);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function updateElement(Element $element): bool
-    {
-        return $this->dataClassRepository->update($element);
     }
 }

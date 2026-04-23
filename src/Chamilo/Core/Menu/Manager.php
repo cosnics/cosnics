@@ -23,8 +23,6 @@ abstract class Manager extends Application
 {
     public const string CONTEXT = __NAMESPACE__;
     public const string PARAM_DIRECTION = 'direction';
-    public const string PARAM_DIRECTION_DOWN = 'down';
-    public const string PARAM_DIRECTION_UP = 'up';
     public const string PARAM_ITEM = 'item';
     public const string PARAM_PARENT = 'parent';
     public const string PARAM_TYPE = 'type';

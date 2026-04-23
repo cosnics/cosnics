@@ -23,14 +23,14 @@ class Mail
      *
      * @var string[]
      */
-    protected array $bcc;
+    protected array $blindCarbonCopies;
 
     /**
      * Array of receiver email addresses in the CC field of the mail
      *
      * @var string[]
      */
-    protected array $cc;
+    protected array $carbonCopies;
 
     /**
      * The embedded images
@@ -45,6 +45,8 @@ class Mail
 
     protected string $message;
 
+    protected array $recipients;
+
     protected ?string $replyEmail;
 
     protected ?string $replyName;
@@ -56,18 +58,16 @@ class Mail
 
     protected string $subject;
 
-    protected array $to;
-
     /**
      * @param string[] $to
-     * @param string[] $cc
-     * @param string[] $bcc
+     * @param string[] $carbonCopies
+     * @param string[] $blindCarbonCopies
      * @param \Chamilo\Libraries\Protocol\Mail\Architecture\Domain\MailFile[] $embeddedImages
      * @param \Chamilo\Libraries\Protocol\Mail\Architecture\Domain\MailFile[] $attachments
      */
     public function __construct(
-        string $subject, string $message, array $to = [], bool $sendIndividually = true, array $cc = [],
-        array $bcc = [], ?string $fromName = null, ?string $fromEmail = null, ?string $replyName = null,
+        string $subject, string $message, array $to = [], bool $sendIndividually = true, array $carbonCopies = [],
+        array $blindCarbonCopies = [], ?string $fromName = null, ?string $fromEmail = null, ?string $replyName = null,
         ?string $replyEmail = null, array $embeddedImages = [], array $attachments = []
     )
     {
@@ -81,7 +81,7 @@ class Mail
         $this->embeddedImages = $embeddedImages;
         $this->attachments = $attachments;
 
-        $this->setRecipients($sendIndividually, $to, $cc, $bcc);
+        $this->setRecipients($sendIndividually, $to, $carbonCopies, $blindCarbonCopies);
     }
 
     /**
@@ -95,17 +95,17 @@ class Mail
     /**
      * @return \string[]
      */
-    public function getBcc(): array
+    public function getBlindCarbonCopies(): array
     {
-        return $this->bcc;
+        return $this->blindCarbonCopies;
     }
 
     /**
      * @return \string[]
      */
-    public function getCc(): array
+    public function getCarbonCopies(): array
     {
-        return $this->cc;
+        return $this->carbonCopies;
     }
 
     /**
@@ -131,6 +131,35 @@ class Mail
         return $this->message;
     }
 
+    /**
+     * @return string[]
+     */
+    public function getRecipients(): array
+    {
+        return $this->recipients;
+    }
+
+    /**
+     * @param string[] $to
+     * @param string[] $carbonCopies
+     * @param string[] $blindCarbonCopies
+     */
+    protected function setRecipients(
+        bool $sendIndividually = false, array $to = [], array $carbonCopies = [], array $blindCarbonCopies = []
+    ): void
+    {
+        if ($sendIndividually && (!empty($carbonCopies) || !empty($blindCarbonCopies))) {
+            throw new InvalidArgumentException(
+                'A mail that is set to send individually to the target users should not include cc or bcc recipients'
+            );
+        }
+
+        $this->recipients = is_array($to) ? $to : [$to];
+        $this->carbonCopies = is_array($carbonCopies) ? $carbonCopies : [$carbonCopies];
+        $this->blindCarbonCopies = is_array($blindCarbonCopies) ? $blindCarbonCopies : [$blindCarbonCopies];
+        $this->sendIndividually = $sendIndividually;
+    }
+
     public function getReplyEmail(): ?string
     {
         return $this->replyEmail;
@@ -149,33 +178,5 @@ class Mail
     public function getSubject(): string
     {
         return $this->subject;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getTo(): array
-    {
-        return $this->to;
-    }
-
-    /**
-     * @param string[] $to
-     * @param string[] $cc
-     * @param string[] $bcc
-     */
-    protected function setRecipients(bool $sendIndividually = false, array $to = [], array $cc = [], array $bcc = []
-    ): void
-    {
-        if ($sendIndividually && (!empty($cc) || !empty($bcc))) {
-            throw new InvalidArgumentException(
-                'A mail that is set to send individually to the target users should not include cc or bcc recipients'
-            );
-        }
-
-        $this->to = is_array($to) ? $to : [$to];
-        $this->cc = is_array($cc) ? $cc : [$cc];
-        $this->bcc = is_array($bcc) ? $bcc : [$bcc];
-        $this->sendIndividually = $sendIndividually;
     }
 }

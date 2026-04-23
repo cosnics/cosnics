@@ -60,8 +60,8 @@ class EventParser
 
         $event = new Event(
             $googleCalendarEvent->getId(),
-            $this->getTimestamp($googleCalendarEvent->getStart(), $calendarProperties->getTimeZone()),
-            $this->getTimestamp($googleCalendarEvent->getEnd(), $calendarProperties->getTimeZone()), $url,
+            $this->getTimestamp($googleCalendarEvent->getStart(), $calendarProperties->timeZone),
+            $this->getTimestamp($googleCalendarEvent->getEnd(), $calendarProperties->timeZone), $url,
             $googleCalendarEvent->getSummary(), $googleCalendarEvent->getDescription(),
             $googleCalendarEvent->getLocation(), $this->getSource($calendarProperties), Manager::CONTEXT
         );
@@ -75,7 +75,7 @@ class EventParser
     private function getSource(CalendarProperties $calendarProperties): string
     {
         return $this->translator->trans(
-            'SourceName', ['%Calendar%' => $calendarProperties->getSummary()], Manager::CONTEXT
+            'SourceName', ['%Calendar%' => $calendarProperties->summary], Manager::CONTEXT
         );
     }
 

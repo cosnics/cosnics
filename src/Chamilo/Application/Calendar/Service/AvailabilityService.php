@@ -18,10 +18,6 @@ use Exception;
  */
 class AvailabilityService
 {
-    public const string PROPERTY_AVAILABLE = 'available';
-    public const string PROPERTY_CALENDAR = 'calendar';
-    public const string PROPERTY_COLOUR = 'colour';
-
     public function __construct(
         protected AvailabilityRepository $availabilityRepository,
         protected CalendarExtensionDataProviderRegistry $calendarProvider
@@ -63,15 +59,6 @@ class AvailabilityService
     public function deleteAvailabilityByCalendarType(string $calendarType): bool
     {
         return $this->availabilityRepository->removeAvailabilityByCalendarType($calendarType);
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Calendar\Storage\DataClass\Availability>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function getActiveAvailabilitiesForUserAndCalendarType(User $user, string $calendarType): ArrayCollection
-    {
-        return $this->getAvailabilitiesForUserAndCalendarType($user, $calendarType, true);
     }
 
     /**
@@ -124,44 +111,11 @@ class AvailabilityService
             $calendars = $calendarDataProvider->getCalendars($user);
 
             if (count($calendars) > 0) {
-                $availableCalendars[$calendars[0]->getType()] = $calendars;
+                $availableCalendars[$calendars[0]->type] = $calendars;
             }
         }
 
         return $availableCalendars;
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Calendar\Storage\DataClass\Availability>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function getInactiveAvailabilitiesForUserAndCalendarType(User $user, string $calendarType): ArrayCollection
-    {
-        return $this->getAvailabilitiesForUserAndCalendarType($user, $calendarType, false);
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $calendarType
-     * @param string $calendarIdentifier
-     *
-     * @return bool
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
-        User $user, string $calendarType, string $calendarIdentifier
-    ): bool
-    {
-        try {
-            $availability = $this->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
-                $user, $calendarType, $calendarIdentifier
-            );
-
-            return $availability->getAvailability() == 1;
-        }
-        catch (StorageNoResultException) {
-            return false;
-        }
     }
 
     /**
@@ -210,7 +164,7 @@ class AvailabilityService
                 try {
                     $numberOfCalendars ++;
                     $this->saveAvailability(
-                        $user, $calendarType, $calendarTypeCalendar->getIdentifier(),
+                        $user, $calendarType, $calendarTypeCalendar->identifier,
                         (boolean) $availabilityData[$calendarTypeCalendar->getUniqueIdentifier()]
                     );
                 }

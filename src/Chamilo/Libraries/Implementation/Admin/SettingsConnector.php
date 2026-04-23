@@ -61,10 +61,10 @@ class SettingsConnector implements SettingsConnectorInterface
     {
         $hours = [];
 
-        for ($i = 0; $i < 24; $i ++) {
+        for ($workingHour = 0; $workingHour < 24; $workingHour ++) {
             $hour = new stdClass();
-            $hour->value = $i;
-            $hour->label = $i;
+            $hour->value = $workingHour;
+            $hour->label = $workingHour;
             $hour->attributes = [];
             $hours[] = $hour;
         }
@@ -128,22 +128,6 @@ class SettingsConnector implements SettingsConnectorInterface
         }
 
         return $this->userRights;
-    }
-
-    /**
-     * @return int[]
-     */
-    public function getWorkingHours(): array
-    {
-        $start = 0;
-        $end = 24;
-        $workingHours = [];
-
-        for ($i = $start; $i <= $end; $i ++) {
-            $workingHours[$i] = $i;
-        }
-
-        return $workingHours;
     }
 
     public function isAllowedToChangePlatformLanguage(): bool
