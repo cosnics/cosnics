@@ -10,7 +10,6 @@ use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\ButtonTool
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\DropDownButtonCollection;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\SubButton;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\ButtonToolBarRenderer;
-use QuickformException;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -30,12 +29,7 @@ class JumpBarRenderer
      */
     public function render(string $navigationUrl, int $currentTime): string
     {
-        try {
-            return $this->buttonToolBarRenderer->render($this->getButtonToolBar($navigationUrl, $currentTime));
-        }
-        catch (QuickformException) {
-            return '';
-        }
+        return $this->buttonToolBarRenderer->render($this->getButtonToolBar($navigationUrl, $currentTime));
     }
 
     private function getButtonToolBar(string $navigationUrl, int $currentTime): ButtonToolBar

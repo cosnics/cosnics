@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\UserInterface\Form\Service;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElements;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Interface\AdvancedElementFinderAjaxResultDataProviderInterface;
 
 /**

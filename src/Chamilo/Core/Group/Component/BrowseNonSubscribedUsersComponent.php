@@ -66,7 +66,6 @@ class BrowseNonSubscribedUsersComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
-     * @throws \QuickformException
      * @throws \TableException
      */
     public function run(?User $currentUser = null): Response
@@ -154,7 +153,6 @@ class BrowseNonSubscribedUsersComponent extends Manager
     }
 
     /**
-     * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getNonSubscribedUserCondition(): AndCondition
@@ -190,7 +188,6 @@ class BrowseNonSubscribedUsersComponent extends Manager
     /**
      * @throws \TableException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
-     * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */

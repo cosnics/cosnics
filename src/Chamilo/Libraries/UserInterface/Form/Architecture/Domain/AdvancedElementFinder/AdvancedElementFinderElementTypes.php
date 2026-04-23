@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder;
+namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder;
 
 /**
  * Class to determine the types for an advanced element finder
@@ -10,12 +10,12 @@ namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\Advan
 class AdvancedElementFinderElementTypes
 {
     /**
-     * @var \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElementType[]
+     * @var \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElementType[]
      */
     private array $types;
 
     /**
-     * @param \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElementType[] $types
+     * @param \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElementType[] $types
      */
     public function __construct(array $types = [])
     {
@@ -46,7 +46,7 @@ class AdvancedElementFinderElementTypes
     }
 
     /**
-     * @return \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElementType[]
+     * @return \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElementType[]
      */
     public function getTypes(): array
     {
@@ -54,7 +54,7 @@ class AdvancedElementFinderElementTypes
     }
 
     /**
-     * @param \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElementType[] $types
+     * @param \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElementType[] $types
      */
     public function setTypes(array $types): static
     {

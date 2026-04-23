@@ -13,6 +13,9 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\SubmitButton;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * @package Chamilo\Libraries\UserInterface\ButtonToolBar\Service
@@ -36,9 +39,6 @@ class ButtonToolBarRenderer extends AbstractButtonCollectionButtonRenderer imple
 
     /**
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
      */
     public function render(ButtonToolBar $buttonToolBar): string
     {
@@ -68,9 +68,14 @@ class ButtonToolBarRenderer extends AbstractButtonCollectionButtonRenderer imple
                 $form->remove('cancel');
             }
 
-            $html[] = $this->twigFormEnvironment->render('searchForm.html.twig', [
-                'form' => $form->createView(),
-            ]);
+            try {
+                $html[] = $this->twigFormEnvironment->render('searchForm.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+            catch (LoaderError|RuntimeError|SyntaxError) {
+                // In case the search form template is not found or has an error, we will ignore the search form and continue rendering the button toolbar.
+            }
         }
 
         $html[] = '</div>';

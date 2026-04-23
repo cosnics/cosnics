@@ -26,7 +26,6 @@ class ArrayCollectionTableRenderer
     /**
      * @throws \TableException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
-     * @throws \QuickformException
      * @throws \Exception
      */
     public function render(

@@ -55,7 +55,6 @@ class BrowseComponent extends Manager
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \QuickformException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
@@ -148,7 +147,6 @@ class BrowseComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
-     * @throws \QuickformException
      * @throws \TableException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException

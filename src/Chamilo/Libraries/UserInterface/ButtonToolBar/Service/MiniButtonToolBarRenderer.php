@@ -16,7 +16,6 @@ class MiniButtonToolBarRenderer extends AbstractButtonCollectionButtonRenderer i
     use ButtonRendererClassesTrait;
 
     /**
-     * @throws \QuickformException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function render(MiniButtonToolBar $miniButtonToolBar): string

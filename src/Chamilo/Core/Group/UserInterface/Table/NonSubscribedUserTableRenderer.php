@@ -90,7 +90,6 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
      * @param \Chamilo\Core\User\Storage\DataClass\User $result
      *
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
-     * @throws \QuickformException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
     {

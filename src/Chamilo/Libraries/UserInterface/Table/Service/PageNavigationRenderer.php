@@ -78,8 +78,10 @@ class PageNavigationRenderer
     /**
      * @param string[] $translationVariables
      *
-     * @throws \QuickformException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function renderItemsPerPageSelector(
         TableParameterValues $parameterValues, string $itemsPerPageParameterName, array $translationVariables = []

@@ -43,7 +43,6 @@ class AvailabilityComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     * @throws \QuickformException
      * @throws \Exception
      */
     public function run(?User $currentUser = null): Response

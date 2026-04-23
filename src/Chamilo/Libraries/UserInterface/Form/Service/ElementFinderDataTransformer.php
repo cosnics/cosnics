@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Form\Service;
 
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElements;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElements;
 use InvalidArgumentException;
 use Symfony\Component\Form\DataTransformerInterface;
 

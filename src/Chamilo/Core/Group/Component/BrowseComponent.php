@@ -93,7 +93,6 @@ class BrowseComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
-     * @throws \QuickformException
      * @throws \TableException
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
@@ -319,7 +318,6 @@ class BrowseComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
-     * @throws \QuickformException
      * @throws \TableException
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
@@ -394,7 +392,6 @@ class BrowseComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
-     * @throws \QuickformException
      * @throws \TableException
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
@@ -430,7 +427,6 @@ class BrowseComponent extends Manager
     /**
      * @throws \TableException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
-     * @throws \QuickformException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException

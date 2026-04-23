@@ -24,7 +24,6 @@ class ListHtmlTableRenderer extends AbstractHtmlTableRenderer
      *
      * @throws \TableException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
-     * @throws \QuickformException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function render(

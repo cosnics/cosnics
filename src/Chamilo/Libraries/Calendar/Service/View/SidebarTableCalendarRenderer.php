@@ -20,7 +20,6 @@ abstract class SidebarTableCalendarRenderer extends SidebarCalendarRenderer
     abstract public function getPreviousDisplayTime(int $displayTime): int;
 
     /**
-     * @throws \QuickformException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function renderNavigation(array $displayParameters, int $displayTime): string

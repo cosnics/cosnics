@@ -134,7 +134,6 @@ class ItemTableRenderer extends DataClassListTableRenderer implements TableRowAc
      *
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \QuickformException
      */
     public function renderTableRowActions(TableResultPosition $resultPosition, mixed $result): string
     {

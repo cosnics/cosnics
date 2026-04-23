@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder;
+namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder;
 
 use Exception;
 
@@ -12,12 +12,12 @@ use Exception;
 class AdvancedElementFinderElements
 {
     /**
-     * @var \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement[]
+     * @var \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElement[]
      */
     private array $elements;
 
     /**
-     * @param \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement[] $elements
+     * @param \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElement[] $elements
      */
     public function __construct(array $elements = [])
     {
@@ -53,7 +53,7 @@ class AdvancedElementFinderElements
     }
 
     /**
-     * @return \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement[]
+     * @return \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElement[]
      */
     public function getElements(): array
     {
@@ -61,7 +61,7 @@ class AdvancedElementFinderElements
     }
 
     /**
-     * @param \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement[] $elements
+     * @param \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElement[] $elements
      */
     public function setElements(array $elements): static
     {

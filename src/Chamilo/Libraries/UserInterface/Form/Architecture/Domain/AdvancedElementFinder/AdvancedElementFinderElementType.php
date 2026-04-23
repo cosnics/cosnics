@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder;
+namespace Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder;
 
 /**
  * class that describes a type for the advanced element finder

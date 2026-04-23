@@ -126,7 +126,6 @@ abstract class HtmlCalendarRenderer extends CalendarRenderer
     }
 
     /**
-     * @throws \QuickformException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function renderViewActions(array $displayParameters, array $viewActions = []): string

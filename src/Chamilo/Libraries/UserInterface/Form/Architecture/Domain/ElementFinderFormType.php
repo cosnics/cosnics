@@ -55,7 +55,7 @@ class ElementFinderFormType extends AbstractType
     protected function addElementTypes(FormView $view, array $options): void
     {
         /**
-         * @var \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes $elementTypes
+         * @var \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElementTypes $elementTypes
          */
         $elementTypes = $options['elementTypes'];
         $elementTypesArray = [];
@@ -115,7 +115,7 @@ class ElementFinderFormType extends AbstractType
 
         $resolver->setAllowedTypes(
             'elementTypes',
-            ['\Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes']
+            ['\Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElementTypes']
         );
     }
 

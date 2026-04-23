@@ -42,8 +42,11 @@ class ViewLogsComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
-     * @throws \QuickformException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      * @throws \TableException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function run(?User $currentUser = null): Response
     {
@@ -141,6 +144,12 @@ class ViewLogsComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function renderButtonToolBar(): string
     {
         $buttonToolBar = new ButtonToolBar();

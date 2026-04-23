@@ -21,7 +21,7 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\Static
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
-use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\Element\AdvancedElementFinder\AdvancedElementFinderElement;
+use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;

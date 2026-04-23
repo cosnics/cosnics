@@ -76,13 +76,7 @@
     "autoload": {
         "psr-4": {
             "Chamilo\\": "src/Chamilo/"
-        },
-        "classmap": [
-            "src/Chamilo/Libraries/UserInterface/Form/Architecture/Domain/Element/"
-        ],
-        "exclude-from-classmap": [
-            "src/Chamilo/Libraries/UserInterface/Form/Architecture/Domain/Element/AdvancedElementFinder/"
-        ]
+        }
     },
     "config": {
         "bin-dir": "bin/",
