@@ -9,6 +9,7 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenti
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeablePasswordInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeableUsernameInterface;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Trait\DefaultRedirectAfterLoginTrait;
 use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -24,6 +25,8 @@ use Symfony\Component\Translation\Translator;
 class PlatformAuthentication extends Authentication
     implements AuthenticationInterface, ChangeablePasswordInterface, ChangeableUsernameInterface
 {
+    use DefaultRedirectAfterLoginTrait;
+
     public function __construct(
         Translator $translator, ChamiloRequest $request, UserService $userService,
         AuthenticationValidator $authenticationValidator, protected HashingAlgorithm $hashingUtilities,

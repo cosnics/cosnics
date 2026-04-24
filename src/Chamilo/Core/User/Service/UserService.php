@@ -8,6 +8,7 @@ use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserPasswordResetE
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserRegistrationEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserUpdateEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserDeleteEvent;
+use Chamilo\Core\User\Architecture\Exception\UserAlreadyExistsException;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
@@ -136,6 +137,7 @@ readonly class UserService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Core\User\Architecture\Exception\UserAlreadyExistsException
      */
     public function createUserFromParameters(
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
@@ -158,7 +160,7 @@ readonly class UserService
         }
 
         if (!$this->isUsernameAvailable($username)) {
-            throw new RuntimeException('The given username is already taken');
+            throw new UserAlreadyExistsException('The given username is already taken');
         }
 
         $user = new User();

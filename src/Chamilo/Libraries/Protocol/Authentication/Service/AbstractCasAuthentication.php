@@ -6,6 +6,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
+use Chamilo\Libraries\Protocol\Authentication\Architecture\Trait\DefaultRedirectAfterLoginTrait;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Exception;
 use Monolog\Logger;
@@ -21,12 +23,14 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class AbstractCasAuthentication extends Authentication implements AuthenticationInterface
 {
+    use DefaultRedirectAfterLoginTrait;
+
     public function __construct(
         Translator $translator, ChamiloRequest $request, UserService $userService,
         AuthenticationValidator $authenticationValidator, protected SessionInterface $session, protected Logger $logger,
-        protected string $host = '', protected bool $enableLog = false, protected bool $checkCertificate = false,
-        protected ?string $certificatePath = null, protected ?string $logPath = null, protected int $port = 443,
-        protected string $uri = ''
+        protected UrlGenerator $urlGenerator, protected string $host = '', protected bool $enableLog = false,
+        protected bool $checkCertificate = false, protected ?string $certificatePath = null,
+        protected ?string $logPath = null, protected int $port = 443, protected string $uri = ''
     )
     {
         parent::__construct($translator, $request, $userService, $authenticationValidator);

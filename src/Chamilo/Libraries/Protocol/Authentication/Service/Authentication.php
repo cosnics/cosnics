@@ -14,9 +14,9 @@ use Symfony\Component\Translation\Translator;
  */
 abstract class Authentication
 {
+    public const string PARAM_AUTHENTICATION = 'authentication';
     public const string PARAM_LOGIN = 'login';
     public const string PARAM_PASSWORD = 'password';
-    public const string PARAM_AUTHENTICATION = 'authentication';
 
     public function __construct(
         protected Translator $translator, protected ChamiloRequest $request, protected UserService $userService,
@@ -64,4 +64,6 @@ abstract class Authentication
 
         return $user;
     }
+
+    abstract public function redirectAfterLogin(): void;
 }

@@ -1,20 +1,16 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Authentication\Service;
 
-use Chamilo\Core\Home\Manager;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserLoginEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserLogoutEvent;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
-use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException;
-use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\Translator;
 
@@ -37,8 +33,7 @@ class AuthenticationValidator
 
     public function __construct(
         protected ChamiloRequest $request, protected Translator $translator, protected SessionInterface $session,
-        protected UrlGenerator $urlGenerator, protected EventDispatcherInterface $eventDispatcher,
-        protected array $enabledSources = []
+        protected EventDispatcherInterface $eventDispatcher, protected array $enabledSources = []
     )
     {
         $this->authentications = [];
@@ -97,27 +92,6 @@ class AuthenticationValidator
         throw new UserException($this->translator->trans('LogoutFailed', [], StringUtilities::LIBRARIES));
     }
 
-    protected function redirectAfterLogin(): void
-    {
-        $context = $this->request->query->get(ApplicationInterface::PARAM_CONTEXT);
-
-        if ($this->request->query->count() > 0 && $context != Manager::CONTEXT) {
-            $parameters = $this->request->query->all();
-        }
-        else {
-            $parameters = [
-                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT
-            ];
-        }
-
-        $redirect = new RedirectResponse(
-            $this->urlGenerator->fromParameters($parameters)
-        );
-
-        $redirect->send();
-        exit;
-    }
-
     protected function setAuthenticatedUser(User $user): void
     {
         $this->session->set(AuthenticationValidator::SESSION_USER_ID, $user->getId());
@@ -169,7 +143,7 @@ class AuthenticationValidator
         $this->eventDispatcher->dispatch(new AfterUserLoginEvent($user, $this->request->getClientIp()));
 
         if ($redirectAfterLogin) {
-            $this->redirectAfterLogin();
+            $authentication->redirectAfterLogin();
         }
     }
 }
