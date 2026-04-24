@@ -40,12 +40,12 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
     abstract protected function getUserByCasUserIdentifier(string $userIdentifier): ?User;
 
     /**
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      */
     protected function initializeClient(): void
     {
         if (!$this->isConfigured()) {
-            throw new Exception($this->translator->trans('CheckCASConfiguration'));
+            throw new NotAuthenticatedException($this->translator->trans('CheckCASConfiguration'));
         }
         elseif (!phpCAS::isInitialized()) {
             // initialize phpCAS

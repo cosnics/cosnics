@@ -14,6 +14,9 @@ use Chamilo\Libraries\Service\Utilities\StringUtilities;
  */
 class CasAuthentication extends AbstractCasAuthentication implements AuthenticationInterface
 {
+    /**
+     * @param string[] $casUserAttributes
+     */
     protected function getCasUserIdentifierFromAttributes(string $casUser, array $casUserAttributes = []): string
     {
         return $casUser;

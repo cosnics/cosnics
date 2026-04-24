@@ -83,6 +83,7 @@ class AuthenticationValidator
 
     /**
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function logout(User $user): void
     {
@@ -90,11 +91,8 @@ class AuthenticationValidator
 
         $this->session->invalidate();
 
-        foreach ($this->authentications as $authentication) {
-            if (get_class($authentication) == $user->getAuthenticationSource()) {
-                $authentication->logout($user);
-            }
-        }
+        $authentication = $this->getAuthenticationByType($user->getAuthenticationSource());
+        $authentication->logout($user);
 
         throw new UserException($this->translator->trans('LogoutFailed', [], StringUtilities::LIBRARIES));
     }
