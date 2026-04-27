@@ -57,6 +57,8 @@ class GroupRepository
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
