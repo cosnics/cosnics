@@ -8,7 +8,6 @@ use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserPasswordResetE
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserRegistrationEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserUpdateEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserDeleteEvent;
-use Chamilo\Core\User\Architecture\Exception\UserAlreadyExistsException;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
@@ -23,11 +22,13 @@ use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
+use Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Service\PropertyMapper;
 use Doctrine\Common\Collections\ArrayCollection;
+use Ehb\Application\Desiderius\Storage\DataClass\UserOperation;
 use Exception;
 use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 use InvalidArgumentException;
@@ -137,7 +138,7 @@ readonly class UserService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Core\User\Architecture\Exception\UserAlreadyExistsException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function createUserFromParameters(
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
@@ -160,7 +161,7 @@ readonly class UserService
         }
 
         if (!$this->isUsernameAvailable($username)) {
-            throw new UserAlreadyExistsException('The given username is already taken');
+            throw new ObjectAlreadyExistsException(UserOperation::getStorageUnitName(), $requiredParameters);
         }
 
         $user = new User();
