@@ -5,6 +5,7 @@ use Chamilo\Libraries\Protocol\ErrorHandling\Architecture\Interface\ExceptionLog
 use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorRegistry;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
+use Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
@@ -13,6 +14,7 @@ use Chamilo\Libraries\Storage\Architecture\Interface\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Service\QueryBuilderConfigurator;
 use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Result;
 use Exception;
@@ -153,6 +155,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function create(string $dataClassStorageUnitName, array $record): bool
     {
@@ -160,6 +163,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $this->connection->insert($dataClassStorageUnitName, $record);
 
             return true;
+        }
+        catch (UniqueConstraintViolationException $exception) {
+            throw new ObjectAlreadyExistsException(
+                $dataClassStorageUnitName, $record, $exception->getMessage(), $exception->getCode(), $exception
+            );
         }
         catch (Throwable $throwable) {
             $this->handleError($throwable);
@@ -364,31 +372,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param callable $function
      *
      * @return mixed
-     * @throws \Exception
-     * @throws \Throwable
      */
     public function transactional(callable $function): mixed
     {
-        try {
-            // Rather than directly using Doctrine's version of transactional, we implement
-            // an intermediate function that throws an exception if the function returns #f.
-            // This mediates between Chamilo's convention of returning #f to signal failure
-            // versus Doctrine's use of Exceptions.
-            $throwOnFalse = function ($connection) use ($function) {
-                $result = call_user_func($function, $connection);
-                if (!$result) {
-                    throw new Exception();
-                }
-                else {
-                    return $result;
-                }
-            };
-
-            return $this->connection->transactional($throwOnFalse);
-        }
-        catch (Exception) {
-            return false;
-        }
+        return $this->connection->transactional($function);
     }
 
     /**

@@ -223,6 +223,7 @@ class DataClassRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function create(DataClass $dataClass): bool
     {
@@ -266,6 +267,7 @@ class DataClassRepository
      * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $dataClassName
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function createRecord(string $dataClassName, array $record): bool
     {

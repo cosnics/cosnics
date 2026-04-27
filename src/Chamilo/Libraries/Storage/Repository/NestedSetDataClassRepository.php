@@ -81,7 +81,9 @@ class NestedSetDataClassRepository
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function create(NestedSet $nestedSet, string $previousNestedSetIdentifier = '0'): bool

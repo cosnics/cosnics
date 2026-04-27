@@ -24,6 +24,7 @@ interface DataClassDatabaseInterface
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function create(string $dataClassStorageUnitName, array $record): bool;
 
