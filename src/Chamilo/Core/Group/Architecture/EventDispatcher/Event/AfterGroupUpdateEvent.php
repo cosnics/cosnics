@@ -7,5 +7,4 @@ namespace Chamilo\Core\Group\Architecture\EventDispatcher\Event;
  */
 class AfterGroupUpdateEvent extends AbstractGroupEvent
 {
-
 }

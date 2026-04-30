@@ -6,7 +6,6 @@ use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\UserInterface\Form\Service\GroupFormDataMapper;
-use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Chamilo\Libraries\UserInterface\Form\Service\FormButtonTypeBuilder;
@@ -57,10 +56,12 @@ class GroupFormType extends AbstractType
 
         $builder->add(
             $this->formTypeBuilder->createSelect(
-                $builder, NestedSet::PROPERTY_PARENT_ID, $this->translator->trans('NewLocation', [], Manager::CONTEXT),
-                true, $this->optionsTreeRenderer->getOptions(disabledIdentifiers: $this->determineDisabledGroupIdentifiers(
+                $builder, Group::PROPERTY_PARENT_ID, $this->translator->trans('NewLocation', [], Manager::CONTEXT),
+                true, $this->optionsTreeRenderer->getOptions(
+                disabledIdentifiers: $this->determineDisabledGroupIdentifiers(
                 $options[self::OPTION_DISABLED_IDENTIFIERS]
-            ))->toArray()
+            )
+            )->toArray()
             )
         );
 
@@ -71,26 +72,6 @@ class GroupFormType extends AbstractType
         );
 
         $this->formButtonTypeBuilder->addSaveAndResetButton($builder);
-    }
-
-    protected function determineDisabledGroupIdentifiers(array $rootDisabledGroupIdentifiers = []): array
-    {
-        $disabledGroupIdentifiers = [];
-
-        foreach ($rootDisabledGroupIdentifiers as $rootDisabledGroupIdentifier) {
-            try {
-                $disabledGroup = $this->groupService->findGroupByIdentifier($rootDisabledGroupIdentifier);
-                $disabledSubgroupIdentifiers =
-                    $this->groupsTreeTraverser->findSubGroupIdentifiersForGroup($disabledGroup, true);
-
-                $disabledGroupIdentifiers[] = $rootDisabledGroupIdentifier;
-                $disabledGroupIdentifiers = array_merge($disabledGroupIdentifiers, $disabledSubgroupIdentifiers);
-            }
-            catch (StorageMethodException|StorageNoResultException) {
-            }
-        }
-
-        return $disabledGroupIdentifiers;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -118,5 +99,25 @@ class GroupFormType extends AbstractType
 
         $resolver->setNormalizer(self::OPTION_EXCLUDED_IDENTIFIERS, $normalizer);
         $resolver->setNormalizer(self::OPTION_DISABLED_IDENTIFIERS, $normalizer);
+    }
+
+    protected function determineDisabledGroupIdentifiers(array $rootDisabledGroupIdentifiers = []): array
+    {
+        $disabledGroupIdentifiers = [];
+
+        foreach ($rootDisabledGroupIdentifiers as $rootDisabledGroupIdentifier) {
+            try {
+                $disabledGroup = $this->groupService->findGroupByIdentifier($rootDisabledGroupIdentifier);
+                $disabledSubgroupIdentifiers =
+                    $this->groupsTreeTraverser->findSubGroupIdentifiersForGroup($disabledGroup, true);
+
+                $disabledGroupIdentifiers[] = $rootDisabledGroupIdentifier;
+                $disabledGroupIdentifiers = array_merge($disabledGroupIdentifiers, $disabledSubgroupIdentifiers);
+            }
+            catch (StorageMethodException|StorageNoResultException) {
+            }
+        }
+
+        return $disabledGroupIdentifiers;
     }
 }

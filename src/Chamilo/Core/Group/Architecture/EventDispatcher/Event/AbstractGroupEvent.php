@@ -11,23 +11,7 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 abstract class AbstractGroupEvent extends Event
 {
-    protected ?User $executingUser;
-
-    protected Group $group;
-
-    public function __construct(Group $group, ?User $executingUser = null)
+    public function __construct(public Group $group, public ?User $executingUser = null)
     {
-        $this->group = $group;
-        $this->executingUser = $executingUser;
-    }
-
-    public function getExecutingUser(): ?User
-    {
-        return $this->executingUser;
-    }
-
-    public function getGroup(): Group
-    {
-        return $this->group;
     }
 }

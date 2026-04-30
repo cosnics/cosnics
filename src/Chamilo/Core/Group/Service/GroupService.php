@@ -5,9 +5,9 @@ use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupCreateEvent;
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupDeleteEvent;
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupMoveEvent;
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupUpdateEvent;
+use Chamilo\Core\Group\Architecture\EventDispatcher\Event\BeforeGroupDeleteEvent;
 use Chamilo\Core\Group\Architecture\Exception\GroupNotFoundException;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
@@ -78,28 +78,31 @@ class GroupService
     }
 
     /**
-     * @throws \Throwable
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function deleteGroup(Group $group, ?User $executingUser = null): bool
     {
-        $subGroupIds = [];
-        $impactedUserIds = $this->groupMembershipService->findUserIdentifiersForGroup($group, true, true);
+        $this->eventDispatcher->dispatch(new BeforeGroupDeleteEvent($group, $executingUser));
+        $descendants = $this->findGroupsForParentIdentifier($group->getId());
 
-        $deletedGroups = $this->groupRepository->deleteGroup($group);
-
-        foreach ($deletedGroups as $deletedGroup) {
-            $subGroupIds[] = $deletedGroup->getId();
+        foreach ($descendants as $descendant) {
+            $this->deleteGroup($descendant, $executingUser);
         }
 
-        if (!$this->groupMembershipService->removeUsersFromGroupsByIdsAfterRemoval($subGroupIds)) {
-            return false;
-        }
-
-        $this->eventDispatcher->dispatch(
-            new AfterGroupDeleteEvent($group, $subGroupIds, $impactedUserIds, $executingUser)
-        );
+        $this->groupRepository->deleteGroup($group);
+        $this->eventDispatcher->dispatch(new AfterGroupDeleteEvent($group, $executingUser));
 
         return true;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Throwable
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
+    public function deleteGroupByIdentifier(string $identifier, ?User $executingUser = null): bool
+    {
+        return $this->deleteGroup($this->findGroupByIdentifier($identifier), $executingUser);
     }
 
     /**
@@ -264,44 +267,17 @@ class GroupService
      */
     public function moveGroup(Group $group, string $parentGroupIdentifier, ?User $executingUser = null): bool
     {
-        $oldParentGroup = $this->findGroupByIdentifier($group->getParentId());
-        $newParentGroup = $this->findGroupByIdentifier($parentGroupIdentifier);
+        $oldParentGroupIdentifier = $group->getParentId();
 
         if (!$this->groupRepository->moveGroup($group, $parentGroupIdentifier)) {
             return false;
         }
 
         $this->eventDispatcher->dispatch(
-            new AfterGroupMoveEvent($group, $oldParentGroup, $newParentGroup, $executingUser)
+            new AfterGroupMoveEvent($group, $oldParentGroupIdentifier, $parentGroupIdentifier, $executingUser)
         );
 
         return true;
-    }
-
-    /**
-     * @param string $groupCode
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param ?\Chamilo\Core\User\Storage\DataClass\User $executingUser
-     *
-     * @return \Chamilo\Core\Group\Storage\DataClass\GroupRelUser
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     */
-    public function subscribeUserToGroupByCode(string $groupCode, User $user, ?User $executingUser = null): GroupRelUser
-    {
-        return $this->groupMembershipService->subscribeUserToGroup(
-            $this->findGroupByCode($groupCode), $user, $executingUser
-        );
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     */
-    public function truncateGroup(Group $group, ?User $executingUser = null): bool
-    {
-        return $this->groupMembershipService->unsubscribeAllUsersFromGroup($group, $executingUser);
     }
 
     /**

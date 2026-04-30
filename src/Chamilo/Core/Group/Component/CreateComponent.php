@@ -16,7 +16,6 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedE
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
-use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
@@ -86,7 +85,7 @@ class CreateComponent extends Manager
 
             try {
                 $group = $this->groupService->createGroupFromParameters(
-                    $submittedData[Group::PROPERTY_NAME], $submittedData[NestedSet::PROPERTY_PARENT_ID]->getValue(),
+                    $submittedData[Group::PROPERTY_NAME], $submittedData[Group::PROPERTY_PARENT_ID]->getValue(),
                     $submittedData[Group::PROPERTY_DESCRIPTION], $submittedData[Group::PROPERTY_CODE], $currentUser
                 );
 

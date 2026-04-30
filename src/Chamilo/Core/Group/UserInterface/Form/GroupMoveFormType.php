@@ -6,7 +6,6 @@ use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\UserInterface\Form\Service\GroupMoveFormDataMapper;
-use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Chamilo\Libraries\UserInterface\Form\Service\FormButtonTypeBuilder;
@@ -50,7 +49,7 @@ class GroupMoveFormType extends AbstractType
 
         $builder->add(
             $this->formTypeBuilder->createSelect(
-                $builder, NestedSet::PROPERTY_PARENT_ID, $this->translator->trans('NewLocation', [], Manager::CONTEXT),
+                $builder, Group::PROPERTY_PARENT_ID, $this->translator->trans('NewLocation', [], Manager::CONTEXT),
                 true, $this->optionsTreeRenderer->getOptions(
                 disabledIdentifiers: $this->determineDisabledGroupIdentifiers(
                     $options[self::OPTION_DISABLED_IDENTIFIERS]

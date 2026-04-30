@@ -3,7 +3,6 @@ namespace Chamilo\Core\Group\UserInterface\Form\Service;
 
 use ArrayIterator;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\OptionsTreeChoice;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Extension\Core\DataMapper\DataMapper;
@@ -33,8 +32,8 @@ class GroupFormDataMapper implements DataMapperInterface
             )
         );
 
-        $forms[NestedSet::PROPERTY_PARENT_ID]->setData(
-            new OptionsTreeChoice($viewData[NestedSet::PROPERTY_PARENT_ID], '')
+        $forms[Group::PROPERTY_PARENT_ID]->setData(
+            new OptionsTreeChoice($viewData[Group::PROPERTY_PARENT_ID], '')
         );
     }
 
@@ -49,6 +48,6 @@ class GroupFormDataMapper implements DataMapperInterface
             ), $viewData
         );
 
-        $viewData[NestedSet::PROPERTY_PARENT_ID] = $forms[NestedSet::PROPERTY_PARENT_ID]->getData()->getValue();
+        $viewData[Group::PROPERTY_PARENT_ID] = $forms[Group::PROPERTY_PARENT_ID]->getData()->getValue();
     }
 }

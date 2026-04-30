@@ -159,7 +159,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
     {
         $conditions = [];
 
-        $userIdentifiers = $this->groupMembershipService->findSubscribedUserIdentifiersForGroupIdentifier(
+        $userIdentifiers = $this->groupMembershipService->retrieveSubscribedUserIdentifiersByGroupIdentifier(
             $this->getGroupIdentifier()
         );
 

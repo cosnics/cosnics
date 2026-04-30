@@ -45,7 +45,7 @@ class TruncateComponent extends Manager
                 $group = $this->groupService->findGroupByIdentifier($groupIdentifier);
 
                 try {
-                    $this->groupMembershipService->emptyGroup($group, $currentUser);
+                    $this->groupMembershipService->deleteGroupMembershipsByGroup($group, $currentUser);
                 }
                 catch (RuntimeException) {
                     $failures ++;

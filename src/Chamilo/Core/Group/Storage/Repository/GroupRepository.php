@@ -2,25 +2,26 @@
 namespace Chamilo\Core\Group\Storage\Repository;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Enum\ComparisonTypeEnum;
-use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\OperationTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Join;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\Joins;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperties;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperty;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
-use Chamilo\Libraries\Storage\Repository\NestedSetDataClassRepository;
+use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -32,7 +33,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class GroupRepository
 {
     public function __construct(
-        protected NestedSetDataClassRepository $nestedSetDataClassRepository,
+        protected DataClassRepository $dataClassRepository,
         protected SearchQueryConditionGenerator $searchQueryConditionGenerator
     )
     {
@@ -41,9 +42,34 @@ class GroupRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
+    public function countAncestors(Group $group, bool $includeSelf = true, ?ConditionInterface $condition = null): int
+    {
+        return $this->dataClassRepository->count(
+            Group::class,
+            new StorageParameters(condition: $this->getAncestorsCondition($group, $includeSelf, $condition))
+        );
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function countDescendants(Group $group, bool $recursive = true, ?ConditionInterface $condition = null): int
+    {
+        return $this->dataClassRepository->count(
+            Group::class, new StorageParameters(
+                condition: $this->getDescendantsCondition(
+                    $group, $recursive, false, $condition
+                )
+            )
+        );
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function countGroups(?ConditionInterface $condition = null): int
     {
-        return $this->nestedSetDataClassRepository->count(
+        return $this->dataClassRepository->count(
             Group::class, new StorageParameters(condition: $condition)
         );
     }
@@ -51,9 +77,12 @@ class GroupRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false): int
+    public function countSiblings(Group $group, bool $includeSelf = true, ?ConditionInterface $condition = null): int
     {
-        return $this->nestedSetDataClassRepository->countDescendants($group, $recursiveSubgroups);
+        return $this->dataClassRepository->count(
+            Group::class,
+            new StorageParameters(condition: $this->getSiblingsCondition($group, $includeSelf, $condition))
+        );
     }
 
     /**
@@ -62,85 +91,56 @@ class GroupRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function createGroup(Group $group): void
+    public function createGroup(Group $group): bool
     {
-        $this->nestedSetDataClassRepository->create($group);
+        $referenceNode = $this->findGroupByIdentifier($group->getParentId());
+
+        // This variable is used to identify the node after which the newly
+        // created node should be placed. This value is initialized with 0
+        // which would create the node as the root of a nested set.
+        $insertAfter = 0;
+
+        if ($referenceNode != 0) { // Not creating the root node of a hierarchy
+
+            // Identify the reference node (except when creating the root node, there must be one).
+            if ($this->validatePosition($group, Group::AS_LAST_CHILD_OF, $referenceNode) === null) {
+                return false;
+            }
+
+            $insertAfter = $referenceNode->getRightValue() - 1;
+        }
+
+        // Creating a node in a nested set requires multiple updates
+        // which have to be performed atomically and consistently.
+        //
+        // Use a transaction to guarantee this.
+
+        return $this->dataClassRepository->transactional(
+            function () use ($group, $insertAfter) { // Correct the left and right values wherever necessary.
+                if (!$this->preInsert($insertAfter)) {
+                    return false;
+                }
+
+                // Left and right values have been shifted so now we
+                // want to really add the location itself, but first
+                // we have to set it's left and right value.
+                $group->setLeftValue($insertAfter + 1);
+                $group->setRightValue($insertAfter + 2);
+
+                return $this->dataClassRepository->create($group);
+            }
+        );
     }
 
     /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     *
-     * @return  \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Throwable
-     */
-    public function deleteGroup(Group $group): ArrayCollection
-    {
-        return $this->nestedSetDataClassRepository->delete($group);
-    }
-
-    /**
-     * @param string $userIdentifier
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<string[]>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(string $userIdentifier): ArrayCollection
+    public function deleteGroup(Group $group): bool
     {
-        $properties = new RetrieveProperties();
+        $this->dataClassRepository->delete($group);
+        $this->postDelete($group);
 
-        $properties->add(new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_LEFT_VALUE));
-        $properties->add(new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_RIGHT_VALUE));
-        $properties->add(new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID));
-        $properties->add(new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID));
-
-        $joinConditions = [];
-
-        $joinConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-            new StaticConditionVariable($userIdentifier)
-        );
-
-        $joinConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-            new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)
-        );
-
-        $joins = new Joins([new Join(GroupRelUser::class, new AndCondition($joinConditions))]);
-
-        $parameters = new StorageParameters(joins: $joins, retrieveProperties: $properties);
-
-        return $this->nestedSetDataClassRepository->records(Group::class, $parameters);
-    }
-
-    /**
-     * @param string $userIdentifier
-     *
-     * @return ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findDirectlySubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection
-    {
-        $join = new Join(
-            GroupRelUser::class, new AndCondition(
-                [
-                    new EqualityCondition(
-                        new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
-                        new StaticConditionVariable($userIdentifier)
-                    ),
-
-                    new EqualityCondition(
-                        new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
-                        new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)
-                    )
-                ]
-            )
-        );
-
-        $joins = new Joins([$join]);
-
-        $parameters = new StorageParameters(joins: $joins);
-
-        return $this->nestedSetDataClassRepository->retrieves(Group::class, $parameters);
+        return true;
     }
 
     /**
@@ -153,7 +153,7 @@ class GroupRepository
             new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($groupCode)
         );
 
-        return $this->nestedSetDataClassRepository->retrieve(
+        return $this->dataClassRepository->retrieve(
             Group::class, new StorageParameters(condition: $condition)
         );
     }
@@ -169,11 +169,11 @@ class GroupRepository
             new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($groupCode)
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parentIdentifier)
         );
 
-        return $this->nestedSetDataClassRepository->retrieve(
+        return $this->dataClassRepository->retrieve(
             Group::class, new StorageParameters(condition: new AndCondition($conditions))
         );
     }
@@ -184,27 +184,7 @@ class GroupRepository
      */
     public function findGroupByIdentifier(string $groupId): ?Group
     {
-        return $this->nestedSetDataClassRepository->retrieveById(Group::class, $groupId);
-    }
-
-    /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<string[]> $directlySubscribedGroupNestingValues
-     *
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findGroupIdentifiersForDirectlySubscribedGroupNestingValues(
-        ArrayCollection $directlySubscribedGroupNestingValues
-    ): array
-    {
-        $parameters = new StorageParameters(
-            condition: $this->getDirectlySubscribedGroupNestingValuesConditions($directlySubscribedGroupNestingValues),
-            retrieveProperties: new RetrieveProperties(
-                [new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)]
-            )
-        );
-
-        return $this->nestedSetDataClassRepository->distinct(Group::class, $parameters);
+        return $this->dataClassRepository->retrieveById(Group::class, $groupId);
     }
 
     /**
@@ -222,7 +202,7 @@ class GroupRepository
     {
         $parameters = new StorageParameters(condition: $condition, orderBy: $orderBy, count: $count, offset: $offset);
 
-        return $this->nestedSetDataClassRepository->retrieves(Group::class, $parameters);
+        return $this->dataClassRepository->retrieves(Group::class, $parameters);
     }
 
     /**
@@ -238,28 +218,11 @@ class GroupRepository
         $condition =
             new InCondition(new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID), $groupIdentifiers);
 
-        return $this->nestedSetDataClassRepository->retrieves(
+        return $this->dataClassRepository->retrieves(
             Group::class, new StorageParameters(
                 condition: $condition, orderBy: $orderBy
             )
         );
-    }
-
-    /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<string[]> $directlySubscribedGroupNestingValues
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findGroupsForDirectlySubscribedGroupNestingValues(
-        ArrayCollection $directlySubscribedGroupNestingValues
-    ): ArrayCollection
-    {
-        $parameters = new StorageParameters(
-            condition: $this->getDirectlySubscribedGroupNestingValuesConditions($directlySubscribedGroupNestingValues)
-        );
-
-        return $this->nestedSetDataClassRepository->retrieves(Group::class, $parameters);
     }
 
     /**
@@ -271,11 +234,11 @@ class GroupRepository
     public function findGroupsForParentIdentifier(string $parentIdentifier = DataClass::EMPTY_UUID): ArrayCollection
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parentIdentifier)
         );
 
-        return $this->nestedSetDataClassRepository->retrieves(
+        return $this->dataClassRepository->retrieves(
             Group::class, new StorageParameters(
                 condition: $condition, orderBy: new OrderBy(
                 [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
@@ -307,13 +270,13 @@ class GroupRepository
         }
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($parentIdentifier)
         );
 
         $condition = new AndCondition($conditions);
 
-        return $this->nestedSetDataClassRepository->retrieves(
+        return $this->dataClassRepository->retrieves(
             Group::class, new StorageParameters(
                 condition: $condition, orderBy: new OrderBy(
                 [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
@@ -328,7 +291,18 @@ class GroupRepository
      */
     public function findParentGroupIdentifiersForGroup(Group $group, bool $includeSelf = true): array
     {
-        return $this->nestedSetDataClassRepository->findAncestorIdentifiers($group, $includeSelf);
+        return $this->dataClassRepository->distinct(
+            Group::class, new StorageParameters(
+                condition: $this->getAncestorsCondition($group, $includeSelf),
+                retrieveProperties: new RetrieveProperties(
+                    [new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)]
+                ), orderBy: new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE)
+                )
+            ])
+            )
+        );
     }
 
     /**
@@ -340,7 +314,15 @@ class GroupRepository
      */
     public function findParentGroupsForGroup(Group $group, bool $includeSelf = true): ArrayCollection
     {
-        return $this->nestedSetDataClassRepository->findAncestors($group, $includeSelf);
+        return $this->dataClassRepository->retrieves(
+            Group::class, new StorageParameters(
+                condition: $this->getAncestorsCondition($group, $includeSelf), orderBy: new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE)
+                )
+            ])
+            )
+        );
     }
 
     /**
@@ -349,12 +331,30 @@ class GroupRepository
      */
     public function findRootGroup(): ?Group
     {
-        return $this->nestedSetDataClassRepository->retrieve(
+        return $this->dataClassRepository->retrieve(
             Group::class, new StorageParameters(
                 condition: new EqualityCondition(
-                    new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                     new StaticConditionVariable(DataClass::EMPTY_UUID)
                 )
+            )
+        );
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function findSiblings(Group $group, bool $includeSelf = true, ?ConditionInterface $condition = null
+    ): ArrayCollection
+    {
+        return $this->dataClassRepository->retrieves(
+            Group::class, new StorageParameters(
+                condition: $this->getSiblingsCondition($group, $includeSelf, $condition), orderBy: new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE)
+                )
+            ])
             )
         );
     }
@@ -369,25 +369,25 @@ class GroupRepository
             $childrenCondition = [];
 
             $childrenCondition[] = new ComparisonCondition(
-                new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_LEFT_VALUE),
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
                 ComparisonTypeEnum::GREATER_THAN, new StaticConditionVariable($group->getLeftValue())
             );
 
             $childrenCondition[] = new ComparisonCondition(
-                new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_RIGHT_VALUE),
-                ComparisonTypeEnum::LESS_THAN, new StaticConditionVariable($group->getRightValue())
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE), ComparisonTypeEnum::LESS_THAN,
+                new StaticConditionVariable($group->getRightValue())
             );
 
             $childrenCondition = new AndCondition($childrenCondition);
         }
         else {
             $childrenCondition = new EqualityCondition(
-                new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                 new StaticConditionVariable($group->getId())
             );
         }
 
-        return $this->nestedSetDataClassRepository->distinct(
+        return $this->dataClassRepository->distinct(
             Group::class, new StorageParameters(
                 condition: $childrenCondition, retrieveProperties: new RetrieveProperties(
                 [new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)]
@@ -405,51 +405,130 @@ class GroupRepository
      */
     public function findSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false): ArrayCollection
     {
-        return $this->nestedSetDataClassRepository->findDescendants($group, $recursiveSubgroups);
+        return $this->dataClassRepository->retrieves(
+            Group::class, new StorageParameters(
+                condition: $this->getDescendantsCondition($group, $recursiveSubgroups)
+            )
+        );
+    }
+
+    protected function getAncestorsCondition(
+        Group $group, bool $includeSelf = false, ?ConditionInterface $condition = null
+    ): AndCondition
+    {
+        $conditions = [];
+
+        if ($includeSelf) {
+            $conditions[] = new ComparisonCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
+                ComparisonTypeEnum::LESS_THAN_OR_EQUAL, new StaticConditionVariable($group->getLeftValue())
+            );
+            $conditions[] = new ComparisonCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
+                ComparisonTypeEnum::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($group->getRightValue())
+            );
+        }
+        else {
+            $conditions[] = new ComparisonCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE), ComparisonTypeEnum::LESS_THAN,
+                new StaticConditionVariable($group->getLeftValue())
+            );
+            $conditions[] = new ComparisonCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
+                ComparisonTypeEnum::GREATER_THAN, new StaticConditionVariable($group->getRightValue())
+            );
+        }
+
+        if ($condition) {
+            $conditions[] = $condition;
+        }
+
+        return new AndCondition($conditions);
+    }
+
+    protected function getDescendantsCondition(
+        Group $group, bool $recursive = false, bool $includeSelf = false, ?ConditionInterface $condition = null
+    ): AndCondition
+    {
+        $conditions = [];
+
+        if ($recursive) {
+            $conditions[] = new ComparisonCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
+                $includeSelf ? ComparisonTypeEnum::GREATER_THAN_OR_EQUAL : ComparisonTypeEnum::GREATER_THAN,
+                new StaticConditionVariable($group->getLeftValue())
+            );
+
+            $conditions[] = new ComparisonCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
+                $includeSelf ? ComparisonTypeEnum::LESS_THAN_OR_EQUAL : ComparisonTypeEnum::LESS_THAN,
+                new StaticConditionVariable($group->getRightValue())
+            );
+        }
+        elseif ($includeSelf) {
+            $conditions[] = new OrCondition(
+                [
+                    new EqualityCondition(
+                        new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID),
+                        new StaticConditionVariable($group->getId())
+                    ),
+                    new EqualityCondition(
+                        new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+                        new StaticConditionVariable($group->getId())
+                    )
+                ]
+            );
+        }
+        else {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+                new StaticConditionVariable($group->getId())
+            );
+        }
+
+        if ($condition) {
+            $conditions[] = $condition;
+        }
+
+        return new AndCondition($conditions);
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<string[]> $directlySubscribedGroupNestingValues
-     *
-     * @return \Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\OrCondition
+     * Build the conditions for the get / count _ siblings methods
      */
-    protected function getDirectlySubscribedGroupNestingValuesConditions(
-        ArrayCollection $directlySubscribedGroupNestingValues
-    ): OrCondition
+    protected function getSiblingsCondition(
+        Group $group, bool $includeSelf = false, ?ConditionInterface $condition = null
+    ): AndCondition
     {
-        $treeConditions = [];
-        $alreadyIncludedParents = [];
-        $directGroupIds = [];
+        $conditions = [];
 
-        foreach ($directlySubscribedGroupNestingValues as $descendent) {
-            if (!in_array($descendent[NestedSet::PROPERTY_PARENT_ID], $alreadyIncludedParents)) {
-                $treeConditions[] = new AndCondition(
-                    [
-                        new ComparisonCondition(
-                            new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_LEFT_VALUE),
-                            ComparisonTypeEnum::LESS_THAN_OR_EQUAL,
-                            new StaticConditionVariable($descendent[NestedSet::PROPERTY_LEFT_VALUE])
-                        ),
-
-                        new ComparisonCondition(
-                            new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_RIGHT_VALUE),
-                            ComparisonTypeEnum::GREATER_THAN_OR_EQUAL,
-                            new StaticConditionVariable($descendent[NestedSet::PROPERTY_RIGHT_VALUE])
-                        )
-                    ]
-                );
-
-                $alreadyIncludedParents[] = $descendent[NestedSet::PROPERTY_PARENT_ID];
-            }
-
-            $directGroupIds[] = $descendent[DataClass::PROPERTY_ID];
-        }
-
-        $treeConditions[] = new InCondition(
-            new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID), $directGroupIds
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+            new StaticConditionVariable($group->getParentId())
         );
 
-        return new OrCondition($treeConditions);
+        if (!$includeSelf) {
+            $conditions[] = new NotCondition(
+                new EqualityCondition(
+                    new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID),
+                    new StaticConditionVariable($group->getId())
+                )
+            );
+        }
+
+        if ($condition) {
+            $conditions[] = $condition;
+        }
+
+        return new AndCondition($conditions);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function hasSiblings(Group $group, ?ConditionInterface $condition = null): bool
+    {
+        return ($this->countSiblings($group, false, $condition) > 0);
     }
 
     /**
@@ -458,7 +537,290 @@ class GroupRepository
      */
     public function moveGroup(Group $group, string $parentGroupIdentifier): bool
     {
-        return $this->nestedSetDataClassRepository->move($group, $parentGroupIdentifier);
+        if ($parentGroupIdentifier == 0) {
+            $referenceNode = $this->findGroupByIdentifier($group->getParentId());
+        }
+        else {
+            $referenceNode = $this->findGroupByIdentifier($parentGroupIdentifier);
+        }
+
+        if ($this->validatePosition($group, Group::AS_LAST_CHILD_OF, $referenceNode) === null) {
+            return false;
+        }
+
+        // This variable is used to identify the node after which the newly
+        // created node should be placed. This value is initialized with 0
+        // which would create the node as the root of a nested set.
+        $insertAfter = $referenceNode->getRightValue() - 1;
+
+        // Moving a node in a nested set requires multiple updates
+        // which have to be performed atomically and consistently.
+        //
+        // Use a transaction to guarantee this.
+
+        return $this->dataClassRepository->transactional(
+            function () use ($group, $insertAfter) { // Step 0: Compute the auxiliary values used by this
+                // algorithm
+                // This is the initial position of the node to be moved
+                $initialLeft = $group->getLeftValue();
+                $initialRight = $group->getRightValue();
+
+                // This is the size of the subtree to be moved (i.e. the size of the gap to be created so that it can be
+                // moved in)
+                $delta = $group->getRightValue() - $group->getLeftValue() + 1;
+
+                // When moving nodes left or up, the gap we have created will have incremented the left and right values
+                // of the nodes to be moved by $delta.
+                $afterPreInsertLeft = ($insertAfter > $initialLeft) ? $initialLeft : $initialLeft + $delta;
+                $afterPreInsertRight = ($insertAfter > $initialLeft) ? $initialRight : $initialRight + $delta;
+
+                // How the nodes should move: negative numbers mean left or up, positive numbers mean right
+                $shift = ($insertAfter + 1) - $afterPreInsertLeft;
+
+                // This is where the node will end up in the end
+                // When moving left or up, simply shift the previous position
+                // When moving right, also account for the fact that post_delete will decrement the left and right
+                // values of the moved nodes by $delta
+                $finalLeft =
+                    (($insertAfter < $initialLeft) ? $afterPreInsertLeft : $afterPreInsertLeft - $delta) + $shift;
+                $finalRight =
+                    (($insertAfter < $initialLeft) ? $afterPreInsertRight : $afterPreInsertRight - $delta) + $shift;
+
+                // Step 1: Create a gap where the node can be moved into.
+                $res = $this->preInsert($insertAfter, $delta / 2);
+
+                if (!$res) {
+                    return false;
+                }
+
+                // Step 2: Move the node and its offspring to fill the newly created gap
+                $conditions = [];
+
+                $conditions[] = new ComparisonCondition(
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
+                    ComparisonTypeEnum::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($afterPreInsertLeft)
+                );
+                $conditions[] = new ComparisonCondition(
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE),
+                    ComparisonTypeEnum::LESS_THAN_OR_EQUAL, new StaticConditionVariable($afterPreInsertRight)
+                );
+
+                $updateCondition = new AndCondition($conditions);
+
+                $leftValueVariable = new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE);
+                $rightValueVariable = new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE);
+
+                $properties = [];
+
+                $properties[] = new UpdateProperty(
+                    $leftValueVariable, new OperationConditionVariable(
+                        $leftValueVariable, OperationTypeEnum::ADDITION, new StaticConditionVariable($shift)
+                    )
+                );
+
+                $properties[] = new UpdateProperty(
+                    $rightValueVariable, new OperationConditionVariable(
+                        $rightValueVariable, OperationTypeEnum::ADDITION, new StaticConditionVariable($shift)
+                    )
+                );
+
+                if (!$this->dataClassRepository->updates(
+                    Group::class, new UpdateProperties($properties), $updateCondition
+                )) {
+                    return false;
+                }
+
+                // Step 3: Close the gap created by the "removal"
+                // Having shifted the nodes to their new position, we have created an equally big gap in their original
+                // position.
+                // This gap is closed by invoking post_delete.
+
+                // Set the left and right values so that it reflects the place they moved away from.
+                $group->setLeftValue($afterPreInsertLeft);
+                $group->setRightValue($afterPreInsertRight);
+
+                if (!$this->postDelete($group)) {
+                    return false;
+                }
+
+                // Step 4: Update the parent id of the moved node.
+                // This has already been performed in memory, but needs to be written to the database.
+
+                // Set the left and right values to their final position, so the update does not alter them.
+                $group->setLeftValue($finalLeft);
+                $group->setRightValue($finalRight);
+
+                if (!$this->dataClassRepository->update($group)) {
+                    return false;
+                }
+
+                return true;
+            }
+        );
+    }
+
+    /**
+     * Change the left/right values in the tree of every node that is affected by to the delete of this node
+     *
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    protected function postDelete(Group $group, ?ConditionInterface $condition = null): bool
+    {
+        // This private function is only ever called from within a transaction.
+        //
+        // This needs to be a transaction: both updates should either commit or abort.
+        // Now, it is possible that the first update succeeds, but the latter doesn't.
+        // This implies that we may end up with an inconsistent nested set.
+        $delta = $group->getRightValue() - $group->getLeftValue() + 1;
+
+        // 1. Update the left and right values of all successors of the deleted node.
+        // A successor has a left-value which is higher than the left-value of the deleted node.
+
+        $conditions = [];
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE), ComparisonTypeEnum::GREATER_THAN,
+            new StaticConditionVariable($group->getLeftValue())
+        );
+
+        if ($condition) {
+            $conditions[] = $condition;
+        }
+
+        $updateCondition = new AndCondition($conditions);
+
+        $leftValueVariable = new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE);
+        $rightValueVariable = new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE);
+
+        $rightValueDataClassProperty = new UpdateProperty(
+            $rightValueVariable, new OperationConditionVariable(
+                $rightValueVariable, OperationTypeEnum::MINUS, new StaticConditionVariable($delta)
+            )
+        );
+
+        $properties = [];
+        $properties[] = $rightValueDataClassProperty;
+        $properties[] = new UpdateProperty(
+            $leftValueVariable, new OperationConditionVariable(
+                $leftValueVariable, OperationTypeEnum::MINUS, new StaticConditionVariable($delta)
+            )
+        );
+
+        if (!$this->dataClassRepository->updates(
+            Group::class, new UpdateProperties($properties), $updateCondition
+        )) {
+            return false;
+        }
+
+        // 2. Update the right values of all ancestors of the deleted node.
+        // An ancestor has a left value less than the left value of the deleted node
+        // and a right value greater than the right value of the deleted node
+
+        $conditions = [];
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE), ComparisonTypeEnum::LESS_THAN,
+            new StaticConditionVariable($group->getLeftValue())
+        );
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE), ComparisonTypeEnum::GREATER_THAN,
+            new StaticConditionVariable($group->getRightValue())
+        );
+
+        if ($condition) {
+            $conditions[] = $condition;
+        }
+
+        $updateCondition = new AndCondition($conditions);
+
+        $properties = [];
+        $properties[] = $rightValueDataClassProperty;
+
+        if (!$this->dataClassRepository->updates(
+            Group::class, new UpdateProperties($properties), $updateCondition
+        )) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Creates the necessary room to insert a number of values (1 by default) into the nested set: it shifts the
+     * left/right values of all nodes that are traversed after the insertion point to the right.
+     *
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    protected function preInsert(
+        int $insertAfter, int $numberOfElements = 1, ?ConditionInterface $condition = null
+    ): bool
+    {
+        // This private function is only ever called from within a transaction.
+        //
+        // This needs to be a transaction: both updates should either commit or abort.
+        // Now, it is possible that the first update succeeds, but the latter doesn't.
+        // This implies that we may end up with an inconsistent nested set.
+
+        // Update all necessary left-values
+        $conditions = [];
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE), ComparisonTypeEnum::GREATER_THAN,
+            new StaticConditionVariable($insertAfter)
+        );
+
+        if ($condition) {
+            $conditions[] = $condition;
+        }
+
+        $updateCondition = new AndCondition($conditions);
+
+        $leftValueVariable = new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE);
+
+        $properties = [];
+        $properties[] = new UpdateProperty(
+            $leftValueVariable, new OperationConditionVariable(
+                $leftValueVariable, OperationTypeEnum::ADDITION, new StaticConditionVariable($numberOfElements * 2)
+            )
+        );
+
+        if (!$this->dataClassRepository->updates(
+            Group::class, new UpdateProperties($properties), $updateCondition
+        )) {
+            return false;
+        }
+
+        // Update all necessary right-values
+        $conditions = [];
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE), ComparisonTypeEnum::GREATER_THAN,
+            new StaticConditionVariable($insertAfter)
+        );
+
+        if ($condition) {
+            $conditions[] = $condition;
+        }
+
+        $updateCondition = new AndCondition($conditions);
+
+        $rightValueVariable = new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE);
+
+        $properties = [];
+        $properties[] = new UpdateProperty(
+            $rightValueVariable, new OperationConditionVariable(
+                $rightValueVariable, OperationTypeEnum::ADDITION, new StaticConditionVariable($numberOfElements * 2)
+            )
+        );
+
+        if (!$this->dataClassRepository->updates(
+            Group::class, new UpdateProperties($properties), $updateCondition
+        )) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -466,6 +828,53 @@ class GroupRepository
      */
     public function updateGroup(Group $group): bool
     {
-        return $this->nestedSetDataClassRepository->update($group);
+        return $this->dataClassRepository->update($group);
+    }
+
+    /**
+     * Validates a relative position of a node, which is used when creating or moving a node.
+     *
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
+    protected function validatePosition(
+        Group $group, int $position = Group::AS_LAST_CHILD_OF, ?Group $referenceNode = null
+    ): ?Group
+    {
+        if ($position == Group::AS_PREVIOUS_SIBLING_OF || $position == Group::AS_NEXT_SIBLING_OF) {
+            if ($referenceNode === null) {
+                // TODO Report an error: must provide a relative position, when create a node as a sibling to another.
+                return null;
+            }
+
+            if ($group->getId() === $referenceNode->getId()) {
+                // TODO Report an error when attempting to create a node as its own sibling
+                return null;
+            }
+
+            if ($group->getParentId() == 0 || $group->getParentId() != $referenceNode->getParentId()) {
+                // To be a sibling of the reference node, the parent should be the same
+                $group->setParentId($referenceNode->getParentId());
+            }
+        }
+
+        if ($position == Group::AS_FIRST_CHILD_OF || $position == Group::AS_LAST_CHILD_OF) {
+            if ($referenceNode === null) {
+                // Use the parent of the node as a reference
+                $referenceNode = $this->findGroupByIdentifier($group->getParentId());
+            }
+
+            if ($group->getId() === $referenceNode->getId()) {
+                // TODO Report an error when attempting to create a node as its own child
+                return null;
+            }
+
+            if ($group->getParentId() == 0 || $group->getParentId() != $referenceNode->getId()) {
+                // To be a child of the reference node, the parent should be set correctly
+                $group->setParentId($referenceNode->getId());
+            }
+        }
+
+        return $referenceNode;
     }
 }

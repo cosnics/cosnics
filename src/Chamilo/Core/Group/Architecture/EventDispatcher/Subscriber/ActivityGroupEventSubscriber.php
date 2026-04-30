@@ -32,8 +32,8 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     {
         return $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivityTypeEnum::CREATED, $afterGroupCreateEvent->getGroup()->getId(),
-                $afterGroupCreateEvent->getExecutingUser()
+                GroupActivityTypeEnum::CREATED, $afterGroupCreateEvent->group->getId(),
+                $afterGroupCreateEvent->executingUser
             )
         );
     }
@@ -46,8 +46,8 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     {
         return $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivityTypeEnum::DELETED, $afterGroupDeleteEvent->getGroup()->getId(),
-                $afterGroupDeleteEvent->getExecutingUser()
+                GroupActivityTypeEnum::DELETED, $afterGroupDeleteEvent->group->getId(),
+                $afterGroupDeleteEvent->executingUser
             )
         );
     }
@@ -60,8 +60,8 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     {
         return $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivityTypeEnum::TRUNCATED, $afterGroupEmptyEvent->getGroup()->getId(),
-                $afterGroupEmptyEvent->getExecutingUser()
+                GroupActivityTypeEnum::TRUNCATED, $afterGroupEmptyEvent->group->getId(),
+                $afterGroupEmptyEvent->executingUser
             )
         );
     }
@@ -74,8 +74,7 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     {
         return $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivityTypeEnum::MOVED, $afterGroupMoveEvent->getGroup()->getId(),
-                $afterGroupMoveEvent->getExecutingUser()
+                GroupActivityTypeEnum::MOVED, $afterGroupMoveEvent->group->getId(), $afterGroupMoveEvent->executingUser
             )
         );
     }
@@ -88,8 +87,8 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     {
         return $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivityTypeEnum::SUBSCRIBED, $afterGroupSubscribeEvent->getGroup()->getId(),
-                $afterGroupSubscribeEvent->getExecutingUser(), $afterGroupSubscribeEvent->getUser()->getId()
+                GroupActivityTypeEnum::SUBSCRIBED, $afterGroupSubscribeEvent->groupIdentifier,
+                $afterGroupSubscribeEvent->executingUser, $afterGroupSubscribeEvent->userIdentifier
             )
         );
     }
@@ -102,8 +101,8 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     {
         return $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivityTypeEnum::UNSUBSCRIBED, $afterGroupUnsubscribeEvent->getGroup()->getId(),
-                $afterGroupUnsubscribeEvent->getExecutingUser(), $afterGroupUnsubscribeEvent->getUser()->getId()
+                GroupActivityTypeEnum::UNSUBSCRIBED, $afterGroupUnsubscribeEvent->groupIdentifier,
+                $afterGroupUnsubscribeEvent->executingUser, $afterGroupUnsubscribeEvent->userIdentifier
             )
         );
     }
@@ -116,8 +115,8 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     {
         return $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivityTypeEnum::UPDATED, $afterGroupUpdateEvent->getGroup()->getId(),
-                $afterGroupUpdateEvent->getExecutingUser()
+                GroupActivityTypeEnum::UPDATED, $afterGroupUpdateEvent->group->getId(),
+                $afterGroupUpdateEvent->executingUser
             )
         );
     }

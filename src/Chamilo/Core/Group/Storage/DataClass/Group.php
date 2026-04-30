@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Group\Storage\DataClass;
 
 use Chamilo\Core\Group\Manager;
-use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
 
 /**
@@ -11,12 +11,19 @@ use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
  * @author  Dieter De Neef
  * @author  Sven Vanpoucke
  */
-class Group extends NestedSet implements UuidDataClassInterface
+class Group extends DataClass implements UuidDataClassInterface
 {
+    public const int AS_FIRST_CHILD_OF = 1;
+    public const int AS_LAST_CHILD_OF = 2;
+    public const int AS_NEXT_SIBLING_OF = 4;
+    public const int AS_PREVIOUS_SIBLING_OF = 3;
     public const string CONTEXT = Manager::CONTEXT;
     public const string PROPERTY_CODE = 'code';
     public const string PROPERTY_DESCRIPTION = 'description';
+    public const string PROPERTY_LEFT_VALUE = 'left_value';
     public const string PROPERTY_NAME = 'name';
+    public const string PROPERTY_PARENT_ID = 'parent_id';
+    public const string PROPERTY_RIGHT_VALUE = 'right_value';
 
     public function getCode(): ?string
     {
@@ -30,13 +37,14 @@ class Group extends NestedSet implements UuidDataClassInterface
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::getDefaultPropertyNames(
-            [
-                self::PROPERTY_NAME,
-                self::PROPERTY_DESCRIPTION,
-                self::PROPERTY_CODE
-            ]
-        );
+        $extendedPropertyNames[] = self::PROPERTY_NAME;
+        $extendedPropertyNames[] = self::PROPERTY_DESCRIPTION;
+        $extendedPropertyNames[] = self::PROPERTY_CODE;
+        $extendedPropertyNames[] = self::PROPERTY_PARENT_ID;
+        $extendedPropertyNames[] = self::PROPERTY_LEFT_VALUE;
+        $extendedPropertyNames[] = self::PROPERTY_RIGHT_VALUE;
+
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     public function getDescription(): ?string
@@ -44,14 +52,39 @@ class Group extends NestedSet implements UuidDataClassInterface
         return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
     }
 
+    public function getLeftValue(): int
+    {
+        return $this->getDefaultProperty(self::PROPERTY_LEFT_VALUE);
+    }
+
     public function getName(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
+    public function getParentId(): string
+    {
+        return $this->getDefaultProperty(self::PROPERTY_PARENT_ID);
+    }
+
+    public function getRightValue(): int
+    {
+        return $this->getDefaultProperty(self::PROPERTY_RIGHT_VALUE);
+    }
+
     public static function getStorageUnitName(): string
     {
         return 'group_group';
+    }
+
+    public function hasChildren(): bool
+    {
+        return !($this->getLeftValue() == ($this->getRightValue() - 1));
+    }
+
+    public function isRoot(): bool
+    {
+        return ($this->getParentId() == 0);
     }
 
     public function setCode(?string $code): static
@@ -68,9 +101,30 @@ class Group extends NestedSet implements UuidDataClassInterface
         return $this;
     }
 
+    public function setLeftValue(int $leftValue): static
+    {
+        $this->setDefaultProperty(self::PROPERTY_LEFT_VALUE, $leftValue);
+
+        return $this;
+    }
+
     public function setName(?string $name): static
     {
         $this->setDefaultProperty(self::PROPERTY_NAME, $name);
+
+        return $this;
+    }
+
+    public function setParentId(string $parentId): static
+    {
+        $this->setDefaultProperty(self::PROPERTY_PARENT_ID, $parentId);
+
+        return $this;
+    }
+
+    public function setRightValue(int $rightValue): static
+    {
+        $this->setDefaultProperty(self::PROPERTY_RIGHT_VALUE, $rightValue);
 
         return $this;
     }

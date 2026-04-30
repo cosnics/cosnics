@@ -17,7 +17,6 @@ use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchPa
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
-use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
@@ -83,7 +82,7 @@ class UpdateComponent extends Manager
             );
 
             $data = $group->getDefaultProperties();
-            $data[NestedSet::PROPERTY_PARENT_ID] = new OptionsTreeChoice($group->getParentId(), '');
+            $data[Group::PROPERTY_PARENT_ID] = new OptionsTreeChoice($group->getParentId(), '');
 
             $form = $this->formFactory->create(
                 GroupFormType::class, $data, ['action' => $formUri, 'disabledGroupIdentifiers' => [$groupIdentifier]]
@@ -96,7 +95,7 @@ class UpdateComponent extends Manager
                 try {
                     $group = $this->groupService->updateGroupFromParameters(
                         $group, $submittedData[Group::PROPERTY_NAME],
-                        $submittedData[NestedSet::PROPERTY_PARENT_ID]->getValue(),
+                        $submittedData[Group::PROPERTY_PARENT_ID]->getValue(),
                         $submittedData[Group::PROPERTY_DESCRIPTION], $submittedData[Group::PROPERTY_CODE], $currentUser
                     );
 

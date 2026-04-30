@@ -11,7 +11,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Component\GroupsFeedComponent;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
-use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
@@ -58,6 +57,13 @@ class GroupFeedComponent extends GroupsFeedComponent
         return ActionEnum::GROUP_FEED->value;
     }
 
+    protected function getFilter(): string
+    {
+        $filter = $this->getRequest()->request->get(self::PARAM_FILTER);
+
+        return substr($filter, static::FILTER_PREFIX_LENGTH);
+    }
+
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -96,14 +102,7 @@ class GroupFeedComponent extends GroupsFeedComponent
             return [];
         }
 
-        return $this->groupMembershipService->findSubscribedUserIdentifiersForGroupIdentifier($filterIdentifier);
-    }
-
-    protected function getFilter(): string
-    {
-        $filter = $this->getRequest()->request->get(self::PARAM_FILTER);
-
-        return substr($filter, static::FILTER_PREFIX_LENGTH);
+        return $this->groupMembershipService->retrieveSubscribedUserIdentifiersByGroupIdentifier($filterIdentifier);
     }
 
     /**
@@ -128,14 +127,13 @@ class GroupFeedComponent extends GroupsFeedComponent
 
         if ($filterIdentifier) {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                 new StaticConditionVariable($filterIdentifier)
             );
         }
         else {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
-                new StaticConditionVariable(0)
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID), new StaticConditionVariable(0)
             );
         }
 

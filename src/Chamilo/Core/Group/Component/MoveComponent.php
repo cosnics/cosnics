@@ -6,6 +6,7 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\UserInterface\Form\GroupMoveFormType;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -15,7 +16,6 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedE
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
-use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
@@ -86,7 +86,7 @@ class MoveComponent extends Manager
             $submittedData = $form->getData();
 
             $success = $this->groupService->moveGroup(
-                $group, $submittedData[NestedSet::PROPERTY_PARENT_ID], $currentUser
+                $group, $submittedData[Group::PROPERTY_PARENT_ID], $currentUser
             );
 
             $message = $translator->trans(
@@ -103,7 +103,7 @@ class MoveComponent extends Manager
             return new RedirectResponse($this->getUrlGenerator()->fromParameters([
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                DataClass::PROPERTY_ID => $submittedData[NestedSet::PROPERTY_PARENT_ID]
+                DataClass::PROPERTY_ID => $submittedData[Group::PROPERTY_PARENT_ID]
             ]));
         }
         else {

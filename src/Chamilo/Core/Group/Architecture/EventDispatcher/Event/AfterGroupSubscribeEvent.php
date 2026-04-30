@@ -7,5 +7,4 @@ namespace Chamilo\Core\Group\Architecture\EventDispatcher\Event;
  */
 class AfterGroupSubscribeEvent extends AbstractGroupMembershipEvent
 {
-
 }

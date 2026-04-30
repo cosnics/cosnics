@@ -74,83 +74,11 @@ class GroupsTreeTraverser
                 $this->subGroupsCount[$cacheKey] = ($group->getRightValue() - $group->getLeftValue() - 1) / 2;
             }
             else {
-                $this->subGroupsCount[$cacheKey] = $this->groupRepository->countSubGroupsForGroup($group);
+                $this->subGroupsCount[$cacheKey] = $this->groupRepository->countDescendants($group);
             }
         }
 
         return $this->subGroupsCount[$cacheKey];
-    }
-
-    /**
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findAllSubscribedGroupIdentifiersForUserIdentifier(string $userIdentifier): array
-    {
-        if (!array_key_exists($userIdentifier, $this->userSubscribedGroupIdentifiers)) {
-            $directlySubscribedGroupNestingValues =
-                $this->findDirectlySubscribedGroupNestingValuesForUserIdentifier($userIdentifier);
-
-            if (count($directlySubscribedGroupNestingValues) > 0) {
-                $this->userSubscribedGroupIdentifiers[$userIdentifier] =
-                    $this->groupRepository->findGroupIdentifiersForDirectlySubscribedGroupNestingValues(
-                        $directlySubscribedGroupNestingValues
-                    );
-            }
-            else {
-                $this->userSubscribedGroupIdentifiers[$userIdentifier] = [];
-            }
-        }
-
-        return $this->userSubscribedGroupIdentifiers[$userIdentifier];
-    }
-
-    /**
-     * @param string $userIdentifier
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findAllSubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection
-    {
-        if (!array_key_exists($userIdentifier, $this->userSubscribedGroups)) {
-            $directlySubscribedGroupNestingValues =
-                $this->findDirectlySubscribedGroupNestingValuesForUserIdentifier($userIdentifier);
-
-            if (count($directlySubscribedGroupNestingValues) > 0) {
-                $this->userSubscribedGroups[$userIdentifier] =
-                    $this->groupRepository->findGroupsForDirectlySubscribedGroupNestingValues(
-                        $directlySubscribedGroupNestingValues
-                    );
-            }
-            else {
-                $this->userSubscribedGroups[$userIdentifier] = new ArrayCollection([]);
-            }
-        }
-
-        return $this->userSubscribedGroups[$userIdentifier];
-    }
-
-    /**
-     * @param string $userIdentifier
-     *
-     * @return ArrayCollection<string[]>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(string $userIdentifier): ArrayCollection
-    {
-        return $this->groupRepository->findDirectlySubscribedGroupNestingValuesForUserIdentifier($userIdentifier);
-    }
-
-    /**
-     * @param string $userIdentifier
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findDirectlySubscribedGroupsForUserIdentifier(string $userIdentifier): ArrayCollection
-    {
-        return $this->groupRepository->findDirectlySubscribedGroupsForUserIdentifier($userIdentifier);
     }
 
     /**

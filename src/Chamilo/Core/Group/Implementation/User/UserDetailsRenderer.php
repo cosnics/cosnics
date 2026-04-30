@@ -3,7 +3,7 @@ namespace Chamilo\Core\Group\Implementation\User;
 
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\Group\Service\GroupsTreeTraverser;
+use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\User\Architecture\Interface\UserDetailsRendererInterface;
 use Chamilo\Core\User\Architecture\Trait\UserDetailsRendererTrait;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -25,7 +25,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
 
     public function __construct(
         protected Translator $translator, protected UrlGenerator $urlGenerator,
-        protected GroupsTreeTraverser $groupsTreeTraverser
+        protected GroupMembershipService $groupMembershipService
     )
     {
     }
@@ -40,7 +40,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
      */
     public function hasContentForUser(User $user, User $requestingUser): bool
     {
-        return $this->groupsTreeTraverser->findAllSubscribedGroupsForUserIdentifier($user->getId())->count() > 0;
+        return $this->groupMembershipService->retrieveGroupsByUserIdentifier($user->getId())->count() > 0;
     }
 
     public function renderTitle(User $user, User $requestingUser): string
@@ -63,7 +63,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         $table->setCellAttributes(1, 0, ['style' => 'width: 150px;']);
         $table->setHeaderContents(1, 1, $this->translator->trans('GroupName', [], Manager::CONTEXT));
 
-        $groups = $this->groupsTreeTraverser->findAllSubscribedGroupsForUserIdentifier($user->getId());
+        $groups = $this->groupMembershipService->retrieveGroupsByUserIdentifier($user->getId());
 
         if ($groups->count() == 0) {
             $table->setCellContents(2, 0, $this->translator->trans('NoGroups', [], Manager::CONTEXT));

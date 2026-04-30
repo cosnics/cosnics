@@ -21,7 +21,6 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedE
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
-use Chamilo\Libraries\Storage\Architecture\Domain\NestedSet;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
@@ -134,7 +133,7 @@ class BrowseComponent extends Manager
     {
         if (!isset($this->numberOfSubscribedUsers)) {
             $this->numberOfSubscribedUsers =
-                $this->groupMembershipService->countSubscribedUsersForGroupIdentifier($this->getGroupIdentifier());
+                $this->groupMembershipService->countSubscribedUsersByGroupIdentifier($this->getGroupIdentifier());
         }
 
         return $this->numberOfSubscribedUsers;
@@ -231,7 +230,7 @@ class BrowseComponent extends Manager
         }
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, NestedSet::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->getGroupIdentifier())
         );
 
@@ -396,7 +395,7 @@ class BrowseComponent extends Manager
     {
         $searchCondition = $this->getButtonToolBarSearchCondition(SubscribedUser::class);
 
-        $totalNumberOfItems = $this->groupMembershipService->countSubscribedUsersForGroupIdentifier(
+        $totalNumberOfItems = $this->groupMembershipService->countSubscribedUsersByGroupIdentifier(
             $this->getGroupIdentifier(), $searchCondition
         );
 
@@ -405,7 +404,7 @@ class BrowseComponent extends Manager
             $this->subscribedUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
         );
 
-        $users = $this->groupMembershipService->findSubscribedUsersForGroupIdentifier(
+        $users = $this->groupMembershipService->retrieveSubscribedUsersByGroupIdentifier(
             $this->getGroupIdentifier(), $searchCondition, $tableParameterValues->getOffset(),
             $tableParameterValues->getNumberOfItemsPerPage(),
             $this->subscribedUserTableRenderer->determineOrderBy($tableParameterValues)

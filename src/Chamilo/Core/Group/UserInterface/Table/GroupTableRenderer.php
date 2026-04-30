@@ -142,7 +142,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
 
                 return $this->stringUtilities->truncate($description);
             case $this->translator->trans(self::COLUMN_USERS, [], \Chamilo\Core\User\Manager::CONTEXT) :
-                return (string) $this->groupMembershipService->countUsersForGroup($result);
+                return (string) $this->groupMembershipService->countUsersByGroup($result);
             case $this->translator->trans(self::COLUMN_SUBGROUPS, [], \Chamilo\Core\User\Manager::CONTEXT) :
                 return (string) $this->groupsTreeTraverser->countSubGroupsForGroup($result, true);
         }
@@ -180,7 +180,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
             )
         );
 
-        $visible = ($this->groupMembershipService->countSubscribedUsersForGroupIdentifier($result->getId()) > 0);
+        $visible = ($this->groupMembershipService->countSubscribedUsersByGroupIdentifier($result->getId()) > 0);
 
         if ($visible) {
             $truncateUrl = $this->groupUrlGenerator->getTruncateUrl($result);

@@ -66,7 +66,7 @@ class SubscribeComponent extends Manager
                 $userToSubscribe = $this->userService->findUserByIdentifier($userIdentifier);
 
                 $groupUserRelation =
-                    $this->groupMembershipService->getGroupUserRelationByGroupAndUser($group, $userToSubscribe);
+                    $this->groupMembershipService->retrieveGroupMembershipByGroupAndUser($group, $userToSubscribe);
 
                 if (!$groupUserRelation instanceof GroupRelUser) {
                     try {

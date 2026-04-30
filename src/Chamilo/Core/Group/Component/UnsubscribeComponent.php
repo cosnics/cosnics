@@ -45,7 +45,7 @@ class UnsubscribeComponent extends Manager
 
             foreach ($groupUserRelationIdentifiers as $groupUserRelationIdentifier) {
                 $groupUserRelation =
-                    $this->groupMembershipService->findGroupRelUserByIdentifier($groupUserRelationIdentifier);
+                    $this->groupMembershipService->retrieveGroupMembershipByIdentifier($groupUserRelationIdentifier);
 
                 if (!$groupUserRelation instanceof GroupRelUser) {
                     continue;
@@ -55,7 +55,7 @@ class UnsubscribeComponent extends Manager
                 $userToUnsubscribe = $this->userService->findUserByIdentifier($groupUserRelation->getUserId());
 
                 try {
-                    $this->groupMembershipService->unsubscribeUserFromGroup($group, $userToUnsubscribe, $currentUser);
+                    $this->groupMembershipService->deleteGroupMembershipByGroupAndUser($group, $userToUnsubscribe, $currentUser);
                 }
                 catch (RuntimeException) {
                     $failures ++;

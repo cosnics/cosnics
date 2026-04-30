@@ -1,27 +1,18 @@
 <?php
 namespace Chamilo\Core\Group\Architecture\EventDispatcher\Event;
 
-use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * @package Chamilo\Core\Group\Architecture\EventDispatcher\Event
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class AbstractGroupMembershipEvent extends AbstractGroupEvent
+abstract class AbstractGroupMembershipEvent extends Event
 {
-    protected User $user;
-
-    public function __construct(Group $group, User $user, ?User $executingUser = null)
+    public function __construct(
+        public string $groupIdentifier, public string $userIdentifier, public ?User $executingUser = null
+    )
     {
-        parent::__construct($group, $executingUser);
-
-        $this->user = $user;
     }
-
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
 }

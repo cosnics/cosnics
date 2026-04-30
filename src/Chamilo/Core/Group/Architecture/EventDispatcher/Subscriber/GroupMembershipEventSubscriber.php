@@ -1,15 +1,15 @@
 <?php
 namespace Chamilo\Core\Group\Architecture\EventDispatcher\Subscriber;
 
+use Chamilo\Core\Group\Architecture\EventDispatcher\Event\BeforeGroupDeleteEvent;
 use Chamilo\Core\Group\Service\GroupMembershipService;
-use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserDeleteEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * @package Chamilo\Core\Group\Architecture\EventDispatcher\Subscriber
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-readonly class UserEventSubscriber implements EventSubscriberInterface
+readonly class GroupMembershipEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(protected GroupMembershipService $groupMembershipService)
     {
@@ -17,17 +17,18 @@ readonly class UserEventSubscriber implements EventSubscriberInterface
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function beforeDelete(BeforeUserDeleteEvent $beforeUserDeleteEvent): bool
+    public function beforeDelete(BeforeGroupDeleteEvent $afterGroupCreateEvent): bool
     {
-        return $this->groupMembershipService->deleteGroupMembershipsByUser($beforeUserDeleteEvent->getUser());
+        return $this->groupMembershipService->deleteGroupMembershipsByGroup(
+            $afterGroupCreateEvent->group, $afterGroupCreateEvent->executingUser
+        );
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
-            BeforeUserDeleteEvent::class => 'beforeDelete'
+            BeforeGroupDeleteEvent::class => 'beforeDelete'
         ];
     }
 }

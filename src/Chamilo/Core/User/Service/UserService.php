@@ -141,7 +141,7 @@ readonly class UserService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function createUserFromParameters(
-        ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
+        ?string $givenName, ?string $surname, string $username, ?string $officialCode, string $emailAddress,
         bool $generatePassword, ?string $password,
         ?string $authSource = 'Chamilo\Libraries\Protocol\Authentication\Service\PlatformAuthentication',
         bool $isPlatformAdmin = false, bool $active = true, bool $sendEmail = false, ?User $executingUser = null
@@ -149,9 +149,7 @@ readonly class UserService
     {
         $requiredParameters = [
             'username' => $username,
-            'officialCode' => $officialCode,
-            'emailAddress' => $emailAddress,
-            'password' => $password
+            'emailAddress' => $emailAddress
         ];
 
         foreach ($requiredParameters as $parameterName => $parameterValue) {
@@ -164,10 +162,14 @@ readonly class UserService
             throw new ObjectAlreadyExistsException(UserOperation::getStorageUnitName(), $requiredParameters);
         }
 
+        if ($officialCode && !$this->isOfficialCodeAvailable($officialCode)) {
+            throw new ObjectAlreadyExistsException(UserOperation::getStorageUnitName(), $requiredParameters);
+        }
+
         $user = new User();
 
-        $user->setGivenName($firstName);
-        $user->setSurname($lastName);
+        $user->setGivenName($givenName);
+        $user->setSurname($surname);
         $user->setUsername($username);
         $user->setOfficialCode($officialCode);
         $user->setEmail($emailAddress);
@@ -332,6 +334,21 @@ readonly class UserService
     public function getUserByUsernameOrEmail(string $usernameOrEmail): ?User
     {
         return $this->userRepository->findUserByUsernameOrEmail($usernameOrEmail);
+    }
+
+    public function isOfficialCodeAvailable(string $officialCode): bool
+    {
+        try {
+            $this->findUserByOfficialCode($officialCode);
+
+            return false;
+        }
+        catch (StorageNoResultException) {
+            return true;
+        }
+        catch (StorageMethodException) {
+            return false;
+        }
     }
 
     public function isUsernameAvailable(string $username): bool
@@ -502,7 +519,7 @@ readonly class UserService
         $user->setOfficialCode($officialCode);
         $user->setEmail($emailAddress);
 
-        if ($user->getUsername() != $username && !$this->isUsernameAvailable($username)) {
+        if (!$this->isUsernameAvailableForUser($user, $username)) {
             throw new RuntimeException('The given username is already taken');
         }
 
@@ -556,7 +573,7 @@ readonly class UserService
             $user->setEmail($emailAddress);
         }
 
-        if (!is_null($username) && $user->getUsername() != $username && $this->isUsernameAvailable($username)) {
+        if (!is_null($username) && $this->isUsernameAvailableForUser($user, $username)) {
             $user->setUsername($username);
         }
 

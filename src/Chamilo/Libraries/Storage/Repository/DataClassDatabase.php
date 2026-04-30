@@ -382,6 +382,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Doctrine\DBAL\Exception
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function update(string $dataClassStorageUnitName, UpdateProperties $properties, ConditionInterface $condition
     ): bool
@@ -399,6 +400,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $queryBuilder->executeStatement();
 
             return true;
+        }
+        catch (UniqueConstraintViolationException $exception) {
+            throw new ObjectAlreadyExistsException(
+                $dataClassStorageUnitName, $properties->toArray(), $exception->getMessage(), $exception->getCode(),
+                $exception
+            );
         }
         catch (Throwable $throwable) {
             $this->handleError($throwable);
