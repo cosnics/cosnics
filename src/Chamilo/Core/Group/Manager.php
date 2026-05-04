@@ -59,7 +59,7 @@ abstract class Manager extends Application
     public function getRootGroup(): Group
     {
         if (!isset($this->rootGroup)) {
-            $this->rootGroup = $this->groupService->findRootGroup();
+            $this->rootGroup = $this->groupService->retrieveRootGroup();
         }
 
         return $this->rootGroup;

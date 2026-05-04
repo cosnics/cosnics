@@ -119,7 +119,7 @@ class BrowseComponent extends Manager
     protected function countNumberOfGroups(): int
     {
         if (!isset($this->numberOfGroups)) {
-            return $this->groupsTreeTraverser->countSubGroupsForGroup($this->getGroup());
+            return $this->groupsTreeTraverser->countDescendantsByGroup($this->getGroup());
         }
 
         return $this->numberOfGroups;
@@ -164,7 +164,7 @@ class BrowseComponent extends Manager
     public function getGroup(): Group
     {
         if (!isset($this->group)) {
-            $this->group = $this->groupService->findGroupByIdentifier($this->getGroupIdentifier());
+            $this->group = $this->groupService->retrieveGroupByIdentifier($this->getGroupIdentifier());
         }
 
         return $this->group;
@@ -326,7 +326,7 @@ class BrowseComponent extends Manager
             $totalNumberOfItems
         );
 
-        $users = $this->groupService->findGroups(
+        $users = $this->groupService->retrieveGroups(
             $this->getGroupTableCondition(), $tableParameterValues->getOffset(),
             $tableParameterValues->getNumberOfItemsPerPage(),
             $this->groupTableRenderer->determineOrderBy($tableParameterValues)
@@ -374,7 +374,7 @@ class BrowseComponent extends Manager
 
         );
 
-        $selectedPathIdentifiers = $this->groupsTreeTraverser->findParentGroupIdentifiersForGroup($this->getGroup());
+        $selectedPathIdentifiers = $this->groupsTreeTraverser->retrieveAncestorIdentifiersByGroup($this->getGroup());
 
         return $this->jsTreeRenderer->render(
             'groupMenu', DataClass::PROPERTY_ID, $dataUrl, array_reverse($selectedPathIdentifiers)

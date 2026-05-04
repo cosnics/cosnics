@@ -70,7 +70,7 @@ class GroupFeedComponent extends GroupsFeedComponent
     public function getGroupElement(Group $group): AdvancedElementFinderElement
     {
         $description = strip_tags(
-            $this->groupsTreeTraverser->getFullyQualifiedNameForGroup($group) . ' [' . $group->getCode() . ']'
+            $this->groupsTreeTraverser->determineFullyQualifiedNameByGroup($group) . ' [' . $group->getCode() . ']'
         );
         $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
@@ -139,7 +139,7 @@ class GroupFeedComponent extends GroupsFeedComponent
 
         $condition = new AndCondition($conditions);
 
-        return $this->groupService->findGroups(
+        return $this->groupService->retrieveGroups(
             condition: $condition, orderBy: new OrderBy(
             [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
         )

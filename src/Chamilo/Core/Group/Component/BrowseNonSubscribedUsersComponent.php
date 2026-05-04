@@ -141,7 +141,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
     protected function getGroup(): Group
     {
         if (!isset($this->group)) {
-            $this->group = $this->groupService->findGroupByIdentifier($this->getGroupIdentifier());
+            $this->group = $this->groupService->retrieveGroupByIdentifier($this->getGroupIdentifier());
         }
 
         return $this->group;

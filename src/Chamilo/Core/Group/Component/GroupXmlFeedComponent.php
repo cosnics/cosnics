@@ -12,6 +12,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
@@ -46,6 +47,7 @@ class GroupXmlFeedComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -53,8 +55,8 @@ class GroupXmlFeedComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $groupsTree = $this->groupService->findGroupsForParentIdentifier(
-            $this->getRequest()->query->get(Group::PROPERTY_PARENT_ID)
+        $groupsTree = $this->groupService->retrieveDescendantsByParentIdentifier(
+            $this->getRequest()->query->get(Group::PROPERTY_PARENT_ID, DataClass::EMPTY_UUID)
         );
 
         $html = [];
@@ -79,7 +81,7 @@ class GroupXmlFeedComponent extends Manager
 
         foreach ($groups as $group) {
             $description = strip_tags(
-                $this->groupsTreeTraverser->getFullyQualifiedNameForGroup($group) . ' [' . $group->getCode() . ']'
+                $this->groupsTreeTraverser->determineFullyQualifiedNameByGroup($group) . ' [' . $group->getCode() . ']'
             );
 
             $hasChildren = $group->hasChildren() ? 1 : 0;

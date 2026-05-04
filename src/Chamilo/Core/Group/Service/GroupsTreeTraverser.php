@@ -3,8 +3,7 @@ namespace Chamilo\Core\Group\Service;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
-use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
-use Chamilo\Libraries\Storage\Service\PropertyMapper;
+use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -14,87 +13,78 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class GroupsTreeTraverser
 {
-    protected GroupRepository $groupRepository;
-
-    /**
-     * @var int[][]
-     */
-    protected array $parentGroupIdentifiers = [];
-
-    protected PropertyMapper $propertyMapper;
-
-    /**
-     * @var int[][]
-     */
-    protected array $subGroupIdentifiers = [];
-
-    /**
-     * @var \Chamilo\Core\Group\Storage\DataClass\Group[][]
-     */
-    protected array $subGroups = [];
-
-    /**
-     * @var int[]
-     */
-    protected array $subGroupsCount = [];
-
-    /**
-     * @var int[][]
-     */
-    protected array $userSubscribedGroupIdentifiers = [];
-
-    /**
-     * @var \Chamilo\Core\Group\Storage\DataClass\Group[][]
-     */
-    protected array $userSubscribedGroups = [];
-
-    public function __construct(
-        GroupRepository $groupRepository, PropertyMapper $propertyMapper
-    )
+    public function __construct(protected GroupRepository $groupRepository)
     {
-        $this->groupRepository = $groupRepository;
-        $this->propertyMapper = $propertyMapper;
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false): int
+    public function countAncestorsByGroup(Group $group, bool $includeSelf = true, ?ConditionInterface $condition = null
+    ): int
     {
-        $cacheKey = md5(serialize([$group->getId(), $recursiveSubgroups]));
+        return $this->groupRepository->countAncestorsByGroup($group, $includeSelf, $condition);
+    }
 
-        if (!array_key_exists($cacheKey, $this->subGroupsCount)) {
-            if ($group->getRightValue() == $group->getLeftValue() + 1) {
-                $this->subGroupsCount[$cacheKey] = 0;
-            }
-            elseif ($group->getRightValue() == $group->getLeftValue() + 3) {
-                $this->subGroupsCount[$cacheKey] = 1;
-            }
-            elseif ($recursiveSubgroups) {
-                $this->subGroupsCount[$cacheKey] = ($group->getRightValue() - $group->getLeftValue() - 1) / 2;
-            }
-            else {
-                $this->subGroupsCount[$cacheKey] = $this->groupRepository->countDescendants($group);
-            }
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function countDescendantsByGroup(Group $group, bool $recursiveDescendants = false): int
+    {
+        if ($group->getRightValue() == $group->getLeftValue() + 1) {
+            return 0;
+        }
+        elseif ($group->getRightValue() == $group->getLeftValue() + 3) {
+            return 1;
+        }
+        elseif ($recursiveDescendants) {
+            return ($group->getRightValue() - $group->getLeftValue() - 1) / 2;
+        }
+        else {
+            return $this->groupRepository->countDescendantsByGroup($group);
+        }
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function countSiblingsByGroup(Group $group, bool $includeSelf = false, ?ConditionInterface $condition = null
+    ): int
+    {
+        return $this->groupRepository->countSiblingsByGroup($group, $includeSelf, $condition);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function determineFullyQualifiedNameByGroup(Group $group, bool $includeSelf = true): string
+    {
+        $ancestors = $this->retrieveAncestorsByGroup($group, $includeSelf);
+
+        $names = [];
+
+        foreach ($ancestors as $ancestor) {
+            $names[] = $ancestor->getName();
         }
 
-        return $this->subGroupsCount[$cacheKey];
+        return implode(' <span class="text-primary">></span> ', array_reverse($names));
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function hasSiblings(Group $group, bool $includeSelf = false, ?ConditionInterface $condition = null): bool
+    {
+        return $this->countSiblingsByGroup($group, $includeSelf, $condition) > 0;
     }
 
     /**
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function findParentGroupIdentifiersForGroup(Group $group, bool $includeSelf = true): array
+    public function retrieveAncestorIdentifiersByGroup(Group $group, bool $includeSelf = true): array
     {
-        $cacheKey = md5(serialize([$group->getId(), $includeSelf]));
-
-        if (!array_key_exists($cacheKey, $this->parentGroupIdentifiers)) {
-            $this->parentGroupIdentifiers[$cacheKey] =
-                $this->groupRepository->findParentGroupIdentifiersForGroup($group, $includeSelf);
-        }
-
-        return $this->parentGroupIdentifiers[$cacheKey];
+        return $this->groupRepository->retrieveAncestorsIdentifiersByGroup($group, $includeSelf);
     }
 
     /**
@@ -104,58 +94,37 @@ class GroupsTreeTraverser
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function findParentGroupsForGroup(Group $group, bool $includeSelf = true): ArrayCollection
+    public function retrieveAncestorsByGroup(Group $group, bool $includeSelf = true): ArrayCollection
     {
-        return $this->groupRepository->findParentGroupsForGroup($group, $includeSelf);
+        return $this->groupRepository->retrieveAncestorsByGroup($group, $includeSelf);
     }
 
     /**
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function findSubGroupIdentifiersForGroup(Group $group, bool $recursiveSubgroups = false): array
+    public function retrieveDescendantIdentifiersByGroup(Group $group, bool $recursiveDescendants = false): array
     {
-        $cacheKey = md5(serialize([$group->getId(), $recursiveSubgroups]));
-
-        if (!array_key_exists($cacheKey, $this->subGroupIdentifiers)) {
-            $this->subGroupIdentifiers[$cacheKey] =
-                $this->groupRepository->findSubGroupIdentifiersForGroup($group, $recursiveSubgroups);
-        }
-
-        return $this->subGroupIdentifiers[$cacheKey];
+        return $this->groupRepository->retrieveDescendantsIdentifiersByGroup($group, $recursiveDescendants);
     }
 
     /**
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function findSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false): array
+    public function retrieveDescendantsByGroup(Group $group, bool $recursiveDescendants = false): ArrayCollection
     {
-        $cacheKey = md5(serialize([$group->getId(), $recursiveSubgroups]));
-
-        if (!array_key_exists($cacheKey, $this->subGroups)) {
-            $subGroups = $this->groupRepository->findSubGroupsForGroup($group, $recursiveSubgroups);
-
-            $this->subGroups[$cacheKey] =
-                $this->propertyMapper->mapDataClassByProperty($subGroups, DataClass::PROPERTY_ID);
-        }
-
-        return $this->subGroups[$cacheKey];
+        return $this->groupRepository->retrieveDescendantsByGroup($group, $recursiveDescendants);
     }
 
     /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function getFullyQualifiedNameForGroup(Group $group, bool $includeSelf = true): string
+    public function retrieveSiblingsByGroup(
+        Group $group, bool $includeSelf = true, ?ConditionInterface $condition = null
+    ): ArrayCollection
     {
-        $parentGroups = $this->findParentGroupsForGroup($group, $includeSelf);
-
-        $names = [];
-
-        foreach ($parentGroups as $parentGroup) {
-            $names[] = $parentGroup->getName();
-        }
-
-        return implode(' <span class="text-primary">></span> ', array_reverse($names));
+        return $this->groupRepository->retrieveSiblingsByGroup($group, $includeSelf, $condition);
     }
 }

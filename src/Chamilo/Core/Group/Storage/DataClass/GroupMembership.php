@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
  * @author  Dieter De Neef
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class GroupRelUser extends DataClass implements UuidDataClassInterface
+class GroupMembership extends DataClass implements UuidDataClassInterface
 {
     public const string CONTEXT = Manager::CONTEXT;
     public const string PROPERTY_GROUP_ID = 'group_id';

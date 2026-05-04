@@ -12,7 +12,6 @@ use Chamilo\Libraries\Storage\Factory\SymfonyCacheAdapterFactory;
 use Chamilo\Libraries\Storage\Repository\DataClassDatabase;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Repository\DisplayOrderRepository;
-use Chamilo\Libraries\Storage\Repository\NestedSetDataClassRepository;
 use Chamilo\Libraries\Storage\Service\CacheDataPreLoaderManager;
 use Chamilo\Libraries\Storage\Service\Condition\AndConditionTranslator;
 use Chamilo\Libraries\Storage\Service\Condition\ComparisonConditionTranslator;
@@ -79,15 +78,6 @@ return static function (ContainerConfigurator $container) {
             '$dataClassDatabase' => service(DataClassDatabase::class),
             '$queryCacheEnabled' => '%cosnics.libraries.storage.enableQueryCache%',
         ]);
-
-    $services->alias(
-        NestedSetDataClassRepository::class,
-        'Chamilo\Libraries\Storage\Repository\Doctrine\NestedSetDataClassRepository'
-    );
-    $services->set(
-        'Chamilo\Libraries\Storage\Repository\Doctrine\NestedSetDataClassRepository',
-        NestedSetDataClassRepository::class
-    )->args(['$dataClassRepository' => service('Chamilo\Libraries\Storage\Repository\Doctrine\DataClassRepository')]);
 
     $services->set(QueryBuilderConfigurator::class);
 

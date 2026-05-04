@@ -40,24 +40,198 @@ class GroupRepository
     }
 
     /**
+     * Change the left/right values in the tree of every node that is affected by to the delete of this node
+     *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countAncestors(Group $group, bool $includeSelf = true, ?ConditionInterface $condition = null): int
+    protected function __postDelete(Group $group): bool
+    {
+        // This private function is only ever called from within a transaction.
+        //
+        // This needs to be a transaction: both updates should either commit or abort.
+        // Now, it is possible that the first update succeeds, but the latter doesn't.
+        // This implies that we may end up with an inconsistent nested set.
+        $delta = $group->getRightValue() - $group->getLeftValue() + 1;
+
+        // 1. Update the left and right values of all successors of the deleted node.
+        // A successor has a left-value which is higher than the left-value of the deleted node.
+
+        $conditions = [];
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE), ComparisonTypeEnum::GREATER_THAN,
+            new StaticConditionVariable($group->getLeftValue())
+        );
+
+        $updateCondition = new AndCondition($conditions);
+
+        $leftValueVariable = new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE);
+        $rightValueVariable = new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE);
+
+        $rightValueDataClassProperty = new UpdateProperty(
+            $rightValueVariable, new OperationConditionVariable(
+                $rightValueVariable, OperationTypeEnum::MINUS, new StaticConditionVariable($delta)
+            )
+        );
+
+        $properties = [];
+        $properties[] = $rightValueDataClassProperty;
+        $properties[] = new UpdateProperty(
+            $leftValueVariable, new OperationConditionVariable(
+                $leftValueVariable, OperationTypeEnum::MINUS, new StaticConditionVariable($delta)
+            )
+        );
+
+        if (!$this->dataClassRepository->updates(
+            Group::class, new UpdateProperties($properties), $updateCondition
+        )) {
+            return false;
+        }
+
+        // 2. Update the right values of all ancestors of the deleted node.
+        // An ancestor has a left value less than the left value of the deleted node
+        // and a right value greater than the right value of the deleted node
+
+        $conditions = [];
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE), ComparisonTypeEnum::LESS_THAN,
+            new StaticConditionVariable($group->getLeftValue())
+        );
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE), ComparisonTypeEnum::GREATER_THAN,
+            new StaticConditionVariable($group->getRightValue())
+        );
+
+        $updateCondition = new AndCondition($conditions);
+
+        $properties = [];
+        $properties[] = $rightValueDataClassProperty;
+
+        if (!$this->dataClassRepository->updates(
+            Group::class, new UpdateProperties($properties), $updateCondition
+        )) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Creates the necessary room to insert a number of values (1 by default) into the nested set: it shifts the
+     * left/right values of all nodes that are traversed after the insertion point to the right.
+     *
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    protected function __preInsert(int $insertAfter, int $numberOfElements = 1): bool
+    {
+        // This private function is only ever called from within a transaction.
+        //
+        // This needs to be a transaction: both updates should either commit or abort.
+        // Now, it is possible that the first update succeeds, but the latter doesn't.
+        // This implies that we may end up with an inconsistent nested set.
+
+        // Update all necessary left-values
+        $conditions = [];
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE), ComparisonTypeEnum::GREATER_THAN,
+            new StaticConditionVariable($insertAfter)
+        );
+
+        $updateCondition = new AndCondition($conditions);
+
+        $leftValueVariable = new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE);
+
+        $properties = [];
+        $properties[] = new UpdateProperty(
+            $leftValueVariable, new OperationConditionVariable(
+                $leftValueVariable, OperationTypeEnum::ADDITION, new StaticConditionVariable($numberOfElements * 2)
+            )
+        );
+
+        if (!$this->dataClassRepository->updates(
+            Group::class, new UpdateProperties($properties), $updateCondition
+        )) {
+            return false;
+        }
+
+        // Update all necessary right-values
+        $conditions = [];
+
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE), ComparisonTypeEnum::GREATER_THAN,
+            new StaticConditionVariable($insertAfter)
+        );
+
+        $updateCondition = new AndCondition($conditions);
+
+        $rightValueVariable = new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE);
+
+        $properties = [];
+        $properties[] = new UpdateProperty(
+            $rightValueVariable, new OperationConditionVariable(
+                $rightValueVariable, OperationTypeEnum::ADDITION, new StaticConditionVariable($numberOfElements * 2)
+            )
+        );
+
+        if (!$this->dataClassRepository->updates(
+            Group::class, new UpdateProperties($properties), $updateCondition
+        )) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Validates a relative position of a node, which is used when creating or moving a node.
+     *
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     */
+    protected function __validatePosition(Group $group, ?Group $referenceNode = null): ?Group
+    {
+        if ($referenceNode === null) {
+            // Use the parent of the node as a reference
+            $referenceNode = $this->retrieveGroupByIdentifier($group->getParentId());
+        }
+
+        if ($group->getId() === $referenceNode->getId()) {
+            // TODO Report an error when attempting to create a node as its own child
+            return null;
+        }
+
+        if ($group->getParentId() == 0 || $group->getParentId() != $referenceNode->getId()) {
+            // To be a child of the reference node, the parent should be set correctly
+            $group->setParentId($referenceNode->getId());
+        }
+
+        return $referenceNode;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function countAncestorsByGroup(Group $group, bool $includeSelf = true, ?ConditionInterface $condition = null
+    ): int
     {
         return $this->dataClassRepository->count(
             Group::class,
-            new StorageParameters(condition: $this->getAncestorsCondition($group, $includeSelf, $condition))
+            new StorageParameters(condition: $this->determineAncestorsCondition($group, $includeSelf, $condition))
         );
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countDescendants(Group $group, bool $recursive = true, ?ConditionInterface $condition = null): int
+    public function countDescendantsByGroup(Group $group, bool $recursive = true, ?ConditionInterface $condition = null
+    ): int
     {
         return $this->dataClassRepository->count(
             Group::class, new StorageParameters(
-                condition: $this->getDescendantsCondition(
+                condition: $this->determineDescendantsCondition(
                     $group, $recursive, false, $condition
                 )
             )
@@ -77,11 +251,12 @@ class GroupRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countSiblings(Group $group, bool $includeSelf = true, ?ConditionInterface $condition = null): int
+    public function countSiblingsByGroup(Group $group, bool $includeSelf = true, ?ConditionInterface $condition = null
+    ): int
     {
         return $this->dataClassRepository->count(
             Group::class,
-            new StorageParameters(condition: $this->getSiblingsCondition($group, $includeSelf, $condition))
+            new StorageParameters(condition: $this->determineSiblingsCondition($group, $includeSelf, $condition))
         );
     }
 
@@ -93,7 +268,7 @@ class GroupRepository
      */
     public function createGroup(Group $group): bool
     {
-        $referenceNode = $this->findGroupByIdentifier($group->getParentId());
+        $referenceNode = $this->retrieveGroupByIdentifier($group->getParentId());
 
         // This variable is used to identify the node after which the newly
         // created node should be placed. This value is initialized with 0
@@ -103,7 +278,7 @@ class GroupRepository
         if ($referenceNode != 0) { // Not creating the root node of a hierarchy
 
             // Identify the reference node (except when creating the root node, there must be one).
-            if ($this->validatePosition($group, Group::AS_LAST_CHILD_OF, $referenceNode) === null) {
+            if ($this->__validatePosition($group, $referenceNode) === null) {
                 return false;
             }
 
@@ -117,7 +292,7 @@ class GroupRepository
 
         return $this->dataClassRepository->transactional(
             function () use ($group, $insertAfter) { // Correct the left and right values wherever necessary.
-                if (!$this->preInsert($insertAfter)) {
+                if (!$this->__preInsert($insertAfter)) {
                     return false;
                 }
 
@@ -138,281 +313,12 @@ class GroupRepository
     public function deleteGroup(Group $group): bool
     {
         $this->dataClassRepository->delete($group);
-        $this->postDelete($group);
+        $this->__postDelete($group);
 
         return true;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findGroupByCode(string $groupCode): ?Group
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($groupCode)
-        );
-
-        return $this->dataClassRepository->retrieve(
-            Group::class, new StorageParameters(condition: $condition)
-        );
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findGroupByCodeAndParentIdentifier(string $groupCode, string $parentIdentifier): ?Group
-    {
-        $conditions = [];
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($groupCode)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($parentIdentifier)
-        );
-
-        return $this->dataClassRepository->retrieve(
-            Group::class, new StorageParameters(condition: new AndCondition($conditions))
-        );
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findGroupByIdentifier(string $groupId): ?Group
-    {
-        return $this->dataClassRepository->retrieveById(Group::class, $groupId);
-    }
-
-    /**
-     * @param ?\Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface $condition
-     * @param ?int $count
-     * @param ?int $offset
-     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy $orderBy
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findGroups(
-        ?ConditionInterface $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
-    ): ArrayCollection
-    {
-        $parameters = new StorageParameters(condition: $condition, orderBy: $orderBy, count: $count, offset: $offset);
-
-        return $this->dataClassRepository->retrieves(Group::class, $parameters);
-    }
-
-    /**
-     * @param string[] $groupIdentifiers
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findGroupsByIdentifiersOrderedByName(array $groupIdentifiers): ArrayCollection
-    {
-        $orderBy = OrderBy::generate(Group::class, Group::PROPERTY_NAME);
-
-        $condition =
-            new InCondition(new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID), $groupIdentifiers);
-
-        return $this->dataClassRepository->retrieves(
-            Group::class, new StorageParameters(
-                condition: $condition, orderBy: $orderBy
-            )
-        );
-    }
-
-    /**
-     * @param string $parentIdentifier
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findGroupsForParentIdentifier(string $parentIdentifier = DataClass::EMPTY_UUID): ArrayCollection
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($parentIdentifier)
-        );
-
-        return $this->dataClassRepository->retrieves(
-            Group::class, new StorageParameters(
-                condition: $condition, orderBy: new OrderBy(
-                [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
-            )
-            )
-        );
-    }
-
-    /**
-     * @param ?string $searchQuery
-     * @param string $parentIdentifier
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findGroupsForSearchQueryAndParentIdentifier(
-        ?string $searchQuery = null, string $parentIdentifier = DataClass::EMPTY_UUID
-    ): ArrayCollection
-    {
-        $conditions = [];
-
-        if ($searchQuery && $searchQuery != '') {
-            $conditions[] = $this->searchQueryConditionGenerator->getSearchConditions(
-                $searchQuery, [
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME),
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE)
-                ]
-            );
-        }
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($parentIdentifier)
-        );
-
-        $condition = new AndCondition($conditions);
-
-        return $this->dataClassRepository->retrieves(
-            Group::class, new StorageParameters(
-                condition: $condition, orderBy: new OrderBy(
-                [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
-            )
-            )
-        );
-    }
-
-    /**
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findParentGroupIdentifiersForGroup(Group $group, bool $includeSelf = true): array
-    {
-        return $this->dataClassRepository->distinct(
-            Group::class, new StorageParameters(
-                condition: $this->getAncestorsCondition($group, $includeSelf),
-                retrieveProperties: new RetrieveProperties(
-                    [new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)]
-                ), orderBy: new OrderBy([
-                new OrderProperty(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE)
-                )
-            ])
-            )
-        );
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param bool $includeSelf
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findParentGroupsForGroup(Group $group, bool $includeSelf = true): ArrayCollection
-    {
-        return $this->dataClassRepository->retrieves(
-            Group::class, new StorageParameters(
-                condition: $this->getAncestorsCondition($group, $includeSelf), orderBy: new OrderBy([
-                new OrderProperty(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE)
-                )
-            ])
-            )
-        );
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findRootGroup(): ?Group
-    {
-        return $this->dataClassRepository->retrieve(
-            Group::class, new StorageParameters(
-                condition: new EqualityCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-                    new StaticConditionVariable(DataClass::EMPTY_UUID)
-                )
-            )
-        );
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findSiblings(Group $group, bool $includeSelf = true, ?ConditionInterface $condition = null
-    ): ArrayCollection
-    {
-        return $this->dataClassRepository->retrieves(
-            Group::class, new StorageParameters(
-                condition: $this->getSiblingsCondition($group, $includeSelf, $condition), orderBy: new OrderBy([
-                new OrderProperty(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE)
-                )
-            ])
-            )
-        );
-    }
-
-    /**
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findSubGroupIdentifiersForGroup(Group $group, bool $recursiveSubgroups = false): array
-    {
-        if ($recursiveSubgroups) {
-            $childrenCondition = [];
-
-            $childrenCondition[] = new ComparisonCondition(
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
-                ComparisonTypeEnum::GREATER_THAN, new StaticConditionVariable($group->getLeftValue())
-            );
-
-            $childrenCondition[] = new ComparisonCondition(
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE), ComparisonTypeEnum::LESS_THAN,
-                new StaticConditionVariable($group->getRightValue())
-            );
-
-            $childrenCondition = new AndCondition($childrenCondition);
-        }
-        else {
-            $childrenCondition = new EqualityCondition(
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-                new StaticConditionVariable($group->getId())
-            );
-        }
-
-        return $this->dataClassRepository->distinct(
-            Group::class, new StorageParameters(
-                condition: $childrenCondition, retrieveProperties: new RetrieveProperties(
-                [new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)]
-            )
-            )
-        );
-    }
-
-    /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
-     * @param bool $recursiveSubgroups
-     *
-     * @return  \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function findSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false): ArrayCollection
-    {
-        return $this->dataClassRepository->retrieves(
-            Group::class, new StorageParameters(
-                condition: $this->getDescendantsCondition($group, $recursiveSubgroups)
-            )
-        );
-    }
-
-    protected function getAncestorsCondition(
+    protected function determineAncestorsCondition(
         Group $group, bool $includeSelf = false, ?ConditionInterface $condition = null
     ): AndCondition
     {
@@ -446,7 +352,7 @@ class GroupRepository
         return new AndCondition($conditions);
     }
 
-    protected function getDescendantsCondition(
+    protected function determineDescendantsCondition(
         Group $group, bool $recursive = false, bool $includeSelf = false, ?ConditionInterface $condition = null
     ): AndCondition
     {
@@ -496,7 +402,7 @@ class GroupRepository
     /**
      * Build the conditions for the get / count _ siblings methods
      */
-    protected function getSiblingsCondition(
+    protected function determineSiblingsCondition(
         Group $group, bool $includeSelf = false, ?ConditionInterface $condition = null
     ): AndCondition
     {
@@ -524,27 +430,19 @@ class GroupRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function hasSiblings(Group $group, ?ConditionInterface $condition = null): bool
-    {
-        return ($this->countSiblings($group, false, $condition) > 0);
-    }
-
-    /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function moveGroup(Group $group, string $parentGroupIdentifier): bool
     {
         if ($parentGroupIdentifier == 0) {
-            $referenceNode = $this->findGroupByIdentifier($group->getParentId());
+            $referenceNode = $this->retrieveGroupByIdentifier($group->getParentId());
         }
         else {
-            $referenceNode = $this->findGroupByIdentifier($parentGroupIdentifier);
+            $referenceNode = $this->retrieveGroupByIdentifier($parentGroupIdentifier);
         }
 
-        if ($this->validatePosition($group, Group::AS_LAST_CHILD_OF, $referenceNode) === null) {
+        if ($this->__validatePosition($group, $referenceNode) === null) {
             return false;
         }
 
@@ -587,7 +485,7 @@ class GroupRepository
                     (($insertAfter < $initialLeft) ? $afterPreInsertRight : $afterPreInsertRight - $delta) + $shift;
 
                 // Step 1: Create a gap where the node can be moved into.
-                $res = $this->preInsert($insertAfter, $delta / 2);
+                $res = $this->__preInsert($insertAfter, $delta / 2);
 
                 if (!$res) {
                     return false;
@@ -639,7 +537,7 @@ class GroupRepository
                 $group->setLeftValue($afterPreInsertLeft);
                 $group->setRightValue($afterPreInsertRight);
 
-                if (!$this->postDelete($group)) {
+                if (!$this->__postDelete($group)) {
                     return false;
                 }
 
@@ -660,167 +558,251 @@ class GroupRepository
     }
 
     /**
-     * Change the left/right values in the tree of every node that is affected by to the delete of this node
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param bool $includeSelf
      *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    protected function postDelete(Group $group, ?ConditionInterface $condition = null): bool
+    public function retrieveAncestorsByGroup(Group $group, bool $includeSelf = true): ArrayCollection
     {
-        // This private function is only ever called from within a transaction.
-        //
-        // This needs to be a transaction: both updates should either commit or abort.
-        // Now, it is possible that the first update succeeds, but the latter doesn't.
-        // This implies that we may end up with an inconsistent nested set.
-        $delta = $group->getRightValue() - $group->getLeftValue() + 1;
-
-        // 1. Update the left and right values of all successors of the deleted node.
-        // A successor has a left-value which is higher than the left-value of the deleted node.
-
-        $conditions = [];
-
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE), ComparisonTypeEnum::GREATER_THAN,
-            new StaticConditionVariable($group->getLeftValue())
-        );
-
-        if ($condition) {
-            $conditions[] = $condition;
-        }
-
-        $updateCondition = new AndCondition($conditions);
-
-        $leftValueVariable = new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE);
-        $rightValueVariable = new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE);
-
-        $rightValueDataClassProperty = new UpdateProperty(
-            $rightValueVariable, new OperationConditionVariable(
-                $rightValueVariable, OperationTypeEnum::MINUS, new StaticConditionVariable($delta)
+        return $this->dataClassRepository->retrieves(
+            Group::class, new StorageParameters(
+                condition: $this->determineAncestorsCondition($group, $includeSelf), orderBy: new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE)
+                )
+            ])
             )
         );
-
-        $properties = [];
-        $properties[] = $rightValueDataClassProperty;
-        $properties[] = new UpdateProperty(
-            $leftValueVariable, new OperationConditionVariable(
-                $leftValueVariable, OperationTypeEnum::MINUS, new StaticConditionVariable($delta)
-            )
-        );
-
-        if (!$this->dataClassRepository->updates(
-            Group::class, new UpdateProperties($properties), $updateCondition
-        )) {
-            return false;
-        }
-
-        // 2. Update the right values of all ancestors of the deleted node.
-        // An ancestor has a left value less than the left value of the deleted node
-        // and a right value greater than the right value of the deleted node
-
-        $conditions = [];
-
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE), ComparisonTypeEnum::LESS_THAN,
-            new StaticConditionVariable($group->getLeftValue())
-        );
-
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE), ComparisonTypeEnum::GREATER_THAN,
-            new StaticConditionVariable($group->getRightValue())
-        );
-
-        if ($condition) {
-            $conditions[] = $condition;
-        }
-
-        $updateCondition = new AndCondition($conditions);
-
-        $properties = [];
-        $properties[] = $rightValueDataClassProperty;
-
-        if (!$this->dataClassRepository->updates(
-            Group::class, new UpdateProperties($properties), $updateCondition
-        )) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
-     * Creates the necessary room to insert a number of values (1 by default) into the nested set: it shifts the
-     * left/right values of all nodes that are traversed after the insertion point to the right.
-     *
+     * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    protected function preInsert(
-        int $insertAfter, int $numberOfElements = 1, ?ConditionInterface $condition = null
-    ): bool
+    public function retrieveAncestorsIdentifiersByGroup(Group $group, bool $includeSelf = true): array
     {
-        // This private function is only ever called from within a transaction.
-        //
-        // This needs to be a transaction: both updates should either commit or abort.
-        // Now, it is possible that the first update succeeds, but the latter doesn't.
-        // This implies that we may end up with an inconsistent nested set.
-
-        // Update all necessary left-values
-        $conditions = [];
-
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE), ComparisonTypeEnum::GREATER_THAN,
-            new StaticConditionVariable($insertAfter)
-        );
-
-        if ($condition) {
-            $conditions[] = $condition;
-        }
-
-        $updateCondition = new AndCondition($conditions);
-
-        $leftValueVariable = new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE);
-
-        $properties = [];
-        $properties[] = new UpdateProperty(
-            $leftValueVariable, new OperationConditionVariable(
-                $leftValueVariable, OperationTypeEnum::ADDITION, new StaticConditionVariable($numberOfElements * 2)
+        return $this->dataClassRepository->distinct(
+            Group::class, new StorageParameters(
+                condition: $this->determineAncestorsCondition($group, $includeSelf),
+                retrieveProperties: new RetrieveProperties(
+                    [new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)]
+                ), orderBy: new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE)
+                )
+            ])
             )
         );
+    }
 
-        if (!$this->dataClassRepository->updates(
-            Group::class, new UpdateProperties($properties), $updateCondition
-        )) {
-            return false;
-        }
-
-        // Update all necessary right-values
-        $conditions = [];
-
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE), ComparisonTypeEnum::GREATER_THAN,
-            new StaticConditionVariable($insertAfter)
-        );
-
-        if ($condition) {
-            $conditions[] = $condition;
-        }
-
-        $updateCondition = new AndCondition($conditions);
-
-        $rightValueVariable = new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE);
-
-        $properties = [];
-        $properties[] = new UpdateProperty(
-            $rightValueVariable, new OperationConditionVariable(
-                $rightValueVariable, OperationTypeEnum::ADDITION, new StaticConditionVariable($numberOfElements * 2)
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param bool $recursive
+     *
+     * @return  \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function retrieveDescendantsByGroup(Group $group, bool $recursive = false): ArrayCollection
+    {
+        return $this->dataClassRepository->retrieves(
+            Group::class, new StorageParameters(
+                condition: $this->determineDescendantsCondition($group, $recursive)
             )
         );
+    }
 
-        if (!$this->dataClassRepository->updates(
-            Group::class, new UpdateProperties($properties), $updateCondition
-        )) {
-            return false;
+    /**
+     * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function retrieveDescendantsIdentifiersByGroup(Group $group, bool $recursive = false): array
+    {
+        if ($recursive) {
+            $childrenCondition = [];
+
+            $childrenCondition[] = new ComparisonCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
+                ComparisonTypeEnum::GREATER_THAN, new StaticConditionVariable($group->getLeftValue())
+            );
+
+            $childrenCondition[] = new ComparisonCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE), ComparisonTypeEnum::LESS_THAN,
+                new StaticConditionVariable($group->getRightValue())
+            );
+
+            $childrenCondition = new AndCondition($childrenCondition);
+        }
+        else {
+            $childrenCondition = new EqualityCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+                new StaticConditionVariable($group->getId())
+            );
         }
 
-        return true;
+        return $this->dataClassRepository->distinct(
+            Group::class, new StorageParameters(
+                condition: $childrenCondition, retrieveProperties: new RetrieveProperties(
+                [new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID)]
+            )
+            )
+        );
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function retrieveGroupByCode(string $groupCode): ?Group
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($groupCode)
+        );
+
+        return $this->dataClassRepository->retrieve(
+            Group::class, new StorageParameters(condition: $condition)
+        );
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function retrieveGroupByCodeAndParentIdentifier(string $groupCode, string $parentIdentifier): ?Group
+    {
+        $conditions = [];
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($groupCode)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+            new StaticConditionVariable($parentIdentifier)
+        );
+
+        return $this->dataClassRepository->retrieve(
+            Group::class, new StorageParameters(condition: new AndCondition($conditions))
+        );
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function retrieveGroupByIdentifier(string $groupId): ?Group
+    {
+        return $this->dataClassRepository->retrieveById(Group::class, $groupId);
+    }
+
+    /**
+     * @param ?\Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface $condition
+     * @param ?int $count
+     * @param ?int $offset
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy $orderBy
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function retrieveGroups(
+        ?ConditionInterface $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
+    ): ArrayCollection
+    {
+        $parameters = new StorageParameters(condition: $condition, orderBy: $orderBy, count: $count, offset: $offset);
+
+        return $this->dataClassRepository->retrieves(Group::class, $parameters);
+    }
+
+    /**
+     * @param string[] $groupIdentifiers
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function retrieveGroupsByIdentifiersOrderedByName(array $groupIdentifiers): ArrayCollection
+    {
+        $condition =
+            new InCondition(new PropertyConditionVariable(Group::class, DataClass::PROPERTY_ID), $groupIdentifiers);
+
+        return $this->dataClassRepository->retrieves(
+            Group::class, new StorageParameters(
+                condition: $condition, orderBy: new OrderBy(
+                [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
+            )
+            )
+        );
+    }
+
+    /**
+     * @param ?string $searchQuery
+     * @param string $parentIdentifier
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function retrieveGroupsBySearchQueryAndParentIdentifier(
+        ?string $searchQuery = null, string $parentIdentifier = DataClass::EMPTY_UUID
+    ): ArrayCollection
+    {
+        $conditions = [];
+
+        if ($searchQuery && $searchQuery != '') {
+            $conditions[] = $this->searchQueryConditionGenerator->getSearchConditions(
+                $searchQuery, [
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME),
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE)
+                ]
+            );
+        }
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+            new StaticConditionVariable($parentIdentifier)
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $this->dataClassRepository->retrieves(
+            Group::class, new StorageParameters(
+                condition: $condition, orderBy: new OrderBy(
+                [new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))]
+            )
+            )
+        );
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function retrieveRootGroup(): ?Group
+    {
+        return $this->dataClassRepository->retrieve(
+            Group::class, new StorageParameters(
+                condition: new EqualityCondition(
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+                    new StaticConditionVariable(DataClass::EMPTY_UUID)
+                )
+            )
+        );
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function retrieveSiblingsByGroup(
+        Group $group, bool $includeSelf = true, ?ConditionInterface $condition = null
+    ): ArrayCollection
+    {
+        return $this->dataClassRepository->retrieves(
+            Group::class, new StorageParameters(
+                condition: $this->determineSiblingsCondition($group, $includeSelf, $condition), orderBy: new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE)
+                )
+            ])
+            )
+        );
     }
 
     /**
@@ -829,52 +811,5 @@ class GroupRepository
     public function updateGroup(Group $group): bool
     {
         return $this->dataClassRepository->update($group);
-    }
-
-    /**
-     * Validates a relative position of a node, which is used when creating or moving a node.
-     *
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     */
-    protected function validatePosition(
-        Group $group, int $position = Group::AS_LAST_CHILD_OF, ?Group $referenceNode = null
-    ): ?Group
-    {
-        if ($position == Group::AS_PREVIOUS_SIBLING_OF || $position == Group::AS_NEXT_SIBLING_OF) {
-            if ($referenceNode === null) {
-                // TODO Report an error: must provide a relative position, when create a node as a sibling to another.
-                return null;
-            }
-
-            if ($group->getId() === $referenceNode->getId()) {
-                // TODO Report an error when attempting to create a node as its own sibling
-                return null;
-            }
-
-            if ($group->getParentId() == 0 || $group->getParentId() != $referenceNode->getParentId()) {
-                // To be a sibling of the reference node, the parent should be the same
-                $group->setParentId($referenceNode->getParentId());
-            }
-        }
-
-        if ($position == Group::AS_FIRST_CHILD_OF || $position == Group::AS_LAST_CHILD_OF) {
-            if ($referenceNode === null) {
-                // Use the parent of the node as a reference
-                $referenceNode = $this->findGroupByIdentifier($group->getParentId());
-            }
-
-            if ($group->getId() === $referenceNode->getId()) {
-                // TODO Report an error when attempting to create a node as its own child
-                return null;
-            }
-
-            if ($group->getParentId() == 0 || $group->getParentId() != $referenceNode->getId()) {
-                // To be a child of the reference node, the parent should be set correctly
-                $group->setParentId($referenceNode->getId());
-            }
-        }
-
-        return $referenceNode;
     }
 }

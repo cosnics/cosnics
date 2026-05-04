@@ -13,10 +13,6 @@ use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
  */
 class Group extends DataClass implements UuidDataClassInterface
 {
-    public const int AS_FIRST_CHILD_OF = 1;
-    public const int AS_LAST_CHILD_OF = 2;
-    public const int AS_NEXT_SIBLING_OF = 4;
-    public const int AS_PREVIOUS_SIBLING_OF = 3;
     public const string CONTEXT = Manager::CONTEXT;
     public const string PROPERTY_CODE = 'code';
     public const string PROPERTY_DESCRIPTION = 'description';

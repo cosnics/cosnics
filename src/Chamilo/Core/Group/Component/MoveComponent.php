@@ -66,7 +66,7 @@ class MoveComponent extends Manager
 
         $groupIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID);
 
-        $group = $this->groupService->findGroupByIdentifier($groupIdentifier);
+        $group = $this->groupService->retrieveGroupByIdentifier($groupIdentifier);
 
         $formUri = $this->getUrlGenerator()->fromParameters(
             [

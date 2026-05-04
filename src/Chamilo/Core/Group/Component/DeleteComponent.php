@@ -40,7 +40,7 @@ class DeleteComponent extends Manager
             }
 
             foreach ($identifiers as $identifier) {
-                $group = $this->groupService->findGroupByIdentifier($identifier);
+                $group = $this->groupService->retrieveGroupByIdentifier($identifier);
 
                 if (!$this->groupService->deleteGroup($group, $currentUser)) {
                     $failures ++;

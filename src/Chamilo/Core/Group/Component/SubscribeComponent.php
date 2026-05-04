@@ -3,7 +3,7 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
+use Chamilo\Core\Group\Storage\DataClass\GroupMembership;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
@@ -26,10 +26,11 @@ class SubscribeComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -59,16 +60,16 @@ class SubscribeComponent extends Manager
                 $userIdentifiers = [$userIdentifiers];
             }
 
-            $group = $this->groupService->findGroupByIdentifier($groupIdentifier);
+            $group = $this->groupService->retrieveGroupByIdentifier($groupIdentifier);
             $containsDuplicates = false;
 
             foreach ($userIdentifiers as $userIdentifier) {
                 $userToSubscribe = $this->userService->findUserByIdentifier($userIdentifier);
 
-                $groupUserRelation =
+                $groupMembership =
                     $this->groupMembershipService->retrieveGroupMembershipByGroupAndUser($group, $userToSubscribe);
 
-                if (!$groupUserRelation instanceof GroupRelUser) {
+                if (!$groupMembership instanceof GroupMembership) {
                     try {
                         $this->groupMembershipService->subscribeUserToGroup($group, $userToSubscribe, $currentUser);
                     }

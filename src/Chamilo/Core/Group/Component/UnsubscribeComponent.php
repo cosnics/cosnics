@@ -4,7 +4,7 @@ namespace Chamilo\Core\Group\Component;
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
+use Chamilo\Core\Group\Storage\DataClass\GroupMembership;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
@@ -34,28 +34,30 @@ class UnsubscribeComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $groupUserRelationIdentifiers = $this->getRequest()->getFromRequestOrQuery(DataClass::PROPERTY_ID);
+        $groupMembershipIdentifiers = $this->getRequest()->getFromRequestOrQuery(DataClass::PROPERTY_ID);
 
         $failures = 0;
 
-        if (!empty($groupUserRelationIdentifiers)) {
-            if (!is_array($groupUserRelationIdentifiers)) {
-                $groupUserRelationIdentifiers = [$groupUserRelationIdentifiers];
+        if (!empty($groupMembershipIdentifiers)) {
+            if (!is_array($groupMembershipIdentifiers)) {
+                $groupMembershipIdentifiers = [$groupMembershipIdentifiers];
             }
 
-            foreach ($groupUserRelationIdentifiers as $groupUserRelationIdentifier) {
-                $groupUserRelation =
-                    $this->groupMembershipService->retrieveGroupMembershipByIdentifier($groupUserRelationIdentifier);
+            foreach ($groupMembershipIdentifiers as $groupMembershipIdentifier) {
+                $groupMembership =
+                    $this->groupMembershipService->retrieveGroupMembershipByIdentifier($groupMembershipIdentifier);
 
-                if (!$groupUserRelation instanceof GroupRelUser) {
+                if (!$groupMembership instanceof GroupMembership) {
                     continue;
                 }
 
-                $group = $this->groupService->findGroupByIdentifier($groupUserRelation->getGroupId());
-                $userToUnsubscribe = $this->userService->findUserByIdentifier($groupUserRelation->getUserId());
+                $group = $this->groupService->retrieveGroupByIdentifier($groupMembership->getGroupId());
+                $userToUnsubscribe = $this->userService->findUserByIdentifier($groupMembership->getUserId());
 
                 try {
-                    $this->groupMembershipService->deleteGroupMembershipByGroupAndUser($group, $userToUnsubscribe, $currentUser);
+                    $this->groupMembershipService->deleteGroupMembershipByGroupAndUser(
+                        $group, $userToUnsubscribe, $currentUser
+                    );
                 }
                 catch (RuntimeException) {
                     $failures ++;
@@ -63,14 +65,14 @@ class UnsubscribeComponent extends Manager
             }
 
             if ($failures) {
-                if (count($groupUserRelationIdentifiers) == 1) {
+                if (count($groupMembershipIdentifiers) == 1) {
                     $message = 'SelectedGroupRelUserNotDeleted';
                 }
                 else {
                     $message = 'SelectedGroupRelUsersNotDeleted';
                 }
             }
-            elseif (count($groupUserRelationIdentifiers) == 1) {
+            elseif (count($groupMembershipIdentifiers) == 1) {
                 $message = 'SelectedGroupRelUserDeleted';
             }
             else {

@@ -141,10 +141,10 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
                 }
 
                 return $this->stringUtilities->truncate($description);
-            case $this->translator->trans(self::COLUMN_USERS, [], \Chamilo\Core\User\Manager::CONTEXT) :
+            case self::COLUMN_USERS :
                 return (string) $this->groupMembershipService->countUsersByGroup($result);
-            case $this->translator->trans(self::COLUMN_SUBGROUPS, [], \Chamilo\Core\User\Manager::CONTEXT) :
-                return (string) $this->groupsTreeTraverser->countSubGroupsForGroup($result, true);
+            case self::COLUMN_SUBGROUPS :
+                return (string) $this->groupsTreeTraverser->countDescendantsByGroup($result, true);
         }
 
         return parent::renderCell($column, $resultPosition, $result);
@@ -216,8 +216,8 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
                 inlineGlyph: new FontAwesomeGlyph(
                     'times'
                 ), action: $deleteUrl, display: DisplayTypeEnum::ICON, confirmationMessage: $this->translator->trans(
-                    'ConfirmChosenAction', [], StringUtilities::LIBRARIES
-                ), classes: ['btn-link']
+                'ConfirmChosenAction', [], StringUtilities::LIBRARIES
+            ), classes: ['btn-link']
             )
         );
 

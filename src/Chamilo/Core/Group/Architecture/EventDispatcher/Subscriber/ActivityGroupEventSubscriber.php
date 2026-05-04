@@ -56,7 +56,7 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function afterEmptyGroup(AfterGroupEmptyEvent $afterGroupEmptyEvent): bool
+    public function afterEmpty(AfterGroupEmptyEvent $afterGroupEmptyEvent): bool
     {
         return $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(

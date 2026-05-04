@@ -67,9 +67,18 @@ $(function () {
             }
         }
         $(this).jstree(true).open_node(data.node);
-    }).on("open_node.jstree", function (event, data) {
+    }).on("load_node.jstree", function (event, data) {
+        data.node.children.forEach(function (childNode) {
+            var pathIdentifiers = {$jsonEncodedSelectedPathIdentifiers};
+
+            if (pathIdentifiers.includes(childNode)) {
+                $('#{$name}').jstree(true).open_node(childNode);
+            }
+        });
+
+    }).on("after_open.jstree", function (event, data) {
         var tree = $(this).jstree(true);
-        
+
         if (data.node.id === '{$selectedIdentifier}') {
             tree.select_node(data.node);
         }
@@ -85,7 +94,10 @@ $(function () {
         var pathIdentifiers = {$jsonEncodedSelectedPathIdentifiers};
 
         pathIdentifiers.forEach(function (pathIdentifier) {
-            tree.open_node(pathIdentifier);
+            if (tree.get_node(pathIdentifier) !== false) {
+                tree.open_node(pathIdentifier);
+            }
+
         });
     });
 });

@@ -42,7 +42,7 @@ class TruncateComponent extends Manager
             }
 
             foreach ($groupIdentifiers as $groupIdentifier) {
-                $group = $this->groupService->findGroupByIdentifier($groupIdentifier);
+                $group = $this->groupService->retrieveGroupByIdentifier($groupIdentifier);
 
                 try {
                     $this->groupMembershipService->deleteGroupMembershipsByGroup($group, $currentUser);

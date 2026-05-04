@@ -94,9 +94,9 @@ class GroupMoveFormType extends AbstractType
 
         foreach ($rootDisabledGroupIdentifiers as $rootDisabledGroupIdentifier) {
             try {
-                $disabledGroup = $this->groupService->findGroupByIdentifier($rootDisabledGroupIdentifier);
+                $disabledGroup = $this->groupService->retrieveGroupByIdentifier($rootDisabledGroupIdentifier);
                 $disabledSubgroupIdentifiers =
-                    $this->groupsTreeTraverser->findSubGroupIdentifiersForGroup($disabledGroup, true);
+                    $this->groupsTreeTraverser->retrieveDescendantIdentifiersByGroup($disabledGroup, true);
 
                 $disabledGroupIdentifiers[] = $rootDisabledGroupIdentifier;
                 $disabledGroupIdentifiers = array_merge($disabledGroupIdentifiers, $disabledSubgroupIdentifiers);

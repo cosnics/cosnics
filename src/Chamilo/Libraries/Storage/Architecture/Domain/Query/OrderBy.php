@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Storage\Architecture\Domain\Query;
 
 use Chamilo\Libraries\Protocol\Security\Architecture\Interface\HashableInterface;
 use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
-use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Selectable;
@@ -20,12 +19,6 @@ use Doctrine\Common\Collections\Selectable;
 class OrderBy extends ArrayCollection implements HashableInterface
 {
     use HashableTrait;
-
-    public static function generate(string $dataClassName, string $propertyName, ?int $direction = SORT_ASC): OrderBy
-    {
-        return new OrderBy([new OrderProperty(new PropertyConditionVariable($dataClassName, $propertyName), $direction)]
-        );
-    }
 
     public function getHashParts(): array
     {
