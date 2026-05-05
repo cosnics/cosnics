@@ -97,29 +97,6 @@ class GroupMembershipRepository
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function deleteGroupMembershipsByGroup(Group $group): bool
-    {
-        return $this->deleteGroupMembershipsByGroupIdentifiers([$group->getId()]);
-    }
-
-    /**
-     * @param string[] $groupsIdentifiers
-     *
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function deleteGroupMembershipsByGroupIdentifiers(array $groupsIdentifiers): bool
-    {
-        $condition = new InCondition(
-            new PropertyConditionVariable(GroupMembership::class, GroupMembership::PROPERTY_GROUP_ID),
-            $groupsIdentifiers
-        );
-
-        return $this->dataClassRepository->deletes(GroupMembership::class, $condition);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function retrieveGroupMembershipByGroupCodeAndUserIdentifier(string $groupCode, string $userId

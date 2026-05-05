@@ -10,10 +10,10 @@ use Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
+use Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -92,107 +92,143 @@ class GroupMembershipService
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function deleteGroupMembership(GroupMembership $groupMembership, ?User $executingUser = null): bool
+    public function createGroupMembershipForGroupAndUser(Group $group, User $user, ?User $executingUser = null
+    ): GroupMembership
     {
-        if (!$this->groupMembershipRepository->deleteGroupMembership($groupMembership)) {
-            throw new RuntimeException(
-                sprintf(
-                    'Could not unsubscribe user %s from group %s', $groupMembership->getUserId(),
-                    $groupMembership->getGroupId()
-                )
+        try {
+            $groupMembership = new GroupMembership();
+
+            $groupMembership->setUserId($user->getId());
+            $groupMembership->setGroupId($group->getId());
+
+            $this->groupMembershipRepository->createGroupMembership($groupMembership);
+
+            $this->eventDispatcher->dispatch(
+                new AfterGroupSubscribeEvent($group->getId(), $user->getId(), $executingUser)
             );
         }
+        catch (ObjectAlreadyExistsException) {
+            $groupMembership =
+                $this->groupMembershipRepository->retrieveGroupMembershipByGroupIdentifierAndUserIdentifier(
+                    $group->getId(), $user->getId()
+                );
+        }
+
+        return $groupMembership;
+    }
+
+    /**
+     * @param string[] $userIdentifiers
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\GroupMembership>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function createGroupMembershipForGroupAndUserIdentifiers(
+        Group $group, array $userIdentifiers, ?User $executingUser = null
+    ): ArrayCollection
+    {
+        $groupMemberships = new ArrayCollection();
+
+        foreach ($userIdentifiers as $userIdentifier) {
+            try {
+                $user = $this->userService->findUserByIdentifier($userIdentifier);
+                $groupMemberships->add($this->createGroupMembershipForGroupAndUser($group, $user, $executingUser));
+            }
+            catch (StorageNoResultException) {
+            }
+        }
+
+        return $groupMemberships;
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function deleteGroupMembership(GroupMembership $groupMembership, ?User $executingUser = null): void
+    {
+        $this->groupMembershipRepository->deleteGroupMembership($groupMembership);
 
         $this->eventDispatcher->dispatch(
             new AfterGroupUnsubscribeEvent(
                 $groupMembership->getGroupId(), $groupMembership->getUserId(), $executingUser
             )
         );
-
-        return true;
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function deleteGroupMembershipByGroupAndUser(Group $group, User $user, ?User $executingUser = null): bool
+    public function deleteGroupMembershipByGroupAndUser(Group $group, User $user, ?User $executingUser = null): void
     {
-        $groupRelation = $this->groupMembershipRepository->retrieveGroupMembershipByGroupIdentifierAndUserIdentifier(
-            $group->getId(), $user->getId()
-        );
+        try {
+            $groupMembership =
+                $this->groupMembershipRepository->retrieveGroupMembershipByGroupIdentifierAndUserIdentifier(
+                    $group->getId(), $user->getId()
+                );
 
-        if (!$groupRelation instanceof GroupMembership) {
-            throw new RuntimeException(
-                sprintf(
-                    'Could not unsubscribe user %s from group %s because there is no active subscription',
-                    $user->getId(), $group->getId()
-                )
+            $this->deleteGroupMembership($groupMembership, $executingUser);
+        }
+        catch (StorageNoResultException) {
+        }
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function deleteGroupMembershipByIdentifier(string $groupMembershipIdentifier, ?User $executingUser = null
+    ): void
+    {
+        try {
+            $this->deleteGroupMembership(
+                $this->retrieveGroupMembershipByIdentifier($groupMembershipIdentifier), $executingUser
             );
         }
-
-        return $this->deleteGroupMembership($groupRelation, $executingUser);
+        catch (StorageNoResultException) {
+        }
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function deleteGroupMembershipsByGroup(Group $group, ?User $executingUser = null): bool
+    public function deleteGroupMembershipsByGroup(Group $group, ?User $executingUser = null): void
     {
         $groupMemberships =
             $this->groupMembershipRepository->retrieveGroupMembershipsByGroupIdentifier($group->getId());
 
         foreach ($groupMemberships as $groupMembership) {
-            if (!$this->groupMembershipRepository->deleteGroupMembership($groupMembership)) {
-                throw new RuntimeException(
-                    sprintf(
-                        'Could not unsubscribe user %s from group %s', $groupMembership->getUserId(),
-                        $groupMembership->getGroupId()
-                    )
-                );
-            }
-
-            $this->eventDispatcher->dispatch(
-                new AfterGroupUnsubscribeEvent(
-                    $group->getId(), $groupMembership->getUserId(), $executingUser
-                )
-            );
+            $this->deleteGroupMembership($groupMembership);
         }
 
         $this->eventDispatcher->dispatch(new AfterGroupEmptyEvent($group, $executingUser));
+    }
 
-        return true;
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function deleteGroupMembershipsByIdentifiers(array $groupMembershipIdentifiers, ?User $executingUser = null
+    ): void
+    {
+        foreach ($groupMembershipIdentifiers as $groupMembershipIdentifier) {
+            $this->deleteGroupMembershipByIdentifier($groupMembershipIdentifier, $executingUser);
+        }
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function deleteGroupMembershipsByUser(User $user, ?User $executingUser = null): bool
+    public function deleteGroupMembershipsByUser(User $user, ?User $executingUser = null): void
     {
         $groupMemberships = $this->retrieveGroupMembershipsByUserIdentifier($user->getId());
 
         foreach ($groupMemberships as $groupMembership) {
             $this->deleteGroupMembership($groupMembership, $executingUser);
         }
-
-        return true;
-    }
-
-    /**
-     * Shortcut method to remove the users from a group by the group identifiers, only directly after removal of the
-     * groups because no notifiers are called. This is due to the fact that a group removal already triggers an event
-     * and therefore this clean-up action of the users after a delete should not trigger a new event.
-     *
-     * @param string[] $groupIdentifiers
-     *
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function removeGroupMembershipsByGroupIdentifiers(array $groupIdentifiers): bool
-    {
-        return $this->groupMembershipRepository->deleteGroupMembershipsByGroupIdentifiers($groupIdentifiers);
     }
 
     /**
@@ -354,35 +390,6 @@ class GroupMembershipService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function subscribeUserToGroup(Group $group, User $user, ?User $executingUser = null): GroupMembership
-    {
-        try {
-            $groupRelation =
-                $this->groupMembershipRepository->retrieveGroupMembershipByGroupIdentifierAndUserIdentifier(
-                    $group->getId(), $user->getId()
-                );
-        }
-        catch (StorageNoResultException) {
-            $groupRelation = new GroupMembership();
-
-            $groupRelation->setUserId($user->getId());
-            $groupRelation->setGroupId($group->getId());
-
-            $this->groupMembershipRepository->createGroupMembership($groupRelation);
-
-            $this->eventDispatcher->dispatch(
-                new AfterGroupSubscribeEvent($group->getId(), $user->getId(), $executingUser)
-            );
-        }
-
-        return $groupRelation;
-    }
-
-    /**
      * @param string[] $userIdentifiers
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
@@ -390,7 +397,7 @@ class GroupMembershipService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function synchronizeGroup(Group $group, array $userIdentifiers, ?User $executingUser = null): bool
+    public function synchronizeGroup(Group $group, array $userIdentifiers, ?User $executingUser = null): void
     {
         $currentUserIdentifiers = $this->retrieveSubscribedUserIdentifiersByGroupIdentifier($group->getId());
 
@@ -400,7 +407,7 @@ class GroupMembershipService
         $newUsers = $this->userService->findUsersByIdentifiers($newUserIdentifiers);
 
         foreach ($newUsers as $newUser) {
-            $this->subscribeUserToGroup($group, $newUser, $executingUser);
+            $this->createGroupMembershipForGroupAndUser($group, $newUser, $executingUser);
         }
 
         $oldUsers = $this->userService->findUsersByIdentifiers($oldUserIdentifiers);
@@ -408,7 +415,5 @@ class GroupMembershipService
         foreach ($oldUsers as $oldUser) {
             $this->deleteGroupMembershipByGroupAndUser($group, $oldUser, $executingUser);
         }
-
-        return true;
     }
 }

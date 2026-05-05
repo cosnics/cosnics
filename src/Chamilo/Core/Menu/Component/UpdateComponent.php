@@ -15,6 +15,7 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedE
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
@@ -150,7 +151,7 @@ class UpdateComponent extends Manager
 
         if (!$item instanceof Item) {
             throw new NoSuchObjectException($this->getTranslator()->trans('MenuItem', [], Manager::CONTEXT),
-                $itemIdentifier);
+                [DataClass::PROPERTY_ID => $itemIdentifier]);
         }
 
         return $item;

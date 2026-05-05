@@ -26,6 +26,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Throwable;
 use Twig\Environment;
 
 /**
@@ -85,20 +86,26 @@ class MoveComponent extends Manager
         if ($form->isSubmitted() && $form->isValid()) {
             $submittedData = $form->getData();
 
-            $success = $this->groupService->moveGroup(
-                $group, $submittedData[Group::PROPERTY_PARENT_ID], $currentUser
-            );
+            try {
+                $this->groupService->moveGroup(
+                    $group, $submittedData[Group::PROPERTY_PARENT_ID], $currentUser
+                );
 
-            $message = $translator->trans(
-                $success ? 'ObjectMoved' : 'ObjectNotMoved', ['%Object%' => $translator->trans('Group')],
-                StringUtilities::LIBRARIES
-            );
-
-            $this->alertsManager->addAlert(
-                new Alert(
-                    $message, $success ? AlertEnum::SUCCESS : AlertEnum::DANGER
-                )
-            );
+                $this->alertsManager->addAlert(
+                    new Alert(
+                        $translator->trans('ObjectMoved', ['%Object%' => $translator->trans('Group')],
+                            StringUtilities::LIBRARIES), AlertEnum::SUCCESS
+                    )
+                );
+            }
+            catch (Throwable) {
+                $this->alertsManager->addAlert(
+                    new Alert(
+                        $translator->trans('ObjectNotMoved', ['%Object%' => $translator->trans('Group')],
+                            StringUtilities::LIBRARIES), AlertEnum::DANGER
+                    )
+                );
+            }
 
             return new RedirectResponse($this->getUrlGenerator()->fromParameters([
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,

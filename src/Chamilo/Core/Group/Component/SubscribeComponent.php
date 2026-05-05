@@ -3,7 +3,6 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\Group\Storage\DataClass\GroupMembership;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
@@ -12,9 +11,9 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -53,54 +52,27 @@ class SubscribeComponent extends Manager
                 ))
         );
 
-        $failures = 0;
-
         if (!empty($userIdentifiers)) {
             if (!is_array($userIdentifiers)) {
                 $userIdentifiers = [$userIdentifiers];
             }
 
-            $group = $this->groupService->retrieveGroupByIdentifier($groupIdentifier);
-            $containsDuplicates = false;
+            try {
+                $this->groupService->createGroupMembershipForGroupIdentifierAndUserIdentifiers(
+                    $groupIdentifier, $userIdentifiers, $currentUser
+                );
 
-            foreach ($userIdentifiers as $userIdentifier) {
-                $userToSubscribe = $this->userService->findUserByIdentifier($userIdentifier);
-
-                $groupMembership =
-                    $this->groupMembershipService->retrieveGroupMembershipByGroupAndUser($group, $userToSubscribe);
-
-                if (!$groupMembership instanceof GroupMembership) {
-                    try {
-                        $this->groupMembershipService->subscribeUserToGroup($group, $userToSubscribe, $currentUser);
-                    }
-                    catch (RuntimeException) {
-                        $failures ++;
-                    }
-                }
-                else {
-                    $containsDuplicates = true;
-                }
+                $message = 'SelectedUserAddedToGroup';
+                $messageType = AlertEnum::SUCCESS;
             }
-
-            if ($failures) {
-                if (count($userIdentifiers) == 1) {
-                    $message = 'SelectedUserNotAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
-                }
-                else {
-                    $message = 'SelectedUsersNotAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
-                }
-            }
-            elseif (count($userIdentifiers) == 1) {
-                $message = 'SelectedUserAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
-            }
-            else {
-                $message = 'SelectedUsersAddedToGroup' . ($containsDuplicates ? 'Dupes' : '');
+            catch (Throwable) {
+                $message = 'SelectedUsersNotAddedToGroup';
+                $messageType = AlertEnum::DANGER;
             }
 
             $this->alertsManager->addAlert(
                 new Alert(
-                    $this->translator->trans($message, [], Manager::CONTEXT),
-                    $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS
+                    $this->translator->trans($message, [], Manager::CONTEXT), $messageType
                 )
             );
 

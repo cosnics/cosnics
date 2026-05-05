@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Storage\Repository;
 
+use Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Enum\ComparisonTypeEnum;
@@ -20,6 +21,7 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperty;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
+use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
@@ -189,7 +191,7 @@ class GroupRepository
      * Validates a relative position of a node, which is used when creating or moving a node.
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     protected function __validatePosition(Group $group, ?Group $referenceNode = null): ?Group
     {
@@ -264,7 +266,7 @@ class GroupRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function createGroup(Group $group): bool
     {
@@ -430,8 +432,8 @@ class GroupRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function moveGroup(Group $group, string $parentGroupIdentifier): bool
     {
@@ -651,47 +653,70 @@ class GroupRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function retrieveGroupByCode(string $groupCode): ?Group
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($groupCode)
-        );
+        try {
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE),
+                new StaticConditionVariable($groupCode)
+            );
 
-        return $this->dataClassRepository->retrieve(
-            Group::class, new StorageParameters(condition: $condition)
-        );
+            return $this->dataClassRepository->retrieve(
+                Group::class, new StorageParameters(condition: $condition)
+            );
+        }
+        catch (StorageNoResultException) {
+            throw new NoSuchGroupException(
+                [Group::PROPERTY_CODE => $groupCode]
+            );
+        }
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function retrieveGroupByCodeAndParentIdentifier(string $groupCode, string $parentIdentifier): ?Group
     {
-        $conditions = [];
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($groupCode)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($parentIdentifier)
-        );
+        try {
+            $conditions = [];
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE),
+                new StaticConditionVariable($groupCode)
+            );
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+                new StaticConditionVariable($parentIdentifier)
+            );
 
-        return $this->dataClassRepository->retrieve(
-            Group::class, new StorageParameters(condition: new AndCondition($conditions))
-        );
+            return $this->dataClassRepository->retrieve(
+                Group::class, new StorageParameters(condition: new AndCondition($conditions))
+            );
+        }
+        catch (StorageNoResultException) {
+            throw new NoSuchGroupException(
+                [Group::PROPERTY_CODE => $groupCode, Group::PROPERTY_PARENT_ID => $parentIdentifier]
+            );
+        }
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function retrieveGroupByIdentifier(string $groupId): ?Group
     {
-        return $this->dataClassRepository->retrieveById(Group::class, $groupId);
+        try {
+            return $this->dataClassRepository->retrieveById(Group::class, $groupId);
+        }
+        catch (StorageNoResultException) {
+            throw new NoSuchGroupException(
+                [DataClass::PROPERTY_ID => $groupId]
+            );
+        }
     }
 
     /**
@@ -771,19 +796,24 @@ class GroupRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function retrieveRootGroup(): ?Group
     {
-        return $this->dataClassRepository->retrieve(
-            Group::class, new StorageParameters(
-                condition: new EqualityCondition(
-                    new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-                    new StaticConditionVariable(DataClass::EMPTY_UUID)
+        try {
+            return $this->dataClassRepository->retrieve(
+                Group::class, new StorageParameters(
+                    condition: new EqualityCondition(
+                        new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+                        new StaticConditionVariable(DataClass::EMPTY_UUID)
+                    )
                 )
-            )
-        );
+            );
+        }
+        catch (StorageNoResultException) {
+            throw new NoSuchGroupException([Group::PROPERTY_PARENT_ID => DataClass::EMPTY_UUID]);
+        }
     }
 
     /**

@@ -24,11 +24,22 @@ class NoSuchObjectExceptionRenderer extends AbstractUserExceptionRenderer implem
     public function renderMessage(UserExceptionInterface $userException): string
     {
         return $this->translator->trans(
-            'ObjectNotExist', [
+            'NoSuchObject', [
             '%ObjectType%' => $userException->getObjectType(),
-            '%ObjectIdentifier%' => $userException->getObjectIdentifier()
+            '%ObjectIdentifiers%' => $this->renderObjectIdentifiers($userException->getObjectIdentifiers())
         ], StringUtilities::LIBRARIES
         );
+    }
+
+    protected function renderObjectIdentifiers(array $objectIdentifiers): string
+    {
+        $identifierParts = [];
+
+        foreach ($objectIdentifiers as $identifierName => $identifierValue) {
+            $identifierParts[] = $identifierName . ' = ' . $identifierValue;
+        }
+
+        return implode(', ', $identifierParts);
     }
 
     /**

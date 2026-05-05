@@ -14,43 +14,12 @@ use Exception;
  */
 class NoSuchObjectException extends Exception implements UserExceptionInterface
 {
-    protected string $objectIdentifier;
-
-    protected string $objectType;
-
     public function __construct(
-        string $objectType, string $objectIdentifier, ?string $message = null, int $code = 0,
+        public string $objectType, public array $objectIdentifiers, ?string $message = null, int $code = 0,
         ?Exception $previousException = null
     )
     {
         parent::__construct($message, $code, $previousException);
-
-        $this->objectType = $objectType;
-        $this->objectIdentifier = $objectIdentifier;
-    }
-
-    public function getObjectIdentifier(): string
-    {
-        return $this->objectIdentifier;
-    }
-
-    public function setObjectIdentifier(string $objectIdentifier): NoSuchObjectException
-    {
-        $this->objectIdentifier = $objectIdentifier;
-
-        return $this;
-    }
-
-    public function getObjectType(): string
-    {
-        return $this->objectType;
-    }
-
-    public function setObjectType(string $objectType): NoSuchObjectException
-    {
-        $this->objectType = $objectType;
-
-        return $this;
     }
 
     public function getUserExceptionRendererClassName(): string

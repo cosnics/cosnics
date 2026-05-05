@@ -10,9 +10,9 @@ use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchPa
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -41,37 +41,19 @@ class TruncateComponent extends Manager
                 $groupIdentifiers = [$groupIdentifiers];
             }
 
-            foreach ($groupIdentifiers as $groupIdentifier) {
-                $group = $this->groupService->retrieveGroupByIdentifier($groupIdentifier);
+            try {
+                $this->groupService->deleteGroupMembershipsByGroupIdentifiers($groupIdentifiers, $currentUser);
 
-                try {
-                    $this->groupMembershipService->deleteGroupMembershipsByGroup($group, $currentUser);
-                }
-                catch (RuntimeException) {
-                    $failures ++;
-                }
-            }
-
-            if ($failures) {
-                if (count($groupIdentifiers) == 1) {
-                    $message = 'SelectedGroupNotEmptied';
-                }
-                else {
-                    $message = 'SelectedGroupsNotEmptied';
-                }
-            }
-            elseif (count($groupIdentifiers) == 1) {
-                $message = 'SelectedGroupEmptied';
-            }
-            else {
                 $message = 'SelectedGroupsEmptied';
+                $messageType = AlertEnum::SUCCESS;
+            }
+            catch (Throwable) {
+                $message = 'SelectedGroupsNotEmptied';
+                $messageType = AlertEnum::DANGER;
             }
 
             $this->alertsManager->addAlert(
-                new Alert(
-                    $this->translator->trans($message, [], Manager::CONTEXT),
-                    $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS
-                )
+                new Alert($this->translator->trans($message, [], Manager::CONTEXT), $messageType)
             );
 
             if (count($groupIdentifiers) == 1) {

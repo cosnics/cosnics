@@ -6,13 +6,12 @@ use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupDeleteEvent;
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupMoveEvent;
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupUpdateEvent;
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\BeforeGroupDeleteEvent;
-use Chamilo\Core\Group\Architecture\Exception\GroupNotFoundException;
+use Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
-use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Service\PropertyMapper;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -47,7 +46,7 @@ class GroupService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function createGroup(Group $group, ?User $executingUser = null): void
     {
@@ -59,7 +58,7 @@ class GroupService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function createGroupFromParameters(
         string $name, string $parentIdentifier, ?string $description = null, ?string $code = null,
@@ -78,9 +77,32 @@ class GroupService
     }
 
     /**
+     * @param string[] $userIdentifiers
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\GroupMembership>
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function deleteGroup(Group $group, ?User $executingUser = null): bool
+    public function createGroupMembershipForGroupIdentifierAndUserIdentifiers(
+        string $groupIdentifier, array $userIdentifiers, ?User $executingUser = null
+    ): ArrayCollection
+    {
+        try {
+            $group = $this->retrieveGroupByIdentifier($groupIdentifier);
+
+            return $this->groupMembershipService->createGroupMembershipForGroupAndUserIdentifiers(
+                $group, $userIdentifiers, $executingUser
+            );
+        }
+        catch (NoSuchGroupException) {
+            return new ArrayCollection();
+        }
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function deleteGroup(Group $group, ?User $executingUser = null): void
     {
         $this->eventDispatcher->dispatch(new BeforeGroupDeleteEvent($group, $executingUser));
         $descendants = $this->groupsTreeTraverser->retrieveDescendantsByGroup($group);
@@ -91,8 +113,6 @@ class GroupService
 
         $this->groupRepository->deleteGroup($group);
         $this->eventDispatcher->dispatch(new AfterGroupDeleteEvent($group, $executingUser));
-
-        return true;
     }
 
     /**
@@ -100,28 +120,49 @@ class GroupService
      * @throws \Throwable
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function deleteGroupByIdentifier(string $identifier, ?User $executingUser = null): bool
+    public function deleteGroupByIdentifier(string $identifier, ?User $executingUser = null): void
     {
-        return $this->deleteGroup($this->retrieveGroupByIdentifier($identifier), $executingUser);
+        $this->deleteGroup($this->retrieveGroupByIdentifier($identifier), $executingUser);
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function moveGroup(Group $group, string $parentGroupIdentifier, ?User $executingUser = null): bool
+    public function deleteGroupMembershipsByGroupIdentifier(string $groupIdentifier, ?User $executingUser = null): void
+    {
+        try {
+            $group = $this->retrieveGroupByIdentifier($groupIdentifier);
+            $this->groupMembershipService->deleteGroupMembershipsByGroup($group, $executingUser);
+        }
+        catch (NoSuchGroupException) {
+        }
+    }
+
+    /**
+     * @param string[] $groupIdentifiers
+     *
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function deleteGroupMembershipsByGroupIdentifiers(array $groupIdentifiers, ?User $executingUser = null): void
+    {
+        foreach ($groupIdentifiers as $groupIdentifier) {
+            $this->deleteGroupMembershipsByGroupIdentifier($groupIdentifier, $executingUser);
+        }
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
+     */
+    public function moveGroup(Group $group, string $parentGroupIdentifier, ?User $executingUser = null): void
     {
         $oldParentGroupIdentifier = $group->getParentId();
 
-        if (!$this->groupRepository->moveGroup($group, $parentGroupIdentifier)) {
-            return false;
-        }
+        $this->groupRepository->moveGroup($group, $parentGroupIdentifier);
 
         $this->eventDispatcher->dispatch(
             new AfterGroupMoveEvent($group, $oldParentGroupIdentifier, $parentGroupIdentifier, $executingUser)
         );
-
-        return true;
     }
 
     /**
@@ -129,24 +170,28 @@ class GroupService
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function retrieveDescendantsByParentIdentifier(string $parentIdentifier = DataClass::EMPTY_UUID
     ): ArrayCollection
     {
-        if ($parentIdentifier !== DataClass::EMPTY_UUID) {
-            $parentGroup = $this->retrieveGroupByIdentifier($parentIdentifier);
-        }
-        else {
-            $parentGroup = $this->retrieveRootGroup();
-        }
+        try {
+            if ($parentIdentifier !== DataClass::EMPTY_UUID) {
+                $parentGroup = $this->retrieveGroupByIdentifier($parentIdentifier);
+            }
+            else {
+                $parentGroup = $this->retrieveRootGroup();
+            }
 
-        return $this->groupsTreeTraverser->retrieveDescendantsByGroup($parentGroup);
+            return $this->groupsTreeTraverser->retrieveDescendantsByGroup($parentGroup);
+        }
+        catch (NoSuchGroupException) {
+            return new ArrayCollection();
+        }
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function retrieveGroupByCode(string $groupCode): Group
     {
@@ -154,17 +199,12 @@ class GroupService
             throw new InvalidArgumentException('The given groupcode can not be empty');
         }
 
-        $group = $this->groupRepository->retrieveGroupByCode($groupCode);
-
-        if (!$group instanceof Group) {
-            throw new RuntimeException('Could not find the group with groupcode ' . $groupCode);
-        }
-
-        return $group;
+        return $this->groupRepository->retrieveGroupByCode($groupCode);
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function retrieveGroupByCodeAndParentIdentifier(string $groupCode, string $parentIdentifier): Group
     {
@@ -178,17 +218,12 @@ class GroupService
             );
         }
 
-        try {
-            return $this->groupRepository->retrieveGroupByCodeAndParentIdentifier($groupCode, $parentIdentifier);
-        }
-        catch (StorageNoResultException) {
-            throw new GroupNotFoundException(code: $groupCode, parentIdentifier: $parentIdentifier);
-        }
+        return $this->groupRepository->retrieveGroupByCodeAndParentIdentifier($groupCode, $parentIdentifier);
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function retrieveGroupByIdentifier(string $groupIdentifier): Group
     {
@@ -229,14 +264,18 @@ class GroupService
         $groups = new ArrayCollection();
 
         foreach ($groupIdentifiers as $groupIdentifier) {
-            $group = $this->retrieveGroupByIdentifier($groupIdentifier);
+            try {
+                $group = $this->retrieveGroupByIdentifier($groupIdentifier);
 
-            $groups->add($group);
+                $groups->add($group);
 
-            $descendants = $this->groupsTreeTraverser->retrieveDescendantsByGroup($group);
+                $descendants = $this->groupsTreeTraverser->retrieveDescendantsByGroup($group);
 
-            foreach ($descendants as $descendant) {
-                $groups->add($descendant);
+                foreach ($descendants as $descendant) {
+                    $groups->add($descendant);
+                }
+            }
+            catch (NoSuchGroupException) {
             }
         }
 
@@ -275,37 +314,31 @@ class GroupService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function retrieveRootGroup(): Group
     {
-        $group = $this->groupRepository->retrieveRootGroup();
-
-        if (!$group instanceof Group) {
+        try {
+            return $this->groupRepository->retrieveRootGroup();
+        }
+        catch (NoSuchGroupException) {
             throw new RuntimeException('Could not find the root group');
         }
-
-        return $group;
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updateGroup(Group $group, ?User $executingUser = null): bool
+    public function updateGroup(Group $group, ?User $executingUser = null): void
     {
-        if (!$this->groupRepository->updateGroup($group)) {
-            return false;
-        }
+        $this->groupRepository->updateGroup($group);
 
         $this->eventDispatcher->dispatch(new AfterGroupUpdateEvent($group, $executingUser));
-
-        return true;
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function updateGroupFromParameters(
         Group $group, string $name, string $parentIdentifier, ?string $description = null, ?string $code = null,

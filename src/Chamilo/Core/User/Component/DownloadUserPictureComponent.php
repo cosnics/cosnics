@@ -11,6 +11,7 @@ use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException;
 use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
@@ -70,7 +71,7 @@ class DownloadUserPictureComponent extends Manager
 
         if (empty($user)) {
             throw new NoSuchObjectException(
-                $translator->trans('User', [], Manager::CONTEXT), $userIdentifier
+                $translator->trans('User', [], Manager::CONTEXT), [DataClass::PROPERTY_ID => $userIdentifier]
             );
         }
 

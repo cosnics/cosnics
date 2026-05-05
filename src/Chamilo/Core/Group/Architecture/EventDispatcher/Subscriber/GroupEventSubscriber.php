@@ -9,7 +9,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * @package Chamilo\Core\Group\Architecture\EventDispatcher\Subscriber
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-readonly class GroupMembershipEventSubscriber implements EventSubscriberInterface
+readonly class GroupEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(protected GroupMembershipService $groupMembershipService)
     {
@@ -20,9 +20,11 @@ readonly class GroupMembershipEventSubscriber implements EventSubscriberInterfac
      */
     public function beforeDelete(BeforeGroupDeleteEvent $afterGroupCreateEvent): bool
     {
-        return $this->groupMembershipService->deleteGroupMembershipsByGroup(
+        $this->groupMembershipService->deleteGroupMembershipsByGroup(
             $afterGroupCreateEvent->group, $afterGroupCreateEvent->executingUser
         );
+
+        return true;
     }
 
     public static function getSubscribedEvents(): array

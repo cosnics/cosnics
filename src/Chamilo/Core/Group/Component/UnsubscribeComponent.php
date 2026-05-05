@@ -3,8 +3,6 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataClass\GroupMembership;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
@@ -12,9 +10,9 @@ use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchPa
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -34,65 +32,45 @@ class UnsubscribeComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $groupMembershipIdentifiers = $this->getRequest()->getFromRequestOrQuery(DataClass::PROPERTY_ID);
-
-        $failures = 0;
+        $groupMembershipIdentifiers = $this->getRequest()->getFromRequestOrQuery(DataClass::PROPERTY_ID, []);
 
         if (!empty($groupMembershipIdentifiers)) {
             if (!is_array($groupMembershipIdentifiers)) {
                 $groupMembershipIdentifiers = [$groupMembershipIdentifiers];
             }
 
-            foreach ($groupMembershipIdentifiers as $groupMembershipIdentifier) {
-                $groupMembership =
-                    $this->groupMembershipService->retrieveGroupMembershipByIdentifier($groupMembershipIdentifier);
-
-                if (!$groupMembership instanceof GroupMembership) {
-                    continue;
-                }
-
-                $group = $this->groupService->retrieveGroupByIdentifier($groupMembership->getGroupId());
-                $userToUnsubscribe = $this->userService->findUserByIdentifier($groupMembership->getUserId());
-
-                try {
-                    $this->groupMembershipService->deleteGroupMembershipByGroupAndUser(
-                        $group, $userToUnsubscribe, $currentUser
-                    );
-                }
-                catch (RuntimeException) {
-                    $failures ++;
-                }
+            try {
+                $redirectGroupMembership =
+                    $this->groupMembershipService->retrieveGroupMembershipByIdentifier($groupMembershipIdentifiers[0]);
+                $redirectGroup = $this->groupService->retrieveGroupByIdentifier($redirectGroupMembership->getGroupId());
+            }
+            catch (Throwable) {
+                $redirectGroup = $this->groupService->retrieveRootGroup();
             }
 
-            if ($failures) {
-                if (count($groupMembershipIdentifiers) == 1) {
-                    $message = 'SelectedGroupRelUserNotDeleted';
-                }
-                else {
-                    $message = 'SelectedGroupRelUsersNotDeleted';
-                }
+            try {
+                $this->groupMembershipService->deleteGroupMembershipsByIdentifiers(
+                    $groupMembershipIdentifiers, $currentUser
+                );
+
+                $message = 'SelectedGroupMembershipsDeleted';
+                $messageType = AlertEnum::SUCCESS;
             }
-            elseif (count($groupMembershipIdentifiers) == 1) {
-                $message = 'SelectedGroupRelUserDeleted';
-            }
-            else {
-                $message = 'SelectedGroupRelUsersDeleted';
+            catch (Throwable) {
+                $message = 'SelectedGroupMembershipsNotDeleted';
+                $messageType = AlertEnum::DANGER;
             }
 
             $this->alertsManager->addAlert(
                 new Alert(
-                    $this->translator->trans($message, [], Manager::CONTEXT),
-                    $failures ? AlertEnum::DANGER : AlertEnum::SUCCESS
+                    $this->translator->trans($message, [], Manager::CONTEXT), $messageType
                 )
             );
-
-            $groupIdentifier =
-                isset($group) && $group instanceof Group ? $group->getId() : $this->getRootGroup()->getId();
 
             return new RedirectResponse($this->getUrlGenerator()->fromParameters([
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                DataClass::PROPERTY_ID => $groupIdentifier
+                DataClass::PROPERTY_ID => $redirectGroup->getId()
             ]));
         }
         else {
