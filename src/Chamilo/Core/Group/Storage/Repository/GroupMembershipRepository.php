@@ -84,9 +84,9 @@ class GroupMembershipRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function createGroupMembership(GroupMembership $groupMembership): bool
+    public function createGroupMembership(GroupMembership $groupMembership): void
     {
-        return $this->dataClassRepository->create($groupMembership);
+        $this->dataClassRepository->create($groupMembership);
     }
 
     /**

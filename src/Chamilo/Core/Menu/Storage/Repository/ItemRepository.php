@@ -45,9 +45,9 @@ readonly class ItemRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function createItem(Item $item): bool
+    public function createItem(Item $item): void
     {
-        return $this->dataClassRepository->create($item);
+        $this->dataClassRepository->create($item);
     }
 
     /**

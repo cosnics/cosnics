@@ -157,12 +157,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function create(string $dataClassStorageUnitName, array $record): bool
+    public function create(string $dataClassStorageUnitName, array $record): void
     {
         try {
             $this->connection->insert($dataClassStorageUnitName, $record);
-
-            return true;
         }
         catch (UniqueConstraintViolationException $exception) {
             throw new ObjectAlreadyExistsException(
@@ -181,7 +179,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function delete(string $dataClassStorageUnitName, ?ConditionInterface $condition = null): bool
+    public function delete(string $dataClassStorageUnitName, ?ConditionInterface $condition = null): void
     {
         try {
             $queryBuilder = $this->connection->createQueryBuilder();
@@ -195,8 +193,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
             }
 
             $queryBuilder->executeStatement();
-
-            return true;
         }
         catch (Throwable $throwable) {
             $this->handleError($throwable);
@@ -386,33 +382,29 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function update(string $dataClassStorageUnitName, UpdateProperties $properties, ConditionInterface $condition
-    ): bool
+    ): void
     {
-        if ($properties->count() === 0) {
-            return true;
-        }
+        if ($properties->count() > 0) {
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder->update($dataClassStorageUnitName);
+            $this->queryBuilderConfigurator->applyUpdate($queryBuilder, $properties, $condition);
+            $sqlQuery = $queryBuilder->getSQL();
 
-        $queryBuilder = $this->connection->createQueryBuilder();
-        $queryBuilder->update($dataClassStorageUnitName);
-        $this->queryBuilderConfigurator->applyUpdate($queryBuilder, $properties, $condition);
-        $sqlQuery = $queryBuilder->getSQL();
-
-        try {
-            $queryBuilder->executeStatement();
-
-            return true;
-        }
-        catch (UniqueConstraintViolationException $exception) {
-            throw new ObjectAlreadyExistsException(
-                $dataClassStorageUnitName, $properties->toArray(), $exception->getMessage(), $exception->getCode(),
-                $exception
-            );
-        }
-        catch (Throwable $throwable) {
-            $this->handleError($throwable);
-            throw new StorageMethodException(
-                __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
-            );
+            try {
+                $queryBuilder->executeStatement();
+            }
+            catch (UniqueConstraintViolationException $exception) {
+                throw new ObjectAlreadyExistsException(
+                    $dataClassStorageUnitName, $properties->toArray(), $exception->getMessage(), $exception->getCode(),
+                    $exception
+                );
+            }
+            catch (Throwable $throwable) {
+                $this->handleError($throwable);
+                throw new StorageMethodException(
+                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
+                );
+            }
         }
     }
 }

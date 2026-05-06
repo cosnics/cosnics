@@ -26,12 +26,12 @@ interface DataClassDatabaseInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function create(string $dataClassStorageUnitName, array $record): bool;
+    public function create(string $dataClassStorageUnitName, array $record): void;
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function delete(string $dataClassStorageUnitName, ?ConditionInterface $condition = null): bool;
+    public function delete(string $dataClassStorageUnitName, ?ConditionInterface $condition = null): void;
 
     /**
      * @return string[]
@@ -75,5 +75,5 @@ interface DataClassDatabaseInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function update(string $dataClassStorageUnitName, UpdateProperties $properties, ConditionInterface $condition
-    ): bool;
+    ): void;
 }

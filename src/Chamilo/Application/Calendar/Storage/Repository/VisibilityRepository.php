@@ -28,9 +28,9 @@ class VisibilityRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function createVisibility(Visibility $visibility): bool
+    public function createVisibility(Visibility $visibility): void
     {
-        return $this->dataClassRepository->create($visibility);
+        $this->dataClassRepository->create($visibility);
     }
 
     /**

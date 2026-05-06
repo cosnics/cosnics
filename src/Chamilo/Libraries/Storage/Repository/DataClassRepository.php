@@ -225,7 +225,7 @@ class DataClassRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function create(DataClass $dataClass): bool
+    public function create(DataClass $dataClass): void
     {
         if ($dataClass instanceof UuidDataClassInterface && !$dataClass->isIdentified()) {
             $dataClass->setId(Uuid::v7()->__toString());
@@ -239,28 +239,21 @@ class DataClassRepository
 
         $dataClassName = $dataClass::class;
 
-        if ($this->createRecord($dataClassName, $objectProperties)) {
-            if (!$dataClass instanceof UuidDataClassInterface) {
-                $dataClass->setId(
-                    (string) $this->dataClassDatabase->getLastInsertedIdentifier($dataClass::getStorageUnitName())
-                );
-            }
-
-            if ($this->queryCacheEnabled) {
-                $this->dataClassRepositoryCache->addForRetrieve(
-                    $dataClassName, $this->buildRetrieveByIdentifierParameters($dataClassName, $dataClass->getId()),
-                    function () use ($dataClass) {
-                        return $dataClass;
-                    }
-                );
-
-                return true;
-            }
-
-            return true;
+        $this->createRecord($dataClassName, $objectProperties);
+        if (!$dataClass instanceof UuidDataClassInterface) {
+            $dataClass->setId(
+                (string) $this->dataClassDatabase->getLastInsertedIdentifier($dataClass::getStorageUnitName())
+            );
         }
 
-        return false;
+        if ($this->queryCacheEnabled) {
+            $this->dataClassRepositoryCache->addForRetrieve(
+                $dataClassName, $this->buildRetrieveByIdentifierParameters($dataClassName, $dataClass->getId()),
+                function () use ($dataClass) {
+                    return $dataClass;
+                }
+            );
+        }
     }
 
     /**
@@ -269,15 +262,15 @@ class DataClassRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function createRecord(string $dataClassName, array $record): bool
+    public function createRecord(string $dataClassName, array $record): void
     {
-        return $this->dataClassDatabase->create($dataClassName::getStorageUnitName(), $record);
+        $this->dataClassDatabase->create($dataClassName::getStorageUnitName(), $record);
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function delete(DataClass $dataClass): bool
+    public function delete(DataClass $dataClass): void
     {
         $dataClassName = $dataClass::class;
 
@@ -286,7 +279,7 @@ class DataClassRepository
             new StaticConditionVariable($dataClass->getId())
         );
 
-        return $this->deletes($dataClassName, $condition);
+        $this->deletes($dataClassName, $condition);
     }
 
     /**
@@ -294,17 +287,12 @@ class DataClassRepository
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function deletes(string $dataClassName, ConditionInterface $condition): bool
+    public function deletes(string $dataClassName, ConditionInterface $condition): void
     {
-        if (!$this->dataClassDatabase->delete($dataClassName::getStorageUnitName(), $condition)) {
-            return false;
-        }
+        $this->dataClassDatabase->delete($dataClassName::getStorageUnitName(), $condition);
 
         if ($this->queryCacheEnabled) {
-            return $this->dataClassRepositoryCache->truncateClass($dataClassName);
-        }
-        else {
-            return true;
+            $this->dataClassRepositoryCache->truncateClass($dataClassName);
         }
     }
 
@@ -493,7 +481,7 @@ class DataClassRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function update(DataClass $dataClass): bool
+    public function update(DataClass $dataClass): void
     {
         $dataClassName = get_class($dataClass);
 
@@ -516,7 +504,7 @@ class DataClassRepository
             );
         }
 
-        return $this->updates($dataClassName, $updatePropertes, $condition);
+        $this->updates($dataClassName, $updatePropertes, $condition);
     }
 
     /**
@@ -524,14 +512,12 @@ class DataClassRepository
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updates(string $dataClassName, UpdateProperties $properties, ConditionInterface $condition): bool
+    public function updates(string $dataClassName, UpdateProperties $properties, ConditionInterface $condition): void
     {
         $this->dataClassDatabase->update($dataClassName::getStorageUnitName(), $properties, $condition);
 
         if ($this->queryCacheEnabled) {
             $this->dataClassRepositoryCache->truncateClass($dataClassName);
         }
-
-        return true;
     }
 }

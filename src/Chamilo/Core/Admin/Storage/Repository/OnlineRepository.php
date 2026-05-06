@@ -26,9 +26,9 @@ readonly class OnlineRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function createOnline(Online $online): bool
+    public function createOnline(Online $online): void
     {
-        return $this->dataClassRepository->create($online);
+        $this->dataClassRepository->create($online);
     }
 
     /**

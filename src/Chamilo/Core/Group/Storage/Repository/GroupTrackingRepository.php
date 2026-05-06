@@ -19,8 +19,8 @@ class GroupTrackingRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function createGroupActivity(GroupActivity $groupActivity): bool
+    public function createGroupActivity(GroupActivity $groupActivity): void
     {
-        return $this->dataClassRepository->create($groupActivity);
+        $this->dataClassRepository->create($groupActivity);
     }
 }

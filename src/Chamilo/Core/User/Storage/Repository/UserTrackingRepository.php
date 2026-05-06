@@ -21,9 +21,9 @@ class UserTrackingRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function createUserActivity(UserActivity $userActivity): bool
+    public function createUserActivity(UserActivity $userActivity): void
     {
-        return $this->dataClassRepository->create($userActivity);
+        $this->dataClassRepository->create($userActivity);
     }
 
     /**
@@ -31,9 +31,9 @@ class UserTrackingRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function createUserAuthenticationActivity(UserAuthenticationActivity $userAuthenticationActivity): bool
+    public function createUserAuthenticationActivity(UserAuthenticationActivity $userAuthenticationActivity): void
     {
-        return $this->dataClassRepository->create($userAuthenticationActivity);
+        $this->dataClassRepository->create($userAuthenticationActivity);
     }
 
     /**
@@ -41,9 +41,9 @@ class UserTrackingRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function createUserVisit(UserVisit $userVisit): bool
+    public function createUserVisit(UserVisit $userVisit): void
     {
-        return $this->dataClassRepository->create($userVisit);
+        $this->dataClassRepository->create($userVisit);
     }
 
     /**
