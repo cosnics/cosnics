@@ -11,6 +11,7 @@ use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -23,6 +24,7 @@ class ActiveComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -49,10 +51,13 @@ class ActiveComponent extends Manager
                     continue;
                 }
 
-                $userToActivate = $this->userService->findUserByIdentifier($identifier);
+                $userToActivate = $this->userService->retrieveUserByIdentifier($identifier);
                 $userToActivate->setActive($active);
 
-                if (!$this->userService->updateUser($userToActivate, $currentUser)) {
+                try {
+                    $this->userService->updateUser($userToActivate, $currentUser);
+                }
+                catch (Throwable) {
                     $failures ++;
                 }
             }

@@ -36,6 +36,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function afterUserCreate(AfterUserCreateEvent $afterUserCreateEvent): bool
     {
@@ -51,6 +52,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function afterUserDelete(AfterUserDeleteEvent $afterUserDeleteEvent): bool
     {
@@ -66,6 +68,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function afterUserEnterPage(AfterUserEnterPageEvent $afterUserEnterPage): bool
     {
@@ -94,6 +97,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function afterUserLogin(AfterUserLoginEvent $afterUserLoginEvent): bool
     {
@@ -106,6 +110,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function afterUserPasswordReset(AfterUserPasswordResetEvent $afterUserPasswordResetEvent): bool
     {
@@ -121,6 +126,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function afterUserRegistration(AfterUserRegistrationEvent $afterUserRegistrationEvent): bool
     {
@@ -134,6 +140,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function afterUserUpdate(AfterUserUpdateEvent $afterUserUpdateEvent): bool
     {
@@ -168,6 +175,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function beforeUserLogout(BeforeUserLogoutEvent $beforeUserLogoutEvent): bool
     {
@@ -180,6 +188,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     protected function createAuthenticationActivityFormParameters(int $action, string $userIdentifier, ?string $clientIp
     ): bool

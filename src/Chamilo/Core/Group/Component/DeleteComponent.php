@@ -13,6 +13,7 @@ use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -42,7 +43,10 @@ class DeleteComponent extends Manager
             foreach ($identifiers as $identifier) {
                 $group = $this->groupService->retrieveGroupByIdentifier($identifier);
 
-                if (!$this->groupService->deleteGroup($group, $currentUser)) {
+                try {
+                    $this->groupService->deleteGroup($group, $currentUser);
+                }
+                catch (Throwable) {
                     $failures ++;
                 }
             }

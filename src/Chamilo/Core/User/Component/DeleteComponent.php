@@ -11,6 +11,7 @@ use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -20,8 +21,8 @@ class DeleteComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -41,9 +42,12 @@ class DeleteComponent extends Manager
             $failures = 0;
 
             foreach ($userIdentifiers as $userIdentifier) {
-                $userToDelete = $this->userService->findUserByIdentifier($userIdentifier);
+                $userToDelete = $this->userService->retrieveUserByIdentifier($userIdentifier);
 
-                if (!$this->userService->deleteUser($userToDelete, $currentUser)) {
+                try {
+                    $this->userService->deleteUser($userToDelete, $currentUser);
+                }
+                catch (Throwable) {
                     $failures ++;
                 }
             }

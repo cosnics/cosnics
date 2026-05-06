@@ -30,7 +30,7 @@ readonly class UserFactory
 
         if ($userIdentifier) {
             try {
-                $user = $this->userService->findUserByIdentifier($userIdentifier);
+                $user = $this->userService->retrieveUserByIdentifier($userIdentifier);
 
                 if ($user instanceof User) {
                     if ($this->canChangeLanguage) {

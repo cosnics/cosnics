@@ -372,6 +372,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param callable $function
      *
      * @return mixed
+     * @throws \Throwable
      */
     public function transactional(callable $function): mixed
     {

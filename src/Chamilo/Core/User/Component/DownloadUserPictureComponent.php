@@ -11,8 +11,6 @@ use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
-use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
-use Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException;
 use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
@@ -45,7 +43,6 @@ class DownloadUserPictureComponent extends Manager
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -53,28 +50,19 @@ class DownloadUserPictureComponent extends Manager
     }
 
     /**
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
      */
     protected function getUserFromRequest(): User
     {
-        $translator = $this->getTranslator();
         $userIdentifier = $this->getRequest()->query->get(Manager::PARAM_USER_ID);
 
         if (empty($userIdentifier)) {
             throw new NoSuchParameterException(Manager::PARAM_USER_ID);
         }
 
-        $user = $this->userService->findUserByIdentifier($userIdentifier);
-
-        if (empty($user)) {
-            throw new NoSuchObjectException(
-                $translator->trans('User', [], Manager::CONTEXT), [DataClass::PROPERTY_ID => $userIdentifier]
-            );
-        }
-
-        return $user;
+        return $this->userService->retrieveUserByIdentifier($userIdentifier);
     }
 }

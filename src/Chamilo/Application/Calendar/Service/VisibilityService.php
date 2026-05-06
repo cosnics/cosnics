@@ -19,6 +19,7 @@ class VisibilityService implements VisibilityServiceInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function changeVisibility(string $userIdentifier, string $source): bool
     {
@@ -35,6 +36,7 @@ class VisibilityService implements VisibilityServiceInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function createVisibilityFromParameters(string $userIdentifier, string $source): bool
     {

@@ -48,7 +48,6 @@ readonly class GroupTreeMenuDataProvider extends TreeMenuDataProvider
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     protected function getRootDataClass(): Group
     {

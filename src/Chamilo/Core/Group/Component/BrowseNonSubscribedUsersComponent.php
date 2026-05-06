@@ -67,6 +67,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \TableException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -99,7 +100,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function getButtonToolBar(): ButtonToolBar
     {
@@ -136,7 +137,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     protected function getGroup(): Group
     {
@@ -200,7 +201,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
             $this->nonSubscribedUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
         );
 
-        $users = $this->userService->findUsers(
+        $users = $this->userService->retrieveUsers(
             $this->getNonSubscribedUserCondition(), $tableParameterValues->getOffset(),
             $tableParameterValues->getNumberOfItemsPerPage(),
             $this->nonSubscribedUserTableRenderer->determineOrderBy($tableParameterValues)

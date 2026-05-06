@@ -41,8 +41,6 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
     abstract public function getPriority(): int;
 
-    abstract protected function getUserByCasUserIdentifier(string $userIdentifier): ?User;
-
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      */
@@ -117,7 +115,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
             $userIdentifier = $this->getCasUserIdentifierFromAttributes(phpCAS::getUser(), $userAttributes);
 
             if ($userIdentifier) {
-                $user = $this->getUserByCasUserIdentifier($userIdentifier);
+                $user = $this->retrieveUserByCasUserIdentifier($userIdentifier);
 
                 if (!$user instanceof User) {
                     $user = $this->registerUser(phpCAS::getUser(), $userAttributes);
@@ -125,7 +123,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
                 if ($userAttributes && isset($userAttributes['surrogatePrincipal'])) {
                     $surrogateUserName = array_pop($userAttributes['surrogatePrincipal']);
-                    $surrogateUser = $this->userService->findUserByUsername($surrogateUserName);
+                    $surrogateUser = $this->userService->retrieveUserByUsername($surrogateUserName);
                     $this->session->set(AuthenticationValidator::PARAM_AS_ADMIN, $surrogateUser->getId());
                 }
 
@@ -158,4 +156,6 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
      * @throws \Exception
      */
     abstract protected function registerUser(string $casUser, array $casUserAttributes = []): User;
+
+    abstract protected function retrieveUserByCasUserIdentifier(string $userIdentifier): ?User;
 }

@@ -22,6 +22,7 @@ use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Throwable;
 use Twig\Environment;
 
 /**
@@ -49,10 +50,10 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -72,19 +73,21 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
         $requestUserIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID);
 
         if (!is_null($requestKey) && !is_null($requestUserIdentifier)) {
-            $userToCreateNewPasswordFor = $this->userService->findUserByIdentifier($requestUserIdentifier);
+            $userToCreateNewPasswordFor = $this->userService->retrieveUserByIdentifier($requestUserIdentifier);
 
             if ($this->userService->isValidKeyForUser($requestKey, $userToCreateNewPasswordFor)) {
-                if (!$this->userService->createNewPasswordForUser($userToCreateNewPasswordFor, $currentUser)) {
-                    throw new UserException(
-                        $this->translator->trans('CreationOfNewPasswordFailed', [], Manager::CONTEXT)
-                    );
-                }
-                else {
+                try {
+                    $this->userService->createNewPasswordForUser($userToCreateNewPasswordFor, $currentUser);
+                    
                     $html[] = $this->alertRenderer->render(
                         new Alert(
                             $this->translator->trans('YourNewPasswordHasBeenMailedToYou', [], Manager::CONTEXT)
                         )
+                    );
+                }
+                catch (Throwable) {
+                    throw new UserException(
+                        $this->translator->trans('CreationOfNewPasswordFailed', [], Manager::CONTEXT)
                     );
                 }
             }
@@ -103,7 +106,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
             if ($form->isSubmitted() && $form->isValid()) {
                 $submittedData = $form->getData();
 
-                $userToResetPasswordFor = $this->userService->findUserByEmail($submittedData[User::PROPERTY_EMAIL]);
+                $userToResetPasswordFor = $this->userService->retrieveUserByEmail($submittedData[User::PROPERTY_EMAIL]);
 
                 if ($this->userService->sendPasswordResetLinkforUser($userToResetPasswordFor)) {
                     $html[] = '<div class="alert alert-success">' . $this->translator->trans(

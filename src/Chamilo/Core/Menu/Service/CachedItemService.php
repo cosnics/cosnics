@@ -52,6 +52,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function createItem(Item $item): bool
     {
@@ -68,6 +69,7 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function createItemForTypeFromValues(string $itemType, array $values): ?Item
     {

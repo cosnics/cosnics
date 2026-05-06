@@ -60,6 +60,7 @@ class UpdateComponent extends Manager
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -75,7 +76,7 @@ class UpdateComponent extends Manager
         $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
 
         if ($userIdentifier) {
-            $userToUpdate = $this->userService->findUserByIdentifier($userIdentifier);
+            $userToUpdate = $this->userService->retrieveUserByIdentifier($userIdentifier);
             $isLockoutRisk =
                 $currentUser->getId() == $userToUpdate->getId() && $userToUpdate->isPlatformAdministrator();
 

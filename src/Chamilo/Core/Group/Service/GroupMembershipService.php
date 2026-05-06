@@ -4,14 +4,15 @@ namespace Chamilo\Core\Group\Service;
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupEmptyEvent;
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupSubscribeEvent;
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupUnsubscribeEvent;
+use Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupMembership;
 use Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository;
+use Chamilo\Core\User\Architecture\Exception\NoSuchUserException;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException;
-use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -94,7 +95,7 @@ class GroupMembershipService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
      */
     public function createGroupMembershipForGroupAndUser(Group $group, User $user, ?User $executingUser = null
     ): GroupMembership
@@ -127,6 +128,7 @@ class GroupMembershipService
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\GroupMembership>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
      */
     public function createGroupMembershipForGroupAndUserIdentifiers(
         Group $group, array $userIdentifiers, ?User $executingUser = null
@@ -136,10 +138,10 @@ class GroupMembershipService
 
         foreach ($userIdentifiers as $userIdentifier) {
             try {
-                $user = $this->userService->findUserByIdentifier($userIdentifier);
+                $user = $this->userService->retrieveUserByIdentifier($userIdentifier);
                 $groupMemberships->add($this->createGroupMembershipForGroupAndUser($group, $user, $executingUser));
             }
-            catch (StorageNoResultException) {
+            catch (NoSuchUserException) {
             }
         }
 
@@ -173,7 +175,7 @@ class GroupMembershipService
 
             $this->deleteGroupMembership($groupMembership, $executingUser);
         }
-        catch (StorageNoResultException) {
+        catch (NoSuchGroupMembershipException) {
         }
     }
 
@@ -188,7 +190,7 @@ class GroupMembershipService
                 $this->retrieveGroupMembershipByIdentifier($groupMembershipIdentifier), $executingUser
             );
         }
-        catch (StorageNoResultException) {
+        catch (NoSuchGroupMembershipException) {
         }
     }
 
@@ -233,7 +235,7 @@ class GroupMembershipService
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
      */
     public function retrieveGroupMembershipByGroupAndUser(Group $group, User $user): ?GroupMembership
     {
@@ -242,7 +244,7 @@ class GroupMembershipService
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
      */
     public function retrieveGroupMembershipByGroupCodeAndUser(string $groupCode, User $user): ?GroupMembership
     {
@@ -253,7 +255,7 @@ class GroupMembershipService
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
      */
     public function retrieveGroupMembershipByGroupIdentifierAndUserIdentifier(
         string $groupIdentifier, string $userIdentifier
@@ -266,7 +268,7 @@ class GroupMembershipService
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
      */
     public function retrieveGroupMembershipByIdentifier(string $groupMembershipIdentifier): ?GroupMembership
     {
@@ -395,7 +397,7 @@ class GroupMembershipService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
      */
     public function synchronizeGroup(Group $group, array $userIdentifiers, ?User $executingUser = null): void
     {
@@ -404,13 +406,13 @@ class GroupMembershipService
         $newUserIdentifiers = array_diff($userIdentifiers, $currentUserIdentifiers);
         $oldUserIdentifiers = array_diff($currentUserIdentifiers, $userIdentifiers);
 
-        $newUsers = $this->userService->findUsersByIdentifiers($newUserIdentifiers);
+        $newUsers = $this->userService->retrieveUsersByIdentifiers($newUserIdentifiers);
 
         foreach ($newUsers as $newUser) {
             $this->createGroupMembershipForGroupAndUser($group, $newUser, $executingUser);
         }
 
-        $oldUsers = $this->userService->findUsersByIdentifiers($oldUserIdentifiers);
+        $oldUsers = $this->userService->retrieveUsersByIdentifiers($oldUserIdentifiers);
 
         foreach ($oldUsers as $oldUser) {
             $this->deleteGroupMembershipByGroupAndUser($group, $oldUser, $executingUser);

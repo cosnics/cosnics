@@ -5,6 +5,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Throwable;
 
 /**
  * @package Chamilo\Libraries\Protocol\Authentication\Service
@@ -25,15 +26,6 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
     public function getPriority(): int
     {
         return 500;
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
-     */
-    protected function getUserByCasUserIdentifier(string $userIdentifier): ?User
-    {
-        return $this->userService->findUserByUsername($userIdentifier);
     }
 
     /**
@@ -58,13 +50,24 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
         $user->setGivenName($casUserAttributes['first_name']);
         $user->setOfficialCode($casUserAttributes['person_number']);
 
-        if (!$this->userService->createUser($user)) {
+        try {
+            $this->userService->createUser($user);
+
+            return $user;
+        }
+        catch (Throwable) {
             throw new NotAuthenticatedException(
                 $this->translator->trans('CasUserRegistrationFailed', [], StringUtilities::LIBRARIES)
             );
         }
-        else {
-            return $user;
-        }
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
+     */
+    protected function retrieveUserByCasUserIdentifier(string $userIdentifier): ?User
+    {
+        return $this->userService->retrieveUserByUsername($userIdentifier);
     }
 }

@@ -63,8 +63,9 @@ readonly class UserSettingsService
     ): bool
     {
         $user->setSetting($variable, $value);
+        $this->userService->updateUser($user, $executingUser);
 
-        return $this->userService->updateUser($user, $executingUser);
+        return true;
     }
 
     /**

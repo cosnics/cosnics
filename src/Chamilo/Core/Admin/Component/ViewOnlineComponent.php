@@ -104,7 +104,7 @@ class ViewOnlineComponent extends Manager
             $totalNumberOfItems
         );
 
-        $users = $this->userService->findUsers(
+        $users = $this->userService->retrieveUsers(
             $this->getOnlineTableCondition(), $tableParameterValues->getOffset(),
             $tableParameterValues->getNumberOfItemsPerPage(),
             $this->onlineTableRenderer->determineOrderBy($tableParameterValues)

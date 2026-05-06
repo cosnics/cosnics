@@ -4,7 +4,6 @@ namespace Chamilo\Core\Group\UserInterface\Menu;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeDataProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -14,7 +13,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 readonly class GroupOptionsTreeDataProvider extends OptionsTreeDataProvider
 {
-    public function __construct(protected GroupService $groupService, protected GroupsTreeTraverser $groupsTreeTraverser)
+    public function __construct(protected GroupService $groupService, protected GroupsTreeTraverser $groupsTreeTraverser
+    )
     {
     }
 
@@ -45,7 +45,7 @@ readonly class GroupOptionsTreeDataProvider extends OptionsTreeDataProvider
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     protected function getDataClassByIdentifier(string $identifier): Group
     {
@@ -54,7 +54,6 @@ readonly class GroupOptionsTreeDataProvider extends OptionsTreeDataProvider
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     protected function getRootDataClass(): Group
     {

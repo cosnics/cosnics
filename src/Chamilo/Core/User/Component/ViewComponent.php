@@ -57,9 +57,9 @@ class ViewComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -70,7 +70,7 @@ class ViewComponent extends Manager
         }
 
         $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
-        $userToRender = $this->userService->findUserByIdentifier($userIdentifier);
+        $userToRender = $this->userService->retrieveUserByIdentifier($userIdentifier);
 
         if ($userToRender instanceof User) {
             $this->breadcrumbTrail->add(new Breadcrumb($userToRender->getFullName()));

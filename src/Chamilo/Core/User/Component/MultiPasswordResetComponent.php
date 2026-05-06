@@ -23,6 +23,7 @@ use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Throwable;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -49,6 +50,7 @@ class MultiPasswordResetComponent extends Manager
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -63,9 +65,12 @@ class MultiPasswordResetComponent extends Manager
             $failures = 0;
 
             foreach ($userIdentifiers as $userIdentifier) {
-                $userToReset = $this->userService->findUserByIdentifier($userIdentifier);
+                $userToReset = $this->userService->retrieveUserByIdentifier($userIdentifier);
 
-                if (!$this->userService->createNewPasswordForUser($userToReset, $currentUser)) {
+                try {
+                    $this->userService->createNewPasswordForUser($userToReset, $currentUser);
+                }
+                catch (Throwable) {
                     $failures ++;
                 }
             }

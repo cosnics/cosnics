@@ -34,8 +34,6 @@ class TruncateComponent extends Manager
 
         $groupIdentifiers = $this->getRequest()->getFromRequestOrQuery(DataClass::PROPERTY_ID);
 
-        $failures = 0;
-
         if (!empty($groupIdentifiers)) {
             if (!is_array($groupIdentifiers)) {
                 $groupIdentifiers = [$groupIdentifiers];

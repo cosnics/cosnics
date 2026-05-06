@@ -27,6 +27,7 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function afterCreate(AfterGroupCreateEvent $afterGroupCreateEvent): bool
     {
@@ -41,6 +42,7 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function afterDelete(AfterGroupDeleteEvent $afterGroupDeleteEvent): bool
     {
@@ -55,6 +57,7 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function afterEmpty(AfterGroupEmptyEvent $afterGroupEmptyEvent): bool
     {
@@ -69,6 +72,7 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function afterMove(AfterGroupMoveEvent $afterGroupMoveEvent): bool
     {
@@ -82,6 +86,7 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function afterSubscribe(AfterGroupSubscribeEvent $afterGroupSubscribeEvent): bool
     {
@@ -96,6 +101,7 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function afterUnsubscribe(AfterGroupUnsubscribeEvent $afterGroupUnsubscribeEvent): bool
     {
@@ -110,6 +116,7 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function afterUpdate(AfterGroupUpdateEvent $afterGroupUpdateEvent): bool
     {

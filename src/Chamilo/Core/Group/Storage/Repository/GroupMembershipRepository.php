@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Storage\Repository;
 
+use Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupMembership;
 use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
@@ -16,6 +17,7 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\Joins;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
+use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -97,7 +99,7 @@ class GroupMembershipRepository
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
      */
     public function retrieveGroupMembershipByGroupCodeAndUserIdentifier(string $groupCode, string $userId
     ): ?GroupMembership
@@ -126,14 +128,21 @@ class GroupMembershipRepository
             )
         );
 
-        return $this->dataClassRepository->retrieve(
-            GroupMembership::class, new StorageParameters(condition: $condition, joins: $joins)
-        );
+        try {
+            return $this->dataClassRepository->retrieve(
+                GroupMembership::class, new StorageParameters(condition: $condition, joins: $joins)
+            );
+        }
+        catch (StorageNoResultException) {
+            throw new NoSuchGroupMembershipException(
+                [Group::PROPERTY_CODE => $groupCode, GroupMembership::PROPERTY_USER_ID => $userId]
+            );
+        }
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
      */
     public function retrieveGroupMembershipByGroupIdentifierAndUserIdentifier(
         string $groupIdentifier, string $userIdentifier
@@ -151,18 +160,35 @@ class GroupMembershipRepository
         );
         $condition = new AndCondition($conditions);
 
-        return $this->dataClassRepository->retrieve(
-            GroupMembership::class, new StorageParameters(condition: $condition)
-        );
+        try {
+            return $this->dataClassRepository->retrieve(
+                GroupMembership::class, new StorageParameters(condition: $condition)
+            );
+        }
+        catch (StorageNoResultException) {
+            throw new NoSuchGroupMembershipException(
+                [
+                    GroupMembership::PROPERTY_GROUP_ID => $groupIdentifier,
+                    GroupMembership::PROPERTY_USER_ID => $userIdentifier
+                ]
+            );
+        }
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
      */
     public function retrieveGroupMembershipByIdentifier(string $groupMembershipIdentifier): ?GroupMembership
     {
-        return $this->dataClassRepository->retrieveById(GroupMembership::class, $groupMembershipIdentifier);
+        try {
+            return $this->dataClassRepository->retrieveById(GroupMembership::class, $groupMembershipIdentifier);
+        }
+        catch (StorageNoResultException) {
+            throw new NoSuchGroupMembershipException(
+                [DataClass::PROPERTY_ID => $groupMembershipIdentifier]
+            );
+        }
     }
 
     /**

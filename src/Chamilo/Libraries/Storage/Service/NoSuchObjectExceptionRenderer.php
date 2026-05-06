@@ -25,8 +25,8 @@ class NoSuchObjectExceptionRenderer extends AbstractUserExceptionRenderer implem
     {
         return $this->translator->trans(
             'NoSuchObject', [
-            '%ObjectType%' => $userException->getObjectType(),
-            '%ObjectIdentifiers%' => $this->renderObjectIdentifiers($userException->getObjectIdentifiers())
+            '%ObjectType%' => $userException->objectType,
+            '%ObjectIdentifiers%' => $this->renderObjectIdentifiers($userException->objectIdentifiers)
         ], StringUtilities::LIBRARIES
         );
     }

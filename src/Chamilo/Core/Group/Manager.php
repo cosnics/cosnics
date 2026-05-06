@@ -54,7 +54,6 @@ abstract class Manager extends Application
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function getRootGroup(): Group
     {

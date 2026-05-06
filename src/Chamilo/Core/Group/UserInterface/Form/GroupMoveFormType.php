@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Group\UserInterface\Form;
 
+use Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\UserInterface\Form\Service\GroupMoveFormDataMapper;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
-use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Chamilo\Libraries\UserInterface\Form\Service\FormButtonTypeBuilder;
 use Chamilo\Libraries\UserInterface\Form\Service\FormTypeBuilder;
 use Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer;
@@ -101,7 +101,7 @@ class GroupMoveFormType extends AbstractType
                 $disabledGroupIdentifiers[] = $rootDisabledGroupIdentifier;
                 $disabledGroupIdentifiers = array_merge($disabledGroupIdentifiers, $disabledSubgroupIdentifiers);
             }
-            catch (StorageMethodException|StorageNoResultException) {
+            catch (StorageMethodException|NoSuchGroupException) {
             }
         }
 

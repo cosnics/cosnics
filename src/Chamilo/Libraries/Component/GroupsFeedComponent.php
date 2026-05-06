@@ -176,7 +176,7 @@ abstract class GroupsFeedComponent extends Manager
 
         $this->userCount = $this->userService->countUsers($condition);
 
-        return $this->userService->findUsers(
+        return $this->userService->retrieveUsers(
             $condition, $this->getOffset(), 100, new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_SURNAME)),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME))

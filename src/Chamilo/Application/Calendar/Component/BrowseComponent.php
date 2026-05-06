@@ -66,7 +66,7 @@ class BrowseComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -91,14 +91,14 @@ class BrowseComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     protected function checkLoggedInAs(): void
     {
         $asAdmin = $this->getRequest()->getSession()->get('_as_admin');
 
         if ($asAdmin && $asAdmin > 0) {
-            $user = $this->userService->findUserByIdentifier($asAdmin);
+            $user = $this->userService->retrieveUserByIdentifier($asAdmin);
             if (!$user instanceof User || !$user->isPlatformAdministrator()) {
                 throw new NotAllowedException();
             }

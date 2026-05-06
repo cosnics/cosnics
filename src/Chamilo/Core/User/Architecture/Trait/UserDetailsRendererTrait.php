@@ -19,7 +19,7 @@ trait UserDetailsRendererTrait
     {
         try {
             return $this->renderUserDetails(
-                $this->userService->findUserByIdentifier($userIdentifier), $requestingUser
+                $this->userService->retrieveUserByIdentifier($userIdentifier), $requestingUser
             );
         }
         catch (Throwable) {

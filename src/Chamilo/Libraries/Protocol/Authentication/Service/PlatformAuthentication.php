@@ -56,8 +56,9 @@ class PlatformAuthentication extends Authentication
 
         // Set the password
         $user->setPassword($this->hashingUtilities->hashString($newPassword));
+        $this->userService->updateUser($user, $executingUser);
 
-        return $this->userService->updateUser($user, $executingUser);
+        return true;
     }
 
     public function getPasswordRequirements(): string
@@ -72,8 +73,8 @@ class PlatformAuthentication extends Authentication
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     public function login(bool $checkIfAuthenticationSourceIsEnabled = true): ?User
     {

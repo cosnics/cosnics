@@ -133,7 +133,7 @@ class BrowseComponent extends Manager
             $totalNumberOfItems
         );
 
-        $users = $this->userService->findUsers(
+        $users = $this->userService->retrieveUsers(
             $searchCondition, $tableParameterValues->getOffset(), $tableParameterValues->getNumberOfItemsPerPage(),
             $this->userTableRenderer->determineOrderBy($tableParameterValues)
         );

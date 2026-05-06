@@ -18,6 +18,7 @@ readonly class OnlineService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function createOnlineForUserIdentifierAndLastAccessDate(string $userIdentifier, int $lastAccessDate): bool
     {
@@ -58,6 +59,7 @@ readonly class OnlineService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     public function updateOnlineForUserIdentifierWithCurrentTime(?string $userIdentifier): bool
     {

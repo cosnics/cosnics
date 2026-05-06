@@ -96,6 +96,7 @@ class BrowseComponent extends Manager
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function run(?User $currentUser = null): Response
     {
@@ -114,7 +115,7 @@ class BrowseComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     protected function countNumberOfGroups(): int
     {
@@ -127,7 +128,6 @@ class BrowseComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     protected function countNumberOfSubscribedUsers(): int
     {
@@ -159,7 +159,7 @@ class BrowseComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function getGroup(): Group
     {
@@ -172,7 +172,7 @@ class BrowseComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function getGroupDetails(): string
     {
@@ -203,7 +203,6 @@ class BrowseComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function getGroupIdentifier(): string
     {
@@ -217,7 +216,6 @@ class BrowseComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     protected function getGroupTableCondition(): ?ConditionInterface
     {
@@ -239,7 +237,7 @@ class BrowseComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function getSubGroupsToolBar(): ButtonToolBar
     {
@@ -267,7 +265,7 @@ class BrowseComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function getSubscribedUsersToolBar(): ButtonToolBar
     {
@@ -310,12 +308,12 @@ class BrowseComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \TableException
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     protected function renderGroupTable(): string
     {
@@ -342,7 +340,7 @@ class BrowseComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     protected function renderHeader(?User $user = null): string
     {
@@ -362,7 +360,7 @@ class BrowseComponent extends Manager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function renderMenu(): string
     {
@@ -384,12 +382,12 @@ class BrowseComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \TableException
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     protected function renderSubscribedUsertable(): string
     {
@@ -422,11 +420,11 @@ class BrowseComponent extends Manager
      * @throws \TableException
      * @throws \Chamilo\Libraries\UserInterface\Table\Architecture\Exception\InvalidPageNumberException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      * @throws \Twig\Error\LoaderError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function renderTabs(): string
     {

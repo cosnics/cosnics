@@ -45,7 +45,9 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
 
                 $user->setPictureUri(null);
 
-                return $this->userService->updateUser($user, $executingUser);
+                $this->userService->updateUser($user, $executingUser);
+
+                return true;
             }
 
             return true;
@@ -168,7 +170,9 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
 
         $user->setPictureUri($imageFile);
 
-        return $this->userService->updateUser($user, $executingUser);
+        $this->userService->updateUser($user, $executingUser);
+
+        return true;
     }
 
     public function updateUserPictureFromParameters(

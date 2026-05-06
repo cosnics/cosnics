@@ -10,6 +10,7 @@ use Chamilo\Libraries\Protocol\Authentication\Architecture\Trait\DefaultRedirect
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
+use Throwable;
 
 /**
  * @package Chamilo\Libraries\Protocol\Authentication\Service
@@ -35,8 +36,6 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      */
     public function login(bool $checkIfAuthenticationSourceIsEnabled = true): ?User
@@ -46,15 +45,14 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
         $securityToken = $this->request->query->get(User::PROPERTY_SECURITY_TOKEN);
 
         if ($securityToken) {
-            $user = $this->userService->getUserBySecurityToken($securityToken);
-
-            if (!$user instanceof User) {
+            try {
+                return $this->userService->retrieveUserBySecurityToken($securityToken);
+            }
+            catch (Throwable) {
                 throw new NotAuthenticatedException(
                     $this->translator->trans('InvalidSecurityToken', [], StringUtilities::LIBRARIES)
                 );
             }
-
-            return $user;
         }
         else {
             throw new NotAuthenticatedException(
