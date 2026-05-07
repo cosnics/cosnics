@@ -27,7 +27,7 @@ class GdImageManipulation extends ImageManipulation
     ): void
     {
         if (!function_exists('imagecopy')) {
-            throw new \Exception('imagecopy function is not available');
+            throw new Exception('imagecopy function is not available');
         }
 
         if ($offsetX == ImageManipulation::CROP_CENTER) {
@@ -45,8 +45,8 @@ class GdImageManipulation extends ImageManipulation
             $this->width = $width;
             $this->height = $height;
         }
-        else{
-            throw new \Exception('imagecopy failed');
+        else {
+            throw new Exception('imagecopy failed');
         }
     }
 
@@ -82,7 +82,7 @@ class GdImageManipulation extends ImageManipulation
             $this->width = $width;
             $this->height = $height;
         }
-        else{
+        else {
             throw new Exception('imagecopyresampled failed');
         }
     }

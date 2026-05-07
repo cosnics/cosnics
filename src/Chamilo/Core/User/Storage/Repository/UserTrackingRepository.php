@@ -1,9 +1,12 @@
 <?php
 namespace Chamilo\Core\User\Storage\Repository;
 
+use Chamilo\Core\User\Architecture\Exception\NoSuchUserVisitException;
 use Chamilo\Core\User\Storage\DataClass\UserActivity;
 use Chamilo\Core\User\Storage\DataClass\UserAuthenticationActivity;
 use Chamilo\Core\User\Storage\DataClass\UserVisit;
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 
 /**
@@ -48,11 +51,16 @@ class UserTrackingRepository
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserVisitException
      */
     public function findUserVisitByIdentifier(string $userVisitIdentifier): ?UserVisit
     {
-        return $this->dataClassRepository->retrieveById(UserVisit::class, $userVisitIdentifier);
+        try {
+            return $this->dataClassRepository->retrieveById(UserVisit::class, $userVisitIdentifier);
+        }
+        catch (StorageNoResultException) {
+            throw new NoSuchUserVisitException([DataClass::PROPERTY_ID => $userVisitIdentifier]);
+        }
     }
 
     /**

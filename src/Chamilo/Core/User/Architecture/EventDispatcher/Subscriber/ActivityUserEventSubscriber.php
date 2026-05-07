@@ -78,10 +78,12 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
             $userIdentifier
         );
 
-        $userVisit = new UserVisit();
-        $userVisit->setUserIdentifier($userIdentifier);
-        $userVisit->setEnterDate(time());
-        $userVisit->setLocation($afterUserEnterPage->getPageUri());
+        $userVisit = new UserVisit(
+            enterDate: time(), location: $afterUserEnterPage->getPageUri(), userIdentifier: $userIdentifier
+        );
+//        $userVisit->setUserIdentifier($userIdentifier);
+//        $userVisit->setEnterDate(time());
+//        $userVisit->setLocation($afterUserEnterPage->getPageUri());
 
         $this->userTrackingRepository->createUserVisit($userVisit);
 
@@ -149,7 +151,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserVisitException
      */
     public function beforeUserLeavePage(BeforeUserLeavePageEvent $beforeUserLeavePage): void
     {

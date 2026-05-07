@@ -118,8 +118,7 @@ class GroupService
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Throwable
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function deleteGroupByIdentifier(string $identifier, ?User $executingUser = null): void
     {
@@ -228,13 +227,7 @@ class GroupService
      */
     public function retrieveGroupByIdentifier(string $groupIdentifier): Group
     {
-        $group = $this->groupRepository->retrieveGroupByIdentifier($groupIdentifier);
-
-        if (!$group instanceof Group) {
-            throw new RuntimeException('Could not find the group with identifier ' . $groupIdentifier);
-        }
-
-        return $group;
+        return $this->groupRepository->retrieveGroupByIdentifier($groupIdentifier);
     }
 
     /**
@@ -258,7 +251,6 @@ class GroupService
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function retrieveGroupsAndDescendantsByGroupIdentifiers(array $groupIdentifiers = []): ArrayCollection
     {

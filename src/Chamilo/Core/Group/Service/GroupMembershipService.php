@@ -222,7 +222,6 @@ class GroupMembershipService
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     public function deleteGroupMembershipsByUser(User $user, ?User $executingUser = null): void
     {

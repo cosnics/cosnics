@@ -42,9 +42,9 @@ abstract class ImageManipulation
         if (is_null($height)) {
             $height = $width;
         }
-        if ($this->scale($width, $height, self::SCALE_OUTSIDE)) {
-            $this->crop($width, $height);
-        }
+
+        $this->scale($width, $height, self::SCALE_OUTSIDE);
+        $this->crop($width, $height);
     }
 
     abstract public function crop(
@@ -69,7 +69,7 @@ abstract class ImageManipulation
     }
 
     /**
-     * @return int[]|bool
+     * @return int[]
      */
     public static function rescale(
         int $originalWidth, int $originalHeight, int $width, int $height, int $type = self::SCALE_INSIDE

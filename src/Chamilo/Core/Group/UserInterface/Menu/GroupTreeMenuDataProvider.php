@@ -19,7 +19,6 @@ readonly class GroupTreeMenuDataProvider extends TreeMenuDataProvider
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
     protected function getChildDataClasses(string $parentIdentifier): ArrayCollection
     {

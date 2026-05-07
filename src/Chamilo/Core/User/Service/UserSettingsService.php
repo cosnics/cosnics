@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Service;
 
 use Chamilo\Core\Admin\Architecture\Domain\SettingsConnectorRegistry;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Throwable;
 
 /**
  * @package Chamilo\Core\User\Service
@@ -83,11 +84,10 @@ readonly class UserSettingsService
                     continue;
                 }
 
-                try{
+                try {
                     $this->updateUserSetting($user, $name, $values[$name], $executingUser);
                 }
-                catch(\Throwable)
-                {
+                catch (Throwable) {
                     $problems ++;
                 }
             }

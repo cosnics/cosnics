@@ -515,8 +515,8 @@ readonly class UserService
 
         $this->updateUser($user);
 
-        if ($sendEmail && !$this->sendRegistrationEmailToUser($user, $password)) {
-            throw new RuntimeException('Could not send an email to the updated user');
+        if ($sendEmail) {
+            $this->sendRegistrationEmailToUser($user, $password);
         }
     }
 }
