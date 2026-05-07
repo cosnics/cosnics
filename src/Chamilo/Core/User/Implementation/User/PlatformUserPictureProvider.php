@@ -12,7 +12,6 @@ use Chamilo\Libraries\Filesystem\Service\FilesystemTools;
 use Chamilo\Libraries\Filesystem\Service\ImageConverter;
 use Chamilo\Libraries\Filesystem\Service\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
-use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
 use Chamilo\Libraries\UserInterface\Theme\Service\ThemePathBuilder;
 use DateTime;
 use Exception;
@@ -36,7 +35,10 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
     {
     }
 
-    public function deleteUserPicture(User $user, ?User $executingUser = null): bool
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function deleteUserPicture(User $user, ?User $executingUser = null): void
     {
         try {
             if ($this->doesUserHavePicture($user)) {
@@ -46,17 +48,9 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
                 $user->setPictureUri(null);
 
                 $this->userService->updateUser($user, $executingUser);
-
-                return true;
             }
-
-            return true;
         }
         catch (NoPictureForUserException) {
-            return true;
-        }
-        catch (StorageMethodException) {
-            return false;
         }
     }
 
@@ -140,12 +134,11 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Exception
      */
-    public function setUserPicture(User $user, ?UploadedFile $fileInformation = null, ?User $executingUser = null): bool
+    public function setUserPicture(User $user, ?UploadedFile $fileInformation = null, ?User $executingUser = null): void
     {
-        if (!$this->deleteUserPicture($user, $executingUser)) {
-            return false;
-        }
+        $this->deleteUserPicture($user, $executingUser);
 
         $path = $this->configurablePathBuilder->getProfilePicturePath();
         $this->filesystem->mkdir($path);
@@ -156,46 +149,30 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
 
         move_uploaded_file($fileInformation->getPathname(), $path . $imageFile);
 
-        try {
-            $imageManipulation = ImageManipulation::factory($path . $imageFile);
-            $imageManipulation->scale(400, 400);
+        $imageManipulation = ImageManipulation::factory($path . $imageFile);
+        $imageManipulation->scale(400, 400);
 
-            if (!$imageManipulation->writeToFile()) {
-                return false;
-            }
-        }
-        catch (Exception) {
-            return false;
-        }
+        $imageManipulation->writeToFile();
 
         $user->setPictureUri($imageFile);
 
         $this->userService->updateUser($user, $executingUser);
-
-        return true;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
     public function updateUserPictureFromParameters(
         User $user, ?UploadedFile $fileInformation = null, bool $removeExistingPicture = false,
         ?User $executingUser = null
-    ): bool
+    ): void
     {
-        try {
-            if ($removeExistingPicture) {
-                if (!$this->deleteUserPicture($user, $executingUser)) {
-                    return false;
-                }
-            }
-            elseif (!is_null($fileInformation) && strlen($fileInformation->getClientOriginalName()) > 0) {
-                if (!$fileInformation->isValid() || !$this->setUserPicture($user, $fileInformation)) {
-                    return false;
-                }
-            }
-
-            return true;
+        if ($removeExistingPicture) {
+            $this->deleteUserPicture($user, $executingUser);
         }
-        catch (StorageMethodException) {
-            return false;
+        elseif (!is_null($fileInformation) && strlen($fileInformation->getClientOriginalName()) > 0 &&
+            $fileInformation->isValid()) {
+            $this->setUserPicture($user, $fileInformation);
         }
     }
 }

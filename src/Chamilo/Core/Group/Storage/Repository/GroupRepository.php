@@ -26,6 +26,7 @@ use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
+use Exception;
 
 /**
  * @package Chamilo\Core\Group\Storage\Repository
@@ -46,7 +47,7 @@ class GroupRepository
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    protected function __postDelete(Group $group): bool
+    protected function __postDelete(Group $group): void
     {
         // This private function is only ever called from within a transaction.
         //
@@ -84,11 +85,9 @@ class GroupRepository
             )
         );
 
-        if (!$this->dataClassRepository->updates(
+        $this->dataClassRepository->updates(
             Group::class, new UpdateProperties($properties), $updateCondition
-        )) {
-            return false;
-        }
+        );
 
         // 2. Update the right values of all ancestors of the deleted node.
         // An ancestor has a left value less than the left value of the deleted node
@@ -111,13 +110,9 @@ class GroupRepository
         $properties = [];
         $properties[] = $rightValueDataClassProperty;
 
-        if (!$this->dataClassRepository->updates(
+        $this->dataClassRepository->updates(
             Group::class, new UpdateProperties($properties), $updateCondition
-        )) {
-            return false;
-        }
-
-        return true;
+        );
     }
 
     /**
@@ -126,7 +121,7 @@ class GroupRepository
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    protected function __preInsert(int $insertAfter, int $numberOfElements = 1): bool
+    protected function __preInsert(int $insertAfter, int $numberOfElements = 1): void
     {
         // This private function is only ever called from within a transaction.
         //
@@ -153,11 +148,7 @@ class GroupRepository
             )
         );
 
-        if (!$this->dataClassRepository->updates(
-            Group::class, new UpdateProperties($properties), $updateCondition
-        )) {
-            return false;
-        }
+        $this->dataClassRepository->updates(Group::class, new UpdateProperties($properties), $updateCondition);
 
         // Update all necessary right-values
         $conditions = [];
@@ -178,13 +169,7 @@ class GroupRepository
             )
         );
 
-        if (!$this->dataClassRepository->updates(
-            Group::class, new UpdateProperties($properties), $updateCondition
-        )) {
-            return false;
-        }
-
-        return true;
+        $this->dataClassRepository->updates(Group::class, new UpdateProperties($properties), $updateCondition);
     }
 
     /**
@@ -192,8 +177,9 @@ class GroupRepository
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
+     * @throws \Exception
      */
-    protected function __validatePosition(Group $group, ?Group $referenceNode = null): ?Group
+    protected function __validatePosition(Group $group, ?Group $referenceNode = null): Group
     {
         if ($referenceNode === null) {
             // Use the parent of the node as a reference
@@ -202,7 +188,7 @@ class GroupRepository
 
         if ($group->getId() === $referenceNode->getId()) {
             // TODO Report an error when attempting to create a node as its own child
-            return null;
+            throw new Exception('Attempting to create a node as its own child');
         }
 
         if ($group->getParentId() == 0 || $group->getParentId() != $referenceNode->getId()) {
@@ -268,7 +254,7 @@ class GroupRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
-    public function createGroup(Group $group): bool
+    public function createGroup(Group $group): void
     {
         $referenceNode = $this->retrieveGroupByIdentifier($group->getParentId());
 
@@ -280,10 +266,7 @@ class GroupRepository
         if ($referenceNode != 0) { // Not creating the root node of a hierarchy
 
             // Identify the reference node (except when creating the root node, there must be one).
-            if ($this->__validatePosition($group, $referenceNode) === null) {
-                return false;
-            }
-
+            $this->__validatePosition($group, $referenceNode);
             $insertAfter = $referenceNode->getRightValue() - 1;
         }
 
@@ -292,11 +275,9 @@ class GroupRepository
         //
         // Use a transaction to guarantee this.
 
-        return $this->dataClassRepository->transactional(
+        $this->dataClassRepository->transactional(
             function () use ($group, $insertAfter) { // Correct the left and right values wherever necessary.
-                if (!$this->__preInsert($insertAfter)) {
-                    return false;
-                }
+                $this->__preInsert($insertAfter);
 
                 // Left and right values have been shifted so now we
                 // want to really add the location itself, but first
@@ -304,7 +285,7 @@ class GroupRepository
                 $group->setLeftValue($insertAfter + 1);
                 $group->setRightValue($insertAfter + 2);
 
-                return $this->dataClassRepository->create($group);
+                $this->dataClassRepository->create($group);
             }
         );
     }
@@ -312,12 +293,10 @@ class GroupRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function deleteGroup(Group $group): bool
+    public function deleteGroup(Group $group): void
     {
         $this->dataClassRepository->delete($group);
         $this->__postDelete($group);
-
-        return true;
     }
 
     protected function determineAncestorsCondition(
@@ -435,7 +414,7 @@ class GroupRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
-    public function moveGroup(Group $group, string $parentGroupIdentifier): bool
+    public function moveGroup(Group $group, string $parentGroupIdentifier): void
     {
         if ($parentGroupIdentifier == 0) {
             $referenceNode = $this->retrieveGroupByIdentifier($group->getParentId());
@@ -444,9 +423,7 @@ class GroupRepository
             $referenceNode = $this->retrieveGroupByIdentifier($parentGroupIdentifier);
         }
 
-        if ($this->__validatePosition($group, $referenceNode) === null) {
-            return false;
-        }
+        $this->__validatePosition($group, $referenceNode);
 
         // This variable is used to identify the node after which the newly
         // created node should be placed. This value is initialized with 0
@@ -458,7 +435,7 @@ class GroupRepository
         //
         // Use a transaction to guarantee this.
 
-        return $this->dataClassRepository->transactional(
+        $this->dataClassRepository->transactional(
             function () use ($group, $insertAfter) { // Step 0: Compute the auxiliary values used by this
                 // algorithm
                 // This is the initial position of the node to be moved
@@ -487,11 +464,7 @@ class GroupRepository
                     (($insertAfter < $initialLeft) ? $afterPreInsertRight : $afterPreInsertRight - $delta) + $shift;
 
                 // Step 1: Create a gap where the node can be moved into.
-                $res = $this->__preInsert($insertAfter, $delta / 2);
-
-                if (!$res) {
-                    return false;
-                }
+                $this->__preInsert($insertAfter, $delta / 2);
 
                 // Step 2: Move the node and its offspring to fill the newly created gap
                 $conditions = [];
@@ -524,11 +497,9 @@ class GroupRepository
                     )
                 );
 
-                if (!$this->dataClassRepository->updates(
+                $this->dataClassRepository->updates(
                     Group::class, new UpdateProperties($properties), $updateCondition
-                )) {
-                    return false;
-                }
+                );
 
                 // Step 3: Close the gap created by the "removal"
                 // Having shifted the nodes to their new position, we have created an equally big gap in their original
@@ -539,9 +510,7 @@ class GroupRepository
                 $group->setLeftValue($afterPreInsertLeft);
                 $group->setRightValue($afterPreInsertRight);
 
-                if (!$this->__postDelete($group)) {
-                    return false;
-                }
+                $this->__postDelete($group);
 
                 // Step 4: Update the parent id of the moved node.
                 // This has already been performed in memory, but needs to be written to the database.
@@ -550,11 +519,7 @@ class GroupRepository
                 $group->setLeftValue($finalLeft);
                 $group->setRightValue($finalRight);
 
-                if (!$this->dataClassRepository->update($group)) {
-                    return false;
-                }
-
-                return true;
+                $this->dataClassRepository->update($group);
             }
         );
     }
@@ -838,8 +803,8 @@ class GroupRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updateGroup(Group $group): bool
+    public function updateGroup(Group $group): void
     {
-        return $this->dataClassRepository->update($group);
+        $this->dataClassRepository->update($group);
     }
 }

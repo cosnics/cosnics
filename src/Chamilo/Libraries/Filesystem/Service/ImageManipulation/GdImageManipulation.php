@@ -20,11 +20,14 @@ class GdImageManipulation extends ImageManipulation
         $this->loadGdImage();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function crop(int $width, int $height, int $offsetX = self::CROP_CENTER, int $offsetY = self::CROP_CENTER
-    ): bool
+    ): void
     {
         if (!function_exists('imagecopy')) {
-            return false;
+            throw new \Exception('imagecopy function is not available');
         }
 
         if ($offsetX == ImageManipulation::CROP_CENTER) {
@@ -41,11 +44,10 @@ class GdImageManipulation extends ImageManipulation
             $this->gdImage = $result;
             $this->width = $width;
             $this->height = $height;
-
-            return true;
         }
-
-        return false;
+        else{
+            throw new \Exception('imagecopy failed');
+        }
     }
 
     /**
@@ -67,7 +69,7 @@ class GdImageManipulation extends ImageManipulation
     /**
      * @throws \Exception
      */
-    public function resize(int $width, int $height): bool
+    public function resize(int $width, int $height): void
     {
         if (!function_exists('imagecopyresampled')) {
             throw new Exception('imagecopyresampled not found');
@@ -79,17 +81,16 @@ class GdImageManipulation extends ImageManipulation
             $this->gdImage = $result;
             $this->width = $width;
             $this->height = $height;
-
-            return true;
         }
-
-        return false;
+        else{
+            throw new Exception('imagecopyresampled failed');
+        }
     }
 
     /**
      * @throws \Exception
      */
-    public function writeToFile(?string $sourceFile = null): bool
+    public function writeToFile(?string $sourceFile = null): void
     {
         if (is_null($sourceFile)) {
             $sourceFile = $this->sourceFile;
@@ -103,6 +104,6 @@ class GdImageManipulation extends ImageManipulation
             throw new Exception($createFunction . ' not found');
         }
 
-        return $createFunction($this->gdImage, $sourceFile);
+        $createFunction($this->gdImage, $sourceFile);
     }
 }

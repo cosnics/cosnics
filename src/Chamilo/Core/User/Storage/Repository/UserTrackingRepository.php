@@ -58,8 +58,8 @@ class UserTrackingRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updateUserVisit(UserVisit $userVisit): bool
+    public function updateUserVisit(UserVisit $userVisit): void
     {
-        return $this->dataClassRepository->update($userVisit);
+        $this->dataClassRepository->update($userVisit);
     }
 }

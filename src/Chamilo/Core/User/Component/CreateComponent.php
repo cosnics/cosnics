@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Throwable;
 use Twig\Environment;
 
 /**
@@ -94,9 +95,12 @@ class CreateComponent extends Manager
                     $pictureInformation = $submittedData[User::PROPERTY_PICTURE_URI];
 
                     if ($pictureInformation instanceof UploadedFile && $pictureInformation->isValid()) {
-                        if (!$this->userPictureProvider->updateUserPictureFromParameters(
-                            $createdUser, $pictureInformation, false, $currentUser
-                        )) {
+                        try {
+                            $this->userPictureProvider->updateUserPictureFromParameters(
+                                $createdUser, $pictureInformation, false, $currentUser
+                            );
+                        }
+                        catch (Throwable) {
                             $this->alertsManager->addAlert(
                                 new Alert(
                                     $translator->trans('UserPictureNotUpdated', [], Manager::CONTEXT),

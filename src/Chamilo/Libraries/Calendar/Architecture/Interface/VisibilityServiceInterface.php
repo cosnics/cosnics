@@ -7,5 +7,5 @@ namespace Chamilo\Libraries\Calendar\Architecture\Interface;
  */
 interface VisibilityServiceInterface
 {
-    public function changeVisibility(string $userIdentifier, string $source): bool;
+    public function changeVisibility(string $userIdentifier, string $source): void;
 }

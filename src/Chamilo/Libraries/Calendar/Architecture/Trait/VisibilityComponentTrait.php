@@ -8,6 +8,7 @@ use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Throwable;
 
 /**
  * @package Chamilo\Libraries\Calendar\Architecture\Trait
@@ -23,10 +24,12 @@ trait VisibilityComponentTrait
     {
         $source = $this->getRequest()->getFromQueryOrRequest(self::PARAM_SOURCE);
 
-        if ($this->visibilityService->changeVisibility($currentUser->getId(), $source)) {
+        try {
+            $this->visibilityService->changeVisibility($currentUser->getId(), $source);
+
             return JsonAjaxResult::success();
         }
-        else {
+        catch (Throwable) {
             return JsonAjaxResult::error(
                 500, $this->getTranslator()->trans(
                 'VisibilityNotChanged', [], StringUtilities::LIBRARIES

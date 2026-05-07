@@ -131,21 +131,21 @@ class AvailabilityRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function removeAvailabilityByCalendarType(string $calendarType): bool
+    public function removeAvailabilityByCalendarType(string $calendarType): void
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Availability::class, Availability::PROPERTY_CALENDAR_TYPE),
             new StaticConditionVariable($calendarType)
         );
 
-        return $this->dataClassRepository->deletes(Availability::class, $condition);
+        $this->dataClassRepository->deletes(Availability::class, $condition);
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updateAvailability(Availability $availability): bool
+    public function updateAvailability(Availability $availability): void
     {
-        return $this->dataClassRepository->update($availability);
+        $this->dataClassRepository->update($availability);
     }
 }

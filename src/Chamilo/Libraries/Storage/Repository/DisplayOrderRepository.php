@@ -30,7 +30,7 @@ class DisplayOrderRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function addDisplayOrderToContext(DataClassDisplayOrderSupport $dataClass): bool
+    public function addDisplayOrderToContext(DataClassDisplayOrderSupport $dataClass): void
     {
         $conditions = [];
 
@@ -46,7 +46,7 @@ class DisplayOrderRepository
             $dataClass, ComparisonTypeEnum::GREATER_THAN_OR_EQUAL, $displayOrder
         );
 
-        return $this->dataClassRepository->updates(
+        $this->dataClassRepository->updates(
             $this->determinePropertyDataClassName($dataClass),
             $this->getDisplayOrderUpdateDataClassProperties($dataClass, 1), new AndCondition($conditions)
         );
@@ -94,7 +94,7 @@ class DisplayOrderRepository
      */
     public function deleteDisplayOrderFromContext(
         DataClassDisplayOrderSupport $dataClass, array $contextProperties, int $displayOrder
-    ): bool
+    ): void
     {
         $conditions = [];
 
@@ -108,7 +108,7 @@ class DisplayOrderRepository
             $dataClass, ComparisonTypeEnum::GREATER_THAN, $displayOrder
         );
 
-        return $this->dataClassRepository->updates(
+        $this->dataClassRepository->updates(
             $this->determinePropertyDataClassName($dataClass),
             $this->getDisplayOrderUpdateDataClassProperties($dataClass, - 1), new AndCondition($conditions)
         );

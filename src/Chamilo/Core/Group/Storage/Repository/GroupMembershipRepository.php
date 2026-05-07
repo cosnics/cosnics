@@ -92,9 +92,9 @@ class GroupMembershipRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function deleteGroupMembership(GroupMembership $groupMembership): bool
+    public function deleteGroupMembership(GroupMembership $groupMembership): void
     {
-        return $this->dataClassRepository->delete($groupMembership);
+        $this->dataClassRepository->delete($groupMembership);
     }
 
     /**

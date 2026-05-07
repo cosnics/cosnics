@@ -20,14 +20,14 @@ readonly class OnlineService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function createOnlineForUserIdentifierAndLastAccessDate(string $userIdentifier, int $lastAccessDate): bool
+    public function createOnlineForUserIdentifierAndLastAccessDate(string $userIdentifier, int $lastAccessDate): void
     {
         $online = new Online();
 
         $online->setUserId($userIdentifier);
         $online->setLastAccessDate($lastAccessDate);
 
-        return $this->onlineRepository->createOnline($online);
+        $this->onlineRepository->createOnline($online);
     }
 
     /**
@@ -51,9 +51,9 @@ readonly class OnlineService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updateOnline(Online $online): bool
+    public function updateOnline(Online $online): void
     {
-        return $this->onlineRepository->updateOnline($online);
+        $this->onlineRepository->updateOnline($online);
     }
 
     /**
@@ -61,7 +61,7 @@ readonly class OnlineService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function updateOnlineForUserIdentifierWithCurrentTime(?string $userIdentifier): bool
+    public function updateOnlineForUserIdentifierWithCurrentTime(?string $userIdentifier): void
     {
         $time = time();
 
@@ -71,10 +71,10 @@ readonly class OnlineService
             $online->setUserId($userIdentifier);
             $online->setLastAccessDate($time);
 
-            return $this->updateOnline($online);
+            $this->updateOnline($online);
         }
         catch (StorageNoResultException) {
-            return $this->createOnlineForUserIdentifierAndLastAccessDate($userIdentifier, $time);
+            $this->createOnlineForUserIdentifierAndLastAccessDate($userIdentifier, $time);
         }
     }
 }

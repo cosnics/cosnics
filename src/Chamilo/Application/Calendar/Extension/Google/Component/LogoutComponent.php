@@ -13,6 +13,7 @@ use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Throwable;
 
 /**
  * @package Chamilo\Application\Calendar\Extension\Google\Component
@@ -29,7 +30,7 @@ class LogoutComponent extends Manager
     )
     {
         parent::__construct(
-            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator,  $urlGenerator, $calendarService
+            $request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator, $calendarService
         );
     }
 
@@ -39,10 +40,11 @@ class LogoutComponent extends Manager
      */
     public function run(?User $currentUser = null): Response
     {
-        $isSuccessful = $this->calendarService->logout($currentUser);
-
-        if ($isSuccessful) {
+        try {
+            $this->calendarService->logout($currentUser);
             $this->availabilityService->deleteAvailabilityByCalendarType(Manager::CONTEXT);
+        }
+        catch (Throwable) {
         }
 
         return new RedirectResponse(

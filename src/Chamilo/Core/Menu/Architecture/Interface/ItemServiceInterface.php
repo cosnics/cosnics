@@ -16,7 +16,7 @@ interface ItemServiceInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      */
-    public function createItem(Item $item): bool;
+    public function createItem(Item $item): void;
 
     /**
      * @param string[][] $values
@@ -29,13 +29,13 @@ interface ItemServiceInterface
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function deleteItem(Item $item): bool;
+    public function deleteItem(Item $item): void;
 
     /**
      * @throws \Psr\Cache\InvalidArgumentException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function deleteItemChildren(Item $item): bool;
+    public function deleteItemChildren(Item $item): void;
 
     public function doesItemHaveChildren(Item $item): bool;
 
@@ -85,17 +85,17 @@ interface ItemServiceInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      */
-    public function moveItemInDirection(Item $item, int $moveDirection): bool;
+    public function moveItemInDirection(Item $item, int $moveDirection): void;
 
     /**
      * @param string[][] $values
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      */
-    public function saveItemFromValues(Item $item, array $values): bool;
+    public function saveItemFromValues(Item $item, array $values): void;
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      */
-    public function updateItem(Item $item): bool;
+    public function updateItem(Item $item): void;
 }

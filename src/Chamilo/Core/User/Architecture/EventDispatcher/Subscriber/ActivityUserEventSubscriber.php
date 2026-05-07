@@ -38,9 +38,9 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function afterUserCreate(AfterUserCreateEvent $afterUserCreateEvent): bool
+    public function afterUserCreate(AfterUserCreateEvent $afterUserCreateEvent): void
     {
-        return $this->userTrackingRepository->createUserActivity(
+        $this->userTrackingRepository->createUserActivity(
             $this->initializeUserActivityFromParameters(
                 UserActivityTypeEnum::CREATED, $afterUserCreateEvent->getUser()->getId(),
                 $afterUserCreateEvent->getExecutingUser() instanceof User ?
@@ -54,9 +54,9 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function afterUserDelete(AfterUserDeleteEvent $afterUserDeleteEvent): bool
+    public function afterUserDelete(AfterUserDeleteEvent $afterUserDeleteEvent): void
     {
-        return $this->userTrackingRepository->createUserActivity(
+        $this->userTrackingRepository->createUserActivity(
             $this->initializeUserActivityFromParameters(
                 UserActivityTypeEnum::DELETED, $afterUserDeleteEvent->getUser()->getId(),
                 $afterUserDeleteEvent->getExecutingUser() instanceof User ?
@@ -70,28 +70,22 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function afterUserEnterPage(AfterUserEnterPageEvent $afterUserEnterPage): bool
+    public function afterUserEnterPage(AfterUserEnterPageEvent $afterUserEnterPage): void
     {
         $userIdentifier = $afterUserEnterPage->getUser()->getId();
 
-        if (!$this->onlineService->updateOnlineForUserIdentifierWithCurrentTime(
+        $this->onlineService->updateOnlineForUserIdentifierWithCurrentTime(
             $userIdentifier
-        )) {
-            return false;
-        }
+        );
 
         $userVisit = new UserVisit();
         $userVisit->setUserIdentifier($userIdentifier);
         $userVisit->setEnterDate(time());
         $userVisit->setLocation($afterUserEnterPage->getPageUri());
 
-        if (!$this->userTrackingRepository->createUserVisit($userVisit)) {
-            return false;
-        }
+        $this->userTrackingRepository->createUserVisit($userVisit);
 
         $this->pageConfiguration->addHtml('<script>var tracker="' . $userVisit->getId() . '";</script>');
-
-        return true;
     }
 
     /**
@@ -99,9 +93,9 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function afterUserLogin(AfterUserLoginEvent $afterUserLoginEvent): bool
+    public function afterUserLogin(AfterUserLoginEvent $afterUserLoginEvent): void
     {
-        return $this->createAuthenticationActivityFormParameters(
+        $this->createAuthenticationActivityFormParameters(
             UserAuthenticationActivity::ACTIVITY_LOGIN, $afterUserLoginEvent->getUser()->getId(),
             $afterUserLoginEvent->getClientIpAddress()
         );
@@ -112,9 +106,9 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function afterUserPasswordReset(AfterUserPasswordResetEvent $afterUserPasswordResetEvent): bool
+    public function afterUserPasswordReset(AfterUserPasswordResetEvent $afterUserPasswordResetEvent): void
     {
-        return $this->userTrackingRepository->createUserActivity(
+        $this->userTrackingRepository->createUserActivity(
             $this->initializeUserActivityFromParameters(
                 UserActivityTypeEnum::PASSWORD_RESET, $afterUserPasswordResetEvent->getUser()->getId(),
                 $afterUserPasswordResetEvent->getExecutingUser() instanceof User ?
@@ -128,9 +122,9 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function afterUserRegistration(AfterUserRegistrationEvent $afterUserRegistrationEvent): bool
+    public function afterUserRegistration(AfterUserRegistrationEvent $afterUserRegistrationEvent): void
     {
-        return $this->userTrackingRepository->createUserActivity(
+        $this->userTrackingRepository->createUserActivity(
             $this->initializeUserActivityFromParameters(
                 UserActivityTypeEnum::REGISTERED, $afterUserRegistrationEvent->getUser()->getId()
             )
@@ -142,9 +136,9 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function afterUserUpdate(AfterUserUpdateEvent $afterUserUpdateEvent): bool
+    public function afterUserUpdate(AfterUserUpdateEvent $afterUserUpdateEvent): void
     {
-        return $this->userTrackingRepository->createUserActivity(
+        $this->userTrackingRepository->createUserActivity(
             $this->initializeUserActivityFromParameters(
                 UserActivityTypeEnum::UPDATED, $afterUserUpdateEvent->getUser()->getId(),
                 $afterUserUpdateEvent->getExecutingUser() instanceof User ?
@@ -157,7 +151,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function beforeUserLeavePage(BeforeUserLeavePageEvent $beforeUserLeavePage): bool
+    public function beforeUserLeavePage(BeforeUserLeavePageEvent $beforeUserLeavePage): void
     {
         $userVisit = $this->userTrackingRepository->findUserVisitByIdentifier(
             $beforeUserLeavePage->getUserVisitIdentifier()
@@ -166,10 +160,8 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
         if ($userVisit instanceof UserVisit) {
             $userVisit->setLeaveDate(time());
 
-            return $this->userTrackingRepository->updateUserVisit($userVisit);
+            $this->userTrackingRepository->updateUserVisit($userVisit);
         }
-
-        return true;
     }
 
     /**
@@ -177,9 +169,9 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function beforeUserLogout(BeforeUserLogoutEvent $beforeUserLogoutEvent): bool
+    public function beforeUserLogout(BeforeUserLogoutEvent $beforeUserLogoutEvent): void
     {
-        return $this->createAuthenticationActivityFormParameters(
+        $this->createAuthenticationActivityFormParameters(
             UserAuthenticationActivity::ACTIVITY_LOGOUT, $beforeUserLogoutEvent->getUser()->getId(),
             $beforeUserLogoutEvent->getClientIpAddress()
         );
@@ -191,7 +183,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
     protected function createAuthenticationActivityFormParameters(int $action, string $userIdentifier, ?string $clientIp
-    ): bool
+    ): void
     {
         $userAuthenticationActivity = new UserAuthenticationActivity();
 
@@ -200,7 +192,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
         $userAuthenticationActivity->setIp($clientIp);
         $userAuthenticationActivity->setAction($action);
 
-        return $this->userTrackingRepository->createUserAuthenticationActivity($userAuthenticationActivity);
+        $this->userTrackingRepository->createUserAuthenticationActivity($userAuthenticationActivity);
     }
 
     public static function getSubscribedEvents(): array

@@ -29,9 +29,9 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function afterCreate(AfterGroupCreateEvent $afterGroupCreateEvent): bool
+    public function afterCreate(AfterGroupCreateEvent $afterGroupCreateEvent): void
     {
-        return $this->groupTrackingRepository->createGroupActivity(
+        $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::CREATED, $afterGroupCreateEvent->group->getId(),
                 $afterGroupCreateEvent->executingUser
@@ -44,9 +44,9 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function afterDelete(AfterGroupDeleteEvent $afterGroupDeleteEvent): bool
+    public function afterDelete(AfterGroupDeleteEvent $afterGroupDeleteEvent): void
     {
-        return $this->groupTrackingRepository->createGroupActivity(
+        $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::DELETED, $afterGroupDeleteEvent->group->getId(),
                 $afterGroupDeleteEvent->executingUser
@@ -59,9 +59,9 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function afterEmpty(AfterGroupEmptyEvent $afterGroupEmptyEvent): bool
+    public function afterEmpty(AfterGroupEmptyEvent $afterGroupEmptyEvent): void
     {
-        return $this->groupTrackingRepository->createGroupActivity(
+        $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::TRUNCATED, $afterGroupEmptyEvent->group->getId(),
                 $afterGroupEmptyEvent->executingUser
@@ -74,9 +74,9 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function afterMove(AfterGroupMoveEvent $afterGroupMoveEvent): bool
+    public function afterMove(AfterGroupMoveEvent $afterGroupMoveEvent): void
     {
-        return $this->groupTrackingRepository->createGroupActivity(
+        $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::MOVED, $afterGroupMoveEvent->group->getId(), $afterGroupMoveEvent->executingUser
             )
@@ -88,9 +88,9 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function afterSubscribe(AfterGroupSubscribeEvent $afterGroupSubscribeEvent): bool
+    public function afterSubscribe(AfterGroupSubscribeEvent $afterGroupSubscribeEvent): void
     {
-        return $this->groupTrackingRepository->createGroupActivity(
+        $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::SUBSCRIBED, $afterGroupSubscribeEvent->groupIdentifier,
                 $afterGroupSubscribeEvent->executingUser, $afterGroupSubscribeEvent->userIdentifier
@@ -103,9 +103,9 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function afterUnsubscribe(AfterGroupUnsubscribeEvent $afterGroupUnsubscribeEvent): bool
+    public function afterUnsubscribe(AfterGroupUnsubscribeEvent $afterGroupUnsubscribeEvent): void
     {
-        return $this->groupTrackingRepository->createGroupActivity(
+        $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::UNSUBSCRIBED, $afterGroupUnsubscribeEvent->groupIdentifier,
                 $afterGroupUnsubscribeEvent->executingUser, $afterGroupUnsubscribeEvent->userIdentifier
@@ -118,9 +118,9 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function afterUpdate(AfterGroupUpdateEvent $afterGroupUpdateEvent): bool
+    public function afterUpdate(AfterGroupUpdateEvent $afterGroupUpdateEvent): void
     {
-        return $this->groupTrackingRepository->createGroupActivity(
+        $this->groupTrackingRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::UPDATED, $afterGroupUpdateEvent->group->getId(),
                 $afterGroupUpdateEvent->executingUser

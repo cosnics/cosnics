@@ -41,9 +41,9 @@ class CalendarRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function clearAccessToken(User $user): bool
+    public function clearAccessToken(User $user): void
     {
-        return $this->userSettingsService->updateUserSetting($user, 'cosnics.libraries.protocol.google.token', '');
+        $this->userSettingsService->updateUserSetting($user, 'cosnics.libraries.protocol.google.token', '');
     }
 
     /**
@@ -167,37 +167,35 @@ class CalendarRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function login(User $user, $authenticationCode = null)
+    public function login(User $user, $authenticationCode = null): void
     {
-        if ($this->hasAccessToken($user)) {
-            return true;
-        }
+        if (!$this->hasAccessToken($user)) {
+            $googleClient = $this->getGoogleClient($user);
 
-        $googleClient = $this->getGoogleClient($user);
+            $redirectUrl = $this->urlGenerator->fromParameters(
+                [
+                    ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+                    ApplicationInterface::PARAM_ACTION => ActionEnum::LOGIN->value
+                ]
+            );
 
-        $redirectUrl = $this->urlGenerator->fromParameters(
-            [
-                ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
-                ApplicationInterface::PARAM_ACTION => ActionEnum::LOGIN->value
-            ]
-        );
+            $googleClient->setRedirectUri($redirectUrl);
 
-        $googleClient->setRedirectUri($redirectUrl);
+            if (isset($authenticationCode)) {
+                try {
+                    $googleClient->authenticate($authenticationCode);
 
-        if (isset($authenticationCode)) {
-            try {
-                $googleClient->authenticate($authenticationCode);
-
-                return $this->saveAccessToken($user, $googleClient->getAccessToken());
+                    $this->saveAccessToken($user, $googleClient->getAccessToken());
+                }
+                catch (Exception) {
+                    $this->clearAccessToken($user);
+                }
             }
-            catch (Exception) {
-                return $this->clearAccessToken($user);
+            else {
+                $response = new RedirectResponse($googleClient->createAuthUrl());
+                $response->send();
+                exit;
             }
-        }
-        else {
-            $response = new RedirectResponse($googleClient->createAuthUrl());
-            $response->send();
-            exit;
         }
     }
 
@@ -205,24 +203,20 @@ class CalendarRepository
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Google_Auth_Exception
      */
-    public function logout(User $user): bool
+    public function logout(User $user): void
     {
         if ($this->getGoogleClient($user)->revokeToken()) {
-            return $this->clearAccessToken($user);
+            $this->clearAccessToken($user);
         }
-
-        return false;
     }
 
-    public function saveAccessToken(User $user, string $accessToken): bool
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     */
+    public function saveAccessToken(User $user, string $accessToken): void
     {
-        try {
-            return $this->userSettingsService->updateUserSetting(
-                $user, 'cosnics.libraries.protocol.google.token', $accessToken
-            );
-        }
-        catch (Exception) {
-            return false;
-        }
+        $this->userSettingsService->updateUserSetting(
+            $user, 'cosnics.libraries.protocol.google.token', $accessToken
+        );
     }
 }

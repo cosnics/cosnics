@@ -18,9 +18,9 @@ class DisplayOrderHandler
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    protected function addDisplayOrderToContext(DataClassDisplayOrderSupport $dataClass): bool
+    protected function addDisplayOrderToContext(DataClassDisplayOrderSupport $dataClass): void
     {
-        return $this->displayOrderRepository->addDisplayOrderToContext($dataClass);
+        $this->displayOrderRepository->addDisplayOrderToContext($dataClass);
     }
 
     /**
@@ -34,13 +34,13 @@ class DisplayOrderHandler
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    protected function deleteDisplayOrderFromContext(DataClassDisplayOrderSupport $dataClass): bool
+    protected function deleteDisplayOrderFromContext(DataClassDisplayOrderSupport $dataClass): void
     {
         $displayOrderContextProperties = array_intersect_key(
             $dataClass->getDefaultProperties(), array_flip($dataClass->getDisplayOrderContextPropertyNames())
         );
 
-        return $this->displayOrderRepository->deleteDisplayOrderFromContext(
+        $this->displayOrderRepository->deleteDisplayOrderFromContext(
             $dataClass, $displayOrderContextProperties, $this->getDisplayOrderValue($dataClass)
         );
     }
@@ -50,7 +50,7 @@ class DisplayOrderHandler
      */
     protected function deletePreviousDisplayOrderFromPreviousContext(
         DataClassDisplayOrderSupport $dataClass, array $displayOrderPropertiesRecord
-    ): bool
+    ): void
     {
         $displayOrderPropertyName = $dataClass->getDisplayOrderPropertyName();
 
@@ -58,7 +58,7 @@ class DisplayOrderHandler
             $displayOrderPropertiesRecord, array_flip($dataClass->getDisplayOrderContextPropertyNames())
         );
 
-        return $this->displayOrderRepository->deleteDisplayOrderFromContext(
+        $this->displayOrderRepository->deleteDisplayOrderFromContext(
             $dataClass, $displayOrderContextProperties, $displayOrderPropertiesRecord[$displayOrderPropertyName]
         );
     }
@@ -117,26 +117,22 @@ class DisplayOrderHandler
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    protected function handleAddedDataClassInContext(DataClassDisplayOrderSupport $dataClass): bool
+    protected function handleAddedDataClassInContext(DataClassDisplayOrderSupport $dataClass): void
     {
         if ($this->hasDisplayOrder($dataClass)) {
-            if (!$this->addDisplayOrderToContext($dataClass)) {
-                return false;
-            }
+            $this->addDisplayOrderToContext($dataClass);
         }
         else {
             $this->setDisplayOrderToNextValueInContext($dataClass);
         }
-
-        return true;
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function handleDisplayOrderAfterDelete(DataClassDisplayOrderSupport $dataClass): bool
+    public function handleDisplayOrderAfterDelete(DataClassDisplayOrderSupport $dataClass): void
     {
-        return $this->deleteDisplayOrderFromContext($dataClass);
+        $this->deleteDisplayOrderFromContext($dataClass);
     }
 
     /**
@@ -144,11 +140,10 @@ class DisplayOrderHandler
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function handleDisplayOrderBeforeCreate(DataClassDisplayOrderSupport $dataClass): bool
+    public function handleDisplayOrderBeforeCreate(DataClassDisplayOrderSupport $dataClass): void
     {
         $this->validateDisplayOrder($dataClass);
-
-        return $this->handleAddedDataClassInContext($dataClass);
+        $this->handleAddedDataClassInContext($dataClass);
     }
 
     /**
@@ -166,16 +161,8 @@ class DisplayOrderHandler
 
         if ($hasDisplayOrderContextChanged || $hasDisplayOrderChanged) {
             $this->validateDisplayOrder($dataClass);
-
-            if (!$this->deletePreviousDisplayOrderFromPreviousContext(
-                $dataClass, $displayOrderPropertiesRecord
-            )) {
-                return false;
-            }
-
-            if (!$this->handleAddedDataClassInContext($dataClass)) {
-                return false;
-            }
+            $this->deletePreviousDisplayOrderFromPreviousContext($dataClass, $displayOrderPropertiesRecord);
+            $this->handleAddedDataClassInContext($dataClass);
         }
 
         return true;

@@ -79,17 +79,17 @@ class CalendarService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function login(User $user, $authenticationCode = null): bool
+    public function login(User $user, $authenticationCode = null): void
     {
-        return $this->calendarRepository->login($user, $authenticationCode);
+        $this->calendarRepository->login($user, $authenticationCode);
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Google_Auth_Exception
      */
-    public function logout(User $user): bool
+    public function logout(User $user): void
     {
-        return $this->calendarRepository->logout($user);
+        $this->calendarRepository->logout($user);
     }
 }

@@ -36,9 +36,9 @@ class VisibilityRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function deleteVisibility(Visibility $visibility): bool
+    public function deleteVisibility(Visibility $visibility): void
     {
-        return $this->dataClassRepository->delete($visibility);
+        $this->dataClassRepository->delete($visibility);
     }
 
     /**

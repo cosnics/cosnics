@@ -60,12 +60,10 @@ readonly class UserSettingsService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function updateUserSetting(User $user, string $variable, mixed $value = null, ?User $executingUser = null
-    ): bool
+    ): void
     {
         $user->setSetting($variable, $value);
         $this->userService->updateUser($user, $executingUser);
-
-        return true;
     }
 
     /**
@@ -85,7 +83,11 @@ readonly class UserSettingsService
                     continue;
                 }
 
-                if (!$this->updateUserSetting($user, $name, $values[$name], $executingUser)) {
+                try{
+                    $this->updateUserSetting($user, $name, $values[$name], $executingUser);
+                }
+                catch(\Throwable)
+                {
                     $problems ++;
                 }
             }

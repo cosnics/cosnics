@@ -30,9 +30,9 @@ class AvailabilityService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function createAvailability(Availability $availability): bool
+    public function createAvailability(Availability $availability): void
     {
-        return $this->availabilityRepository->createAvailability($availability);
+        $this->availabilityRepository->createAvailability($availability);
     }
 
     /**
@@ -57,9 +57,9 @@ class AvailabilityService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function deleteAvailabilityByCalendarType(string $calendarType): bool
+    public function deleteAvailabilityByCalendarType(string $calendarType): void
     {
-        return $this->availabilityRepository->removeAvailabilityByCalendarType($calendarType);
+        $this->availabilityRepository->removeAvailabilityByCalendarType($calendarType);
     }
 
     /**
@@ -203,9 +203,9 @@ class AvailabilityService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updateAvailability(Availability $availability): bool
+    public function updateAvailability(Availability $availability): void
     {
-        return $this->availabilityRepository->updateAvailability($availability);
+        $this->availabilityRepository->updateAvailability($availability);
     }
 
     /**

@@ -54,13 +54,10 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function createItem(Item $item): bool
+    public function createItem(Item $item): void
     {
-        if (!$this->itemService->createItem($item)) {
-            return false;
-        }
-
-        return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
+        $this->itemService->createItem($item);
+        $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 
     /**
@@ -92,13 +89,10 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function deleteItem(Item $item): bool
+    public function deleteItem(Item $item): void
     {
-        if (!$this->itemService->deleteItem($item)) {
-            return false;
-        }
-
-        return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
+        $this->itemService->deleteItem($item);
+        $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 
     /**
@@ -107,13 +101,10 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Symfony\Component\Cache\Exception\CacheException
      */
-    public function deleteItemChildren(Item $item): bool
+    public function deleteItemChildren(Item $item): void
     {
-        if (!$this->itemService->deleteItemChildren($item)) {
-            return false;
-        }
-
-        return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
+        $this->itemService->deleteItemChildren($item);
+        $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 
     public function doesItemHaveChildren(Item $item): bool
@@ -218,13 +209,10 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function moveItemInDirection(Item $item, int $moveDirection): bool
+    public function moveItemInDirection(Item $item, int $moveDirection): void
     {
-        if (!$this->itemService->moveItemInDirection($item, $moveDirection)) {
-            return false;
-        }
-
-        return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
+        $this->itemService->moveItemInDirection($item, $moveDirection);
+        $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 
     public function preLoadCacheData(): array
@@ -238,25 +226,19 @@ class CachedItemService implements CacheDataPreLoaderInterface, ItemServiceInter
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function saveItemFromValues(Item $item, array $values): bool
+    public function saveItemFromValues(Item $item, array $values): void
     {
-        if (!$this->itemService->saveItemFromValues($item, $values)) {
-            return false;
-        }
-
-        return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
+        $this->itemService->saveItemFromValues($item, $values);
+        $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\DisplayOrderException
      */
-    public function updateItem(Item $item): bool
+    public function updateItem(Item $item): void
     {
-        if (!$this->itemService - $this->updateItem($item)) {
-            return false;
-        }
-
-        return $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
+        $this->itemService->$this->updateItem($item);
+        $this->clearCacheDataForKeyParts([__CLASS__, self::KEY_ITEMS]);
     }
 }

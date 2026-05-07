@@ -37,21 +37,19 @@ abstract class ImageManipulation
         $this->height = $dimension[self::DIMENSION_HEIGHT];
     }
 
-    public function createThumbnail(int $width, ?int $height = null): bool
+    public function createThumbnail(int $width, ?int $height = null): void
     {
         if (is_null($height)) {
             $height = $width;
         }
         if ($this->scale($width, $height, self::SCALE_OUTSIDE)) {
-            return $this->crop($width, $height);
+            $this->crop($width, $height);
         }
-
-        return false;
     }
 
     abstract public function crop(
         int $width, int $height, int $offsetX = self::CROP_CENTER, int $offsetY = self::CROP_CENTER
-    ): bool;
+    ): void;
 
     /**
      * @throws \Exception
@@ -75,7 +73,7 @@ abstract class ImageManipulation
      */
     public static function rescale(
         int $originalWidth, int $originalHeight, int $width, int $height, int $type = self::SCALE_INSIDE
-    ): bool|array
+    ): array
     {
         $aspect = $originalHeight / $originalWidth;
 
@@ -87,7 +85,7 @@ abstract class ImageManipulation
 
         // don't scale up
         if ($width >= $originalWidth && $height >= $originalHeight) {
-            return false;
+            return [self::DIMENSION_WIDTH => $originalWidth, self::DIMENSION_HEIGHT => $originalHeight];
         }
 
         $newAspect = $height / $width;
@@ -104,14 +102,14 @@ abstract class ImageManipulation
         return [self::DIMENSION_WIDTH => $width, self::DIMENSION_HEIGHT => $height];
     }
 
-    abstract public function resize(int $width, int $height): bool;
+    abstract public function resize(int $width, int $height): void;
 
-    public function scale(int $width, int $height, int $type = self::SCALE_INSIDE): bool
+    public function scale(int $width, int $height, int $type = self::SCALE_INSIDE): void
     {
         $newDimensions = static::rescale($this->width, $this->height, $width, $height, $type);
 
-        return $this->resize($newDimensions[self::DIMENSION_WIDTH], $newDimensions[self::DIMENSION_HEIGHT]);
+        $this->resize($newDimensions[self::DIMENSION_WIDTH], $newDimensions[self::DIMENSION_HEIGHT]);
     }
 
-    abstract public function writeToFile(?string $sourceFile = null): bool;
+    abstract public function writeToFile(?string $sourceFile = null): void;
 }

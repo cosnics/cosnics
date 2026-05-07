@@ -8,6 +8,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  *
@@ -23,11 +24,11 @@ class LoginComponent extends Manager
      */
     public function run(?User $currentUser = null): Response
     {
-        $isSuccessful = $this->calendarService->login(
-            $currentUser, $this->getRequest()->query->get(CalendarService::PARAM_AUTHORIZATION_CODE)
-        );
+        try {
+            $this->calendarService->login(
+                $currentUser, $this->getRequest()->query->get(CalendarService::PARAM_AUTHORIZATION_CODE)
+            );
 
-        if ($isSuccessful) {
             return new RedirectResponse(
                 $this->getUrlGenerator()->fromParameters(
                     [
@@ -37,7 +38,7 @@ class LoginComponent extends Manager
                 )
             );
         }
-        else {
+        catch (Throwable) {
             return new RedirectResponse(
                 $this->getUrlGenerator()->fromParameters(
                     [

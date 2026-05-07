@@ -34,6 +34,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\Translator;
+use Throwable;
 
 /**
  * @package Chamilo\Core\User\Service
@@ -169,8 +170,13 @@ readonly class UserService
 
         $this->createUser($user, $executingUser);
 
-        if ($sendEmail && !$this->sendRegistrationEmailToUser($user, $password)) {
-            throw new RuntimeException('Could not send an email to the new user');
+        if ($sendEmail) {
+            try {
+                $this->sendRegistrationEmailToUser($user, $password);
+            }
+            catch (Throwable) {
+                throw new RuntimeException('Could not send an email to the new user');
+            }
         }
 
         return $user;
@@ -335,7 +341,7 @@ readonly class UserService
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\UserException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
-    public function sendPasswordResetLinkforUser(User $user): bool
+    public function sendPasswordResetLinkforUser(User $user): void
     {
         if (!$user->getActive()) {
             throw new UserException(
@@ -392,8 +398,6 @@ readonly class UserService
             $this->activeMailer->sendMail(
                 new Mail($mailSubject, implode(PHP_EOL, $mailBody), [$user->getEmail()])
             );
-
-            return true;
         }
         catch (Exception) {
             throw new UserException(
@@ -405,7 +409,7 @@ readonly class UserService
         }
     }
 
-    public function sendRegistrationEmailToUser(User $user, string $password): bool
+    public function sendRegistrationEmailToUser(User $user, string $password): void
     {
         $options = [];
         $options['firstname'] = $user->getGivenName();
@@ -425,14 +429,7 @@ readonly class UserService
             $subject, $body, [$user->getEmail()], true, [], [], $options['admin_name'], $options['admin_email']
         );
 
-        try {
-            $this->activeMailer->sendMail($mail);
-        }
-        catch (Exception) {
-            return false;
-        }
-
-        return true;
+        $this->activeMailer->sendMail($mail);
     }
 
     /**

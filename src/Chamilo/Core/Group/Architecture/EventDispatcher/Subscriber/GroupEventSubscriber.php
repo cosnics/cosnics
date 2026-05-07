@@ -18,13 +18,11 @@ readonly class GroupEventSubscriber implements EventSubscriberInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function beforeDelete(BeforeGroupDeleteEvent $afterGroupCreateEvent): bool
+    public function beforeDelete(BeforeGroupDeleteEvent $afterGroupCreateEvent): void
     {
         $this->groupMembershipService->deleteGroupMembershipsByGroup(
             $afterGroupCreateEvent->group, $afterGroupCreateEvent->executingUser
         );
-
-        return true;
     }
 
     public static function getSubscribedEvents(): array

@@ -13,6 +13,7 @@ use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * @package Chamilo\Core\Menu\Component
@@ -41,7 +42,10 @@ class DeleteComponent extends Manager
         $parentIdentifier = 0;
 
         foreach ($items as $item) {
-            if (!$this->cachedItemService->deleteItem($item)) {
+            try {
+                $this->cachedItemService->deleteItem($item);
+            }
+            catch (Throwable) {
                 $failures ++;
             }
 

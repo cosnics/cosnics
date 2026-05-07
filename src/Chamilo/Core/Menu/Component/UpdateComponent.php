@@ -28,6 +28,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Throwable;
 use Twig\Environment;
 
 /**
@@ -99,19 +100,24 @@ class UpdateComponent extends Manager
         $form->handleRequest($this->getRequest());
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $success = $this->cachedItemService->saveItemFromValues(
-                $item, $form->getData()
-            );
-
-            $message = $this->getTranslator()->trans(
-                $success ? 'ObjectCreated' : 'ObjectNotCreated',
-                ['%Object%' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)],
-                StringUtilities::LIBRARIES
-            );
+            try {
+                $this->cachedItemService->saveItemFromValues(
+                    $item, $form->getData()
+                );
+                $message = 'ObjectCreated';
+                $messageType = AlertEnum::SUCCESS;
+            }
+            catch (Throwable) {
+                $message = 'ObjectNotCreated';
+                $messageType = AlertEnum::DANGER;
+            }
 
             $this->alertsManager->addAlert(
                 new Alert(
-                    $message, $success ? AlertEnum::SUCCESS : AlertEnum::DANGER
+                    $this->getTranslator()->trans(
+                        $message, ['%Object%' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)],
+                        StringUtilities::LIBRARIES
+                    ), $messageType
                 )
             );
 

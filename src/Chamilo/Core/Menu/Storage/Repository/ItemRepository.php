@@ -53,9 +53,9 @@ readonly class ItemRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function deleteItem(Item $item): bool
+    public function deleteItem(Item $item): void
     {
-        return $this->dataClassRepository->delete($item);
+        $this->dataClassRepository->delete($item);
     }
 
     /**
@@ -186,8 +186,8 @@ readonly class ItemRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updateItem(Item $item): bool
+    public function updateItem(Item $item): void
     {
-        return $this->dataClassRepository->update($item);
+        $this->dataClassRepository->update($item);
     }
 }

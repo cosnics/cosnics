@@ -14,6 +14,7 @@ use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -50,28 +51,29 @@ class UpdateUserPictureComponent extends ProfileComponent
 
                 $pictureInformation = $submittedData[User::PROPERTY_PICTURE_URI];
 
-                $success = $this->userPictureProvider->updateUserPictureFromParameters(
-                    $currentUser, $pictureInformation,
-                    (bool) $submittedData[AbstractUserFormType::PROPERTY_PICTURE_REMOVE], $currentUser
-                );
+                try {
+                    $this->userPictureProvider->updateUserPictureFromParameters(
+                        $currentUser, $pictureInformation,
+                        (bool) $submittedData[AbstractUserFormType::PROPERTY_PICTURE_REMOVE], $currentUser
+                    );
 
-                if (!$success) {
+                    $message = 'UserProfileUpdated';
+                    $messageType = AlertEnum::SUCCESS;
+                }
+                catch (Throwable) {
                     if ($pictureInformation instanceof UploadedFile && !$pictureInformation->isValid()) {
-                        $errorMessage = $pictureInformation->getErrorMessage();
+                        $message = $pictureInformation->getErrorMessage();
                     }
                     else {
-                        $errorMessage = 'UserProfileNotUpdated';
+                        $message = 'UserProfileNotUpdated';
                     }
-                }
-                else {
-                    $errorMessage = 'UserProfileNotUpdated';
-                    $successMessage = 'UserProfileUpdated';
+
+                    $messageType = AlertEnum::DANGER;
                 }
 
                 $this->alertsManager->addAlert(
                     new Alert(
-                        $this->getTranslator()->trans($success ? $successMessage : $errorMessage),
-                        !$success ? AlertEnum::DANGER : AlertEnum::SUCCESS
+                        $this->getTranslator()->trans($message, [], Manager::CONTEXT), $messageType
                     )
                 );
 

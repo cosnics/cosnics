@@ -12,6 +12,7 @@ use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * @package Chamilo\Core\Menu\Component
@@ -49,17 +50,22 @@ class MoveComponent extends Manager
 
         $item = $this->itemService->findItemByIdentifier($itemIdentifier);
 
-        $success = $this->cachedItemService->moveItemInDirection($item, $moveDirection);
-
-        $message = $this->getTranslator()->trans(
-            $success ? 'ObjectMoved' : 'ObjectNotMoved',
-            ['%Object%' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)],
-            StringUtilities::LIBRARIES
-        );
+        try {
+            $this->cachedItemService->moveItemInDirection($item, $moveDirection);
+            $message = 'ObjectMoved';
+            $messageType = AlertEnum::SUCCESS;
+        }
+        catch (Throwable) {
+            $message = 'ObjectNotMoved';
+            $messageType = AlertEnum::DANGER;
+        }
 
         $this->alertsManager->addAlert(
             new Alert(
-                $message, $success ? AlertEnum::SUCCESS : AlertEnum::DANGER
+                $this->getTranslator()->trans(
+                    $message, ['%Object%' => $this->getTranslator()->trans('ManagerItem', [], Manager::CONTEXT)],
+                    StringUtilities::LIBRARIES
+                ), $messageType
             )
         );
 

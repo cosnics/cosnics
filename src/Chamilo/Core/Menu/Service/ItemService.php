@@ -51,17 +51,10 @@ readonly class ItemService implements ItemServiceInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function createItem(Item $item): bool
+    public function createItem(Item $item): void
     {
-        if (!$this->displayOrderHandler->handleDisplayOrderBeforeCreate($item)) {
-            return false;
-        }
-
-        if (!$this->itemRepository->createItem($item)) {
-            return false;
-        }
-
-        return true;
+        $this->displayOrderHandler->handleDisplayOrderBeforeCreate($item);
+        $this->itemRepository->createItem($item);
     }
 
     /**
@@ -91,9 +84,7 @@ readonly class ItemService implements ItemServiceInterface
             $item->setSetting($configurationVariable, $configurationValue);
         }
 
-        if (!$this->createItem($item)) {
-            return null;
-        }
+        $this->createItem($item);
 
         return $item;
     }
@@ -103,21 +94,11 @@ readonly class ItemService implements ItemServiceInterface
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function deleteItem(Item $item): bool
+    public function deleteItem(Item $item): void
     {
-        if (!$this->deleteItemChildren($item)) {
-            return false;
-        }
-
-        if (!$this->itemRepository->deleteItem($item)) {
-            return false;
-        }
-
-        if (!$this->displayOrderHandler->handleDisplayOrderAfterDelete($item)) {
-            return false;
-        }
-
-        return true;
+        $this->deleteItemChildren($item);
+        $this->itemRepository->deleteItem($item);
+        $this->displayOrderHandler->handleDisplayOrderAfterDelete($item);
     }
 
     /**
@@ -125,17 +106,13 @@ readonly class ItemService implements ItemServiceInterface
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function deleteItemChildren(Item $item): bool
+    public function deleteItemChildren(Item $item): void
     {
         $itemChildren = $this->findItemsByParentIdentifier($item->getId());
 
         foreach ($itemChildren as $itemChild) {
-            if (!$this->deleteItem($itemChild)) {
-                return false;
-            }
+            $this->deleteItem($itemChild);
         }
-
-        return true;
     }
 
     /**
@@ -256,12 +233,12 @@ readonly class ItemService implements ItemServiceInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function moveItemInDirection(Item $item, int $moveDirection): bool
+    public function moveItemInDirection(Item $item, int $moveDirection): void
     {
         $newDisplayOrder = $item->getSort() + ($moveDirection == self::PARAM_DIRECTION_UP ? - 1 : 1);
         $item->setSort($newDisplayOrder);
 
-        return $this->updateItem($item);
+        $this->updateItem($item);
     }
 
     /**
@@ -271,7 +248,7 @@ readonly class ItemService implements ItemServiceInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function saveItemFromValues(Item $item, array $values): bool
+    public function saveItemFromValues(Item $item, array $values): void
     {
         $parentHasChanged = $item->getParentId() != $values[Item::PROPERTY_PARENT];
 
@@ -292,11 +269,7 @@ readonly class ItemService implements ItemServiceInterface
             $item->setSetting($configurationVariable, $configurationValue);
         }
 
-        if (!$this->updateItem($item)) {
-            return false;
-        }
-
-        return true;
+        $this->updateItem($item);
     }
 
     /**
@@ -304,16 +277,9 @@ readonly class ItemService implements ItemServiceInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    public function updateItem(Item $item): bool
+    public function updateItem(Item $item): void
     {
-        if (!$this->displayOrderHandler->handleDisplayOrderBeforeUpdate($item)) {
-            return false;
-        }
-
-        if (!$this->itemRepository->updateItem($item)) {
-            return false;
-        }
-
-        return true;
+        $this->displayOrderHandler->handleDisplayOrderBeforeUpdate($item);
+        $this->itemRepository->updateItem($item);
     }
 }

@@ -21,15 +21,15 @@ class VisibilityService implements VisibilityServiceInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function changeVisibility(string $userIdentifier, string $source): bool
+    public function changeVisibility(string $userIdentifier, string $source): void
     {
         try {
             $visibility = $this->retrieveVisibilityForUserIdentifierAndSource($userIdentifier, $source);
 
-            return $this->deleteVisibility($visibility);
+            $this->deleteVisibility($visibility);
         }
         catch (StorageNoResultException) {
-            return $this->createVisibilityFromParameters($userIdentifier, $source);
+            $this->createVisibilityFromParameters($userIdentifier, $source);
         }
     }
 
@@ -38,21 +38,21 @@ class VisibilityService implements VisibilityServiceInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
      */
-    public function createVisibilityFromParameters(string $userIdentifier, string $source): bool
+    public function createVisibilityFromParameters(string $userIdentifier, string $source): void
     {
         $visibility = new Visibility();
         $visibility->setUserId($userIdentifier);
         $visibility->setSource($source);
 
-        return $this->visibilityRepository->createVisibility($visibility);
+        $this->visibilityRepository->createVisibility($visibility);
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function deleteVisibility(Visibility $visibility): bool
+    public function deleteVisibility(Visibility $visibility): void
     {
-        return $this->visibilityRepository->deleteVisibility($visibility);
+        $this->visibilityRepository->deleteVisibility($visibility);
     }
 
     /**

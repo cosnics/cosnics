@@ -74,8 +74,8 @@ readonly class OnlineRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function updateOnline(Online $online): bool
+    public function updateOnline(Online $online): void
     {
-        return $this->dataClassRepository->update($online);
+        $this->dataClassRepository->update($online);
     }
 }
