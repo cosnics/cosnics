@@ -30,6 +30,7 @@
         "composer/composer": "2.9.*",
         "doctrine/collections": "2.*",
         "doctrine/dbal": "4.*",
+        "doctrine/orm": "3.*",
         "econea/nusoap": "0.9.*",
         "ezyang/htmlpurifier": "4.*",
         "google/apiclient": "1.*",

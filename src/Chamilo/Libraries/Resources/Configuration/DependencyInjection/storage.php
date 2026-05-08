@@ -8,6 +8,8 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionTranslatorInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
 use Chamilo\Libraries\Storage\Factory\DataClassFactory;
+use Chamilo\Libraries\Storage\Factory\DoctrineEntityManagerFactory;
+use Chamilo\Libraries\Storage\Factory\DoctrineMappingDriverFactory;
 use Chamilo\Libraries\Storage\Factory\SymfonyCacheAdapterFactory;
 use Chamilo\Libraries\Storage\Repository\DataClassDatabase;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
@@ -46,6 +48,11 @@ use Chamilo\Libraries\Storage\Service\StorageNoResultExceptionRenderer;
 use Chamilo\Libraries\Storage\Service\SymfonyCacheAdapterManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 return static function (ContainerConfigurator $container) {
     $services = $container->services();
@@ -115,4 +122,24 @@ return static function (ContainerConfigurator $container) {
     $services->set(StorageLastInsertedIdentifierExceptionRenderer::class)->tag(UserExceptionRendererInterface::class);
     $services->set(StorageMethodExceptionRenderer::class)->tag(UserExceptionRendererInterface::class);
     $services->set(StorageNoResultExceptionRenderer::class)->tag(UserExceptionRendererInterface::class);
+
+    $services->set(Configuration::class);
+    $services->set(DoctrineMappingDriverFactory::class);
+
+    $services->set(MappingDriver::class)->factory([service(DoctrineMappingDriverFactory::class), 'createMappingDriver']
+    );
+
+    $services->set('Chamilo\Libraries\Storage\EntityManagerCacheAdapter', ArrayAdapter::class)->args(
+        ['$namespace' => 'Chamilo\Libraries\Storage\EntityManager']
+    )->tag(AdapterInterface::class)->factory([service(SymfonyCacheAdapterFactory::class), 'createArrayAdapter']);
+
+    $services->set(DoctrineEntityManagerFactory::class)->args(
+        [
+            '$mappingDriver' => service('doctrine.orm.mapping_driver'),
+            '$doctrineConnection' => service(Connection::class),
+            '$cacheAdapter' => service('Chamilo\Libraries\Storage\EntityManagerCacheAdapter')
+        ]
+    );
+    $services->set(EntityManager::class)->factory([service(DoctrineEntityManagerFactory::class), 'createEntityManager']
+    );
 };
