@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\DependencyInjection;
 
 use Chamilo\Libraries\DependencyInjection\Architecture\Domain\AbstractDependencyInjectionExtension;
+use Chamilo\Libraries\DependencyInjection\Architecture\Domain\LibrariesConfiguration;
 use Chamilo\Libraries\DependencyInjection\Architecture\Interface\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Architecture\Trait\ExtensionTrait;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ApplicationCompilerPass;
@@ -19,6 +20,7 @@ use Chamilo\Libraries\DependencyInjection\CompilerPass\HtmlCalendarRendererCompi
 use Chamilo\Libraries\DependencyInjection\CompilerPass\MailerCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\TabRendererCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\UserExceptionRendererCompilerPass;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
@@ -31,7 +33,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     implements ExtensionInterface, ICompilerPassExtension
 {
     use ExtensionTrait {
-        load as public extentensionLoad;
+        load as public extensionLoad;
     }
 
     public function getAlias(): string
@@ -73,14 +75,24 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         ];
     }
 
-    public function getContext(): string
-    {
-        return 'Chamilo\Libraries';
-    }
-
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $this->extentensionLoad($configs, $container);
+        $this->extensionLoad($configs, $container);
+        $this->processLibrariesConfiguration($configs, $container);
+    }
+
+    protected function processLibrariesConfiguration(array $configuration, ContainerBuilder $container): void
+    {
+        $config = $this->processConfiguration(new LibrariesConfiguration(), $configuration);
+
+        if (array_key_exists('doctrine', $config) && array_key_exists('orm', $config['doctrine'])) {
+            $ormConfig = $config['doctrine']['orm'];
+
+            if (array_key_exists('mappings', $ormConfig)) {
+                $mappingDriverDef = $container->getDefinition(MappingDriver::class);
+                $mappingDriverDef->setArguments([$ormConfig['mappings']]);
+            }
+        }
     }
 
     public function registerCompilerPasses(ContainerBuilder $container): void

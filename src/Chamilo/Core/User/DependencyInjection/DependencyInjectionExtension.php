@@ -6,18 +6,23 @@ use Chamilo\Core\User\DependencyInjection\CompilerPass\UserPictureProviderCompil
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\DependencyInjection\Architecture\Domain\AbstractDependencyInjectionExtension;
 use Chamilo\Libraries\DependencyInjection\Architecture\Interface\ICompilerPassExtension;
+use Chamilo\Libraries\DependencyInjection\Architecture\Interface\IConfigurableExtension;
 use Chamilo\Libraries\DependencyInjection\Architecture\Trait\ExtensionTrait;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * @package Chamilo\Core\User\DependencyInjection
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
-    implements ExtensionInterface, ICompilerPassExtension
+    implements ExtensionInterface, ICompilerPassExtension, IConfigurableExtension
 {
-    use ExtensionTrait;
+    use ExtensionTrait {
+        load as public extensionLoad;
+    }
 
     public function getAlias(): string
     {
@@ -39,6 +44,26 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
                 'userInterface.php'
             ]
         ];
+    }
+
+    public function load(array $configs, ContainerBuilder $container): void
+    {
+        $this->extensionLoad($configs, $container);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function loadContainerConfiguration(ContainerBuilder $container): void
+    {
+        $loader = new YamlFileLoader(
+            $container, new FileLocator(
+                $this->getSystemPathBuilder()->namespaceToFullPath('Chamilo\Core\User') . 'Resources' .
+                DIRECTORY_SEPARATOR . 'Configuration'
+            )
+        );
+
+        $loader->load('Configuration.yaml');
     }
 
     public function registerCompilerPasses(ContainerBuilder $container): void

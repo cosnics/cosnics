@@ -1,18 +1,18 @@
 <?php
 namespace Chamilo\Core\User\Storage\Repository;
 
-use Chamilo\Core\User\Storage\Entity\UserVisit;
+use Chamilo\Core\User\Storage\Entity\UserActivity;
 use Doctrine\ORM\EntityRepository;
 
 /**
  * @package Chamilo\Core\User\Storage\Repository
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserTrackingEntityRepository extends EntityRepository
+class UserActivityRepository extends EntityRepository
 {
-    public function saveUserVisit(UserVisit $userVisit): void
+    public function saveUserActivity(UserActivity $userActivity): void
     {
-        $this->getEntityManager()->persist($userVisit);
+        $this->getEntityManager()->persist($userActivity);
         $this->getEntityManager()->flush();
     }
 }

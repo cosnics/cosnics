@@ -2,13 +2,15 @@
 
 namespace Chamilo\Libraries\Storage\Factory;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\PsrCachedReader;
+use Chamilo\Libraries\DependencyInjection\Architecture\Domain\DoctrineORMMappingsConfiguration;
+use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
+use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
 use InvalidArgumentException;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
  * Factory class to create a mapping driver for doctrine with a given configuration array
@@ -34,11 +36,13 @@ use InvalidArgumentException;
 class DoctrineMappingDriverFactory
 {
     public function __construct(
-        protected Configuration $doctrineConfiguration, protected ?string $chamiloRootPath = null
+        protected Configuration $doctrineConfiguration, protected AdapterInterface $cacheAdapter,
+        protected SystemPathBuilder $systemPathBuilder, protected ConfigurablePathBuilder $configurablePathBuilder,
+        protected ?string $chamiloRootPath = null
     )
     {
-        $this->doctrineConfiguration = $doctrineConfiguration;
-        $this->chamiloRootPath = !is_null($chamiloRootPath) ? $chamiloRootPath : Path::getInstance()->getBasePath();
+        $this->chamiloRootPath =
+            !is_null($chamiloRootPath) ? $chamiloRootPath : $this->systemPathBuilder->getBasePath();
     }
 
     /**
@@ -49,7 +53,7 @@ class DoctrineMappingDriverFactory
      *
      * @return string[]
      */
-    protected function createAbsoluteMappingPaths($type, $mappingPaths)
+    protected function createAbsoluteMappingPaths(string $type, array $mappingPaths): array
     {
         foreach ($mappingPaths as $index => $mappingPath) {
             $absoluteMappingPath = realpath($this->chamiloRootPath . $mappingPath);
@@ -68,14 +72,9 @@ class DoctrineMappingDriverFactory
     /**
      * @param string[] $paths
      */
-    protected function createAttributeDriver($paths): AttributeDriver
+    protected function createAttributeDriver(array $paths): AttributeDriver
     {
-        return new AttributeDriver(
-            new PsrCachedReader(
-                new AnnotationReader(),
-                new PhpFileCache(Path::getInstance()->getCachePath(__NAMESPACE__) . 'Annotations')
-            ), (array) $paths
-        );
+        return new AttributeDriver($paths);
     }
 
     /**
@@ -85,7 +84,7 @@ class DoctrineMappingDriverFactory
      *
      * @param string[] $mappingConfiguration
      */
-    public function createMappingDriver(array $mappingConfiguration = []): AttributeDriver
+    public function createMappingDriver(array $mappingConfiguration = []): MappingDriver
     {
         $mappingConfiguration = $this->processConfiguration($mappingConfiguration);
 
@@ -105,9 +104,9 @@ class DoctrineMappingDriverFactory
      *
      * @param string[] $mappingConfiguration
      *
-     * @return string[][][]
+     * @return string[][]
      */
-    protected function processConfiguration(array $mappingConfiguration = [])
+    protected function processConfiguration(array $mappingConfiguration = []): array
     {
         $doctrineORMMappingsConfiguration = new DoctrineORMMappingsConfiguration();
         $treeNode = $doctrineORMMappingsConfiguration->getConfigTreeBuilder()->buildTree();

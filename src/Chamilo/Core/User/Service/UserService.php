@@ -11,7 +11,7 @@ use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserDeleteEvent;
 use Chamilo\Core\User\Architecture\Exception\NoSuchUserException;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\Repository\UserRepository;
+use Chamilo\Core\User\Storage\Repository\Legacy\UserRepository;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeablePasswordInterface;

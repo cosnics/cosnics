@@ -59,8 +59,8 @@ function getUtilities(type, parameters) {
     }
 
     parameters.type = type;
-    parameters.application = 'Chamilo\\Libraries\\Ajax';
-    parameters.go = 'utilities';
+    parameters.context = 'Chamilo\\Libraries\\Ajax';
+    parameters.action = 'utilities';
 
     var response = $.ajax({
         type: "POST",

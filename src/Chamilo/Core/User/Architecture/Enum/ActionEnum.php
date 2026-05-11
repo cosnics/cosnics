@@ -34,7 +34,7 @@ enum ActionEnum: string
     case DELETE = 'Delete';
     case DOWNLOAD_USER_PICTURE = 'DownloadUserPicture';
     case LANGUAGE = 'Language';
-    case LEAVE = 'LEAVE';
+    case LEAVE = 'Leave';
     case LOGIN_AS = 'LoginAs';
     case LOGOUT = 'Logout';
     case REGISTER = 'Register';

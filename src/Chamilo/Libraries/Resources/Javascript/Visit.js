@@ -3,13 +3,14 @@
  * @author Hans De Bisschop
  */
 (function ($) {
+
     $(window).on('beforeunload', function (e) {
         if (typeof tracker != 'undefined') {
             var ajaxUri = getPath('WEB_PATH') + 'index.php';
 
             parameters = new Object();
-            parameters.application = 'Chamilo\\Core\\User';
-            parameters.go = 'Leave';
+            parameters.context = 'Chamilo\\Core\\User';
+            parameters.action = 'Leave';
             parameters.tracker = tracker;
 
             $.ajax({

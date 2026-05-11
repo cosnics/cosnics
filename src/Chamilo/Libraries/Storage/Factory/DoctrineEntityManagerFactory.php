@@ -2,11 +2,13 @@
 namespace Chamilo\Libraries\Storage\Factory;
 
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ChamiloNamingStrategy;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
+use Symfony\Bridge\Doctrine\Types\UlidType;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
@@ -29,30 +31,24 @@ class DoctrineEntityManagerFactory
         $this->eventListeners = [];
     }
 
-    /**
-     * Adds an event listener to the entity manager
-     *
-     * @param string|array $events
-     * @param object $eventListener
-     */
     public function addEventListener(string|array $events, object $eventListener): void
     {
         $this->eventListeners[] = ['events' => $events, 'listener' => $eventListener];
     }
 
     /**
-     * Creates and returns the entity manager
-     *
-     * @return \Doctrine\ORM\EntityManager
+     * @throws \Doctrine\DBAL\Exception
      */
     public function createEntityManager(): EntityManager
     {
+        Type::addType(UuidType::NAME, UuidType::class);
+        Type::addType(UlidType::NAME, UlidType::class);
+
         $configuration = ORMSetup::createConfiguration(
             proxyDir: $this->configurablePathBuilder->getCachePath(__NAMESPACE__), cache: $this->cacheAdapter
         );
 
         $configuration->setMetadataDriverImpl($this->mappingDriver);
-        //$configuration->setNamingStrategy(new ChamiloNamingStrategy());
 
         $entityManager = new EntityManager($this->doctrineConnection, $configuration);
 

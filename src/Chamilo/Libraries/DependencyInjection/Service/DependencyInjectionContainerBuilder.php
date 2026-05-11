@@ -7,6 +7,7 @@ use Chamilo\Core\Admin\Service\PackageFactory;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\DependencyInjection\Architecture\Interface\ContainerExtensionFinderInterface;
 use Chamilo\Libraries\DependencyInjection\Architecture\Interface\ICompilerPassExtension;
+use Chamilo\Libraries\DependencyInjection\Architecture\Interface\IConfigurableExtension;
 use Chamilo\Libraries\Filesystem\Service\PackagesContentFinder\PackagesClassFinder;
 use Chamilo\Libraries\Filesystem\Service\SystemPathBuilder;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
@@ -210,6 +211,11 @@ class DependencyInjectionContainerBuilder
         }
 
         foreach ($extensions as $extension) {
+            if ($extension instanceof IConfigurableExtension) {
+                /** @var IConfigurableExtension $extension */
+                $extension->loadContainerConfiguration($container);
+            }
+
             if ($extension instanceof ICompilerPassExtension) {
                 /** @var ICompilerPassExtension $extension */
                 $extension->registerCompilerPasses($container);

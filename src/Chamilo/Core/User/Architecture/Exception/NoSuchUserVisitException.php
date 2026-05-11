@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Architecture\Exception;
 
-use Chamilo\Core\User\Storage\DataClass\UserVisit;
+use Chamilo\Core\User\Storage\Entity\UserVisit;
 use Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException;
 use Exception;
 
