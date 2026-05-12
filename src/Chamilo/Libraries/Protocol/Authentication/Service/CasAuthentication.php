@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Authentication\Service;
 
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -29,10 +29,8 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
     }
 
     /**
-     * @param string $casUser
      * @param string[] $casUserAttributes
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException

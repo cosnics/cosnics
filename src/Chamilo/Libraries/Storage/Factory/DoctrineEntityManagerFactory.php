@@ -25,7 +25,8 @@ class DoctrineEntityManagerFactory
 
     public function __construct(
         protected MappingDriver $mappingDriver, protected Connection $doctrineConnection,
-        protected AdapterInterface $cacheAdapter, protected ConfigurablePathBuilder $configurablePathBuilder
+        protected AdapterInterface $cacheAdapter, protected ConfigurablePathBuilder $configurablePathBuilder,
+        protected RepositoryFactory $repositoryFactory
     )
     {
         $this->eventListeners = [];
@@ -49,6 +50,7 @@ class DoctrineEntityManagerFactory
         );
 
         $configuration->setMetadataDriverImpl($this->mappingDriver);
+        $configuration->setRepositoryFactory($this->repositoryFactory);
 
         $entityManager = new EntityManager($this->doctrineConnection, $configuration);
 

@@ -4,7 +4,7 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Core\User\UserInterface\Form\ResetPasswordFormType;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
@@ -22,6 +22,7 @@ use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 use Throwable;
 use Twig\Environment;
 
@@ -73,7 +74,8 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
         $requestUserIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID);
 
         if (!is_null($requestKey) && !is_null($requestUserIdentifier)) {
-            $userToCreateNewPasswordFor = $this->userService->retrieveUserByIdentifier($requestUserIdentifier);
+            $userToCreateNewPasswordFor =
+                $this->userService->retrieveUserByIdentifier(Uuid::fromString($requestUserIdentifier));
 
             if ($this->userService->isValidKeyForUser($requestKey, $userToCreateNewPasswordFor)) {
                 try {

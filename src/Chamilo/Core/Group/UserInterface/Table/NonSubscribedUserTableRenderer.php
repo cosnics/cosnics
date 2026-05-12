@@ -4,7 +4,7 @@ namespace Chamilo\Core\Group\UserInterface\Table;
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Component\SubscribeComponent;
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
@@ -87,7 +87,7 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $result
+     * @param \Chamilo\Core\User\Storage\Entity\User $result
      *
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */

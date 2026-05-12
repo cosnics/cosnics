@@ -9,7 +9,7 @@ use Chamilo\Core\Group\Architecture\EventDispatcher\Event\BeforeGroupDeleteEvent
 use Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;

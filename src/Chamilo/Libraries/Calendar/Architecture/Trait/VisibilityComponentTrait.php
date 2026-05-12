@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Architecture\Trait;
 
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Calendar\Architecture\Interface\VisibilityServiceInterface;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
@@ -25,7 +25,7 @@ trait VisibilityComponentTrait
         $source = $this->getRequest()->getFromQueryOrRequest(self::PARAM_SOURCE);
 
         try {
-            $this->visibilityService->changeVisibility($currentUser->getId(), $source);
+            $this->visibilityService->changeVisibility($currentUser->getIdentifier()->toString(), $source);
 
             return JsonAjaxResult::success();
         }

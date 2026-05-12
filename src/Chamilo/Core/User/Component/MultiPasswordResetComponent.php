@@ -5,7 +5,7 @@ use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;

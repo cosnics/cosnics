@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Libraries\Storage\Factory;
 
 use Chamilo\Libraries\DependencyInjection\Architecture\Domain\DoctrineORMMappingsConfiguration;

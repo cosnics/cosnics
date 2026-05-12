@@ -7,7 +7,7 @@ use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Core\User\UserInterface\Form\AbstractUserFormType;
 use Chamilo\Core\User\UserInterface\Form\RegisterFormType;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;

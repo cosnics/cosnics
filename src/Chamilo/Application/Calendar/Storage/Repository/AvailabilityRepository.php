@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Calendar\Storage\Repository;
 
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
@@ -34,9 +34,6 @@ class AvailabilityRepository
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param bool $isAvailable
-     *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Calendar\Storage\DataClass\Availability>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -46,7 +43,7 @@ class AvailabilityRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Availability::class, Availability::PROPERTY_USER_ID),
-            new StaticConditionVariable($user->getId())
+            new StaticConditionVariable($user->getIdentifier()->toString())
         );
 
         if (!is_null($isAvailable)) {
@@ -64,10 +61,6 @@ class AvailabilityRepository
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $calendarType
-     * @param ?bool $isAvailable
-     *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Calendar\Storage\DataClass\Availability>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -78,7 +71,7 @@ class AvailabilityRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Availability::class, Availability::PROPERTY_USER_ID),
-            new StaticConditionVariable($user->getId())
+            new StaticConditionVariable($user->getIdentifier()->toString())
         );
 
         $conditions[] = new EqualityCondition(
@@ -111,7 +104,7 @@ class AvailabilityRepository
         $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Availability::class, Availability::PROPERTY_USER_ID),
-            new StaticConditionVariable($user->getId())
+            new StaticConditionVariable($user->getIdentifier()->toString())
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Availability::class, Availability::PROPERTY_CALENDAR_TYPE),

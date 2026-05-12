@@ -5,7 +5,7 @@ use Chamilo\Core\Menu\Architecture\Interface\SelectableItemInterface;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\ItemRenderer;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Symfony\Component\Translation\Translator;

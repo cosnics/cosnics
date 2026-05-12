@@ -6,7 +6,7 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserSettingsService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;

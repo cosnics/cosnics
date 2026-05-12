@@ -6,7 +6,7 @@ use Chamilo\Core\Menu\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Menu\Manager;
 use Chamilo\Core\Menu\Service\CachedItemService;
 use Chamilo\Core\Menu\Service\ItemService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;

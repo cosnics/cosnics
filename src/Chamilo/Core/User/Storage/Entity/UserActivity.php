@@ -78,24 +78,24 @@ class UserActivity
         return $this;
     }
 
-    public function getSourceUserIdentifier(): ?string
+    public function getSourceUserIdentifier(): ?Uuid
     {
         return $this->sourceUserIdentifier;
     }
 
-    public function setSourceUserIdentifier(?string $sourceUserIdentifier): UserActivity
+    public function setSourceUserIdentifier(?Uuid $sourceUserIdentifier): UserActivity
     {
         $this->sourceUserIdentifier = $sourceUserIdentifier;
 
         return $this;
     }
 
-    public function getTargetUserIdentifier(): ?string
+    public function getTargetUserIdentifier(): ?Uuid
     {
         return $this->targetUserIdentifier;
     }
 
-    public function setTargetUserIdentifier(?string $targetUserIdentifier): UserActivity
+    public function setTargetUserIdentifier(?Uuid $targetUserIdentifier): UserActivity
     {
         $this->targetUserIdentifier = $targetUserIdentifier;
 

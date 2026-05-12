@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Calendar\Service\View\ICalCalendarRenderer;

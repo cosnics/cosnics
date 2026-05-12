@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Layout\Service;
 
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Service\BreadcrumbGenerator;

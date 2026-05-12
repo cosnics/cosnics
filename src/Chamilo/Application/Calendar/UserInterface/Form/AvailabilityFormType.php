@@ -3,7 +3,7 @@ namespace Chamilo\Application\Calendar\UserInterface\Form;
 
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\UserInterface\Form\Service\FormButtonTypeBuilder;
 use Chamilo\Libraries\UserInterface\Form\Service\FormTypeBuilder;
 use Symfony\Component\Form\AbstractType;

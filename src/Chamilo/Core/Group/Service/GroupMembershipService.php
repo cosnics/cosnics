@@ -10,12 +10,13 @@ use Chamilo\Core\Group\Storage\DataClass\GroupMembership;
 use Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository;
 use Chamilo\Core\User\Architecture\Exception\NoSuchUserException;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Group\Service
@@ -103,19 +104,19 @@ class GroupMembershipService
         try {
             $groupMembership = new GroupMembership();
 
-            $groupMembership->setUserId($user->getId());
+            $groupMembership->setUserId($user->getIdentifier()->toString());
             $groupMembership->setGroupId($group->getId());
 
             $this->groupMembershipRepository->createGroupMembership($groupMembership);
 
             $this->eventDispatcher->dispatch(
-                new AfterGroupSubscribeEvent($group->getId(), $user->getId(), $executingUser)
+                new AfterGroupSubscribeEvent($group->getId(), $user->getIdentifier()->toString(), $executingUser)
             );
         }
         catch (ObjectAlreadyExistsException) {
             $groupMembership =
                 $this->groupMembershipRepository->retrieveGroupMembershipByGroupIdentifierAndUserIdentifier(
-                    $group->getId(), $user->getId()
+                    $group->getId(), $user->getIdentifier()->toString()
                 );
         }
 
@@ -138,7 +139,7 @@ class GroupMembershipService
 
         foreach ($userIdentifiers as $userIdentifier) {
             try {
-                $user = $this->userService->retrieveUserByIdentifier($userIdentifier);
+                $user = $this->userService->retrieveUserByIdentifier(Uuid::fromString($userIdentifier));
                 $groupMemberships->add($this->createGroupMembershipForGroupAndUser($group, $user, $executingUser));
             }
             catch (NoSuchUserException) {
@@ -170,7 +171,7 @@ class GroupMembershipService
         try {
             $groupMembership =
                 $this->groupMembershipRepository->retrieveGroupMembershipByGroupIdentifierAndUserIdentifier(
-                    $group->getId(), $user->getId()
+                    $group->getId(), $user->getIdentifier()->toString()
                 );
 
             $this->deleteGroupMembership($groupMembership, $executingUser);
@@ -225,7 +226,7 @@ class GroupMembershipService
      */
     public function deleteGroupMembershipsByUser(User $user, ?User $executingUser = null): void
     {
-        $groupMemberships = $this->retrieveGroupMembershipsByUserIdentifier($user->getId());
+        $groupMemberships = $this->retrieveGroupMembershipsByUserIdentifier($user->getIdentifier()->toString());
 
         foreach ($groupMemberships as $groupMembership) {
             $this->deleteGroupMembership($groupMembership, $executingUser);
@@ -238,7 +239,9 @@ class GroupMembershipService
      */
     public function retrieveGroupMembershipByGroupAndUser(Group $group, User $user): ?GroupMembership
     {
-        return $this->retrieveGroupMembershipByGroupIdentifierAndUserIdentifier($group->getId(), $user->getId());
+        return $this->retrieveGroupMembershipByGroupIdentifierAndUserIdentifier(
+            $group->getId(), $user->getIdentifier()->toString()
+        );
     }
 
     /**
@@ -248,7 +251,7 @@ class GroupMembershipService
     public function retrieveGroupMembershipByGroupCodeAndUser(string $groupCode, User $user): ?GroupMembership
     {
         return $this->groupMembershipRepository->retrieveGroupMembershipByGroupCodeAndUserIdentifier(
-            $groupCode, $user->getId()
+            $groupCode, $user->getIdentifier()->toString()
         );
     }
 

@@ -2,7 +2,8 @@
 namespace Chamilo\Core\User\Architecture\Trait;
 
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
+use Symfony\Component\Uid\Uuid;
 use Throwable;
 
 /**
@@ -19,7 +20,7 @@ trait UserDetailsRendererTrait
     {
         try {
             return $this->renderUserDetails(
-                $this->userService->retrieveUserByIdentifier($userIdentifier), $requestingUser
+                $this->userService->retrieveUserByIdentifier(Uuid::fromString($userIdentifier)), $requestingUser
             );
         }
         catch (Throwable) {

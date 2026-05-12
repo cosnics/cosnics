@@ -6,7 +6,7 @@ use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Architecture\Trait\UserDetailsRendererTrait;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Service\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;

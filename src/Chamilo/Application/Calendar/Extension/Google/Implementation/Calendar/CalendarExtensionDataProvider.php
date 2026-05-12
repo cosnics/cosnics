@@ -6,7 +6,7 @@ use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Application\Calendar\Extension\Google\Service\EventParser;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Symfony\Component\Translation\Translator;
 
 /**

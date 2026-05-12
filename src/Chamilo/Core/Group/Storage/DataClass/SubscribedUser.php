@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Group\Storage\DataClass;
 
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 
 /**
  * @package Chamilo\Core\Group\Storage\DataClass

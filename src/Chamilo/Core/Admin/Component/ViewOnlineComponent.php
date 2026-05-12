@@ -6,7 +6,7 @@ use Chamilo\Core\Admin\Service\OnlineService;
 use Chamilo\Core\Admin\UserInterface\Table\OnlineTableRenderer;
 use Chamilo\Core\User\Implementation\User\UserDetailsRenderer;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;

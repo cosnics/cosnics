@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Component;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Manager;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
@@ -143,7 +143,7 @@ abstract class GroupsFeedComponent extends Manager
     abstract public function retrieveGroups(): ArrayCollection;
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\Entity\User>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     private function retrieveUsers(): ArrayCollection

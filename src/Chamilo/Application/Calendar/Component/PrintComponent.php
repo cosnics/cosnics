@@ -8,7 +8,7 @@ use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserSettingsService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Calendar\Factory\HtmlCalendarRendererFactory;
 use Chamilo\Libraries\Calendar\Service\CalendarTableConfigurationBuilder;

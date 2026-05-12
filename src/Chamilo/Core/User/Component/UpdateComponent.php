@@ -7,7 +7,7 @@ use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Core\User\UserInterface\Form\AbstractUserFormType;
 use Chamilo\Core\User\UserInterface\Form\UserFormType;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 use Throwable;
 use Twig\Environment;
 
@@ -76,9 +77,9 @@ class UpdateComponent extends Manager
         $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
 
         if ($userIdentifier) {
-            $userToUpdate = $this->userService->retrieveUserByIdentifier($userIdentifier);
-            $isLockoutRisk =
-                $currentUser->getId() == $userToUpdate->getId() && $userToUpdate->isPlatformAdministrator();
+            $userToUpdate = $this->userService->retrieveUserByIdentifier(Uuid::fromString($userIdentifier));
+            $isLockoutRisk = $currentUser->getIdentifier()->equals($userToUpdate->getIdentifier()) &&
+                $userToUpdate->isPlatformAdministrator();
 
             $updateUrl = $urlGenerator->fromParameters([
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
@@ -87,7 +88,7 @@ class UpdateComponent extends Manager
             ]);
 
             $form = $this->formFactory->create(
-                UserFormType::class, $userToUpdate->getDefaultProperties(), [
+                UserFormType::class, $userToUpdate, [
                     'action' => $updateUrl,
                     'user' => $userToUpdate,
                     'executingUser' => $currentUser,

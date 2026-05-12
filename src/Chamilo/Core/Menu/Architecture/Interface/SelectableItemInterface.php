@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Menu\Architecture\Interface;
 
 use Chamilo\Core\Menu\Storage\DataClass\Item;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 
 /**
  * @package Chamilo\Core\Menu\Architecture\Interface

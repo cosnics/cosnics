@@ -4,7 +4,7 @@ namespace Chamilo\Core\Admin\Component;
 use Chamilo\Core\Admin\Architecture\Domain\ActionProviderRegistry;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Core\Admin\Service\PackageBundlesCacheService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;

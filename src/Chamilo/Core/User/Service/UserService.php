@@ -10,7 +10,7 @@ use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserUpdateEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserDeleteEvent;
 use Chamilo\Core\User\Architecture\Exception\NoSuchUserException;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Core\User\Storage\Repository\Legacy\UserRepository;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
@@ -34,6 +34,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 use Throwable;
 
 /**
@@ -44,12 +45,13 @@ use Throwable;
 readonly class UserService
 {
     public function __construct(
-        protected UserRepository $userRepository, protected HashingAlgorithm $hashingUtilities,
+        protected UserRepository $legacyUserRepository, protected HashingAlgorithm $hashingUtilities,
         protected Translator $translator, protected WebPathBuilder $webPathBuilder,
         protected MailerInterface $activeMailer, protected PasswordGeneratorInterface $passwordGenerator,
         protected AuthenticationValidator $authenticationValidator, protected UrlGenerator $urlGenerator,
         protected EventDispatcherInterface $eventDispatcher, private string $securityKey, protected string $siteName,
-        protected string $administratorName, protected string $administratorEmail, protected bool $allowRegistration
+        protected string $administratorName, protected string $administratorEmail, protected bool $allowRegistration,
+        protected \Chamilo\Core\User\Storage\Repository\UserRepository $userRepository
     )
     {
     }
@@ -59,7 +61,7 @@ readonly class UserService
      */
     public function countUsers(?ConditionInterface $condition = null): int
     {
-        return $this->userRepository->countUsers($condition);
+        return $this->legacyUserRepository->countUsers($condition);
     }
 
     /**
@@ -119,7 +121,7 @@ readonly class UserService
         $user->setRegistrationDate(time());
         $user->setSecurityToken(sha1(time() . uniqid()));
 
-        $this->userRepository->createUser($user);
+        $this->legacyUserRepository->createUser($user);
         $this->eventDispatcher->dispatch(new AfterUserCreateEvent($user, $executingUser));
     }
 
@@ -188,7 +190,7 @@ readonly class UserService
     public function deleteUser(User $user, ?User $executingUser = null): void
     {
         $this->eventDispatcher->dispatch(new BeforeUserDeleteEvent($user));
-        $this->userRepository->deleteUser($user);
+        $this->legacyUserRepository->deleteUser($user);
         $this->eventDispatcher->dispatch(new AfterUserDeleteEvent($user, $executingUser));
     }
 
@@ -267,16 +269,15 @@ readonly class UserService
      */
     public function retrieveUserByEmail(string $email): ?User
     {
-        return $this->userRepository->retrieveUserByEmail($email);
+        return $this->legacyUserRepository->retrieveUserByEmail($email);
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
-    public function retrieveUserByIdentifier(string $identifier): ?User
+    public function retrieveUserByIdentifier(Uuid $identifier): User
     {
-        return $this->userRepository->retrieveUserByIdentifier($identifier);
+        return $this->userRepository->findUserByIdentifier($identifier);
     }
 
     /**
@@ -285,7 +286,7 @@ readonly class UserService
      */
     public function retrieveUserByOfficialCode(string $officialCode): ?User
     {
-        return $this->userRepository->retrieveUserByOfficialCode($officialCode);
+        return $this->legacyUserRepository->retrieveUserByOfficialCode($officialCode);
     }
 
     /**
@@ -294,7 +295,7 @@ readonly class UserService
      */
     public function retrieveUserBySecurityToken(string $securityToken): ?User
     {
-        return $this->userRepository->retrieveUserBySecurityToken($securityToken);
+        return $this->legacyUserRepository->retrieveUserBySecurityToken($securityToken);
     }
 
     /**
@@ -303,7 +304,7 @@ readonly class UserService
      */
     public function retrieveUserByUsername(string $username): ?User
     {
-        return $this->userRepository->retrieveUserByUsername($username);
+        return $this->legacyUserRepository->retrieveUserByUsername($username);
     }
 
     /**
@@ -312,29 +313,29 @@ readonly class UserService
      */
     public function retrieveUserByUsernameOrEmail(string $usernameOrEmail): ?User
     {
-        return $this->userRepository->retrieveUserByUsernameOrEmail($usernameOrEmail);
+        return $this->legacyUserRepository->retrieveUserByUsernameOrEmail($usernameOrEmail);
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\Entity\User>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function retrieveUsers(
         ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        return $this->userRepository->retrieveUsers($condition, $count, $offset, $orderBy);
+        return $this->legacyUserRepository->retrieveUsers($condition, $count, $offset, $orderBy);
     }
 
     /**
      * @param string[] $userIdentifiers
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\Entity\User>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function retrieveUsersByIdentifiers(array $userIdentifiers = []): ArrayCollection
     {
-        return $this->userRepository->retrieveUsersByIdentifiers($userIdentifiers);
+        return $this->legacyUserRepository->retrieveUsersByIdentifiers($userIdentifiers);
     }
 
     /**
@@ -369,7 +370,7 @@ readonly class UserService
                     ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                     ApplicationInterface::PARAM_ACTION => ActionEnum::RESET_PASSWORD->value,
                     Manager::PARAM_RESET_KEY => $this->determineUserKey($user),
-                    DataClass::PROPERTY_ID => $user->getId()
+                    DataClass::PROPERTY_ID => $user->getIdentifier()->toString()
                 ]
             );
 
@@ -466,7 +467,7 @@ readonly class UserService
      */
     public function updateUser(User $user, ?User $executingUser = null): void
     {
-        $this->userRepository->updateUser($user);
+        $this->legacyUserRepository->updateUser($user);
         $this->eventDispatcher->dispatch(new AfterUserUpdateEvent($user, $executingUser));
     }
 

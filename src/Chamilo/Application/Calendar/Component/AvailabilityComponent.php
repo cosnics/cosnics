@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
 use Chamilo\Application\Calendar\UserInterface\Form\AvailabilityFormType;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;

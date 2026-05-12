@@ -6,7 +6,7 @@ use Chamilo\Application\Calendar\Architecture\Interface\CalendarExtensionDataPro
 use Chamilo\Application\Calendar\Extension\Office365\Manager;
 use Chamilo\Application\Calendar\Extension\Office365\Service\EventParser;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\CalendarService;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
@@ -99,7 +99,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
     public function getCalendars(?User $user = null): array
     {
         try {
-            $identifier = [__METHOD__, $user->getId()];
+            $identifier = [__METHOD__, $user->getIdentifier()->toString()];
             $identifierString = md5(serialize($identifier));
 
             $cacheItem = $this->filesystemAdapter->getItem($identifierString);
@@ -141,7 +141,7 @@ class CalendarExtensionDataProvider implements CalendarExtensionDataProviderInte
 
             $identifier = [
                 __METHOD__,
-                $user->getId(),
+                $user->getIdentifier()->toString(),
                 $calendarIdentifiers,
                 $fromDate,
                 $toDate

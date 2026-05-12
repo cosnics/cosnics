@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\UserInterface\Form\Service;
 
 use ArrayIterator;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\Form\Extension\Core\DataMapper\DataMapper;
 use Traversable;

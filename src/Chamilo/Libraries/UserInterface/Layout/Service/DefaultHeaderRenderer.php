@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\UserInterface\Layout\Service;
 
 use Chamilo\Core\Menu\UserInterface\MenuRenderer\MenuRenderer;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Service\BreadcrumbTrailRenderer;

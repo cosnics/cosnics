@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
@@ -33,7 +33,7 @@ class LoginAsComponent extends Manager
 
             $session->clear();
             $session->set(AuthenticationValidator::SESSION_USER_ID, $this->getUserIdentifier());
-            $session->set(AuthenticationValidator::PARAM_AS_ADMIN, $currentUser->getId());
+            $session->set(AuthenticationValidator::PARAM_AS_ADMIN, $currentUser->getIdentifier()->toString());
 
             return new RedirectResponse(
                 $this->getUrlGenerator()->fromParameters(

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Architecture\EventDispatcher\Event;
 
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

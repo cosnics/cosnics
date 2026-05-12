@@ -7,7 +7,7 @@ use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;

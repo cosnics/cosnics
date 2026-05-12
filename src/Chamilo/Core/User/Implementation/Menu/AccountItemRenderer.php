@@ -5,7 +5,7 @@ use Chamilo\Core\Menu\Architecture\Interface\SelectableItemInterface;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;

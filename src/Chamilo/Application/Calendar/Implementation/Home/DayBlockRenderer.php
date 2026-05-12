@@ -6,7 +6,7 @@ use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Calendar\Service\CalendarTableConfigurationBuilder;
 use Chamilo\Libraries\Calendar\Service\View\MiniDayCalendarRenderer;

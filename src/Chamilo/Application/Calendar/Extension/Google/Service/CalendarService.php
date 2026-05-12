@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Service;
 use Chamilo\Application\Calendar\Extension\Google\Architecture\Domain\CalendarProperties;
 use Chamilo\Application\Calendar\Extension\Google\Architecture\Domain\EventIterator;
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
 
 /**

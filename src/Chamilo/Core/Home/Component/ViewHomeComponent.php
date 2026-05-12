@@ -3,8 +3,7 @@ namespace Chamilo\Core\Home\Component;
 
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\HomeRenderer;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\Repository\UserVisitRepository;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
@@ -26,8 +25,7 @@ class ViewHomeComponent extends Manager implements NoAuthenticationSupportInterf
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         protected readonly AuthenticationValidator $authenticationValidator,
-        protected readonly HomeRenderer $homeRenderer,
-        protected readonly UserVisitRepository $userTrackingEntityRepository
+        protected readonly HomeRenderer $homeRenderer
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);

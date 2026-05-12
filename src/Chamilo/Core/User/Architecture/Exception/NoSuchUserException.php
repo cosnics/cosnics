@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Architecture\Exception;
 
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException;
 use Exception;
 

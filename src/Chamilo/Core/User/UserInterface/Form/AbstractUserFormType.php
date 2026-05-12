@@ -5,7 +5,7 @@ use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeablePasswordInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeableUsernameInterface;
@@ -108,8 +108,8 @@ abstract class AbstractUserFormType extends AbstractType
     ): void
     {
         /**
-         * @var \Chamilo\Core\User\Storage\DataClass\User $user
-         * @var \Chamilo\Core\User\Storage\DataClass\User $executingUser
+         * @var \Chamilo\Core\User\Storage\Entity\User $user
+         * @var \Chamilo\Core\User\Storage\Entity\User $executingUser
          */
         $user = $options['user'];
         $executingUser = $options['executingUser'];
@@ -164,8 +164,8 @@ abstract class AbstractUserFormType extends AbstractType
     public function buildPersonalDetailsForm(FormBuilderInterface $builder, array $options): void
     {
         /**
-         * @var \Chamilo\Core\User\Storage\DataClass\User $user
-         * @var \Chamilo\Core\User\Storage\DataClass\User $executingUser
+         * @var \Chamilo\Core\User\Storage\Entity\User $user
+         * @var \Chamilo\Core\User\Storage\Entity\User $executingUser
          */
         $user = $options['user'];
         $executingUser = $options['executingUser'];
@@ -270,7 +270,7 @@ abstract class AbstractUserFormType extends AbstractType
     public function buildPictureForm(FormBuilderInterface $builder, array $options): void
     {
         /**
-         * @var \Chamilo\Core\User\Storage\DataClass\User $user
+         * @var \Chamilo\Core\User\Storage\Entity\User $user
          */
         $user = $options['user'];
 
@@ -451,7 +451,7 @@ abstract class AbstractUserFormType extends AbstractType
     {
         $authentication = $payload['authentication'];
         /**
-         * @var \Chamilo\Core\User\Storage\DataClass\User $user
+         * @var \Chamilo\Core\User\Storage\Entity\User $user
          */
         $user = $payload['user'];
 
@@ -464,7 +464,7 @@ abstract class AbstractUserFormType extends AbstractType
     public function validateUsername(mixed $value, ExecutionContextInterface $context, mixed $payload): void
     {
         /**
-         * @var \Chamilo\Core\User\Storage\DataClass\User $user
+         * @var \Chamilo\Core\User\Storage\Entity\User $user
          */
         $user = $payload['user'];
 

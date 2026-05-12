@@ -3,7 +3,7 @@ namespace Chamilo\Core\Group\Component;
 
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;

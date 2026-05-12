@@ -3,7 +3,7 @@ namespace Chamilo\Application\Calendar\Service;
 
 use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProviderRegistry;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 
 /**
  * @package Chamilo\Application\Calendar\Implementation\Libraries

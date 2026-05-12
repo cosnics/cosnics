@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Calendar\Architecture\Interface;
 
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 
 /**
  * @package Chamilo\Application\Calendar\Architecture

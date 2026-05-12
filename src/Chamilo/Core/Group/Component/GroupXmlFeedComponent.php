@@ -8,7 +8,7 @@ use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;

@@ -7,7 +7,7 @@ use Chamilo\Core\User\Architecture\EventDispatcher\Subscriber\ActivityUserEventS
 use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Service\UserFactory;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 return static function (ContainerConfigurator $container) {

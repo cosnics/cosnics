@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Service;
 use Chamilo\Application\Calendar\Architecture\Domain\CalendarExtensionDataProviderRegistry;
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
 use Chamilo\Application\Calendar\Storage\Repository\AvailabilityRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ActionResult;
 use Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -84,11 +84,6 @@ class AvailabilityService
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $calendarType
-     * @param string $calendarIdentifier
-     *
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
@@ -120,13 +115,6 @@ class AvailabilityService
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $calendarType
-     * @param string $calendarIdentifier
-     * @param bool $isAvailable
-     * @param ?string $colour
-     *
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -180,20 +168,12 @@ class AvailabilityService
         );
     }
 
-    /**
-     * @param \Chamilo\Application\Calendar\Storage\DataClass\Availability $availability
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $calendarType
-     * @param string $calendarIdentifier
-     * @param bool $isAvailable
-     * @param ?string $colour
-     */
     private function setAvailabilityProperties(
         Availability $availability, User $user, string $calendarType, string $calendarIdentifier,
         bool $isAvailable = true, ?string $colour = null
     ): void
     {
-        $availability->setUserId($user->getId());
+        $availability->setUserId($user->getIdentifier()->toString());
         $availability->setCalendarType($calendarType);
         $availability->setCalendarId($calendarIdentifier);
         $availability->setAvailability($isAvailable);
@@ -209,14 +189,6 @@ class AvailabilityService
     }
 
     /**
-     * @param \Chamilo\Application\Calendar\Storage\DataClass\Availability $availability
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $calendarType
-     * @param string $calendarIdentifier
-     * @param bool $isAvailable
-     * @param ?string $colour
-     *
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function updateAvailabilityFromParameters(

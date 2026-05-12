@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\CalendarRepository;
 use Microsoft\Graph\Generated\Models\Calendar;

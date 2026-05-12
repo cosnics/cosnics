@@ -3,7 +3,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Service;
 
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Core\User\Service\UserSettingsService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Storage\Architecture\Trait\SingleCacheAdapterHandlerTrait;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -35,7 +35,7 @@ class OwnedCalendarsCacheService
             return [];
         }
 
-        $cacheIdentifier = $this->getCacheKeyForParts([__METHOD__, $user->getId()]);
+        $cacheIdentifier = $this->getCacheKeyForParts([__METHOD__, $user->getIdentifier()->toString()]);
 
         if (!$this->hasCacheDataForKey($cacheIdentifier)) {
             $lifetime = $this->userSettingsService->findUserSetting(

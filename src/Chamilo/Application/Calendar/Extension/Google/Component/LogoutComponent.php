@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Component;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;

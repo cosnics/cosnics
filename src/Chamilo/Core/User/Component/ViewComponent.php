@@ -7,12 +7,11 @@ use Chamilo\Core\User\Implementation\User\UserDetailsRenderer;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
-use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchParameterException;
 use Chamilo\Libraries\Protocol\Mail\Architecture\Interface\MailerInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
@@ -31,6 +30,7 @@ use Chamilo\Libraries\UserInterface\Tab\Architecture\Domain\TabsCollection;
 use Chamilo\Libraries\UserInterface\Tab\Service\TabsRenderer;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -70,25 +70,20 @@ class ViewComponent extends Manager
         }
 
         $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
-        $userToRender = $this->userService->retrieveUserByIdentifier($userIdentifier);
+        $userToRender = $this->userService->retrieveUserByIdentifier(Uuid::fromString($userIdentifier));
 
-        if ($userToRender instanceof User) {
-            $this->breadcrumbTrail->add(new Breadcrumb($userToRender->getFullName()));
+        $this->breadcrumbTrail->add(new Breadcrumb($userToRender->getFullName()));
 
-            $html = [];
+        $html = [];
 
-            $html[] = $this->renderHeader($currentUser);
-            $html[] = $this->buttonToolBarRenderer->render($this->getButtonToolBar($userToRender));
-            $html[] = $this->tabsRenderer->renderNavigationAndContent(
-                'userDetails', $this->getTabsCollection($userToRender, $currentUser), md5(UserDetailsRenderer::class)
-            );
-            $html[] = $this->renderFooter();
+        $html[] = $this->renderHeader($currentUser);
+        $html[] = $this->buttonToolBarRenderer->render($this->getButtonToolBar($userToRender));
+        $html[] = $this->tabsRenderer->renderNavigationAndContent(
+            'userDetails', $this->getTabsCollection($userToRender, $currentUser), md5(UserDetailsRenderer::class)
+        );
+        $html[] = $this->renderFooter();
 
-            return new Response(implode(PHP_EOL, $html));
-        }
-        else {
-            throw new NoSuchParameterException(self::PARAM_USER_ID);
-        }
+        return new Response(implode(PHP_EOL, $html));
     }
 
     public function getButtonToolBar(User $userToRender): ButtonToolBar

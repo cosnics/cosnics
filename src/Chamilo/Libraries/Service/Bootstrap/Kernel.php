@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Service\Bootstrap;
 
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserEnterPageEvent;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Architecture\Interface\NoVisitTraceComponentInterface;

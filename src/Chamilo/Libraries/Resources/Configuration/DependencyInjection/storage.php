@@ -10,6 +10,7 @@ use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslator
 use Chamilo\Libraries\Storage\Factory\DataClassFactory;
 use Chamilo\Libraries\Storage\Factory\DoctrineEntityManagerFactory;
 use Chamilo\Libraries\Storage\Factory\DoctrineMappingDriverFactory;
+use Chamilo\Libraries\Storage\Factory\RepositoryFactory;
 use Chamilo\Libraries\Storage\Factory\SymfonyCacheAdapterFactory;
 use Chamilo\Libraries\Storage\Repository\DataClassDatabase;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
@@ -124,6 +125,8 @@ return static function (ContainerConfigurator $container) {
     $services->set(StorageNoResultExceptionRenderer::class)->tag(UserExceptionRendererInterface::class);
 
     $services->set(Configuration::class);
+    $services->set(RepositoryFactory::class);
+
     $services->set(DoctrineMappingDriverFactory::class)->args(
         ['$cacheAdapter' => service('Chamilo\Libraries\StorageDoctrineMappingDriverCacheAdapter')]
     );

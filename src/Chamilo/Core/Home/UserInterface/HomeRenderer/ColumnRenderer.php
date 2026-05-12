@@ -5,7 +5,7 @@ use Chamilo\Core\Home\Architecture\Domain\BlockRendererRegistry;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Element;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Symfony\Component\Translation\Translator;
 
 /**

@@ -7,10 +7,11 @@ use Chamilo\Application\Calendar\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Service\CalendarDataProvider;
 use Chamilo\Application\Calendar\Storage\Repository\VisibilityRepository;
+use Chamilo\Core\User\Architecture\Exception\NoSuchUserException;
 use Chamilo\Core\User\Component\ConfigureComponent;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserSettingsService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
@@ -97,9 +98,15 @@ class BrowseComponent extends Manager
     {
         $asAdmin = $this->getRequest()->getSession()->get('_as_admin');
 
-        if ($asAdmin && $asAdmin > 0) {
-            $user = $this->userService->retrieveUserByIdentifier($asAdmin);
-            if (!$user instanceof User || !$user->isPlatformAdministrator()) {
+        if ($asAdmin) {
+            try {
+                $user = $this->userService->retrieveUserByIdentifier($asAdmin);
+
+                if (!$user->isPlatformAdministrator()) {
+                    throw new NotAllowedException();
+                }
+            }
+            catch (NoSuchUserException) {
                 throw new NotAllowedException();
             }
         }
@@ -262,7 +269,8 @@ class BrowseComponent extends Manager
 
         return $renderer->render(
             $events, $calendarTableConfiguration, $displayParameters, $this->getCurrentRendererTime(),
-            $this->getViewActions($user), $this->calendarDataProvider->getVisibilities($user->getId()), Manager::CONTEXT
+            $this->getViewActions($user),
+            $this->calendarDataProvider->getVisibilities($user->getIdentifier()->toString()), Manager::CONTEXT
         );
     }
 }

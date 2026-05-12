@@ -5,7 +5,7 @@ use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;

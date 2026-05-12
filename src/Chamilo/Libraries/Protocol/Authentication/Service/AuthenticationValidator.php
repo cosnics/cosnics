@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Protocol\Authentication\Service;
 
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserLoginEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserLogoutEvent;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
@@ -94,7 +94,7 @@ class AuthenticationValidator
 
     protected function setAuthenticatedUser(User $user): void
     {
-        $this->session->set(AuthenticationValidator::SESSION_USER_ID, $user->getId());
+        $this->session->set(AuthenticationValidator::SESSION_USER_ID, $user->getIdentifier()->toString());
     }
 
     /**

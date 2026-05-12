@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Service;
 
 use Chamilo\Core\User\Service\UserSettingsService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Calendar\Architecture\Domain\CalendarTableConfiguration;
 
 /**

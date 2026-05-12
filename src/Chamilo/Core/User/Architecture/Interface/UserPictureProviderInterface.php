@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Architecture\Interface;
 
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

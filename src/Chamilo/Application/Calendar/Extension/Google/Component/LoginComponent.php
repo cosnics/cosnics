@@ -4,7 +4,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Component;
 use Chamilo\Application\Calendar\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;

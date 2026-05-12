@@ -14,7 +14,7 @@ use Chamilo\Core\User\Architecture\EventDispatcher\Event\AfterUserUpdateEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserLeavePageEvent;
 use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserLogoutEvent;
 use Chamilo\Core\User\Architecture\Exception\NoSuchUserVisitException;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Core\User\Storage\Entity\UserActivity;
 use Chamilo\Core\User\Storage\Entity\UserAuthenticationActivity;
 use Chamilo\Core\User\Storage\Entity\UserVisit;
@@ -39,24 +39,30 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     {
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
+     */
     public function afterUserCreate(AfterUserCreateEvent $afterUserCreateEvent): void
     {
         $this->userActivityRepository->saveUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivityTypeEnum::CREATED, $afterUserCreateEvent->getUser()->getId(),
+                UserActivityTypeEnum::CREATED, $afterUserCreateEvent->getUser()->getIdentifier(),
                 $afterUserCreateEvent->getExecutingUser() instanceof User ?
-                    $afterUserCreateEvent->getExecutingUser()->getId() : null
+                    $afterUserCreateEvent->getExecutingUser()->getIdentifier() : null
             )
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
+     */
     public function afterUserDelete(AfterUserDeleteEvent $afterUserDeleteEvent): void
     {
         $this->userActivityRepository->saveUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivityTypeEnum::DELETED, $afterUserDeleteEvent->getUser()->getId(),
+                UserActivityTypeEnum::DELETED, $afterUserDeleteEvent->getUser()->getIdentifier(),
                 $afterUserDeleteEvent->getExecutingUser() instanceof User ?
-                    $afterUserDeleteEvent->getExecutingUser()->getId() : null
+                    $afterUserDeleteEvent->getExecutingUser()->getIdentifier() : null
             )
         );
     }
@@ -65,15 +71,16 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function afterUserEnterPage(AfterUserEnterPageEvent $afterUserEnterPage): void
     {
-        $userIdentifier = $afterUserEnterPage->getUser()->getId();
+        $userIdentifier = $afterUserEnterPage->getUser()->getIdentifier();
 
-        $this->onlineService->updateOnlineForUserIdentifierWithCurrentTime($userIdentifier);
+        $this->onlineService->updateOnlineForUserIdentifierWithCurrentTime($userIdentifier->toString());
 
         $userVisit = new UserVisit();
-        $userVisit->setUserIdentifier(Uuid::fromString($userIdentifier));
+        $userVisit->setUserIdentifier($userIdentifier);
         $userVisit->setEnterDate(time());
         $userVisit->setLocation($afterUserEnterPage->getPageUri());
 
@@ -82,45 +89,60 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
         $this->pageConfiguration->addHtml('<script>var tracker="' . $userVisit->getIdentifier() . '";</script>');
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
+     */
     public function afterUserLogin(AfterUserLoginEvent $afterUserLoginEvent): void
     {
         $this->createAuthenticationActivityFromParameters(
-            UserAuthenticationActivityTypeEnum::LOGIN, Uuid::fromString($afterUserLoginEvent->getUser()->getId()),
+            UserAuthenticationActivityTypeEnum::LOGIN, $afterUserLoginEvent->getUser()->getIdentifier(),
             $afterUserLoginEvent->getClientIpAddress()
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
+     */
     public function afterUserPasswordReset(AfterUserPasswordResetEvent $afterUserPasswordResetEvent): void
     {
         $this->userActivityRepository->saveUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivityTypeEnum::PASSWORD_RESET, $afterUserPasswordResetEvent->getUser()->getId(),
+                UserActivityTypeEnum::PASSWORD_RESET, $afterUserPasswordResetEvent->getUser()->getIdentifier(),
                 $afterUserPasswordResetEvent->getExecutingUser() instanceof User ?
-                    $afterUserPasswordResetEvent->getExecutingUser()->getId() : null
+                    $afterUserPasswordResetEvent->getExecutingUser()->getIdentifier() : null
             )
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
+     */
     public function afterUserRegistration(AfterUserRegistrationEvent $afterUserRegistrationEvent): void
     {
         $this->userActivityRepository->saveUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivityTypeEnum::REGISTERED, $afterUserRegistrationEvent->getUser()->getId()
+                UserActivityTypeEnum::REGISTERED, $afterUserRegistrationEvent->getUser()->getIdentifier()
             )
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
+     */
     public function afterUserUpdate(AfterUserUpdateEvent $afterUserUpdateEvent): void
     {
         $this->userActivityRepository->saveUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivityTypeEnum::UPDATED, $afterUserUpdateEvent->getUser()->getId(),
+                UserActivityTypeEnum::UPDATED, $afterUserUpdateEvent->getUser()->getIdentifier(),
                 $afterUserUpdateEvent->getExecutingUser() instanceof User ?
-                    $afterUserUpdateEvent->getExecutingUser()->getId() : null
+                    $afterUserUpdateEvent->getExecutingUser()->getIdentifier() : null
             )
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
+     */
     public function beforeUserLeavePage(BeforeUserLeavePageEvent $beforeUserLeavePage): void
     {
         try {
@@ -136,14 +158,20 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
+     */
     public function beforeUserLogout(BeforeUserLogoutEvent $beforeUserLogoutEvent): void
     {
         $this->createAuthenticationActivityFromParameters(
-            UserAuthenticationActivityTypeEnum::LOGOUT, Uuid::fromString($beforeUserLogoutEvent->getUser()->getId()),
+            UserAuthenticationActivityTypeEnum::LOGOUT, $beforeUserLogoutEvent->getUser()->getIdentifier(),
             $beforeUserLogoutEvent->getClientIpAddress()
         );
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
+     */
     protected function createAuthenticationActivityFromParameters(
         UserAuthenticationActivityTypeEnum $action, Uuid $userIdentifier, ?string $clientIp
     ): void
@@ -174,7 +202,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     }
 
     protected function initializeUserActivityFromParameters(
-        UserActivityTypeEnum $action, string $targetUserIdentifier, ?string $sourceUserIdentifier = null
+        UserActivityTypeEnum $action, Uuid $targetUserIdentifier, ?Uuid $sourceUserIdentifier = null
     ): UserActivity
     {
         $userActivity = new UserActivity();

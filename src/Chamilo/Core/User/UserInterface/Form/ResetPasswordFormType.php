@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\UserInterface\Form;
 
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Form\Service\FormButtonTypeBuilder;
 use Chamilo\Libraries\UserInterface\Form\Service\FormTypeBuilder;

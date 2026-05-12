@@ -3,7 +3,7 @@ namespace Chamilo\Core\Admin\UserInterface\Table;
 
 use Chamilo\Core\Admin\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Service\Utilities\ClassnameUtilities;
@@ -51,7 +51,7 @@ class OnlineTableRenderer extends DataClassListTableRenderer
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $result
+     * @param \Chamilo\Core\User\Storage\Entity\User $result
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, mixed $result): string
     {

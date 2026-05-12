@@ -13,7 +13,7 @@ use Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider;
 use Chamilo\Core\Group\UserInterface\Table\GroupTableRenderer;
 use Chamilo\Core\Group\UserInterface\Table\SubscribedUserTableRenderer;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;

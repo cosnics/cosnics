@@ -7,7 +7,7 @@ use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Component\GroupsFeedComponent;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
@@ -85,8 +85,8 @@ class GroupFeedComponent extends GroupsFeedComponent
         $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
-            self::PARAM_USER . '_' . $user->getId(), $glyph->getClassNamesString(), $user->getFullName(),
-            $user->getOfficialCode()
+            self::PARAM_USER . '_' . $user->getIdentifier()->toString(), $glyph->getClassNamesString(),
+            $user->getFullName(), $user->getOfficialCode()
         );
     }
 

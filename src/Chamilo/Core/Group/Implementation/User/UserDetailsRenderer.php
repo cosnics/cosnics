@@ -6,7 +6,7 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\User\Architecture\Interface\UserDetailsRendererInterface;
 use Chamilo\Core\User\Architecture\Trait\UserDetailsRendererTrait;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
@@ -40,7 +40,8 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
      */
     public function hasContentForUser(User $user, User $requestingUser): bool
     {
-        return $this->groupMembershipService->retrieveGroupsByUserIdentifier($user->getId())->count() > 0;
+        return $this->groupMembershipService->retrieveGroupsByUserIdentifier($user->getIdentifier()->toString())->count(
+            ) > 0;
     }
 
     public function renderTitle(User $user, User $requestingUser): string
@@ -63,7 +64,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         $table->setCellAttributes(1, 0, ['style' => 'width: 150px;']);
         $table->setHeaderContents(1, 1, $this->translator->trans('GroupName', [], Manager::CONTEXT));
 
-        $groups = $this->groupMembershipService->retrieveGroupsByUserIdentifier($user->getId());
+        $groups = $this->groupMembershipService->retrieveGroupsByUserIdentifier($user->getIdentifier()->toString());
 
         if ($groups->count() == 0) {
             $table->setCellContents(2, 0, $this->translator->trans('NoGroups', [], Manager::CONTEXT));

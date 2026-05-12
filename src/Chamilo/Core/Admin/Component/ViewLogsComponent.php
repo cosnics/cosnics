@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Admin\Component;
 
 use Chamilo\Core\Admin\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
 use Chamilo\Libraries\Filesystem\Service\FilesystemTools;

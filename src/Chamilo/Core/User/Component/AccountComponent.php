@@ -3,7 +3,7 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Core\User\UserInterface\Form\AbstractUserFormType;
 use Chamilo\Core\User\UserInterface\Form\AccountFormType;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
@@ -33,7 +33,7 @@ class AccountComponent extends ProfileComponent
         $translator = $this->getTranslator();
 
         $form = $this->formFactory->create(
-            AccountFormType::class, $currentUser->getDefaultProperties(), [
+            AccountFormType::class, $currentUser, [
                 'action' => $this->getUrlGenerator()->fromRequest(),
                 'user' => $currentUser,
                 'executingUser' => $currentUser

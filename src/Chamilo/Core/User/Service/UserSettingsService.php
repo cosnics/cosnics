@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Service;
 
 use Chamilo\Core\Admin\Architecture\Domain\SettingsConnectorRegistry;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Throwable;
 
 /**
@@ -18,7 +18,9 @@ readonly class UserSettingsService
     {
     }
 
-    public function findUserSetting(User $user, string $variable, mixed $defaultValue = null)
+    public function findUserSetting(
+        User $user, string $variable, mixed $defaultValue = null
+    )
     {
         return $user->getSetting($variable, $defaultValue);
     }

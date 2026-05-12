@@ -3,9 +3,9 @@ namespace Chamilo\Core\User\Service;
 
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
-use Chamilo\Libraries\Service\Routing\DataClassUrlGenerator;
+use Chamilo\Libraries\Service\Routing\UrlGenerator;
 
 /**
  * @package Chamilo\Core\User\Service
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Service\Routing\DataClassUrlGenerator;
  */
 readonly class UserUrlGenerator
 {
-    public function __construct(protected DataClassUrlGenerator $dataClassUrlGenerator)
+    public function __construct(protected UrlGenerator $urlGenerator)
     {
     }
 
@@ -42,9 +42,12 @@ readonly class UserUrlGenerator
      */
     protected function getUserActionUrl(string $action, User $user, array $additionalParameters = []): string
     {
-        return $this->dataClassUrlGenerator->getActionUrl(
-            Manager::CONTEXT, ApplicationInterface::PARAM_ACTION, Manager::PARAM_USER_ID, $action, $user,
-            $additionalParameters
-        );
+        $parameters = [
+            ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+            ApplicationInterface::PARAM_ACTION => $action,
+            Manager::PARAM_USER_ID => $user->getIdentifier()->toString()
+        ];
+
+        return $this->urlGenerator->fromParameters(array_merge($parameters, $additionalParameters));
     }
 }

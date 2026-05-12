@@ -6,7 +6,7 @@ use Chamilo\Core\Group\Component\SubscribeComponent;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\DataClassUrlGenerator;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
@@ -58,7 +58,8 @@ class GroupUrlGenerator
     public function getSubscribeUserUrl(Group $group, User $user): string
     {
         return $this->getGroupActionUrl(
-            ActionEnum::SUBSCRIBE->value, $group, [SubscribeComponent::PARAM_USER_ID => $user->getId()]
+            ActionEnum::SUBSCRIBE->value, $group,
+            [SubscribeComponent::PARAM_USER_ID => $user->getIdentifier()->toString()]
         );
     }
 

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Authentication\Architecture\Interface;
 
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 
 /**
  * An authentication class implements the <code>ChangeablePassword</code>

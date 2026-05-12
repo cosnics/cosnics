@@ -6,7 +6,7 @@ use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\BlockRenderer;
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Core\User\UserInterface\Form\LoginFormType;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
@@ -65,7 +65,7 @@ readonly class LoginBlockRenderer extends BlockRenderer
                 [
                     ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                     ApplicationInterface::PARAM_ACTION => ActionEnum::DOWNLOAD_USER_PICTURE->value,
-                    Manager::PARAM_USER_ID => $user->getId()
+                    Manager::PARAM_USER_ID => $user->getIdentifier()->toString()
                 ]
             );
 

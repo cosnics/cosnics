@@ -4,7 +4,7 @@ namespace Chamilo\Core\User\UserInterface\Table;
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserUrlGenerator;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
@@ -134,7 +134,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $result
+     * @param \Chamilo\Core\User\Storage\Entity\User $result
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, mixed $result): string
     {
@@ -153,7 +153,7 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $result
+     * @param \Chamilo\Core\User\Storage\Entity\User $result
      *
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
@@ -185,7 +185,8 @@ class UserTableRenderer extends DataClassListTableRenderer implements TableRowAc
             );
         }
 
-        if ($this->currentUser instanceof User && $result->getId() != $this->currentUser->getId()) {
+        if ($this->currentUser instanceof User &&
+            !$result->getIdentifier()->equals($this->currentUser->getIdentifier())) {
             if ($isPlatformAdministrator) {
                 $deleteUrl = $this->userUrlGenerator->getDeleteUrl($result);
 

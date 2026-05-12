@@ -2,17 +2,19 @@
 namespace Chamilo\Core\User\Storage\Repository;
 
 use Chamilo\Core\User\Storage\Entity\UserAuthenticationActivity;
-use Doctrine\ORM\EntityRepository;
+use Chamilo\Libraries\Storage\Repository\AbstractEntityRepository;
 
 /**
  * @package Chamilo\Core\User\Storage\Repository
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserAuthenticationActivityRepository extends EntityRepository
+class UserAuthenticationActivityRepository extends AbstractEntityRepository
 {
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
+     */
     public function saveUserAuthenticationActivity(UserAuthenticationActivity $userAuthenticationActivity): void
     {
-        $this->getEntityManager()->persist($userAuthenticationActivity);
-        $this->getEntityManager()->flush();
+        $this->saveEntity($userAuthenticationActivity);
     }
 }

@@ -11,7 +11,7 @@ use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupUnsubscribeE
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupUpdateEvent;
 use Chamilo\Core\Group\Storage\DataClass\GroupActivity;
 use Chamilo\Core\Group\Storage\Repository\GroupTrackingRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -151,7 +151,9 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
         $groupActivity->setAction($action);
         $groupActivity->setDate(time());
         $groupActivity->setGroupIdentifier($groupIdentifier);
-        $groupActivity->setUserIdentifier($executingUser instanceof User ? $executingUser->getId() : null);
+        $groupActivity->setUserIdentifier(
+            $executingUser instanceof User ? $executingUser->getIdentifier()->toString() : null
+        );
         $groupActivity->setTargetUserIdentifier($targetUserIdentifier);
 
         return $groupActivity;

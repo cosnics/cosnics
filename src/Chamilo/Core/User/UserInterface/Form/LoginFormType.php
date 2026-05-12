@@ -3,7 +3,7 @@ namespace Chamilo\Core\User\UserInterface\Form;
 
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\UserInterface\Form\Architecture\Domain\ButtonsFormType;

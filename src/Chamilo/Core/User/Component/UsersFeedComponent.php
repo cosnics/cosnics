@@ -4,7 +4,7 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
 use Chamilo\Libraries\Protocol\Authentication\Service\AuthenticationValidator;
@@ -102,7 +102,7 @@ class UsersFeedComponent extends Manager
         $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
-            'user_' . $user->getId(), $glyph->getClassNamesString(), $user->getFullName(), $user->getOfficialCode()
+            'user_' . $user->getIdentifier()->toString(), $glyph->getClassNamesString(), $user->getFullName(), $user->getOfficialCode()
         );
     }
 
@@ -137,7 +137,7 @@ class UsersFeedComponent extends Manager
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\Entity\User>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function retrieveUsers(): ArrayCollection

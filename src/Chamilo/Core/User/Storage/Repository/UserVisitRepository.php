@@ -3,31 +3,36 @@ namespace Chamilo\Core\User\Storage\Repository;
 
 use Chamilo\Core\User\Architecture\Exception\NoSuchUserVisitException;
 use Chamilo\Core\User\Storage\Entity\UserVisit;
-use Doctrine\ORM\EntityRepository;
+use Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException;
+use Chamilo\Libraries\Storage\Repository\AbstractEntityRepository;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\User\Storage\Repository
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserVisitRepository extends EntityRepository
+class UserVisitRepository extends AbstractEntityRepository
 {
     /**
      * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserVisitException
      */
-    public function findUserVisitByIdentifier(string $identifier): ?UserVisit
+    public function findUserVisitByIdentifier(Uuid $identifier): UserVisit
     {
-        $userVisit = $this->find($identifier);
-
-        if (!$userVisit instanceof UserVisit) {
-            throw new NoSuchUserVisitException(['identifier' => $identifier]);
+        try {
+            return $this->findEntityByIdentifier(UserVisit::class, $identifier);
         }
-
-        return $userVisit;
+        catch (NoSuchObjectException $exception) {
+            throw new NoSuchUserVisitException(
+                $exception->objectIdentifiers, $exception->getMessage(), $exception->getCode(), $exception
+            );
+        }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
+     */
     public function saveUserVisit(UserVisit $userVisit): void
     {
-        $this->getEntityManager()->persist($userVisit);
-        $this->getEntityManager()->flush();
+        $this->saveEntity($userVisit);
     }
 }

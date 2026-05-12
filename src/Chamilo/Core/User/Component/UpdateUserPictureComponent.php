@@ -4,7 +4,7 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Core\User\UserInterface\Form\AbstractUserFormType;
 use Chamilo\Core\User\UserInterface\Form\UserPictureUpdateFormType;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;

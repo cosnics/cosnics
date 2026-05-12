@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Component;
 
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;

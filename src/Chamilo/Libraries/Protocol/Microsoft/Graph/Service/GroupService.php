@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchGroupException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
@@ -298,8 +298,8 @@ class GroupService
 
     /**
      * @param string $groupId
-     * @param array<\Chamilo\Core\User\Storage\DataClass\User> $users
-     * @param ?array<\Chamilo\Core\User\Storage\DataClass\User> $excludedUsersForRemoval
+     * @param array<\Chamilo\Core\User\Storage\Entity\User> $users
+     * @param ?array<\Chamilo\Core\User\Storage\Entity\User> $excludedUsersForRemoval
      *
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      * @throws \Exception

@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
 use Chamilo\Core\User\Service\UserSettingsService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\UserRepository;
 
@@ -41,7 +41,7 @@ class UserService
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User[] $users
+     * @param \Chamilo\Core\User\Storage\Entity\User[] $users
      *
      * @return string[]
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException

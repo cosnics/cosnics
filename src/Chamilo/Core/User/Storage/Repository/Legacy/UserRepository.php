@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Storage\Repository\Legacy;
 
 use Chamilo\Core\User\Architecture\Exception\NoSuchUserException;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
@@ -29,6 +29,7 @@ class UserRepository
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @todo Implement Doctrine ORM
      */
     public function countUsers(?ConditionInterface $condition = null): int
     {
@@ -56,6 +57,7 @@ class UserRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
+     * @todo Implement Doctrine ORM
      */
     public function retrieveUserByEmail($email): ?User
     {
@@ -144,6 +146,7 @@ class UserRepository
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
+     * @todo Implement Doctrine ORM
      */
     public function retrieveUserByUsernameOrEmail(string $usernameOrEmail): ?User
     {
@@ -171,8 +174,9 @@ class UserRepository
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\Entity\User>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @todo Implement Doctrine ORM
      */
     public function retrieveUsers(
         ?ConditionInterface $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
@@ -186,8 +190,9 @@ class UserRepository
     /**
      * @param string[] $userIdentifiers
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\Entity\User>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @todo Implement Doctrine ORM
      */
     public function retrieveUsersByIdentifiers(array $userIdentifiers, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection

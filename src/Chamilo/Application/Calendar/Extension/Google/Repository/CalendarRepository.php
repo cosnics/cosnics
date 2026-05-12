@@ -5,7 +5,7 @@ use Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar;
 use Chamilo\Application\Calendar\Extension\Google\Architecture\Enum\ActionEnum;
 use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Core\User\Service\UserSettingsService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;

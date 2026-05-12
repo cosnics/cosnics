@@ -3,7 +3,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Service;
 
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Core\User\Service\UserSettingsService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Storage\Architecture\Trait\SingleCacheAdapterHandlerTrait;
 use Google_Service_Calendar_Events;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -34,7 +34,7 @@ class EventsCacheService
     ): Google_Service_Calendar_Events
     {
         $cacheIdentifier = $this->getCacheKeyForParts(
-            [__METHOD__, $user->getId(), $calendarIdentifier, $fromDate, $toDate]
+            [__METHOD__, $user->getIdentifier()->toString(), $calendarIdentifier, $fromDate, $toDate]
         );
 
         if (!$this->hasCacheDataForKey($cacheIdentifier)) {

@@ -5,7 +5,7 @@ use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserLeavePageEven
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Service\UserUrlGenerator;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Architecture\Interface\NoVisitTraceComponentInterface;
 use Chamilo\Libraries\Protocol\Ajax\Architecture\Domain\JsonAjaxResult;
@@ -18,6 +18,7 @@ use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\User\Component
@@ -45,7 +46,9 @@ class LeaveComponent extends Manager implements NoVisitTraceComponentInterface
     {
         if ($currentUser instanceof User) {
             $this->eventDispatcher->dispatch(
-                new BeforeUserLeavePageEvent($currentUser, $this->getRequest()->request->get('tracker'))
+                new BeforeUserLeavePageEvent(
+                    $currentUser, Uuid::fromString($this->getRequest()->request->get('tracker'))
+                )
             );
 
             return JsonAjaxResult::success();

@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Protocol\Authentication\Service;
 
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
@@ -124,7 +124,9 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
                 if ($userAttributes && isset($userAttributes['surrogatePrincipal'])) {
                     $surrogateUserName = array_pop($userAttributes['surrogatePrincipal']);
                     $surrogateUser = $this->userService->retrieveUserByUsername($surrogateUserName);
-                    $this->session->set(AuthenticationValidator::PARAM_AS_ADMIN, $surrogateUser->getId());
+                    $this->session->set(
+                        AuthenticationValidator::PARAM_AS_ADMIN, $surrogateUser->getIdentifier()->toString()
+                    );
                 }
 
                 return $user;
@@ -149,10 +151,8 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
     }
 
     /**
-     * @param string $casUser
      * @param string[] $casUserAttributes
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
      * @throws \Exception
      */
     abstract protected function registerUser(string $casUser, array $casUserAttributes = []): User;

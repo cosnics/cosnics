@@ -6,7 +6,7 @@ use Chamilo\Core\User\Architecture\Interface\UserPictureProviderInterface;
 use Chamilo\Core\User\Architecture\Interface\UserPictureUpdateProviderInterface;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
 use Chamilo\Libraries\Filesystem\Service\FilesystemTools;
 use Chamilo\Libraries\Filesystem\Service\ImageConverter;
@@ -144,7 +144,7 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
         $this->filesystem->mkdir($path);
 
         $imageFile = $this->filesystemTools->createUniqueName(
-            $path, $user->getId() . '-' . $fileInformation->getClientOriginalName()
+            $path, $user->getIdentifier()->toString() . '-' . $fileInformation->getClientOriginalName()
         );
 
         move_uploaded_file($fileInformation->getPathname(), $path . $imageFile);
