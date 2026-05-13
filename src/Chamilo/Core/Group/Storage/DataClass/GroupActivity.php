@@ -53,6 +53,11 @@ class GroupActivity extends DataClass implements UuidDataClassInterface
         return 'group_activity';
     }
 
+    public static function getAlias(): string
+    {
+        return 't_grp_atv';
+    }
+
     public function getTargetUserIdentifier(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_TARGET_USER_ID);

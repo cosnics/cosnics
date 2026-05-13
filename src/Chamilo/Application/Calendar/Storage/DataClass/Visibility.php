@@ -18,4 +18,9 @@ class Visibility extends \Chamilo\Libraries\Calendar\Architecture\Domain\Visibil
     {
         return 'calendar_visibility';
     }
+
+    public static function getAlias(): string
+    {
+        return 't_cal_vis';
+    }
 }

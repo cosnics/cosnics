@@ -89,6 +89,11 @@ class Element extends DataClass
         return 'home_element';
     }
 
+    public static function getAlias(): string
+    {
+        return 't_hom_elm';
+    }
+
     public function getTitle(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_TITLE);

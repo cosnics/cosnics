@@ -31,6 +31,11 @@ class Online extends DataClass implements UuidDataClassInterface
         return 'admin_online';
     }
 
+    public static function getAlias(): string
+    {
+        return 't_adm_onl';
+    }
+
     public function getUserId(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);

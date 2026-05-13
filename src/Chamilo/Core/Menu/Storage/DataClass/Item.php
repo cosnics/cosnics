@@ -111,6 +111,11 @@ class Item extends DataClass
         return 'menu_item';
     }
 
+    public static function getAlias(): string
+    {
+        return 't_mnu_itm';
+    }
+
     public function getTitleForIsoCode(string $isoCode): ?string
     {
         return $this->getSerializedPropertyValue(self::PROPERTY_TITLES, $isoCode);

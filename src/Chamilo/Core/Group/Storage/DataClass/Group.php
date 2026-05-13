@@ -73,6 +73,11 @@ class Group extends DataClass implements UuidDataClassInterface
         return 'group_group';
     }
 
+    public static function getAlias(): string
+    {
+        return 't_grp_grp';
+    }
+
     public function hasChildren(): bool
     {
         return !($this->getLeftValue() == ($this->getRightValue() - 1));

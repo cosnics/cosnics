@@ -61,6 +61,11 @@ class Availability extends DataClass implements UuidDataClassInterface
         return 'calendar_availability';
     }
 
+    public static function getAlias(): string
+    {
+        return 't_cal_avb';
+    }
+
     public function getUniqueIdentifier(): string
     {
         return md5(serialize([$this->getCalendarType(), $this->getCalendarId()]));

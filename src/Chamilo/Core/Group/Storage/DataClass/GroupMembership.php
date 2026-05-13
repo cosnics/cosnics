@@ -34,6 +34,11 @@ class GroupMembership extends DataClass implements UuidDataClassInterface
         return 'group_group_rel_user';
     }
 
+    public static function getAlias(): string
+    {
+        return 't_grp_mbs';
+    }
+
     public function getUserId(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);

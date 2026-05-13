@@ -124,6 +124,11 @@ class User extends DataClass implements ConfigurableDataClassInterface, UuidData
         return 'user_user';
     }
 
+    public static function getAlias(): string
+    {
+        return 't_usr_usr';
+    }
+
     public function getSurname(): ?string
     {
         return $this->getDefaultProperty(self::PROPERTY_SURNAME);

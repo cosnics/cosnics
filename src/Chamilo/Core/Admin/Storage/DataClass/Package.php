@@ -64,6 +64,11 @@ class Package extends DataClass
         return 'configuration_package';
     }
 
+    public static function getAlias(): string
+    {
+        return 't_adm_pkg';
+    }
+
     public function getType(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
