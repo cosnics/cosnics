@@ -3,7 +3,8 @@ namespace Chamilo\Libraries\Storage\Service\Condition;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\MultipleAggregateCondition;
 use Chamilo\Libraries\Storage\Service\ConditionTranslator;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Service\Condition
@@ -16,7 +17,8 @@ abstract class MultipleAggregateConditionTranslator extends ConditionTranslator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function translate(
-        QueryBuilder $querybuilder, MultipleAggregateCondition $multipleAggregateCondition, ?bool $enableAliasing = true
+        DBALQueryBuilder|ORMQueryBuilder $querybuilder, MultipleAggregateCondition $multipleAggregateCondition,
+        ?bool $enableAliasing = true
     ): string
     {
         if (!empty($multipleAggregateCondition->getConditions())) {

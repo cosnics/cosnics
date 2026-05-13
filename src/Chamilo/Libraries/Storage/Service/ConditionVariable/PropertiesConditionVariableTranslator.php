@@ -4,7 +4,8 @@ namespace Chamilo\Libraries\Storage\Service\ConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionVariableTranslator;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Service\ConditionVariable
@@ -23,7 +24,7 @@ class PropertiesConditionVariableTranslator extends ConditionVariableTranslator
 
     /** @noinspection PhpUnusedParameterInspection */
     public function translate(
-        QueryBuilder $querybuilder, PropertiesConditionVariable $propertiesConditionVariable,
+        DBALQueryBuilder|ORMQueryBuilder $querybuilder, PropertiesConditionVariable $propertiesConditionVariable,
         ?bool $enableAliasing = true
     ): string
     {

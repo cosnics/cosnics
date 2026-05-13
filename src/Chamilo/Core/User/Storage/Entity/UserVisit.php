@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Storage\Entity;
 
+use Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
@@ -12,7 +13,7 @@ use Symfony\Component\Uid\UuidV7;
 #[ORM\Entity(repositoryClass: 'Chamilo\Core\User\Storage\Repository\UserVisitRepository')]
 #[ORM\Table(name: 'user_visit')]
 #[ORM\Index(name: 'id_idx', columns: ['id'])]
-class UserVisit
+class UserVisit implements DoctrineEntityInterface
 {
     public const string PROPERTY_ENTER_DATE = 'enter_date';
     public const string PROPERTY_LEAVE_DATE = 'leave_date';

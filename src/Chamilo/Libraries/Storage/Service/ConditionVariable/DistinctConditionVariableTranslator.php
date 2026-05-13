@@ -4,7 +4,8 @@ namespace Chamilo\Libraries\Storage\Service\ConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\DistinctConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionVariableTranslator;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Service\ConditionVariable
@@ -22,7 +23,8 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function translate(
-        QueryBuilder $querybuilder, DistinctConditionVariable $distinctConditionVariable, ?bool $enableAliasing = true
+        DBALQueryBuilder|ORMQueryBuilder $querybuilder, DistinctConditionVariable $distinctConditionVariable,
+        ?bool $enableAliasing = true
     ): string
     {
         $strings = [];

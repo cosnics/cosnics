@@ -5,7 +5,8 @@ use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchCl
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Architecture\Domain
@@ -55,7 +56,8 @@ class ConditionVariableTranslatorRegistry
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function translate(
-        QueryBuilder $querybuilder, ConditionVariableInterface $conditionVariable, ?bool $enableAliasing = true
+        DBALQueryBuilder|ORMQueryBuilder $querybuilder, ConditionVariableInterface $conditionVariable,
+        ?bool $enableAliasing = true
     )
     {
         /** @noinspection PhpParamsInspection */

@@ -5,7 +5,8 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Enum\ComparisonTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionTranslator;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Service\Condition
@@ -23,7 +24,8 @@ class ComparisonConditionTranslator extends ConditionTranslator implements Condi
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function translate(
-        QueryBuilder $querybuilder, ComparisonCondition $comparisonCondition, ?bool $enableAliasing = true
+        DBALQueryBuilder|ORMQueryBuilder $querybuilder, ComparisonCondition $comparisonCondition,
+        ?bool $enableAliasing = true
     ): string
     {
         $string = [];

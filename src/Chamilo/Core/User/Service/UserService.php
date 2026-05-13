@@ -23,11 +23,9 @@ use Chamilo\Libraries\Protocol\Security\Service\HashingAlgorithm;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
-use Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException;
-use Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException;
+use Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Ehb\Application\Desiderius\Storage\DataClass\UserOperation;
 use Exception;
 use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
 use InvalidArgumentException;
@@ -65,7 +63,7 @@ readonly class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function createNewPasswordForUser(User $user, ?User $executingUser = null): void
     {
@@ -112,23 +110,20 @@ readonly class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function createUser(User $user, ?User $executingUser = null): void
     {
         $user->setRegistrationDate(time());
         $user->setSecurityToken(sha1(time() . uniqid()));
 
-        $this->legacyUserRepository->createUser($user);
+        $this->userRepository->saveUser($user);
         $this->eventDispatcher->dispatch(new AfterUserCreateEvent($user, $executingUser));
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function createUserFromParameters(
         ?string $givenName, ?string $surname, string $username, ?string $officialCode, string $emailAddress,
@@ -149,11 +144,11 @@ readonly class UserService
         }
 
         if (!$this->isUsernameAvailable($username)) {
-            throw new ObjectAlreadyExistsException(UserOperation::getStorageUnitName(), $requiredParameters);
+            throw new EntityAlreadyExistsException(User::class, $requiredParameters);
         }
 
         if ($officialCode && !$this->isOfficialCodeAvailable($officialCode)) {
-            throw new ObjectAlreadyExistsException(UserOperation::getStorageUnitName(), $requiredParameters);
+            throw new EntityAlreadyExistsException(User::class, $requiredParameters);
         }
 
         $user = new User();
@@ -184,17 +179,13 @@ readonly class UserService
         return $user;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
     public function deleteUser(User $user, ?User $executingUser = null): void
     {
         $this->eventDispatcher->dispatch(new BeforeUserDeleteEvent($user));
-        $this->legacyUserRepository->deleteUser($user);
+        $this->userRepository->removeUser($user);
         $this->eventDispatcher->dispatch(new AfterUserDeleteEvent($user, $executingUser));
     }
 
-    /** @noinspection PhpUnusedParameterInspection */
     public function determineUserKey(User $user): string
     {
         return $this->hashingUtilities->hashString($this->securityKey . $user->getEmail());
@@ -210,7 +201,7 @@ readonly class UserService
         catch (NoSuchUserException) {
             return true;
         }
-        catch (StorageMethodException) {
+        catch (Throwable) {
             return false;
         }
     }
@@ -225,7 +216,7 @@ readonly class UserService
         catch (NoSuchUserException) {
             return true;
         }
-        catch (StorageMethodException) {
+        catch (Throwable) {
             return false;
         }
     }
@@ -264,12 +255,11 @@ readonly class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     public function retrieveUserByEmail(string $email): ?User
     {
-        return $this->legacyUserRepository->retrieveUserByEmail($email);
+        return $this->userRepository->findUserByEmail($email);
     }
 
     /**
@@ -281,39 +271,36 @@ readonly class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     public function retrieveUserByOfficialCode(string $officialCode): ?User
     {
-        return $this->legacyUserRepository->retrieveUserByOfficialCode($officialCode);
+        return $this->userRepository->findUserByOfficialCode($officialCode);
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     public function retrieveUserBySecurityToken(string $securityToken): ?User
     {
-        return $this->legacyUserRepository->retrieveUserBySecurityToken($securityToken);
+        return $this->userRepository->findUserBySecurityToken($securityToken);
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     public function retrieveUserByUsername(string $username): ?User
     {
-        return $this->legacyUserRepository->retrieveUserByUsername($username);
+        return $this->userRepository->findUserByUsername($username);
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function retrieveUserByUsernameOrEmail(string $usernameOrEmail): ?User
     {
-        return $this->legacyUserRepository->retrieveUserByUsernameOrEmail($usernameOrEmail);
+        return $this->userRepository->findUserByUsernameOrEmail($usernameOrEmail);
     }
 
     /**
@@ -434,7 +421,7 @@ readonly class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function updateAccountFromParameters(
@@ -463,16 +450,16 @@ readonly class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function updateUser(User $user, ?User $executingUser = null): void
     {
-        $this->legacyUserRepository->updateUser($user);
+        $this->userRepository->saveUser($user);
         $this->eventDispatcher->dispatch(new AfterUserUpdateEvent($user, $executingUser));
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function updateUserFromParameters(
         User $user, ?string $firstName, ?string $lastName, ?string $username, ?string $officialCode,

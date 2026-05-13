@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Storage\Repository;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 use Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException;
 use Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException;
+use Chamilo\Libraries\Storage\Service\QueryBuilderConfigurator;
 use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,20 +21,24 @@ use Symfony\Component\Uid\Uuid;
 abstract class AbstractEntityRepository extends EntityRepository
 {
     public function __construct(
-        EntityManagerInterface $em, ClassMetadata $class, protected StorageAliasGenerator $storageAliasGenerator
+        EntityManagerInterface $em, ClassMetadata $class, protected StorageAliasGenerator $storageAliasGenerator,
+        protected QueryBuilderConfigurator $queryBuilderConfigurator
     )
     {
         parent::__construct($em, $class);
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     */
     protected function buildFromQuery(string $entityType, StorageParameters $parameters): QueryBuilder
     {
         $queryBuilder = $this->createQueryBuilder($this->getAlias($entityType));
 
         $queryBuilder->from($entityType, $this->getAlias($entityType));
-        //        $this->queryBuilderConfigurator->applyParameters(
-        //            $queryBuilder, $parameters, $entityType
-        //        );
+        $this->queryBuilderConfigurator->applyParameters(
+            $queryBuilder, $parameters, $entityType
+        );
 
         return $queryBuilder;
     }
@@ -63,12 +68,13 @@ abstract class AbstractEntityRepository extends EntityRepository
      *
      * @return tEntityType|null|object
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
-    public function findEntity(string $entityType, StorageParameters $parameters): ?object
+    public function findEntity(string $entityType, StorageParameters $parameters): mixed
     {
         $queryBuilder = $this->buildFromQuery($entityType, $parameters);
 
-        return null;
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**

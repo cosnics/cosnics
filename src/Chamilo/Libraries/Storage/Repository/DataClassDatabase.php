@@ -16,7 +16,6 @@ use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Doctrine\DBAL\Result;
 use Exception;
 use Throwable;
 
@@ -39,36 +38,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
         protected QueryBuilderConfigurator $queryBuilderConfigurator
     )
     {
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    protected function __retrieve(string $dataClassStorageUnitName, StorageParameters $parameters): Result
-    {
-        try {
-            $queryBuilder = $this->buildFromQuery($dataClassStorageUnitName, $parameters);
-            $sqlQuery = $queryBuilder->getSQL();
-
-            try {
-                return $this->connection->executeQuery(
-                    $sqlQuery, $queryBuilder->getParameters(), $queryBuilder->getParameterTypes()
-                );
-            }
-            catch (Throwable $throwable) {
-                $this->handleError($throwable);
-                throw new StorageMethodException(
-                    __FUNCTION__, $dataClassStorageUnitName, $throwable->getMessage(), $sqlQuery
-                );
-            }
-        }
-        catch (\Doctrine\DBAL\Exception $exception) {
-            $this->handleError($exception);
-            throw new StorageMethodException(
-                __FUNCTION__, $dataClassStorageUnitName, $exception->getMessage()
-            );
-        }
     }
 
     /**

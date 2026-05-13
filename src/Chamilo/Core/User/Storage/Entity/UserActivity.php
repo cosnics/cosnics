@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Storage\Entity;
 
 use Chamilo\Core\User\Architecture\Enum\UserActivityTypeEnum;
+use Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
@@ -13,7 +14,7 @@ use Symfony\Component\Uid\UuidV7;
 #[ORM\Entity(repositoryClass: 'Chamilo\Core\User\Storage\Repository\UserActivityRepository')]
 #[ORM\Table(name: 'user_activity')]
 #[ORM\Index(name: 'id_idx', columns: ['id'])]
-class UserActivity
+class UserActivity implements DoctrineEntityInterface
 {
     public const string PROPERTY_ACTION = 'action';
     public const string PROPERTY_DATE = 'date';

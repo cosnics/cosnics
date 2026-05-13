@@ -12,7 +12,8 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\UpdateProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Service
@@ -32,7 +33,7 @@ class QueryBuilderConfigurator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function applyParameters(
-        QueryBuilder $queryBuilder, StorageParameters $parameters, string $dataClassStorageUnitName
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, StorageParameters $parameters, string $dataClassStorageUnitName
     ): void
     {
         $this->processCondition($queryBuilder, $parameters->getCondition());
@@ -48,7 +49,7 @@ class QueryBuilderConfigurator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function applyUpdate(
-        QueryBuilder $queryBuilder, UpdateProperties $properties, ConditionInterface $condition
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, UpdateProperties $properties, ConditionInterface $condition
     ): void
     {
         foreach ($properties as $dataClassProperty) {
@@ -70,7 +71,7 @@ class QueryBuilderConfigurator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processCondition(
-        QueryBuilder $queryBuilder, ?ConditionInterface $condition = null, ?bool $enableAliasing = true
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, ?ConditionInterface $condition = null, ?bool $enableAliasing = true
     ): void
     {
         if ($condition instanceof ConditionInterface) {
@@ -82,7 +83,7 @@ class QueryBuilderConfigurator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processGroupBy(
-        QueryBuilder $queryBuilder, GroupBy $groupBy = new GroupBy()
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, GroupBy $groupBy = new GroupBy()
     ): void
     {
         foreach ($groupBy as $groupByVariable) {
@@ -94,7 +95,7 @@ class QueryBuilderConfigurator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processHavingCondition(
-        QueryBuilder $queryBuilder, ?ConditionInterface $condition = null
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, ?ConditionInterface $condition = null
     ): void
     {
         if ($condition instanceof ConditionInterface) {
@@ -106,7 +107,7 @@ class QueryBuilderConfigurator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processJoins(
-        QueryBuilder $queryBuilder, string $dataClassStorageUnitName, Joins $joins = new Joins()
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, string $dataClassStorageUnitName, Joins $joins = new Joins()
     ): void
     {
         foreach ($joins as $join) {
@@ -135,7 +136,7 @@ class QueryBuilderConfigurator
         }
     }
 
-    protected function processLimit(QueryBuilder $queryBuilder, ?int $count = null, ?int $offset = null): void
+    protected function processLimit(DBALQueryBuilder|ORMQueryBuilder $queryBuilder, ?int $count = null, ?int $offset = null): void
     {
         if ($count > 0) {
             $queryBuilder->setMaxResults(intval($count));
@@ -150,7 +151,7 @@ class QueryBuilderConfigurator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processOrderBy(
-        QueryBuilder $queryBuilder, OrderBy $orderBy = new OrderBy()
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, OrderBy $orderBy = new OrderBy()
     ): void
     {
         foreach ($orderBy as $orderByProperty) {
@@ -165,7 +166,7 @@ class QueryBuilderConfigurator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processRetrieveProperties(
-        QueryBuilder $queryBuilder, RetrieveProperties $properties = new RetrieveProperties()
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, RetrieveProperties $properties = new RetrieveProperties()
     ): void
     {
         foreach ($properties as $conditionVariable) {
@@ -177,7 +178,7 @@ class QueryBuilderConfigurator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function translateCondition(
-        QueryBuilder $queryBuilder, ConditionInterface $condition, ?bool $enableAliasing = true
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, ConditionInterface $condition, ?bool $enableAliasing = true
     ): string
     {
         return $this->conditionTranslatorRegistry->translate(
@@ -189,7 +190,7 @@ class QueryBuilderConfigurator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function translateConditionVariable(
-        QueryBuilder $queryBuilder, ConditionVariableInterface $conditionVariable, ?bool $enableAliasing = true
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, ConditionVariableInterface $conditionVariable, ?bool $enableAliasing = true
     ): string
     {
         return $this->conditionVariableTranslatorRegistry->translate(

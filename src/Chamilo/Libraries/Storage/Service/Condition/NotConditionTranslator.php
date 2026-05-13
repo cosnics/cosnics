@@ -4,7 +4,8 @@ namespace Chamilo\Libraries\Storage\Service\Condition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionTranslator;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Service\Condition
@@ -22,7 +23,7 @@ class NotConditionTranslator extends ConditionTranslator implements ConditionTra
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function translate(
-        QueryBuilder $querybuilder, NotCondition $notCondition, ?bool $enableAliasing = true
+        DBALQueryBuilder|ORMQueryBuilder $querybuilder, NotCondition $notCondition, ?bool $enableAliasing = true
     ): string
     {
         $string = [];

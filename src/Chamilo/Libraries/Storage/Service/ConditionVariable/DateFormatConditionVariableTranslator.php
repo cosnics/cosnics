@@ -4,7 +4,8 @@ namespace Chamilo\Libraries\Storage\Service\ConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\DateFormatConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionVariableTranslator;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Service\ConditionVariable
@@ -24,7 +25,7 @@ class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function translate(
-        QueryBuilder $querybuilder, DateFormatConditionVariable $dateFormatConditionVariable,
+        DBALQueryBuilder|ORMQueryBuilder $querybuilder, DateFormatConditionVariable $dateFormatConditionVariable,
         ?bool $enableAliasing = true
     ): string
     {

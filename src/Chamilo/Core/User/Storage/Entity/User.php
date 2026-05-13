@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Storage\Entity;
 
 use Chamilo\Core\User\Manager;
+use Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
@@ -16,7 +17,7 @@ use Symfony\Component\Uid\UuidV7;
 #[ORM\Entity(repositoryClass: 'Chamilo\Core\User\Storage\Repository\UserRepository')]
 #[ORM\Table(name: 'user_user')]
 #[ORM\Index(name: 'id_idx', columns: ['id'])]
-class User
+class User implements DoctrineEntityInterface
 {
     public const string CONTEXT = Manager::CONTEXT;
     public const string PROPERTY_ACTIVE = 'active';
@@ -40,7 +41,7 @@ class User
     protected string $authenticationSource;
 
     #[ORM\Column(name: 'configuration', type: 'json')]
-    protected array $configuration;
+    protected array $configuration = [];
 
     #[ORM\Column(name: 'creator_id', type: 'uuid', nullable: true)]
     protected ?Uuid $creatorIdentifier;
@@ -48,7 +49,7 @@ class User
     #[ORM\Column(name: 'email', type: 'string', nullable: true)]
     protected ?string $email;
 
-    #[ORM\Column(name: 'given_name', type: 'string', nullable: true)]
+    #[ORM\Column(name: 'firstname', type: 'string', nullable: true)]
     protected ?string $givenName;
 
     #[ORM\Id]

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Home\Component;
 
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\HomeRenderer;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\NoAuthenticationSupportInterface;
@@ -25,7 +26,7 @@ class ViewHomeComponent extends Manager implements NoAuthenticationSupportInterf
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         protected readonly AuthenticationValidator $authenticationValidator,
-        protected readonly HomeRenderer $homeRenderer
+        protected readonly HomeRenderer $homeRenderer, protected readonly UserService $userService
     )
     {
         parent::__construct($request, $applicationHeaderRenderer, $defaultFooterRenderer, $translator, $urlGenerator);
@@ -48,6 +49,15 @@ class ViewHomeComponent extends Manager implements NoAuthenticationSupportInterf
          * -> Mapping of usernames / user principals
          */
         $this->authenticationValidator->validate();
+
+//        try{
+//            $user = $this->userService->retrieveUserByUsernameOrEmail('magali.gillard@ehb.be');
+//            dump($user);
+//        }
+//        catch(\Throwable $e){
+//            dump($e);
+//        }
+
 
         $html = [];
 

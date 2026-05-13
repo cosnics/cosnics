@@ -2,7 +2,7 @@
 namespace Chamilo\Core\User\Storage\Repository\Legacy;
 
 use Chamilo\Core\User\Architecture\Exception\NoSuchUserException;
-use Chamilo\Core\User\Storage\Entity\User;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;

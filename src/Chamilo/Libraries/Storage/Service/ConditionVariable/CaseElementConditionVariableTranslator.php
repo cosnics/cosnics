@@ -5,7 +5,8 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\CaseEl
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionVariableTranslator;
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
 
 /**
  * @package Chamilo\Libraries\Storage\Service\ConditionVariable
@@ -26,7 +27,7 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function translate(
-        QueryBuilder $querybuilder, CaseElementConditionVariable $caseElementConditionVariable,
+        DBALQueryBuilder|ORMQueryBuilder $querybuilder, CaseElementConditionVariable $caseElementConditionVariable,
         ?bool $enableAliasing = true
     ): string
     {
