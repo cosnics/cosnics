@@ -7,4 +7,5 @@ namespace Chamilo\Libraries\Storage\Architecture\Interface;
  */
 interface DoctrineEntityInterface
 {
+    public static function getAlias(): string;
 }

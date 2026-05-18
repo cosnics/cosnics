@@ -15,7 +15,6 @@ return static function (ContainerConfigurator $container) {
     $services = $container->services();
     $services->defaults()->public()->autowire()->autoconfigure();
 
-    $services->set(\Chamilo\Core\User\Storage\Repository\Legacy\UserRepository::class);
     $services->set(UserVisitRepository::class)->factory(
         [service(EntityManager::class), 'getRepository']
     )->args([UserVisit::class]);

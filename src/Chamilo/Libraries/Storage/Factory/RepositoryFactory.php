@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Storage\Factory;
 
 use Chamilo\Libraries\Storage\Service\QueryBuilderConfigurator;
-use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectRepository;
@@ -21,10 +20,7 @@ final class RepositoryFactory implements \Doctrine\ORM\Repository\RepositoryFact
      */
     private array $repositoryList = [];
 
-    public function __construct(
-        protected StorageAliasGenerator $storageAliasGenerator,
-        protected QueryBuilderConfigurator $queryBuilderConfigurator
-    )
+    public function __construct(protected QueryBuilderConfigurator $queryBuilderConfigurator)
     {
     }
 
@@ -42,9 +38,7 @@ final class RepositoryFactory implements \Doctrine\ORM\Repository\RepositoryFact
         $repositoryClassName =
             $metadata->customRepositoryClassName ?: $entityManager->getConfiguration()->getDefaultRepositoryClassName();
 
-        return new $repositoryClassName(
-            $entityManager, $metadata, $this->storageAliasGenerator, $this->queryBuilderConfigurator
-        );
+        return new $repositoryClassName($entityManager, $metadata, $this->queryBuilderConfigurator);
     }
 
     public function getRepository(EntityManagerInterface $entityManager, string $entityName): EntityRepository

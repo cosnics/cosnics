@@ -14,13 +14,13 @@ interface DataClassDatabaseInterface
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function count(string $dataClassStorageUnitName, StorageParameters $parameters): int;
+    public function count(string $dataClassName, StorageParameters $parameters): int;
 
     /**
      * @return int[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function countGrouped(string $dataClassStorageUnitName, StorageParameters $parameters): array;
+    public function countGrouped(string $dataClassName, StorageParameters $parameters): array;
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
@@ -37,11 +37,9 @@ interface DataClassDatabaseInterface
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function distinct(string $dataClassStorageUnitName, StorageParameters $parameters): array;
+    public function distinct(string $dataClassName, StorageParameters $parameters): array;
 
     public function escapeColumnName(string $columnName, ?string $storageUnitAlias = null): string;
-
-    public function getAlias(string $dataClassStorageUnitName): string;
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
@@ -56,13 +54,13 @@ interface DataClassDatabaseInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function retrieve(string $dataClassStorageUnitName, StorageParameters $parameters): ?array;
+    public function retrieve(string $dataClassName, StorageParameters $parameters): ?array;
 
     /**
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function retrieves(string $dataClassStorageUnitName, StorageParameters $parameters): array;
+    public function retrieves(string $dataClassName, StorageParameters $parameters): array;
 
     /**
      * @param callable $function

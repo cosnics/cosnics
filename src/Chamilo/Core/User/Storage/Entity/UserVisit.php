@@ -42,6 +42,11 @@ class UserVisit implements DoctrineEntityInterface
         $this->setIdentifier(new UuidV7());
     }
 
+    public static function getAlias(): string
+    {
+        return 't_usr_vst';
+    }
+
     public function getEnterDate(): int
     {
         return $this->enterDate;

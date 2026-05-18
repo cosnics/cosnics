@@ -11,7 +11,7 @@ use Chamilo\Core\User\Architecture\EventDispatcher\Event\BeforeUserDeleteEvent;
 use Chamilo\Core\User\Architecture\Exception\NoSuchUserException;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\Entity\User;
-use Chamilo\Core\User\Storage\Repository\Legacy\UserRepository;
+use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Filesystem\Service\WebPathBuilder;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\ChangeablePasswordInterface;
@@ -43,23 +43,24 @@ use Throwable;
 readonly class UserService
 {
     public function __construct(
-        protected UserRepository $legacyUserRepository, protected HashingAlgorithm $hashingUtilities,
-        protected Translator $translator, protected WebPathBuilder $webPathBuilder,
-        protected MailerInterface $activeMailer, protected PasswordGeneratorInterface $passwordGenerator,
+        protected HashingAlgorithm $hashingUtilities, protected Translator $translator,
+        protected WebPathBuilder $webPathBuilder, protected MailerInterface $activeMailer,
+        protected PasswordGeneratorInterface $passwordGenerator,
         protected AuthenticationValidator $authenticationValidator, protected UrlGenerator $urlGenerator,
         protected EventDispatcherInterface $eventDispatcher, private string $securityKey, protected string $siteName,
         protected string $administratorName, protected string $administratorEmail, protected bool $allowRegistration,
-        protected \Chamilo\Core\User\Storage\Repository\UserRepository $userRepository
+        protected UserRepository $userRepository
     )
     {
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function countUsers(?ConditionInterface $condition = null): int
     {
-        return $this->legacyUserRepository->countUsers($condition);
+        return $this->userRepository->countUsers($condition);
     }
 
     /**
@@ -305,24 +306,24 @@ readonly class UserService
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\Entity\User>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function retrieveUsers(
         ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
-        return $this->legacyUserRepository->retrieveUsers($condition, $count, $offset, $orderBy);
+        return $this->userRepository->retrieveUsers($condition, $count, $offset, $orderBy);
     }
 
     /**
      * @param string[] $userIdentifiers
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\Entity\User>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function retrieveUsersByIdentifiers(array $userIdentifiers = []): ArrayCollection
     {
-        return $this->legacyUserRepository->retrieveUsersByIdentifiers($userIdentifiers);
+        return $this->userRepository->retrieveUsersByIdentifiers($userIdentifiers);
     }
 
     /**

@@ -14,8 +14,7 @@ abstract class ConditionVariableTranslator
 {
     public function __construct(
         protected ConditionTranslatorRegistry $conditionTranslatorRegistry,
-        protected ConditionVariableTranslatorRegistry $conditionVariableTranslatorRegistry,
-        protected StorageAliasGenerator $storageAliasGenerator
+        protected ConditionVariableTranslatorRegistry $conditionVariableTranslatorRegistry
     )
     {
     }

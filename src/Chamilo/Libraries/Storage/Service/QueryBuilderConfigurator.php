@@ -23,8 +23,7 @@ class QueryBuilderConfigurator
 {
     public function __construct(
         protected ConditionTranslatorRegistry $conditionTranslatorRegistry,
-        protected ConditionVariableTranslatorRegistry $conditionVariableTranslatorRegistry,
-        protected StorageAliasGenerator $storageAliasGenerator
+        protected ConditionVariableTranslatorRegistry $conditionVariableTranslatorRegistry
     )
     {
     }
@@ -71,7 +70,8 @@ class QueryBuilderConfigurator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processCondition(
-        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, ?ConditionInterface $condition = null, ?bool $enableAliasing = true
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, ?ConditionInterface $condition = null,
+        ?bool $enableAliasing = true
     ): void
     {
         if ($condition instanceof ConditionInterface) {
@@ -104,10 +104,12 @@ class QueryBuilderConfigurator
     }
 
     /**
+     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $dataClassName
+     *
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processJoins(
-        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, string $dataClassStorageUnitName, Joins $joins = new Joins()
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, string $dataClassName, Joins $joins = new Joins()
     ): void
     {
         foreach ($joins as $join) {
@@ -119,8 +121,8 @@ class QueryBuilderConfigurator
             $joinDataClassName = $join->getDataClassName();
             $joinDataClassStorageUnitName = $joinDataClassName::getStorageUnitName();
 
-            $fromAlias = $this->storageAliasGenerator->getTableAlias($dataClassStorageUnitName);
-            $joinAlias = $this->storageAliasGenerator->getTableAlias($joinDataClassStorageUnitName);
+            $fromAlias = $dataClassName::getAlias();
+            $joinAlias = $joinDataClassName::getAlias();
 
             switch ($join->getType()) {
                 case JoinTypeEnum::NORMAL :
@@ -136,7 +138,9 @@ class QueryBuilderConfigurator
         }
     }
 
-    protected function processLimit(DBALQueryBuilder|ORMQueryBuilder $queryBuilder, ?int $count = null, ?int $offset = null): void
+    protected function processLimit(
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, ?int $count = null, ?int $offset = null
+    ): void
     {
         if ($count > 0) {
             $queryBuilder->setMaxResults(intval($count));
@@ -190,7 +194,8 @@ class QueryBuilderConfigurator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function translateConditionVariable(
-        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, ConditionVariableInterface $conditionVariable, ?bool $enableAliasing = true
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, ConditionVariableInterface $conditionVariable,
+        ?bool $enableAliasing = true
     ): string
     {
         return $this->conditionVariableTranslatorRegistry->translate(

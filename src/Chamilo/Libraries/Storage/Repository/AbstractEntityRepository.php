@@ -1,11 +1,17 @@
 <?php
 namespace Chamilo\Libraries\Storage\Repository;
 
+use Chamilo\Libraries\Storage\Architecture\Domain\Enum\FunctionTypeEnum;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\FunctionConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertiesConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 use Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException;
 use Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException;
+use Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface;
 use Chamilo\Libraries\Storage\Service\QueryBuilderConfigurator;
-use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -21,26 +27,65 @@ use Symfony\Component\Uid\Uuid;
 abstract class AbstractEntityRepository extends EntityRepository
 {
     public function __construct(
-        EntityManagerInterface $em, ClassMetadata $class, protected StorageAliasGenerator $storageAliasGenerator,
-        protected QueryBuilderConfigurator $queryBuilderConfigurator
+        EntityManagerInterface $em, ClassMetadata $class, protected QueryBuilderConfigurator $queryBuilderConfigurator
     )
     {
         parent::__construct($em, $class);
     }
 
     /**
+     * @param \Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters $parameters
+     * @param string $dataClassName
+     *
+     * @return void
+     */
+    protected function applyDataClassPropertiesToParameters(string $dataClassName, StorageParameters $parameters): void
+    {
+        if ($parameters->getRetrieveProperties()->isEmpty()) {
+            $parameters->getRetrieveProperties()->add(new PropertiesConditionVariable($dataClassName));
+        }
+    }
+
+    /**
+     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface> $entityType
+     *
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function buildFromQuery(string $entityType, StorageParameters $parameters): QueryBuilder
     {
-        $queryBuilder = $this->createQueryBuilder($this->getAlias($entityType));
+        $alias = $entityType::getAlias();
 
-        $queryBuilder->from($entityType, $this->getAlias($entityType));
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+
+        $queryBuilder->from($entityType, $alias);
         $this->queryBuilderConfigurator->applyParameters(
             $queryBuilder, $parameters, $entityType
         );
 
         return $queryBuilder;
+    }
+
+    /**
+     * @template tEntityType
+     * @param class-string<tEntityType> $entityType
+     *
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     */
+    public function countEntities(string $entityType, StorageParameters $parameters = new StorageParameters()): int
+    {
+        $parameters->setRetrieveProperties(
+            new RetrieveProperties(
+                [
+                    new FunctionConditionVariable(
+                        FunctionTypeEnum::COUNT, new StaticConditionVariable(1)
+                    )
+                ]
+            )
+        );
+
+        $query = $this->buildFromQuery($entityType, $parameters)->getQuery();
+
+        return $query->getSingleScalarResult();
     }
 
     /**
@@ -66,15 +111,39 @@ abstract class AbstractEntityRepository extends EntityRepository
      * @template tEntityType
      * @param class-string<tEntityType> $entityType
      *
+     * @return \Doctrine\Common\Collections\ArrayCollection<tEntityType|null|object>
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     */
+    public function findEntities(string $entityType, StorageParameters $parameters = new StorageParameters()): mixed
+    {
+        $this->applyDataClassPropertiesToParameters($entityType, $parameters);
+
+        $query = $this->buildFromQuery($entityType, $parameters)->getQuery();
+
+        return new ArrayCollection($query->getResult());
+    }
+
+    /**
+     * @template tEntityType
+     * @param class-string<tEntityType> $entityType
+     *
      * @return tEntityType|null|object
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
-    public function findEntity(string $entityType, StorageParameters $parameters): mixed
+    public function findEntity(string $entityType, StorageParameters $parameters = new StorageParameters()): mixed
     {
-        $queryBuilder = $this->buildFromQuery($entityType, $parameters);
+        $this->applyDataClassPropertiesToParameters($entityType, $parameters);
+        $parameters->returnSingleResult();
 
-        return $queryBuilder->getQuery()->getResult();
+        $query = $this->buildFromQuery($entityType, $parameters)->getQuery();
+        $result = $query->getOneOrNullResult();
+
+        if (!$result instanceof DoctrineEntityInterface) {
+            throw new NoSuchObjectException(objectType: $entityType, query: $query->getDQL());
+        }
+
+        return $result;
     }
 
     /**
@@ -98,11 +167,6 @@ abstract class AbstractEntityRepository extends EntityRepository
     public function flush(): void
     {
         $this->getEntityManager()->flush();
-    }
-
-    public function getAlias(string $dataClassStorageUnitName): string
-    {
-        return $this->storageAliasGenerator->getTableAlias($dataClassStorageUnitName);
     }
 
     /**

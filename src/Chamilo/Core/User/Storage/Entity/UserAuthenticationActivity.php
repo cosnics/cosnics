@@ -57,6 +57,11 @@ class UserAuthenticationActivity implements DoctrineEntityInterface
         return $this;
     }
 
+    public static function getAlias(): string
+    {
+        return 't_usr_aat';
+    }
+
     public function getDate(): int
     {
         return $this->date;

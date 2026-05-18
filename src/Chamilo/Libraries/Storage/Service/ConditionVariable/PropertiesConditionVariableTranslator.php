@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Storage\Service\ConditionVariable;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
+use Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface;
 use Chamilo\Libraries\Storage\Service\ConditionVariableTranslator;
 use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
 use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
@@ -28,10 +29,11 @@ class PropertiesConditionVariableTranslator extends ConditionVariableTranslator
         ?bool $enableAliasing = true
     ): string
     {
-        $className = $propertiesConditionVariable->getDataClassName();
-
-        if ($enableAliasing) {
-            return $this->storageAliasGenerator->getDataClassAlias($className) . '.*';
+        if (is_subclass_of($propertiesConditionVariable->getDataClassName(), DoctrineEntityInterface::class)) {
+            return $propertiesConditionVariable->getDataClassName()::getAlias();
+        }
+        elseif ($enableAliasing) {
+            return $propertiesConditionVariable->getDataClassName()::getAlias() . '.*';
         }
         else {
             return '*';

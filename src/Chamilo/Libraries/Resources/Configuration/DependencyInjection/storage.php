@@ -42,7 +42,6 @@ use Chamilo\Libraries\Storage\Service\NoSuchObjectExceptionRenderer;
 use Chamilo\Libraries\Storage\Service\PropertyMapper;
 use Chamilo\Libraries\Storage\Service\QueryBuilderConfigurator;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
-use Chamilo\Libraries\Storage\Service\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\Service\StorageLastInsertedIdentifierExceptionRenderer;
 use Chamilo\Libraries\Storage\Service\StorageMethodExceptionRenderer;
 use Chamilo\Libraries\Storage\Service\StorageNoResultExceptionRenderer;
@@ -68,7 +67,6 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(PropertyMapper::class);
     $services->set(SearchQueryConditionGenerator::class);
-    $services->set(StorageAliasGenerator::class);
 
     $services->set(Connection::class)->factory([DriverManager::class, 'getConnection'])->args(
         ['%cosnics.libraries.storage.database%']

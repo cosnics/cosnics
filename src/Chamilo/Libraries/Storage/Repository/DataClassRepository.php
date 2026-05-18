@@ -56,9 +56,7 @@ class DataClassRepository
             )
         );
 
-        return $this->dataClassDatabase->count(
-            $this->determineDataClassStorageUnitName($dataClassName), $parameters
-        );
+        return $this->dataClassDatabase->count($dataClassName, $parameters);
     }
 
     /**
@@ -73,7 +71,7 @@ class DataClassRepository
             new FunctionConditionVariable(FunctionTypeEnum::COUNT, new StaticConditionVariable(1))
         );
 
-        return $this->dataClassDatabase->countGrouped($dataClassName::getStorageUnitName(), $parameters);
+        return $this->dataClassDatabase->countGrouped($dataClassName, $parameters);
     }
 
     /**
@@ -87,7 +85,7 @@ class DataClassRepository
             new RetrieveProperties([new DistinctConditionVariable($parameters->getRetrieveProperties()->toArray())])
         );
 
-        return $this->dataClassDatabase->distinct($dataClassName::getStorageUnitName(), $parameters);
+        return $this->dataClassDatabase->distinct($dataClassName, $parameters);
     }
 
     /**
@@ -103,9 +101,7 @@ class DataClassRepository
 
         $parameters->returnSingleResult();
 
-        return $this->dataClassDatabase->retrieve(
-            $this->determineDataClassStorageUnitName($dataClassName), $parameters
-        );
+        return $this->dataClassDatabase->retrieve($dataClassName, $parameters);
     }
 
     /**
@@ -117,7 +113,7 @@ class DataClassRepository
     {
         $this->applyDataClassPropertiesToParameters($dataClassName, $parameters);
 
-        $records = $this->dataClassDatabase->retrieves($dataClassName::getStorageUnitName(), $parameters);
+        $records = $this->dataClassDatabase->retrieves($dataClassName, $parameters);
 
         return new ArrayCollection($records);
     }
@@ -430,7 +426,7 @@ class DataClassRepository
         )
         );
 
-        $record = $this->dataClassDatabase->retrieve($dataClassName::getStorageUnitName(), $parameters);
+        $record = $this->dataClassDatabase->retrieve($dataClassName, $parameters);
 
         return (int) $record[self::ALIAS_MAX_SORT];
     }

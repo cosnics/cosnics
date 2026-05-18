@@ -50,15 +50,6 @@ class ViewHomeComponent extends Manager implements NoAuthenticationSupportInterf
          */
         $this->authenticationValidator->validate();
 
-//        try{
-//            $user = $this->userService->retrieveUserByUsernameOrEmail('magali.gillard@ehb.be');
-//            dump($user);
-//        }
-//        catch(\Throwable $e){
-//            dump($e);
-//        }
-
-
         $html = [];
 
         $html[] = $this->renderHeader($currentUser);

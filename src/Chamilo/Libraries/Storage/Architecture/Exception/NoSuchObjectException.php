@@ -15,7 +15,7 @@ use Exception;
 class NoSuchObjectException extends Exception implements UserExceptionInterface
 {
     public function __construct(
-        public string $objectType, public array $objectIdentifiers, ?string $message = null, int $code = 0,
+        public string $objectType, public ?array $criteria = null, public ?string $query = null, ?string $message = null, int $code = 0,
         ?Exception $previousException = null
     )
     {

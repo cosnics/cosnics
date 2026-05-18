@@ -23,7 +23,7 @@ class UserVisitRepository extends AbstractEntityRepository
         }
         catch (NoSuchObjectException $exception) {
             throw new NoSuchUserVisitException(
-                $exception->objectIdentifiers, $exception->getMessage(), $exception->getCode(), $exception
+                $exception->criteria, $exception->query, $exception->getMessage(), $exception->getCode(), $exception
             );
         }
     }

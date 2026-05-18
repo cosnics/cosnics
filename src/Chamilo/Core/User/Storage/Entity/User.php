@@ -103,6 +103,11 @@ class User implements DoctrineEntityInterface
         return $this;
     }
 
+    public static function getAlias(): string
+    {
+        return 't_usr_usr';
+    }
+
     public function getAuthenticationSource(): string
     {
         return $this->authenticationSource;

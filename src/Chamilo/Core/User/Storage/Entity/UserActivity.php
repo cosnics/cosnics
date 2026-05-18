@@ -55,6 +55,11 @@ class UserActivity implements DoctrineEntityInterface
         return $this;
     }
 
+    public static function getAlias(): string
+    {
+        return 't_usr_atv';
+    }
+
     public function getDate(): int
     {
         return $this->date;

@@ -24,6 +24,8 @@ abstract class DataClass
         $this->setOptionalProperties($optionalProperties);
     }
 
+    abstract public static function getAlias(): string;
+
     /**
      * @return string[]
      */

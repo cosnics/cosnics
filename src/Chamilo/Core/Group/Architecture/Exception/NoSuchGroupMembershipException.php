@@ -12,9 +12,10 @@ use Exception;
 class NoSuchGroupMembershipException extends NoSuchObjectException
 {
     public function __construct(
-        array $objectIdentifiers, ?string $message = null, int $code = 0, ?Exception $previousException = null
+        ?array $criteria = null, ?string $query = null, ?string $message = null, int $code = 0,
+        ?Exception $previousException = null
     )
     {
-        parent::__construct(GroupMembership::class, $objectIdentifiers, $message, $code, $previousException);
+        parent::__construct(GroupMembership::class, $criteria, $query, $message, $code, $previousException);
     }
 }
