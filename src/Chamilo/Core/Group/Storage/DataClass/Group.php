@@ -4,6 +4,7 @@ namespace Chamilo\Core\Group\Storage\DataClass;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Group\Storage\DataClass
@@ -20,6 +21,11 @@ class Group extends DataClass implements UuidDataClassInterface
     public const string PROPERTY_NAME = 'name';
     public const string PROPERTY_PARENT_ID = 'parent_id';
     public const string PROPERTY_RIGHT_VALUE = 'right_value';
+
+    public static function getAlias(): string
+    {
+        return 't_grp_grp';
+    }
 
     public function getCode(): ?string
     {
@@ -48,6 +54,17 @@ class Group extends DataClass implements UuidDataClassInterface
         return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
     }
 
+    public function getId(): ?string
+    {
+        $identifier = $this->getDefaultProperty(self::PROPERTY_ID);
+
+        if ($identifier) {
+            $identifier = Uuid::fromString($identifier)->toString();
+        }
+
+        return $identifier;
+    }
+
     public function getLeftValue(): int
     {
         return $this->getDefaultProperty(self::PROPERTY_LEFT_VALUE);
@@ -71,11 +88,6 @@ class Group extends DataClass implements UuidDataClassInterface
     public static function getStorageUnitName(): string
     {
         return 'group_group';
-    }
-
-    public static function getAlias(): string
-    {
-        return 't_grp_grp';
     }
 
     public function hasChildren(): bool

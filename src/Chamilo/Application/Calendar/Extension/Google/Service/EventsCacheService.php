@@ -26,8 +26,8 @@ class EventsCacheService
     }
 
     /**
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function getEventsForCalendarIdentifierAndBetweenDates(
         User $user, string $calendarIdentifier, $fromDate, $toDate

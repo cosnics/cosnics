@@ -139,7 +139,7 @@ class GroupMembershipService
 
         foreach ($userIdentifiers as $userIdentifier) {
             try {
-                $user = $this->userService->retrieveUserByIdentifier(Uuid::fromString($userIdentifier));
+                $user = $this->userService->findUserByIdentifier(Uuid::fromString($userIdentifier));
                 $groupMemberships->add($this->createGroupMembershipForGroupAndUser($group, $user, $executingUser));
             }
             catch (NoSuchUserException) {
@@ -400,6 +400,7 @@ class GroupMembershipService
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function synchronizeGroup(Group $group, array $userIdentifiers, ?User $executingUser = null): void
     {
@@ -408,13 +409,13 @@ class GroupMembershipService
         $newUserIdentifiers = array_diff($userIdentifiers, $currentUserIdentifiers);
         $oldUserIdentifiers = array_diff($currentUserIdentifiers, $userIdentifiers);
 
-        $newUsers = $this->userService->retrieveUsersByIdentifiers($newUserIdentifiers);
+        $newUsers = $this->userService->findUsersByIdentifiers($newUserIdentifiers);
 
         foreach ($newUsers as $newUser) {
             $this->createGroupMembershipForGroupAndUser($group, $newUser, $executingUser);
         }
 
-        $oldUsers = $this->userService->retrieveUsersByIdentifiers($oldUserIdentifiers);
+        $oldUsers = $this->userService->findUsersByIdentifiers($oldUserIdentifiers);
 
         foreach ($oldUsers as $oldUser) {
             $this->deleteGroupMembershipByGroupAndUser($group, $oldUser, $executingUser);

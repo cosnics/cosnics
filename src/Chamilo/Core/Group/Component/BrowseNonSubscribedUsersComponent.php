@@ -200,7 +200,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
             $this->nonSubscribedUserTableRenderer->getDefaultParameterValues(), $totalNumberOfItems
         );
 
-        $users = $this->userService->retrieveUsers(
+        $users = $this->userService->findUsers(
             $this->getNonSubscribedUserCondition(), $tableParameterValues->getOffset(),
             $tableParameterValues->getNumberOfItemsPerPage(),
             $this->nonSubscribedUserTableRenderer->determineOrderBy($tableParameterValues)

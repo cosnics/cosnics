@@ -123,7 +123,7 @@ abstract class AbstractCasAuthentication extends Authentication implements Authe
 
                 if ($userAttributes && isset($userAttributes['surrogatePrincipal'])) {
                     $surrogateUserName = array_pop($userAttributes['surrogatePrincipal']);
-                    $surrogateUser = $this->userService->retrieveUserByUsername($surrogateUserName);
+                    $surrogateUser = $this->userService->findUserByUsername($surrogateUserName);
                     $this->session->set(
                         AuthenticationValidator::PARAM_AS_ADMIN, $surrogateUser->getIdentifier()->toString()
                     );

@@ -36,7 +36,7 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function deleteUserPicture(User $user, ?User $executingUser = null): void
     {
@@ -133,7 +133,6 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Exception
      */
     public function setUserPicture(User $user, ?UploadedFile $fileInformation = null, ?User $executingUser = null): void
@@ -161,6 +160,8 @@ class PlatformUserPictureProvider implements UserPictureProviderInterface, UserP
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
+     * @throws \Exception
      */
     public function updateUserPictureFromParameters(
         User $user, ?UploadedFile $fileInformation = null, bool $removeExistingPicture = false,

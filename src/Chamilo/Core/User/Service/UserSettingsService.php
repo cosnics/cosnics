@@ -60,7 +60,7 @@ readonly class UserSettingsService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function updateUserSetting(User $user, string $variable, mixed $value = null, ?User $executingUser = null
     ): void

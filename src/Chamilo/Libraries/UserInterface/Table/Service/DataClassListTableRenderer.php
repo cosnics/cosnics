@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Libraries\UserInterface\Table\Service;
 
+use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableResultPosition;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Table\Service
@@ -16,7 +18,14 @@ abstract class DataClassListTableRenderer extends ListTableRenderer
      */
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, mixed $result): string
     {
-        return (string) $result->getDefaultProperty($column->getName());
+        if ($result instanceof DataClass) {
+            return (string) $result->getDefaultProperty($column->getName());
+        }
+        else {
+            $propertyAccessor = new PropertyAccessor();
+
+            return $propertyAccessor->getValue($result, $column->getName());
+        }
     }
 
     /**
@@ -24,6 +33,11 @@ abstract class DataClassListTableRenderer extends ListTableRenderer
      */
     protected function renderIdentifierCell(mixed $result): string
     {
-        return $result->getId();
+        if ($result instanceof DataClass) {
+            return $result->getId();
+        }
+        else {
+            return $result->getIdentifier();
+        }
     }
 }

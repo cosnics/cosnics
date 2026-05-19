@@ -32,22 +32,6 @@ class UserRepository extends AbstractEntityRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
-     */
-    public function retrieveUsersByIdentifiers(array $userIdentifiers, OrderBy $orderBy = new OrderBy()
-    ): ArrayCollection
-    {
-        $condition =
-            new InCondition(new PropertyConditionVariable(\Chamilo\Core\User\Storage\DataClass\User::class, DataClass::PROPERTY_ID), $userIdentifiers);
-
-        return $this->findEntities(
-            User::class, new StorageParameters(
-                condition: $condition, orderBy: $orderBy
-            )
-        );
-    }
-
-    /**
      * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     public function findUserByEmail(string $securityToken): User
@@ -81,10 +65,10 @@ class UserRepository extends AbstractEntityRepository
      */
     public function findUserByOfficialCode(string $officialCode): User
     {
-        $user = $this->findOneBy(['official_code' => $officialCode]);
+        $user = $this->findOneBy(['officialCode' => $officialCode]);
 
         if (!$user instanceof User) {
-            throw new NoSuchUserException(['official_code' => $officialCode]);
+            throw new NoSuchUserException(['officialCode' => $officialCode]);
         }
 
         return $user;
@@ -95,10 +79,10 @@ class UserRepository extends AbstractEntityRepository
      */
     public function findUserBySecurityToken(string $securityToken): User
     {
-        $user = $this->findOneBy(['security_token' => $securityToken]);
+        $user = $this->findOneBy(['securityToken' => $securityToken]);
 
         if (!$user instanceof User) {
-            throw new NoSuchUserException(['security_token' => $securityToken]);
+            throw new NoSuchUserException(['securityToken' => $securityToken]);
         }
 
         return $user;
@@ -119,8 +103,8 @@ class UserRepository extends AbstractEntityRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     public function findUserByUsernameOrEmail(string $usernameOrEmail): User
     {
@@ -128,7 +112,7 @@ class UserRepository extends AbstractEntityRepository
             $conditions = [];
 
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(\Chamilo\Core\User\Storage\DataClass\User::class, User::PROPERTY_EMAIL),
+                new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL),
                 new StaticConditionVariable($usernameOrEmail)
             );
             $conditions[] = new EqualityCondition(
@@ -147,22 +131,38 @@ class UserRepository extends AbstractEntityRepository
         }
     }
 
-    public function removeUser(User $user): void
-    {
-        $this->getEntityManager()->remove($user);
-    }
-
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\Entity\User>
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
-    public function retrieveUsers(
+    public function findUsers(
         ?ConditionInterface $condition = null, ?int $count = null, ?int $offset = null, OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
         $parameters = new StorageParameters(condition: $condition, orderBy: $orderBy, count: $count, offset: $offset);
 
         return $this->findEntities(User::class, $parameters);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     */
+    public function findUsersByIdentifiers(array $userIdentifiers, OrderBy $orderBy = new OrderBy()): ArrayCollection
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers
+        );
+
+        return $this->findEntities(
+            User::class, new StorageParameters(
+                condition: $condition, orderBy: $orderBy
+            )
+        );
+    }
+
+    public function removeUser(User $user): void
+    {
+        $this->getEntityManager()->remove($user);
     }
 
     /**

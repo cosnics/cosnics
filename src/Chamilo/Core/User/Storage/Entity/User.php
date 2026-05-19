@@ -21,17 +21,17 @@ class User implements DoctrineEntityInterface
 {
     public const string CONTEXT = Manager::CONTEXT;
     public const string PROPERTY_ACTIVE = 'active';
-    public const string PROPERTY_AUTHENTICATION_SOURCE = 'auth_source';
-    public const string PROPERTY_CREATOR_IDENTIFIER = 'creator_id';
+    public const string PROPERTY_AUTHENTICATION_SOURCE = 'authenticationSource';
+    public const string PROPERTY_CREATOR_IDENTIFIER = 'creatorIdentifier';
     public const string PROPERTY_EMAIL = 'email';
-    public const string PROPERTY_GIVEN_NAME = 'firstname';
-    public const string PROPERTY_OFFICIAL_CODE = 'official_code';
+    public const string PROPERTY_GIVEN_NAME = 'givenName';
+    public const string PROPERTY_OFFICIAL_CODE = 'officialCode';
     public const string PROPERTY_PASSWORD = 'password';
-    public const string PROPERTY_PICTURE_URI = 'picture_uri';
+    public const string PROPERTY_PICTURE_URI = 'pictureUri';
     public const string PROPERTY_PLATFORM_ADMINISTRATOR = 'admin';
-    public const string PROPERTY_REGISTRATION_DATE = 'registration_date';
-    public const string PROPERTY_SECURITY_TOKEN = 'security_token';
-    public const string PROPERTY_SURNAME = 'lastname';
+    public const string PROPERTY_REGISTRATION_DATE = 'registrationDate';
+    public const string PROPERTY_SECURITY_TOKEN = 'securityToken';
+    public const string PROPERTY_SURNAME = 'surname';
     public const string PROPERTY_USERNAME = 'username';
 
     #[ORM\Column(name: 'active', type: 'boolean')]
@@ -120,12 +120,12 @@ class User implements DoctrineEntityInterface
         return $this;
     }
 
-    public function getCreatorIdentifier(): ?string
+    public function getCreatorIdentifier(): ?Uuid
     {
         return $this->creatorIdentifier;
     }
 
-    public function setCreatorIdentifier(?string $creatorIdentifier): static
+    public function setCreatorIdentifier(?Uuid $creatorIdentifier): static
     {
         $this->creatorIdentifier = $creatorIdentifier;
 
@@ -257,7 +257,7 @@ class User implements DoctrineEntityInterface
 
     public function getUsername(): string
     {
-        return $this->getUsername();
+        return $this->username;
     }
 
     public function setUsername(string $username): static

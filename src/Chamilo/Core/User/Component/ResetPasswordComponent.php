@@ -75,7 +75,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
 
         if (!is_null($requestKey) && !is_null($requestUserIdentifier)) {
             $userToCreateNewPasswordFor =
-                $this->userService->retrieveUserByIdentifier(Uuid::fromString($requestUserIdentifier));
+                $this->userService->findUserByIdentifier(Uuid::fromString($requestUserIdentifier));
 
             if ($this->userService->isValidKeyForUser($requestKey, $userToCreateNewPasswordFor)) {
                 try {
@@ -108,7 +108,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
             if ($form->isSubmitted() && $form->isValid()) {
                 $submittedData = $form->getData();
 
-                $userToResetPasswordFor = $this->userService->retrieveUserByEmail($submittedData[User::PROPERTY_EMAIL]);
+                $userToResetPasswordFor = $this->userService->findUserByEmail($submittedData[User::PROPERTY_EMAIL]);
 
                 try {
                     $this->userService->sendPasswordResetLinkforUser($userToResetPasswordFor);

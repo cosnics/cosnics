@@ -50,7 +50,7 @@ class ActiveComponent extends Manager
                     continue;
                 }
 
-                $userToActivate = $this->userService->retrieveUserByIdentifier($identifier);
+                $userToActivate = $this->userService->findUserByIdentifier($identifier);
                 $userToActivate->setActive($active);
 
                 try {

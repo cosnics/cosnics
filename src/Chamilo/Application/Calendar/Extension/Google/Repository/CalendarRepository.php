@@ -39,7 +39,7 @@ class CalendarRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function clearAccessToken(User $user): void
     {
@@ -47,7 +47,7 @@ class CalendarRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function findEventsForCalendarIdentifierAndBetweenDates(
         User $user, string $calendarIdentifier, int $fromDate, int $toDate
@@ -75,7 +75,7 @@ class CalendarRepository
 
     /**
      * @return \Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function findOwnedCalendars(User $user): array
     {
@@ -99,7 +99,7 @@ class CalendarRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function getCalendarClient(User $user): Google_Service_Calendar
     {
@@ -111,7 +111,7 @@ class CalendarRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function getGoogleClient(User $user): Google_Client
     {
@@ -165,7 +165,7 @@ class CalendarRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function login(User $user, $authenticationCode = null): void
     {
@@ -200,8 +200,8 @@ class CalendarRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Google_Auth_Exception
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function logout(User $user): void
     {
@@ -211,7 +211,7 @@ class CalendarRepository
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function saveAccessToken(User $user, string $accessToken): void
     {

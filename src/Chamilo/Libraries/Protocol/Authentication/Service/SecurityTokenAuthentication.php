@@ -46,7 +46,7 @@ class SecurityTokenAuthentication extends Authentication implements Authenticati
 
         if ($securityToken) {
             try {
-                return $this->userService->retrieveUserBySecurityToken($securityToken);
+                return $this->userService->findUserBySecurityToken($securityToken);
             }
             catch (Throwable) {
                 throw new NotAuthenticatedException(

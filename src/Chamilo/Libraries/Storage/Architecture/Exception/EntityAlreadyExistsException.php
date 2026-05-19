@@ -11,8 +11,8 @@ use Throwable;
 class EntityAlreadyExistsException extends Exception
 {
     public function __construct(
-        public string $entityClassname, public object $entity, string $message = '', int $code = 0,
-        ?Throwable $previous = null
+        public string $entityClassname, public ?object $entity = null, public ?array $criteria = null,
+        string $message = '', int $code = 0, ?Throwable $previous = null
     )
     {
         parent::__construct($message, $code, $previous);

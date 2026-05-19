@@ -42,6 +42,12 @@ abstract class Authentication
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
+    /**
+     * @return \Chamilo\Core\User\Storage\Entity\User|null
+     * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
+     */
     protected function getUserFromCredentialsRequest(): ?User
     {
         $username = $this->request->request->get(self::PARAM_LOGIN);
@@ -50,7 +56,7 @@ abstract class Authentication
             return null;
         }
 
-        $user = $this->userService->retrieveUserByUsernameOrEmail($username);
+        $user = $this->userService->findUserByUsernameOrEmail($username);
 
         if (!$user instanceof User) {
             throw new NotAuthenticatedException(

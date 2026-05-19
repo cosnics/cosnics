@@ -70,7 +70,7 @@ class ViewComponent extends Manager
         }
 
         $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
-        $userToRender = $this->userService->retrieveUserByIdentifier(Uuid::fromString($userIdentifier));
+        $userToRender = $this->userService->findUserByIdentifier(Uuid::fromString($userIdentifier));
 
         $this->breadcrumbTrail->add(new Breadcrumb($userToRender->getFullName()));
 

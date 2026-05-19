@@ -72,8 +72,8 @@ class PlatformAuthentication extends Authentication
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     public function login(bool $checkIfAuthenticationSourceIsEnabled = true): ?User

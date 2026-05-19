@@ -4,7 +4,6 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Architecture\Enum\ActionEnum;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\Entity\User;
-use Chamilo\Core\User\UserInterface\Form\AbstractUserFormType;
 use Chamilo\Core\User\UserInterface\Form\AccountFormType;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\UserInterface\Alert\Architecture\Domain\Alert;
@@ -42,16 +41,8 @@ class AccountComponent extends ProfileComponent
         $form->handleRequest($this->getRequest());
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $submittedData = $form->getData();
-
             try {
-                $this->userService->updateAccountFromParameters(
-                    $currentUser, $submittedData[User::PROPERTY_GIVEN_NAME], $submittedData[User::PROPERTY_SURNAME],
-                    $submittedData[User::PROPERTY_USERNAME], $submittedData[User::PROPERTY_OFFICIAL_CODE],
-                    $submittedData[User::PROPERTY_EMAIL],
-                    $submittedData[AbstractUserFormType::PROPERTY_PASSWORD_CURRENT],
-                    $submittedData[User::PROPERTY_PASSWORD], $currentUser
-                );
+                $this->userService->updateUser($form->getData());
 
                 $this->alertsManager->addAlert(
                     new Alert(

@@ -21,14 +21,6 @@ class SubscribedUser extends User
     #[ORM\Column(name: 'relation_id', type: 'string')]
     protected ?string $relationIdentifier;
 
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        $extendedPropertyNames[] = self::PROPERTY_RELATION_ID;
-        $extendedPropertyNames[] = self::PROPERTY_GROUP_ID;
-
-        return parent::getDefaultPropertyNames($extendedPropertyNames);
-    }
-
     public function getGroupId(): string
     {
         return $this->groupIdentifier;

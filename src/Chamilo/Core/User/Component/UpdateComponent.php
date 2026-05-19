@@ -77,7 +77,7 @@ class UpdateComponent extends Manager
         $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
 
         if ($userIdentifier) {
-            $userToUpdate = $this->userService->retrieveUserByIdentifier(Uuid::fromString($userIdentifier));
+            $userToUpdate = $this->userService->findUserByIdentifier(Uuid::fromString($userIdentifier));
             $isLockoutRisk = $currentUser->getIdentifier()->equals($userToUpdate->getIdentifier()) &&
                 $userToUpdate->isPlatformAdministrator();
 

@@ -19,7 +19,7 @@ class CalendarService
 
     /**
      * @return \Microsoft\Graph\Generated\Models\Event[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function findEventsForCalendarIdentifierAndBetweenDates(
         User $user, string $calendarIdentifier, int $fromDate, int $toDate
@@ -38,7 +38,7 @@ class CalendarService
     /**
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchCalendarException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function getCalendarByIdentifier(string $calendarIdentifier, User $user): Calendar
     {
@@ -49,7 +49,7 @@ class CalendarService
 
     /**
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Architecture\Exception\NoSuchUserException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     protected function getUserIdentifier(User $user): ?string
     {
@@ -58,7 +58,7 @@ class CalendarService
 
     /**
      * @return \Microsoft\Graph\Generated\Models\Calendar[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function listOwnedCalendars(User $user): array
     {

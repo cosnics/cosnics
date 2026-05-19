@@ -55,7 +55,6 @@ readonly class UserService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function countUsers(?ConditionInterface $condition = null): int
@@ -145,11 +144,13 @@ readonly class UserService
         }
 
         if (!$this->isUsernameAvailable($username)) {
-            throw new EntityAlreadyExistsException(User::class, $requiredParameters);
+            throw new EntityAlreadyExistsException(entityClassname: User::class, criteria: ['username' => $username]);
         }
 
         if ($officialCode && !$this->isOfficialCodeAvailable($officialCode)) {
-            throw new EntityAlreadyExistsException(User::class, $requiredParameters);
+            throw new EntityAlreadyExistsException(
+                entityClassname: User::class, criteria: ['emailAddress' => $emailAddress]
+            );
         }
 
         $user = new User();
@@ -192,10 +193,81 @@ readonly class UserService
         return $this->hashingUtilities->hashString($this->securityKey . $user->getEmail());
     }
 
+    /**
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
+     */
+    public function findUserByEmail(string $email): ?User
+    {
+        return $this->userRepository->findUserByEmail($email);
+    }
+
+    /**
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
+     */
+    public function findUserByIdentifier(Uuid $identifier): User
+    {
+        return $this->userRepository->findUserByIdentifier($identifier);
+    }
+
+    /**
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
+     */
+    public function findUserByOfficialCode(string $officialCode): ?User
+    {
+        return $this->userRepository->findUserByOfficialCode($officialCode);
+    }
+
+    /**
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
+     */
+    public function findUserBySecurityToken(string $securityToken): ?User
+    {
+        return $this->userRepository->findUserBySecurityToken($securityToken);
+    }
+
+    /**
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
+     */
+    public function findUserByUsername(string $username): ?User
+    {
+        return $this->userRepository->findUserByUsername($username);
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
+     */
+    public function findUserByUsernameOrEmail(string $usernameOrEmail): ?User
+    {
+        return $this->userRepository->findUserByUsernameOrEmail($usernameOrEmail);
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\Entity\User>
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     */
+    public function findUsers(
+        ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
+    ): ArrayCollection
+    {
+        return $this->userRepository->findUsers($condition, $count, $offset, $orderBy);
+    }
+
+    /**
+     * @param string[] $userIdentifiers
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\Entity\User>
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     */
+    public function findUsersByIdentifiers(array $userIdentifiers = []): ArrayCollection
+    {
+        return $this->userRepository->findUsersByIdentifiers($userIdentifiers);
+    }
+
     public function isOfficialCodeAvailable(string $officialCode): bool
     {
         try {
-            $this->retrieveUserByOfficialCode($officialCode);
+            $this->findUserByOfficialCode($officialCode);
 
             return false;
         }
@@ -210,7 +282,7 @@ readonly class UserService
     public function isUsernameAvailable(string $username): bool
     {
         try {
-            $this->retrieveUserByUsername($username);
+            $this->findUserByUsername($username);
 
             return false;
         }
@@ -253,77 +325,6 @@ readonly class UserService
         $this->eventDispatcher->dispatch(new AfterUserRegistrationEvent($user));
 
         return $user;
-    }
-
-    /**
-     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
-     */
-    public function retrieveUserByEmail(string $email): ?User
-    {
-        return $this->userRepository->findUserByEmail($email);
-    }
-
-    /**
-     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
-     */
-    public function retrieveUserByIdentifier(Uuid $identifier): User
-    {
-        return $this->userRepository->findUserByIdentifier($identifier);
-    }
-
-    /**
-     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
-     */
-    public function retrieveUserByOfficialCode(string $officialCode): ?User
-    {
-        return $this->userRepository->findUserByOfficialCode($officialCode);
-    }
-
-    /**
-     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
-     */
-    public function retrieveUserBySecurityToken(string $securityToken): ?User
-    {
-        return $this->userRepository->findUserBySecurityToken($securityToken);
-    }
-
-    /**
-     * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
-     */
-    public function retrieveUserByUsername(string $username): ?User
-    {
-        return $this->userRepository->findUserByUsername($username);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
-     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
-     */
-    public function retrieveUserByUsernameOrEmail(string $usernameOrEmail): ?User
-    {
-        return $this->userRepository->findUserByUsernameOrEmail($usernameOrEmail);
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\Entity\User>
-     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
-     */
-    public function retrieveUsers(
-        ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null, OrderBy $orderBy = new OrderBy()
-    ): ArrayCollection
-    {
-        return $this->userRepository->retrieveUsers($condition, $count, $offset, $orderBy);
-    }
-
-    /**
-     * @param string[] $userIdentifiers
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\Entity\User>
-     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
-     */
-    public function retrieveUsersByIdentifiers(array $userIdentifiers = []): ArrayCollection
-    {
-        return $this->userRepository->retrieveUsersByIdentifiers($userIdentifiers);
     }
 
     /**

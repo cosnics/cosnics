@@ -27,16 +27,16 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 abstract class AbstractUserFormType extends AbstractType
 {
-    public const string CATEGORY_ACCOUNT = 'category_account';
-    public const string CATEGORY_MAIL = 'category_mail';
+    public const string CATEGORY_ACCOUNT = 'categoryAccount';
+    public const string CATEGORY_MAIL = 'categoryMail';
     public const string CATEGORY_SECURITY = 'category_security';
     public const string PROPERTY_LOCKOUT = 'lockout';
-    public const string PROPERTY_PASSWORD_CONFIRM = 'confirm_password';
-    public const string PROPERTY_PASSWORD_CURRENT = 'current_password';
-    public const string PROPERTY_PASSWORD_GENERATE = 'generate_password';
-    public const string PROPERTY_PICTURE_CURRENT = 'current_picture';
-    public const string PROPERTY_PICTURE_REMOVE = 'remove_picture';
-    public const string PROPERTY_SEND_MAIL = 'send_mail';
+    public const string PROPERTY_PASSWORD_CONFIRM = 'confirmPassword';
+    public const string PROPERTY_PASSWORD_CURRENT = 'currentPassword';
+    public const string PROPERTY_PASSWORD_GENERATE = 'generatePassword';
+    public const string PROPERTY_PICTURE_CURRENT = 'currentPicture';
+    public const string PROPERTY_PICTURE_REMOVE = 'removePicture';
+    public const string PROPERTY_SEND_MAIL = 'sendMail';
 
     /**
      * @param array<bool> $userRights
@@ -173,98 +173,71 @@ abstract class AbstractUserFormType extends AbstractType
         // Firstname
         $givenNameLabel = $this->translator->trans('GivenName', [], Manager::CONTEXT);
 
-        if ($this->hasUserRight($executingUser, 'cosnics.application.user.rights.changeGivenName')) {
-            $builder->add(
-                $this->formTypeBuilder->createText(
-                    builder: $builder, name: User::PROPERTY_GIVEN_NAME, label: $givenNameLabel
+        $builder->add(
+            $this->formTypeBuilder->createText(
+                builder: $builder, name: User::PROPERTY_GIVEN_NAME, label: $givenNameLabel, options: [
+                'disabled' => !$this->hasUserRight(
+                    $executingUser, 'cosnics.application.user.rights.changeGivenName'
                 )
-            );
-        }
-        else {
-            $builder->add(
-                $this->formTypeBuilder->createVisualContent(
-                    builder: $builder, name: User::PROPERTY_GIVEN_NAME, label: $givenNameLabel
-                )
-            );
-        }
+            ]
+            )
+        );
 
         // Lastname
         $surnameLabel = $this->translator->trans('Surname', [], Manager::CONTEXT);
 
-        if ($this->hasUserRight($executingUser, 'cosnics.application.user.rights.changeSurname')) {
-            $builder->add(
-                $this->formTypeBuilder->createText(
-                    builder: $builder, name: User::PROPERTY_SURNAME, label: $surnameLabel
+        $builder->add(
+            $this->formTypeBuilder->createText(
+                builder: $builder, name: User::PROPERTY_SURNAME, label: $surnameLabel, options: [
+                'disabled' => !$this->hasUserRight(
+                    $executingUser, 'cosnics.application.user.rights.changeSurname'
                 )
-            );
-        }
-        else {
-            $builder->add(
-                $this->formTypeBuilder->createVisualContent(
-                    builder: $builder, name: User::PROPERTY_SURNAME, label: $surnameLabel
-                )
-            );
-        }
+            ]
+            )
+        );
 
         // Email
         $emailLabel = $this->translator->trans('Email', [], Manager::CONTEXT);
 
-        if ($this->hasUserRight($executingUser, 'cosnics.application.user.rights.changeEmail')) {
-            $builder->add(
-                $this->formTypeBuilder->createEmail(
-                    builder: $builder, name: User::PROPERTY_EMAIL, label: $emailLabel,
-                    required: $this->getUserRequirement(
-                        'cosnics.application.user.require.email',
-                    ), constraints: [new Assert\Email()]
+        $builder->add(
+            $this->formTypeBuilder->createEmail(
+                builder: $builder, name: User::PROPERTY_EMAIL, label: $emailLabel, required: $this->getUserRequirement(
+                'cosnics.application.user.require.email',
+            ), constraints: [new Assert\Email()], options: [
+                'disabled' => !$this->hasUserRight(
+                    $executingUser, 'cosnics.application.user.rights.changeEmail'
                 )
-            );
-        }
-        else {
-            $builder->add(
-                $this->formTypeBuilder->createVisualContent(
-                    builder: $builder, name: User::PROPERTY_EMAIL, label: $emailLabel
-                )
-            );
-        }
+            ]
+            )
+        );
 
         // Username
         $usernameLabel = $this->translator->trans('Username', [], Manager::CONTEXT);
 
-        if ($this->isUsernameChangeable($executingUser, $user)) {
-            $constraint = new Assert\Callback(callback: [$this, 'validateUserName'], payload: ['user' => $user]);
+        $constraint = new Assert\Callback(callback: [$this, 'validateUserName'], payload: ['user' => $user]);
 
-            $builder->add(
-                $this->formTypeBuilder->createText(
-                    builder: $builder, name: User::PROPERTY_USERNAME, label: $usernameLabel, constraints: [$constraint]
-                )
-            );
-        }
-        else {
-            $builder->add(
-                $this->formTypeBuilder->createVisualContent(
-                    builder: $builder, name: User::PROPERTY_USERNAME, label: $usernameLabel
-                )
-            );
-        }
+        $builder->add(
+            $this->formTypeBuilder->createText(
+                builder: $builder, name: User::PROPERTY_USERNAME, label: $usernameLabel, constraints: [$constraint],
+                options: [
+                    'disabled' => !$this->isUsernameChangeable($executingUser, $user)
+                ]
+            )
+        );
 
         // Official Code
         $officialCodeLabel = $this->translator->trans('OfficialCode', [], Manager::CONTEXT);
 
-        if ($this->hasUserRight($executingUser, 'cosnics.application.user.rights.changeOfficialCode')) {
-            $builder->add(
-                $this->formTypeBuilder->createText(
-                    builder: $builder, name: User::PROPERTY_OFFICIAL_CODE, label: $officialCodeLabel,
-                    required: $this->getUserRequirement('cosnics.application.user.require.officialCode')
+        $builder->add(
+            $this->formTypeBuilder->createText(
+                builder: $builder, name: User::PROPERTY_OFFICIAL_CODE, label: $officialCodeLabel,
+                required: $this->getUserRequirement('cosnics.application.user.require.officialCode'), options: [
+                'disabled' => !$this->hasUserRight(
+                    $executingUser, 'cosnics.application.user.rights.changeOfficialCode'
                 )
-            );
-        }
-        else {
-            $builder->add(
-                $this->formTypeBuilder->createVisualContent(
-                    builder: $builder, name: User::PROPERTY_OFFICIAL_CODE, label: $officialCodeLabel
-                )
-            );
-        }
+            ]
+            )
+        );
     }
 
     public function buildPictureForm(FormBuilderInterface $builder, array $options): void
@@ -325,9 +298,9 @@ abstract class AbstractUserFormType extends AbstractType
 
         if ($addTokenField) {
             $builder->add(
-                $this->formTypeBuilder->createVisualContent(
+                $this->formTypeBuilder->createText(
                     $builder, User::PROPERTY_SECURITY_TOKEN,
-                    $this->translator->trans('SecurityToken', [], Manager::CONTEXT)
+                    $this->translator->trans('SecurityToken', [], Manager::CONTEXT), options: ['disabled' => true]
                 )
             );
         }
@@ -469,7 +442,7 @@ abstract class AbstractUserFormType extends AbstractType
         $user = $payload['user'];
 
         if (($user instanceof User && !$this->userService->isUsernameAvailableForUser($user, $value)) ||
-            !$this->userService->isUsernameAvailable($value)) {
+            (!$user instanceof User && !$this->userService->isUsernameAvailable($value))) {
             $context->buildViolation('UsernameInvalid')->atPath(User::PROPERTY_USERNAME)->addViolation();
         }
     }

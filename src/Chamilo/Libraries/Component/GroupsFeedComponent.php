@@ -145,6 +145,7 @@ abstract class GroupsFeedComponent extends Manager
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\Entity\User>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     private function retrieveUsers(): ArrayCollection
     {
@@ -176,7 +177,7 @@ abstract class GroupsFeedComponent extends Manager
 
         $this->userCount = $this->userService->countUsers($condition);
 
-        return $this->userService->retrieveUsers(
+        return $this->userService->findUsers(
             $condition, $this->getOffset(), 100, new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_SURNAME)),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME))

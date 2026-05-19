@@ -32,8 +32,8 @@ class CalendarService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function getEventsForCalendarIdentifierAndBetweenDates(
         User $user, string $calendarIdentifier, ?int $fromDate = null, ?int $toDate = null
@@ -55,7 +55,7 @@ class CalendarService
      *
      * @return \Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar[]
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function getOwnedCalendars(User $user): array
     {
@@ -77,7 +77,7 @@ class CalendarService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function login(User $user, $authenticationCode = null): void
     {
@@ -85,7 +85,7 @@ class CalendarService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      * @throws \Google_Auth_Exception
      */
     public function logout(User $user): void

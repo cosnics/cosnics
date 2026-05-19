@@ -64,7 +64,7 @@ class MultiPasswordResetComponent extends Manager
             $failures = 0;
 
             foreach ($userIdentifiers as $userIdentifier) {
-                $userToReset = $this->userService->retrieveUserByIdentifier($userIdentifier);
+                $userToReset = $this->userService->findUserByIdentifier($userIdentifier);
 
                 try {
                     $this->userService->createNewPasswordForUser($userToReset, $currentUser);

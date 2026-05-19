@@ -42,7 +42,7 @@ class DeleteComponent extends Manager
             $failures = 0;
 
             foreach ($userIdentifiers as $userIdentifier) {
-                $userToDelete = $this->userService->retrieveUserByIdentifier($userIdentifier);
+                $userToDelete = $this->userService->findUserByIdentifier($userIdentifier);
 
                 try {
                     $this->userService->deleteUser($userToDelete, $currentUser);

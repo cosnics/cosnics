@@ -31,8 +31,6 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
     /**
      * @param string[] $casUserAttributes
      *
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException
      */
     protected function registerUser(string $casUser, array $casUserAttributes = []): User
@@ -61,11 +59,10 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\User\Architecture\Exception\NoSuchUserException
      */
     protected function retrieveUserByCasUserIdentifier(string $userIdentifier): ?User
     {
-        return $this->userService->retrieveUserByUsername($userIdentifier);
+        return $this->userService->findUserByUsername($userIdentifier);
     }
 }

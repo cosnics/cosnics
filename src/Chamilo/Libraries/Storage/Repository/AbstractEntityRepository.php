@@ -114,7 +114,8 @@ abstract class AbstractEntityRepository extends EntityRepository
      * @return \Doctrine\Common\Collections\ArrayCollection<tEntityType|null|object>
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
-    public function findEntities(string $entityType, StorageParameters $parameters = new StorageParameters()): mixed
+    public function findEntities(string $entityType, StorageParameters $parameters = new StorageParameters()
+    ): ArrayCollection
     {
         $this->applyDataClassPropertiesToParameters($entityType, $parameters);
 
@@ -127,11 +128,11 @@ abstract class AbstractEntityRepository extends EntityRepository
      * @template tEntityType
      * @param class-string<tEntityType> $entityType
      *
-     * @return tEntityType|null|object
+     * @return tEntityType
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
-    public function findEntity(string $entityType, StorageParameters $parameters = new StorageParameters()): mixed
+    public function findEntity(string $entityType, StorageParameters $parameters = new StorageParameters())
     {
         $this->applyDataClassPropertiesToParameters($entityType, $parameters);
         $parameters->returnSingleResult();
@@ -150,10 +151,10 @@ abstract class AbstractEntityRepository extends EntityRepository
      * @template tEntityType
      * @param class-string<tEntityType> $entityType
      *
-     * @return tEntityType|null|object
+     * @return tEntityType
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException
      */
-    public function findEntityByIdentifier(string $entityType, Uuid $identifier): ?object
+    public function findEntityByIdentifier(string $entityType, Uuid $identifier)
     {
         $entity = $this->find($identifier);
 
@@ -200,7 +201,8 @@ abstract class AbstractEntityRepository extends EntityRepository
         }
         catch (UniqueConstraintViolationException $exception) {
             throw new EntityAlreadyExistsException(
-                $entity::class, $entity, $exception->getMessage(), $exception->getCode(), $exception
+                entityClassname: $entity::class, entity: $entity, message: $exception->getMessage(),
+                code: $exception->getCode(), previous: $exception
             );
         }
     }

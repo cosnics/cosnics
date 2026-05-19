@@ -102,7 +102,8 @@ class UsersFeedComponent extends Manager
         $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
-            'user_' . $user->getIdentifier()->toString(), $glyph->getClassNamesString(), $user->getFullName(), $user->getOfficialCode()
+            'user_' . $user->getIdentifier()->toString(), $glyph->getClassNamesString(), $user->getFullName(),
+            $user->getOfficialCode()
         );
     }
 
@@ -138,7 +139,7 @@ class UsersFeedComponent extends Manager
 
     /**
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\Entity\User>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function retrieveUsers(): ArrayCollection
     {
@@ -146,7 +147,7 @@ class UsersFeedComponent extends Manager
 
         $this->userCount = $this->userService->countUsers($condition);
 
-        return $this->userService->retrieveUsers(
+        return $this->userService->findUsers(
             $condition, $this->getOffset(), 100, new OrderBy([
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_SURNAME)),
                 new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME)),

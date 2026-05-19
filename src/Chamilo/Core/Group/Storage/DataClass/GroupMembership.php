@@ -4,6 +4,7 @@ namespace Chamilo\Core\Group\Storage\DataClass;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Interface\UuidDataClassInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Group\Storage\DataClass
@@ -16,6 +17,11 @@ class GroupMembership extends DataClass implements UuidDataClassInterface
     public const string PROPERTY_GROUP_ID = 'group_id';
     public const string PROPERTY_USER_ID = 'user_id';
 
+    public static function getAlias(): string
+    {
+        return 't_grp_mbs';
+    }
+
     /**
      * @return string[]
      */
@@ -26,7 +32,24 @@ class GroupMembership extends DataClass implements UuidDataClassInterface
 
     public function getGroupId(): string
     {
-        return $this->getDefaultProperty(self::PROPERTY_GROUP_ID);
+        $identifier = $this->getDefaultProperty(self::PROPERTY_GROUP_ID);
+
+        if ($identifier) {
+            $identifier = Uuid::fromString($identifier)->toString();
+        }
+
+        return $identifier;
+    }
+
+    public function getId(): ?string
+    {
+        $identifier = $this->getDefaultProperty(self::PROPERTY_ID);
+
+        if ($identifier) {
+            $identifier = Uuid::fromString($identifier)->toString();
+        }
+
+        return $identifier;
     }
 
     public static function getStorageUnitName(): string
@@ -34,14 +57,15 @@ class GroupMembership extends DataClass implements UuidDataClassInterface
         return 'group_group_rel_user';
     }
 
-    public static function getAlias(): string
-    {
-        return 't_grp_mbs';
-    }
-
     public function getUserId(): string
     {
-        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
+        $identifier = $this->getDefaultProperty(self::PROPERTY_USER_ID);
+
+        if ($identifier) {
+            $identifier = Uuid::fromString($identifier)->toString();
+        }
+
+        return $identifier;
     }
 
     public function setGroupId($groupIdentifier): static

@@ -100,7 +100,7 @@ class BrowseComponent extends Manager
 
         if ($asAdmin) {
             try {
-                $user = $this->userService->retrieveUserByIdentifier($asAdmin);
+                $user = $this->userService->findUserByIdentifier($asAdmin);
 
                 if (!$user->isPlatformAdministrator()) {
                     throw new NotAllowedException();

@@ -28,7 +28,7 @@ readonly class CalendarExtensionDataProvider implements CalendarExtensionDataPro
      * @return \Chamilo\Libraries\Calendar\Architecture\Domain\Event[]
      * @throws \DateInvalidTimeZoneException
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     private function getCalendarEvents(User $user, string $calendarId, int $fromDate, int $toDate): array
     {
@@ -51,6 +51,7 @@ readonly class CalendarExtensionDataProvider implements CalendarExtensionDataPro
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     private function getCalendarIdentifiers(User $user): array
     {
@@ -80,7 +81,7 @@ readonly class CalendarExtensionDataProvider implements CalendarExtensionDataPro
 
     /**
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      * @see \Chamilo\Application\Calendar\Architecture\Interface\CalendarExtensionDataProviderInterface::getCalendars()
      */
     public function getCalendars(User $user): array
@@ -97,6 +98,7 @@ readonly class CalendarExtensionDataProvider implements CalendarExtensionDataPro
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \DateInvalidTimeZoneException
      * @throws \Symfony\Component\Cache\Exception\CacheException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function getEvents(User $user, $fromDate, $toDate): array
     {

@@ -28,6 +28,7 @@ class ButtonsFormType extends AbstractType
     {
         $resolver->setDefaults([
             'buttons' => [],
+            'mapped' => false
         ]);
 
         $resolver->setNormalizer('buttons', static function (Options $options, $buttons) {
@@ -36,10 +37,10 @@ class ButtonsFormType extends AbstractType
             }
 
             foreach ($buttons as $button) {
-                if ($button->type instanceof ResolvedFormType) {
+                if ($button->getType() instanceof ResolvedFormType) {
                     $validTypes = [SubmitType::class, ResetType::class, ButtonType::class, VisualButtonFormType::class];
 
-                    if (!in_array(get_class($button->type->getInnerType()), $validTypes)) {
+                    if (!in_array(get_class($button->getType()->getInnerType()), $validTypes)) {
                         throw new LogicException(
                             'Buttons should be either a ButtonTypeInterface or a SubmitButtonTypeInterface.'
                         );

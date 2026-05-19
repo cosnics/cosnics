@@ -27,7 +27,7 @@ class OwnedCalendarsCacheService
     /**
      * @return \Chamilo\Application\Calendar\Architecture\Domain\AvailableCalendar[]
      * @throws \Symfony\Component\Cache\Exception\CacheException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function getOwnedCalendars(?User $user = null): array
     {

@@ -62,6 +62,6 @@ class DownloadUserPictureComponent extends Manager
             throw new NoSuchParameterException(Manager::PARAM_USER_ID);
         }
 
-        return $this->userService->retrieveUserByIdentifier(Uuid::fromString($userIdentifier));
+        return $this->userService->findUserByIdentifier(Uuid::fromString($userIdentifier));
     }
 }
