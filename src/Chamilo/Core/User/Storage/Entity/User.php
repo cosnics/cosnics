@@ -5,7 +5,6 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Uid\UuidV7;
 
 /**
  * @package Chamilo\Core\User\Storage\Entity
@@ -25,6 +24,7 @@ class User implements DoctrineEntityInterface
     public const string PROPERTY_CREATOR_IDENTIFIER = 'creatorIdentifier';
     public const string PROPERTY_EMAIL = 'email';
     public const string PROPERTY_GIVEN_NAME = 'givenName';
+    public const string PROPERTY_IDENTIFIER = 'identifier';
     public const string PROPERTY_OFFICIAL_CODE = 'officialCode';
     public const string PROPERTY_PASSWORD = 'password';
     public const string PROPERTY_PICTURE_URI = 'pictureUri';
@@ -80,11 +80,6 @@ class User implements DoctrineEntityInterface
 
     #[ORM\Column(name: 'username', type: 'string')]
     protected string $username;
-
-    public function __construct()
-    {
-        $this->setIdentifier(new UuidV7());
-    }
 
     public function getActive(): bool
     {

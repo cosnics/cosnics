@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Group\Architecture\EventDispatcher\Event;
 
 use Chamilo\Core\User\Storage\Entity\User;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
@@ -11,7 +12,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 abstract class AbstractGroupMembershipEvent extends Event
 {
     public function __construct(
-        public string $groupIdentifier, public string $userIdentifier, public ?User $executingUser = null
+        public Uuid $groupIdentifier, public Uuid $userIdentifier, public ?User $executingUser = null
     )
     {
     }

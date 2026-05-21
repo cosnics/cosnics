@@ -10,5 +10,4 @@ enum JoinTypeEnum: int
 {
     case LEFT = 2;
     case NORMAL = 1;
-    case RIGHT = 3;
 }

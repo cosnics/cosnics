@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Storage\Repository;
 
+use Chamilo\Core\Group\Storage\Entity\GroupMembership;
 use Chamilo\Libraries\Storage\Architecture\Domain\Enum\FunctionTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertiesConditionVariable;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
@@ -46,6 +48,14 @@ abstract class AbstractEntityRepository extends EntityRepository
         }
     }
 
+    protected function getIdentityConditionVariable(string $entityClassName, string $propertyName): FunctionConditionVariable
+    {
+        return new FunctionConditionVariable(
+            FunctionTypeEnum::IDENTITY,
+            new PropertyConditionVariable($entityClassName, $propertyName)
+        );
+    }
+
     /**
      * @param class-string<\Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface> $entityType
      *
@@ -58,9 +68,7 @@ abstract class AbstractEntityRepository extends EntityRepository
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
         $queryBuilder->from($entityType, $alias);
-        $this->queryBuilderConfigurator->applyParameters(
-            $queryBuilder, $parameters, $entityType
-        );
+        $this->queryBuilderConfigurator->applyParameters($queryBuilder, $parameters);
 
         return $queryBuilder;
     }

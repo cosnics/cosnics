@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Core\Group\Architecture\EventDispatcher\Event;
 
-use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\Entity\Group;
 use Chamilo\Core\User\Storage\Entity\User;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Group\Architecture\EventDispatcher\Event
@@ -11,7 +12,7 @@ use Chamilo\Core\User\Storage\Entity\User;
 class AfterGroupMoveEvent extends AbstractGroupEvent
 {
     public function __construct(
-        Group $group, public string $oldParentGroupIdentifier, public string $newParentGroupIdentifier,
+        Group $group, public Uuid $oldParentGroupIdentifier, public Uuid $newParentGroupIdentifier,
         ?User $executingUser = null
     )
     {

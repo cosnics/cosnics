@@ -19,6 +19,7 @@ use Symfony\Component\Uid\Uuid;
 class Group implements DoctrineEntityInterface
 {
     public const string CONTEXT = Manager::CONTEXT;
+    public const string PROPERTY_ID = 'identifier';
     public const string PROPERTY_CODE = 'code';
     public const string PROPERTY_DESCRIPTION = 'description';
     public const string PROPERTY_LEFT_VALUE = 'leftValue';

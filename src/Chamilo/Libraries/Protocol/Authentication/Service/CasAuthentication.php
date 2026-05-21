@@ -5,6 +5,7 @@ use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAuthenticatedException;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Interface\AuthenticationInterface;
 use Chamilo\Libraries\Service\Utilities\StringUtilities;
+use Symfony\Component\Uid\UuidV7;
 use Throwable;
 
 /**
@@ -37,6 +38,7 @@ class CasAuthentication extends AbstractCasAuthentication implements Authenticat
     {
         $user = new User();
 
+        $user->setIdentifier(new UuidV7());
         $user->setUsername($casUser);
         $user->setPassword('PLACEHOLDER');
         $user->setAuthenticationSource(static::class);

@@ -50,6 +50,9 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
             case FunctionTypeEnum::AVERAGE :
                 $strings[] = 'AVG';
                 break;
+            case FunctionTypeEnum::IDENTITY :
+                $strings[] = 'IDENTITY';
+                break;
         }
 
         if ($functionConditionVariable->getFunction() !== FunctionTypeEnum::DISTINCT) {

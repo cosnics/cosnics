@@ -2,6 +2,7 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Chamilo\Libraries\Protocol\Console\Architecture\Domain\ClearCacheCommand;
+use Chamilo\Libraries\Protocol\Console\Architecture\Domain\DoctrineProxyCacheCommand;
 use Chamilo\Libraries\Protocol\Console\Architecture\Domain\GenerateResourcesCommand;
 use Chamilo\Libraries\Protocol\Console\Architecture\Domain\PreLoadCacheCommand;
 use Chamilo\Libraries\Protocol\Console\Service\ChamiloConnectionProvider;
@@ -26,6 +27,7 @@ return static function (ContainerConfigurator $container) {
     $services->set(PreLoadCacheCommand::class)->tag(Command::class);
     $services->set(ClearCacheCommand::class)->tag(Command::class);
     $services->set(GenerateResourcesCommand::class)->tag(Command::class);
+    $services->set(DoctrineProxyCacheCommand::class)->tag(Command::class);
 
     $services->set(ChamiloConnectionProvider::class);
 

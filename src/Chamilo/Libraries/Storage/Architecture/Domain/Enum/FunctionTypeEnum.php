@@ -14,4 +14,5 @@ enum FunctionTypeEnum: int
     case MAX = 4;
     case MIN = 3;
     case SUM = 1;
+    case IDENTITY = 7;
 }

@@ -160,6 +160,14 @@ class UserRepository extends AbstractEntityRepository
         );
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    public function getUserReference(Uuid $userIdentifier): User
+    {
+        return $this->getEntityManager()->getReference(User::class, $userIdentifier);
+    }
+
     public function removeUser(User $user): void
     {
         $this->getEntityManager()->remove($user);

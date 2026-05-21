@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Storage\Architecture\Domain\Query;
 use Chamilo\Libraries\Protocol\Security\Architecture\Interface\HashableInterface;
 use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
 use Chamilo\Libraries\Storage\Architecture\Domain\Enum\JoinTypeEnum;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 
 /**
@@ -17,61 +18,24 @@ class Join implements HashableInterface
 {
     use HashableTrait;
 
-    private ?ConditionInterface $condition;
-
-    private string $dataClassName;
-
-    private JoinTypeEnum $type;
-
+    /**
+     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $entityClassName
+     */
     public function __construct(
-        string $dataClassName, ?ConditionInterface $condition = null, JoinTypeEnum $type = JoinTypeEnum::NORMAL
+        public PropertyConditionVariable $propertyConditionVariable, public string $entityClassName,
+        public ?ConditionInterface $condition = null, public JoinTypeEnum $type = JoinTypeEnum::NORMAL
     )
     {
-        $this->dataClassName = $dataClassName;
-        $this->condition = $condition;
-        $this->type = $type;
-    }
-
-    public function getCondition(): ConditionInterface
-    {
-        return $this->condition;
-    }
-
-    public function setCondition(?ConditionInterface $condition = null): static
-    {
-        $this->condition = $condition;
-
-        return $this;
-    }
-
-    /**
-     * @return class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass>
-     */
-    public function getDataClassName(): string
-    {
-        return $this->dataClassName;
     }
 
     public function getHashParts(): array
     {
         $hashParts = [];
 
-        $hashParts[] = $this->getDataClassName();
-        $hashParts[] = $this->getCondition()->getHashParts();
-        $hashParts[] = $this->getType()->value;
+        $hashParts[] = $this->entityClassName;
+        $hashParts[] = $this->condition->getHashParts();
+        $hashParts[] = $this->type->value;
 
         return $hashParts;
-    }
-
-    public function getType(): JoinTypeEnum
-    {
-        return $this->type;
-    }
-
-    public function setType(JoinTypeEnum $type): static
-    {
-        $this->type = $type;
-
-        return $this;
     }
 }

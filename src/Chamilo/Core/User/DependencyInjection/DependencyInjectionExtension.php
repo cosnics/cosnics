@@ -58,12 +58,12 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
     {
         $loader = new YamlFileLoader(
             $container, new FileLocator(
-                $this->getSystemPathBuilder()->namespaceToFullPath('Chamilo\Core\User') . 'Resources' .
+                $this->getSystemPathBuilder()->namespaceToFullPath(Manager::CONTEXT) . 'Resources' .
                 DIRECTORY_SEPARATOR . 'Configuration'
             )
         );
 
-        $loader->load('Configuration.yaml');
+        $loader->load('configuration.yaml');
     }
 
     public function registerCompilerPasses(ContainerBuilder $container): void

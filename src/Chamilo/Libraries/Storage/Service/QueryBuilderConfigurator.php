@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
 use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
 
 /**
@@ -32,11 +33,11 @@ class QueryBuilderConfigurator
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function applyParameters(
-        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, StorageParameters $parameters, string $dataClassStorageUnitName
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, StorageParameters $parameters
     ): void
     {
         $this->processCondition($queryBuilder, $parameters->getCondition());
-        $this->processJoins($queryBuilder, $dataClassStorageUnitName, $parameters->getJoins());
+        $this->processJoins($queryBuilder, $parameters->getJoins());
         $this->processRetrieveProperties($queryBuilder, $parameters->getRetrieveProperties());
         $this->processOrderBy($queryBuilder, $parameters->getOrderBy());
         $this->processGroupBy($queryBuilder, $parameters->getGroupBy());
@@ -104,35 +105,32 @@ class QueryBuilderConfigurator
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $dataClassName
+     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface> $entityClassName
      *
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processJoins(
-        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, string $dataClassName, Joins $joins = new Joins()
+        DBALQueryBuilder|ORMQueryBuilder $queryBuilder, Joins $joins = new Joins()
     ): void
     {
         foreach ($joins as $join) {
-            $joinCondition = $this->translateCondition($queryBuilder, $join->getCondition());
+            if($join->condition instanceof ConditionInterface){
+                $joinCondition = $this->translateCondition($queryBuilder, $join->condition);
+            }
 
-            /**
-             * @var class-string<\Chamilo\Libraries\Storage\Architecture\Domain\DataClass> $joinDataClassName
-             */
-            $joinDataClassName = $join->getDataClassName();
-            $joinDataClassStorageUnitName = $joinDataClassName::getStorageUnitName();
+            else{
+                $joinCondition = null;
+            }
+            $joinAlias = $join->entityClassName::getAlias();
+            $propertyConditionVariable =
+                $this->translateConditionVariable($queryBuilder, $join->propertyConditionVariable);
 
-            $fromAlias = $dataClassName::getAlias();
-            $joinAlias = $joinDataClassName::getAlias();
-
-            switch ($join->getType()) {
+            switch ($join->type) {
                 case JoinTypeEnum::NORMAL :
-                    $queryBuilder->join($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
-                    break;
-                case JoinTypeEnum::RIGHT :
-                    $queryBuilder->rightJoin($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
+                    $queryBuilder->join($propertyConditionVariable, $joinAlias, Join::ON, $joinCondition);
                     break;
                 case JoinTypeEnum::LEFT :
-                    $queryBuilder->leftJoin($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
+                    $queryBuilder->leftJoin($propertyConditionVariable, $joinAlias, Join::ON, $joinCondition);
                     break;
             }
         }

@@ -48,9 +48,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         $queryBuilder = $this->connection->createQueryBuilder();
 
         $queryBuilder->from($dataClassName::getStorageUnitName(), $dataClassName::getAlias());
-        $this->queryBuilderConfigurator->applyParameters(
-            $queryBuilder, $parameters, $dataClassName
-        );
+        $this->queryBuilderConfigurator->applyParameters($queryBuilder, $parameters);
 
         return $queryBuilder;
     }

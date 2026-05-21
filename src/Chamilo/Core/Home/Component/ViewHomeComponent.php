@@ -14,6 +14,7 @@ use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Home\Component
@@ -52,6 +53,8 @@ class ViewHomeComponent extends Manager implements NoAuthenticationSupportInterf
          * -> Mapping of usernames / user principals
          */
         $this->authenticationValidator->validate();
+
+        $this->groupMembershipEntityRepository->findGroupMembershipUserIdentifiersByGroupIdentifiers([Uuid::fromString('019df6e6-5100-7db4-9be1-6e958bc70a24')->toBinary()]);
 
         $html = [];
 

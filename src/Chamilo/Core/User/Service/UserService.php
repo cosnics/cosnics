@@ -33,6 +33,7 @@ use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 use Throwable;
 
 /**
@@ -155,6 +156,7 @@ readonly class UserService
 
         $user = new User();
 
+        $user->setIdentifier(new UuidV7());
         $user->setGivenName($givenName);
         $user->setSurname($surname);
         $user->setUsername($username);

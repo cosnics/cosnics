@@ -18,8 +18,10 @@ use Symfony\Component\Uid\Uuid;
 class GroupMembership implements DoctrineEntityInterface
 {
     public const string CONTEXT = Manager::CONTEXT;
-    public const string PROPERTY_GROUP_ID = 'group_id';
-    public const string PROPERTY_USER_ID = 'user_id';
+    public const string PROPERTY_GROUP_ID = 'groupIdentifier';
+    public const string PROPERTY_USER_ID = 'userIdentifier';
+    public const string PROPERTY_GROUP = 'group';
+    public const string PROPERTY_USER = 'user';
 
     #[ORM\ManyToOne(targetEntity: Group::class)]
     #[ORM\JoinColumn(name: 'group_id', nullable: false)]
@@ -51,12 +53,24 @@ class GroupMembership implements DoctrineEntityInterface
         return $this;
     }
 
+    public function getIdentifier(): Uuid
+    {
+        return $this->identifier;
+    }
+
+    public function setIdentifier(Uuid $identifier): GroupMembership
+    {
+        $this->identifier = $identifier;
+
+        return $this;
+    }
+
     public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser($user): static
+    public function setUser(User $user): static
     {
         $this->user = $user;
 
