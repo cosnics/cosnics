@@ -8,7 +8,6 @@ use Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException;
 use Chamilo\Core\Group\Storage\Entity\Group;
 use Chamilo\Core\Group\Storage\Entity\GroupMembership;
 use Chamilo\Core\Group\Storage\Repository\GroupEntityRepository;
-use Chamilo\Core\Group\Storage\Repository\GroupMembershipEntityRepository;
 use Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository;
 use Chamilo\Core\User\Architecture\Exception\NoSuchUserException;
 use Chamilo\Core\User\Service\UserService;
@@ -39,10 +38,9 @@ class GroupMembershipService
     protected array $groupUsersCount = [];
 
     public function __construct(
-        protected readonly GroupMembershipRepository $groupMembershipRepository,
         protected readonly EventDispatcherInterface $eventDispatcher, protected readonly UserService $userService,
         protected readonly GroupsTreeTraverser $groupsTreeTraverser,
-        protected readonly GroupMembershipEntityRepository $groupMembershipEntityRepository,
+        protected readonly GroupMembershipRepository $groupMembershipRepository,
         protected readonly GroupEntityRepository $groupEntityRepository,
         protected readonly UserRepository $userRepository
     )
@@ -53,7 +51,7 @@ class GroupMembershipService
         Uuid $groupIdentifier, ?ConditionInterface $condition = null
     ): int
     {
-        return $this->groupMembershipEntityRepository->countSubscribedUsersByGroupIdentifier(
+        return $this->groupMembershipRepository->countGroupMembershipsByGroupIdentifier(
             $groupIdentifier, $condition
         );
     }
@@ -65,7 +63,7 @@ class GroupMembershipService
         array $groupIdentifiers, ?ConditionInterface $condition = null
     ): int
     {
-        return $this->groupMembershipEntityRepository->countSubscribedUsersByGroupIdentifiers(
+        return $this->groupMembershipRepository->countGroupMembershipsByGroupIdentifiers(
             $groupIdentifiers, $condition
         );
     }
@@ -76,7 +74,7 @@ class GroupMembershipService
     public function countUsersByGroup(Group $group, bool $includeSubGroups = false, bool $recursiveSubgroups = false
     ): int
     {
-        $cacheKey = md5(serialize([$group->getId(), $includeSubGroups, $recursiveSubgroups]));
+        $cacheKey = md5(serialize([$group->getIdentifier(), $includeSubGroups, $recursiveSubgroups]));
 
         if (!array_key_exists($cacheKey, $this->groupUsersCount)) {
             if ($includeSubGroups) {
@@ -87,7 +85,7 @@ class GroupMembershipService
                 $groupIdentifiers = [];
             }
 
-            $groupIdentifiers[] = $group->getId();
+            $groupIdentifiers[] = $group->getIdentifier();
 
             $this->groupUsersCount[$cacheKey] = $this->countSubscribedUsersByGroupIdentifiers($groupIdentifiers);
         }
@@ -96,10 +94,9 @@ class GroupMembershipService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function createGroupMembershipForGroupAndUser(Group $group, User $user, ?User $executingUser = null
     ): GroupMembership
@@ -111,7 +108,7 @@ class GroupMembershipService
             $groupMembership->setUser($user);
             $groupMembership->setGroup($group);
 
-            $this->groupMembershipEntityRepository->saveGroupMembership($groupMembership);
+            $this->groupMembershipRepository->saveGroupMembership($groupMembership);
 
             $this->eventDispatcher->dispatch(
                 new AfterGroupSubscribeEvent($group->getIdentifier(), $user->getIdentifier(), $executingUser)
@@ -125,12 +122,14 @@ class GroupMembershipService
     }
 
     /**
-     * @param string[] $userIdentifiers
+     * @param \Symfony\Component\Uid\Uuid[] $userIdentifiers
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\GroupMembership>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\Entity\GroupMembership>
+     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
      */
     public function createGroupMembershipForGroupAndUserIdentifiers(
         Group $group, array $userIdentifiers, ?User $executingUser = null
@@ -140,7 +139,7 @@ class GroupMembershipService
 
         foreach ($userIdentifiers as $userIdentifier) {
             try {
-                $user = $this->userService->findUserByIdentifier(Uuid::fromString($userIdentifier));
+                $user = $this->userService->findUserByIdentifier($userIdentifier);
                 $groupMemberships->add($this->createGroupMembershipForGroupAndUser($group, $user, $executingUser));
             }
             catch (NoSuchUserException) {
@@ -152,7 +151,7 @@ class GroupMembershipService
 
     public function deleteGroupMembership(GroupMembership $groupMembership, ?User $executingUser = null): void
     {
-        $this->groupMembershipEntityRepository->removeGroupMembership($groupMembership);
+        $this->groupMembershipRepository->removeGroupMembership($groupMembership);
 
         $this->eventDispatcher->dispatch(
             new AfterGroupUnsubscribeEvent(
@@ -168,10 +167,9 @@ class GroupMembershipService
     public function deleteGroupMembershipByGroupAndUser(Group $group, User $user, ?User $executingUser = null): void
     {
         try {
-            $groupMembership =
-                $this->groupMembershipEntityRepository->findGroupMembershipByGroupIdentifierAndUserIdentifier(
-                    $group->getIdentifier(), $user->getIdentifier()
-                );
+            $groupMembership = $this->groupMembershipRepository->findGroupMembershipByGroupIdentifierAndUserIdentifier(
+                $group->getIdentifier(), $user->getIdentifier()
+            );
 
             $this->deleteGroupMembership($groupMembership, $executingUser);
         }
@@ -179,10 +177,7 @@ class GroupMembershipService
         }
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function deleteGroupMembershipByIdentifier(string $groupMembershipIdentifier, ?User $executingUser = null
+    public function deleteGroupMembershipByIdentifier(Uuid $groupMembershipIdentifier, ?User $executingUser = null
     ): void
     {
         try {
@@ -200,7 +195,7 @@ class GroupMembershipService
     public function deleteGroupMembershipsByGroup(Group $group, ?User $executingUser = null): void
     {
         $groupMemberships =
-            $this->groupMembershipEntityRepository->findGroupMembershipsByGroupIdentifier($group->getIdentifier());
+            $this->groupMembershipRepository->findGroupMembershipsByGroupIdentifier($group->getIdentifier());
 
         foreach ($groupMemberships as $groupMembership) {
             $this->deleteGroupMembership($groupMembership);
@@ -209,9 +204,6 @@ class GroupMembershipService
         $this->eventDispatcher->dispatch(new AfterGroupEmptyEvent($group, $executingUser));
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
     public function deleteGroupMembershipsByIdentifiers(array $groupMembershipIdentifiers, ?User $executingUser = null
     ): void
     {
@@ -221,11 +213,11 @@ class GroupMembershipService
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function deleteGroupMembershipsByUser(User $user, ?User $executingUser = null): void
     {
-        $groupMemberships = $this->retrieveGroupMembershipsByUserIdentifier($user->getIdentifier()->toString());
+        $groupMemberships = $this->retrieveGroupMembershipsByUserIdentifier($user->getIdentifier());
 
         foreach ($groupMemberships as $groupMembership) {
             $this->deleteGroupMembership($groupMembership, $executingUser);
@@ -233,16 +225,15 @@ class GroupMembershipService
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\GroupMembership>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\Entity\GroupMembership>
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function findGroupMembershipsByGroupIdentifier(Uuid $groupIdentifier): ArrayCollection
     {
-        return $this->groupMembershipEntityRepository->findGroupMembershipsByGroupIdentifier($groupIdentifier);
+        return $this->groupMembershipRepository->findGroupMembershipsByGroupIdentifier($groupIdentifier);
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
@@ -261,7 +252,7 @@ class GroupMembershipService
         Uuid $groupIdentifier, Uuid $userIdentifier
     ): ?GroupMembership
     {
-        return $this->groupMembershipEntityRepository->findGroupMembershipByGroupIdentifierAndUserIdentifier(
+        return $this->groupMembershipRepository->findGroupMembershipByGroupIdentifierAndUserIdentifier(
             $groupIdentifier, $userIdentifier
         );
     }
@@ -271,32 +262,23 @@ class GroupMembershipService
      */
     public function retrieveGroupMembershipByIdentifier(Uuid $groupMembershipIdentifier): ?GroupMembership
     {
-        return $this->groupMembershipEntityRepository->findGroupMembershipByIdentifier($groupMembershipIdentifier);
+        return $this->groupMembershipRepository->findGroupMembershipByIdentifier($groupMembershipIdentifier);
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\GroupMembership>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\Entity\GroupMembership>
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function retrieveGroupMembershipsByUserIdentifier(Uuid $userIdentifier): ArrayCollection
     {
-        return $this->groupMembershipEntityRepository->findGroupMembershipsByUserIdentifier($userIdentifier);
+        return $this->groupMembershipRepository->findGroupMembershipsByUserIdentifier($userIdentifier);
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @return \Symfony\Component\Uid\Uuid[]
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
-    public function retrieveGroupsByUserIdentifier(string $userIdentifier): ArrayCollection
-    {
-        return $this->groupMembershipRepository->retrieveGroupsByUserIdentifier($userIdentifier);
-    }
-
-    /**
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function retrieveSubscribedUserIdentifiersByGroupIdentifier(string $groupIdentifier): array
+    public function retrieveSubscribedUserIdentifiersByGroupIdentifier(Uuid $groupIdentifier): array
     {
         return $this->retrieveSubscribedUserIdentifiersByGroupIdentifiers([$groupIdentifier]);
     }
@@ -309,23 +291,16 @@ class GroupMembershipService
      */
     public function retrieveSubscribedUserIdentifiersByGroupIdentifiers(array $groupIdentifiers): array
     {
-        return $this->groupMembershipEntityRepository->findGroupMembershipUserIdentifiersByGroupIdentifiers(
+        return $this->groupMembershipRepository->findGroupMembershipUserIdentifiersByGroupIdentifiers(
             $groupIdentifiers
         );
     }
 
     /**
-     * @param string $groupIdentifier
-     * @param ?\Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface $condition
-     * @param ?int $offset
-     * @param ?int $count
-     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy $orderBy
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\SubscribedUser>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\Entity\GroupMembership>
      */
     public function retrieveSubscribedUsersByGroupIdentifier(
-        string $groupIdentifier, ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null,
+        Uuid $groupIdentifier, ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null,
         OrderBy $orderBy = new OrderBy()
     ): ArrayCollection
     {
@@ -334,14 +309,9 @@ class GroupMembershipService
     }
 
     /**
-     * @param string[] $groupIdentifiers
-     * @param ?\Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface $condition
-     * @param ?int $offset
-     * @param ?int $count
-     * @param \Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy $orderBy
+     * @param \Symfony\Component\Uid\Uuid[] $groupIdentifiers
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\SubscribedUser>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\Entity\GroupMembership>
      */
     public function retrieveSubscribedUsersByGroupIdentifiers(
         array $groupIdentifiers, ?ConditionInterface $condition = null, ?int $offset = null, ?int $count = null,
@@ -354,14 +324,14 @@ class GroupMembershipService
     }
 
     /**
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @return \Symfony\Component\Uid\Uuid[]
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function retrieveUserIdentifiersByGroup(
         Group $group, bool $includeSubGroups = false, bool $recursiveSubgroups = false
     ): array
     {
-        $cacheKey = md5(serialize([$group->getId(), $includeSubGroups, $recursiveSubgroups]));
+        $cacheKey = md5(serialize([$group->getIdentifier(), $includeSubGroups, $recursiveSubgroups]));
 
         if (!array_key_exists($cacheKey, $this->groupUserIdentifiers)) {
             if ($includeSubGroups) {
@@ -372,7 +342,7 @@ class GroupMembershipService
                 $groupIdentifiers = [];
             }
 
-            $groupIdentifiers[] = $group->getId();
+            $groupIdentifiers[] = $group->getIdentifier();
 
             $this->groupUserIdentifiers[$cacheKey] =
                 $this->retrieveSubscribedUserIdentifiersByGroupIdentifiers($groupIdentifiers);
@@ -384,15 +354,13 @@ class GroupMembershipService
     /**
      * @param string[] $userIdentifiers
      *
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupMembershipException
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function synchronizeGroup(Group $group, array $userIdentifiers, ?User $executingUser = null): void
     {
-        $currentUserIdentifiers = $this->retrieveSubscribedUserIdentifiersByGroupIdentifier($group->getId());
+        $currentUserIdentifiers = $this->retrieveSubscribedUserIdentifiersByGroupIdentifier($group->getIdentifier());
 
         $newUserIdentifiers = array_diff($userIdentifiers, $currentUserIdentifiers);
         $oldUserIdentifiers = array_diff($currentUserIdentifiers, $userIdentifiers);

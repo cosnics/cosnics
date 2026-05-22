@@ -15,14 +15,14 @@ class StaticConditionVariable implements ConditionVariableInterface
 {
     use HashableTrait;
 
-    private bool $quote;
+    private mixed $type;
 
     private mixed $value;
 
-    public function __construct($value, ?bool $quote = true)
+    public function __construct($value, mixed $type = null)
     {
         $this->value = $value;
-        $this->quote = $quote;
+        $this->type = $type;
     }
 
     /**
@@ -38,13 +38,13 @@ class StaticConditionVariable implements ConditionVariableInterface
         return [
             static::class,
             $this->getValue(),
-            $this->getQuote()
+            $this->getType()
         ];
     }
 
-    public function getQuote(): bool
+    public function getType(): mixed
     {
-        return $this->quote;
+        return $this->type;
     }
 
     public function getValue(): mixed

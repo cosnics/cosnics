@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Home\Component;
 
 use Chamilo\Core\Group\Service\GroupService;
-use Chamilo\Core\Group\Storage\Repository\GroupMembershipEntityRepository;
+use Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\UserInterface\HomeRenderer\HomeRenderer;
 use Chamilo\Core\User\Storage\Entity\User;
@@ -29,7 +29,7 @@ class ViewHomeComponent extends Manager implements NoAuthenticationSupportInterf
         DefaultFooterRenderer $defaultFooterRenderer, Translator $translator, UrlGenerator $urlGenerator,
         protected readonly AuthenticationValidator $authenticationValidator,
         protected readonly HomeRenderer $homeRenderer,
-        protected readonly GroupMembershipEntityRepository $groupMembershipEntityRepository,
+        protected readonly GroupMembershipRepository $groupMembershipEntityRepository,
         protected readonly GroupService $groupService
     )
     {
@@ -54,7 +54,7 @@ class ViewHomeComponent extends Manager implements NoAuthenticationSupportInterf
          */
         $this->authenticationValidator->validate();
 
-        $this->groupMembershipEntityRepository->findGroupMembershipUserIdentifiersByGroupIdentifiers([Uuid::fromString('019df6e6-5100-7db4-9be1-6e958bc70a24')->toBinary()]);
+        //$this->groupMembershipEntityRepository->findGroupMembershipUserIdentifiersByGroupIdentifiers([Uuid::fromString('019df6e6-5100-7db4-9be1-6e958bc70a24')->toBinary()]);
 
         $html = [];
 

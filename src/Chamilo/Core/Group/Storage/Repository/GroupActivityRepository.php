@@ -1,19 +1,18 @@
 <?php
 namespace Chamilo\Core\Group\Storage\Repository;
 
-use Chamilo\Core\Group\Storage\Entity\Group;
+use Chamilo\Core\Group\Storage\Entity\GroupActivity;
 use Chamilo\Libraries\Storage\Architecture\Trait\CommonEntityRepositoryTrait;
 use Chamilo\Libraries\Storage\Service\QueryBuilderConfigurator;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
-use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Group\Storage\Repository
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class GroupEntityRepository extends NestedTreeRepository
+class GroupActivityRepository extends EntityRepository
 {
     use CommonEntityRepositoryTrait;
 
@@ -25,10 +24,10 @@ class GroupEntityRepository extends NestedTreeRepository
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
-    public function getGroupReference(Uuid $groupIdentifier): Group
+    public function createGroupActivity(GroupActivity $groupActivity): void
     {
-        return $this->getEntityManager()->getReference(Group::class, $groupIdentifier);
+        $this->saveEntity($groupActivity);
     }
 }

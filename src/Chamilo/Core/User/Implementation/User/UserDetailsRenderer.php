@@ -12,6 +12,7 @@ use Chamilo\Libraries\Service\Utilities\StringUtilities;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\InlineGlyph;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\NamespaceIdentGlyph;
 use HTML_Table;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\Translation\Translator;
 
 class UserDetailsRenderer implements UserDetailsRendererInterface
@@ -78,7 +79,9 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
             ), 'th'
             );
 
-            $value = $user->getDefaultProperty($attribute);
+            $propertyAccessor = new PropertyAccessor();
+
+            $value = $propertyAccessor->getValue($user, $attribute);
 
             $value = match ($attribute) {
                 User::PROPERTY_ACTIVE, User::PROPERTY_PLATFORM_ADMINISTRATOR => $this->translator->trans(

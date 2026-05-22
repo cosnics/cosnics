@@ -4,7 +4,10 @@ namespace Chamilo\Core\Group\Storage\Entity;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -16,39 +19,57 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity(repositoryClass: 'Chamilo\Core\Group\Storage\Repository\GroupEntityRepository')]
 #[ORM\Table(name: 'group_group')]
 #[ORM\Index(name: 'id_idx', columns: ['id'])]
+#[Gedmo\Tree(type: 'nested')]
 class Group implements DoctrineEntityInterface
 {
     public const string CONTEXT = Manager::CONTEXT;
-    public const string PROPERTY_ID = 'identifier';
     public const string PROPERTY_CODE = 'code';
     public const string PROPERTY_DESCRIPTION = 'description';
+    public const string PROPERTY_IDENTIFIER = 'identifier';
     public const string PROPERTY_LEFT_VALUE = 'leftValue';
     public const string PROPERTY_NAME = 'name';
     public const string PROPERTY_PARENT_ID = 'parentIdentifier';
     public const string PROPERTY_RIGHT_VALUE = 'rightValue';
 
-    #[ORM\Column(name: 'code', type: 'string', nullable: true)]
+    #[ORM\OneToMany(targetEntity: Group::class, mappedBy: 'parent')]
+    #[ORM\OrderBy(['leftValue' => 'ASC'])]
+    protected $children;
+
+    #[ORM\Column(name: 'code', type: Types::STRING, nullable: true)]
     protected string $code;
 
-    #[ORM\Column(name: 'description', type: 'string', nullable: true)]
+    #[ORM\Column(name: 'description', type: Types::STRING, nullable: true)]
     protected string $description;
 
     #[ORM\Id]
-    #[ORM\Column(name: 'id', type: 'uuid', unique: true)]
+    #[ORM\Column(name: 'id', type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'NONE')]
     protected Uuid $identifier;
 
-    #[ORM\Column(name: 'left_value', type: 'integer')]
+    #[Gedmo\TreeLeft]
+    #[ORM\Column(name: 'left_value', type: Types::INTEGER)]
     protected int $leftValue;
 
-    #[ORM\Column(name: 'name', type: 'string')]
+    #[ORM\Column(name: 'name', type: Types::STRING)]
     protected string $name;
 
-    #[ORM\Column(name: 'parent_id', type: 'uuid')]
-    protected Uuid $parentIdentifier;
+    #[Gedmo\TreeParent]
+    #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    protected $parent;
 
-    #[ORM\Column(name: 'right_value', type: 'integer')]
+    #[Gedmo\TreeRight]
+    #[ORM\Column(name: 'right_value', type: Types::INTEGER)]
     protected int $rightValue;
+
+    #[Gedmo\TreeLevel]
+    #[ORM\Column(name: 'level', type: Types::INTEGER)]
+    protected $level;
+
+    #[Gedmo\TreeRoot]
+    #[ORM\ManyToOne(targetEntity: Group::class)]
+    #[ORM\JoinColumn(name: 'root', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    private $root;
 
     public static function getAlias(): string
     {
@@ -115,16 +136,14 @@ class Group implements DoctrineEntityInterface
         return $this;
     }
 
-    public function getParentIdentifier(): Uuid
+    public function getParent(): ?Group
     {
-        return $this->parentIdentifier;
+        return $this->parent;
     }
 
-    public function setParentIdentifier(Uuid $parentIdentifier): static
+    public function setParent(?Group $parent = null): void
     {
-        $this->parentIdentifier = $parentIdentifier;
-
-        return $this;
+        $this->parent = $parent;
     }
 
     public function getRightValue(): int
@@ -139,6 +158,11 @@ class Group implements DoctrineEntityInterface
         return $this;
     }
 
+    public function getRoot(): ?Group
+    {
+        return $this->root;
+    }
+
     public function hasChildren(): bool
     {
         return !($this->getLeftValue() == ($this->getRightValue() - 1));
@@ -146,6 +170,6 @@ class Group implements DoctrineEntityInterface
 
     public function isRoot(): bool
     {
-        return ($this->getParentIdentifier() == DataClass::EMPTY_UUID);
+        return ($this->getParent() == DataClass::EMPTY_UUID);
     }
 }

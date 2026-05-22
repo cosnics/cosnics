@@ -12,7 +12,7 @@ use Symfony\Component\Uid\Uuid;
  * @author  Dieter De Neef
  * @author  Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-#[ORM\Entity(repositoryClass: 'Chamilo\Core\Group\Storage\Repository\GroupMembershipEntityRepository')]
+#[ORM\Entity(repositoryClass: 'Chamilo\Core\Group\Storage\Repository\GroupMembershipRepository')]
 #[ORM\Table(name: 'group_group_rel_user')]
 #[ORM\Index(name: 'id_idx', columns: ['id'])]
 class GroupMembership implements DoctrineEntityInterface

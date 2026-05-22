@@ -5,7 +5,7 @@ use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Component\SubscribeComponent;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
+use Chamilo\Core\Group\Storage\Entity\GroupMembership;
 use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\DataClassUrlGenerator;
@@ -68,13 +68,13 @@ class GroupUrlGenerator
         return $this->getGroupActionUrl(ActionEnum::TRUNCATE->value, $group);
     }
 
-    public function getUnsubscribeUserUrl(SubscribedUser $subscribedUser): string
+    public function getUnsubscribeUserUrl(GroupMembership $subscribedUser): string
     {
         return $this->urlGenerator->fromParameters(
             [
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::UNSUBSCRIBE->value,
-                DataClass::PROPERTY_ID => $subscribedUser->getRelationId()
+                DataClass::PROPERTY_ID => $subscribedUser->getIdentifier()->toString()
             ]
         );
     }

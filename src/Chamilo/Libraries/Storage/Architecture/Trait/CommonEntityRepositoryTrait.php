@@ -1,8 +1,8 @@
 <?php
-namespace Chamilo\Libraries\Storage\Repository;
+namespace Chamilo\Libraries\Storage\Architecture\Trait;
 
-use Chamilo\Core\Group\Storage\Entity\GroupMembership;
 use Chamilo\Libraries\Storage\Architecture\Domain\Enum\FunctionTypeEnum;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\DistinctConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
@@ -15,25 +15,20 @@ use Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface;
 use Chamilo\Libraries\Storage\Service\QueryBuilderConfigurator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\QueryBuilder;
 use Exception;
+use InvalidArgumentException;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * @package Chamilo\Libraries\Storage\Repository
+ * @package Chamilo\Libraries\Storage\Architecture\Trait
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class AbstractEntityRepository extends EntityRepository
+trait CommonEntityRepositoryTrait
 {
-    public function __construct(
-        EntityManagerInterface $em, ClassMetadata $class, protected QueryBuilderConfigurator $queryBuilderConfigurator
-    )
-    {
-        parent::__construct($em, $class);
-    }
+    protected QueryBuilderConfigurator $queryBuilderConfigurator;
 
     /**
      * @param \Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters $parameters
@@ -46,14 +41,6 @@ abstract class AbstractEntityRepository extends EntityRepository
         if ($parameters->getRetrieveProperties()->isEmpty()) {
             $parameters->getRetrieveProperties()->add(new PropertiesConditionVariable($dataClassName));
         }
-    }
-
-    protected function getIdentityConditionVariable(string $entityClassName, string $propertyName): FunctionConditionVariable
-    {
-        return new FunctionConditionVariable(
-            FunctionTypeEnum::IDENTITY,
-            new PropertyConditionVariable($entityClassName, $propertyName)
-        );
     }
 
     /**
@@ -97,6 +84,40 @@ abstract class AbstractEntityRepository extends EntityRepository
     }
 
     /**
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     */
+    public function distinctEntityProperties(string $entityType, StorageParameters $parameters): array
+    {
+        $parameters->setRetrieveProperties(
+            new RetrieveProperties([new DistinctConditionVariable($parameters->getRetrieveProperties()->toArray())])
+        );
+
+        return $this->buildFromQuery($entityType, $parameters)->getQuery()->getResult();
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     */
+    public function distinctEntityProperty(string $entityType, StorageParameters $parameters): array
+    {
+        if ($parameters->getRetrieveProperties()->count() != 1) {
+            throw new InvalidArgumentException(
+                'Exactly one property should be set in the parameters to retrieve distinct values for that property'
+            );
+        }
+
+        $results = $this->distinctEntityProperties($entityType, $parameters);
+
+        $propertValues = [];
+
+        foreach ($results as $result) {
+            $propertValues[] = array_pop($result);
+        }
+
+        return $propertValues;
+    }
+
+    /**
      * @throws \Exception
      */
     public function executeTransaction(callable $callable)
@@ -114,6 +135,9 @@ abstract class AbstractEntityRepository extends EntityRepository
             throw $exception;
         }
     }
+
+    abstract public function find(mixed $id, LockMode|int|null $lockMode = null, int|null $lockVersion = null
+    ): object|null;
 
     /**
      * @template tEntityType
@@ -176,6 +200,16 @@ abstract class AbstractEntityRepository extends EntityRepository
     public function flush(): void
     {
         $this->getEntityManager()->flush();
+    }
+
+    abstract protected function getEntityManager(): EntityManagerInterface;
+
+    protected function getIdentityConditionVariable(string $entityClassName, string $propertyName
+    ): FunctionConditionVariable
+    {
+        return new FunctionConditionVariable(
+            FunctionTypeEnum::IDENTITY, new PropertyConditionVariable($entityClassName, $propertyName)
+        );
     }
 
     /**

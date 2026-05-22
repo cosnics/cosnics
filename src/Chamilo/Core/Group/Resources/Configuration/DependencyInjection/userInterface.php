@@ -9,7 +9,7 @@ use Chamilo\Core\Group\UserInterface\Menu\GroupOptionsTreeDataProvider;
 use Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider;
 use Chamilo\Core\Group\UserInterface\Table\GroupTableRenderer;
 use Chamilo\Core\Group\UserInterface\Table\NonSubscribedUserTableRenderer;
-use Chamilo\Core\Group\UserInterface\Table\SubscribedUserTableRenderer;
+use Chamilo\Core\Group\UserInterface\Table\GroupMembershipTableRenderer;
 use Chamilo\Libraries\UserInterface\Tree\Service\JsTreeMenuDataProvider;
 use Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeRenderer;
 use Symfony\Component\Form\FormTypeInterface;
@@ -29,7 +29,7 @@ return static function (ContainerConfigurator $container) {
     );
 
     $services->set(GroupTableRenderer::class);
-    $services->set(SubscribedUserTableRenderer::class);
+    $services->set(GroupMembershipTableRenderer::class);
     $services->set(NonSubscribedUserTableRenderer::class);
 
     $services->set(GroupMoveFormType::class)->args(

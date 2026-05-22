@@ -24,6 +24,7 @@ use Chamilo\Core\User\Storage\Repository\UserVisitRepository;
 use Chamilo\Libraries\UserInterface\Layout\Architecture\Domain\PageHeaders;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 
 /**
  * @package Chamilo\Core\User\EventDispatcher\Subscriber
@@ -80,6 +81,8 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
         $this->onlineService->updateOnlineForUserIdentifierWithCurrentTime($userIdentifier->toString());
 
         $userVisit = new UserVisit();
+
+        $userVisit->setIdentifier(new UuidV7());
         $userVisit->setUserIdentifier($userIdentifier);
         $userVisit->setEnterDate(time());
         $userVisit->setLocation($afterUserEnterPage->getPageUri());
@@ -178,6 +181,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     {
         $userAuthenticationActivity = new UserAuthenticationActivity();
 
+        $userAuthenticationActivity->setIdentifier(new UuidV7());
         $userAuthenticationActivity->setUserIdentifier($userIdentifier);
         $userAuthenticationActivity->setDate(time());
         $userAuthenticationActivity->setIp($clientIp);
@@ -207,6 +211,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     {
         $userActivity = new UserActivity();
 
+        $userActivity->setIdentifier(new UuidV7());
         $userActivity->setAction($action);
         $userActivity->setDate(time());
         $userActivity->setSourceUserIdentifier($sourceUserIdentifier);

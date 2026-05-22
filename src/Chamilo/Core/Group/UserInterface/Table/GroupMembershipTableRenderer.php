@@ -4,7 +4,6 @@ namespace Chamilo\Core\Group\UserInterface\Table;
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
-use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
 use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
@@ -15,6 +14,7 @@ use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\Button;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Architecture\Domain\MiniButtonToolBar;
 use Chamilo\Libraries\UserInterface\ButtonToolBar\Service\MiniButtonToolBarRenderer;
 use Chamilo\Libraries\UserInterface\Glyph\Architecture\Domain\FontAwesomeGlyph;
+use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\Column\TableColumn;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableAction;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableAction\TableActions;
 use Chamilo\Libraries\UserInterface\Table\Architecture\Domain\TableResultPosition;
@@ -30,7 +30,7 @@ use Symfony\Component\Translation\Translator;
  * @package Chamilo\Core\Group\UserInterface\Table
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class SubscribedUserTableRenderer extends DataClassListTableRenderer
+class GroupMembershipTableRenderer extends DataClassListTableRenderer
     implements TableRowActionsSupport, TableActionsSupport
 {
     public const string TABLE_IDENTIFIER = DataClass::PROPERTY_ID;
@@ -69,15 +69,29 @@ class SubscribedUserTableRenderer extends DataClassListTableRenderer
     protected function initializeColumns(): void
     {
         $this->addColumn(
-            $this->dataClassPropertyTableColumnFactory->getColumn(SubscribedUser::class, User::PROPERTY_GIVEN_NAME)
+            $this->dataClassPropertyTableColumnFactory->getColumn(User::class, User::PROPERTY_GIVEN_NAME)
         );
         $this->addColumn(
-            $this->dataClassPropertyTableColumnFactory->getColumn(SubscribedUser::class, User::PROPERTY_SURNAME)
+            $this->dataClassPropertyTableColumnFactory->getColumn(User::class, User::PROPERTY_SURNAME)
         );
     }
 
     /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\SubscribedUser $result
+     * @param \Chamilo\Core\Group\Storage\Entity\GroupMembership $result
+     *
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     */
+    protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, mixed $result): string
+    {
+        return match ($column->getName()) {
+            User::PROPERTY_GIVEN_NAME => $result->getUser()->getGivenName(),
+            User::PROPERTY_SURNAME => $result->getUser()->getSurname(),
+            default => parent::renderCell($column, $resultPosition, $result),
+        };
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\Entity\GroupMembership $result
      *
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */

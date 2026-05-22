@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition;
 
 use Chamilo\Libraries\Protocol\Security\Architecture\Trait\HashableTrait;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableInterface;
 use Chamilo\Libraries\Storage\Service\Condition\InConditionTranslator;
@@ -17,10 +18,10 @@ class InCondition implements ConditionInterface
 
     private ConditionVariableInterface $conditionVariable;
 
-    private array $values;
+    private array|StaticConditionVariable $values;
 
     public function __construct(
-        ConditionVariableInterface $conditionVariable, array $values
+        ConditionVariableInterface $conditionVariable, array|StaticConditionVariable $values
     )
     {
         $this->conditionVariable = $conditionVariable;
@@ -46,13 +47,18 @@ class InCondition implements ConditionInterface
 
         $values = $this->getValues();
 
-        ksort($values);
-        $hashParts[] = $values;
+        if(is_array($values)) {
+            ksort($values);
+            $hashParts[] = $values;
+        }
+        else {
+            $hashParts[] = $values->getHashParts();
+        }
 
         return $hashParts;
     }
 
-    public function getValues(): array
+    public function getValues(): array|StaticConditionVariable
     {
         return $this->values;
     }

@@ -33,6 +33,7 @@
         "doctrine/orm": "3.*",
         "econea/nusoap": "0.9.*",
         "ezyang/htmlpurifier": "4.*",
+        "gedmo/doctrine-extensions": "3.*",
         "google/apiclient": "1.*",
         "hackzilla/password-generator": "1.*",
         "league/flysystem": "3.*",
@@ -66,7 +67,7 @@
         "symfony/uid": "7.4.*",
         "symfony/validator": "7.4.*",
         "symfony/yaml": "7.4.*",
-        "twig/twig": "3.21.*",
+        "twig/twig": "3.*",
         "untt/oauth2-microsoft": "0.*",
         "voku/stringy": "6.*"
     },

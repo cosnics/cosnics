@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Group\Architecture\Exception;
 
-use Chamilo\Core\Group\Storage\DataClass\GroupMembership;
+use Chamilo\Core\Group\Storage\Entity\GroupMembership;
 use Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException;
 use Exception;
 

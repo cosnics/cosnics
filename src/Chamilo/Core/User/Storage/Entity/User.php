@@ -28,7 +28,7 @@ class User implements DoctrineEntityInterface
     public const string PROPERTY_OFFICIAL_CODE = 'officialCode';
     public const string PROPERTY_PASSWORD = 'password';
     public const string PROPERTY_PICTURE_URI = 'pictureUri';
-    public const string PROPERTY_PLATFORM_ADMINISTRATOR = 'admin';
+    public const string PROPERTY_PLATFORM_ADMINISTRATOR = 'platformAdministrator';
     public const string PROPERTY_REGISTRATION_DATE = 'registrationDate';
     public const string PROPERTY_SECURITY_TOKEN = 'securityToken';
     public const string PROPERTY_SURNAME = 'surname';

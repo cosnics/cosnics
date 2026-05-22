@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\Service\Condition;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionTranslator;
 use Doctrine\DBAL\ArrayParameterType;
@@ -29,13 +30,26 @@ class InConditionTranslator extends ConditionTranslator implements ConditionTran
     {
         $string = [];
         $values = $inCondition->getValues();
+        $isArrayAndHasValues = is_array($values) && count($values) > 0;
+        $isStaticConditionVariableAndHasValues =
+            $values instanceof StaticConditionVariable && count($values->getValue()) > 0;
+        $hasValues = $isArrayAndHasValues || $isStaticConditionVariableAndHasValues;
 
-        if (count($values) > 0) {
+        if ($hasValues) {
             $string[] = $this->conditionVariableTranslatorRegistry->translate(
                 $querybuilder, $inCondition->getConditionVariable(), $enableAliasing
             );
             $string[] = 'IN';
-            $string[] = '(' . $querybuilder->createNamedParameter($values, ArrayParameterType::STRING) . ')';
+
+            if ($values instanceof StaticConditionVariable) {
+                $values = $values->getValue();
+                $type = $values->getType();
+            }
+            else {
+                $type = ArrayParameterType::STRING;
+            }
+
+            $string[] = '(' . $querybuilder->createNamedParameter($values, $type) . ')';
         }
         else {
             $string[] = '1 = 0';

@@ -13,16 +13,29 @@ use Chamilo\Libraries\Storage\Architecture\Domain\Query\OrderBy;
 use Chamilo\Libraries\Storage\Architecture\Domain\StorageParameters;
 use Chamilo\Libraries\Storage\Architecture\Exception\NoSuchObjectException;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
-use Chamilo\Libraries\Storage\Repository\AbstractEntityRepository;
+use Chamilo\Libraries\Storage\Architecture\Trait\CommonEntityRepositoryTrait;
+use Chamilo\Libraries\Storage\Service\QueryBuilderConfigurator;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\User\Storage\Repository
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UserRepository extends AbstractEntityRepository
+class UserRepository extends EntityRepository
 {
+    use CommonEntityRepositoryTrait;
+
+    public function __construct(
+        EntityManagerInterface $em, ClassMetadata $class, protected QueryBuilderConfigurator $queryBuilderConfigurator
+    )
+    {
+        parent::__construct($em, $class);
+    }
+
     /**
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */

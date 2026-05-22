@@ -36,11 +36,11 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function hasContentForUser(User $user, User $requestingUser): bool
     {
-        return $this->groupMembershipService->retrieveGroupsByUserIdentifier($user->getIdentifier()->toString())->count(
+        return $this->groupMembershipService->retrieveGroupMembershipsByUserIdentifier($user->getIdentifier())->count(
             ) > 0;
     }
 
@@ -52,6 +52,7 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
     /**
      * @throws \TableException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function renderUserDetails(User $user, User $requestingUser): string
     {
@@ -64,29 +65,30 @@ class UserDetailsRenderer implements UserDetailsRendererInterface
         $table->setCellAttributes(1, 0, ['style' => 'width: 150px;']);
         $table->setHeaderContents(1, 1, $this->translator->trans('GroupName', [], Manager::CONTEXT));
 
-        $groups = $this->groupMembershipService->retrieveGroupsByUserIdentifier($user->getIdentifier()->toString());
+        $groupMemberships =
+            $this->groupMembershipService->retrieveGroupMembershipsByUserIdentifier($user->getIdentifier());
 
-        if ($groups->count() == 0) {
+        if ($groupMemberships->count() == 0) {
             $table->setCellContents(2, 0, $this->translator->trans('NoGroups', [], Manager::CONTEXT));
             $table->setCellAttributes(2, 0, ['colspan' => 2, 'style' => 'text-align: center;']);
         }
         else {
             $rowIndex = 2;
 
-            foreach ($groups as $group) {
+            foreach ($groupMemberships as $groupMembership) {
                 $viewUrl = $this->urlGenerator->fromParameters(
                     [
                         ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                         ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                        DataClass::PROPERTY_ID => $group->getId()
+                        DataClass::PROPERTY_ID => $groupMembership->getGroup()->getIdentifier()->toString()
                     ]
                 );
 
                 $url = '<a href="' . $viewUrl . '">';
 
-                $table->setCellContents($rowIndex, 0, $url . $group->getCode() . '</a>');
+                $table->setCellContents($rowIndex, 0, $url . $groupMembership->getGroup()->getCode() . '</a>');
                 $table->setCellAttributes($rowIndex, 0, ['style' => 'width: 150px;']);
-                $table->setCellContents($rowIndex, 1, $url . $group->getName() . '</a>');
+                $table->setCellContents($rowIndex, 1, $url . $groupMembership->getGroup()->getName() . '</a>');
                 $rowIndex ++;
             }
         }

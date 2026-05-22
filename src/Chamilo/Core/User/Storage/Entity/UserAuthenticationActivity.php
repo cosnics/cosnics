@@ -5,7 +5,6 @@ use Chamilo\Core\User\Architecture\Enum\UserAuthenticationActivityTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Uid\UuidV7;
 
 /**
  * @package Chamilo\Core\User\Storage\DataClass
@@ -39,11 +38,6 @@ class UserAuthenticationActivity implements DoctrineEntityInterface
 
     #[ORM\Column(name: 'user_id', type: 'uuid')]
     protected Uuid $userIdentifier;
-
-    public function __construct()
-    {
-        $this->setIdentifier(new UuidV7());
-    }
 
     public function getAction(): UserAuthenticationActivityTypeEnum
     {

@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Storage\Service\ConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Architecture\Interface\ConditionVariableTranslatorInterface;
 use Chamilo\Libraries\Storage\Service\ConditionVariableTranslator;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
 use Doctrine\ORM\QueryBuilder as ORMQueryBuilder;
 
@@ -25,6 +26,13 @@ class StaticConditionVariableTranslator extends ConditionVariableTranslator
         DBALQueryBuilder|ORMQueryBuilder $querybuilder, StaticConditionVariable $staticConditionVariable
     ): string
     {
-        return $querybuilder->createNamedParameter($staticConditionVariable->getValue());
+        if ($querybuilder instanceof DBALQueryBuilder) {
+            $type = $staticConditionVariable->getType() ?: ParameterType::STRING;
+        }
+        else {
+            $type = $staticConditionVariable->getType();
+        }
+
+        return $querybuilder->createNamedParameter($staticConditionVariable->getValue(), $type);
     }
 }

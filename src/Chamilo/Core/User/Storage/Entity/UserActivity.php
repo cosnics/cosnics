@@ -5,7 +5,6 @@ use Chamilo\Core\User\Architecture\Enum\UserActivityTypeEnum;
 use Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Uid\UuidV7;
 
 /**
  * @package Chamilo\Core\User\Storage\Entity
@@ -37,11 +36,6 @@ class UserActivity implements DoctrineEntityInterface
 
     #[ORM\Column(name: 'target_user_id', type: 'uuid', nullable: true)]
     protected ?Uuid $targetUserIdentifier;
-
-    public function __construct()
-    {
-        $this->setIdentifier(new UuidV7());
-    }
 
     public function getAction(): UserActivityTypeEnum
     {

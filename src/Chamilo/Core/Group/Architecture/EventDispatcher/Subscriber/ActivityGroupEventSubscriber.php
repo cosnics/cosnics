@@ -9,10 +9,11 @@ use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupMoveEvent;
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupSubscribeEvent;
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupUnsubscribeEvent;
 use Chamilo\Core\Group\Architecture\EventDispatcher\Event\AfterGroupUpdateEvent;
-use Chamilo\Core\Group\Storage\DataClass\GroupActivity;
-use Chamilo\Core\Group\Storage\Repository\GroupTrackingRepository;
+use Chamilo\Core\Group\Storage\Entity\GroupActivity;
+use Chamilo\Core\Group\Storage\Repository\GroupActivityRepository;
 use Chamilo\Core\User\Storage\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Group\Architecture\EventDispatcher\Subscriber
@@ -20,77 +21,68 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
 {
-    public function __construct(protected GroupTrackingRepository $groupTrackingRepository)
+    public function __construct(protected GroupActivityRepository $groupActivityRepository)
     {
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function afterCreate(AfterGroupCreateEvent $afterGroupCreateEvent): void
     {
-        $this->groupTrackingRepository->createGroupActivity(
+        $this->groupActivityRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivityTypeEnum::CREATED, $afterGroupCreateEvent->group->getId(),
+                GroupActivityTypeEnum::CREATED, $afterGroupCreateEvent->group->getIdentifier(),
                 $afterGroupCreateEvent->executingUser
             )
         );
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function afterDelete(AfterGroupDeleteEvent $afterGroupDeleteEvent): void
     {
-        $this->groupTrackingRepository->createGroupActivity(
+        $this->groupActivityRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivityTypeEnum::DELETED, $afterGroupDeleteEvent->group->getId(),
+                GroupActivityTypeEnum::DELETED, $afterGroupDeleteEvent->group->getIdentifier(),
                 $afterGroupDeleteEvent->executingUser
             )
         );
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function afterEmpty(AfterGroupEmptyEvent $afterGroupEmptyEvent): void
     {
-        $this->groupTrackingRepository->createGroupActivity(
+        $this->groupActivityRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivityTypeEnum::TRUNCATED, $afterGroupEmptyEvent->group->getId(),
+                GroupActivityTypeEnum::TRUNCATED, $afterGroupEmptyEvent->group->getIdentifier(),
                 $afterGroupEmptyEvent->executingUser
             )
         );
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function afterMove(AfterGroupMoveEvent $afterGroupMoveEvent): void
     {
-        $this->groupTrackingRepository->createGroupActivity(
+        $this->groupActivityRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivityTypeEnum::MOVED, $afterGroupMoveEvent->group->getId(), $afterGroupMoveEvent->executingUser
+                GroupActivityTypeEnum::MOVED, $afterGroupMoveEvent->group->getIdentifier(),
+                $afterGroupMoveEvent->executingUser
             )
         );
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function afterSubscribe(AfterGroupSubscribeEvent $afterGroupSubscribeEvent): void
     {
-        $this->groupTrackingRepository->createGroupActivity(
+        $this->groupActivityRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::SUBSCRIBED, $afterGroupSubscribeEvent->groupIdentifier,
                 $afterGroupSubscribeEvent->executingUser, $afterGroupSubscribeEvent->userIdentifier
@@ -99,13 +91,11 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function afterUnsubscribe(AfterGroupUnsubscribeEvent $afterGroupUnsubscribeEvent): void
     {
-        $this->groupTrackingRepository->createGroupActivity(
+        $this->groupActivityRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::UNSUBSCRIBED, $afterGroupUnsubscribeEvent->groupIdentifier,
                 $afterGroupUnsubscribeEvent->executingUser, $afterGroupUnsubscribeEvent->userIdentifier
@@ -114,15 +104,13 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageLastInsertedIdentifierException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\ObjectAlreadyExistsException
+     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     public function afterUpdate(AfterGroupUpdateEvent $afterGroupUpdateEvent): void
     {
-        $this->groupTrackingRepository->createGroupActivity(
+        $this->groupActivityRepository->createGroupActivity(
             $this->initializeGroupActivityFromParameters(
-                GroupActivityTypeEnum::UPDATED, $afterGroupUpdateEvent->group->getId(),
+                GroupActivityTypeEnum::UPDATED, $afterGroupUpdateEvent->group->getIdentifier(),
                 $afterGroupUpdateEvent->executingUser
             )
         );
@@ -142,8 +130,8 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     }
 
     protected function initializeGroupActivityFromParameters(
-        GroupActivityTypeEnum $action, string $groupIdentifier, ?User $executingUser = null,
-        ?string $targetUserIdentifier = null
+        GroupActivityTypeEnum $action, Uuid $groupIdentifier, ?User $executingUser = null,
+        ?Uuid $targetUserIdentifier = null
     ): GroupActivity
     {
         $groupActivity = new GroupActivity();

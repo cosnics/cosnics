@@ -23,6 +23,6 @@ class SortableStaticTableColumn extends AbstractSortableTableColumn
 
     public function getConditionVariable(): StaticConditionVariable
     {
-        return new StaticConditionVariable($this->getName(), false);
+        return new StaticConditionVariable($this->getName());
     }
 }

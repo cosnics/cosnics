@@ -8,10 +8,10 @@ use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\Group\Storage\DataClass\SubscribedUser;
+use Chamilo\Core\Group\Storage\Entity\GroupMembership;
 use Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider;
 use Chamilo\Core\Group\UserInterface\Table\GroupTableRenderer;
-use Chamilo\Core\Group\UserInterface\Table\SubscribedUserTableRenderer;
+use Chamilo\Core\Group\UserInterface\Table\GroupMembershipTableRenderer;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
@@ -44,6 +44,7 @@ use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCom
 use Chamilo\Libraries\UserInterface\Tree\Service\JsTreeRenderer;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -63,7 +64,7 @@ class BrowseComponent extends Manager
 
     private ?Group $group;
 
-    private ?string $groupIdentifier = null;
+    private ?Uuid $groupIdentifier = null;
 
     public function __construct(
         ChamiloRequest $request, ApplicationHeaderRenderer $applicationHeaderRenderer,
@@ -76,7 +77,7 @@ class BrowseComponent extends Manager
         protected readonly GroupsTreeTraverser $groupsTreeTraverser, protected readonly JsTreeRenderer $jsTreeRenderer,
         protected readonly MiniButtonToolBarRenderer $miniButtonToolBarRenderer,
         protected readonly RequestTableParameterValuesCompiler $requestTableParameterValuesCompiler,
-        protected readonly SubscribedUserTableRenderer $subscribedUserTableRenderer,
+        protected readonly GroupMembershipTableRenderer $subscribedUserTableRenderer,
         protected readonly TabsRenderer $tabsRenderer
     )
     {
@@ -147,10 +148,10 @@ class BrowseComponent extends Manager
             $searchProperties[] = new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION);
             $searchProperties[] = new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE);
         }
-        elseif ($type === SubscribedUser::class) {
-            $searchProperties[] = new PropertyConditionVariable(SubscribedUser::class, User::PROPERTY_GIVEN_NAME);
-            $searchProperties[] = new PropertyConditionVariable(SubscribedUser::class, User::PROPERTY_SURNAME);
-            $searchProperties[] = new PropertyConditionVariable(SubscribedUser::class, User::PROPERTY_USERNAME);
+        elseif ($type === GroupMembership::class) {
+            $searchProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_GIVEN_NAME);
+            $searchProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_SURNAME);
+            $searchProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME);
         }
 
         return $searchProperties;
@@ -203,11 +204,15 @@ class BrowseComponent extends Manager
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    public function getGroupIdentifier(): string
+    public function getGroupIdentifier(): Uuid
     {
         if (!isset($this->groupIdentifier)) {
-            $this->groupIdentifier =
-                $this->getRequest()->query->get(DataClass::PROPERTY_ID, $this->getRootGroup()->getId());
+            if ($this->getRequest()->query->has(DataClass::PROPERTY_ID)) {
+                $this->groupIdentifier = Uuid::fromString($this->getRequest()->query->get(DataClass::PROPERTY_ID));
+            }
+            else {
+                $this->groupIdentifier = $this->getRootGroup()->getId();
+            }
         }
 
         return $this->groupIdentifier;
@@ -390,7 +395,7 @@ class BrowseComponent extends Manager
      */
     protected function renderSubscribedUsertable(): string
     {
-        $searchCondition = $this->getButtonToolBarSearchCondition(SubscribedUser::class);
+        $searchCondition = $this->getButtonToolBarSearchCondition(GroupMembership::class);
 
         $totalNumberOfItems = $this->groupMembershipService->countSubscribedUsersByGroupIdentifier(
             $this->getGroupIdentifier(), $searchCondition
