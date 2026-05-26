@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\Factory;
 
 use Chamilo\Libraries\Filesystem\Service\ConfigurablePathBuilder;
+use Doctrine\Common\EventSubscriber;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
@@ -55,7 +56,14 @@ class DoctrineEntityManagerFactory
         $entityManager = new EntityManager($this->doctrineConnection, $configuration);
 
         foreach ($this->eventListeners as $eventListener) {
-            $entityManager->getEventManager()->addEventListener($eventListener['events'], $eventListener['listener']);
+            if ($eventListener['listener'] instanceof EventSubscriber) {
+                $entityManager->getEventManager()->addEventSubscriber($eventListener['listener']);
+            }
+            else {
+                $entityManager->getEventManager()->addEventListener(
+                    $eventListener['events'], $eventListener['listener']
+                );
+            }
         }
 
         return $entityManager;

@@ -1,6 +1,7 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
+use Chamilo\Libraries\DependencyInjection\CompilerPass\DoctrineEventListenerCompilerPass;
 use Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Interface\UserExceptionRendererInterface;
 use Chamilo\Libraries\Storage\Architecture\Domain\ConditionTranslatorRegistry;
 use Chamilo\Libraries\Storage\Architecture\Domain\ConditionVariableTranslatorRegistry;
@@ -12,6 +13,7 @@ use Chamilo\Libraries\Storage\Factory\DoctrineEntityManagerFactory;
 use Chamilo\Libraries\Storage\Factory\DoctrineMappingDriverFactory;
 use Chamilo\Libraries\Storage\Factory\RepositoryFactory;
 use Chamilo\Libraries\Storage\Factory\SymfonyCacheAdapterFactory;
+use Chamilo\Libraries\Storage\Factory\TreeListenerFactory;
 use Chamilo\Libraries\Storage\Repository\DataClassDatabase;
 use Chamilo\Libraries\Storage\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Repository\DisplayOrderRepository;
@@ -51,6 +53,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\Mapping\Driver\MappingDriver;
+use Gedmo\Tree\TreeListener;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
@@ -124,6 +127,11 @@ return static function (ContainerConfigurator $container) {
 
     $services->set(Configuration::class);
     $services->set(RepositoryFactory::class);
+
+    $services->set(TreeListenerFactory::class);
+    $services->set(TreeListener::class)->factory([service(TreeListenerFactory::class), 'getTreeListener'])->tag(
+        DoctrineEventListenerCompilerPass::TAG_EVENT_LISTENER
+    );
 
     $services->set(DoctrineMappingDriverFactory::class)->args(
         ['$cacheAdapter' => service('Chamilo\Libraries\StorageDoctrineMappingDriverCacheAdapter')]

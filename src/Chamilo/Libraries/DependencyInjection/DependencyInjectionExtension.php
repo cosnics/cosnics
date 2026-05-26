@@ -13,6 +13,7 @@ use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheDataPreLoaderCompile
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConditionTranslatorCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConditionVariableTranslatorCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
+use Chamilo\Libraries\DependencyInjection\CompilerPass\DoctrineEventListenerCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\EventDispatcherCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\FormTypeCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\HashingCompilerPass;
@@ -107,6 +108,7 @@ class DependencyInjectionExtension extends AbstractDependencyInjectionExtension
         $container->addCompilerPass(new ConditionTranslatorCompilerPass());
         $container->addCompilerPass(new ConditionVariableTranslatorCompilerPass());
         $container->addCompilerPass(new EventDispatcherCompilerPass());
+        $container->addCompilerPass(new DoctrineEventListenerCompilerPass());
         $container->addCompilerPass(new ButtonRendererCompilerPass());
         $container->addCompilerPass(new TabRendererCompilerPass());
         $container->addCompilerPass(new HtmlCalendarRendererCompilerPass());

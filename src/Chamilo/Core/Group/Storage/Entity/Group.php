@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Group\Storage\Entity;
 
 use Chamilo\Core\Group\Manager;
-use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,7 +31,7 @@ class Group implements DoctrineEntityInterface
     public const string PROPERTY_RIGHT_VALUE = 'rightValue';
 
     #[ORM\OneToMany(targetEntity: Group::class, mappedBy: 'parent')]
-    #[ORM\OrderBy(['leftValue' => 'ASC'])]
+    #[ORM\OrderBy(['lft' => 'ASC'])]
     protected $children;
 
     #[ORM\Column(name: 'code', type: Types::STRING, nullable: true)]
@@ -48,7 +47,11 @@ class Group implements DoctrineEntityInterface
 
     #[Gedmo\TreeLeft]
     #[ORM\Column(name: 'left_value', type: Types::INTEGER)]
-    protected int $leftValue;
+    protected int $lft;
+
+    #[Gedmo\TreeLevel]
+    #[ORM\Column(name: 'level', type: Types::INTEGER)]
+    protected $lvl;
 
     #[ORM\Column(name: 'name', type: Types::STRING)]
     protected string $name;
@@ -60,16 +63,12 @@ class Group implements DoctrineEntityInterface
 
     #[Gedmo\TreeRight]
     #[ORM\Column(name: 'right_value', type: Types::INTEGER)]
-    protected int $rightValue;
+    protected int $rgt;
 
-    #[Gedmo\TreeLevel]
-    #[ORM\Column(name: 'level', type: Types::INTEGER)]
-    protected $level;
-
-    #[Gedmo\TreeRoot]
-    #[ORM\ManyToOne(targetEntity: Group::class)]
-    #[ORM\JoinColumn(name: 'root', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private $root;
+    //    #[Gedmo\TreeRoot]
+    //    #[ORM\ManyToOne(targetEntity: Group::class)]
+    //    #[ORM\JoinColumn(name: 'root', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    //    private $root;
 
     public static function getAlias(): string
     {
@@ -112,18 +111,6 @@ class Group implements DoctrineEntityInterface
         return $this;
     }
 
-    public function getLeftValue(): int
-    {
-        return $this->leftValue;
-    }
-
-    public function setLeftValue(int $leftValue): static
-    {
-        $this->leftValue = $leftValue;
-
-        return $this;
-    }
-
     public function getName(): string
     {
         return $this->name;
@@ -146,30 +133,13 @@ class Group implements DoctrineEntityInterface
         $this->parent = $parent;
     }
 
-    public function getRightValue(): int
-    {
-        return $this->rightValue;
-    }
-
-    public function setRightValue(int $rightValue): static
-    {
-        $this->rightValue = $rightValue;
-
-        return $this;
-    }
-
-    public function getRoot(): ?Group
-    {
-        return $this->root;
-    }
-
-    public function hasChildren(): bool
-    {
-        return !($this->getLeftValue() == ($this->getRightValue() - 1));
-    }
+    //    public function getRoot(): ?Group
+    //    {
+    //        return $this->root;
+    //    }
 
     public function isRoot(): bool
     {
-        return ($this->getParent() == DataClass::EMPTY_UUID);
+        return ($this->getParent()->getIdentifier() === $this->getIdentifier());
     }
 }
