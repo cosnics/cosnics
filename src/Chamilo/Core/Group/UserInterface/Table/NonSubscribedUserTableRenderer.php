@@ -97,7 +97,7 @@ class NonSubscribedUserTableRenderer extends DataClassListTableRenderer
 
         $subscribeUrl = $this->urlGenerator->fromRequest([
             ApplicationInterface::PARAM_ACTION => ActionEnum::SUBSCRIBE->value,
-            SubscribeComponent::PARAM_USER_ID => $result->getId()
+            SubscribeComponent::PARAM_USER_ID => $result->getIdentifier()->toString()
 
         ]);
 

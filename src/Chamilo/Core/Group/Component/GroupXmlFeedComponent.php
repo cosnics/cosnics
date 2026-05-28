@@ -6,7 +6,7 @@ use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
-use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\Entity\Group;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
@@ -55,7 +55,7 @@ class GroupXmlFeedComponent extends Manager
         }
 
         $groupsTree = $this->groupService->retrieveDescendantsByParentIdentifier(
-            $this->getRequest()->query->get(Group::PROPERTY_PARENT_ID, DataClass::EMPTY_UUID)
+            $this->getRequest()->query->get(Group::PROPERTY_PARENT, DataClass::EMPTY_UUID)
         );
 
         $html = [];
@@ -69,7 +69,7 @@ class GroupXmlFeedComponent extends Manager
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group> $groups
+     * @param \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\Entity\Group> $groups
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -85,7 +85,7 @@ class GroupXmlFeedComponent extends Manager
 
             $hasChildren = $group->hasChildren() ? 1 : 0;
             $html[] =
-                '<leaf id="' . $group->getId() . '" classes="' . $glyph->getClassNamesString() . '" has_children="' .
+                '<leaf id="' . $group->getIdentifier() . '" classes="' . $glyph->getClassNamesString() . '" has_children="' .
                 $hasChildren . '" title="' . htmlspecialchars($group->getName()) . '" description="' .
                 htmlspecialchars($description) . '"/>' . PHP_EOL;
         }

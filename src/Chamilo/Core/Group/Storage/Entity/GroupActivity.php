@@ -82,6 +82,18 @@ class GroupActivity implements DoctrineEntityInterface
         return $this;
     }
 
+    public function getIdentifier(): Uuid
+    {
+        return $this->identifier;
+    }
+
+    public function setIdentifier(Uuid $identifier): static
+    {
+        $this->identifier = $identifier;
+
+        return $this;
+    }
+
     public function getTargetUserIdentifier(): ?string
     {
         return $this->targetUserIdentifier;

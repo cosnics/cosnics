@@ -3,6 +3,7 @@ namespace Chamilo\Core\Group\Storage\Entity;
 
 use Chamilo\Core\Group\Manager;
 use Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -15,7 +16,7 @@ use Symfony\Component\Uid\Uuid;
  * @author  Dieter De Neef
  * @author  Sven Vanpoucke
  */
-#[ORM\Entity(repositoryClass: 'Chamilo\Core\Group\Storage\Repository\GroupEntityRepository')]
+#[ORM\Entity(repositoryClass: 'Chamilo\Core\Group\Storage\Repository\GroupRepository')]
 #[ORM\Table(name: 'group_group')]
 #[ORM\Index(name: 'id_idx', columns: ['id'])]
 #[Gedmo\Tree(type: 'nested')]
@@ -26,19 +27,20 @@ class Group implements DoctrineEntityInterface
     public const string PROPERTY_DESCRIPTION = 'description';
     public const string PROPERTY_IDENTIFIER = 'identifier';
     public const string PROPERTY_LEFT_VALUE = 'leftValue';
+    public const string PROPERTY_LEVEL = 'lvl';
     public const string PROPERTY_NAME = 'name';
-    public const string PROPERTY_PARENT_ID = 'parentIdentifier';
+    public const string PROPERTY_PARENT = 'parent';
     public const string PROPERTY_RIGHT_VALUE = 'rightValue';
 
     #[ORM\OneToMany(targetEntity: Group::class, mappedBy: 'parent')]
     #[ORM\OrderBy(['lft' => 'ASC'])]
-    protected $children;
+    protected ?Collection $children;
 
     #[ORM\Column(name: 'code', type: Types::STRING, nullable: true)]
     protected string $code;
 
     #[ORM\Column(name: 'description', type: Types::STRING, nullable: true)]
-    protected string $description;
+    protected ?string $description = null;
 
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: UuidType::NAME, unique: true)]
@@ -51,7 +53,7 @@ class Group implements DoctrineEntityInterface
 
     #[Gedmo\TreeLevel]
     #[ORM\Column(name: 'level', type: Types::INTEGER)]
-    protected $lvl;
+    protected int $lvl;
 
     #[ORM\Column(name: 'name', type: Types::STRING)]
     protected string $name;
@@ -59,7 +61,7 @@ class Group implements DoctrineEntityInterface
     #[Gedmo\TreeParent]
     #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    protected $parent;
+    protected ?Group $parent = null;
 
     #[Gedmo\TreeRight]
     #[ORM\Column(name: 'right_value', type: Types::INTEGER)]
@@ -137,9 +139,9 @@ class Group implements DoctrineEntityInterface
     //    {
     //        return $this->root;
     //    }
-
-    public function isRoot(): bool
-    {
-        return ($this->getParent()->getIdentifier() === $this->getIdentifier());
-    }
+    //
+    //    public function isRoot(): bool
+    //    {
+    //        return ($this->getRoot()->getIdentifier()->equals($this->getIdentifier()));
+    //    }
 }

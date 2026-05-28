@@ -10,6 +10,7 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Tree\Service\OptionsTreeDataProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Menu\UserInterface\Menu
@@ -28,7 +29,7 @@ readonly class ItemOptionsTreeDataProvider extends OptionsTreeDataProvider
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Menu\Storage\DataClass\Item>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    protected function getChildDataClasses(string $parentIdentifier): ArrayCollection
+    protected function getChildDataClasses(string|Uuid $parentIdentifier): ArrayCollection
     {
         if ($parentIdentifier === DataClass::EMPTY_UUID) {
             return $this->itemService->findRootCategoryItems();
@@ -40,7 +41,7 @@ readonly class ItemOptionsTreeDataProvider extends OptionsTreeDataProvider
     /**
      * @return \Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\TreeNode[]
      */
-    public function getData(?string $identifier, array $excludedIdentifiers = []): array
+    public function getData(string|Uuid|null $identifier, array $excludedIdentifiers = []): array
     {
         $getIdentifier = function (Item $item) {
             return $item->getId();
@@ -57,7 +58,7 @@ readonly class ItemOptionsTreeDataProvider extends OptionsTreeDataProvider
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageNoResultException
      */
-    protected function getDataClassByIdentifier(string $identifier): Item
+    protected function getDataClassByIdentifier(string|Uuid $identifier): Item
     {
         return $this->itemService->findItemByIdentifier($identifier);
     }

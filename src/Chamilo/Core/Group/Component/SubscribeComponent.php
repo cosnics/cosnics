@@ -13,6 +13,7 @@ use Chamilo\Libraries\UserInterface\Alert\Architecture\Enum\AlertEnum;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\Breadcrumb;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Uid\Uuid;
 use Throwable;
 
 /**
@@ -32,13 +33,13 @@ class SubscribeComponent extends Manager
      */
     public function run(?User $currentUser = null): Response
     {
-        $groupIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID);
+        $groupIdentifier = $this->getGroupIdentifier();
 
         if (!$currentUser instanceof User || !$currentUser->isPlatformAdministrator()) {
             throw new NotAllowedException();
         }
 
-        $userIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_ID);
+        $userIdentifiers = $this->getUserIdentifiers();
 
         $this->breadcrumbTrail->add(
             new Breadcrumb($this->translator->trans('ViewerComponent', [], Manager::CONTEXT),
@@ -52,10 +53,6 @@ class SubscribeComponent extends Manager
         );
 
         if (!empty($userIdentifiers)) {
-            if (!is_array($userIdentifiers)) {
-                $userIdentifiers = [$userIdentifiers];
-            }
-
             try {
                 $this->groupService->createGroupMembershipForGroupIdentifierAndUserIdentifiers(
                     $groupIdentifier, $userIdentifiers, $currentUser
@@ -84,5 +81,30 @@ class SubscribeComponent extends Manager
         else {
             throw new NoSuchParameterException(DataClass::PROPERTY_ID);
         }
+    }
+
+    protected function getGroupIdentifier(): Uuid
+    {
+        return Uuid::fromString($this->getRequest()->query->get(DataClass::PROPERTY_ID));
+    }
+
+    /**
+     * @return \Symfony\Component\Uid\Uuid[]
+     */
+    protected function getUserIdentifiers(): array
+    {
+        $userIdentifiers = $this->getRequest()->getFromRequestOrQuery(self::PARAM_USER_ID);
+
+        if (!is_array($userIdentifiers)) {
+            $userIdentifiers = [$userIdentifiers];
+        }
+
+        $uuidUserIdentifiers = [];
+
+        foreach ($userIdentifiers as $userIdentifier) {
+            $uuidUserIdentifiers[] = Uuid::fromString($userIdentifier);
+        }
+
+        return $uuidUserIdentifiers;
     }
 }

@@ -41,7 +41,7 @@ class UnsubscribeComponent extends Manager
             try {
                 $redirectGroupMembership =
                     $this->groupMembershipService->retrieveGroupMembershipByIdentifier($groupMembershipIdentifiers[0]);
-                $redirectGroup = $this->groupService->retrieveGroupByIdentifier($redirectGroupMembership->getGroupId());
+                $redirectGroup = $this->groupService->retrieveGroupByIdentifier($redirectGroupMembership->getGroup()->getIdentifier());
             }
             catch (Throwable) {
                 $redirectGroup = $this->groupService->retrieveRootGroup();
@@ -69,7 +69,7 @@ class UnsubscribeComponent extends Manager
             return new RedirectResponse($this->getUrlGenerator()->fromParameters([
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                DataClass::PROPERTY_ID => $redirectGroup->getId()
+                DataClass::PROPERTY_ID => $redirectGroup->getIdentifier()->toString()
             ]));
         }
         else {

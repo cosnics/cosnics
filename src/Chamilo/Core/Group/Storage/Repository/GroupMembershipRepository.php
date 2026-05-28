@@ -61,7 +61,7 @@ class GroupMembershipRepository extends EntityRepository
         try {
             $groupCondition = new InCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Core\Group\Storage\DataClass\Group::class, Group::PROPERTY_IDENTIFIER
+                    Group::class, Group::PROPERTY_IDENTIFIER
                 ), new StaticConditionVariable($groupIdentifiers, UuidType::NAME . '[]')
             );
 
@@ -300,6 +300,14 @@ class GroupMembershipRepository extends EntityRepository
         );
     }
 
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    public function getGroupMembershipReference(Uuid $groupIdentifier): GroupMembership
+    {
+        return $this->getReference(GroupMembership::class, $groupIdentifier);
+    }
+
     protected function getGroupMembershipRetrieveProperties(): RetrieveProperties
     {
         return new RetrieveProperties(
@@ -311,16 +319,16 @@ class GroupMembershipRepository extends EntityRepository
         );
     }
 
-    public function removeGroupMembership(GroupMembership $groupMembership): void
+    public function removeGroupMembership(GroupMembership $groupMembership, bool $flush = true): void
     {
-        $this->getEntityManager()->remove($groupMembership);
+        $this->removeEntity($groupMembership, $flush);
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
-    public function saveGroupMembership(GroupMembership $groupMembership): void
+    public function saveGroupMembership(GroupMembership $groupMembership, bool $flush = true): void
     {
-        $this->saveEntity($groupMembership);
+        $this->saveEntity($groupMembership, $flush);
     }
 }

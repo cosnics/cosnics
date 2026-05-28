@@ -6,7 +6,7 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
-use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\Entity\Group;
 use Chamilo\Libraries\Architecture\Enum\DisplayTypeEnum;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
@@ -109,7 +109,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
     }
 
     /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $result
+     * @param \Chamilo\Core\Group\Storage\Entity\Group $result
      *
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
@@ -128,7 +128,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
                     [
                         ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                         ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                        DataClass::PROPERTY_ID => $result->getId()
+                        DataClass::PROPERTY_ID => $result->getIdentifier()->toString()
                     ]
                 );
 
@@ -151,7 +151,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
     }
 
     /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $result
+     * @param \Chamilo\Core\Group\Storage\Entity\Group $result
      *
      * @throws \Exception
      */
@@ -180,7 +180,7 @@ class GroupTableRenderer extends DataClassListTableRenderer implements TableRowA
             )
         );
 
-        $visible = ($this->groupMembershipService->countSubscribedUsersByGroupIdentifier($result->getId()) > 0);
+        $visible = ($this->groupMembershipService->countSubscribedUsersByGroupIdentifier($result->getIdentifier()) > 0);
 
         if ($visible) {
             $truncateUrl = $this->groupUrlGenerator->getTruncateUrl($result);

@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\UserInterface\Tree\Service;
 
 use stdClass;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Tree\Service
@@ -39,7 +40,7 @@ class JsTreeMenuDataProvider
         return $jsonNodes;
     }
 
-    public function getData(string $uriFormat, ?string $itemIdentifier): array
+    public function getData(string $uriFormat, string|Uuid|null $itemIdentifier): array
     {
         $data = $this->treeMenuDataProvider->getData($uriFormat, $itemIdentifier);
 

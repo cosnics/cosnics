@@ -11,7 +11,7 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 abstract class AbstractGroupEvent extends Event
 {
-    public function __construct(public Group $group, public ?User $executingUser = null)
+    public function __construct(public Group $group, public ?User $executingUser = null, public bool $flush = true)
     {
     }
 }

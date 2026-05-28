@@ -23,8 +23,9 @@ abstract class DataClassListTableRenderer extends ListTableRenderer
         }
         else {
             $propertyAccessor = new PropertyAccessor();
+            $value = $propertyAccessor->getValue($result, $column->getName());
 
-            return $propertyAccessor->getValue($result, $column->getName());
+            return $value ?: '';
         }
     }
 

@@ -4,7 +4,7 @@ namespace Chamilo\Core\Group\Service;
 use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Component\SubscribeComponent;
 use Chamilo\Core\Group\Manager;
-use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\Entity\Group;
 use Chamilo\Core\Group\Storage\Entity\GroupMembership;
 use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Interface\ApplicationInterface;
@@ -39,10 +39,13 @@ class GroupUrlGenerator
      */
     protected function getGroupActionUrl(string $action, Group $group, array $additionalParameters = []): string
     {
-        return $this->dataClassUrlGenerator->getActionUrl(
-            Manager::CONTEXT, ApplicationInterface::PARAM_ACTION, DataClass::PROPERTY_ID, $action, $group,
-            $additionalParameters
-        );
+        $parameters = [
+            ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
+            ApplicationInterface::PARAM_ACTION => $action,
+            Group::PROPERTY_IDENTIFIER => $group->getIdentifier()->toString()
+        ];
+
+        return $this->urlGenerator->fromParameters(array_merge($parameters, $additionalParameters));
     }
 
     public function getMoveUrl(Group $group): string

@@ -213,6 +213,18 @@ trait CommonEntityRepositoryTrait
     }
 
     /**
+     * @template tEntityType
+     * @param class-string<tEntityType> $entityClassName
+     *
+     * @return tEntityType
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    protected function getReference(string $entityClassName, Uuid $userIdentifier)
+    {
+        return $this->getEntityManager()->getReference($entityClassName, $userIdentifier);
+    }
+
+    /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function refreshEntity(object $entity): void

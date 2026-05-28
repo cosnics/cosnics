@@ -18,7 +18,7 @@ class UuidAwareQueryBuilder extends QueryBuilder
                 $type = 'uuid';
             }
 
-            if (method_exists($value, 'getIdentifier')) {
+            if ((is_string($value) || is_object($value)) && method_exists($value, 'getIdentifier')) {
                 if ($value->getIdentifier() instanceof Uuid) {
                     $value = $value->getIdentifier();
                     $type = 'uuid';

@@ -178,19 +178,19 @@ class UserRepository extends EntityRepository
      */
     public function getUserReference(Uuid $userIdentifier): User
     {
-        return $this->getEntityManager()->getReference(User::class, $userIdentifier);
+        return $this->getReference(User::class, $userIdentifier);
     }
 
-    public function removeUser(User $user): void
+    public function removeUser(User $user, bool $flush = true): void
     {
-        $this->getEntityManager()->remove($user);
+        $this->removeEntity($user, $flush);
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
-    public function saveUser(User $user): void
+    public function saveUser(User $user, bool $flush = true): void
     {
-        $this->saveEntity($user);
+        $this->saveEntity($user, $flush);
     }
 }

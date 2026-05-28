@@ -6,7 +6,7 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
-use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\Entity\Group;
 use Chamilo\Core\Group\UserInterface\Form\GroupFormType;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\Entity\User;
@@ -23,11 +23,11 @@ use Chamilo\Libraries\UserInterface\Alert\Service\AlertsManager;
 use Chamilo\Libraries\UserInterface\Breadcrumb\Architecture\Domain\BreadcrumbTrail;
 use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
-use Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\OptionsTreeChoice;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 use Throwable;
 use Twig\Environment;
 
@@ -71,7 +71,7 @@ class UpdateComponent extends Manager
         $groupIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID);
 
         if ($groupIdentifier) {
-            $group = $this->groupService->retrieveGroupByIdentifier($groupIdentifier);
+            $group = $this->groupService->retrieveGroupByIdentifier(Uuid::fromString($groupIdentifier));
 
             $formUri = $this->getUrlGenerator()->fromParameters(
                 [
@@ -81,11 +81,8 @@ class UpdateComponent extends Manager
                 ]
             );
 
-            $data = $group->getDefaultProperties();
-            $data[Group::PROPERTY_PARENT_ID] = new OptionsTreeChoice($group->getParentId(), '');
-
             $form = $this->formFactory->create(
-                GroupFormType::class, $data, ['action' => $formUri, 'disabledGroupIdentifiers' => [$groupIdentifier]]
+                GroupFormType::class, $group, ['action' => $formUri, 'disabledGroupIdentifiers' => [$groupIdentifier]]
             );
             $form->handleRequest($this->getRequest());
 
@@ -95,8 +92,8 @@ class UpdateComponent extends Manager
                 try {
                     $group = $this->groupService->updateGroupFromParameters(
                         $group, $submittedData[Group::PROPERTY_NAME],
-                        $submittedData[Group::PROPERTY_PARENT_ID]->getValue(),
-                        $submittedData[Group::PROPERTY_DESCRIPTION], $submittedData[Group::PROPERTY_CODE], $currentUser
+                        $submittedData[Group::PROPERTY_PARENT]->getValue(), $submittedData[Group::PROPERTY_DESCRIPTION],
+                        $submittedData[Group::PROPERTY_CODE], $currentUser
                     );
 
                     $this->alertsManager->addAlert(
@@ -111,7 +108,7 @@ class UpdateComponent extends Manager
                     return new RedirectResponse($this->getUrlGenerator()->fromParameters([
                         ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                         ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                        DataClass::PROPERTY_ID => $group->getId()
+                        DataClass::PROPERTY_ID => $group->getIdentifier()->toString()
                     ]));
                 }
                 catch (Throwable) {

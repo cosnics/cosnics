@@ -6,7 +6,7 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
-use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\Entity\Group;
 use Chamilo\Core\Group\UserInterface\Table\NonSubscribedUserTableRenderer;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\Entity\User;
@@ -35,6 +35,7 @@ use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Chamilo\Libraries\UserInterface\Table\Service\RequestTableParameterValuesCompiler;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -110,7 +111,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
                     self::PARAM_ACTION => ActionEnum::BROWSE_NON_SUBSCRIBED_USERS->value,
-                    DataClass::PROPERTY_ID => $group->getId()
+                    DataClass::PROPERTY_ID => $group->getIdentifier()->toString()
                 ]
             )
         );
@@ -123,7 +124,7 @@ class BrowseNonSubscribedUsersComponent extends Manager
                 [
                     self::PARAM_CONTEXT => Manager::CONTEXT,
                     self::PARAM_ACTION => ActionEnum::BROWSE_NON_SUBSCRIBED_USERS->value,
-                    DataClass::PROPERTY_ID => $group->getId()
+                    DataClass::PROPERTY_ID => $group->getIdentifier()->toString()
                 ]
             ), DisplayTypeEnum::ICON_AND_LABEL
             )
@@ -135,7 +136,6 @@ class BrowseNonSubscribedUsersComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     protected function getGroup(): Group
@@ -147,13 +147,14 @@ class BrowseNonSubscribedUsersComponent extends Manager
         return $this->group;
     }
 
-    protected function getGroupIdentifier(): string
+    protected function getGroupIdentifier(): Uuid
     {
-        return $this->getRequest()->query->get(DataClass::PROPERTY_ID);
+        return Uuid::fromString($this->getRequest()->query->get(DataClass::PROPERTY_ID));
     }
 
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function getNonSubscribedUserCondition(): AndCondition
     {

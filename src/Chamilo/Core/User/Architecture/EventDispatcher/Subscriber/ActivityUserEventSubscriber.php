@@ -47,10 +47,10 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     {
         $this->userActivityRepository->saveUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivityTypeEnum::CREATED, $afterUserCreateEvent->getUser()->getIdentifier(),
-                $afterUserCreateEvent->getExecutingUser() instanceof User ?
-                    $afterUserCreateEvent->getExecutingUser()->getIdentifier() : null
-            )
+                UserActivityTypeEnum::CREATED, $afterUserCreateEvent->user->getIdentifier(),
+                $afterUserCreateEvent->executingUser instanceof User ?
+                    $afterUserCreateEvent->executingUser->getIdentifier() : null
+            ), $afterUserCreateEvent->flush
         );
     }
 
@@ -61,10 +61,10 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     {
         $this->userActivityRepository->saveUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivityTypeEnum::DELETED, $afterUserDeleteEvent->getUser()->getIdentifier(),
-                $afterUserDeleteEvent->getExecutingUser() instanceof User ?
-                    $afterUserDeleteEvent->getExecutingUser()->getIdentifier() : null
-            )
+                UserActivityTypeEnum::DELETED, $afterUserDeleteEvent->user->getIdentifier(),
+                $afterUserDeleteEvent->executingUser instanceof User ?
+                    $afterUserDeleteEvent->executingUser->getIdentifier() : null
+            ), $afterUserDeleteEvent->flush
         );
     }
 
@@ -76,7 +76,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
      */
     public function afterUserEnterPage(AfterUserEnterPageEvent $afterUserEnterPage): void
     {
-        $userIdentifier = $afterUserEnterPage->getUser()->getIdentifier();
+        $userIdentifier = $afterUserEnterPage->user->getIdentifier();
 
         $this->onlineService->updateOnlineForUserIdentifierWithCurrentTime($userIdentifier->toString());
 
@@ -85,9 +85,9 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
         $userVisit->setIdentifier(new UuidV7());
         $userVisit->setUserIdentifier($userIdentifier);
         $userVisit->setEnterDate(time());
-        $userVisit->setLocation($afterUserEnterPage->getPageUri());
+        $userVisit->setLocation($afterUserEnterPage->pageUri);
 
-        $this->userVisitRepository->saveUserVisit($userVisit);
+        $this->userVisitRepository->saveUserVisit($userVisit, $afterUserEnterPage->flush);
 
         $this->pageConfiguration->addHtml('<script>var tracker="' . $userVisit->getIdentifier() . '";</script>');
     }
@@ -98,8 +98,8 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     public function afterUserLogin(AfterUserLoginEvent $afterUserLoginEvent): void
     {
         $this->createAuthenticationActivityFromParameters(
-            UserAuthenticationActivityTypeEnum::LOGIN, $afterUserLoginEvent->getUser()->getIdentifier(),
-            $afterUserLoginEvent->getClientIpAddress()
+            UserAuthenticationActivityTypeEnum::LOGIN, $afterUserLoginEvent->user->getIdentifier(),
+            $afterUserLoginEvent->clientIpAddress, $afterUserLoginEvent->flush
         );
     }
 
@@ -110,10 +110,10 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     {
         $this->userActivityRepository->saveUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivityTypeEnum::PASSWORD_RESET, $afterUserPasswordResetEvent->getUser()->getIdentifier(),
-                $afterUserPasswordResetEvent->getExecutingUser() instanceof User ?
-                    $afterUserPasswordResetEvent->getExecutingUser()->getIdentifier() : null
-            )
+                UserActivityTypeEnum::PASSWORD_RESET, $afterUserPasswordResetEvent->user->getIdentifier(),
+                $afterUserPasswordResetEvent->executingUser instanceof User ?
+                    $afterUserPasswordResetEvent->executingUser->getIdentifier() : null
+            ), $afterUserPasswordResetEvent->flush
         );
     }
 
@@ -124,8 +124,8 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     {
         $this->userActivityRepository->saveUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivityTypeEnum::REGISTERED, $afterUserRegistrationEvent->getUser()->getIdentifier()
-            )
+                UserActivityTypeEnum::REGISTERED, $afterUserRegistrationEvent->user->getIdentifier()
+            ), $afterUserRegistrationEvent->flush
         );
     }
 
@@ -136,10 +136,10 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     {
         $this->userActivityRepository->saveUserActivity(
             $this->initializeUserActivityFromParameters(
-                UserActivityTypeEnum::UPDATED, $afterUserUpdateEvent->getUser()->getIdentifier(),
-                $afterUserUpdateEvent->getExecutingUser() instanceof User ?
-                    $afterUserUpdateEvent->getExecutingUser()->getIdentifier() : null
-            )
+                UserActivityTypeEnum::UPDATED, $afterUserUpdateEvent->user->getIdentifier(),
+                $afterUserUpdateEvent->executingUser instanceof User ?
+                    $afterUserUpdateEvent->executingUser->getIdentifier() : null
+            ), $afterUserUpdateEvent->flush
         );
     }
 
@@ -150,12 +150,12 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     {
         try {
             $userVisit = $this->userVisitRepository->findUserVisitByIdentifier(
-                $beforeUserLeavePage->getUserVisitIdentifier()
+                $beforeUserLeavePage->userVisitIdentifier
             );
 
             $userVisit->setLeaveDate(time());
 
-            $this->userVisitRepository->saveUserVisit($userVisit);
+            $this->userVisitRepository->saveUserVisit($userVisit, $beforeUserLeavePage->flush);
         }
         catch (NoSuchUserVisitException) {
         }
@@ -167,8 +167,8 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
     public function beforeUserLogout(BeforeUserLogoutEvent $beforeUserLogoutEvent): void
     {
         $this->createAuthenticationActivityFromParameters(
-            UserAuthenticationActivityTypeEnum::LOGOUT, $beforeUserLogoutEvent->getUser()->getIdentifier(),
-            $beforeUserLogoutEvent->getClientIpAddress()
+            UserAuthenticationActivityTypeEnum::LOGOUT, $beforeUserLogoutEvent->user->getIdentifier(),
+            $beforeUserLogoutEvent->clientIpAddress, $beforeUserLogoutEvent->flush
         );
     }
 
@@ -176,7 +176,7 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
     protected function createAuthenticationActivityFromParameters(
-        UserAuthenticationActivityTypeEnum $action, Uuid $userIdentifier, ?string $clientIp
+        UserAuthenticationActivityTypeEnum $action, Uuid $userIdentifier, ?string $clientIp, bool $flush = true
     ): void
     {
         $userAuthenticationActivity = new UserAuthenticationActivity();
@@ -187,7 +187,9 @@ readonly class ActivityUserEventSubscriber implements EventSubscriberInterface
         $userAuthenticationActivity->setIp($clientIp);
         $userAuthenticationActivity->setAction($action);
 
-        $this->userAuthenticationActivityRepository->saveUserAuthenticationActivity($userAuthenticationActivity);
+        $this->userAuthenticationActivityRepository->saveUserAuthenticationActivity(
+            $userAuthenticationActivity, $flush
+        );
     }
 
     public static function getSubscribedEvents(): array

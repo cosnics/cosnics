@@ -7,11 +7,11 @@ use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
-use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\Entity\Group;
 use Chamilo\Core\Group\Storage\Entity\GroupMembership;
 use Chamilo\Core\Group\UserInterface\Menu\GroupTreeMenuDataProvider;
-use Chamilo\Core\Group\UserInterface\Table\GroupTableRenderer;
 use Chamilo\Core\Group\UserInterface\Table\GroupMembershipTableRenderer;
+use Chamilo\Core\Group\UserInterface\Table\GroupTableRenderer;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
@@ -114,7 +114,6 @@ class BrowseComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     protected function countNumberOfGroups(): int
@@ -158,7 +157,6 @@ class BrowseComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function getGroup(): Group
@@ -171,7 +169,6 @@ class BrowseComponent extends Manager
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      * @throws \Chamilo\Core\Group\Architecture\Exception\NoSuchGroupException
      */
     public function getGroupDetails(): string
@@ -193,7 +190,7 @@ class BrowseComponent extends Manager
         $html[] = '</tr>';
         $html[] = '<tr>';
         $html[] = '<th class="w-25" scope="row">' . $translator->trans('Description', [], Manager::CONTEXT) . '</th>';
-        $html[] = '<td>' . ($group->getDescription() ? $group->getDescription() : '-') . '</td>';
+        $html[] = '<td>' . ($group->getDescription() ?: '-') . '</td>';
         $html[] = '</tr>';
         $html[] = '</tbody>';
         $html[] = '</table>';
@@ -201,9 +198,6 @@ class BrowseComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
     public function getGroupIdentifier(): Uuid
     {
         if (!isset($this->groupIdentifier)) {
@@ -211,16 +205,13 @@ class BrowseComponent extends Manager
                 $this->groupIdentifier = Uuid::fromString($this->getRequest()->query->get(DataClass::PROPERTY_ID));
             }
             else {
-                $this->groupIdentifier = $this->getRootGroup()->getId();
+                $this->groupIdentifier = $this->getRootGroup()->getIdentifier();
             }
         }
 
         return $this->groupIdentifier;
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
     protected function getGroupTableCondition(): ?ConditionInterface
     {
         $conditions = [];
@@ -232,7 +223,7 @@ class BrowseComponent extends Manager
         }
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT),
             new StaticConditionVariable($this->getGroupIdentifier())
         );
 
@@ -507,7 +498,7 @@ class BrowseComponent extends Manager
             )
         );
 
-        if ($this->getGroup()->getId() != $this->getRootGroup()->getId()) {
+        if (!$this->getGroup()->getIdentifier()->equals($this->getRootGroup()->getIdentifier())) {
             $deleteUrl = $this->groupUrlGenerator->getDeleteUrl($group);
             $tabs->add(
                 new LinkTab(

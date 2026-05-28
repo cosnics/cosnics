@@ -12,7 +12,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 abstract class AbstractGroupMembershipEvent extends Event
 {
     public function __construct(
-        public Uuid $groupIdentifier, public Uuid $userIdentifier, public ?User $executingUser = null
+        public Uuid $groupIdentifier, public Uuid $userIdentifier, public ?User $executingUser = null,
+        public bool $flush = true
     )
     {
     }

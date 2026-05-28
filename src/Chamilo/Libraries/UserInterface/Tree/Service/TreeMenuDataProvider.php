@@ -2,9 +2,11 @@
 namespace Chamilo\Libraries\UserInterface\Tree\Service;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface;
 use Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\TreeNode;
 use Closure;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Tree\Service
@@ -13,9 +15,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 abstract readonly class TreeMenuDataProvider
 {
     protected function __getData(
-        string $uriFormat, ?string $identifier, Closure $getIdentifier, Closure $getText, Closure $hasChildNodes
+        string $uriFormat, string|Uuid|null $identifier, Closure $getIdentifier, Closure $getText, Closure $hasChildNodes
     ): array
     {
+
         if (!$identifier) {
             $rootDataClass = $this->getRootDataClass();
             $identifier = $getIdentifier($rootDataClass);
@@ -34,14 +37,14 @@ abstract readonly class TreeMenuDataProvider
         }
     }
 
-    abstract protected function getChildDataClasses(string $parentIdentifier): ArrayCollection;
+    abstract protected function getChildDataClasses(string|Uuid $parentIdentifier): ArrayCollection;
 
     /**
      * @return \Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\TreeNode[]
      */
-    abstract public function getData(string $uriFormat, ?string $identifier): array;
+    abstract public function getData(string $uriFormat, string|Uuid|null $identifier): array;
 
-    abstract protected function getRootDataClass(): DataClass;
+    abstract protected function getRootDataClass(): DataClass|DoctrineEntityInterface;
 
     protected function getTreeNode(
         string $uriFormat, string $identifier, string $text, array $childNodes = [], bool $hasChildNodes = false
@@ -60,7 +63,7 @@ abstract readonly class TreeMenuDataProvider
     }
 
     protected function processChildren(
-        string $uriFormat, string $parentIdentifier, Closure $getIdentifier, Closure $getText, Closure $hasChildNodes
+        string $uriFormat, string|Uuid $parentIdentifier, Closure $getIdentifier, Closure $getText, Closure $hasChildNodes
     ): array
     {
         $childDataClasses = $this->getChildDataClasses($parentIdentifier);

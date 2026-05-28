@@ -2,9 +2,11 @@
 namespace Chamilo\Libraries\UserInterface\Tree\Service;
 
 use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
+use Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface;
 use Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\TreeNode;
 use Closure;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Libraries\UserInterface\Tree\Service
@@ -28,16 +30,16 @@ abstract readonly class OptionsTreeDataProvider
         );
     }
 
-    abstract protected function getChildDataClasses(string $parentIdentifier): ArrayCollection;
+    abstract protected function getChildDataClasses(Uuid|string $parentIdentifier): ArrayCollection;
 
     /**
      * @return \Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\TreeNode[]
      */
-    abstract public function getData(?string $identifier, array $excludedIdentifiers = []): array;
+    abstract public function getData(string|Uuid|null $identifier, array $excludedIdentifiers = []): array;
 
-    abstract protected function getDataClassByIdentifier(string $identifier): DataClass;
+    abstract protected function getDataClassByIdentifier(string|Uuid $identifier): DataClass|DoctrineEntityInterface;
 
-    abstract protected function getRootDataClass(): DataClass;
+    abstract protected function getRootDataClass(): DataClass|DoctrineEntityInterface;
 
     protected function getTreeNode(string $identifier, string $text, array $childNodes = []): TreeNode
     {

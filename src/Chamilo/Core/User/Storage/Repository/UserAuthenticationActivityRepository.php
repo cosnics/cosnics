@@ -7,6 +7,7 @@ use Chamilo\Libraries\Storage\Service\QueryBuilderConfigurator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\User\Storage\Repository
@@ -24,10 +25,20 @@ class UserAuthenticationActivityRepository extends EntityRepository
     }
 
     /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    public function getUserAuthenticationActivityReference(Uuid $identifier): UserAuthenticationActivity
+    {
+        return $this->getReference(UserAuthenticationActivity::class, $identifier);
+    }
+
+    /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
-    public function saveUserAuthenticationActivity(UserAuthenticationActivity $userAuthenticationActivity): void
+    public function saveUserAuthenticationActivity(
+        UserAuthenticationActivity $userAuthenticationActivity, bool $flush = true
+    ): void
     {
-        $this->saveEntity($userAuthenticationActivity);
+        $this->saveEntity($userAuthenticationActivity, $flush);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Component;
 
-use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\Entity\Group;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
@@ -114,7 +114,7 @@ abstract class GroupsFeedComponent extends Manager
     }
 
     /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param \Chamilo\Core\Group\Storage\Entity\Group $group
      *
      * @return \Chamilo\Libraries\UserInterface\Form\Architecture\Domain\AdvancedElementFinder\AdvancedElementFinderElement
      */
@@ -138,7 +138,7 @@ abstract class GroupsFeedComponent extends Manager
     abstract public function getUserIdentifiers(): array;
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\Entity\Group>
      */
     abstract public function retrieveGroups(): ArrayCollection;
 

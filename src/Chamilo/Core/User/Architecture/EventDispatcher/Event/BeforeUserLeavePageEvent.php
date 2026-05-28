@@ -10,17 +10,10 @@ use Symfony\Component\Uid\Uuid;
  */
 class BeforeUserLeavePageEvent extends AbstractUserEvent
 {
-    protected Uuid $userVisitIdentifier;
-
-    public function __construct(User $user, Uuid $userVisitIdentifier, ?User $executingUser = null)
+    public function __construct(
+        User $user, public Uuid $userVisitIdentifier, ?User $executingUser = null, bool $flush = true
+    )
     {
-        parent::__construct($user, $executingUser);
-
-        $this->userVisitIdentifier = $userVisitIdentifier;
-    }
-
-    public function getUserVisitIdentifier(): Uuid
-    {
-        return $this->userVisitIdentifier;
+        parent::__construct($user, $executingUser, $flush);
     }
 }

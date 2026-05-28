@@ -10,6 +10,7 @@ use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\UserInterface\Tree\Service\TreeMenuDataProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Menu\UserInterface\Menu
@@ -25,10 +26,10 @@ readonly class ItemTreeMenuDataProvider extends TreeMenuDataProvider
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\Entity\Group>
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
-    protected function getChildDataClasses(string $parentIdentifier): ArrayCollection
+    protected function getChildDataClasses(string|Uuid $parentIdentifier): ArrayCollection
     {
         if ($parentIdentifier === DataClass::EMPTY_UUID) {
             return $this->itemService->findRootCategoryItems();
@@ -40,7 +41,7 @@ readonly class ItemTreeMenuDataProvider extends TreeMenuDataProvider
     /**
      * @return \Chamilo\Libraries\UserInterface\Tree\Architecture\Domain\TreeNode[]
      */
-    public function getData(string $uriFormat, ?string $identifier): array
+    public function getData(string $uriFormat, string|Uuid|null $identifier): array
     {
         $getIdentifier = function (Item $item) {
             return $item->getId();

@@ -1,9 +1,8 @@
 <?php
 namespace Chamilo\Core\Group\Service;
 
-use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\Entity\Group;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
-use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -13,118 +12,71 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class GroupsTreeTraverser
 {
-    public function __construct(protected GroupRepository $groupRepository)
+    public function __construct(protected GroupRepository $groupEntityRepository)
     {
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function countAncestorsByGroup(Group $group, bool $includeSelf = true, ?ConditionInterface $condition = null
-    ): int
-    {
-        return $this->groupRepository->countAncestorsByGroup($group, $includeSelf, $condition);
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
     public function countDescendantsByGroup(Group $group, bool $recursiveDescendants = false): int
     {
-        if ($group->getRightValue() == $group->getLeftValue() + 1) {
-            return 0;
-        }
-        elseif ($group->getRightValue() == $group->getLeftValue() + 3) {
-            return 1;
-        }
-        elseif ($recursiveDescendants) {
-            return ($group->getRightValue() - $group->getLeftValue() - 1) / 2;
-        }
-        else {
-            return $this->groupRepository->countDescendantsByGroup($group);
-        }
+        return $this->groupEntityRepository->countDescendantsByGroup($group, $recursiveDescendants);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function countSiblingsByGroup(Group $group, bool $includeSelf = false, ?ConditionInterface $condition = null
-    ): int
+    public function countSiblingsByGroup(Group $group): int
     {
-        return $this->groupRepository->countSiblingsByGroup($group, $includeSelf, $condition);
+        return $this->groupEntityRepository->countSiblingsByGroup($group);
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function determineFullyQualifiedNameByGroup(Group $group, bool $includeSelf = true): string
+    public function determineFullyQualifiedNameByGroup(
+        Group $group, bool $includeSelf = true, string $separator = ' <span class="text-primary">></span> '
+    ): string
     {
-        $ancestors = $this->retrieveAncestorsByGroup($group, $includeSelf);
-
-        $names = [];
-
-        foreach ($ancestors as $ancestor) {
-            $names[] = $ancestor->getName();
-        }
-
-        return implode(' <span class="text-primary">></span> ', array_reverse($names));
+        return $this->groupEntityRepository->findAncestorsAsPathString(
+            $group, $includeSelf, $separator
+        );
     }
 
-    /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function hasSiblings(Group $group, bool $includeSelf = false, ?ConditionInterface $condition = null): bool
+    public function hasDescendantsByGroup(Group $group, bool $recursive = true): bool
     {
-        return $this->countSiblingsByGroup($group, $includeSelf, $condition) > 0;
+        return $this->groupEntityRepository->hasDescendantsByGroup($group, $recursive);
+    }
+
+    public function hasSiblings(Group $group): bool
+    {
+        return $this->countSiblingsByGroup($group) > 0;
     }
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function retrieveAncestorIdentifiersByGroup(Group $group, bool $includeSelf = true): array
     {
-        return $this->groupRepository->retrieveAncestorsIdentifiersByGroup($group, $includeSelf);
+        return $this->groupEntityRepository->findAncestorsIdentifiersByGroup($group, $includeSelf);
     }
 
     /**
-     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param \Chamilo\Core\Group\Storage\Entity\Group $group
      * @param bool $includeSelf
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\Entity\Group>
      */
     public function retrieveAncestorsByGroup(Group $group, bool $includeSelf = true): ArrayCollection
     {
-        return $this->groupRepository->retrieveAncestorsByGroup($group, $includeSelf);
+        return $this->groupEntityRepository->findAncestorsByGroup($group, $includeSelf);
     }
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
      */
     public function retrieveDescendantIdentifiersByGroup(Group $group, bool $recursiveDescendants = false): array
     {
-        return $this->groupRepository->retrieveDescendantsIdentifiersByGroup($group, $recursiveDescendants);
+        return $this->groupEntityRepository->findDescendantsIdentifiersByGroup($group, $recursiveDescendants);
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\Entity\Group>
      */
     public function retrieveDescendantsByGroup(Group $group, bool $recursiveDescendants = false): ArrayCollection
     {
-        return $this->groupRepository->retrieveDescendantsByGroup($group, $recursiveDescendants);
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
-     */
-    public function retrieveSiblingsByGroup(
-        Group $group, bool $includeSelf = true, ?ConditionInterface $condition = null
-    ): ArrayCollection
-    {
-        return $this->groupRepository->retrieveSiblingsByGroup($group, $includeSelf, $condition);
+        return $this->groupEntityRepository->findDescendantsByGroup($group, $recursiveDescendants);
     }
 }

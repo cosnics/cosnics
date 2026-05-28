@@ -13,9 +13,9 @@ class AfterGroupMoveEvent extends AbstractGroupEvent
 {
     public function __construct(
         Group $group, public Uuid $oldParentGroupIdentifier, public Uuid $newParentGroupIdentifier,
-        ?User $executingUser = null
+        ?User $executingUser = null, bool $flush = true
     )
     {
-        parent::__construct($group, $executingUser);
+        parent::__construct($group, $executingUser, $flush);
     }
 }

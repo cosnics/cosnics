@@ -16,7 +16,7 @@ readonly class UserEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function beforeDelete(BeforeUserDeleteEvent $beforeUserDeleteEvent): void
     {

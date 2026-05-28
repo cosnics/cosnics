@@ -6,7 +6,7 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
-use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\Entity\Group;
 use Chamilo\Core\Group\UserInterface\Form\GroupMoveFormType;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\Entity\User;
@@ -26,6 +26,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 use Throwable;
 use Twig\Environment;
 
@@ -65,7 +66,7 @@ class MoveComponent extends Manager
 
         $translator = $this->getTranslator();
 
-        $groupIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID);
+        $groupIdentifier = Uuid::fromString($this->getRequest()->query->get(DataClass::PROPERTY_ID));
 
         $group = $this->groupService->retrieveGroupByIdentifier($groupIdentifier);
 
@@ -78,8 +79,7 @@ class MoveComponent extends Manager
         );
 
         $form = $this->formFactory->create(
-            GroupMoveFormType::class, $group->getDefaultProperties(),
-            ['action' => $formUri, 'disabledGroupIdentifiers' => [$groupIdentifier]]
+            GroupMoveFormType::class, $group, ['action' => $formUri, 'disabledGroupIdentifiers' => [$groupIdentifier]]
         );
         $form->handleRequest($this->getRequest());
 
@@ -88,7 +88,7 @@ class MoveComponent extends Manager
 
             try {
                 $this->groupService->moveGroup(
-                    $group, $submittedData[Group::PROPERTY_PARENT_ID], $currentUser
+                    $group, $submittedData[Group::PROPERTY_PARENT], $currentUser
                 );
 
                 $this->alertsManager->addAlert(
@@ -110,7 +110,7 @@ class MoveComponent extends Manager
             return new RedirectResponse($this->getUrlGenerator()->fromParameters([
                 ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                 ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                DataClass::PROPERTY_ID => $submittedData[Group::PROPERTY_PARENT_ID]
+                DataClass::PROPERTY_ID => $group->getParent()->getIdentifier()->toString()
             ]));
         }
         else {

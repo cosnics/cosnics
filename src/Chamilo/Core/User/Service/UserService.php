@@ -66,7 +66,7 @@ readonly class UserService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
-    public function createNewPasswordForUser(User $user, ?User $executingUser = null): void
+    public function createNewPasswordForUser(User $user, ?User $executingUser = null, bool $flush = true): void
     {
         $translator = $this->translator;
 
@@ -74,7 +74,7 @@ readonly class UserService
 
         $user->setPassword($this->hashingUtilities->hashString($newPassword));
         $this->updateUser($user);
-        $this->eventDispatcher->dispatch(new AfterUserPasswordResetEvent($user, $executingUser));
+        $this->eventDispatcher->dispatch(new AfterUserPasswordResetEvent($user, $executingUser, $flush));
 
         try {
             $mailSubject = $translator->trans('LoginRequest', [], Manager::CONTEXT);
@@ -113,13 +113,13 @@ readonly class UserService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
-    public function createUser(User $user, ?User $executingUser = null): void
+    public function createUser(User $user, ?User $executingUser = null, bool $flush = true): void
     {
         $user->setRegistrationDate(time());
         $user->setSecurityToken(sha1(time() . uniqid()));
 
-        $this->userRepository->saveUser($user);
-        $this->eventDispatcher->dispatch(new AfterUserCreateEvent($user, $executingUser));
+        $this->userRepository->saveUser($user, $flush);
+        $this->eventDispatcher->dispatch(new AfterUserCreateEvent($user, $executingUser, $flush));
     }
 
     /**
@@ -130,7 +130,8 @@ readonly class UserService
         ?string $givenName, ?string $surname, string $username, ?string $officialCode, string $emailAddress,
         bool $generatePassword, ?string $password,
         ?string $authSource = 'Chamilo\Libraries\Protocol\Authentication\Service\PlatformAuthentication',
-        bool $isPlatformAdmin = false, bool $active = true, bool $sendEmail = false, ?User $executingUser = null
+        bool $isPlatformAdmin = false, bool $active = true, bool $sendEmail = false, ?User $executingUser = null,
+        bool $flush = true
     ): User
     {
         $requiredParameters = [
@@ -169,7 +170,7 @@ readonly class UserService
         $password = $generatePassword ? $this->passwordGenerator->generatePassword() : $password;
         $user->setPassword($this->hashingUtilities->hashString($password));
 
-        $this->createUser($user, $executingUser);
+        $this->createUser($user, $executingUser, $flush);
 
         if ($sendEmail) {
             try {
@@ -183,11 +184,11 @@ readonly class UserService
         return $user;
     }
 
-    public function deleteUser(User $user, ?User $executingUser = null): void
+    public function deleteUser(User $user, ?User $executingUser = null, bool $flush = true): void
     {
-        $this->eventDispatcher->dispatch(new BeforeUserDeleteEvent($user));
-        $this->userRepository->removeUser($user);
-        $this->eventDispatcher->dispatch(new AfterUserDeleteEvent($user, $executingUser));
+        $this->eventDispatcher->dispatch(new BeforeUserDeleteEvent($user, $executingUser, $flush));
+        $this->userRepository->removeUser($user, $flush);
+        $this->eventDispatcher->dispatch(new AfterUserDeleteEvent($user, $executingUser, $flush));
     }
 
     public function determineUserKey(User $user): string
@@ -266,6 +267,19 @@ readonly class UserService
         return $this->userRepository->findUsersByIdentifiers($userIdentifiers);
     }
 
+    public function flushEntities(): void
+    {
+        $this->userRepository->flush();
+    }
+
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    public function getUserReference(Uuid $userIdentifier): User
+    {
+        return $this->userRepository->getUserReference($userIdentifier);
+    }
+
     public function isOfficialCodeAvailable(string $officialCode): bool
     {
         try {
@@ -316,7 +330,7 @@ readonly class UserService
     public function registerUserFromParameters(
         ?string $firstName, ?string $lastName, string $username, ?string $officialCode, string $emailAddress,
         bool $generatePassword, ?string $password = null, ?string $authSource = 'Platform', bool $sendEmail = false,
-        ?User $executingUser = null
+        ?User $executingUser = null, bool $flush = true
     ): User
     {
         $user = $this->createUserFromParameters(
@@ -324,7 +338,7 @@ readonly class UserService
             false, $this->allowRegistration, $sendEmail, $executingUser
         );
 
-        $this->eventDispatcher->dispatch(new AfterUserRegistrationEvent($user));
+        $this->eventDispatcher->dispatch(new AfterUserRegistrationEvent($user, $executingUser, $flush));
 
         return $user;
     }
@@ -456,10 +470,10 @@ readonly class UserService
     /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
-    public function updateUser(User $user, ?User $executingUser = null): void
+    public function updateUser(User $user, ?User $executingUser = null, bool $flush = true): void
     {
-        $this->userRepository->saveUser($user);
-        $this->eventDispatcher->dispatch(new AfterUserUpdateEvent($user, $executingUser));
+        $this->userRepository->saveUser($user, $flush);
+        $this->eventDispatcher->dispatch(new AfterUserUpdateEvent($user, $executingUser, $flush));
     }
 
     /**

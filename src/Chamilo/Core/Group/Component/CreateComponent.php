@@ -6,7 +6,7 @@ use Chamilo\Core\Group\Manager;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupUrlGenerator;
-use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\Entity\Group;
 use Chamilo\Core\Group\UserInterface\Form\GroupFormType;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\Entity\User;
@@ -26,6 +26,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 use Throwable;
 use Twig\Environment;
 
@@ -64,13 +65,13 @@ class CreateComponent extends Manager
 
         $translator = $this->getTranslator();
 
-        $groupIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID, $this->getRootGroup()->getId());
+        $groupIdentifier = $this->getGroupIdentifier();
 
         $formUri = $this->getUrlGenerator()->fromParameters(
             [
                 self::PARAM_CONTEXT => Manager::CONTEXT,
                 self::PARAM_ACTION => ActionEnum::CREATE->value,
-                DataClass::PROPERTY_ID => $groupIdentifier
+                DataClass::PROPERTY_ID => $groupIdentifier->toString()
             ]
         );
 
@@ -84,7 +85,7 @@ class CreateComponent extends Manager
 
             try {
                 $group = $this->groupService->createGroupFromParameters(
-                    $submittedData[Group::PROPERTY_NAME], $submittedData[Group::PROPERTY_PARENT_ID]->getValue(),
+                    $submittedData[Group::PROPERTY_NAME], $submittedData[Group::PROPERTY_PARENT]->getValue(),
                     $submittedData[Group::PROPERTY_DESCRIPTION], $submittedData[Group::PROPERTY_CODE], $currentUser
                 );
 
@@ -100,7 +101,7 @@ class CreateComponent extends Manager
                 return new RedirectResponse($this->getUrlGenerator()->fromParameters([
                     ApplicationInterface::PARAM_CONTEXT => Manager::CONTEXT,
                     ApplicationInterface::PARAM_ACTION => ActionEnum::BROWSE->value,
-                    DataClass::PROPERTY_ID => $group->getId()
+                    DataClass::PROPERTY_ID => $group->getIdentifier()->toString()
                 ]));
             }
             catch (Throwable) {
@@ -130,5 +131,17 @@ class CreateComponent extends Manager
         $html[] = $this->renderFooter();
 
         return new Response(implode(PHP_EOL, $html));
+    }
+
+    protected function getGroupIdentifier(): Uuid
+    {
+        $groupIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID);
+
+        if ($groupIdentifier === null) {
+            return $this->getRootGroup()->getIdentifier();
+        }
+        else {
+            return Uuid::fromString($groupIdentifier);
+        }
     }
 }

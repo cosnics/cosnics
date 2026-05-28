@@ -7,19 +7,12 @@ use Chamilo\Core\User\Storage\Entity\User;
  * @package Chamilo\Core\User\Architecture\EventDispatcher\Event
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class AbstractUserAuthenticationEvent extends AbstractUserEvent
+abstract class AbstractUserAuthenticationEvent extends AbstractUserEvent
 {
-    protected ?string $clientIpAddress;
-
-    public function __construct(User $user, ?string $clientIpAddress, ?User $executingUser = null)
+    public function __construct(
+        User $user, public ?string $clientIpAddress, ?User $executingUser = null, bool $flush = true
+    )
     {
-        parent::__construct($user, $executingUser);
-
-        $this->clientIpAddress = $clientIpAddress;
-    }
-
-    public function getClientIpAddress(): ?string
-    {
-        return $this->clientIpAddress;
+        parent::__construct($user, $executingUser, $flush);
     }
 }

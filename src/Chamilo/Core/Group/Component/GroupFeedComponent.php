@@ -5,7 +5,7 @@ use Chamilo\Core\Group\Architecture\Enum\ActionEnum;
 use Chamilo\Core\Group\Service\GroupMembershipService;
 use Chamilo\Core\Group\Service\GroupService;
 use Chamilo\Core\Group\Service\GroupsTreeTraverser;
-use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Group\Storage\Entity\Group;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
@@ -26,6 +26,7 @@ use Chamilo\Libraries\UserInterface\Layout\Service\ApplicationHeaderRenderer;
 use Chamilo\Libraries\UserInterface\Layout\Service\DefaultFooterRenderer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -34,7 +35,7 @@ use Symfony\Component\Translation\Translator;
  */
 class GroupFeedComponent extends GroupsFeedComponent
 {
-    public const int FILTER_PREFIX_LENGTH = 2;
+    public const int FILTER_PREFIX_LENGTH = 5;
     public const string PARAM_GROUP = 'group';
     public const string PARAM_USER = 'user';
 
@@ -57,11 +58,15 @@ class GroupFeedComponent extends GroupsFeedComponent
         return ActionEnum::GROUP_FEED->value;
     }
 
-    protected function getFilter(): string
+    protected function getFilter(): ?Uuid
     {
         $filter = $this->getRequest()->request->get(self::PARAM_FILTER);
 
-        return substr($filter, static::FILTER_PREFIX_LENGTH);
+        if ($filter) {
+            return Uuid::fromString(substr($filter, static::FILTER_PREFIX_LENGTH));
+        }
+
+        return null;
     }
 
     /**
@@ -75,8 +80,8 @@ class GroupFeedComponent extends GroupsFeedComponent
         $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
-            self::PARAM_GROUP . '_' . $group->getId(), $glyph->getClassNamesString(), $group->getName(), $description,
-            AdvancedElementFinderElement::TYPE_SELECTABLE_AND_FILTER
+            self::PARAM_GROUP . '_' . $group->getIdentifier()->toString(), $glyph->getClassNamesString(),
+            $group->getName(), $description, AdvancedElementFinderElement::TYPE_SELECTABLE_AND_FILTER
         );
     }
 
@@ -92,7 +97,7 @@ class GroupFeedComponent extends GroupsFeedComponent
 
     /**
      * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function getUserIdentifiers(): array
     {
@@ -106,8 +111,8 @@ class GroupFeedComponent extends GroupsFeedComponent
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
-     * @throws \Chamilo\Libraries\Storage\Architecture\Exception\StorageMethodException
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Group\Storage\Entity\Group>
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     public function retrieveGroups(): ArrayCollection
     {
@@ -127,13 +132,13 @@ class GroupFeedComponent extends GroupsFeedComponent
 
         if ($filterIdentifier) {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT),
                 new StaticConditionVariable($filterIdentifier)
             );
         }
         else {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID), new StaticConditionVariable(0)
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT), new StaticConditionVariable(null)
             );
         }
 

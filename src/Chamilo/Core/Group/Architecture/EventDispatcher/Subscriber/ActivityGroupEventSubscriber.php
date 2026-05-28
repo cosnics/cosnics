@@ -14,6 +14,7 @@ use Chamilo\Core\Group\Storage\Repository\GroupActivityRepository;
 use Chamilo\Core\User\Storage\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 
 /**
  * @package Chamilo\Core\Group\Architecture\EventDispatcher\Subscriber
@@ -30,11 +31,11 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
      */
     public function afterCreate(AfterGroupCreateEvent $afterGroupCreateEvent): void
     {
-        $this->groupActivityRepository->createGroupActivity(
+        $this->groupActivityRepository->saveGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::CREATED, $afterGroupCreateEvent->group->getIdentifier(),
                 $afterGroupCreateEvent->executingUser
-            )
+            ), $afterGroupCreateEvent->flush
         );
     }
 
@@ -43,11 +44,11 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
      */
     public function afterDelete(AfterGroupDeleteEvent $afterGroupDeleteEvent): void
     {
-        $this->groupActivityRepository->createGroupActivity(
+        $this->groupActivityRepository->saveGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::DELETED, $afterGroupDeleteEvent->group->getIdentifier(),
                 $afterGroupDeleteEvent->executingUser
-            )
+            ), $afterGroupDeleteEvent->flush
         );
     }
 
@@ -56,11 +57,11 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
      */
     public function afterEmpty(AfterGroupEmptyEvent $afterGroupEmptyEvent): void
     {
-        $this->groupActivityRepository->createGroupActivity(
+        $this->groupActivityRepository->saveGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::TRUNCATED, $afterGroupEmptyEvent->group->getIdentifier(),
                 $afterGroupEmptyEvent->executingUser
-            )
+            ), $afterGroupEmptyEvent->flush
         );
     }
 
@@ -69,11 +70,11 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
      */
     public function afterMove(AfterGroupMoveEvent $afterGroupMoveEvent): void
     {
-        $this->groupActivityRepository->createGroupActivity(
+        $this->groupActivityRepository->saveGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::MOVED, $afterGroupMoveEvent->group->getIdentifier(),
                 $afterGroupMoveEvent->executingUser
-            )
+            ), $afterGroupMoveEvent->flush
         );
     }
 
@@ -82,11 +83,11 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
      */
     public function afterSubscribe(AfterGroupSubscribeEvent $afterGroupSubscribeEvent): void
     {
-        $this->groupActivityRepository->createGroupActivity(
+        $this->groupActivityRepository->saveGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::SUBSCRIBED, $afterGroupSubscribeEvent->groupIdentifier,
                 $afterGroupSubscribeEvent->executingUser, $afterGroupSubscribeEvent->userIdentifier
-            )
+            ), $afterGroupSubscribeEvent->flush
         );
     }
 
@@ -95,11 +96,11 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
      */
     public function afterUnsubscribe(AfterGroupUnsubscribeEvent $afterGroupUnsubscribeEvent): void
     {
-        $this->groupActivityRepository->createGroupActivity(
+        $this->groupActivityRepository->saveGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::UNSUBSCRIBED, $afterGroupUnsubscribeEvent->groupIdentifier,
                 $afterGroupUnsubscribeEvent->executingUser, $afterGroupUnsubscribeEvent->userIdentifier
-            )
+            ), $afterGroupUnsubscribeEvent->flush
         );
     }
 
@@ -108,11 +109,11 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
      */
     public function afterUpdate(AfterGroupUpdateEvent $afterGroupUpdateEvent): void
     {
-        $this->groupActivityRepository->createGroupActivity(
+        $this->groupActivityRepository->saveGroupActivity(
             $this->initializeGroupActivityFromParameters(
                 GroupActivityTypeEnum::UPDATED, $afterGroupUpdateEvent->group->getIdentifier(),
                 $afterGroupUpdateEvent->executingUser
-            )
+            ), $afterGroupUpdateEvent->flush
         );
     }
 
@@ -136,11 +137,12 @@ readonly class ActivityGroupEventSubscriber implements EventSubscriberInterface
     {
         $groupActivity = new GroupActivity();
 
+        $groupActivity->setIdentifier(new UuidV7());
         $groupActivity->setAction($action);
         $groupActivity->setDate(time());
         $groupActivity->setGroupIdentifier($groupIdentifier);
         $groupActivity->setUserIdentifier(
-            $executingUser instanceof User ? $executingUser->getIdentifier()->toString() : null
+            $executingUser instanceof User ? $executingUser->getIdentifier() : null
         );
         $groupActivity->setTargetUserIdentifier($targetUserIdentifier);
 

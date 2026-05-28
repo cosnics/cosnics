@@ -7,6 +7,7 @@ use Chamilo\Libraries\Storage\Service\QueryBuilderConfigurator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Group\Storage\Repository
@@ -24,10 +25,18 @@ class GroupActivityRepository extends EntityRepository
     }
 
     /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    public function getGroupActivityReference(Uuid $groupIdentifier): GroupActivity
+    {
+        return $this->getReference(GroupActivity::class, $groupIdentifier);
+    }
+
+    /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
-    public function createGroupActivity(GroupActivity $groupActivity): void
+    public function saveGroupActivity(GroupActivity $groupActivity, bool $flush = true): void
     {
-        $this->saveEntity($groupActivity);
+        $this->saveEntity($groupActivity, $flush);
     }
 }

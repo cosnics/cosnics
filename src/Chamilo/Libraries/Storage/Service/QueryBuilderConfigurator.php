@@ -105,32 +105,46 @@ class QueryBuilderConfigurator
     }
 
     /**
-     * @param class-string<\Chamilo\Libraries\Storage\Architecture\Interface\DoctrineEntityInterface> $entityClassName
-     *
      * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
      */
     protected function processJoins(
         DBALQueryBuilder|ORMQueryBuilder $queryBuilder, Joins $joins = new Joins()
     ): void
     {
+        if ($queryBuilder instanceof ORMQueryBuilder) {
+            $this->processORMJoins($queryBuilder, $joins);
+        }
+        else {
+            $this->processLegacyJoins($queryBuilder, $joins);
+        }
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     */
+    protected function processLegacyJoins(
+        DBALQueryBuilder $queryBuilder, Joins $joins = new Joins()
+    ): void
+    {
         foreach ($joins as $join) {
-            if($join->condition instanceof ConditionInterface){
+            if ($join->condition instanceof ConditionInterface) {
                 $joinCondition = $this->translateCondition($queryBuilder, $join->condition);
             }
 
-            else{
+            else {
                 $joinCondition = null;
             }
+
+            $fromAlias = $join->propertyConditionVariable->getDataClassName()::getAlias();
             $joinAlias = $join->entityClassName::getAlias();
-            $propertyConditionVariable =
-                $this->translateConditionVariable($queryBuilder, $join->propertyConditionVariable);
+            $joinDataClassStorageUnitName = $join->entityClassName::getStorageUnitName();
 
             switch ($join->type) {
                 case JoinTypeEnum::NORMAL :
-                    $queryBuilder->join($propertyConditionVariable, $joinAlias, Join::ON, $joinCondition);
+                    $queryBuilder->join($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
                     break;
                 case JoinTypeEnum::LEFT :
-                    $queryBuilder->leftJoin($propertyConditionVariable, $joinAlias, Join::ON, $joinCondition);
+                    $queryBuilder->leftJoin($fromAlias, $joinDataClassStorageUnitName, $joinAlias, $joinCondition);
                     break;
             }
         }
@@ -146,6 +160,36 @@ class QueryBuilderConfigurator
 
         if ($offset > 0) {
             $queryBuilder->setFirstResult(intval($offset));
+        }
+    }
+
+    /**
+     * @throws \Chamilo\Libraries\Protocol\ExceptionHandling\Architecture\Exception\NoSuchClassException
+     */
+    protected function processORMJoins(
+        ORMQueryBuilder $queryBuilder, Joins $joins = new Joins()
+    ): void
+    {
+        foreach ($joins as $join) {
+            if ($join->condition instanceof ConditionInterface) {
+                $joinCondition = $this->translateCondition($queryBuilder, $join->condition);
+            }
+
+            else {
+                $joinCondition = null;
+            }
+            $joinAlias = $join->entityClassName::getAlias();
+            $propertyConditionVariable =
+                $this->translateConditionVariable($queryBuilder, $join->propertyConditionVariable);
+
+            switch ($join->type) {
+                case JoinTypeEnum::NORMAL :
+                    $queryBuilder->join($propertyConditionVariable, $joinAlias, Join::ON, $joinCondition);
+                    break;
+                case JoinTypeEnum::LEFT :
+                    $queryBuilder->leftJoin($propertyConditionVariable, $joinAlias, Join::ON, $joinCondition);
+                    break;
+            }
         }
     }
 

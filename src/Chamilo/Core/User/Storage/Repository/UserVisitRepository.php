@@ -42,10 +42,18 @@ class UserVisitRepository extends EntityRepository
     }
 
     /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    public function getUserVisitReference(Uuid $identifier): UserVisit
+    {
+        return $this->getReference(UserVisit::class, $identifier);
+    }
+
+    /**
      * @throws \Chamilo\Libraries\Storage\Architecture\Exception\EntityAlreadyExistsException
      */
-    public function saveUserVisit(UserVisit $userVisit): void
+    public function saveUserVisit(UserVisit $userVisit, bool $flush = true): void
     {
-        $this->saveEntity($userVisit);
+        $this->saveEntity($userVisit, $flush);
     }
 }

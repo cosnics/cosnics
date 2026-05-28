@@ -21,6 +21,7 @@ use Chamilo\Libraries\UserInterface\Tree\Service\JsTreeMenuDataProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Core\Group\Component
@@ -66,8 +67,15 @@ class GroupTreeDataComponent extends Manager
         );
     }
 
-    public function getCurrentGroupIdentifier(): ?string
+    public function getCurrentGroupIdentifier(): ?Uuid
     {
-        return $this->getRequest()->query->get(DataClass::PROPERTY_ID);
+        $groupIdentifier = $this->getRequest()->query->get(DataClass::PROPERTY_ID);
+
+        if ($groupIdentifier) {
+            return Uuid::fromString($groupIdentifier);
+        }
+        else {
+            return null;
+        }
     }
 }

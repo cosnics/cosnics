@@ -9,17 +9,8 @@ use Chamilo\Core\User\Storage\Entity\User;
  */
 class AfterUserEnterPageEvent extends AbstractUserEvent
 {
-    protected string $pageUri;
-
-    public function __construct(User $user, string $pageUri, ?User $executingUser = null)
+    public function __construct(User $user, public string $pageUri, ?User $executingUser = null, bool $flush = true)
     {
-        parent::__construct($user, $executingUser);
-
-        $this->pageUri = $pageUri;
-    }
-
-    public function getPageUri(): string
-    {
-        return $this->pageUri;
+        parent::__construct($user, $executingUser, $flush);
     }
 }
