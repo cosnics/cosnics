@@ -10,6 +10,12 @@ a[class=""] {
     padding: 0px 4px;
 }
 
+[data-bs-theme=cosnics] {
+    color-scheme: light;
+    --bs-warning: #d1a00e;
+    --bs-warning-rgb: 209, 160, 14;
+}
+
 /************************
  * DROPZONE FILE UPLOAD *
  ************************/

@@ -79,7 +79,8 @@ class BaseHeaderRenderer
         $html = [];
 
         $html[] = '<!DOCTYPE html>';
-        $html[] = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $locale . '" lang="' . $locale . '">';
+        $html[] = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $locale . '" lang="' . $locale .
+            '" data-bs-theme="cosnics">';
         $html[] = '<head>';
 
         foreach ($this->pageConfiguration->getHtmlHeaders() as $htmlHeader) {
