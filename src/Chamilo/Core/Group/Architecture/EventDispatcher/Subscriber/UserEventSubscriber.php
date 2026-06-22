@@ -20,7 +20,7 @@ readonly class UserEventSubscriber implements EventSubscriberInterface
      */
     public function beforeDelete(BeforeUserDeleteEvent $beforeUserDeleteEvent): void
     {
-        $this->groupMembershipService->deleteGroupMembershipsByUser($beforeUserDeleteEvent->getUser());
+        $this->groupMembershipService->deleteGroupMembershipsByUser($beforeUserDeleteEvent->user);
     }
 
     public static function getSubscribedEvents(): array
