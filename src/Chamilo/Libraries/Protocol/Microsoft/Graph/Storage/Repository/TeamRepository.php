@@ -94,7 +94,7 @@ class TeamRepository
         );
 
         //Content-Location: /teams/{teamId}/operation/{operationId}
-        $locationHeader = $response->getHeaders()['location'];
+        $locationHeader = $response->getHeaders()['Location'];
         if (!$locationHeader)
         {
             throw new \Exception("No location header");
