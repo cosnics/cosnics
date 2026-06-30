@@ -20,10 +20,7 @@ class PdoSessionHandlerFactory
      */
     public function getPdoSessionHandler(): PdoSessionHandler
     {
-        $pdo = $this->connection->getNativeConnection();
-        $pdo->setAttribute(\PDO::SQLSRV_ATTR_ENCODING, \PDO::SQLSRV_ENCODING_BINARY);
-
-        return new PdoSessionHandler($pdo, [
+        return new PdoSessionHandler($this->connection->getNativeConnection(), [
             'db_table' => 'user_session',
             'db_id_col' => 'session_id',
             'db_data_col' => 'data',
