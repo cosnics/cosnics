@@ -253,7 +253,7 @@ trait CommonEntityRepositoryTrait
                 $this->flush();
             }
         }
-            /** @noinspection RedundantCatchClause */
+            /** @noinspection PhpRedundantCatchClauseInspection */
         catch (UniqueConstraintViolationException $exception) {
             throw new EntityAlreadyExistsException(
                 entityClassname: $entity::class, entity: $entity, message: $exception->getMessage(),

@@ -76,7 +76,7 @@ return static function (ContainerConfigurator $container) {
     );
 
     $services->set('Doctrine\DBAL\Connection\Session')->factory([DriverManager::class, 'getConnection'])->args(
-        ['%cosnics.libraries.storage.database%']
+        ['%cosnics.libraries.storage.database.session%']
     );
 
     $services->set(DataClassDatabase::class);
