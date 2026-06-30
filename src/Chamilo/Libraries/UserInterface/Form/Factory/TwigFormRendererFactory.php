@@ -32,7 +32,10 @@ class TwigFormRendererFactory
     public function getFormRenderer(): Environment
     {
         $loader = new FilesystemLoader([$this->themeSystemPathBuilder->getTemplatePath(StringUtilities::LIBRARIES)]);
-        $loader->addPath($this->systemPathBuilder->getVendorPath() . 'symfony\twig-bridge\Resources\views\Form');
+        $loader->addPath(
+            $this->systemPathBuilder->getVendorPath() . 'symfony' . DIRECTORY_SEPARATOR . 'twig-bridge' .
+            DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'Form'
+        );
 
         $twig = new Environment($loader);
         $twig->addExtension(new TranslationExtension($this->translator));
