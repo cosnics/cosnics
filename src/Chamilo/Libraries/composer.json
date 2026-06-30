@@ -26,8 +26,8 @@
                     "input": "Resources/Javascript/"
                 },
                 {
-                    "output": "Chamilo/Libraries/Resources/Plugin/JQuery/images/",
-                    "input": "Resources/Plugin/JQuery/images/"
+                    "output": "Chamilo/Libraries/Resources/Plugin/Jquery/images/",
+                    "input": "Resources/Plugin/Jquery/images/"
                 },
                 {
                     "output": "Chamilo/Libraries/Resources/Plugin/TinyMCE/",
