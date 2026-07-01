@@ -1,11 +1,10 @@
 <?php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use Chamilo\Libraries\Protocol\Session\Factory\PdoSessionHandlerFactory;
 use Chamilo\Libraries\Protocol\Session\Factory\SessionFactory;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
+use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
 return static function (ContainerConfigurator $container) {
@@ -17,12 +16,13 @@ return static function (ContainerConfigurator $container) {
         '$securityKey' => '%cosnics.libraries.protocol.security.securityKey%',
     ]);
 
-    $services->set(PdoSessionHandlerFactory::class)->args(['$connection' => service('Doctrine\DBAL\Connection\Session')]
-    );
-
     $services->alias(SessionInterface::class, Session::class);
     $services->set(Session::class)->factory([service(SessionFactory::class), 'getSession']);
-    $services->set(NativeSessionStorage::class)->args(['$handler' => service(PdoSessionHandler::class)]);
-    $services->set(PdoSessionHandler::class)->factory([service(PdoSessionHandlerFactory::class), 'getPdoSessionHandler']
+    $services->set(NativeSessionStorage::class)->args(
+        ['$handler' => service(NativeFileSessionHandler::class)]
+    );
+
+    $services->set(NativeFileSessionHandler::class)->args(
+        ['$savePath' => '%cosnics.libraries.protocol.session.savePath%']
     );
 };

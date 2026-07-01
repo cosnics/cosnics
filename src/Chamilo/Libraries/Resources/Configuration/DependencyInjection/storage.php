@@ -75,10 +75,6 @@ return static function (ContainerConfigurator $container) {
         ['%cosnics.libraries.storage.database%']
     );
 
-    $services->set('Doctrine\DBAL\Connection\Session')->factory([DriverManager::class, 'getConnection'])->args(
-        ['%cosnics.libraries.storage.database.session%']
-    );
-
     $services->set(DataClassDatabase::class);
 
     $services->alias(DataClassRepository::class, 'Chamilo\Libraries\Storage\Repository\Doctrine\DataClassRepository');
