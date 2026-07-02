@@ -42,8 +42,8 @@ class InConditionTranslator extends ConditionTranslator implements ConditionTran
             $string[] = 'IN';
 
             if ($values instanceof StaticConditionVariable) {
-                $values = $values->getValue();
                 $type = $values->getType();
+                $values = $values->getValue();
             }
             else {
                 $type = ArrayParameterType::STRING;

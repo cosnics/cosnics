@@ -60,6 +60,27 @@ trait CommonEntityRepositoryTrait
         return $queryBuilder;
     }
 
+    protected function convertUuidToString(Uuid $uuid): string
+    {
+        return $uuid->toString();
+    }
+
+    /**
+     * @param \Symfony\Component\Uid\Uuid[] $uuids
+     *
+     * @return string[]
+     */
+    protected function convertUuidsToStrings(array $uuids): array
+    {
+        $uuidStrings = [];
+
+        foreach ($uuids as $uuid) {
+            $uuidStrings[] = $this->convertUuidToString($uuid);
+        }
+
+        return $uuidStrings;
+    }
+
     /**
      * @template tEntityType
      * @param class-string<tEntityType> $entityType
@@ -200,6 +221,7 @@ trait CommonEntityRepositoryTrait
     public function flush(): void
     {
         $this->getEntityManager()->flush();
+        $this->getEntityManager()->clear();
     }
 
     abstract protected function getEntityManager(): EntityManagerInterface;

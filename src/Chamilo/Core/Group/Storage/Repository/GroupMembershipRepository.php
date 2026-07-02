@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Architecture\Interface\ConditionInterface;
 use Chamilo\Libraries\Storage\Architecture\Trait\CommonEntityRepositoryTrait;
 use Chamilo\Libraries\Storage\Service\QueryBuilderConfigurator;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -62,7 +63,7 @@ class GroupMembershipRepository extends EntityRepository
             $groupCondition = new InCondition(
                 new PropertyConditionVariable(
                     Group::class, Group::PROPERTY_IDENTIFIER
-                ), new StaticConditionVariable($groupIdentifiers, UuidType::NAME . '[]')
+                ), new StaticConditionVariable($this->convertUuidsToStrings($groupIdentifiers), ArrayParameterType::STRING)
             );
 
             if ($condition instanceof ConditionInterface) {
@@ -247,7 +248,7 @@ class GroupMembershipRepository extends EntityRepository
     {
         $groupCondition = new InCondition(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_IDENTIFIER),
-            new StaticConditionVariable($groupIdentifiers, UuidType::NAME . '[]')
+            new StaticConditionVariable($this->convertUuidsToStrings($groupIdentifiers), ArrayParameterType::STRING)
         );
 
         if ($condition instanceof ConditionInterface) {
