@@ -21,3 +21,5 @@ vue-cli-service
 /composer.phar
 .vscode/settings.json
 *.phpunit.result.cache
+
+.env
