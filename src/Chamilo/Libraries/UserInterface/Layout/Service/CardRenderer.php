@@ -59,9 +59,11 @@ class CardRenderer
         $html[] = '<div class="card-text">';
 
         foreach ($tableValues as $key => $value) {
-            $html[] = '<div class="form-floating mb-2">';
-            $html[] = '<div class="form-control">' . $value . '</div>';
-            $html[] = '<label><strong>' . $key . '</strong></label>';
+            $html[] = '<div class="row mb-2">';
+            $html[] = '    <label class="col-sm-3 col-form-label col-form-label-sm">' . $key . '</label>';
+            $html[] = '    <div class="col-sm-9">';
+            $html[] = '        <div class="form-control form-control-sm">' . $value . '</div>';
+            $html[] = '    </div>';
             $html[] = '</div>';
         }
 
