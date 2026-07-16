@@ -227,16 +227,10 @@ class DataClassRepository
             $dataClass->setId(Uuid::v7()->__toString());
         }
 
-        $objectProperties = $dataClass->getDefaultProperties();
-
-        if (!$dataClass instanceof UuidDataClassInterface) {
-            unset($objectProperties[DataClass::PROPERTY_ID]);
-        }
-
         $dataClassName = $dataClass::class;
 
-        $this->createRecord($dataClassName, $objectProperties);
-        if (!$dataClass instanceof UuidDataClassInterface) {
+        $this->createRecord($dataClassName, $dataClass->getDefaultProperties());
+        if (!$dataClass instanceof UuidDataClassInterface && !$dataClass->isIdentified()) {
             $dataClass->setId(
                 (string) $this->dataClassDatabase->getLastInsertedIdentifier($dataClass::getStorageUnitName())
             );

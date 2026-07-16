@@ -10,7 +10,6 @@ use Chamilo\Core\User\Storage\Entity\User;
 use Chamilo\Libraries\Architecture\Domain\ChamiloRequest;
 use Chamilo\Libraries\Protocol\Authentication\Architecture\Exception\NotAllowedException;
 use Chamilo\Libraries\Service\Routing\UrlGenerator;
-use Chamilo\Libraries\Storage\Architecture\Domain\DataClass;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Architecture\Domain\Query\ConditionVariable\PropertyConditionVariable;
@@ -55,16 +54,7 @@ class ViewOnlineComponent extends Manager
         $html = [];
 
         $html[] = $this->renderHeader($currentUser);
-
-        $userIdentifier = $this->getRequest()->query->get(self::PARAM_USER_ID);
-
-        if (isset($userIdentifier)) {
-            $html[] = $this->renderUserInformation($userIdentifier, $currentUser);
-        }
-        else {
-            $html[] = $this->renderOnlineTable();
-        }
-
+        $html[] = $this->renderOnlineTable();
         $html[] = $this->renderFooter();
 
         return new Response(implode(PHP_EOL, $html));
@@ -79,12 +69,12 @@ class ViewOnlineComponent extends Manager
 
         if (!empty($userIdentifiers)) {
             return new InCondition(
-                new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), $userIdentifiers
+                new PropertyConditionVariable(User::class, User::PROPERTY_IDENTIFIER), $userIdentifiers
             );
         }
         else {
             return new EqualityCondition(
-                new PropertyConditionVariable(User::class, DataClass::PROPERTY_ID), new StaticConditionVariable(- 1)
+                new PropertyConditionVariable(User::class, User::PROPERTY_IDENTIFIER), new StaticConditionVariable(- 1)
             );
         }
     }

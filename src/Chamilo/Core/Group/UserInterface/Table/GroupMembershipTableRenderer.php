@@ -84,8 +84,8 @@ class GroupMembershipTableRenderer extends DataClassListTableRenderer
     protected function renderCell(TableColumn $column, TableResultPosition $resultPosition, mixed $result): string
     {
         return match ($column->getName()) {
-            User::PROPERTY_GIVEN_NAME => $result->getUser()->getGivenName(),
-            User::PROPERTY_SURNAME => $result->getUser()->getSurname(),
+            User::PROPERTY_GIVEN_NAME => (string) $result->getUser()->getGivenName(),
+            User::PROPERTY_SURNAME => (string) $result->getUser()->getSurname(),
             default => parent::renderCell($column, $resultPosition, $result),
         };
     }
