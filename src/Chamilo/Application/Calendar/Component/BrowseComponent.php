@@ -36,6 +36,7 @@ use Detection\MobileDetect;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @package Chamilo\Application\Calendar\Component
@@ -100,7 +101,7 @@ class BrowseComponent extends Manager
 
         if ($asAdmin) {
             try {
-                $user = $this->userService->findUserByIdentifier($asAdmin);
+                $user = $this->userService->findUserByIdentifier(Uuid::fromString($asAdmin));
 
                 if (!$user->isPlatformAdministrator()) {
                     throw new NotAllowedException();
