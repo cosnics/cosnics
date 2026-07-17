@@ -112,7 +112,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupportI
 
                 try {
                     $this->userService->sendPasswordResetLinkforUser($userToResetPasswordFor);
-                    $html[] = '<div class="alert alert-success">' . $this->translator->trans(
+                    $html[] = '<div class="callout callout-success">' . $this->translator->trans(
                             'ResetLinkSendForUser', [
                             '%User%' => $userToResetPasswordFor->getFullName() . ' (' .
                                 $userToResetPasswordFor->getUsername() . ')'

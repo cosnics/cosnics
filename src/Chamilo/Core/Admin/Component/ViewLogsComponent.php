@@ -80,7 +80,7 @@ class ViewLogsComponent extends Manager
             $logFilePath = $this->configurablePathBuilder->getLogPath() . $logFile;
 
             if (!file_exists($logFilePath)) {
-                return '<div class="alert alert-warning">' .
+                return '<div class="callout callout-warning">' .
                     $translator->trans('NoLogfilesFound', [], Manager::CONTEXT) . '</div>';
             }
         }

@@ -51,12 +51,17 @@ footer.chamilo-footer {
 }
 
 .callout {
-    background-color: var(--callout-bg, var(--bs-gray-100));
-    border-left: .25rem solid var(--callout-border, var(--bs-gray-300));
-    --bs-code-color: var(--callout-code-color);
-    color: var(--callout-color, inherit);
+    --bs-callout-bg: transparent;
+    --bs-callout-padding-x: 1.25rem;
+    --bs-callout-padding-y: 1.25rem;
+    --bs-callout-margin-bottom: 1rem;
+    background-color: var(--bs-callout-bg, var(--bs-gray-100));
+    border-left: .25rem solid var(--bs-callout-border, var(--bs-gray-300));
+    --bs-code-color: var(--bs-callout-code-color);
+    color: var(--bs-callout-color, inherit);
     --bs-link-color-rgb: var(--callout-link);
-    padding: 1.25rem;
+    padding: var(--bs-callout-padding-y) var(--bs-callout-padding-x);
+    margin-bottom: var(--bs-callout-margin-bottom);
 }
 
 .callout h4 {
@@ -71,22 +76,52 @@ footer.chamilo-footer {
     background-color: #0000000d
 }
 
+.callout-primary {
+    --bs-callout-bg: var(--bs-primary-bg-subtle);
+    --bs-callout-border: var(--bs-primary-border-subtle);
+    --bs-callout-color: var(--bs-primary-text-emphasis);
+}
+
+.callout-secondary {
+    --bs-callout-bg: var(--bs-secondary-bg-subtle);
+    --bs-callout-border-color: var(--bs-secondary-border-subtle);
+    --bs-callout-color: var(--bs-secondary-text-emphasis);
+}
+
+.callout-success {
+    --bs-callout-bg: var(--bs-success-bg-subtle);
+    --bs-callout-border: var(--bs-success-border-subtle);
+    --bs-callout-color: var(--bs-success-text-emphasis);
+}
+
 .callout-info {
-    --callout-bg: var(--bs-info-bg-subtle);
-    --callout-border: var(--bs-info-border-subtle);
-    --callout-color: var(--bs-info-text-emphasis);
+    --bs-callout-bg: var(--bs-info-bg-subtle);
+    --bs-callout-border: var(--bs-info-border-subtle);
+    --bs-callout-color: var(--bs-info-text-emphasis);
 }
 
 .callout-warning {
-    --callout-bg: var(--bs-warning-bg-subtle);
-    --callout-border: var(--bs-warning-border-subtle);
-    --callout-color: var(--bs-warning-text-emphasis);
+    --bs-callout-bg: var(--bs-warning-bg-subtle);
+    --bs-callout-border: var(--bs-warning-border-subtle);
+    --bs-callout-color: var(--bs-warning-text-emphasis);
 }
 
 .callout-danger {
-    --callout-bg: var(--bs-danger-bg-subtle);
-    --callout-border: var(--bs-danger-border-subtle);
-    --callout-color: var(--bs-danger-text-emphasis);
+    --bs-callout-bg: var(--bs-danger-bg-subtle);
+    --bs-callout-border: var(--bs-danger-border-subtle);
+    --bs-callout-color: var(--bs-danger-text-emphasis);
+}
+
+.callout-light {
+    --bs-callout-bg: var(--bs-light-bg-subtle);
+    --bs-callout-border: var(--bs-light-border-subtle);
+    --bs-callout-color: var(--bs-light-text-emphasis);
+}
+
+.callout-dark {
+    --bs-callout-bg: var(--bs-dark-bg-subtle);
+    --bs-callout-border: var(--bs-dark-border-subtle);
+    --bs-callout-color: var(--bs-dark-text-emphasis);
 }
 
 /***********
